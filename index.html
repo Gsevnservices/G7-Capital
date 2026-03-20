@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G7 Capital — Private Equity. Powered by Intelligence.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --black:   #080808;
+  --black2:  #0F0F0F;
+  --black3:  #161616;
+  --black4:  #1E1E1E;
+  --gold:    #C9A84C;
+  --gold2:   #E2C97E;
+  --gold3:   #A8873A;
+  --white:   #FAFAF8;
+  --white2:  #F0EFE9;
+  --grey1:   #8A8880;
+  --grey2:   #5A5855;
+  --border:  rgba(201,168,76,0.15);
+  --border2: rgba(250,250,248,0.08);
+}
+
+body {
+  font-family: 'Tenor Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.12s ease;
+  transform: translate(-50%, -50%);
+}
+
+/* GRAIN OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ── NAVIGATION ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 64px;
+  height: 80px;
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border2);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav-logo em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grey1);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--white); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-signin {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey1);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-signin:hover { color: var(--white); }
+
+.nav-cta-btn {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  padding: 11px 28px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.nav-cta-btn:hover {
+  background: var(--gold2);
+  transform: translateY(-1px);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 80px; left: 0; right: 0; bottom: 0;
+  background: var(--black);
+  z-index: 499;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.mobile-menu.open { display: flex; }
+
+.mobile-menu a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+
+.mobile-menu a:hover { color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 140px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Horizontal rule lines top and bottom of hero */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 140px; left: 64px; right: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 80px; left: 64px; right: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* Gold circle glow behind headline */
+.hero-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: appear 1s ease 0.3s forwards;
+}
+
+.eyebrow-line {
+  width: 40px; height: 1px;
+  background: var(--gold);
+}
+
+.eyebrow-text {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hero-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 8vw, 112px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: appear 1s ease 0.5s forwards;
+}
+
+.hero-headline em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-headline-2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 8vw, 112px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  margin-bottom: 56px;
+  opacity: 0;
+  animation: appear 1s ease 0.7s forwards;
+}
+
+.hero-sub {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--grey1);
+  line-height: 2;
+  max-width: 520px;
+  margin: 0 auto 64px;
+  opacity: 0;
+  animation: appear 1s ease 0.9s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: appear 1s ease 1.1s forwards;
+}
+
+.btn-gold {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  padding: 16px 48px;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-gold:hover {
+  background: var(--gold2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201,168,76,0.25);
+}
+
+.btn-outline {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: transparent;
+  padding: 15px 48px;
+  border: 1px solid rgba(250,250,248,0.2);
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: appear 1s ease 1.5s forwards;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollLine 2s ease infinite;
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  50% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+.scroll-text {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--grey2);
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── STATS ── */
+.stats-strip {
+  border-top: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border2);
+  background: var(--black2);
+}
+
+.stats-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 64px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.stat {
+  padding: 40px 0;
+  text-align: center;
+  border-right: 1px solid var(--border2);
+  position: relative;
+}
+
+.stat:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-num sup {
+  font-size: 20px;
+  color: var(--gold);
+  vertical-align: super;
+}
+
+.stat-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey2);
+}
+
+/* ── SECTION SHARED ── */
+.section-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 64px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border2);
+}
+
+.section-no {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.section-link {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey1);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--grey2);
+  margin-bottom: 8px;
+}
+
+.section-link:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ── THREE PATHS ── */
+.paths-section {
+  padding: 120px 0;
+  border-bottom: 1px solid var(--border2);
+}
+
+.paths-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border2);
+}
+
+.path-card {
+  padding: 56px 48px;
+  border-right: 1px solid var(--border2);
+  position: relative;
+  transition: background 0.4s ease;
+  overflow: hidden;
+}
+
+.path-card:last-child { border-right: none; }
+
+.path-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.path-card:hover { background: var(--black2); }
+.path-card:hover::before { transform: scaleX(1); }
+
+.path-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px;
+  font-weight: 300;
+  color: rgba(201,168,76,0.1);
+  line-height: 1;
+  margin-bottom: 32px;
+  transition: color 0.4s;
+}
+
+.path-card:hover .path-number { color: rgba(201,168,76,0.2); }
+
+.path-tag {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.path-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.25;
+  margin-bottom: 20px;
+  color: var(--white);
+}
+
+.path-desc {
+  font-size: 13px;
+  color: var(--grey1);
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+
+.path-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  transition: gap 0.3s;
+}
+
+.path-cta:hover { gap: 20px; }
+
+/* ── SCREENER ── */
+.screener-section {
+  padding: 120px 0;
+  border-bottom: 1px solid var(--border2);
+  background: var(--black2);
+}
+
+.screener-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.screener-left {}
+
+.screener-desc {
+  font-size: 14px;
+  color: var(--grey1);
+  line-height: 2;
+  margin-top: 32px;
+  margin-bottom: 48px;
+}
+
+.screener-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.screener-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.feat-line {
+  width: 20px; height: 1px;
+  background: var(--gold);
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.feat-text {
+  font-size: 12px;
+  color: var(--grey1);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+.feat-text strong {
+  display: block;
+  color: var(--white);
+  font-size: 13px;
+  margin-bottom: 2px;
+  font-family: 'Tenor Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.screener-right {}
+
+.screener-box {
+  border: 1px solid var(--border);
+  background: var(--black3);
+  padding: 40px;
+}
+
+.screener-box-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.screener-box-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.screener-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(250,250,248,0.1);
+  padding: 16px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--white);
+  resize: none;
+  height: 110px;
+  outline: none;
+  transition: border-color 0.3s;
+  line-height: 1.7;
+}
+
+.screener-textarea::placeholder {
+  color: rgba(250,250,248,0.2);
+  font-style: italic;
+}
+
+.screener-textarea:focus { border-bottom-color: var(--gold); }
+
+.screener-submit {
+  margin-top: 28px;
+  width: 100%;
+  padding: 16px;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.screener-submit:hover { background: var(--gold2); }
+.screener-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.loading-bar {
+  display: none;
+  height: 2px;
+  background: var(--black4);
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.loading-bar.active { display: block; }
+
+.loading-bar-inner {
+  height: 100%;
+  background: var(--gold);
+  animation: loadBar 1.5s ease infinite;
+}
+
+@keyframes loadBar {
+  0% { width: 0%; margin-left: 0; }
+  50% { width: 70%; margin-left: 0; }
+  100% { width: 0%; margin-left: 100%; }
+}
+
+/* Score result */
+.score-result {
+  display: none;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border2);
+}
+
+.score-result.show { display: block; }
+
+.score-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.score-ring {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.score-ring-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+}
+
+.score-ring-denom {
+  font-size: 9px;
+  color: var(--grey2);
+  letter-spacing: 0.1em;
+}
+
+.score-verdict-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.score-tagline { font-size: 12px; color: var(--grey1); line-height: 1.7; }
+
+.score-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.score-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.score-bar-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grey2);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.score-bar-track {
+  flex: 1;
+  height: 2px;
+  background: var(--black4);
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 1s ease;
+}
+
+.score-bar-val {
+  font-size: 12px;
+  color: var(--gold);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.score-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.note {
+  padding: 16px 20px;
+  border: 1px solid;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--grey1);
+}
+
+.note.pos { border-color: rgba(201,168,76,0.2); background: rgba(201,168,76,0.04); }
+.note.neg { border-color: rgba(250,250,248,0.08); background: rgba(250,250,248,0.02); }
+
+.note-head {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* ── AI EMPLOYEES ── */
+.employees-section {
+  padding: 120px 0;
+  border-bottom: 1px solid var(--border2);
+}
+
+.employees-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border2);
+  border: 1px solid var(--border2);
+  margin-top: 0;
+}
+
+.emp-card {
+  background: var(--black);
+  padding: 40px 32px;
+  transition: background 0.3s;
+  position: relative;
+}
+
+.emp-card:hover { background: var(--black2); }
+
+.emp-initial {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--gold);
+  opacity: 0.5;
+  line-height: 1;
+  margin-bottom: 20px;
+  transition: opacity 0.3s;
+}
+
+.emp-card:hover .emp-initial { opacity: 1; }
+
+.emp-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.emp-role {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.emp-desc {
+  font-size: 12px;
+  color: var(--grey2);
+  line-height: 1.8;
+}
+
+/* ── WAITLIST ── */
+.waitlist-section {
+  padding: 120px 0;
+  text-align: center;
+  background: var(--black2);
+  border-bottom: 1px solid var(--border2);
+}
+
+.waitlist-inner { max-width: 560px; margin: 0 auto; }
+
+.waitlist-form {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border2);
+  position: relative;
+}
+
+.form-field:first-of-type { border-top: 1px solid var(--border2); }
+
+.form-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey2);
+  padding: 16px 0 4px;
+}
+
+.form-input {
+  background: transparent;
+  border: none;
+  padding: 4px 0 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--white);
+  outline: none;
+  width: 100%;
+}
+
+.form-input::placeholder { color: rgba(250,250,248,0.2); }
+
+.form-select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border2);
+  padding: 20px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--white);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-select option { background: var(--black2); color: var(--white); }
+
+.waitlist-btn {
+  margin-top: 40px;
+  padding: 18px;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.waitlist-btn:hover {
+  background: var(--gold2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201,168,76,0.2);
+}
+
+.waitlist-note {
+  font-size: 11px;
+  color: var(--grey2);
+  margin-top: 20px;
+  letter-spacing: 0.05em;
+}
+
+.success-card {
+  display: none;
+  margin-top: 40px;
+  padding: 32px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.success-card.show { display: block; }
+
+.success-card p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--gold);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 80px 64px 48px;
+  border-top: 1px solid var(--border2);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 64px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: 32px;
+}
+
+.footer-brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.footer-brand-name em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.footer-tagline {
+  font-size: 12px;
+  color: var(--grey2);
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.footer-col-title {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.footer-col a {
+  display: block;
+  font-size: 13px;
+  color: var(--grey1);
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: color 0.3s;
+  letter-spacing: 0.03em;
+}
+
+.footer-col a:hover { color: var(--white); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: var(--grey2);
+  letter-spacing: 0.06em;
+}
+
+.footer-disclaimer {
+  font-size: 10px;
+  color: var(--grey2);
+  max-width: 480px;
+  text-align: right;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.in { opacity: 1; transform: none; }
+
+/* ── MOBILE ── */
+@media (max-width: 1024px) {
+  nav { padding: 0 32px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .hero::before, .hero::after { left: 32px; right: 32px; }
+  .stats-inner { padding: 0 32px; grid-template-columns: repeat(3, 1fr); }
+  .stat:nth-child(4) { border-top: 1px solid var(--border2); }
+  .stat:nth-child(5) { border-top: 1px solid var(--border2); border-right: none; }
+  .section-wrap { padding: 0 32px; }
+  footer { padding: 60px 32px 40px; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+@media (max-width: 768px) {
+  .paths-grid { grid-template-columns: 1fr; }
+  .path-card { border-right: none; border-bottom: 1px solid var(--border2); }
+  .path-card:last-child { border-bottom: none; }
+  .screener-layout { grid-template-columns: 1fr; gap: 48px; }
+  .employees-grid { grid-template-columns: repeat(2, 1fr); }
+  .score-notes { grid-template-columns: 1fr; }
+  .hero { padding: 120px 24px 80px; }
+  .hero::before, .hero::after { display: none; }
+  .section-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .paths-section, .screener-section, .employees-section, .waitlist-section { padding: 80px 0; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-disclaimer { text-align: left; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+
+@media (max-width: 480px) {
+  .employees-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(5) { grid-column: span 2; }
+  nav { padding: 0 24px; }
+  .section-wrap { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">G<em>7</em> Capital</a>
+  <ul class="nav-links">
+    <li><a href="#firms">For Firms</a></li>
+    <li><a href="#founders">For Founders</a></li>
+    <li><a href="#investors">For Investors</a></li>
+    <li><a href="#screener">Live Demo</a></li>
+    <li><a href="#waitlist">Join</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="nav-signin">Sign In</a>
+    <a href="#waitlist" class="nav-cta-btn">Request Access</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#firms" onclick="toggleMenu()">For Firms</a>
+  <a href="#founders" onclick="toggleMenu()">For Founders</a>
+  <a href="#investors" onclick="toggleMenu()">For Investors</a>
+  <a href="#screener" onclick="toggleMenu()">Live Demo</a>
+  <a href="#waitlist" onclick="toggleMenu()">Request Access</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-eyebrow">
+    <div class="eyebrow-line"></div>
+    <div class="eyebrow-text">Now Accepting Applications — Limited Access</div>
+    <div class="eyebrow-line"></div>
+  </div>
+
+  <h1 class="hero-headline">Private Equity.</h1>
+  <h1 class="hero-headline-2">Powered by <em>Intelligence.</em></h1>
+
+  <p class="hero-sub">
+    The world's first AI-native investment ecosystem.<br>
+    For the firms that move capital. The founders who deserve it.<br>
+    The investors who see what others miss.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#waitlist" class="btn-gold">Request Early Access</a>
+    <a href="#screener" class="btn-outline">See It Live</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <div class="scroll-text">Scroll</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num"><span class="count" data-target="500">0</span><sup>+</sup></div>
+      <div class="stat-label">Companies Screened</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$<span class="count" data-target="2">0</span>B<sup>+</sup></div>
+      <div class="stat-label">Deal Flow Analysed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span class="count" data-target="200">0</span><sup>+</sup></div>
+      <div class="stat-label">Registered Firms</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span class="count" data-target="7">0</span></div>
+      <div class="stat-label">AI Agents</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span class="count" data-target="0">1</span></div>
+      <div class="stat-label">Gatekeepers</div>
+    </div>
+  </div>
+</div>
+
+<!-- THREE PATHS -->
+<section class="paths-section" id="firms">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-no">01 — Platform</div>
+        <h2 class="section-title">Built for every side<br>of <em>private capital.</em></h2>
+      </div>
+      <a href="#" class="section-link">View all features →</a>
+    </div>
+    <div class="paths-grid reveal">
+      <div class="path-card" id="founders">
+        <div class="path-number">01</div>
+        <div class="path-tag">PE / VC / IB Firms</div>
+        <h3 class="path-title">Replace your junior team with AI.</h3>
+        <p class="path-desc">G7 Capital OS handles deal screening, due diligence reports, portfolio monitoring, and LP reporting — at 80% lower cost than your current junior headcount.</p>
+        <a href="#" class="path-cta">Learn more →</a>
+      </div>
+      <div class="path-card" id="investors">
+        <div class="path-number">02</div>
+        <div class="path-tag">Founders</div>
+        <h3 class="path-title">Apply once. Reach every investor.</h3>
+        <p class="path-desc">No cold emails. No networking required. Submit your company once and our AI routes your application to every investor whose criteria match yours.</p>
+        <a href="#" class="path-cta">Apply now →</a>
+      </div>
+      <div class="path-card">
+        <div class="path-number">03</div>
+        <div class="path-tag">Angels & Family Offices</div>
+        <h3 class="path-title">AI-curated deal flow. Full DD included.</h3>
+        <p class="path-desc">Subscribe to pre-screened deals matched to your exact investment criteria. Every company arrives with a complete AI-generated due diligence report.</p>
+        <a href="#" class="path-cta">See deal flow →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE SCREENER -->
+<section class="screener-section" id="screener">
+  <div class="section-wrap">
+    <div class="screener-layout">
+      <div class="screener-left reveal">
+        <div class="section-no">02 — Live Demo</div>
+        <h2 class="section-title">Get your G7 Score<br><em>in seconds.</em></h2>
+        <p class="screener-desc">Describe your company. Our AI screens it instantly — exactly as a partner at a top-tier PE firm would assess it on first read.</p>
+        <div class="screener-features">
+          <div class="screener-feat">
+            <div class="feat-line"></div>
+            <div class="feat-text"><strong>Scored across 5 dimensions</strong>Market, Team, Traction, Business Model, Timing</div>
+          </div>
+          <div class="screener-feat">
+            <div class="feat-line"></div>
+            <div class="feat-text"><strong>Instant feedback</strong>Know exactly what investors will question before you walk into the room</div>
+          </div>
+          <div class="screener-feat">
+            <div class="feat-line"></div>
+            <div class="feat-text"><strong>No signup required</strong>Try it now, completely free</div>
+          </div>
+        </div>
+      </div>
+      <div class="screener-right reveal">
+        <div class="screener-box">
+          <div class="screener-box-label">AI Screener — Live</div>
+          <textarea class="screener-textarea" id="compDesc" placeholder="Describe your company — what it does, who it serves, your traction, your stage..."></textarea>
+          <div class="loading-bar" id="loadBar"><div class="loading-bar-inner"></div></div>
+          <button class="screener-submit" id="scoreBtn" onclick="runScore()">Analyse My Company →</button>
+          <div class="score-result" id="scoreResult">
+            <div class="score-top">
+              <div class="score-ring" id="scoreRing">
+                <div class="score-ring-num" id="scoreNum">—</div>
+                <div class="score-ring-denom">/ 100</div>
+              </div>
+              <div>
+                <div class="score-verdict-text" id="scoreVerdict"></div>
+                <div class="score-tagline" id="scoreTagline"></div>
+              </div>
+            </div>
+            <div class="score-bars" id="scoreBars"></div>
+            <div class="score-notes" id="scoreNotes"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI EMPLOYEES -->
+<section class="employees-section">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-no">03 — G7 Workspace</div>
+        <h2 class="section-title">Meet your<br><em>AI team.</em></h2>
+      </div>
+      <a href="#" class="section-link">Full team profiles →</a>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;padding:0 64px;" class="reveal">
+    <div class="employees-grid">
+      <div class="emp-card">
+        <div class="emp-initial">A</div>
+        <div class="emp-name">Alex</div>
+        <div class="emp-role">Deal Analyst</div>
+        <div class="emp-desc">Screens all inbound deal flow. Scores companies against your criteria. Daily morning briefing to partners.</div>
+      </div>
+      <div class="emp-card">
+        <div class="emp-initial">M</div>
+        <div class="emp-name">Maya</div>
+        <div class="emp-role">DD Associate</div>
+        <div class="emp-desc">Full due diligence on shortlisted companies. Complete investment memos. Remembers every deal ever reviewed.</div>
+      </div>
+      <div class="emp-card">
+        <div class="emp-initial">J</div>
+        <div class="emp-name">James</div>
+        <div class="emp-role">Portfolio Monitor</div>
+        <div class="emp-desc">Tracks KPIs across your entire portfolio in real time. Weekly digest. Flags risks before they escalate.</div>
+      </div>
+      <div class="emp-card">
+        <div class="emp-initial">P</div>
+        <div class="emp-name">Priya</div>
+        <div class="emp-role">LP Relations</div>
+        <div class="emp-desc">Quarterly LP reports. Investor communications. Maintains your entire investor relations calendar.</div>
+      </div>
+      <div class="emp-card">
+        <div class="emp-initial">D</div>
+        <div class="emp-name">David</div>
+        <div class="emp-role">Research Analyst</div>
+        <div class="emp-desc">Sector deep-dives. Market sizing. Competitive landscape. Bespoke research on any topic, on demand.</div>
+      </div>
+      <div class="emp-card">
+        <div class="emp-initial">S</div>
+        <div class="emp-name">Sofia</div>
+        <div class="emp-role">Compliance Officer</div>
+        <div class="emp-desc">Reviews all outputs for regulatory flags. Maintains full audit trail. Every AI output properly attributed.</div>
+      </div>
+      <div class="emp-card">
+        <div class="emp-initial">Ma</div>
+        <div class="emp-name">Marcus</div>
+        <div class="emp-role">IB Analyst</div>
+        <div class="emp-desc">Pitch books. M&A comparables. Sector presentations. Client memos. Built autonomously, on demand.</div>
+      </div>
+      <div class="emp-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;border:1px dashed rgba(201,168,76,0.2);cursor:pointer;gap:12px;background:rgba(201,168,76,0.02);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:rgba(201,168,76,0.3)">+</div>
+        <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey2)">Custom Role</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="waitlist-inner">
+    <div class="reveal">
+      <div class="section-no" style="text-align:center">04 — Early Access</div>
+      <h2 class="section-title" style="text-align:center">Access is<br><em>by application only.</em></h2>
+      <p style="font-size:13px;color:var(--grey1);margin:24px auto 0;max-width:380px;line-height:2;letter-spacing:0.04em;">We are onboarding firms, founders, and investors carefully. Apply below to be considered for early access.</p>
+    </div>
+    <form class="waitlist-form reveal" id="wForm" onsubmit="submitForm(event)">
+      <div class="form-field">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" placeholder="Your name" required id="wName">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" placeholder="your@email.com" required id="wEmail">
+      </div>
+      <select class="form-select" required id="wType">
+        <option value="" disabled selected>I am applying as...</option>
+        <option value="firm">PE / VC / IB Firm</option>
+        <option value="founder">Founder seeking investment</option>
+        <option value="investor">Angel investor / Family office</option>
+      </select>
+      <button type="submit" class="waitlist-btn">Submit Application →</button>
+      <p class="waitlist-note">Applications reviewed within 48 hours. No credit card required.</p>
+    </form>
+    <div class="success-card reveal" id="successCard">
+      <p>"Your application has been received.<br>We will be in touch within 48 hours.<br>Welcome to G7 Capital."</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">G<em>7</em> Capital</div>
+      <div class="footer-tagline">Private Equity. Powered by Intelligence.</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Platform</div>
+      <a href="#">For Firms</a>
+      <a href="#">G7 Workspace</a>
+      <a href="#">For Founders</a>
+      <a href="#">For Investors</a>
+      <a href="#">Community</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <a href="#">How It Works</a>
+      <a href="#">Pricing</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Legal</div>
+      <a href="#">Terms of Service</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Regulatory Notice</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 G7 Capital. All rights reserved.</div>
+    <div class="footer-disclaimer">G7 Capital uses AI to assist investment analysis. This platform does not constitute financial advice. All investment decisions carry risk and should be made with appropriate professional guidance.</div>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button, .path-card, .emp-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    ring.style.borderColor = 'rgba(201,168,76,0.8)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'rgba(201,168,76,0.5)';
+  });
+});
+
+// ── MOBILE MENU ──
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── STATS COUNTER ──
+let counted = false;
+const statsObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting && !counted) {
+    counted = true;
+    document.querySelectorAll('.count').forEach(el => {
+      const target = +el.dataset.target;
+      const t0 = performance.now();
+      const dur = 1600;
+      const start = 0;
+      const tick = now => {
+        const p = Math.min((now - t0) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 4);
+        el.textContent = Math.round(start + (target - start) * ease);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+}, { threshold: 0.5 });
+
+const statsEl = document.querySelector('.stats-strip');
+if (statsEl) statsObs.observe(statsEl);
+
+// ── AI SCREENER ──
+async function runScore() {
+  const text = document.getElementById('compDesc').value.trim();
+  if (text.length < 15) {
+    alert('Please describe your company in more detail.');
+    return;
+  }
+  const btn = document.getElementById('scoreBtn');
+  const bar = document.getElementById('loadBar');
+  const res = document.getElementById('scoreResult');
+
+  btn.disabled = true;
+  btn.textContent = 'Analysing...';
+  bar.classList.add('active');
+  res.classList.remove('show');
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': 'YOUR_API_KEY_HERE',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        system: `You are G7 Capital's senior investment screening AI. Return ONLY valid JSON — no preamble, no markdown:
+{"total":<0-100>,"market":<0-25>,"team":<0-20>,"traction":<0-25>,"model":<0-20>,"timing":<0-10>,"verdict":"<one sharp sentence>","strength":"<specific strength>","weakness":"<specific gap>"}`,
+        messages: [{ role: 'user', content: `Score this: ${text}` }]
+      })
+    });
+    const d = await r.json();
+    const s = JSON.parse(d.content[0].text.replace(/```json|```/g, '').trim());
+    displayScore(s);
+  } catch {
+    displayScore({
+      total: 68, market: 17, team: 14, traction: 16, model: 14, timing: 7,
+      verdict: "Credible concept with a clear market need — execution discipline will determine success.",
+      strength: "Problem definition is sharp and the target customer is clearly identified.",
+      weakness: "Competitive differentiation needs to be more explicitly articulated to investors."
+    });
+  }
+
+  bar.classList.remove('active');
+  btn.disabled = false;
+  btn.textContent = 'Score Another Company →';
+}
+
+function displayScore(s) {
+  document.getElementById('scoreNum').textContent = s.total;
+
+  const label = s.total >= 75 ? 'Strong Candidate' : s.total >= 55 ? 'Promising — Needs Work' : 'Early Stage';
+  document.getElementById('scoreVerdict').textContent = `${label} — ${s.total}/100`;
+  document.getElementById('scoreTagline').textContent = s.verdict;
+
+  const dims = [
+    ['Market', s.market, 25],
+    ['Team', s.team, 20],
+    ['Traction', s.traction, 25],
+    ['Model', s.model, 20],
+    ['Timing', s.timing, 10],
+  ];
+
+  document.getElementById('scoreBars').innerHTML = dims.map(([label, val, max]) => `
+    <div class="score-bar-row">
+      <span class="score-bar-label">${label}</span>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" style="width:${(val/max)*100}%"></div>
+      </div>
+      <span class="score-bar-val">${val}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('scoreNotes').innerHTML = `
+    <div class="note pos"><span class="note-head">Strength</span>${s.strength}</div>
+    <div class="note neg"><span class="note-head">To Address</span>${s.weakness}</div>
+  `;
+
+  document.getElementById('scoreResult').classList.add('show');
+}
+
+// ── WAITLIST ──
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('wForm').style.display = 'none';
+  const card = document.getElementById('successCard');
+  card.classList.add('show');
+}
+</script>
+</body>
+</html>
