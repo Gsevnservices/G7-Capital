@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workspace — G7 Capital</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+<script src="../assets/alex-master-v1.js"></script>
+<script src="../assets/workspace.js"></script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+
+<style>
+
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;
+  --grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08);
+  --green:#5A9E6F;--amber:#C4924A;--red:#C45A5A
+}
+body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh}
+
+/* ─────────────────────────────────────────────
+   GRAIN TEXTURE
+───────────────────────────────────────────── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ─────────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--gold)}
+.nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+
+/* ─────────────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────────────── */
+.page-wrap{max-width:1200px;margin:0 auto;padding:120px 64px 100px}
+@media(max-width:768px){.page-wrap{padding:108px 24px 80px}}
+
+/* ─────────────────────────────────────────────
+   WELCOME HEADER
+───────────────────────────────────────────── */
+.welcome-wrap{
+  padding:56px 0 64px;
+  border-bottom:1px solid var(--border2);
+  margin-bottom:48px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:32px;flex-wrap:wrap
+}
+.welcome-left{flex:1;min-width:280px}
+.welcome-eyebrow{
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+  display:flex;align-items:center;gap:14px;
+  opacity:0;animation:fadeUp .8s ease .15s both
+}
+.welcome-eyebrow-line{width:32px;height:1px;background:var(--gold)}
+.welcome-headline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,4.5vw,60px);
+  font-weight:300;line-height:1.05;color:var(--white);
+  margin-bottom:14px;letter-spacing:-.01em;
+  opacity:0;animation:fadeUp .8s ease .3s both
+}
+.welcome-headline em{font-style:normal;color:var(--gold)}
+.welcome-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(18px,2vw,22px);
+  color:var(--grey1);line-height:1.5;
+  opacity:0;animation:fadeUp .8s ease .45s both
+}
+/* Alex status indicator — top right of welcome */
+.alex-status-pill{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 20px;
+  border:1px solid rgba(90,158,111,.25);
+  background:rgba(90,158,111,.06);
+  flex-shrink:0;
+  opacity:0;animation:fadeUp .8s ease .5s both;
+  align-self:flex-start;margin-top:8px
+}
+.alex-status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 8px rgba(90,158,111,.6);
+  animation:pulse 2.5s ease infinite
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 8px rgba(90,158,111,.6)}50%{box-shadow:0 0 16px rgba(90,158,111,.9)}}
+.alex-status-text{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--green)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─────────────────────────────────────────────
+   QUICK STATS BAR
+───────────────────────────────────────────── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--border2);
+  margin-bottom:48px;
+  opacity:0;animation:fadeUp .8s ease .55s both
+}
+.stat-cell{
+  padding:28px 24px;border-right:1px solid var(--border2);
+  position:relative;overflow:hidden
+}
+.stat-cell:last-child{border-right:none}
+.stat-cell::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .7s ease
+}
+.stat-cell.lit::before{transform:scaleX(1)}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:44px;font-weight:300;color:var(--white);line-height:1;margin-bottom:6px
+}
+.stat-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2)}
+@media(max-width:600px){
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .stat-cell{border-right:none;border-bottom:1px solid var(--border2)}
+  .stat-cell:nth-child(odd){border-right:1px solid var(--border2)}
+  .stat-cell:nth-child(3),.stat-cell:nth-child(4){border-bottom:none}
+}
+
+/* ─────────────────────────────────────────────
+   PRIMARY ACTION CARD — full width, prominent
+───────────────────────────────────────────── */
+.action-card{
+  border:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(201,168,76,.06) 0%,rgba(201,168,76,.02) 100%);
+  padding:48px 56px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:32px;flex-wrap:wrap;
+  margin-bottom:64px;
+  position:relative;overflow:hidden;
+  opacity:0;animation:fadeUp .8s ease .65s both
+}
+/* Decorative large G in background */
+.action-card::before{
+  content:'A';
+  position:absolute;right:200px;top:50%;transform:translateY(-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-size:200px;font-weight:300;
+  color:rgba(201,168,76,.04);
+  line-height:1;pointer-events:none;
+  letter-spacing:-.05em
+}
+.action-card-left{flex:1;min-width:240px;position:relative;z-index:1}
+.action-card-eyebrow{
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px
+}
+.action-card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,3.5vw,42px);font-weight:300;
+  color:var(--white);line-height:1.15;margin-bottom:10px
+}
+.action-card-sub{font-size:13px;color:var(--grey1);line-height:1.8;max-width:420px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  padding:18px 48px;text-decoration:none;
+  transition:all .3s;border:none;cursor:pointer;
+  position:relative;z-index:1;white-space:nowrap
+}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,.2)}
+.btn-primary-arrow{font-size:18px}
+@media(max-width:640px){.action-card{padding:32px 24px}.action-card::before{display:none}}
+
+/* ─────────────────────────────────────────────
+   SECTION LABELS (shared)
+───────────────────────────────────────────── */
+.section-eyebrow{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:24px
+}
+.eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.eyebrow-text{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+
+/* ─────────────────────────────────────────────
+   RECENT DEALS TABLE
+───────────────────────────────────────────── */
+.recent-wrap{
+  margin-bottom:64px;
+  opacity:0;animation:fadeUp .8s ease .7s both
+}
+.recent-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:0;padding-bottom:0
+}
+.view-all-link{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);text-decoration:none;transition:color .3s
+}
+.view-all-link:hover{color:var(--gold)}
+
+.recent-table{width:100%;border-collapse:collapse;border:1px solid var(--border2)}
+.recent-table th{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2);font-weight:400;
+  padding:14px 20px;
+  border-bottom:1px solid var(--border2);
+  text-align:left;background:var(--black2)
+}
+.recent-table td{
+  padding:18px 20px;
+  border-bottom:1px solid var(--border2);
+  font-size:13px;color:var(--grey1)
+}
+.recent-table tr:last-child td{border-bottom:none}
+.recent-table tbody tr{cursor:pointer;transition:background .2s}
+.recent-table tbody tr:hover{background:var(--black4)}
+.recent-table tbody tr:hover .r-company{color:var(--gold)}
+.r-company{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--white);
+  transition:color .2s;display:block;line-height:1.2
+}
+.status-badge{display:inline-block;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px}
+.badge-priority{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid var(--border)}
+.badge-watch{background:transparent;color:var(--grey1);border:1px solid var(--border2)}
+.badge-pass{background:transparent;color:var(--grey2);border:1px solid rgba(90,88,85,.25)}
+.score-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300}
+.score-high{color:var(--green)}.score-mid{color:var(--amber)}.score-low{color:var(--red)}.score-none{color:var(--grey2);font-size:13px}
+.decision-badge{font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px}
+.decision-agreed{color:var(--green);border:1px solid rgba(90,158,111,.25)}
+.decision-overridden{color:var(--amber);border:1px solid rgba(196,146,74,.25)}
+.decision-pending{color:var(--grey2);border:1px solid rgba(90,88,85,.2)}
+
+/* Mobile: recent table becomes cards */
+@media(max-width:640px){
+  .recent-table{display:none}
+  .recent-mobile-cards{display:flex!important}
+}
+.recent-mobile-cards{
+  display:none;flex-direction:column;gap:0;
+  border:1px solid var(--border2)
+}
+.recent-mobile-card{
+  padding:20px;border-bottom:1px solid var(--border2);
+  cursor:pointer;transition:background .2s
+}
+.recent-mobile-card:last-child{border-bottom:none}
+.recent-mobile-card:hover{background:var(--black4)}
+.rmc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.rmc-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--white);line-height:1.2}
+.rmc-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rmc-date{font-size:11px;color:var(--grey2)}
+
+/* Empty state */
+.recent-empty{
+  padding:48px;text-align:center;
+  border:1px solid var(--border2);color:var(--grey2);
+  font-size:13px;line-height:1.8
+}
+.recent-empty strong{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;color:var(--grey1);margin-bottom:6px
+}
+
+/* ─────────────────────────────────────────────
+   TWO-COLUMN LOWER SECTION
+   Alex status card + quick links
+───────────────────────────────────────────── */
+.lower-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:24px;margin-bottom:64px;
+  opacity:0;animation:fadeUp .8s ease .75s both
+}
+@media(max-width:760px){.lower-grid{grid-template-columns:1fr}}
+
+/* ─────────────────────────────────────────────
+   ALEX STATUS CARD
+───────────────────────────────────────────── */
+.alex-card{
+  border:1px solid var(--border2);
+  background:var(--black2);
+  padding:32px
+}
+.alex-card-header{
+  display:flex;align-items:center;gap:14px;
+  padding-bottom:24px;border-bottom:1px solid var(--border2);margin-bottom:24px
+}
+.alex-initial{
+  width:48px;height:48px;border-radius:50%;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--gold);
+  flex-shrink:0
+}
+.alex-card-title{
+  flex:1
+}
+.alex-card-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;color:var(--white);margin-bottom:2px
+}
+.alex-card-role{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2)
+}
+.alex-active{display:flex;align-items:center;gap:7px}
+.alex-active-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.5s ease infinite}
+.alex-active-text{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--green)}
+
+.alex-config-list{display:flex;flex-direction:column;gap:0;margin-bottom:24px}
+.config-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:16px;padding:10px 0;
+  border-bottom:1px solid var(--border2)
+}
+.config-row:last-child{border-bottom:none}
+.config-key{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey2);flex-shrink:0}
+.config-val{font-size:13px;color:var(--grey1);text-align:right;word-break:break-word}
+.btn-update-config{
+  display:inline-block;
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);background:none;
+  border:1px solid var(--border);padding:11px 24px;
+  text-decoration:none;transition:all .3s;cursor:pointer
+}
+.btn-update-config:hover{border-color:var(--gold);background:rgba(201,168,76,.05)}
+
+/* ─────────────────────────────────────────────
+   QUICK LINK CARDS — 3 cards in a row
+───────────────────────────────────────────── */
+.quick-links{
+  display:flex;flex-direction:column;gap:0;
+  border:1px solid var(--border2)
+}
+.quick-link-card{
+  display:flex;align-items:center;gap:20px;
+  padding:24px 28px;border-bottom:1px solid var(--border2);
+  text-decoration:none;cursor:pointer;
+  background:none;border-left:none;border-right:none;
+  width:100%;text-align:left;
+  transition:background .2s;position:relative
+}
+.quick-link-card:last-child{border-bottom:none}
+.quick-link-card:hover{background:var(--black4)}
+.quick-link-card:hover .ql-arrow{color:var(--gold);transform:translateX(4px)}
+.ql-icon{
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--grey2);
+  flex-shrink:0;transition:border-color .3s
+}
+.quick-link-card:hover .ql-icon{border-color:var(--gold);color:var(--gold)}
+.ql-text{flex:1}
+.ql-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--white);
+  display:block;margin-bottom:3px
+}
+.ql-sub{font-size:11px;color:var(--grey2);letter-spacing:.03em}
+.ql-arrow{font-size:16px;color:var(--grey2);transition:all .25s}
+/* Reset card — red accent */
+.quick-link-card.ql-reset:hover{background:rgba(196,90,90,.04)}
+.quick-link-card.ql-reset:hover .ql-arrow{color:var(--red)}
+.quick-link-card.ql-reset:hover .ql-icon{border-color:rgba(196,90,90,.4);color:var(--red)}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+footer{
+  border-top:1px solid var(--border2);
+  padding:48px 64px 40px;
+  max-width:1200px;margin:0 auto
+}
+.footer-inner{
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:24px
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;letter-spacing:.1em;color:var(--grey2)
+}
+.footer-brand em{font-style:normal;color:var(--gold)}
+.footer-links{display:flex;gap:28px;flex-wrap:wrap}
+.footer-links a{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey2);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--grey1)}
+.footer-copy{font-size:10px;color:var(--grey2);letter-spacing:.06em;width:100%;padding-top:24px;border-top:1px solid var(--border2);margin-top:8px}
+@media(max-width:768px){footer{padding:40px 24px 32px}}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─────────────────────────────────────────────
+     NAVIGATION
+───────────────────────────────────────────── -->
+<nav>
+  <a href="../index.html" class="nav-logo">G<em>7</em> Capital</a>
+  <div class="nav-right">
+    <a href="index.html"   class="nav-link active">Dashboard</a>
+    <a href="submit.html"  class="nav-link">New Deal</a>
+    <a href="history.html" class="nav-link">History</a>
+    <span class="nav-badge" id="navFirmName">Workspace</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ─── WELCOME HEADER ───────────────────────── -->
+  <div class="welcome-wrap">
+    <div class="welcome-left">
+      <div class="welcome-eyebrow">
+        <div class="welcome-eyebrow-line"></div>
+        <span>G7 Workspace</span>
+      </div>
+      <h1 class="welcome-headline">
+        Good <span id="timeGreeting">morning</span>,<br>
+        <em id="firmNameHeadline">Your Firm</em>.
+      </h1>
+      <p class="welcome-sub">Alex is ready. Your AI deal analyst is standing by.</p>
+    </div>
+    <div class="alex-status-pill">
+      <div class="alex-status-dot"></div>
+      <span class="alex-status-text">Alex — Active</span>
+    </div>
+  </div>
+
+  <!-- ─── QUICK STATS BAR ──────────────────────── -->
+  <div class="stats-bar">
+    <div class="stat-cell" id="statCell0">
+      <div class="stat-num" id="statDeals">0</div>
+      <div class="stat-label">Deals Screened</div>
+    </div>
+    <div class="stat-cell" id="statCell1">
+      <div class="stat-num" id="statPriority">0</div>
+      <div class="stat-label">Priority Reviews</div>
+    </div>
+    <div class="stat-cell" id="statCell2">
+      <div class="stat-num" id="statAvg">—</div>
+      <div class="stat-label">Avg G7 Score</div>
+    </div>
+    <div class="stat-cell" id="statCell3">
+      <div class="stat-num" id="statCalib">0</div>
+      <div class="stat-label">Calibrations</div>
+    </div>
+  </div>
+
+  <!-- ─── PRIMARY ACTION CARD ──────────────────── -->
+  <div class="action-card">
+    <div class="action-card-left">
+      <div class="action-card-eyebrow">Alex — Deal Analyst</div>
+      <h2 class="action-card-title">Screen a New Deal</h2>
+      <p class="action-card-sub">
+        Submit a company for Alex to analyse to institutional standard.
+        Text description or PDF upload — results in under 60 seconds.
+      </p>
+    </div>
+    <a href="submit.html" class="btn-primary">
+      Submit a Deal <span class="btn-primary-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ─── RECENT DEALS ─────────────────────────── -->
+  <div class="recent-wrap">
+    <div class="recent-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div class="section-eyebrow" style="margin-bottom:0">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">01 — Recent Screenings</span>
+      </div>
+      <a href="history.html" class="view-all-link">View All →</a>
+    </div>
+
+    <!-- Desktop table -->
+    <table class="recent-table" id="recentTable">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th style="text-align:center">Score</th>
+          <th>Decision</th>
+        </tr>
+      </thead>
+      <tbody id="recentTableBody">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+
+    <!-- Mobile cards -->
+    <div class="recent-mobile-cards" id="recentMobileCards">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Empty state -->
+    <div class="recent-empty" id="recentEmpty" style="display:none">
+      <strong>No deals screened yet.</strong>
+      Submit a company above and Alex will produce a full screening note in under 60 seconds.
+    </div>
+  </div>
+
+  <!-- ─── LOWER GRID: ALEX STATUS + QUICK LINKS ── -->
+  <div class="lower-grid">
+
+    <!-- Alex Status Card -->
+    <div class="alex-card reveal">
+      <div class="alex-card-header">
+        <div class="alex-initial">A</div>
+        <div class="alex-card-title">
+          <div class="alex-card-name">Alex</div>
+          <div class="alex-card-role">Deal Analyst — G7 Workspace</div>
+        </div>
+        <div class="alex-active">
+          <div class="alex-active-dot"></div>
+          <span class="alex-active-text">Ready</span>
+        </div>
+      </div>
+
+      <div class="alex-config-list">
+        <div class="config-row">
+          <span class="config-key">Stage Focus</span>
+          <span class="config-val" id="cfgStage">—</span>
+        </div>
+        <div class="config-row">
+          <span class="config-key">Sector Focus</span>
+          <span class="config-val" id="cfgSector">—</span>
+        </div>
+        <div class="config-row">
+          <span class="config-key">Ticket Size</span>
+          <span class="config-val" id="cfgTicket">—</span>
+        </div>
+        <div class="config-row">
+          <span class="config-key">Calibrations Applied</span>
+          <span class="config-val" id="cfgCalib">0</span>
+        </div>
+        <div class="config-row">
+          <span class="config-key">Last Screened</span>
+          <span class="config-val" id="cfgLastScreened">Never</span>
+        </div>
+      </div>
+
+      <a href="onboard.html" class="btn-update-config">Update Configuration →</a>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links reveal">
+
+      <a href="history.html" class="quick-link-card">
+        <div class="ql-icon">H</div>
+        <div class="ql-text">
+          <span class="ql-title">Deal History</span>
+          <span class="ql-sub">Search and filter all screened deals</span>
+        </div>
+        <span class="ql-arrow">→</span>
+      </a>
+
+      <a href="onboard.html" class="quick-link-card">
+        <div class="ql-icon">C</div>
+        <div class="ql-text">
+          <span class="ql-title">Update Configuration</span>
+          <span class="ql-sub">Edit thesis, parameters, and hard pass rules</span>
+        </div>
+        <span class="ql-arrow">→</span>
+      </a>
+
+      <button class="quick-link-card ql-reset" onclick="handleReset()">
+        <div class="ql-icon">R</div>
+        <div class="ql-text">
+          <span class="ql-title">Reset Workspace</span>
+          <span class="ql-sub">Clear all data and start fresh</span>
+        </div>
+        <span class="ql-arrow">→</span>
+      </button>
+
+    </div>
+
+  </div><!-- /lower-grid -->
+
+</div><!-- /page-wrap -->
+
+<!-- ─────────────────────────────────────────────
+     FOOTER
+───────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">G<em>7</em> Capital</div>
+    <div class="footer-links">
+      <a href="../index.html">Main Site</a>
+      <a href="submit.html">New Deal</a>
+      <a href="history.html">History</a>
+      <a href="onboard.html">Settings</a>
+    </div>
+    <div class="footer-copy">
+      G7 Workspace — Private &amp; Confidential. Deal data is stored locally in your browser only.
+      © 2026 G7 Capital / Gsevn Services.
+    </div>
+  </div>
+</footer>
+
+<script>
+
+// ─────────────────────────────────────────────
+// ONBOARDING GUARD — must be first
+// ─────────────────────────────────────────────
+try { requireOnboarding(); } catch(e) { /* redirecting */ }
+
+
+// ─────────────────────────────────────────────
+// CURSOR
+// ─────────────────────────────────────────────
+(function() {
+  var c = document.getElementById('cursor');
+  var r = document.getElementById('cursorRing');
+  if (!c) return;
+  document.addEventListener('mousemove', function(e) {
+    c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
+    r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a,button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      c.style.transform = 'translate(-50%,-50%) scale(2)';
+      r.style.transform = 'translate(-50%,-50%) scale(1.4)';
+      r.style.borderColor = 'rgba(201,168,76,.8)';
+    });
+    el.addEventListener('mouseleave', function() {
+      c.style.transform = 'translate(-50%,-50%) scale(1)';
+      r.style.transform = 'translate(-50%,-50%) scale(1)';
+      r.style.borderColor = 'rgba(201,168,76,.5)';
+    });
+  });
+})();
+
+
+// ─────────────────────────────────────────────
+// TIME-BASED GREETING
+// ─────────────────────────────────────────────
+(function() {
+  var h = new Date().getHours();
+  var greeting = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  document.getElementById('timeGreeting').textContent = greeting;
+})();
+
+
+// ─────────────────────────────────────────────
+// STAT COUNT-UP ANIMATION
+// ─────────────────────────────────────────────
+function animateCount(elId, target, duration) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  if (target === 0 || target === null) { el.textContent = target === null ? '—' : '0'; return; }
+  var startTime = null;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var eased    = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+
+// ─────────────────────────────────────────────
+// HELPERS: extract status and score from alexOutput
+// (mirrors logic in history.html — kept local
+//  so the dashboard has no dependency on enrichDeal)
+// ─────────────────────────────────────────────
+function extractStatus(alexOutput) {
+  if (!alexOutput) return null;
+  var m = alexOutput.match(/STATUS[:\s]+([^\n]+)/i);
+  if (!m) m = alexOutput.match(/RECOMMENDATION[:\s]+([^\n]+)/i);
+  if (!m) return null;
+  var v = m[1].trim().toUpperCase();
+  if (v.indexOf('PRIORITY') !== -1) return 'PRIORITY REVIEW';
+  if (v.indexOf('WATCH')    !== -1) return 'WATCH';
+  if (v.indexOf('PASS')     !== -1) return 'PASS';
+  return v.slice(0, 20);
+}
+
+function statusBadgeHtml(status) {
+  if (!status) return '<span class="status-badge badge-pass">—</span>';
+  var s = status.toUpperCase();
+  if (s.indexOf('PRIORITY') !== -1) return '<span class="status-badge badge-priority">Priority</span>';
+  if (s.indexOf('WATCH')    !== -1) return '<span class="status-badge badge-watch">Watch</span>';
+  return '<span class="status-badge badge-pass">Pass</span>';
+}
+
+function scoreHtml(score) {
+  if (score === null || score === undefined) return '<span class="score-val score-none">—</span>';
+  var cls = score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
+  return '<span class="score-val ' + cls + '">' + score + '</span>';
+}
+
+function decisionHtml(decision) {
+  if (!decision) return '<span class="decision-badge decision-pending">Pending</span>';
+  var d = decision.toLowerCase();
+  if (d === 'agreed')     return '<span class="decision-badge decision-agreed">Agreed</span>';
+  if (d === 'overridden') return '<span class="decision-badge decision-overridden">Overridden</span>';
+  return '<span class="decision-badge decision-pending">Pending</span>';
+}
+
+function escHtml(s) {
+  return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+}
+
+
+// ─────────────────────────────────────────────
+// NAVIGATE TO DEAL — sets g7_pending_result,
+// then goes to result.html
+// ─────────────────────────────────────────────
+function viewDeal(dealId) {
+  var deal = loadDealById(dealId);
+  if (!deal) return;
+  localStorage.setItem('g7_pending_result', JSON.stringify({
+    dealId:      deal.id,
+    companyName: deal.companyName,
+    alexOutput:  deal.alexOutput,
+    timestamp:   deal.dateScreened
+  }));
+  window.location.href = 'result.html';
+}
+
+
+// ─────────────────────────────────────────────
+// RESET WORKSPACE — confirm then clear
+// After clearing, go to onboard.html to start fresh
+// ─────────────────────────────────────────────
+function handleReset() {
+  var cleared = clearWorkspace();  // clearWorkspace() shows confirm dialog
+  if (cleared) {
+    window.location.href = 'onboard.html';
+  }
+}
+
+
+// ─────────────────────────────────────────────
+// SCROLL REVEAL
+// ─────────────────────────────────────────────
+function initReveal() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+}
+
+
+// ─────────────────────────────────────────────
+// MAIN INIT
+// ─────────────────────────────────────────────
+(function init() {
+
+  // ── 1. Firm config ──
+  var cfg = loadFirmConfig() || {};
+  var firmName = cfg.firmName || 'Your Firm';
+
+  // Set firm name everywhere
+  document.getElementById('firmNameHeadline').textContent = firmName;
+  document.getElementById('navFirmName').textContent      = firmName;
+
+  // ── 2. Deal data ──
+  var deals    = loadAllDeals();
+  var calibLog = loadCalibrationLog();
+
+  // Extract scores and statuses for stats
+  var scores   = [];
+  var priority = 0;
+  deals.forEach(function(deal) {
+    var parsed = parseAlexScore(deal.alexOutput || '');
+    if (parsed.score !== null) scores.push(parsed.score);
+    var status = extractStatus(deal.alexOutput || '');
+    if (status && status.toUpperCase().indexOf('PRIORITY') !== -1) priority++;
+    // Cache on object for row rendering
+    deal._score    = parsed.score;
+    deal._status   = status;
+  });
+  var avg = scores.length ? Math.round(scores.reduce(function(a,b){ return a+b; },0) / scores.length) : null;
+
+  // ── 3. Stats ──
+  animateCount('statDeals',    deals.length,    900);
+  animateCount('statPriority', priority,         900);
+  animateCount('statCalib',    calibLog.length,  900);
+  if (avg !== null) {
+    animateCount('statAvg', avg, 900);
+  } else {
+    document.getElementById('statAvg').textContent = '—';
+  }
+
+  // Staggered gold underline on stat cells
+  setTimeout(function() {
+    [0,1,2,3].forEach(function(i) {
+      setTimeout(function() {
+        var el = document.getElementById('statCell'+i);
+        if (el) el.classList.add('lit');
+      }, i * 130);
+    });
+  }, 500);
+
+  // ── 4. Recent deals (last 5, newest first) ──
+  var recent = deals.slice(0, 5);
+
+  if (recent.length === 0) {
+    document.getElementById('recentTable').style.display        = 'none';
+    document.getElementById('recentMobileCards').style.display  = 'none';
+    document.getElementById('recentEmpty').style.display        = 'block';
+  } else {
+    // Desktop table
+    var tbHtml = '';
+    recent.forEach(function(deal) {
+      tbHtml += '<tr onclick="viewDeal(\'' + deal.id + '\')">';
+      tbHtml += '<td><span class="r-company">' + escHtml(deal.companyName) + '</span></td>';
+      tbHtml += '<td style="color:var(--grey2);white-space:nowrap">' + formatDate(deal.dateScreened) + '</td>';
+      tbHtml += '<td>' + statusBadgeHtml(deal._status) + '</td>';
+      tbHtml += '<td style="text-align:center">' + scoreHtml(deal._score) + '</td>';
+      tbHtml += '<td>' + decisionHtml(deal.partnerDecision) + '</td>';
+      tbHtml += '</tr>';
+    });
+    document.getElementById('recentTableBody').innerHTML = tbHtml;
+
+    // Mobile cards
+    var mcHtml = '';
+    recent.forEach(function(deal) {
+      mcHtml += '<div class="recent-mobile-card" onclick="viewDeal(\'' + deal.id + '\')">';
+      mcHtml += '<div class="rmc-top"><span class="rmc-name">' + escHtml(deal.companyName) + '</span>' + scoreHtml(deal._score) + '</div>';
+      mcHtml += '<div class="rmc-meta">' + statusBadgeHtml(deal._status) + decisionHtml(deal.partnerDecision) + '</div>';
+      mcHtml += '<span class="rmc-date">' + formatDate(deal.dateScreened) + '</span>';
+      mcHtml += '</div>';
+    });
+    document.getElementById('recentMobileCards').innerHTML = mcHtml;
+  }
+
+  // ── 5. Alex status card ──
+  // Build ticket size display
+  var ticket = '—';
+  if (cfg.ticketMin && cfg.ticketMax) ticket = cfg.ticketMin + ' — ' + cfg.ticketMax;
+  else if (cfg.ticketMin) ticket = cfg.ticketMin + '+';
+  else if (cfg.ticketMax) ticket = 'Up to ' + cfg.ticketMax;
+
+  document.getElementById('cfgStage').textContent        = cfg.stageFocus  || '—';
+  document.getElementById('cfgSector').textContent       = cfg.sectorFocus || '—';
+  document.getElementById('cfgTicket').textContent       = ticket;
+  document.getElementById('cfgCalib').textContent        = calibLog.length;
+  document.getElementById('cfgLastScreened').textContent = deals.length
+    ? formatDate(deals[0].dateScreened)
+    : 'Never';
+
+  // ── 6. Scroll reveal ──
+  initReveal();
+
+})();
+
+</script>
+</body>
+</html>

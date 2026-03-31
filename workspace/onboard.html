@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firm Setup — G7 Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<style>
+
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;
+  --black2:#0F0F0F;
+  --black3:#161616;
+  --black4:#1E1E1E;
+  --gold:#C9A84C;
+  --gold2:#E2C97E;
+  --gold3:#A8873A;
+  --white:#FAFAF8;
+  --white2:#F0EFE9;
+  --grey1:#8A8880;
+  --grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);
+  --border2:rgba(250,250,248,0.08)
+}
+body{
+  font-family:'Tenor Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:none;
+  min-height:100vh
+}
+
+/* ─────────────────────────────────────────────
+   GRAIN TEXTURE OVERLAY (fixed, behind everything)
+   Note: ::before so z-index 1000 sits above content
+───────────────────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1000;
+  opacity:.4
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR (hidden on mobile)
+───────────────────────────────────────────── */
+.cursor{
+  position:fixed;
+  width:8px;height:8px;
+  background:var(--gold);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transition:transform .15s ease;
+  transform:translate(-50%,-50%);
+  left:-100px;top:-100px
+}
+.cursor-ring{
+  position:fixed;
+  width:36px;height:36px;
+  border:1px solid rgba(201,168,76,.5);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9998;
+  transition:all .12s ease;
+  transform:translate(-50%,-50%);
+  left:-100px;top:-100px
+}
+@media(max-width:480px){
+  .cursor,.cursor-ring{display:none}
+  body{cursor:auto}
+}
+
+/* ─────────────────────────────────────────────
+   NAVIGATION
+   Same on every page — logo left, minimal right
+───────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:999;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 64px;
+  height:80px;
+  background:rgba(8,8,8,.92);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border2)
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--white);text-decoration:none
+}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-back{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);text-decoration:none;
+  transition:color .3s
+}
+.nav-back:hover{color:var(--white)}
+.nav-badge{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--border);
+  padding:6px 16px
+}
+.hamburger{
+  display:none;flex-direction:column;gap:6px;
+  cursor:pointer;background:none;border:none;padding:4px
+}
+.hamburger span{display:block;width:28px;height:1px;background:var(--white)}
+@media(max-width:768px){
+  nav{padding:0 24px}
+  .nav-back,.nav-badge{display:none}
+  .hamburger{display:flex}
+}
+
+/* ─────────────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────────────── */
+.page-wrap{
+  max-width:860px;
+  margin:0 auto;
+  padding:140px 40px 120px
+}
+@media(max-width:768px){
+  .page-wrap{padding:120px 24px 80px}
+}
+
+/* ─────────────────────────────────────────────
+   ALREADY ONBOARDED BANNER
+   Shown if firm has already completed setup
+───────────────────────────────────────────── */
+.returning-banner{
+  display:none;
+  margin-bottom:48px;
+  padding:24px 32px;
+  border:1px solid var(--border);
+  background:rgba(201,168,76,.04);
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  flex-wrap:wrap
+}
+.returning-banner.show{display:flex}
+.returning-text{
+  font-size:13px;color:var(--grey1);line-height:1.7
+}
+.returning-text strong{
+  display:block;color:var(--white);
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;margin-bottom:4px
+}
+.btn-go-workspace{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  padding:12px 28px;text-decoration:none;
+  transition:all .3s;white-space:nowrap;border:none;cursor:pointer
+}
+.btn-go-workspace:hover{background:var(--gold2)}
+
+/* ─────────────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────────────── */
+.page-eyebrow{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:40px;
+  opacity:0;animation:fadeUp .8s ease .2s both
+}
+.eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.eyebrow-text{
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold)
+}
+.page-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,5vw,64px);font-weight:300;
+  line-height:1.05;letter-spacing:-.01em;
+  color:var(--white);
+  margin-bottom:16px;
+  opacity:0;animation:fadeUp .8s ease .4s both
+}
+.page-title em{font-style:italic;color:var(--gold)}
+.page-sub{
+  font-size:14px;color:var(--grey1);line-height:1.9;
+  max-width:560px;
+  margin-bottom:64px;
+  opacity:0;animation:fadeUp .8s ease .6s both
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ─────────────────────────────────────────────
+   PROGRESS INDICATOR
+   Shows which step of the form the user is on
+───────────────────────────────────────────── */
+.progress-bar{
+  display:flex;gap:0;
+  margin-bottom:64px;
+  border:1px solid var(--border2);
+  opacity:0;animation:fadeUp .8s ease .7s both
+}
+.progress-step{
+  flex:1;padding:20px 24px;
+  border-right:1px solid var(--border2);
+  cursor:pointer;transition:background .3s
+}
+.progress-step:last-child{border-right:none}
+.progress-step.active{background:rgba(201,168,76,.06)}
+.progress-step.done{background:rgba(201,168,76,.03)}
+.progress-step-num{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2);margin-bottom:6px
+}
+.progress-step.active .progress-step-num,
+.progress-step.done .progress-step-num{color:var(--gold)}
+.progress-step-label{
+  font-size:11px;letter-spacing:.05em;
+  color:var(--grey2)
+}
+.progress-step.active .progress-step-label{color:var(--white)}
+.progress-step.done .progress-step-label{color:var(--grey1)}
+@media(max-width:600px){
+  .progress-step-label{display:none}
+  .progress-step{padding:16px 12px}
+}
+
+/* ─────────────────────────────────────────────
+   FORM SECTIONS
+   Each section is a "step" shown one at a time
+───────────────────────────────────────────── */
+.form-section{
+  display:none;
+  opacity:0;animation:fadeUp .5s ease forwards
+}
+.form-section.active{display:block}
+
+.section-heading{
+  margin-bottom:40px;
+  padding-bottom:24px;
+  border-bottom:1px solid var(--border2)
+}
+.section-no{
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px
+}
+.section-heading-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:300;
+  color:var(--white);line-height:1.2
+}
+.section-heading-desc{
+  font-size:13px;color:var(--grey1);line-height:1.8;
+  margin-top:8px;max-width:500px
+}
+
+/* ─────────────────────────────────────────────
+   FORM FIELDS
+───────────────────────────────────────────── */
+.field-group{
+  display:flex;flex-direction:column;
+  gap:0;
+  margin-bottom:8px
+}
+/* Two-column grid for short fields */
+.field-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0
+}
+@media(max-width:600px){.field-row{grid-template-columns:1fr}}
+
+.field{
+  display:flex;flex-direction:column;
+  border-bottom:1px solid var(--border2);
+  padding:4px 0;
+  position:relative;
+  transition:border-color .3s
+}
+/* Left border glow when active */
+.field:focus-within{
+  border-bottom-color:rgba(201,168,76,.4)
+}
+.field-row .field{
+  border-right:1px solid var(--border2)
+}
+.field-row .field:last-child{border-right:none}
+
+.field-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2);padding:16px 0 4px
+}
+.field-label .req{color:var(--gold);margin-left:2px}
+.field-label .opt{
+  color:var(--grey2);opacity:.5;
+  font-size:8px;letter-spacing:.1em
+}
+
+.field input,
+.field select,
+.field textarea{
+  background:transparent;border:none;outline:none;
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;font-weight:300;
+  color:var(--white);
+  padding:4px 0 16px;
+  width:100%;
+  line-height:1.5;
+  resize:none
+}
+.field input::placeholder,
+.field textarea::placeholder{
+  color:rgba(250,250,248,.18);font-style:italic
+}
+.field select{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5855' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 4px center
+}
+.field select option{
+  background:var(--black2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:14px
+}
+.field textarea{
+  min-height:140px;
+  font-size:16px;
+  padding-top:8px
+}
+.field textarea.tall{min-height:200px}
+
+/* Character count hint */
+.field-hint{
+  font-size:10px;letter-spacing:.05em;
+  color:var(--grey2);
+  padding:0 0 12px;
+  line-height:1.6
+}
+
+/* Field-level error */
+.field-error{
+  font-size:10px;color:#e8a0a0;
+  letter-spacing:.05em;padding-bottom:8px;
+  display:none;font-style:italic
+}
+.field-error.show{display:block}
+
+/* ─────────────────────────────────────────────
+   API KEY FIELD — special treatment
+───────────────────────────────────────────── */
+.api-key-wrap{position:relative}
+.api-key-wrap input{
+  padding-right:48px;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:13px;letter-spacing:.05em
+}
+.toggle-key{
+  position:absolute;right:0;bottom:16px;
+  background:none;border:none;cursor:pointer;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey2);transition:color .3s;padding:4px
+}
+.toggle-key:hover{color:var(--gold)}
+
+/* Security note */
+.security-note{
+  margin-top:24px;
+  padding:20px 24px;
+  border:1px solid var(--border2);
+  background:rgba(250,250,248,.02)
+}
+.security-note p{
+  font-size:12px;color:var(--grey2);line-height:1.8;
+  letter-spacing:.02em
+}
+.security-note strong{
+  display:block;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey1);margin-bottom:6px;
+  font-family:'Tenor Sans',sans-serif;font-weight:400
+}
+
+/* ─────────────────────────────────────────────
+   NAVIGATION BUTTONS (step prev / next / submit)
+───────────────────────────────────────────── */
+.form-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:48px;padding-top:32px;
+  border-top:1px solid var(--border2)
+}
+.btn-prev{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey1);background:none;border:none;cursor:pointer;
+  transition:color .3s;padding:0;
+  display:flex;align-items:center;gap:12px
+}
+.btn-prev:hover{color:var(--white)}
+.btn-prev span{font-size:16px;color:var(--grey2)}
+.btn-next{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  border:none;cursor:pointer;
+  padding:16px 40px;transition:all .3s;
+  display:flex;align-items:center;gap:12px
+}
+.btn-next:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-next span{font-size:16px}
+.btn-submit{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  border:none;cursor:pointer;
+  padding:16px 48px;transition:all .3s;
+  display:flex;align-items:center;gap:12px
+}
+.btn-submit:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 12px 40px rgba(201,168,76,.2)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ─────────────────────────────────────────────
+   LOADING STATE
+───────────────────────────────────────────── */
+.loading-bar{
+  display:none;height:2px;
+  background:var(--black4);
+  margin-top:24px;overflow:hidden
+}
+.loading-bar.active{display:block}
+.loading-bar-inner{
+  height:100%;background:var(--gold);
+  animation:loadBar 1.5s ease infinite
+}
+@keyframes loadBar{
+  0%{width:0%;margin-left:0}
+  50%{width:70%;margin-left:0}
+  100%{width:0%;margin-left:100%}
+}
+
+/* ─────────────────────────────────────────────
+   SUCCESS STATE — after submission
+───────────────────────────────────────────── */
+.success-screen{
+  display:none;
+  text-align:center;
+  padding:80px 0
+}
+.success-screen.show{
+  display:block;
+  animation:fadeUp .8s ease forwards
+}
+.success-icon{
+  width:80px;height:80px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  margin:0 auto 40px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;color:var(--gold)
+}
+.success-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;font-weight:300;
+  color:var(--white);margin-bottom:16px;line-height:1.1
+}
+.success-title em{font-style:italic;color:var(--gold)}
+.success-sub{
+  font-size:14px;color:var(--grey1);
+  line-height:1.9;margin-bottom:48px;
+  max-width:460px;margin-left:auto;margin-right:auto
+}
+.btn-enter-workspace{
+  display:inline-block;
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  padding:18px 56px;text-decoration:none;
+  transition:all .3s
+}
+.btn-enter-workspace:hover{
+  background:var(--gold2);
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(201,168,76,.25)
+}
+
+/* ─────────────────────────────────────────────
+   DIVIDER
+───────────────────────────────────────────── */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:64px 0
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────── */
+.reveal{
+  opacity:0;transform:translateY(24px);
+  transition:opacity .7s ease,transform .7s ease
+}
+.reveal.in{opacity:1;transform:none}
+
+/* ─────────────────────────────────────────────
+   MOBILE ADJUSTMENTS
+───────────────────────────────────────────── */
+@media(max-width:600px){
+  .form-nav{flex-direction:column;gap:16px;align-items:stretch}
+  .btn-prev{justify-content:center}
+  .btn-next,.btn-submit{justify-content:center;width:100%}
+  .progress-bar{overflow-x:auto}
+}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor (desktop only) -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─────────────────────────────────────────────
+     NAVIGATION
+───────────────────────────────────────────── -->
+<nav>
+  <a href="../index.html" class="nav-logo">G<em>7</em> Capital</a>
+  <div class="nav-right">
+    <a href="../index.html" class="nav-back">← Main Site</a>
+    <span class="nav-badge">Workspace Setup</span>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ─────────────────────────────────────────────
+     MAIN CONTENT
+───────────────────────────────────────────── -->
+<main class="page-wrap">
+
+  <!-- Returning firm banner (shown if g7_onboarded = true) -->
+  <div class="returning-banner" id="returningBanner">
+    <div class="returning-text">
+      <strong id="returningFirmName">Your Firm</strong>
+      Your workspace is already configured. You can proceed directly to the workspace or update your configuration below.
+    </div>
+    <button class="btn-go-workspace" onclick="window.location.href='index.html'">Enter Workspace →</button>
+  </div>
+
+  <!-- Page header -->
+  <div class="page-eyebrow">
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-text">G7 Workspace — Step 01</span>
+  </div>
+  <h1 class="page-title">Configure Your<br><em>Firm Profile</em></h1>
+  <p class="page-sub">
+    This takes five minutes. Your answers shape every analysis Alex produces.
+    He will apply your thesis, respect your hard pass rules, and write to your standards — every time.
+  </p>
+
+  <!-- Step progress indicator -->
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-step active" id="step-tab-1" onclick="goToStep(1)">
+      <div class="progress-step-num">01</div>
+      <div class="progress-step-label">API Key</div>
+    </div>
+    <div class="progress-step" id="step-tab-2" onclick="goToStep(2)">
+      <div class="progress-step-num">02</div>
+      <div class="progress-step-label">Firm Identity</div>
+    </div>
+    <div class="progress-step" id="step-tab-3" onclick="goToStep(3)">
+      <div class="progress-step-num">03</div>
+      <div class="progress-step-label">Parameters</div>
+    </div>
+    <div class="progress-step" id="step-tab-4" onclick="goToStep(4)">
+      <div class="progress-step-num">04</div>
+      <div class="progress-step-label">Thesis</div>
+    </div>
+    <div class="progress-step" id="step-tab-5" onclick="goToStep(5)">
+      <div class="progress-step-num">05</div>
+      <div class="progress-step-label">History</div>
+    </div>
+  </div>
+
+  <!-- ─── FORM ───────────────────────────────── -->
+  <form id="onboardForm" novalidate>
+
+    <!-- ══════════════════════════════════════════
+         STEP 1 — API KEY
+         The Anthropic API key needed to run Alex
+    ══════════════════════════════════════════ -->
+    <div class="form-section active" id="formStep1">
+      <div class="section-heading">
+        <div class="section-no">01 — Access</div>
+        <h2 class="section-heading-title">Connect Your API Key</h2>
+        <p class="section-heading-desc">
+          Alex runs on the Anthropic Claude API. Enter your key once — it is stored locally in your browser and never sent anywhere except directly to Anthropic.
+        </p>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label class="field-label" for="apiKey">
+            Anthropic API Key <span class="req">*</span>
+          </label>
+          <div class="api-key-wrap">
+            <!-- type="password" so key is hidden by default -->
+            <input
+              type="password"
+              id="apiKey"
+              name="apiKey"
+              placeholder="sk-ant-api03-..."
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button type="button" class="toggle-key" id="toggleKey">Show</button>
+          </div>
+          <div class="field-error" id="apiKey-error">Please enter your Anthropic API key.</div>
+        </div>
+      </div>
+
+      <div class="security-note">
+        <strong>Security Note</strong>
+        <p>
+          Your API key is stored in your browser's localStorage — it never touches our servers.
+          All API calls go directly from your browser to Anthropic.
+          Do not share this browser session with anyone who should not have API access.
+        </p>
+      </div>
+
+      <div class="form-nav">
+        <div></div><!-- spacer -->
+        <button type="button" class="btn-next" onclick="nextStep(1)">
+          Firm Identity <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 2 — FIRM IDENTITY
+         Name and type of the firm
+    ══════════════════════════════════════════ -->
+    <div class="form-section" id="formStep2">
+      <div class="section-heading">
+        <div class="section-no">02 — Identity</div>
+        <h2 class="section-heading-title">About Your Firm</h2>
+        <p class="section-heading-desc">
+          Alex addresses your firm by name in every note and calibrates his analysis to your firm type.
+        </p>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label class="field-label" for="firmName">
+            Firm Name <span class="req">*</span>
+          </label>
+          <input
+            type="text"
+            id="firmName"
+            name="firmName"
+            placeholder="e.g. Northgate Capital Partners"
+            autocomplete="organization"
+          >
+          <div class="field-error" id="firmName-error">Please enter your firm name.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="firmType">
+            Firm Type <span class="req">*</span>
+          </label>
+          <select id="firmType" name="firmType">
+            <option value="" disabled selected>Select firm type</option>
+            <option value="Venture Capital (VC)">Venture Capital (VC)</option>
+            <option value="Private Equity (PE)">Private Equity (PE)</option>
+            <option value="Investment Bank (IB)">Investment Bank (IB)</option>
+            <option value="Merchant Bank">Merchant Bank</option>
+            <option value="Family Office">Family Office</option>
+            <option value="Corporate Venture">Corporate Venture</option>
+            <option value="Growth Equity">Growth Equity</option>
+            <option value="Hedge Fund">Hedge Fund</option>
+            <option value="Angel / Syndicate">Angel / Syndicate</option>
+          </select>
+          <div class="field-error" id="firmType-error">Please select your firm type.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="fundSize">
+            Fund Size <span class="opt">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="fundSize"
+            name="fundSize"
+            placeholder="e.g. $150M Fund II"
+            autocomplete="off"
+          >
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn-prev" onclick="prevStep(2)">
+          <span>←</span> API Key
+        </button>
+        <button type="button" class="btn-next" onclick="nextStep(2)">
+          Parameters <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 3 — INVESTMENT PARAMETERS
+         Stage, sector, geography, ticket, return
+    ══════════════════════════════════════════ -->
+    <div class="form-section" id="formStep3">
+      <div class="section-heading">
+        <div class="section-no">03 — Parameters</div>
+        <h2 class="section-heading-title">Investment Parameters</h2>
+        <p class="section-heading-desc">
+          These filters are applied before any analysis begins. Alex will flag any deal that falls outside them immediately.
+        </p>
+      </div>
+
+      <div class="field-group">
+
+        <div class="field">
+          <label class="field-label" for="stageFocus">
+            Stage Focus <span class="req">*</span>
+          </label>
+          <select id="stageFocus" name="stageFocus">
+            <option value="" disabled selected>Select primary stage</option>
+            <option value="Pre-seed">Pre-seed</option>
+            <option value="Seed">Seed</option>
+            <option value="Series A">Series A</option>
+            <option value="Series B">Series B</option>
+            <option value="Series C and beyond">Series C and beyond</option>
+            <option value="Growth Equity">Growth Equity</option>
+            <option value="Buyout / PE">Buyout / PE</option>
+            <option value="Pre-seed to Seed">Pre-seed to Seed</option>
+            <option value="Seed to Series A">Seed to Series A</option>
+            <option value="Series A to Series B">Series A to Series B</option>
+            <option value="All stages">All stages</option>
+          </select>
+          <div class="field-error" id="stageFocus-error">Please select your stage focus.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="sectorFocus">
+            Sector Focus <span class="req">*</span>
+          </label>
+          <input
+            type="text"
+            id="sectorFocus"
+            name="sectorFocus"
+            placeholder="e.g. B2B SaaS, Fintech, Healthcare"
+            autocomplete="off"
+          >
+          <div class="field-hint">List your focus sectors separated by commas.</div>
+          <div class="field-error" id="sectorFocus-error">Please enter your sector focus.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="geography">
+            Geography <span class="req">*</span>
+          </label>
+          <input
+            type="text"
+            id="geography"
+            name="geography"
+            placeholder="e.g. UK, Western Europe, North America"
+            autocomplete="off"
+          >
+          <div class="field-error" id="geography-error">Please enter your target geography.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label" for="ticketMin">
+              Minimum Ticket Size <span class="opt">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="ticketMin"
+              name="ticketMin"
+              placeholder="e.g. £500K"
+              autocomplete="off"
+            >
+          </div>
+          <div class="field">
+            <label class="field-label" for="ticketMax">
+              Maximum Ticket Size <span class="opt">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="ticketMax"
+              name="ticketMax"
+              placeholder="e.g. £5M"
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="returnTarget">
+            Return Target <span class="opt">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="returnTarget"
+            name="returnTarget"
+            placeholder="e.g. 3x MOIC / 25% IRR"
+            autocomplete="off"
+          >
+        </div>
+
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn-prev" onclick="prevStep(3)">
+          <span>←</span> Firm Identity
+        </button>
+        <button type="button" class="btn-next" onclick="nextStep(3)">
+          Thesis &amp; Rules <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 4 — INVESTMENT THESIS & HARD PASS RULES
+         The substance that makes Alex firm-specific
+    ══════════════════════════════════════════ -->
+    <div class="form-section" id="formStep4">
+      <div class="section-heading">
+        <div class="section-no">04 — Thesis</div>
+        <h2 class="section-heading-title">Investment Thesis &amp; Hard Rules</h2>
+        <p class="section-heading-desc">
+          This is what makes Alex yours. Write in your own words. The more specific you are, the more precisely Alex applies your judgment.
+        </p>
+      </div>
+
+      <div class="field-group">
+
+        <div class="field">
+          <label class="field-label" for="investmentThesis">
+            Investment Thesis <span class="req">*</span>
+          </label>
+          <textarea
+            id="investmentThesis"
+            name="investmentThesis"
+            class="tall"
+            placeholder="What does your firm believe that most investors do not? What type of opportunity do you back, and why? Write this in your own words — the clearer and more specific, the better Alex will serve you."
+            spellcheck="true"
+          ></textarea>
+          <div class="field-hint">
+            Aim for 100–400 words. Include your view on timing, market, and founder archetype.
+          </div>
+          <div class="field-error" id="investmentThesis-error">Please describe your investment thesis.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="hardPass">
+            Hard Pass Criteria <span class="req">*</span>
+          </label>
+          <textarea
+            id="hardPass"
+            name="hardPass"
+            placeholder="List the categories, deal types, or characteristics that are an immediate pass for your firm. Alex will screen these out instantly — before any analysis begins.&#10;&#10;e.g.&#10;— Pre-revenue companies&#10;— Hardware businesses&#10;— Regulated financial services without licences&#10;— Valuations above 20x ARR at seed stage"
+            spellcheck="true"
+          ></textarea>
+          <div class="field-hint">
+            Be exhaustive. These are applied as a first filter — they save Alex's time and yours.
+          </div>
+          <div class="field-error" id="hardPass-error">Please list your hard pass criteria.</div>
+        </div>
+
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn-prev" onclick="prevStep(4)">
+          <span>←</span> Parameters
+        </button>
+        <button type="button" class="btn-next" onclick="nextStep(4)">
+          Deal History <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 5 — DEAL HISTORY (optional)
+         Past deals teach Alex your pattern recognition
+    ══════════════════════════════════════════ -->
+    <div class="form-section" id="formStep5">
+      <div class="section-heading">
+        <div class="section-no">05 — History</div>
+        <h2 class="section-heading-title">Recent Deal History</h2>
+        <p class="section-heading-desc">
+          Optional — but this is what makes Alex remember. He will reference past decisions when screening new deals, spotting patterns across your pipeline.
+        </p>
+      </div>
+
+      <div class="field-group">
+
+        <div class="field">
+          <label class="field-label" for="dealHistory">
+            Recent Deals <span class="opt">(optional — up to 10)</span>
+          </label>
+          <textarea
+            id="dealHistory"
+            name="dealHistory"
+            class="tall"
+            placeholder="List deals your firm has reviewed recently. Format each one as:&#10;&#10;COMPANY: [name] | VERDICT: [Invested / Passed / In Process] | REASON: [one line]&#10;&#10;e.g.&#10;COMPANY: Luminos AI | VERDICT: Passed | REASON: Team lacked enterprise sales experience, NRR below 100%&#10;COMPANY: Meridian Health | VERDICT: Invested | REASON: Strong founder-market fit, clear regulatory pathway, 140% NRR"
+            spellcheck="false"
+          ></textarea>
+          <div class="field-hint">
+            This field is entirely optional. Skip it now and add deals later as Alex screens them.
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="activePipeline">
+            Active Pipeline <span class="opt">(optional)</span>
+          </label>
+          <textarea
+            id="activePipeline"
+            name="activePipeline"
+            placeholder="List any deals currently in your pipeline that Alex should be aware of.&#10;&#10;e.g. Zenith Logistics — Series A — in DD phase"
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+      </div>
+
+      <!-- Loading bar — shown during save -->
+      <div class="loading-bar" id="loadingBar">
+        <div class="loading-bar-inner"></div>
+      </div>
+
+      <div class="form-nav">
+        <button type="button" class="btn-prev" onclick="prevStep(5)">
+          <span>←</span> Thesis
+        </button>
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Configure Alex <span>→</span>
+        </button>
+      </div>
+    </div>
+
+  </form><!-- end #onboardForm -->
+
+  <!-- ══════════════════════════════════════════
+       SUCCESS SCREEN — shown after save completes
+  ══════════════════════════════════════════ -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✦</div>
+    <h2 class="success-title">Alex is<br><em>Ready</em></h2>
+    <p class="success-sub" id="successMessage">
+      Your firm profile has been saved. Alex now knows your thesis, your rules, and your standards. Every screening note he produces will reflect them.
+    </p>
+    <a href="index.html" class="btn-enter-workspace">Enter Workspace →</a>
+  </div>
+
+</main>
+
+<!-- ─────────────────────────────────────────────
+     JAVASCRIPT
+───────────────────────────────────────────── -->
+<script>
+
+// ─────────────────────────────────────────────
+// CURSOR BEHAVIOUR (desktop only)
+// Cursor starts off-screen, appears on first mousemove
+// ─────────────────────────────────────────────
+(function() {
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  if (!cursor || !ring) return;
+
+  document.addEventListener('mousemove', function(e) {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+    // Ring follows with a tiny lag via CSS transition
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  });
+
+  // Scale up cursor on hover over interactive elements
+  document.querySelectorAll('a,button,select,input,textarea').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+      ring.style.transform   = 'translate(-50%,-50%) scale(1.4)';
+      ring.style.borderColor = 'rgba(201,168,76,.8)';
+    });
+    el.addEventListener('mouseleave', function() {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform   = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'rgba(201,168,76,.5)';
+    });
+  });
+})();
+
+
+// ─────────────────────────────────────────────
+// TOGGLE API KEY VISIBILITY
+// ─────────────────────────────────────────────
+document.getElementById('toggleKey').addEventListener('click', function() {
+  var input = document.getElementById('apiKey');
+  if (input.type === 'password') {
+    input.type = 'text';
+    this.textContent = 'Hide';
+  } else {
+    input.type = 'password';
+    this.textContent = 'Show';
+  }
+});
+
+
+// ─────────────────────────────────────────────
+// STEP TRACKING
+// currentStep tracks which step (1-5) is visible
+// ─────────────────────────────────────────────
+var currentStep = 1;
+var totalSteps  = 5;
+
+
+// Show a specific step — hide all others, update progress tabs
+function goToStep(stepNum) {
+  // Only allow navigating backward freely; forward requires validation
+  if (stepNum > currentStep) return; // forward nav is handled by nextStep()
+
+  currentStep = stepNum;
+  renderStep();
+}
+
+
+// Actually show/hide sections and update tabs
+function renderStep() {
+  // Hide all sections
+  for (var i = 1; i <= totalSteps; i++) {
+    var section = document.getElementById('formStep' + i);
+    var tab     = document.getElementById('step-tab-' + i);
+    if (!section || !tab) continue;
+
+    section.classList.remove('active');
+    tab.classList.remove('active');
+
+    if (i < currentStep) {
+      tab.classList.add('done');
+    } else {
+      tab.classList.remove('done');
+    }
+  }
+
+  // Show current section and mark tab active
+  var activeSection = document.getElementById('formStep' + currentStep);
+  var activeTab     = document.getElementById('step-tab-' + currentStep);
+  if (activeSection) activeSection.classList.add('active');
+  if (activeTab)     activeTab.classList.add('active');
+
+  // Scroll to top of form
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// ─────────────────────────────────────────────
+// VALIDATION — per-step rules
+// Returns true if the step is valid, false otherwise
+// ─────────────────────────────────────────────
+function validateStep(stepNum) {
+  var valid = true;
+
+  // Clear all errors in this step first
+  var section = document.getElementById('formStep' + stepNum);
+  section.querySelectorAll('.field-error').forEach(function(el) {
+    el.classList.remove('show');
+  });
+
+  if (stepNum === 1) {
+    // API key — must be present and look like an Anthropic key
+    var apiKey = document.getElementById('apiKey').value.trim();
+    if (!apiKey || apiKey.length < 20) {
+      document.getElementById('apiKey-error').classList.add('show');
+      valid = false;
+    }
+  }
+
+  if (stepNum === 2) {
+    // Firm name and type required
+    if (!document.getElementById('firmName').value.trim()) {
+      document.getElementById('firmName-error').classList.add('show');
+      valid = false;
+    }
+    if (!document.getElementById('firmType').value) {
+      document.getElementById('firmType-error').classList.add('show');
+      valid = false;
+    }
+  }
+
+  if (stepNum === 3) {
+    // Stage, sector, geography required
+    if (!document.getElementById('stageFocus').value) {
+      document.getElementById('stageFocus-error').classList.add('show');
+      valid = false;
+    }
+    if (!document.getElementById('sectorFocus').value.trim()) {
+      document.getElementById('sectorFocus-error').classList.add('show');
+      valid = false;
+    }
+    if (!document.getElementById('geography').value.trim()) {
+      document.getElementById('geography-error').classList.add('show');
+      valid = false;
+    }
+  }
+
+  if (stepNum === 4) {
+    // Thesis and hard pass required
+    if (!document.getElementById('investmentThesis').value.trim()) {
+      document.getElementById('investmentThesis-error').classList.add('show');
+      valid = false;
+    }
+    if (!document.getElementById('hardPass').value.trim()) {
+      document.getElementById('hardPass-error').classList.add('show');
+      valid = false;
+    }
+  }
+
+  // Step 5 has no required fields — deal history and pipeline are optional
+
+  return valid;
+}
+
+
+// ─────────────────────────────────────────────
+// NEXT / PREV STEP BUTTONS
+// ─────────────────────────────────────────────
+function nextStep(fromStep) {
+  if (!validateStep(fromStep)) return; // stop if validation fails
+  currentStep = fromStep + 1;
+  renderStep();
+}
+
+function prevStep(fromStep) {
+  currentStep = fromStep - 1;
+  renderStep();
+}
+
+
+// ─────────────────────────────────────────────
+// ASSEMBLE FIRM KNOWLEDGE BASE TEXT BLOCK
+// Builds the exact format from CLAUDE.md Section 7
+// This text is injected into every Alex API call
+// ─────────────────────────────────────────────
+function buildFirmKnowledgeBase(data) {
+  // Build ticket size string
+  var ticketStr = 'Not specified';
+  if (data.ticketMin && data.ticketMax) {
+    ticketStr = data.ticketMin + ' — ' + data.ticketMax;
+  } else if (data.ticketMin) {
+    ticketStr = data.ticketMin + ' minimum';
+  } else if (data.ticketMax) {
+    ticketStr = 'Up to ' + data.ticketMax;
+  }
+
+  var kb = '';
+  kb += '═══════════════════════════════════════════════════\n';
+  kb += 'FIRM KNOWLEDGE BASE — ' + data.firmName + '\n';
+  kb += 'Injected into every Alex session\n';
+  kb += '═══════════════════════════════════════════════════\n\n';
+  kb += 'FIRM NAME:            ' + data.firmName + '\n';
+  kb += 'FIRM TYPE:            ' + data.firmType + '\n';
+  kb += 'FUND SIZE:            ' + (data.fundSize || 'Not specified') + '\n';
+  kb += 'STAGE FOCUS:          ' + data.stageFocus + '\n';
+  kb += 'SECTOR FOCUS:         ' + data.sectorFocus + '\n';
+  kb += 'GEOGRAPHY:            ' + data.geography + '\n';
+  kb += 'TICKET SIZE:          ' + ticketStr + '\n';
+  kb += 'RETURN TARGET:        ' + (data.returnTarget || 'Not specified') + '\n\n';
+  kb += 'INVESTMENT THESIS:\n';
+  kb += data.investmentThesis + '\n\n';
+  kb += 'HARD PASS CRITERIA:\n';
+  kb += data.hardPass + '\n\n';
+  kb += 'RECENT DEAL HISTORY:\n';
+  kb += (data.dealHistory || 'No deal history provided yet. This will build up as Alex screens deals.') + '\n\n';
+  kb += 'FIRM-SPECIFIC CALIBRATION NOTES:\n';
+  kb += 'No calibration notes yet. These accumulate as partners agree or disagree with Alex\'s verdicts.\n\n';
+  kb += 'ACTIVE PIPELINE:\n';
+  kb += (data.activePipeline || 'No active pipeline provided.') + '\n';
+  kb += '═══════════════════════════════════════════════════\n';
+
+  return kb;
+}
+
+
+// ─────────────────────────────────────────────
+// FORM SUBMIT — save everything to localStorage
+// ─────────────────────────────────────────────
+document.getElementById('onboardForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // Final validation on step 5 (no required fields, but run anyway)
+  if (!validateStep(5)) return;
+
+  // Show loading state
+  var submitBtn  = document.getElementById('submitBtn');
+  var loadingBar = document.getElementById('loadingBar');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Saving…';
+  loadingBar.classList.add('active');
+
+  // Collect all form values
+  var data = {
+    apiKey:            document.getElementById('apiKey').value.trim(),
+    firmName:          document.getElementById('firmName').value.trim(),
+    firmType:          document.getElementById('firmType').value,
+    fundSize:          document.getElementById('fundSize').value.trim(),
+    stageFocus:        document.getElementById('stageFocus').value,
+    sectorFocus:       document.getElementById('sectorFocus').value.trim(),
+    geography:         document.getElementById('geography').value.trim(),
+    ticketMin:         document.getElementById('ticketMin').value.trim(),
+    ticketMax:         document.getElementById('ticketMax').value.trim(),
+    returnTarget:      document.getElementById('returnTarget').value.trim(),
+    investmentThesis:  document.getElementById('investmentThesis').value.trim(),
+    hardPass:          document.getElementById('hardPass').value.trim(),
+    dealHistory:       document.getElementById('dealHistory').value.trim(),
+    activePipeline:    document.getElementById('activePipeline').value.trim(),
+    onboardedAt:       new Date().toISOString()
+  };
+
+  // Small delay so the loading bar is visible (feels intentional)
+  setTimeout(function() {
+
+    // 1. Save API key separately (used directly by workspace.js for API calls)
+    localStorage.setItem('g7_api_key', data.apiKey);
+
+    // 2. Save structured config as JSON (used by dashboard and other pages)
+    var firmConfig = {
+      firmName:     data.firmName,
+      firmType:     data.firmType,
+      fundSize:     data.fundSize,
+      stageFocus:   data.stageFocus,
+      sectorFocus:  data.sectorFocus,
+      geography:    data.geography,
+      ticketMin:    data.ticketMin,
+      ticketMax:    data.ticketMax,
+      returnTarget: data.returnTarget,
+      onboardedAt:  data.onboardedAt
+    };
+    localStorage.setItem('g7_firm_config', JSON.stringify(firmConfig));
+
+    // 3. Save the full firm knowledge base text block
+    //    This is appended to ALEX_MASTER_PROMPT on every API call
+    var firmKB = buildFirmKnowledgeBase(data);
+    localStorage.setItem('g7_firm_knowledge_base', firmKB);
+
+    // 4. Mark firm as onboarded
+    localStorage.setItem('g7_onboarded', 'true');
+
+    // 5. Initialise empty deal history and calibration log arrays if not present
+    if (!localStorage.getItem('g7_deal_history')) {
+      localStorage.setItem('g7_deal_history', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('g7_calibration_log')) {
+      localStorage.setItem('g7_calibration_log', JSON.stringify([]));
+    }
+
+    // Hide loading bar, hide form, show success screen
+    loadingBar.classList.remove('active');
+    document.getElementById('onboardForm').style.display = 'none';
+    document.getElementById('progressBar').style.display = 'none';
+
+    // Update success message with firm name
+    document.getElementById('successMessage').textContent =
+      data.firmName + ' is now configured. Alex knows your thesis, your hard pass rules, and your standards. Every deal he screens will reflect them.';
+
+    document.getElementById('successScreen').classList.add('show');
+
+    // Auto-redirect to workspace after 3 seconds
+    setTimeout(function() {
+      window.location.href = 'index.html';
+    }, 3000);
+
+  }, 800); // 800ms loading delay
+});
+
+
+// ─────────────────────────────────────────────
+// ON PAGE LOAD — check if firm already onboarded
+// If yes, show the returning firm banner
+// ─────────────────────────────────────────────
+(function() {
+  var isOnboarded = localStorage.getItem('g7_onboarded') === 'true';
+  if (!isOnboarded) return;
+
+  // Show banner with firm name
+  var config = {};
+  try { config = JSON.parse(localStorage.getItem('g7_firm_config') || '{}'); } catch(e) {}
+
+  var banner = document.getElementById('returningBanner');
+  var nameEl = document.getElementById('returningFirmName');
+
+  if (config.firmName) nameEl.textContent = config.firmName;
+  banner.classList.add('show');
+
+  // Pre-fill form with existing values for easy editing
+  if (localStorage.getItem('g7_api_key')) {
+    document.getElementById('apiKey').value = localStorage.getItem('g7_api_key');
+  }
+  if (config.firmName)    document.getElementById('firmName').value    = config.firmName;
+  if (config.firmType)    document.getElementById('firmType').value    = config.firmType;
+  if (config.fundSize)    document.getElementById('fundSize').value    = config.fundSize;
+  if (config.stageFocus)  document.getElementById('stageFocus').value  = config.stageFocus;
+  if (config.sectorFocus) document.getElementById('sectorFocus').value = config.sectorFocus;
+  if (config.geography)   document.getElementById('geography').value   = config.geography;
+  if (config.ticketMin)   document.getElementById('ticketMin').value   = config.ticketMin;
+  if (config.ticketMax)   document.getElementById('ticketMax').value   = config.ticketMax;
+  if (config.returnTarget)document.getElementById('returnTarget').value= config.returnTarget;
+
+  // Re-fill thesis and hard pass from the stored KB text (extract sections)
+  var kb = localStorage.getItem('g7_firm_knowledge_base') || '';
+  var thesisMatch  = kb.match(/INVESTMENT THESIS:\n([\s\S]*?)\n\nHARD PASS CRITERIA:/);
+  var hardPassMatch= kb.match(/HARD PASS CRITERIA:\n([\s\S]*?)\n\nRECENT DEAL HISTORY:/);
+  var historyMatch = kb.match(/RECENT DEAL HISTORY:\n([\s\S]*?)\n\nFIRM-SPECIFIC CALIBRATION/);
+  var pipelineMatch= kb.match(/ACTIVE PIPELINE:\n([\s\S]*?)\n═══/);
+
+  if (thesisMatch   && thesisMatch[1])   document.getElementById('investmentThesis').value = thesisMatch[1].trim();
+  if (hardPassMatch && hardPassMatch[1]) document.getElementById('hardPass').value          = hardPassMatch[1].trim();
+  if (historyMatch  && historyMatch[1]) {
+    var histText = historyMatch[1].trim();
+    // Don't pre-fill the "no history yet" default placeholder
+    if (!histText.startsWith('No deal history provided yet')) {
+      document.getElementById('dealHistory').value = histText;
+    }
+  }
+  if (pipelineMatch && pipelineMatch[1]) {
+    var pipeText = pipelineMatch[1].trim();
+    if (!pipeText.startsWith('No active pipeline')) {
+      document.getElementById('activePipeline').value = pipeText;
+    }
+  }
+})();
+
+</script>
+
+</body>
+</html>

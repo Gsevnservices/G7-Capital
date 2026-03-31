@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screening Note — G7 Workspace</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+<!-- Alex's system prompt (required by workspace.js) -->
+<script src="../assets/alex-master-v1.js"></script>
+
+<!-- Workspace engine: callAlex, saveDeal, parseAlexScore, etc. -->
+<script src="../assets/workspace.js"></script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+
+<style>
+
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;
+  --black2:#0F0F0F;
+  --black3:#161616;
+  --black4:#1E1E1E;
+  --gold:#C9A84C;
+  --gold2:#E2C97E;
+  --gold3:#A8873A;
+  --white:#FAFAF8;
+  --white2:#F0EFE9;
+  --grey1:#8A8880;
+  --grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);
+  --border2:rgba(250,250,248,0.08);
+  --red:#C45A5A;
+  --amber:#C4924A;
+  --green:#5A9E6F
+}
+body{
+  font-family:'Tenor Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:none;
+  /* Space at bottom for fixed action bar */
+  padding-bottom:88px
+}
+
+/* ─────────────────────────────────────────────
+   GRAIN TEXTURE
+───────────────────────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1000;opacity:.4
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ─────────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+
+/* ─────────────────────────────────────────────
+   STATUS BANNER
+   Full width strip immediately below nav
+───────────────────────────────────────────── */
+.status-banner{
+  margin-top:80px;
+  padding:40px 64px;
+  position:relative;overflow:hidden
+}
+/* PRIORITY REVIEW — gold background, black text */
+.status-banner.status-priority{
+  background:var(--gold);
+  border-bottom:1px solid var(--gold3)
+}
+.status-banner.status-priority .status-label,
+.status-banner.status-priority .status-value,
+.status-banner.status-priority .status-company{color:var(--black)}
+.status-banner.status-priority .status-meta{color:rgba(8,8,8,.6)}
+.status-banner.status-priority .status-indicator{background:var(--black);color:var(--gold)}
+/* WATCH — dark, gold border, gold text */
+.status-banner.status-watch{
+  background:var(--black2);
+  border-top:2px solid var(--gold);
+  border-bottom:1px solid var(--border2)
+}
+.status-banner.status-watch .status-value{color:var(--gold)}
+.status-banner.status-watch .status-indicator{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid var(--border)}
+/* PASS — dark, grey */
+.status-banner.status-pass{
+  background:var(--black2);
+  border-top:2px solid var(--grey2);
+  border-bottom:1px solid var(--border2)
+}
+.status-banner.status-pass .status-value{color:var(--grey1)}
+.status-banner.status-pass .status-indicator{background:rgba(90,88,85,.1);color:var(--grey1);border:1px solid rgba(90,88,85,.3)}
+
+.status-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.status-indicator{padding:6px 18px;font-size:9px;letter-spacing:.25em;text-transform:uppercase;font-weight:400}
+.status-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--grey1);flex-shrink:0}
+.status-value{font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:400}
+.status-company{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,42px);font-weight:300;color:var(--white);flex:1;min-width:200px;line-height:1.1}
+.status-banner.status-priority .status-company{color:var(--black)}
+.status-meta{font-size:11px;letter-spacing:.08em;color:var(--grey1);margin-left:auto}
+@media(max-width:768px){
+  .status-banner{padding:28px 24px}
+  .status-company{font-size:24px;width:100%}
+  .status-meta{margin-left:0}
+}
+
+/* ─────────────────────────────────────────────
+   PAGE CONTENT WRAPPER
+───────────────────────────────────────────── */
+.page-wrap{max-width:1100px;margin:0 auto;padding:56px 64px 40px}
+@media(max-width:768px){.page-wrap{padding:32px 24px 40px}}
+
+/* ─────────────────────────────────────────────
+   SCORE SECTION — ring + dimension bars
+───────────────────────────────────────────── */
+.score-section{
+  display:grid;grid-template-columns:260px 1fr;
+  gap:56px;align-items:start;
+  padding:48px;background:var(--black2);
+  border:1px solid var(--border2);
+  margin-bottom:40px;
+  opacity:0;animation:fadeUp .7s ease .3s both
+}
+@media(max-width:760px){.score-section{grid-template-columns:1fr;padding:28px}}
+
+/* Score ring (SVG) */
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+.score-ring-svg{width:190px;height:190px;transform:rotate(-90deg)}
+.ring-track{fill:none;stroke:var(--black4);stroke-width:10}
+.ring-fill{
+  fill:none;stroke:var(--gold);stroke-width:10;
+  stroke-linecap:round;
+  stroke-dasharray:0 503; /* animated to (score/100)*503 */
+  transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1)
+}
+/* Score number in center */
+.score-center{
+  position:absolute;
+  display:flex;flex-direction:column;align-items:center;justify-content:center
+}
+.score-ring-container{position:relative;width:190px;height:190px;flex-shrink:0}
+.score-ring-number-wrap{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none
+}
+.score-ring-number{
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px;font-weight:300;
+  color:var(--white);line-height:1
+}
+.score-ring-denom{font-size:12px;color:var(--grey2);letter-spacing:.1em;margin-top:2px}
+.score-ring-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2);text-align:center
+}
+/* Verdict under the ring */
+.score-verdict-card{
+  width:100%;padding:14px 20px;
+  background:var(--black3);border:1px solid var(--border2);
+  text-align:center
+}
+.score-verdict-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);margin-bottom:4px}
+.score-verdict-value{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--white)}
+
+/* Dimension bars */
+.dimensions-wrap{display:flex;flex-direction:column;gap:0}
+.dimensions-title{
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);padding-bottom:20px;
+  border-bottom:1px solid var(--border2);margin-bottom:20px
+}
+.dim-row{
+  display:grid;grid-template-columns:140px 1fr 52px;
+  align-items:center;gap:16px;
+  padding:12px 0;border-bottom:1px solid var(--border2)
+}
+.dim-row:last-child{border-bottom:none}
+.dim-label{font-size:11px;letter-spacing:.06em;color:var(--grey1)}
+.dim-track{height:3px;background:var(--black4);border-radius:2px;overflow:hidden}
+.dim-fill{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.dim-score{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;color:var(--white);text-align:right}
+.dim-max{font-size:10px;color:var(--grey2)}
+/* Valuation assessment pill */
+.valuation-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border:1px solid var(--border2);
+  font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  margin-top:20px
+}
+.valuation-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.val-fair .valuation-dot{background:var(--green)}
+.val-fair .valuation-text{color:var(--grey1)}
+.val-slight .valuation-dot{background:var(--amber)}
+.val-slight .valuation-text{color:var(--amber)}
+.val-significant .valuation-dot{background:#C47A4A}
+.val-significant .valuation-text{color:#C47A4A}
+.val-excessive .valuation-dot{background:var(--red)}
+.val-excessive .valuation-text{color:var(--red)}
+
+/* ─────────────────────────────────────────────
+   SECTION CARDS — shared by all content sections
+───────────────────────────────────────────── */
+.section-card{
+  border:1px solid var(--border2);
+  background:var(--black2);
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp .6s ease both
+}
+.card-header{
+  padding:24px 32px;
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:baseline;gap:20px
+}
+.card-number{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);flex-shrink:0
+}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;color:var(--white)
+}
+.card-body{padding:32px}
+@media(max-width:600px){.card-body{padding:20px}.card-header{padding:16px 20px}}
+
+/* ─────────────────────────────────────────────
+   EXECUTIVE SUMMARY
+───────────────────────────────────────────── */
+.exec-summary-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(17px,2.2vw,20px);
+  font-weight:300;line-height:1.85;
+  color:var(--white2)
+}
+
+/* ─────────────────────────────────────────────
+   NARRATIVE DRIFT CHECK
+───────────────────────────────────────────── */
+.inconsistency-warning{
+  display:none;
+  padding:14px 20px;margin-bottom:20px;
+  border:1px solid rgba(196,90,90,.3);
+  background:rgba(196,90,90,.05)
+}
+.inconsistency-warning.show{display:flex;align-items:flex-start;gap:12px}
+.warn-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:5px}
+.warn-text{font-size:12px;color:#e8a0a0;line-height:1.7}
+
+.drift-table{width:100%;border-collapse:collapse}
+.drift-table th{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2);padding:0 16px 12px 0;
+  border-bottom:1px solid var(--border2);
+  text-align:left;font-weight:400
+}
+.drift-table td{
+  padding:14px 16px 14px 0;
+  border-bottom:1px solid var(--border2);
+  font-size:13px;color:var(--grey1);line-height:1.65;
+  vertical-align:top
+}
+.drift-table tr:last-child td{border-bottom:none}
+.drift-table .col-verdict{white-space:nowrap}
+.verdict-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase
+}
+.verdict-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.verdict-consistent .verdict-dot{background:var(--green)}
+.verdict-consistent .verdict-text{color:var(--green)}
+.verdict-inconsistent .verdict-dot{background:var(--red)}
+.verdict-inconsistent .verdict-text{color:var(--red);font-weight:400}
+.verdict-unverifiable .verdict-dot{background:var(--amber)}
+.verdict-unverifiable .verdict-text{color:var(--amber)}
+@media(max-width:600px){
+  .drift-table th:nth-child(2),.drift-table td:nth-child(2){display:none}
+}
+
+/* ─────────────────────────────────────────────
+   GENERAL SECTION BODY TEXT
+───────────────────────────────────────────── */
+.section-text{
+  font-size:13px;color:var(--grey1);line-height:1.9;
+  letter-spacing:.02em
+}
+.section-text p{margin-bottom:12px}
+.section-text p:last-child{margin-bottom:0}
+
+/* ─────────────────────────────────────────────
+   RED FLAG ITEMS (Section 09)
+───────────────────────────────────────────── */
+.flag-list{display:flex;flex-direction:column;gap:10px}
+.flag-item{
+  padding:12px 16px 12px 20px;
+  border-left:3px solid var(--grey2);
+  background:rgba(250,250,248,.02);
+  display:flex;align-items:flex-start;gap:12px
+}
+.flag-item.flag-high{border-left-color:var(--red);background:rgba(196,90,90,.04)}
+.flag-item.flag-medium{border-left-color:var(--amber);background:rgba(196,146,74,.04)}
+.flag-item.flag-low{border-left-color:var(--grey2);background:rgba(250,250,248,.02)}
+.flag-sev{
+  font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  padding:3px 8px;flex-shrink:0;margin-top:1px;line-height:1
+}
+.flag-high .flag-sev{color:var(--red);border:1px solid rgba(196,90,90,.3)}
+.flag-medium .flag-sev{color:var(--amber);border:1px solid rgba(196,146,74,.3)}
+.flag-low .flag-sev{color:var(--grey2);border:1px solid rgba(90,88,85,.3)}
+.flag-text{font-size:13px;color:var(--grey1);line-height:1.65}
+
+/* ─────────────────────────────────────────────
+   THESIS DEPENDENCY CHAIN
+───────────────────────────────────────────── */
+.dependency-list{display:flex;flex-direction:column;gap:0}
+.dependency-item{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:16px 0;border-bottom:1px solid var(--border2)
+}
+.dependency-item:last-child{border-bottom:none}
+.dep-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;font-weight:300;color:var(--grey2);
+  line-height:1;flex-shrink:0;width:28px;padding-top:3px
+}
+.dep-body{flex:1}
+.dep-text{font-size:13px;color:var(--grey1);line-height:1.7;margin-bottom:8px}
+.confidence-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  border-radius:2px
+}
+.conf-high{background:rgba(90,158,111,.12);color:var(--green);border:1px solid rgba(90,158,111,.25)}
+.conf-medium{background:rgba(196,146,74,.1);color:var(--amber);border:1px solid rgba(196,146,74,.25)}
+.conf-low{background:rgba(196,90,90,.1);color:var(--red);border:1px solid rgba(196,90,90,.25)}
+
+/* Single Point of Failure card */
+.spof-card{
+  border:1px solid var(--border);
+  background:rgba(201,168,76,.04);
+  padding:24px 28px;
+  margin-top:24px
+}
+.spof-label{
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px
+}
+.spof-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;
+  color:var(--white);line-height:1.55
+}
+
+/* ─────────────────────────────────────────────
+   ALEX'S NOTE
+───────────────────────────────────────────── */
+.alex-note-card{
+  border:1px solid var(--border2);
+  border-left:4px solid var(--gold);
+  background:var(--black2);
+  padding:36px 36px 36px 40px;
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp .6s ease both
+}
+.alex-note-label{
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+  display:flex;align-items:center;gap:12px
+}
+.alex-note-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.alex-note-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:300;font-style:italic;
+  color:var(--white2);line-height:1.85
+}
+@media(max-width:600px){.alex-note-card{padding:24px 20px 24px 24px}}
+
+/* ─────────────────────────────────────────────
+   INFORMATION GAPS
+───────────────────────────────────────────── */
+.gaps-list{
+  list-style:none;display:flex;flex-direction:column;gap:10px;
+  margin-bottom:24px
+}
+.gaps-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:13px;color:var(--grey1);line-height:1.65
+}
+.gap-bullet{
+  width:1px;height:14px;background:var(--grey2);
+  flex-shrink:0;margin-top:4px
+}
+.confidence-row{
+  display:flex;align-items:center;gap:12px;
+  padding-top:16px;border-top:1px solid var(--border2)
+}
+.conf-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2)}
+
+/* ─────────────────────────────────────────────
+   FALLBACK SECTION TEXT (plain content rendering)
+───────────────────────────────────────────── */
+.raw-section{
+  font-size:13px;color:var(--grey1);line-height:1.9;
+  white-space:pre-wrap;word-break:break-word
+}
+
+/* ─────────────────────────────────────────────
+   SECONDARY ACTIONS
+───────────────────────────────────────────── */
+.secondary-actions{
+  display:flex;align-items:center;gap:32px;
+  padding:32px 0;border-top:1px solid var(--border2);
+  flex-wrap:wrap
+}
+.action-link{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);text-decoration:none;
+  transition:color .3s;display:flex;align-items:center;gap:8px;
+  background:none;border:none;cursor:pointer
+}
+.action-link:hover{color:var(--gold)}
+.action-link-sep{width:1px;height:16px;background:var(--grey2)}
+
+/* ─────────────────────────────────────────────
+   FIXED ACTION BAR — stays visible while scrolling
+───────────────────────────────────────────── */
+.action-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:990;
+  background:rgba(8,8,8,.95);
+  backdrop-filter:blur(24px);
+  border-top:1px solid var(--border2);
+  padding:0 64px;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px
+}
+.action-bar-info{
+  font-size:11px;color:var(--grey2);
+  letter-spacing:.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.action-bar-info strong{color:var(--white);font-weight:400}
+.action-bar-buttons{display:flex;gap:12px;flex-shrink:0}
+.btn-agree{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  border:none;cursor:pointer;
+  padding:14px 32px;transition:all .3s
+}
+.btn-agree:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-agree.confirmed{background:var(--black3);color:var(--green);border:1px solid rgba(90,158,111,.3);cursor:default;transform:none}
+.btn-disagree{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);background:var(--black3);
+  border:1px solid var(--border);cursor:pointer;
+  padding:13px 24px;transition:all .3s
+}
+.btn-disagree:hover{border-color:var(--gold);background:var(--black4)}
+@media(max-width:768px){
+  .action-bar{padding:0 16px;height:auto;flex-direction:column;gap:10px;padding-top:12px;padding-bottom:12px}
+  .action-bar-info{white-space:normal;font-size:10px}
+  .action-bar-buttons{width:100%;flex-direction:column;gap:8px}
+  .btn-agree,.btn-disagree{width:100%;justify-content:center}
+  body{padding-bottom:140px}
+}
+
+/* ─────────────────────────────────────────────
+   CALIBRATION MODAL
+   Full-screen overlay when partner disagrees
+───────────────────────────────────────────── */
+.modal-overlay{
+  display:none;
+  position:fixed;inset:0;z-index:1500;
+  background:rgba(8,8,8,.97);
+  overflow-y:auto;
+  padding:80px 40px 40px
+}
+.modal-overlay.show{display:flex;align-items:flex-start;justify-content:center}
+.modal-inner{
+  width:100%;max-width:680px;
+  padding:64px 0
+}
+.modal-eyebrow{
+  display:flex;align-items:center;gap:16px;margin-bottom:32px
+}
+.modal-eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.modal-eyebrow-text{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.modal-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,4vw,52px);font-weight:300;
+  color:var(--white);margin-bottom:12px;line-height:1.05
+}
+.modal-sub{
+  font-size:13px;color:var(--grey1);line-height:1.8;
+  max-width:500px;margin-bottom:48px
+}
+.modal-sub em{font-style:italic;color:var(--white2)}
+/* Modal form fields reuse same style as onboard */
+.m-field{
+  display:flex;flex-direction:column;
+  border-bottom:1px solid var(--border2);
+  padding:4px 0;
+  transition:border-color .3s
+}
+.m-field:focus-within{border-bottom-color:rgba(201,168,76,.4)}
+.m-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);padding:16px 0 4px}
+.m-label .req{color:var(--gold)}
+.m-label .readonly-tag{font-size:8px;letter-spacing:.1em;color:var(--grey2);opacity:.5;margin-left:6px}
+.m-input,.m-select,.m-textarea{
+  background:transparent;border:none;outline:none;
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;
+  color:var(--white);padding:4px 0 16px;
+  width:100%;line-height:1.5;resize:none
+}
+.m-input[readonly]{color:var(--grey1);cursor:default}
+.m-select{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5855' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 4px center
+}
+.m-select option{background:var(--black2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:14px}
+.m-textarea{min-height:120px;font-size:15px;padding-top:8px}
+.m-field-error{font-size:10px;color:#e8a0a0;letter-spacing:.05em;padding-bottom:8px;display:none;font-style:italic}
+.m-field-error.show{display:block}
+.modal-actions{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:40px;padding-top:32px;
+  border-top:1px solid var(--border2);
+  gap:16px;flex-wrap:wrap
+}
+.btn-cancel{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);background:none;border:none;
+  cursor:pointer;transition:color .3s;padding:0
+}
+.btn-cancel:hover{color:var(--white)}
+.btn-save-calib{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  border:none;cursor:pointer;
+  padding:16px 36px;transition:all .3s
+}
+.btn-save-calib:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-save-calib:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.modal-success{
+  display:none;
+  padding:40px 0;text-align:center
+}
+.modal-success.show{display:block;animation:fadeUp .5s ease forwards}
+.modal-success-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:300;font-style:italic;
+  color:var(--gold);margin-bottom:12px
+}
+.modal-success-sub{font-size:13px;color:var(--grey1);line-height:1.8}
+
+/* ─────────────────────────────────────────────
+   EMPTY / ERROR STATE
+───────────────────────────────────────────── */
+.empty-state{
+  display:none;
+  text-align:center;padding:120px 40px
+}
+.empty-state.show{display:block}
+.empty-state-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;font-weight:300;
+  color:var(--grey2);margin-bottom:16px
+}
+.empty-state-sub{font-size:14px;color:var(--grey2);margin-bottom:40px}
+.btn-screen-new{
+  display:inline-block;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  padding:16px 40px;text-decoration:none;transition:all .3s
+}
+.btn-screen-new:hover{background:var(--gold2);transform:translateY(-2px)}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL & ANIMATIONS
+───────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* Staggered animation delays for section cards */
+.section-card:nth-child(1){animation-delay:.3s}
+.section-card:nth-child(2){animation-delay:.4s}
+.section-card:nth-child(3){animation-delay:.5s}
+.section-card:nth-child(4){animation-delay:.6s}
+.section-card:nth-child(5){animation-delay:.7s}
+.section-card:nth-child(6){animation-delay:.8s}
+.section-card:nth-child(7){animation-delay:.85s}
+.section-card:nth-child(8){animation-delay:.9s}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─────────────────────────────────────────────
+     NAVIGATION
+───────────────────────────────────────────── -->
+<nav>
+  <a href="../index.html" class="nav-logo">G<em>7</em> Capital</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Dashboard</a>
+    <a href="submit.html" class="nav-link">New Deal</a>
+    <a href="history.html" class="nav-link">History</a>
+    <span class="nav-badge" id="navFirmName">Workspace</span>
+  </div>
+</nav>
+
+<!-- ─────────────────────────────────────────────
+     EMPTY STATE — shown if no pending result
+───────────────────────────────────────────── -->
+<div class="empty-state" id="emptyState">
+  <div class="empty-state-title">No screening note found.</div>
+  <div class="empty-state-sub">Submit a deal to generate a screening note.</div>
+  <a href="submit.html" class="btn-screen-new">Screen a New Deal →</a>
+</div>
+
+<!-- ─────────────────────────────────────────────
+     RESULT CONTENT — populated by JS
+───────────────────────────────────────────── -->
+<div id="resultContent" style="display:none">
+
+  <!-- 2. STATUS BANNER -->
+  <div class="status-banner" id="statusBanner">
+    <div class="status-inner">
+      <span class="status-indicator" id="statusIndicator">—</span>
+      <div>
+        <div class="status-company" id="statusCompany">—</div>
+        <div class="status-meta" id="statusMeta">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- 3. SCORE SECTION -->
+    <div class="score-section" id="scoreSection">
+
+      <!-- Ring -->
+      <div class="score-ring-wrap">
+        <div class="score-ring-container">
+          <svg class="score-ring-svg" viewBox="0 0 200 200">
+            <circle class="ring-track" cx="100" cy="100" r="80"/>
+            <circle class="ring-fill" id="ringFill" cx="100" cy="100" r="80"/>
+          </svg>
+          <div class="score-ring-number-wrap">
+            <div class="score-ring-number" id="scoreNumber">0</div>
+            <div class="score-ring-denom">/ 100</div>
+          </div>
+        </div>
+        <div class="score-ring-label" id="scoreVerdictLabel">G7 Score</div>
+        <div class="score-verdict-card">
+          <div class="score-verdict-label">Valuation</div>
+          <div class="score-verdict-value" id="valuationValue">—</div>
+        </div>
+        <!-- Valuation assessment pill -->
+        <div class="valuation-pill" id="valuationPill">
+          <span class="valuation-dot"></span>
+          <span class="valuation-text" id="valuationPillText">—</span>
+        </div>
+      </div>
+
+      <!-- Dimension Bars -->
+      <div class="dimensions-wrap">
+        <div class="dimensions-title">Score Breakdown</div>
+        <div class="dim-row">
+          <span class="dim-label">Thesis Fit</span>
+          <div class="dim-track"><div class="dim-fill" id="dim-thesis"></div></div>
+          <span class="dim-score"><span id="dimScore-thesis">—</span><span class="dim-max">/20</span></span>
+        </div>
+        <div class="dim-row">
+          <span class="dim-label">Market</span>
+          <div class="dim-track"><div class="dim-fill" id="dim-market"></div></div>
+          <span class="dim-score"><span id="dimScore-market">—</span><span class="dim-max">/20</span></span>
+        </div>
+        <div class="dim-row">
+          <span class="dim-label">Team</span>
+          <div class="dim-track"><div class="dim-fill" id="dim-team"></div></div>
+          <span class="dim-score"><span id="dimScore-team">—</span><span class="dim-max">/25</span></span>
+        </div>
+        <div class="dim-row">
+          <span class="dim-label">Traction</span>
+          <div class="dim-track"><div class="dim-fill" id="dim-traction"></div></div>
+          <span class="dim-score"><span id="dimScore-traction">—</span><span class="dim-max">/20</span></span>
+        </div>
+        <div class="dim-row">
+          <span class="dim-label">Business Model</span>
+          <div class="dim-track"><div class="dim-fill" id="dim-model"></div></div>
+          <span class="dim-score"><span id="dimScore-model">—</span><span class="dim-max">/10</span></span>
+        </div>
+        <div class="dim-row">
+          <span class="dim-label">Risk / Red Flags</span>
+          <div class="dim-track"><div class="dim-fill" id="dim-risk"></div></div>
+          <span class="dim-score"><span id="dimScore-risk">—</span><span class="dim-max">/5</span></span>
+        </div>
+      </div>
+
+    </div><!-- /score-section -->
+
+    <!-- Dynamic sections rendered by JS into this container -->
+    <div id="sectionsContainer"></div>
+
+    <!-- 8. ALEX'S NOTE — injected separately for special styling -->
+    <div class="alex-note-card" id="alexNoteCard" style="display:none">
+      <div class="alex-note-label">Alex's Note</div>
+      <div class="alex-note-text" id="alexNoteText">—</div>
+    </div>
+
+    <!-- SECONDARY ACTIONS -->
+    <div class="secondary-actions">
+      <a href="submit.html" class="action-link">← Screen Another Deal</a>
+      <span class="action-link-sep"></span>
+      <button class="action-link" id="btnExportPDF" onclick="handleExport()">↓ Download Screening Note</button>
+      <span class="action-link-sep"></span>
+      <a href="history.html" class="action-link">View Deal History →</a>
+    </div>
+
+  </div><!-- /page-wrap -->
+
+</div><!-- /resultContent -->
+
+<!-- ─────────────────────────────────────────────
+     FIXED ACTION BAR — always visible
+───────────────────────────────────────────── -->
+<div class="action-bar" id="actionBar" style="display:none">
+  <div class="action-bar-info">
+    Deal screened <strong id="actionBarDate">—</strong> · <strong id="actionBarCompany">—</strong>
+  </div>
+  <div class="action-bar-buttons">
+    <button class="btn-agree" id="btnAgree" onclick="handleAgree()">
+      Partner Agrees →
+    </button>
+    <button class="btn-disagree" id="btnDisagree" onclick="openCalibrationModal()">
+      Partner Disagrees — Add Calibration
+    </button>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────
+     CALIBRATION MODAL
+───────────────────────────────────────────── -->
+<div class="modal-overlay" id="calibModal">
+  <div class="modal-inner">
+
+    <!-- Modal form state -->
+    <div id="calibForm">
+      <div class="modal-eyebrow">
+        <div class="modal-eyebrow-line"></div>
+        <span class="modal-eyebrow-text">Calibration</span>
+      </div>
+      <h2 class="modal-title">Correct Alex's Judgment</h2>
+      <p class="modal-sub">
+        This correction will be applied to <em>every future deal Alex screens for your firm</em>.
+        Be precise — vague corrections do not improve Alex.
+      </p>
+
+      <div class="m-field">
+        <label class="m-label">
+          Alex's Assessment
+          <span class="readonly-tag">— read only</span>
+        </label>
+        <input class="m-input" id="calibAlexAssessment" type="text" readonly>
+      </div>
+
+      <div class="m-field">
+        <label class="m-label">Your Decision <span class="req">*</span></label>
+        <select class="m-select" id="calibPartnerDecision">
+          <option value="" disabled selected>Select your verdict</option>
+          <option value="Pass — declined to invest">Pass — declined to invest</option>
+          <option value="Watch — keeping in pipeline">Watch — keeping in pipeline</option>
+          <option value="Priority Review — proceeding immediately">Priority Review — proceeding immediately</option>
+        </select>
+        <div class="m-field-error" id="calibDecision-error">Please select your decision.</div>
+      </div>
+
+      <div class="m-field">
+        <label class="m-label">Reason for Disagreement <span class="req">*</span></label>
+        <textarea
+          class="m-textarea"
+          id="calibReason"
+          placeholder="Where specifically was Alex wrong? Be precise — vague corrections do not improve Alex."
+        ></textarea>
+        <div class="m-field-error" id="calibReason-error">Please explain why you disagree.</div>
+      </div>
+
+      <div class="m-field">
+        <label class="m-label">Learning Rule <span class="req">*</span></label>
+        <textarea
+          class="m-textarea"
+          id="calibLearning"
+          placeholder="What rule should Alex apply in future? Format: When [condition], Alex should [action]."
+        ></textarea>
+        <div class="m-field-error" id="calibLearning-error">Please provide a learning rule.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeCalibrationModal()">Cancel</button>
+        <button class="btn-save-calib" id="btnSaveCalib" onclick="submitCalibration()">
+          Save Correction — Update Alex →
+        </button>
+      </div>
+    </div><!-- /calibForm -->
+
+    <!-- Success state inside modal -->
+    <div class="modal-success" id="calibSuccess">
+      <div class="modal-success-title">Alex has been updated.</div>
+      <div class="modal-success-sub">
+        This learning applies to all future screenings for your firm.<br>
+        Redirecting to deal history…
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────
+     JAVASCRIPT
+───────────────────────────────────────────── -->
+<script>
+
+// ─────────────────────────────────────────────
+// ONBOARDING GUARD
+// ─────────────────────────────────────────────
+try { requireOnboarding(); } catch(e) { /* redirecting */ }
+
+
+// ─────────────────────────────────────────────
+// FIRM NAME IN NAV
+// ─────────────────────────────────────────────
+(function() {
+  var cfg = loadFirmConfig();
+  if (cfg && cfg.firmName) document.getElementById('navFirmName').textContent = cfg.firmName;
+})();
+
+
+// ─────────────────────────────────────────────
+// CURSOR
+// ─────────────────────────────────────────────
+(function() {
+  var c = document.getElementById('cursor');
+  var r = document.getElementById('cursorRing');
+  if (!c) return;
+  document.addEventListener('mousemove', function(e) {
+    c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
+    r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a,button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      c.style.transform = 'translate(-50%,-50%) scale(2)';
+      r.style.transform = 'translate(-50%,-50%) scale(1.4)';
+      r.style.borderColor = 'rgba(201,168,76,.8)';
+    });
+    el.addEventListener('mouseleave', function() {
+      c.style.transform = 'translate(-50%,-50%) scale(1)';
+      r.style.transform = 'translate(-50%,-50%) scale(1)';
+      r.style.borderColor = 'rgba(201,168,76,.5)';
+    });
+  });
+})();
+
+
+// ─────────────────────────────────────────────
+// STATE — current deal loaded from localStorage
+// ─────────────────────────────────────────────
+var currentDealId  = null;
+var currentDeal    = null;
+var parsedData     = null;
+
+
+// ─────────────────────────────────────────────
+// PARSING ENGINE
+// Extracts structured data from Alex's raw text output.
+// Robust — handles missing sections gracefully.
+// ─────────────────────────────────────────────
+
+// Split text into named sections using the ━━━ divider pattern
+// Alex's format is: ━━━ / TITLE / ━━━ / content (dual-divider)
+// This 4-state machine handles that correctly.
+function splitIntoSections(text) {
+  var sections = [];
+  var lines = text.split('\n');
+  // States: IDLE | AFTER_DIVIDER | HAVE_TITLE | IN_CONTENT
+  var state          = 'IDLE';
+  var currentTitle   = '';
+  var currentContent = [];
+
+  for (var i = 0; i < lines.length; i++) {
+    var line     = lines[i];
+    var isEmpty  = line.trim() === '';
+    // Detect a divider line (5+ consecutive ━ or = or ─ or -)
+    var isDivider = /^[━=─\-]{5,}/.test(line.trim());
+
+    if (isDivider) {
+      if (state === 'IN_CONTENT') {
+        // Divider closes the current section
+        if (currentTitle && currentContent.join('').trim().length > 0) {
+          sections.push({
+            title:   currentTitle.trim(),
+            content: currentContent.join('\n').trim()
+          });
+        }
+        currentTitle   = '';
+        currentContent = [];
+        state = 'AFTER_DIVIDER';
+      } else if (state === 'HAVE_TITLE') {
+        // Second divider after title — now start collecting content
+        state = 'IN_CONTENT';
+      } else {
+        // IDLE or AFTER_DIVIDER — another divider, stay waiting
+        state = 'AFTER_DIVIDER';
+      }
+    } else if ((state === 'IDLE' || state === 'AFTER_DIVIDER') && !isEmpty) {
+      // First non-empty line after a divider is the section title
+      currentTitle   = line.trim();
+      currentContent = [];
+      state = 'HAVE_TITLE';
+    } else if (state === 'IN_CONTENT') {
+      // Collect content lines
+      currentContent.push(line);
+    }
+    // HAVE_TITLE + non-divider lines: skip — waiting for second divider
+  }
+  // Catch any trailing section without a closing divider
+  if (state === 'IN_CONTENT' && currentTitle && currentContent.join('').trim().length > 0) {
+    sections.push({ title: currentTitle.trim(), content: currentContent.join('\n').trim() });
+  }
+  return sections;
+}
+
+
+// Find a section by partial title match (case-insensitive)
+function findSection(sections, titleFragment) {
+  var frag = titleFragment.toLowerCase();
+  for (var i = 0; i < sections.length; i++) {
+    if (sections[i].title.toLowerCase().indexOf(frag) !== -1) {
+      return sections[i];
+    }
+  }
+  return null;
+}
+
+
+// Extract a metadata value from text like "KEY:   value"
+function extractMeta(text, key) {
+  var re = new RegExp(key + '[:\\s]+([^\\n]+)', 'i');
+  var m  = text.match(re);
+  return m ? m[1].trim() : null;
+}
+
+
+// Parse dimension scores from text
+// Handles: "Thesis Fit: 16/20" or "Thesis Fit     16/20" or "Thesis Fit: 16"
+function parseDimension(text, name) {
+  var patterns = [
+    new RegExp(name + '[:\\s]+([0-9]+)\\s*/\\s*([0-9]+)', 'i'),
+    new RegExp(name + '[^0-9]+([0-9]+)', 'i')
+  ];
+  for (var i = 0; i < patterns.length; i++) {
+    var m = text.match(patterns[i]);
+    if (m) return parseInt(m[1], 10);
+  }
+  return null;
+}
+
+
+// Parse the Narrative Drift table
+// Lines like: "CLAIM: X | DATA: Y | VERDICT: Z"
+// or block format with CLAIM:, DATA:, VERDICT: on separate lines
+function parseDriftCheck(content) {
+  var rows = [];
+  if (!content) return rows;
+
+  // Try pipe-delimited format first
+  var lines = content.split('\n');
+  var currentRow = null;
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) {
+      if (currentRow && currentRow.claim) { rows.push(currentRow); currentRow = null; }
+      continue;
+    }
+    // Pipe-delimited: CLAIM: X | DATA: Y | VERDICT: Z
+    if (line.indexOf('|') !== -1) {
+      var parts = line.split('|');
+      var row = {};
+      parts.forEach(function(p) {
+        var kv = p.match(/^(CLAIM|DATA|VERDICT)[:\s]+(.+)$/i);
+        if (kv) row[kv[1].toLowerCase()] = kv[2].trim();
+      });
+      if (row.claim || row.verdict) rows.push(row);
+    } else {
+      // Block format: each field on its own line
+      var claimM   = line.match(/^CLAIM[:\s]+(.+)$/i);
+      var dataM    = line.match(/^DATA[:\s]+(.+)$/i);
+      var verdictM = line.match(/^VERDICT[:\s]+(.+)$/i);
+      if (claimM)   { currentRow = currentRow || {}; currentRow.claim   = claimM[1].trim(); }
+      if (dataM)    { currentRow = currentRow || {}; currentRow.data    = dataM[1].trim(); }
+      if (verdictM) { currentRow = currentRow || {}; currentRow.verdict = verdictM[1].trim();
+                      rows.push(currentRow); currentRow = null; }
+    }
+  }
+  if (currentRow && currentRow.claim) rows.push(currentRow);
+  return rows;
+}
+
+
+// Parse Thesis Dependency Chain — returns { items:[], spof:string }
+function parseDependencyChain(content) {
+  if (!content) return { items: [], spof: null };
+  var items = [];
+  var spof  = null;
+  var lines = content.split('\n');
+
+  // Find SINGLE POINT OF FAILURE
+  var spofIdx = content.toUpperCase().indexOf('SINGLE POINT OF FAILURE');
+  if (spofIdx !== -1) {
+    var spofLine = content.slice(spofIdx).split('\n')[0];
+    spof = spofLine.replace(/SINGLE POINT OF FAILURE[:\s—]*/i, '').trim();
+    // Also check the line after
+    var spofLines = content.slice(spofIdx).split('\n');
+    if (spof.length < 10 && spofLines[1]) spof = spofLines[1].trim();
+  }
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    if (line.toUpperCase().indexOf('SINGLE POINT') !== -1) continue;
+
+    // Match numbered items: "1. Assumption text — CONFIDENCE: HIGH"
+    // or "1. Assumption — HIGH"
+    var numMatch = line.match(/^(\d+)[.)]\s+(.+?)(?:\s*[—–-]+\s*CONFIDENCE[:\s]*|\s*[—–-]\s*)(HIGH|MEDIUM|LOW)/i);
+    if (numMatch) {
+      items.push({ text: numMatch[2].trim(), confidence: numMatch[3].toUpperCase() });
+      continue;
+    }
+    // Match without number: "Assumption — CONFIDENCE: HIGH"
+    var plainMatch = line.match(/^(.+?)\s*[—–-]+\s*(?:CONFIDENCE[:\s]+)?(HIGH|MEDIUM|LOW)/i);
+    if (plainMatch && plainMatch[1].length > 5) {
+      items.push({ text: plainMatch[1].trim(), confidence: plainMatch[2].toUpperCase() });
+    }
+  }
+  return { items: items, spof: spof };
+}
+
+
+// Parse Information Gaps section — returns { gaps:[], confidence:string }
+function parseInfoGaps(content) {
+  if (!content) return { gaps: [], confidence: null };
+  var gaps       = [];
+  var confidence = null;
+  var lines      = content.split('\n');
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    // Confidence rating at end
+    var confM = line.match(/CONFIDENCE\s+RATING[:\s]+(HIGH|MEDIUM|LOW)/i);
+    if (confM) { confidence = confM[1].toUpperCase(); continue; }
+    // Strip list markers (—, -, •, *, numbers)
+    var cleaned = line.replace(/^[—\-•*\d.)\s]+/, '').trim();
+    if (cleaned.length > 5) gaps.push(cleaned);
+  }
+  return { gaps: gaps, confidence: confidence };
+}
+
+
+// Parse red flags — returns array of { severity, text }
+function parseRedFlags(content) {
+  if (!content) return [];
+  var flags = [];
+  var lines = content.split('\n');
+  var currentSeverity = 'LOW';
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+
+    // Severity header lines
+    if (/^HIGH\s+FLAGS?/i.test(line) || /severity.*high/i.test(line)) { currentSeverity = 'HIGH'; continue; }
+    if (/^MEDIUM\s+FLAGS?/i.test(line) || /severity.*medium/i.test(line)) { currentSeverity = 'MEDIUM'; continue; }
+    if (/^LOW\s+FLAGS?/i.test(line) || /severity.*low/i.test(line)) { currentSeverity = 'LOW'; continue; }
+
+    // Inline severity: "HIGH: flag text" or "FLAG (HIGH): text"
+    var inlineMatch = line.match(/^(HIGH|MEDIUM|LOW)[:\s—–]+(.+)$/i);
+    if (inlineMatch) {
+      flags.push({ severity: inlineMatch[1].toUpperCase(), text: inlineMatch[2].trim() });
+      continue;
+    }
+    // Parenthetical: "flag text (HIGH)" or "flag text — HIGH"
+    var suffixMatch = line.match(/^(.+?)\s*[—–(]\s*(HIGH|MEDIUM|LOW)\s*[)—]?\s*$/i);
+    if (suffixMatch) {
+      flags.push({ severity: suffixMatch[2].toUpperCase(), text: suffixMatch[1].trim() });
+      continue;
+    }
+    // Checkbox format: "□ flag text" — use current severity
+    var checkMatch = line.match(/^[□✓✗☐☑•\-—*]\s+(.+)$/);
+    if (checkMatch && checkMatch[1].length > 5) {
+      flags.push({ severity: currentSeverity, text: checkMatch[1].trim() });
+    }
+  }
+  return flags;
+}
+
+
+// Main parser — returns structured object from raw Alex text
+function parseAlexOutput(raw) {
+  var result = {
+    raw:                  raw,
+    company:              null,
+    status:               'WATCH',   // default
+    score:                null,
+    valuation:            null,
+    dimensions:           {},
+    executiveSummary:     null,
+    narrativeDrift:       [],
+    hasInconsistency:     false,
+    numberedSections:     [],
+    thesisDependency:     { items: [], spof: null },
+    alexNote:             null,
+    informationGaps:      { gaps: [], confidence: null },
+    redFlags:             []
+  };
+
+  var sections = splitIntoSections(raw);
+
+  // ── Extract metadata from header block ──
+  var headerBlock = sections.length > 0 ? sections[0].content : raw.slice(0, 800);
+
+  result.company = extractMeta(raw, 'COMPANY') || '—';
+  var statusRaw  = extractMeta(raw, 'STATUS') || extractMeta(raw, 'RECOMMENDATION');
+  if (statusRaw) {
+    var su = statusRaw.toUpperCase();
+    if (su.indexOf('PRIORITY') !== -1)    result.status = 'PRIORITY REVIEW';
+    else if (su.indexOf('WATCH') !== -1)  result.status = 'WATCH';
+    else if (su.indexOf('PASS') !== -1)   result.status = 'PASS';
+    else                                   result.status = statusRaw;
+  }
+
+  // G7 Score
+  var scorePatterns = [
+    /G7\s*SCORE[:\s]+(\d{1,3})\s*\/\s*100/i,
+    /TOTAL\s*SCORE[:\s]+(\d{1,3})/i,
+    /SCORE[:\s]+(\d{1,3})\s*\/\s*100/i,
+    /\b(\d{2,3})\s*\/\s*100\b/
+  ];
+  for (var sp = 0; sp < scorePatterns.length; sp++) {
+    var sm = raw.match(scorePatterns[sp]);
+    if (sm) { var n = parseInt(sm[1],10); if (n >= 0 && n <= 100) { result.score = n; break; } }
+  }
+
+  // Valuation
+  var valRaw = extractMeta(raw, 'VALUATION') || extractMeta(raw, 'VALUATION VERDICT');
+  if (valRaw) {
+    result.valuation = valRaw.replace(/[—–-]/g,'').trim();
+  }
+
+  // Dimension scores — search the entire raw text
+  result.dimensions = {
+    thesis:   parseDimension(raw, 'Thesis\\s*Fit'),
+    market:   parseDimension(raw, 'Market'),
+    team:     parseDimension(raw, 'Team'),
+    traction: parseDimension(raw, 'Traction'),
+    model:    parseDimension(raw, 'Business\\s*Model'),
+    risk:     parseDimension(raw, 'Risk(?:\\s*/\\s*Red\\s*Flags?)?')
+  };
+
+  // ── Named sections ──
+  var execSection  = findSection(sections, 'EXECUTIVE SUMMARY');
+  result.executiveSummary = execSection ? execSection.content : null;
+
+  var driftSection = findSection(sections, 'NARRATIVE DRIFT');
+  if (driftSection) {
+    result.narrativeDrift = parseDriftCheck(driftSection.content);
+    result.hasInconsistency = result.narrativeDrift.some(function(r) {
+      return r.verdict && r.verdict.toUpperCase().indexOf('INCONSISTENT') !== -1;
+    });
+  }
+
+  var depSection   = findSection(sections, 'THESIS DEPENDENCY');
+  if (depSection) result.thesisDependency = parseDependencyChain(depSection.content);
+
+  var noteSection  = findSection(sections, "ALEX'S NOTE") || findSection(sections, 'ALEX NOTE');
+  result.alexNote  = noteSection ? noteSection.content : null;
+
+  var gapsSection  = findSection(sections, 'INFORMATION GAPS') || findSection(sections, 'MISSING');
+  if (gapsSection) result.informationGaps = parseInfoGaps(gapsSection.content);
+
+  // Red flags — look inside numbered sections or a dedicated Red Flags section
+  var flagsSection = findSection(sections, 'RED FLAG') || findSection(sections, 'RISK');
+  if (flagsSection) result.redFlags = parseRedFlags(flagsSection.content);
+
+  // ── Numbered sections (01 through 10) ──
+  // These are generic sections rendered as cards in order
+  var skipTitles = [
+    'G7 WORKSPACE', 'DEAL SCREENING', 'SCORE', 'EXECUTIVE SUMMARY',
+    'NARRATIVE DRIFT', 'THESIS DEPENDENCY', "ALEX'S NOTE", 'ALEX NOTE',
+    'INFORMATION GAPS', 'MISSING', 'PREPARED BY'
+  ];
+  sections.forEach(function(sec) {
+    var titleUp = sec.title.toUpperCase();
+    // Check if it's a numbered section (starts with digits or 0X)
+    var isNumbered = /^0?[0-9]+\s+[—–]?\s+/.test(sec.title) ||
+                     /^SECTION\s+[0-9]/.test(titleUp);
+    // Check it's not in skip list
+    var isSkipped = skipTitles.some(function(s) { return titleUp.indexOf(s) !== -1; });
+    if (!isSkipped && sec.content && sec.content.length > 10) {
+      result.numberedSections.push({
+        rawTitle: sec.title,
+        content:  sec.content,
+        isRedFlags: titleUp.indexOf('RED FLAG') !== -1 || titleUp.indexOf('RISK') !== -1
+      });
+    }
+  });
+
+  return result;
+}
+
+
+// ─────────────────────────────────────────────
+// RENDERING — builds the DOM from parsed data
+// ─────────────────────────────────────────────
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// Convert plain text to paragraphs (split on blank lines)
+function textToHtml(text) {
+  if (!text) return '<p>—</p>';
+  var paragraphs = text.split(/\n\s*\n/);
+  return paragraphs.map(function(p) {
+    return '<p>' + escapeHtml(p.trim()).replace(/\n/g, '<br>') + '</p>';
+  }).filter(function(p){ return p !== '<p></p>'; }).join('');
+}
+
+// Render status banner
+function renderStatusBanner(data, deal) {
+  var banner  = document.getElementById('statusBanner');
+  var company = document.getElementById('statusCompany');
+  var meta    = document.getElementById('statusMeta');
+  var ind     = document.getElementById('statusIndicator');
+
+  company.textContent = data.company || deal.companyName || '—';
+
+  var dateStr = formatDate(deal.dateScreened);
+  meta.textContent = 'Screened ' + dateStr + ' · ' + deal.source;
+
+  var st = (data.status || 'WATCH').toUpperCase();
+  if (st.indexOf('PRIORITY') !== -1) {
+    banner.className = 'status-banner status-priority';
+    ind.textContent  = 'Priority Review';
+  } else if (st.indexOf('WATCH') !== -1) {
+    banner.className = 'status-banner status-watch';
+    ind.textContent  = 'Watch';
+  } else {
+    banner.className = 'status-banner status-pass';
+    ind.textContent  = 'Pass';
+  }
+
+  // Action bar date
+  document.getElementById('actionBarDate').textContent = dateStr;
+  document.getElementById('actionBarCompany').textContent = data.company || deal.companyName;
+}
+
+// Render score ring + dimension bars
+function renderScore(data) {
+  var score = data.score;
+  if (score === null || score === undefined) {
+    document.getElementById('scoreNumber').textContent = '—';
+    return;
+  }
+
+  // Count-up animation for number
+  var start    = 0;
+  var duration = 1400;
+  var startTime = null;
+  function countUp(timestamp) {
+    if (!startTime) startTime = timestamp;
+    var progress = Math.min((timestamp - startTime) / duration, 1);
+    var eased    = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    document.getElementById('scoreNumber').textContent = Math.round(eased * score);
+    if (progress < 1) requestAnimationFrame(countUp);
+  }
+  requestAnimationFrame(countUp);
+
+  // Ring fill — circumference of r=80 is 2π×80 ≈ 502.65
+  var circumference = 2 * Math.PI * 80;
+  var fillAmount    = (score / 100) * circumference;
+  // Small delay so animation is visible after page load
+  setTimeout(function() {
+    var ringFill = document.getElementById('ringFill');
+    ringFill.style.strokeDasharray = fillAmount + ' ' + circumference;
+  }, 200);
+
+  // Score verdict label
+  var parsed = parseAlexScore(data.raw);
+  if (parsed.verdict) {
+    document.getElementById('scoreVerdictLabel').textContent = parsed.verdict;
+  }
+
+  // Dimension bars
+  var dimConfig = [
+    { key: 'thesis',   elId: 'dim-thesis',   scoreId: 'dimScore-thesis',   max: 20 },
+    { key: 'market',   elId: 'dim-market',   scoreId: 'dimScore-market',   max: 20 },
+    { key: 'team',     elId: 'dim-team',     scoreId: 'dimScore-team',     max: 25 },
+    { key: 'traction', elId: 'dim-traction', scoreId: 'dimScore-traction', max: 20 },
+    { key: 'model',    elId: 'dim-model',    scoreId: 'dimScore-model',    max: 10 },
+    { key: 'risk',     elId: 'dim-risk',     scoreId: 'dimScore-risk',     max:  5 }
+  ];
+  dimConfig.forEach(function(dim, idx) {
+    var val = data.dimensions[dim.key];
+    var fill  = document.getElementById(dim.elId);
+    var label = document.getElementById(dim.scoreId);
+    if (val !== null && val !== undefined) {
+      label.textContent = val;
+      // Animate bar with staggered delay
+      setTimeout(function() {
+        fill.style.width = ((val / dim.max) * 100) + '%';
+      }, 300 + idx * 80);
+    } else {
+      label.textContent = '—';
+    }
+  });
+
+  // Valuation
+  renderValuation(data.valuation);
+}
+
+function renderValuation(val) {
+  var pill  = document.getElementById('valuationPill');
+  var text  = document.getElementById('valuationPillText');
+  var value = document.getElementById('valuationValue');
+
+  var display = val || '—';
+  value.textContent = display;
+  text.textContent  = display;
+
+  if (!val) return;
+  var v = val.toUpperCase();
+  pill.className = 'valuation-pill';
+  if (v.indexOf('FAIR') !== -1 && v.indexOf('PREMIUM') === -1) {
+    pill.classList.add('val-fair');
+  } else if (v.indexOf('SLIGHT') !== -1) {
+    pill.classList.add('val-slight');
+    value.style.color = 'var(--amber)';
+  } else if (v.indexOf('SIGNIFICANT') !== -1) {
+    pill.classList.add('val-significant');
+    value.style.color = '#C47A4A';
+  } else if (v.indexOf('EXCESS') !== -1) {
+    pill.classList.add('val-excessive');
+    value.style.color = 'var(--red)';
+  } else {
+    pill.classList.add('val-fair');
+  }
+}
+
+// Render all numbered sections + special sections into container
+function renderSections(data) {
+  var container = document.getElementById('sectionsContainer');
+  var html       = '';
+  var cardDelay  = 0.3;
+
+  // ── Executive Summary ──
+  if (data.executiveSummary) {
+    html += '<div class="section-card" style="animation-delay:' + cardDelay + 's">';
+    html += '<div class="card-header">';
+    html += '<span class="card-number">00</span>';
+    html += '<span class="card-title">Executive Summary</span>';
+    html += '</div>';
+    html += '<div class="card-body">';
+    html += '<div class="exec-summary-text">' + textToHtml(data.executiveSummary) + '</div>';
+    html += '</div></div>';
+    cardDelay += 0.08;
+  }
+
+  // ── Narrative Drift Check ──
+  if (data.narrativeDrift && data.narrativeDrift.length > 0) {
+    html += '<div class="section-card" style="animation-delay:' + cardDelay + 's">';
+    html += '<div class="card-header">';
+    html += '<span class="card-number">—</span>';
+    html += '<span class="card-title">Narrative Drift Check</span>';
+    html += '</div><div class="card-body">';
+
+    // Inconsistency warning banner
+    if (data.hasInconsistency) {
+      html += '<div class="inconsistency-warning show">';
+      html += '<div class="warn-dot"></div>';
+      html += '<div class="warn-text">Alex identified inconsistencies between founder claims and data. Review before proceeding.</div>';
+      html += '</div>';
+    }
+
+    html += '<div style="overflow-x:auto">';
+    html += '<table class="drift-table">';
+    html += '<thead><tr>';
+    html += '<th style="width:35%">Claim</th>';
+    html += '<th style="width:35%">Data</th>';
+    html += '<th style="width:30%">Verdict</th>';
+    html += '</tr></thead><tbody>';
+
+    data.narrativeDrift.forEach(function(row) {
+      html += '<tr>';
+      html += '<td>' + escapeHtml(row.claim || '—') + '</td>';
+      html += '<td>' + escapeHtml(row.data  || '—') + '</td>';
+      var v = (row.verdict || '').toUpperCase();
+      var vcls = v.indexOf('INCONSISTENT') !== -1 ? 'verdict-inconsistent' :
+                 v.indexOf('CONSISTENT')   !== -1 ? 'verdict-consistent'   :
+                 'verdict-unverifiable';
+      var vlabel = v.indexOf('INCONSISTENT') !== -1 ? 'Inconsistent' :
+                   v.indexOf('CONSISTENT')   !== -1 ? 'Consistent'   :
+                   'Unverifiable';
+      html += '<td class="col-verdict"><span class="verdict-badge ' + vcls + '">';
+      html += '<span class="verdict-dot"></span>';
+      html += '<span class="verdict-text">' + vlabel + '</span>';
+      html += '</span></td></tr>';
+    });
+    html += '</tbody></table></div>';
+    html += '</div></div>';
+    cardDelay += 0.08;
+  }
+
+  // ── Numbered sections ──
+  data.numberedSections.forEach(function(sec) {
+    // Parse a display number from the raw title (e.g. "01 — MARKET ANALYSIS")
+    var numMatch = sec.rawTitle.match(/^(0?[0-9]+)/);
+    var dispNum  = numMatch ? numMatch[1].replace(/^0+/, '0').padStart(2,'0') : '—';
+    var title    = sec.rawTitle.replace(/^0?[0-9]+\s*[—–]?\s*/,'').trim();
+
+    html += '<div class="section-card" style="animation-delay:' + cardDelay + 's">';
+    html += '<div class="card-header">';
+    html += '<span class="card-number">' + escapeHtml(dispNum) + '</span>';
+    html += '<span class="card-title">' + escapeHtml(title) + '</span>';
+    html += '</div><div class="card-body">';
+
+    // Special rendering for red flags section
+    if (sec.isRedFlags && data.redFlags.length > 0) {
+      html += renderRedFlagsHtml(data.redFlags);
+    } else {
+      html += '<div class="section-text">' + textToHtml(sec.content) + '</div>';
+    }
+
+    html += '</div></div>';
+    cardDelay += 0.08;
+  });
+
+  // ── Thesis Dependency Chain ──
+  if (data.thesisDependency && (data.thesisDependency.items.length > 0 || data.thesisDependency.spof)) {
+    html += '<div class="section-card" style="animation-delay:' + cardDelay + 's">';
+    html += '<div class="card-header">';
+    html += '<span class="card-number">—</span>';
+    html += '<span class="card-title">Thesis Dependency Chain</span>';
+    html += '</div><div class="card-body">';
+
+    if (data.thesisDependency.items.length > 0) {
+      html += '<div class="dependency-list">';
+      data.thesisDependency.items.forEach(function(item, idx) {
+        var confCls = item.confidence === 'HIGH'   ? 'conf-high'   :
+                      item.confidence === 'MEDIUM' ? 'conf-medium' : 'conf-low';
+        html += '<div class="dependency-item">';
+        html += '<span class="dep-num">' + (idx + 1) + '</span>';
+        html += '<div class="dep-body">';
+        html += '<div class="dep-text">' + escapeHtml(item.text) + '</div>';
+        html += '<span class="confidence-pill ' + confCls + '">' + item.confidence + ' CONFIDENCE</span>';
+        html += '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    if (data.thesisDependency.spof) {
+      html += '<div class="spof-card">';
+      html += '<div class="spof-label">Single Point of Failure</div>';
+      html += '<div class="spof-text">' + escapeHtml(data.thesisDependency.spof) + '</div>';
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+    cardDelay += 0.08;
+  }
+
+  // ── Information Gaps ──
+  if (data.informationGaps && data.informationGaps.gaps.length > 0) {
+    html += '<div class="section-card" style="animation-delay:' + cardDelay + 's">';
+    html += '<div class="card-header">';
+    html += '<span class="card-number">—</span>';
+    html += '<span class="card-title">Information Gaps</span>';
+    html += '</div><div class="card-body">';
+    html += '<ul class="gaps-list">';
+    data.informationGaps.gaps.forEach(function(gap) {
+      html += '<li><span class="gap-bullet"></span><span>' + escapeHtml(gap) + '</span></li>';
+    });
+    html += '</ul>';
+    if (data.informationGaps.confidence) {
+      var confCls = data.informationGaps.confidence === 'HIGH' ? 'conf-high' :
+                    data.informationGaps.confidence === 'MEDIUM' ? 'conf-medium' : 'conf-low';
+      html += '<div class="confidence-row">';
+      html += '<span class="conf-label">Confidence Rating</span>';
+      html += '<span class="confidence-pill ' + confCls + '">' + data.informationGaps.confidence + '</span>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+
+  // If no sections were parsed at all, fall back to rendering the raw text
+  if (html === '') {
+    html  = '<div class="section-card">';
+    html += '<div class="card-header">';
+    html += '<span class="card-number">—</span>';
+    html += '<span class="card-title">Screening Note</span>';
+    html += '</div><div class="card-body">';
+    html += '<div class="raw-section">' + escapeHtml(data.raw) + '</div>';
+    html += '</div></div>';
+  }
+
+  container.innerHTML = html;
+}
+
+function renderRedFlagsHtml(flags) {
+  if (!flags || flags.length === 0) return '<p class="section-text">No red flags identified.</p>';
+  var html = '<div class="flag-list">';
+  flags.forEach(function(flag) {
+    var cls = flag.severity === 'HIGH'   ? 'flag-high'   :
+              flag.severity === 'MEDIUM' ? 'flag-medium' : 'flag-low';
+    html += '<div class="flag-item ' + cls + '">';
+    html += '<span class="flag-sev">' + flag.severity + '</span>';
+    html += '<span class="flag-text">' + escapeHtml(flag.text) + '</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// Render Alex's Note
+function renderAlexNote(text) {
+  if (!text) return;
+  var card = document.getElementById('alexNoteCard');
+  var el   = document.getElementById('alexNoteText');
+  el.innerHTML = escapeHtml(text).replace(/\n/g,'<br>');
+  card.style.display = 'block';
+  // Stagger delay so it appears after sections
+  card.style.animationDelay = '1s';
+}
+
+
+// ─────────────────────────────────────────────
+// SCROLL REVEAL
+// ─────────────────────────────────────────────
+function initReveal() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+}
+
+
+// ─────────────────────────────────────────────
+// AGREE / DISAGREE HANDLERS
+// ─────────────────────────────────────────────
+function handleAgree() {
+  if (!currentDealId) return;
+  updateDealDecision(currentDealId, 'agreed');
+  var btn = document.getElementById('btnAgree');
+  btn.textContent = '✓ Decision Recorded';
+  btn.classList.add('confirmed');
+  btn.disabled = true;
+  document.getElementById('btnDisagree').disabled = true;
+  setTimeout(function() {
+    window.location.href = 'history.html';
+  }, 1200);
+}
+
+function openCalibrationModal() {
+  // Pre-fill Alex's assessment from score + status
+  var assessment = '';
+  if (parsedData) {
+    var st = parsedData.status || '—';
+    var sc = parsedData.score !== null ? ' (G7 Score: ' + parsedData.score + '/100)' : '';
+    assessment = st + sc;
+  }
+  document.getElementById('calibAlexAssessment').value = assessment;
+
+  // Clear previous entries
+  document.getElementById('calibPartnerDecision').value = '';
+  document.getElementById('calibReason').value          = '';
+  document.getElementById('calibLearning').value        = '';
+  document.querySelectorAll('.m-field-error').forEach(function(el) {
+    el.classList.remove('show');
+  });
+
+  document.getElementById('calibForm').style.display    = 'block';
+  document.getElementById('calibSuccess').classList.remove('show');
+  document.getElementById('calibModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCalibrationModal() {
+  document.getElementById('calibModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function submitCalibration() {
+  // Validate
+  var valid = true;
+  ['calibPartnerDecision','calibReason','calibLearning'].forEach(function(id) {
+    var el    = document.getElementById(id);
+    var errId = id === 'calibPartnerDecision' ? 'calibDecision-error' :
+                id === 'calibReason'          ? 'calibReason-error'   : 'calibLearning-error';
+    var err   = document.getElementById(errId);
+    if (!el.value.trim()) {
+      err.classList.add('show');
+      valid = false;
+    } else {
+      err.classList.remove('show');
+    }
+  });
+  if (!valid) return;
+
+  var btn = document.getElementById('btnSaveCalib');
+  btn.disabled    = true;
+  btn.textContent = 'Saving…';
+
+  var alexAssessment  = document.getElementById('calibAlexAssessment').value;
+  var partnerDecision = document.getElementById('calibPartnerDecision').value;
+  var reason          = document.getElementById('calibReason').value.trim();
+  var learning        = document.getElementById('calibLearning').value.trim();
+
+  // Save calibration — this updates the firm KB and deal record
+  addCalibration(currentDealId, alexAssessment, partnerDecision, reason, learning);
+
+  // Show success
+  document.getElementById('calibForm').style.display = 'none';
+  document.getElementById('calibSuccess').classList.add('show');
+
+  // Redirect after 2 seconds
+  setTimeout(function() {
+    window.location.href = 'history.html';
+  }, 2000);
+}
+
+
+// ─────────────────────────────────────────────
+// EXPORT PDF
+// ─────────────────────────────────────────────
+function handleExport() {
+  if (currentDealId) exportNoteAsPDF(currentDealId);
+}
+
+
+// ─────────────────────────────────────────────
+// MAIN INIT — runs on page load
+// ─────────────────────────────────────────────
+(function init() {
+  // Read pending result from localStorage
+  var pendingRaw = localStorage.getItem('g7_pending_result');
+  if (!pendingRaw) {
+    document.getElementById('emptyState').classList.add('show');
+    return;
+  }
+
+  var pending;
+  try {
+    pending = JSON.parse(pendingRaw);
+  } catch(e) {
+    document.getElementById('emptyState').classList.add('show');
+    return;
+  }
+
+  if (!pending || !pending.dealId || !pending.alexOutput) {
+    document.getElementById('emptyState').classList.add('show');
+    return;
+  }
+
+  // Load the full deal from history
+  currentDealId = pending.dealId;
+  currentDeal   = loadDealById(currentDealId) || {
+    id:          pending.dealId,
+    companyName: pending.companyName || '—',
+    source:      '—',
+    dateScreened:pending.timestamp || new Date().toISOString()
+  };
+
+  // Parse Alex's raw output
+  parsedData = parseAlexOutput(pending.alexOutput);
+
+  // Show the result content, hide empty state
+  document.getElementById('resultContent').style.display  = 'block';
+  document.getElementById('actionBar').style.display      = 'flex';
+  document.getElementById('emptyState').style.display     = 'none';
+
+  // Update page title with company name
+  document.title = (parsedData.company || currentDeal.companyName) + ' — G7 Workspace';
+
+  // Render each section
+  renderStatusBanner(parsedData, currentDeal);
+  renderScore(parsedData);
+  renderSections(parsedData);
+  renderAlexNote(parsedData.alexNote);
+
+  // Init scroll reveal
+  initReveal();
+
+  // Clear the pending result so refreshing doesn't show stale data
+  // (keep a short delay so fast back-navigation still works)
+  setTimeout(function() {
+    localStorage.removeItem('g7_pending_result');
+  }, 5000);
+})();
+
+</script>
+
+</body>
+</html>

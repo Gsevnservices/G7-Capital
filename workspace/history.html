@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deal History — G7 Workspace</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+<script src="../assets/alex-master-v1.js"></script>
+<script src="../assets/workspace.js"></script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+
+<style>
+
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;
+  --grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08);
+  --red:#C45A5A;--amber:#C4924A;--green:#5A9E6F
+}
+body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh}
+
+/* ─────────────────────────────────────────────
+   GRAIN TEXTURE
+───────────────────────────────────────────── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ─────────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--gold)}
+.nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+
+/* ─────────────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────────────── */
+.page-wrap{max-width:1200px;margin:0 auto;padding:140px 64px 100px}
+@media(max-width:768px){.page-wrap{padding:120px 24px 80px}}
+
+/* ─────────────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────────────── */
+.page-eyebrow{display:flex;align-items:center;gap:16px;margin-bottom:32px;opacity:0;animation:fadeUp .8s ease .2s both}
+.eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.eyebrow-text{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,64px);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:12px;opacity:0;animation:fadeUp .8s ease .35s both}
+.page-sub{font-size:14px;color:var(--grey1);line-height:1.9;max-width:500px;margin-bottom:56px;opacity:0;animation:fadeUp .8s ease .5s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─────────────────────────────────────────────
+   STATS BAR — four metrics in a row
+───────────────────────────────────────────── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--border2);
+  margin-bottom:48px;
+  opacity:0;animation:fadeUp .8s ease .55s both
+}
+.stat-cell{
+  padding:32px 24px;
+  border-right:1px solid var(--border2);
+  position:relative
+}
+.stat-cell:last-child{border-right:none}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:48px;font-weight:300;
+  color:var(--white);line-height:1;margin-bottom:8px
+}
+.stat-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2)
+}
+.stat-cell::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:1px;background:linear-gradient(90deg,var(--gold),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .6s ease
+}
+.stat-cell.animated::after{transform:scaleX(1)}
+@media(max-width:640px){
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .stat-cell{border-right:none;border-bottom:1px solid var(--border2)}
+  .stat-cell:nth-child(1),.stat-cell:nth-child(2){border-right:1px solid var(--border2)}
+  .stat-cell:nth-child(3),.stat-cell:nth-child(4){border-right:none}
+  .stat-cell:nth-child(3),.stat-cell:nth-child(4){border-bottom:none}
+}
+
+/* ─────────────────────────────────────────────
+   FILTER BAR
+───────────────────────────────────────────── */
+.filter-bar{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--border2);
+  margin-bottom:32px;
+  flex-wrap:wrap;
+  opacity:0;animation:fadeUp .8s ease .65s both
+}
+.filter-search{
+  flex:1;min-width:200px;
+  display:flex;align-items:center;
+  border-right:1px solid var(--border2);
+  padding:0 20px;gap:12px
+}
+.search-icon{font-size:12px;color:var(--grey2)}
+.filter-search input{
+  background:transparent;border:none;outline:none;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:12px;letter-spacing:.05em;
+  color:var(--white);
+  padding:18px 0;width:100%
+}
+.filter-search input::placeholder{color:var(--grey2)}
+.filter-select{
+  padding:18px 40px 18px 16px;
+  background:transparent;border:none;outline:none;
+  border-right:1px solid var(--border2);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--grey1);cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235A5855' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  transition:color .3s
+}
+.filter-select:hover,.filter-select:focus{color:var(--white)}
+.filter-select option{background:var(--black2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:13px;text-transform:none;letter-spacing:0}
+.filter-select:last-of-type{border-right:none}
+.btn-clear-filters{
+  padding:18px 20px;
+  background:none;border:none;border-left:1px solid var(--border2);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey2);cursor:pointer;transition:color .3s;
+  white-space:nowrap
+}
+.btn-clear-filters:hover{color:var(--gold)}
+/* Results count */
+.results-count{
+  font-size:11px;color:var(--grey2);
+  letter-spacing:.05em;margin-bottom:16px
+}
+.results-count span{color:var(--white)}
+@media(max-width:768px){
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .filter-search{border-right:none;border-bottom:1px solid var(--border2)}
+  .filter-select{border-right:none;border-bottom:1px solid var(--border2)}
+  .filter-select:last-of-type{border-bottom:none}
+  .btn-clear-filters{border-left:none;border-top:1px solid var(--border2);text-align:center}
+}
+
+/* ─────────────────────────────────────────────
+   DEALS TABLE (desktop)
+───────────────────────────────────────────── */
+.deals-table-wrap{
+  border:1px solid var(--border2);
+  overflow-x:auto;
+  margin-bottom:64px;
+  opacity:0;animation:fadeUp .8s ease .7s both
+}
+.deals-table{
+  width:100%;border-collapse:collapse;
+  min-width:780px
+}
+.deals-table th{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2);font-weight:400;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border2);
+  text-align:left;white-space:nowrap;
+  background:var(--black2)
+}
+.deals-table td{
+  padding:20px;
+  border-bottom:1px solid var(--border2);
+  font-size:13px;color:var(--grey1);
+  vertical-align:middle
+}
+.deals-table tr:last-child td{border-bottom:none}
+/* Clickable row */
+.deals-table tbody tr{
+  cursor:pointer;
+  transition:background .2s
+}
+.deals-table tbody tr:hover{background:var(--black4)}
+.deals-table tbody tr:hover .company-name{color:var(--gold)}
+
+/* Company name cell */
+.company-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:400;
+  color:var(--white);transition:color .2s;
+  display:block;line-height:1.2;margin-bottom:3px
+}
+.company-source{
+  font-size:10px;letter-spacing:.06em;
+  color:var(--grey2)
+}
+
+/* Status badge */
+.status-badge{
+  display:inline-block;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  padding:4px 10px;white-space:nowrap
+}
+.badge-priority{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid var(--border)}
+.badge-watch{background:transparent;color:var(--grey1);border:1px solid var(--border2)}
+.badge-pass{background:transparent;color:var(--grey2);border:1px solid rgba(90,88,85,.25)}
+
+/* Score cell */
+.score-cell{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:300;
+  text-align:center
+}
+.score-high{color:var(--green)}
+.score-mid{color:var(--amber)}
+.score-low{color:var(--red)}
+.score-none{color:var(--grey2);font-size:14px}
+
+/* Partner decision */
+.decision-badge{
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 10px
+}
+.decision-agreed{color:var(--green);border:1px solid rgba(90,158,111,.25)}
+.decision-overridden{color:var(--amber);border:1px solid rgba(196,146,74,.25)}
+.decision-pending{color:var(--grey2);border:1px solid rgba(90,88,85,.2)}
+
+/* Risk cell */
+.risk-cell{
+  font-size:12px;color:var(--grey1);
+  max-width:200px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.risk-high{color:var(--red)}
+
+/* ─────────────────────────────────────────────
+   MOBILE DEAL CARDS (replaces table on small screens)
+───────────────────────────────────────────── */
+.deal-cards{display:none;flex-direction:column;gap:0;border:1px solid var(--border2);margin-bottom:64px}
+.deal-card{
+  padding:24px 20px;border-bottom:1px solid var(--border2);
+  cursor:pointer;transition:background .2s;
+  display:flex;flex-direction:column;gap:10px
+}
+.deal-card:last-child{border-bottom:none}
+.deal-card:hover{background:var(--black4)}
+.deal-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.deal-card-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:400;color:var(--white);line-height:1.2
+}
+.deal-card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.deal-card-date{font-size:11px;color:var(--grey2)}
+@media(max-width:640px){
+  .deals-table-wrap{display:none}
+  .deal-cards{display:flex;opacity:0;animation:fadeUp .8s ease .7s both}
+}
+
+/* ─────────────────────────────────────────────
+   EMPTY STATE — no deals yet
+───────────────────────────────────────────── */
+.empty-deals{
+  display:none;
+  text-align:center;
+  padding:80px 40px;
+  border:1px solid var(--border2);
+  margin-bottom:64px
+}
+.empty-deals.show{display:block}
+.empty-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:300;
+  color:var(--grey2);margin-bottom:12px
+}
+.empty-sub{font-size:13px;color:var(--grey2);margin-bottom:32px}
+.btn-screen-first{
+  display:inline-block;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  padding:14px 36px;text-decoration:none;transition:all .3s
+}
+.btn-screen-first:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* No results after filtering */
+.no-results-row td{
+  text-align:center;padding:48px!important;
+  color:var(--grey2);font-size:13px;font-style:italic
+}
+
+/* ─────────────────────────────────────────────
+   SECTION DIVIDER
+───────────────────────────────────────────── */
+.section-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:80px 0 64px
+}
+
+/* ─────────────────────────────────────────────
+   CALIBRATION LOG
+───────────────────────────────────────────── */
+.calibration-empty{
+  border:1px solid var(--border2);padding:48px 40px;text-align:center;
+  margin-bottom:48px
+}
+.calibration-empty p{font-size:13px;color:var(--grey2);line-height:1.9;max-width:480px;margin:0 auto}
+.calibration-empty strong{display:block;font-size:16px;font-family:'Cormorant Garamond',serif;font-weight:300;color:var(--grey1);margin-bottom:8px}
+
+.calibration-list{display:flex;flex-direction:column;gap:0;margin-bottom:48px}
+.calib-card{
+  border:1px solid var(--border2);
+  border-top:none;
+  transition:background .2s
+}
+.calib-card:first-child{border-top:1px solid var(--border2)}
+.calib-card:hover{background:rgba(250,250,248,.01)}
+.calib-header{
+  padding:20px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border2);
+  cursor:pointer
+}
+.calib-num{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold)
+}
+.calib-company{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--white);flex:1
+}
+.calib-date{font-size:11px;color:var(--grey2)}
+.calib-expand{
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--grey2);transition:color .3s;background:none;border:none;cursor:pointer
+}
+.calib-header:hover .calib-expand{color:var(--gold)}
+.calib-body{
+  display:none;
+  padding:28px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px
+}
+.calib-row{
+  display:flex;flex-direction:column;gap:6px
+}
+.calib-row-full{grid-column:1/-1}
+.calib-row-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey2)
+}
+.calib-row-value{
+  font-size:13px;color:var(--grey1);line-height:1.7
+}
+.calib-learning{
+  font-size:13px;color:var(--white);
+  line-height:1.7;font-style:italic;
+  border-left:3px solid var(--gold);
+  padding-left:16px;
+  font-family:'Cormorant Garamond',serif;font-weight:300;font-size:16px
+}
+@media(max-width:600px){.calib-body{grid-template-columns:1fr}}
+
+/* ─────────────────────────────────────────────
+   FOOTER ACTIONS
+───────────────────────────────────────────── */
+.footer-actions{
+  display:flex;align-items:center;gap:32px;
+  padding:40px 0;
+  border-top:1px solid var(--border2);
+  flex-wrap:wrap
+}
+.footer-link{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);text-decoration:none;
+  transition:color .3s;display:flex;align-items:center;gap:8px;
+  background:none;border:none;cursor:pointer
+}
+.footer-link:hover{color:var(--gold)}
+.footer-link-sep{width:1px;height:16px;background:var(--grey2)}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─────────────────────────────────────────────
+     NAVIGATION
+───────────────────────────────────────────── -->
+<nav>
+  <a href="../index.html" class="nav-logo">G<em>7</em> Capital</a>
+  <div class="nav-right">
+    <a href="index.html"  class="nav-link">Dashboard</a>
+    <a href="submit.html" class="nav-link">New Deal</a>
+    <a href="history.html" class="nav-link active">History</a>
+    <span class="nav-badge" id="navFirmName">Workspace</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ─── PAGE HEADER ──────────────────────────── -->
+  <div class="page-eyebrow">
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-text">01 — Deal History</span>
+  </div>
+  <h1 class="page-title">Every Deal Alex Has Screened.</h1>
+  <p class="page-sub">
+    Your complete screening record. Searchable, filterable, and linked to full notes.
+  </p>
+
+  <!-- ─── STATS BAR ────────────────────────────── -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-cell" id="statCell0">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Deals Screened</div>
+    </div>
+    <div class="stat-cell" id="statCell1">
+      <div class="stat-num" id="statPriority">0</div>
+      <div class="stat-label">Priority Reviews</div>
+    </div>
+    <div class="stat-cell" id="statCell2">
+      <div class="stat-num" id="statAvgScore">—</div>
+      <div class="stat-label">Average G7 Score</div>
+    </div>
+    <div class="stat-cell" id="statCell3">
+      <div class="stat-num" id="statCalib">0</div>
+      <div class="stat-label">Calibrations Added</div>
+    </div>
+  </div>
+
+  <!-- ─── FILTER BAR ───────────────────────────── -->
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-search">
+      <span class="search-icon">⌕</span>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by company name…"
+        autocomplete="off"
+        oninput="applyFilters()"
+      >
+    </div>
+    <select class="filter-select" id="filterStatus" onchange="applyFilters()">
+      <option value="all">All Statuses</option>
+      <option value="PRIORITY REVIEW">Priority Review</option>
+      <option value="WATCH">Watch</option>
+      <option value="PASS">Pass</option>
+    </select>
+    <select class="filter-select" id="filterScore" onchange="applyFilters()">
+      <option value="all">All Scores</option>
+      <option value="high">70 – 100 (Strong)</option>
+      <option value="mid">40 – 69 (Borderline)</option>
+      <option value="low">0 – 39 (Weak)</option>
+      <option value="none">No Score</option>
+    </select>
+    <select class="filter-select" id="filterDecision" onchange="applyFilters()">
+      <option value="all">All Decisions</option>
+      <option value="agreed">Agreed</option>
+      <option value="overridden">Overridden</option>
+      <option value="pending">Pending</option>
+    </select>
+    <select class="filter-select" id="filterDate" onchange="applyFilters()">
+      <option value="all">All Time</option>
+      <option value="week">This Week</option>
+      <option value="month">This Month</option>
+    </select>
+    <button class="btn-clear-filters" onclick="clearFilters()">Clear</button>
+  </div>
+  <div class="results-count" id="resultsCount"></div>
+
+  <!-- ─── DEALS TABLE (desktop) ────────────────── -->
+  <div class="deals-table-wrap" id="dealsTableWrap">
+    <table class="deals-table" id="dealsTable">
+      <thead>
+        <tr>
+          <th style="min-width:180px">Company</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th style="text-align:center">Score</th>
+          <th>Valuation</th>
+          <th>Primary Risk</th>
+          <th>Decision</th>
+        </tr>
+      </thead>
+      <tbody id="dealsTableBody">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── DEAL CARDS (mobile) ──────────────────── -->
+  <div class="deal-cards" id="dealCardsContainer">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- ─── EMPTY STATE ──────────────────────────── -->
+  <div class="empty-deals" id="emptyDeals">
+    <div class="empty-title">No deals screened yet.</div>
+    <div class="empty-sub">Submit your first deal and Alex will screen it in under 60 seconds.</div>
+    <a href="submit.html" class="btn-screen-first">Screen Your First Deal →</a>
+  </div>
+
+  <!-- ─── SECTION DIVIDER ──────────────────────── -->
+  <div class="section-divider reveal"></div>
+
+  <!-- ─── CALIBRATION LOG ──────────────────────── -->
+  <div class="page-eyebrow reveal">
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-text">02 — Alex's Learning Log</span>
+  </div>
+  <h2 class="page-title reveal" style="font-size:clamp(32px,4vw,52px);margin-bottom:12px">How Alex Has Been Corrected.</h2>
+  <p class="page-sub reveal">
+    Every time you disagree with Alex, your correction is written into his firm knowledge base and applied immediately to future screenings.
+  </p>
+
+  <!-- Empty calibration state -->
+  <div class="calibration-empty" id="calibEmpty">
+    <strong>No calibrations added yet.</strong>
+    <p>
+      When you disagree with Alex, corrections appear here and are immediately applied to future screenings.
+      The more you correct, the more precisely Alex learns your firm's judgment.
+    </p>
+  </div>
+
+  <!-- Calibration entries list -->
+  <div class="calibration-list" id="calibrationList">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- ─── FOOTER ACTIONS ───────────────────────── -->
+  <div class="footer-actions">
+    <a href="submit.html"  class="footer-link">← Screen a New Deal</a>
+    <span class="footer-link-sep"></span>
+    <a href="onboard.html" class="footer-link">Update Firm Configuration</a>
+    <span class="footer-link-sep"></span>
+    <button class="footer-link" onclick="exportHistoryCSV()">↓ Export History as CSV</button>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+
+// ─────────────────────────────────────────────
+// ONBOARDING GUARD
+// ─────────────────────────────────────────────
+try { requireOnboarding(); } catch(e) { /* redirecting */ }
+
+
+// ─────────────────────────────────────────────
+// FIRM NAME IN NAV
+// ─────────────────────────────────────────────
+(function() {
+  var cfg = loadFirmConfig();
+  if (cfg && cfg.firmName) document.getElementById('navFirmName').textContent = cfg.firmName;
+})();
+
+
+// ─────────────────────────────────────────────
+// CURSOR
+// ─────────────────────────────────────────────
+(function() {
+  var c = document.getElementById('cursor');
+  var r = document.getElementById('cursorRing');
+  if (!c) return;
+  document.addEventListener('mousemove', function(e) {
+    c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
+    r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a,button,tr[data-id]').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      c.style.transform = 'translate(-50%,-50%) scale(2)';
+      r.style.transform = 'translate(-50%,-50%) scale(1.4)';
+      r.style.borderColor = 'rgba(201,168,76,.8)';
+    });
+    el.addEventListener('mouseleave', function() {
+      c.style.transform = 'translate(-50%,-50%) scale(1)';
+      r.style.transform = 'translate(-50%,-50%) scale(1)';
+      r.style.borderColor = 'rgba(201,168,76,.5)';
+    });
+  });
+})();
+
+
+// ─────────────────────────────────────────────
+// HELPER: extract status from Alex's raw output
+// Returns 'PRIORITY REVIEW', 'WATCH', or 'PASS'
+// ─────────────────────────────────────────────
+function extractStatus(alexOutput) {
+  if (!alexOutput) return null;
+  var m = alexOutput.match(/STATUS[:\s]+([^\n]+)/i);
+  if (!m) m = alexOutput.match(/RECOMMENDATION[:\s]+([^\n]+)/i);
+  if (!m) return null;
+  var v = m[1].trim().toUpperCase();
+  if (v.indexOf('PRIORITY') !== -1) return 'PRIORITY REVIEW';
+  if (v.indexOf('WATCH')    !== -1) return 'WATCH';
+  if (v.indexOf('PASS')     !== -1) return 'PASS';
+  return v.slice(0,20);
+}
+
+
+// ─────────────────────────────────────────────
+// HELPER: extract valuation from Alex's output
+// ─────────────────────────────────────────────
+function extractValuation(alexOutput) {
+  if (!alexOutput) return '—';
+  var m = alexOutput.match(/VALUATION(?:\s+VERDICT)?[:\s]+([^\n]+)/i);
+  if (!m) return '—';
+  var v = m[1].trim().replace(/[—–]/g,'').trim();
+  return v.slice(0,28) || '—';
+}
+
+
+// ─────────────────────────────────────────────
+// HELPER: extract first HIGH risk flag
+// ─────────────────────────────────────────────
+function extractPrimaryRisk(alexOutput) {
+  if (!alexOutput) return null;
+  // Look for inline HIGH flag: "HIGH: text" or "HIGH — text"
+  var m = alexOutput.match(/\bHIGH[:\s—–]+([^\n]{10,80})/i);
+  if (m) return m[1].trim();
+  // Fallback: look for □ inside a "HIGH FLAGS" block
+  var highBlock = alexOutput.match(/HIGH\s+FLAGS?.*?\n([\s\S]{0,400}?)(?:\nMEDIUM|\nLOW|\n━)/i);
+  if (highBlock) {
+    var lineM = highBlock[1].match(/[□•\-]\s+([^\n]{10,80})/);
+    if (lineM) return lineM[1].trim();
+  }
+  return null;
+}
+
+
+// ─────────────────────────────────────────────
+// ENRICH DEALS
+// Adds parsed metadata to each deal object for display.
+// Parsing happens once and results cached on the object.
+// ─────────────────────────────────────────────
+function enrichDeal(deal) {
+  if (deal._enriched) return deal;
+  var parsed            = parseAlexScore(deal.alexOutput || '');
+  deal._score           = parsed.score;
+  deal._status          = extractStatus(deal.alexOutput) || parsed.status || 'WATCH';
+  deal._valuation       = extractValuation(deal.alexOutput);
+  deal._primaryRisk     = extractPrimaryRisk(deal.alexOutput);
+  deal._enriched        = true;
+  return deal;
+}
+
+
+// ─────────────────────────────────────────────
+// BUILD STATUS BADGE HTML
+// ─────────────────────────────────────────────
+function statusBadgeHtml(status) {
+  if (!status) return '<span class="status-badge badge-pass">—</span>';
+  var s = status.toUpperCase();
+  if (s.indexOf('PRIORITY') !== -1)
+    return '<span class="status-badge badge-priority">Priority</span>';
+  if (s.indexOf('WATCH') !== -1)
+    return '<span class="status-badge badge-watch">Watch</span>';
+  return '<span class="status-badge badge-pass">Pass</span>';
+}
+
+
+// ─────────────────────────────────────────────
+// BUILD SCORE CELL HTML
+// ─────────────────────────────────────────────
+function scoreCellHtml(score) {
+  if (score === null || score === undefined)
+    return '<span class="score-cell score-none">—</span>';
+  var cls = score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
+  return '<span class="score-cell ' + cls + '">' + score + '</span>';
+}
+
+
+// ─────────────────────────────────────────────
+// BUILD DECISION BADGE HTML
+// ─────────────────────────────────────────────
+function decisionBadgeHtml(decision) {
+  if (!decision)
+    return '<span class="decision-badge decision-pending">Pending</span>';
+  var d = decision.toLowerCase();
+  if (d === 'agreed')
+    return '<span class="decision-badge decision-agreed">Agreed</span>';
+  if (d === 'overridden')
+    return '<span class="decision-badge decision-overridden">Overridden</span>';
+  return '<span class="decision-badge decision-pending">Pending</span>';
+}
+
+
+// ─────────────────────────────────────────────
+// NAVIGATE TO A DEAL — sets g7_pending_result
+// and redirects to result.html
+// ─────────────────────────────────────────────
+function viewDeal(dealId) {
+  var deal = loadDealById(dealId);
+  if (!deal) return;
+  var pending = {
+    dealId:      deal.id,
+    companyName: deal.companyName,
+    alexOutput:  deal.alexOutput,
+    timestamp:   deal.dateScreened
+  };
+  localStorage.setItem('g7_pending_result', JSON.stringify(pending));
+  window.location.href = 'result.html';
+}
+
+
+// ─────────────────────────────────────────────
+// STATS — compute and animate counters
+// ─────────────────────────────────────────────
+function renderStats(deals, calibLog) {
+  var total    = deals.length;
+  var priority = deals.filter(function(d) {
+    return d._status && d._status.toUpperCase().indexOf('PRIORITY') !== -1;
+  }).length;
+  var scores   = deals.map(function(d){ return d._score; }).filter(function(s){ return s !== null && s !== undefined; });
+  var avg      = scores.length ? Math.round(scores.reduce(function(a,b){ return a+b; },0) / scores.length) : null;
+  var calibs   = calibLog.length;
+
+  // Animate count-up for each number
+  animateCount('statTotal',    total,    900);
+  animateCount('statPriority', priority, 900);
+  animateCount('statCalib',    calibs,   900);
+  if (avg !== null) {
+    animateCount('statAvgScore', avg, 900);
+  } else {
+    document.getElementById('statAvgScore').textContent = '—';
+  }
+
+  // Trigger the gold underline animation on each cell
+  setTimeout(function() {
+    for (var i = 0; i < 4; i++) {
+      (function(idx){ setTimeout(function(){ document.getElementById('statCell'+idx).classList.add('animated'); }, idx * 120); })(i);
+    }
+  }, 400);
+}
+
+function animateCount(elId, target, duration) {
+  var el = document.getElementById(elId);
+  if (!el || target === 0) { el && (el.textContent = '0'); return; }
+  var start = 0;
+  var startTime = null;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var eased    = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+
+// ─────────────────────────────────────────────
+// FILTER STATE
+// ─────────────────────────────────────────────
+var allDeals = [];  // enriched full list, newest first
+
+function applyFilters() {
+  var search   = document.getElementById('searchInput').value.trim().toLowerCase();
+  var status   = document.getElementById('filterStatus').value;
+  var score    = document.getElementById('filterScore').value;
+  var decision = document.getElementById('filterDecision').value;
+  var date     = document.getElementById('filterDate').value;
+
+  var now  = new Date();
+  var week = new Date(now); week.setDate(now.getDate() - 7);
+  var month= new Date(now); month.setDate(now.getDate() - 30);
+
+  var filtered = allDeals.filter(function(deal) {
+    // Search
+    if (search && deal.companyName.toLowerCase().indexOf(search) === -1) return false;
+    // Status
+    if (status !== 'all') {
+      var ds = (deal._status || '').toUpperCase();
+      if (status === 'PRIORITY REVIEW' && ds.indexOf('PRIORITY') === -1) return false;
+      if (status === 'WATCH'           && ds !== 'WATCH')                 return false;
+      if (status === 'PASS'            && ds !== 'PASS')                  return false;
+    }
+    // Score
+    if (score !== 'all') {
+      var s = deal._score;
+      if (score === 'high' && (s === null || s < 70))  return false;
+      if (score === 'mid'  && (s === null || s < 40 || s >= 70)) return false;
+      if (score === 'low'  && (s === null || s >= 40)) return false;
+      if (score === 'none' && s !== null)              return false;
+    }
+    // Decision
+    if (decision !== 'all') {
+      var pd = (deal.partnerDecision || 'pending').toLowerCase();
+      if (decision === 'agreed'     && pd !== 'agreed')     return false;
+      if (decision === 'overridden' && pd !== 'overridden') return false;
+      if (decision === 'pending'    && pd !== 'pending' && deal.partnerDecision) return false;
+    }
+    // Date
+    if (date !== 'all') {
+      var screened = new Date(deal.dateScreened);
+      if (date === 'week'  && screened < week)  return false;
+      if (date === 'month' && screened < month) return false;
+    }
+    return true;
+  });
+
+  renderTable(filtered);
+  renderMobileCards(filtered);
+
+  var countEl = document.getElementById('resultsCount');
+  if (allDeals.length === 0) {
+    countEl.textContent = '';
+  } else if (filtered.length === allDeals.length) {
+    countEl.innerHTML = 'Showing all <span>' + allDeals.length + '</span> deals';
+  } else {
+    countEl.innerHTML = 'Showing <span>' + filtered.length + '</span> of ' + allDeals.length + ' deals';
+  }
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value      = '';
+  document.getElementById('filterStatus').value     = 'all';
+  document.getElementById('filterScore').value      = 'all';
+  document.getElementById('filterDecision').value   = 'all';
+  document.getElementById('filterDate').value       = 'all';
+  applyFilters();
+}
+
+
+// ─────────────────────────────────────────────
+// RENDER DESKTOP TABLE
+// ─────────────────────────────────────────────
+function renderTable(deals) {
+  var tbody = document.getElementById('dealsTableBody');
+
+  if (deals.length === 0 && allDeals.length > 0) {
+    tbody.innerHTML = '<tr class="no-results-row"><td colspan="7">No deals match the current filters.</td></tr>';
+    return;
+  }
+
+  var html = '';
+  deals.forEach(function(deal) {
+    var risk = deal._primaryRisk;
+    var riskHtml = risk
+      ? '<span class="risk-cell risk-high" title="' + escHtml(risk) + '">' + escHtml(risk.slice(0,40)) + (risk.length>40?'…':'') + '</span>'
+      : '<span class="risk-cell" style="color:var(--grey2)">—</span>';
+
+    html += '<tr data-id="' + deal.id + '" onclick="viewDeal(\'' + deal.id + '\')">';
+    html += '<td>';
+    html += '<span class="company-name">' + escHtml(deal.companyName) + '</span>';
+    html += '<span class="company-source">' + escHtml(deal.source || '—') + '</span>';
+    html += '</td>';
+    html += '<td style="white-space:nowrap;color:var(--grey2)">' + formatDate(deal.dateScreened) + '</td>';
+    html += '<td>' + statusBadgeHtml(deal._status) + '</td>';
+    html += '<td style="text-align:center">' + scoreCellHtml(deal._score) + '</td>';
+    html += '<td style="font-size:12px;color:var(--grey1)">' + escHtml(deal._valuation || '—') + '</td>';
+    html += '<td>' + riskHtml + '</td>';
+    html += '<td>' + decisionBadgeHtml(deal.partnerDecision) + '</td>';
+    html += '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+
+// ─────────────────────────────────────────────
+// RENDER MOBILE CARDS
+// ─────────────────────────────────────────────
+function renderMobileCards(deals) {
+  var container = document.getElementById('dealCardsContainer');
+
+  if (deals.length === 0 && allDeals.length > 0) {
+    container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--grey2);font-size:13px;font-style:italic">No deals match the current filters.</div>';
+    return;
+  }
+
+  var html = '';
+  deals.forEach(function(deal) {
+    html += '<div class="deal-card" onclick="viewDeal(\'' + deal.id + '\')">';
+    html += '<div class="deal-card-top">';
+    html += '<span class="deal-card-name">' + escHtml(deal.companyName) + '</span>';
+    html += scoreCellHtml(deal._score);
+    html += '</div>';
+    html += '<div class="deal-card-meta">';
+    html += statusBadgeHtml(deal._status);
+    html += decisionBadgeHtml(deal.partnerDecision);
+    html += '</div>';
+    html += '<span class="deal-card-date">' + formatDate(deal.dateScreened) + ' · ' + escHtml(deal.source || '—') + '</span>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+
+// ─────────────────────────────────────────────
+// RENDER CALIBRATION LOG
+// ─────────────────────────────────────────────
+function renderCalibrationLog(log) {
+  var emptyEl = document.getElementById('calibEmpty');
+  var listEl  = document.getElementById('calibrationList');
+
+  if (!log || log.length === 0) {
+    emptyEl.style.display = 'block';
+    listEl.innerHTML      = '';
+    return;
+  }
+  emptyEl.style.display = 'none';
+
+  // Show newest calibration first
+  var sorted = log.slice().reverse();
+  var html   = '';
+
+  sorted.forEach(function(entry) {
+    html += '<div class="calib-card">';
+    html += '<div class="calib-header">';
+    html += '<span class="calib-num">Calibration #' + entry.calibrationNumber + '</span>';
+    html += '<span class="calib-company">' + escHtml(entry.dealId ? getDealName(entry.dealId) : '—') + '</span>';
+    html += '<span class="calib-date">' + formatDate(entry.date) + '</span>';
+    html += '</div>';  // /calib-header
+
+    html += '<div class="calib-body">';
+    html += '<div class="calib-row">';
+    html += '<div class="calib-row-label">Alex\'s Assessment</div>';
+    html += '<div class="calib-row-value">' + escHtml(entry.alexAssessment || '—') + '</div>';
+    html += '</div>';
+    html += '<div class="calib-row">';
+    html += '<div class="calib-row-label">Partner Decision</div>';
+    html += '<div class="calib-row-value">' + escHtml(entry.partnerDecision || '—') + '</div>';
+    html += '</div>';
+    html += '<div class="calib-row">';
+    html += '<div class="calib-row-label">Reason for Disagreement</div>';
+    html += '<div class="calib-row-value">' + escHtml(entry.reasonForDisagreement || '—') + '</div>';
+    html += '</div>';
+    html += '<div class="calib-row calib-row-full">';
+    html += '<div class="calib-row-label">Learning Rule Added to Alex</div>';
+    html += '<div class="calib-learning">' + escHtml(entry.learningRule || '—') + '</div>';
+    html += '</div>';
+    html += '</div>';  // /calib-body
+
+    html += '</div>';  // /calib-card
+  });
+
+  listEl.innerHTML = html;
+}
+
+// Lookup deal company name from history by id
+function getDealName(dealId) {
+  var deal = loadDealById(dealId);
+  return deal ? deal.companyName : '—';
+}
+
+
+// ─────────────────────────────────────────────
+// CSV EXPORT
+// Builds a CSV file from all deals and triggers download
+// ─────────────────────────────────────────────
+function exportHistoryCSV() {
+  var deals = loadAllDeals();
+  if (deals.length === 0) {
+    alert('No deals to export yet.');
+    return;
+  }
+
+  var cfg      = loadFirmConfig() || {};
+  var firmName = cfg.firmName || 'G7 Workspace';
+
+  // CSV header row
+  var rows = [
+    ['G7 Workspace — Deal History Export', '', '', '', '', '', ''],
+    ['Firm: ' + firmName, '', '', '', '', '', ''],
+    ['Exported: ' + new Date().toLocaleDateString('en-GB'), '', '', '', '', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['Company', 'Date Screened', 'Status', 'G7 Score', 'Valuation', 'Partner Decision', 'Source']
+  ];
+
+  deals.forEach(function(deal) {
+    var d = enrichDeal(deal);
+    rows.push([
+      d.companyName,
+      formatDate(d.dateScreened),
+      d._status || '—',
+      d._score !== null && d._score !== undefined ? d._score : '—',
+      d._valuation || '—',
+      d.partnerDecision || 'Pending',
+      d.source || '—'
+    ]);
+  });
+
+  // Escape cells: wrap in quotes if they contain commas or quotes
+  var csvContent = rows.map(function(row) {
+    return row.map(function(cell) {
+      var s = String(cell);
+      if (s.indexOf(',') !== -1 || s.indexOf('"') !== -1 || s.indexOf('\n') !== -1) {
+        s = '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }).join(',');
+  }).join('\n');
+
+  // Trigger download via a temporary link
+  var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  var url  = URL.createObjectURL(blob);
+  var link = document.createElement('a');
+  link.href     = url;
+  link.download = 'g7-deal-history-' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+
+// ─────────────────────────────────────────────
+// SCROLL REVEAL
+// ─────────────────────────────────────────────
+function initReveal() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+}
+
+
+// ─────────────────────────────────────────────
+// HTML ESCAPE HELPER
+// ─────────────────────────────────────────────
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+
+// ─────────────────────────────────────────────
+// MAIN INIT
+// ─────────────────────────────────────────────
+(function init() {
+  var rawDeals  = loadAllDeals();      // from workspace.js
+  var calibLog  = loadCalibrationLog(); // from workspace.js
+
+  // Enrich every deal with parsed metadata
+  allDeals = rawDeals.map(enrichDeal);
+
+  // Handle empty state — no deals at all
+  if (allDeals.length === 0) {
+    document.getElementById('emptyDeals').classList.add('show');
+    document.getElementById('dealsTableWrap').style.display    = 'none';
+    document.getElementById('dealCardsContainer').style.display= 'none';
+    document.getElementById('filterBar').style.display         = 'none';
+    document.getElementById('resultsCount').style.display      = 'none';
+  } else {
+    document.getElementById('emptyDeals').style.display        = 'none';
+    applyFilters();  // render table with default (no) filters
+  }
+
+  // Stats
+  renderStats(allDeals, calibLog);
+
+  // Calibration log
+  renderCalibrationLog(calibLog);
+
+  // Scroll reveal
+  initReveal();
+})();
+
+</script>
+</body>
+</html>
