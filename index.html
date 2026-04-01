@@ -31,6 +31,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 .nav-right{display:flex;align-items:center}
 .nav-cta-btn{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:11px 28px;text-decoration:none;transition:all .3s}
 .nav-cta-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.nav-workspace-btn{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:10px 24px;text-decoration:none;transition:all .3s;margin-right:16px}
+.nav-workspace-btn:hover{background:rgba(201,168,76,.08);transform:translateY(-1px)}
 .hamburger{display:none;flex-direction:column;gap:6px;cursor:pointer;background:none;border:none;padding:4px}
 .hamburger span{display:block;width:28px;height:1px;background:var(--white);transition:all .3s}
 .mobile-menu{display:none;position:fixed;top:80px;left:0;right:0;bottom:0;background:var(--black);z-index:499;flex-direction:column;justify-content:center;align-items:center;gap:40px;border-top:1px solid var(--border)}
@@ -255,6 +257,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
     <li><a href="#waitlist">Join</a></li>
   </ul>
   <div class="nav-right">
+    <a href="workspace/onboard.html" class="nav-workspace-btn">Enter Workspace</a>
     <a href="#waitlist" class="nav-cta-btn">Request Access</a>
   </div>
   <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Open menu">
@@ -289,7 +292,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   </p>
   <div class="hero-actions">
     <a href="#waitlist" class="btn-gold">Request Early Access</a>
-    <a href="#screener" class="btn-outline">See It Live</a>
+    <a href="workspace/onboard.html" class="btn-outline">See It Live</a>
   </div>
   <div class="hero-scroll">
     <div class="scroll-line"></div>
