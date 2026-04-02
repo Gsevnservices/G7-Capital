@@ -158,6 +158,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   stroke-dasharray:0 503; /* animated to (score/100)*503 */
   transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1)
 }
+/* Empty state — no score available */
+.ring-fill.ring-no-score{stroke:var(--grey2);stroke-dasharray:0 503}
+.score-ring-number.ring-no-score-text{font-size:36px;color:var(--grey2)}
+.score-ring-denom.ring-no-score-hide{display:none}
+.score-no-data-label{
+  font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--grey2);text-align:center;margin-top:-8px
+}
 /* Score number in center */
 .score-center{
   position:absolute;
@@ -1100,6 +1108,8 @@ function parseInfoGaps(content) {
 
 
 // Parse red flags — returns array of { severity, text }
+// Alex's format is: "Flag description text: HIGH"
+// Severity is at the END of the line, after the last colon.
 function parseRedFlags(content) {
   if (!content) return [];
   var flags = [];
@@ -1110,24 +1120,36 @@ function parseRedFlags(content) {
     var line = lines[i].trim();
     if (!line) continue;
 
-    // Severity header lines
+    // Severity header lines (e.g. "HIGH FLAGS" or "— HIGH —")
     if (/^HIGH\s+FLAGS?/i.test(line) || /severity.*high/i.test(line)) { currentSeverity = 'HIGH'; continue; }
     if (/^MEDIUM\s+FLAGS?/i.test(line) || /severity.*medium/i.test(line)) { currentSeverity = 'MEDIUM'; continue; }
     if (/^LOW\s+FLAGS?/i.test(line) || /severity.*low/i.test(line)) { currentSeverity = 'LOW'; continue; }
 
-    // Inline severity: "HIGH: flag text" or "FLAG (HIGH): text"
+    // PRIMARY: severity at end of line after last colon
+    // Matches: "Some flag description: HIGH" or "[HIGH] flag text: MEDIUM"
+    var endColonMatch = line.match(/^([\s\S]+?):\s*(HIGH|MEDIUM|LOW)\s*$/i);
+    if (endColonMatch) {
+      // Strip any leading bracket prefix like "[HIGH]" or "(MEDIUM)" from the text
+      var cleanText = endColonMatch[1].replace(/^\s*[\[(](HIGH|MEDIUM|LOW)[\])]\s*/i, '').trim();
+      flags.push({ severity: endColonMatch[2].toUpperCase(), text: cleanText });
+      continue;
+    }
+
+    // SECONDARY: inline at start — "HIGH: flag text"
     var inlineMatch = line.match(/^(HIGH|MEDIUM|LOW)[:\s—–]+(.+)$/i);
     if (inlineMatch) {
       flags.push({ severity: inlineMatch[1].toUpperCase(), text: inlineMatch[2].trim() });
       continue;
     }
-    // Parenthetical: "flag text (HIGH)" or "flag text — HIGH"
+
+    // TERTIARY: parenthetical or dash suffix — "flag text (HIGH)" or "flag text — HIGH"
     var suffixMatch = line.match(/^(.+?)\s*[—–(]\s*(HIGH|MEDIUM|LOW)\s*[)—]?\s*$/i);
     if (suffixMatch) {
       flags.push({ severity: suffixMatch[2].toUpperCase(), text: suffixMatch[1].trim() });
       continue;
     }
-    // Checkbox format: "□ flag text" — use current severity
+
+    // FALLBACK: bullet/checkbox lines — use inherited severity from section header
     var checkMatch = line.match(/^[□✓✗☐☑•\-—*]\s+(.+)$/);
     if (checkMatch && checkMatch[1].length > 5) {
       flags.push({ severity: currentSeverity, text: checkMatch[1].trim() });
@@ -1306,7 +1328,19 @@ function renderStatusBanner(data, deal) {
 function renderScore(data) {
   var score = data.score;
   if (score === null || score === undefined) {
-    document.getElementById('scoreNumber').textContent = '—';
+    // No score — show grey ring with question mark
+    document.getElementById('scoreNumber').textContent = '?';
+    document.getElementById('scoreNumber').classList.add('ring-no-score-text');
+    document.getElementById('ringFill').classList.add('ring-no-score');
+    // Hide the "/ 100" denominator
+    var denomEl = document.querySelector('.score-ring-denom');
+    if (denomEl) denomEl.classList.add('ring-no-score-hide');
+    // Insert "Insufficient data to score" label below the ring label
+    var labelEl = document.getElementById('scoreVerdictLabel');
+    var noDataEl = document.createElement('div');
+    noDataEl.className = 'score-no-data-label';
+    noDataEl.textContent = 'Insufficient data to score';
+    labelEl.parentNode.insertBefore(noDataEl, labelEl.nextSibling);
     return;
   }
 
