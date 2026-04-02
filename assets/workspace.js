@@ -39,10 +39,13 @@
 // ─────────────────────────────────────────────────────────────
 async function callAlex(dealSubmission) {
 
-  // 1a. Get API key from localStorage
+  // 1a. API key is stored in localStorage during onboarding but is NOT sent
+  //     from the browser. The Cloudflare Worker adds it server-side using
+  //     an environment variable. We still check it exists so onboarding
+  //     is enforced — the key validates that the firm completed setup.
   var apiKey = localStorage.getItem('g7_api_key');
   if (!apiKey || apiKey.trim() === '') {
-    throw new Error('No API key found. Please complete firm setup in Settings before screening a deal.');
+    throw new Error('No API key found. Please complete firm setup before screening a deal.');
   }
 
   // 1b. Get the firm knowledge base from localStorage
@@ -72,16 +75,17 @@ async function callAlex(dealSubmission) {
     '───────────────────────────────────────────────'
   ].join('\n');
 
-  // 1e. Make the API call to Anthropic
+  // 1e. Make the API call via the Cloudflare Worker proxy.
+  //     The worker adds the API key server-side — we do not send it from the browser.
+  //     Replace the placeholder URL below with your deployed worker URL after deploying.
+  var PROXY_URL = 'https://g7-proxy.gsevnservices.workers.dev/api/message';
+
   var response;
   try {
-    response = await fetch('https://api.anthropic.com/v1/messages', {
+    response = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey.trim(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-iab': 'true'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
@@ -93,8 +97,8 @@ async function callAlex(dealSubmission) {
       })
     });
   } catch (networkError) {
-    // Network-level failure (no internet, CORS, etc.)
-    throw new Error('Could not reach the Anthropic API. Please check your internet connection and try again.');
+    // Network-level failure (no internet, worker unreachable, etc.)
+    throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
   }
 
   // 1f. Parse the response JSON
