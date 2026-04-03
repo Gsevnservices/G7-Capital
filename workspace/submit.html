@@ -1178,11 +1178,14 @@ document.getElementById('submitForm').addEventListener('submit', async function(
     // Save the deal to history
     var dealId = saveDeal(companyName, dealSource, dealContent, alexOutput);
 
-    // Store the pending result for result.html to pick up
+    // Store the pending result for result.html to pick up.
+    // dealContent is included so the CQ flow can send original materials
+    // back to Alex alongside the firm's answers to his questions.
     var pendingResult = {
       dealId:      dealId,
       companyName: companyName,
       alexOutput:  alexOutput,
+      dealContent: dealContent,
       timestamp:   new Date().toISOString()
     };
     localStorage.setItem('g7_pending_result', JSON.stringify(pendingResult));

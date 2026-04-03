@@ -23,6 +23,14 @@
 'use strict';
 
 // ─────────────────────────────────────────────────────────────
+// PROXY URL — the Cloudflare Worker that forwards requests to Anthropic.
+// The API key lives in Cloudflare as an environment variable.
+// Replace this URL if you redeploy the worker under a different name.
+// ─────────────────────────────────────────────────────────────
+var G7_PROXY_URL = 'https://g7-proxy.gsevnservices.workers.dev/api/message';
+
+
+// ─────────────────────────────────────────────────────────────
 // 1. callAlex(dealSubmission)
 //
 // The core API call. Assembles the full system prompt and user
@@ -77,12 +85,9 @@ async function callAlex(dealSubmission) {
 
   // 1e. Make the API call via the Cloudflare Worker proxy.
   //     The worker adds the API key server-side — we do not send it from the browser.
-  //     Replace the placeholder URL below with your deployed worker URL after deploying.
-  var PROXY_URL = 'https://g7-proxy.gsevnservices.workers.dev/api/message';
-
   var response;
   try {
-    response = await fetch(PROXY_URL, {
+    response = await fetch(G7_PROXY_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -220,6 +225,85 @@ function updateDealDecision(id, decision) {
     }
   }
   localStorage.setItem('g7_deal_history', JSON.stringify(history));
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// 5b. updateDealOutput(id, newAlexOutput, clarifyingQuestions, clarifyingAnswers)
+//
+// Replaces a deal's alexOutput with the final complete screening note,
+// and stores the clarifying Q&A for the record.
+// Called from result.html after a successful CQ second-pass API call.
+// ─────────────────────────────────────────────────────────────
+function updateDealOutput(id, newAlexOutput, clarifyingQuestions, clarifyingAnswers) {
+  var history = loadAllDeals();
+  for (var i = 0; i < history.length; i++) {
+    if (history[i].id === id) {
+      history[i].alexOutput            = newAlexOutput;
+      history[i].clarifyingQuestions   = clarifyingQuestions || null;
+      history[i].clarifyingAnswers     = clarifyingAnswers   || null;
+      break;
+    }
+  }
+  localStorage.setItem('g7_deal_history', JSON.stringify(history));
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// 5c. callAlexRaw(userMessage)
+//
+// Makes an API call with a pre-assembled user message string.
+// Used by the clarifying questions flow in result.html when sending
+// the firm's answers back to Alex for the second-pass screening note.
+// Uses the same system prompt (Alex Master + Firm KB) as callAlex().
+//
+// Returns: Alex's full text response (string)
+// Throws:  Error with a user-readable message if something goes wrong
+// ─────────────────────────────────────────────────────────────
+async function callAlexRaw(userMessage) {
+
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  if (!firmKB || firmKB.trim() === '') {
+    throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+
+  var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
+
+  var response;
+  try {
+    response = await fetch(G7_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model:      'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system:     systemPrompt,
+        messages:   [{ role: 'user', content: userMessage }]
+      })
+    });
+  } catch (networkError) {
+    throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
+  }
+
+  var data;
+  try {
+    data = await response.json();
+  } catch (parseError) {
+    throw new Error('Received an unexpected response from the API. Please try again.');
+  }
+
+  if (data.error) {
+    var msg = data.error.message || 'Unknown API error';
+    if (data.error.type === 'authentication_error') throw new Error('Invalid API key. Please check your Anthropic API key in Settings.');
+    if (data.error.type === 'rate_limit_error')     throw new Error('Rate limit reached. Please wait a moment and try again.');
+    throw new Error('API error: ' + msg);
+  }
+
+  if (!data.content || !data.content[0] || !data.content[0].text) {
+    throw new Error('Alex returned an empty response. Please try again.');
+  }
+
+  return data.content[0].text;
 }
 
 

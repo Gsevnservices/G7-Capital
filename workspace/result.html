@@ -627,6 +627,151 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .section-card:nth-child(7){animation-delay:.85s}
 .section-card:nth-child(8){animation-delay:.9s}
 
+/* ─────────────────────────────────────────────
+   CLARIFYING QUESTIONS INTERFACE
+───────────────────────────────────────────── */
+.cq-wrap{
+  max-width:760px;margin:0 auto;
+  padding-top:16px
+}
+.cq-eyebrow{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px
+}
+.cq-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,4vw,48px);font-weight:300;
+  color:var(--white);line-height:1.15;
+  margin-bottom:20px
+}
+.cq-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:300;font-style:italic;
+  color:var(--grey1);line-height:1.85;
+  margin-bottom:48px;
+  padding-bottom:32px;
+  border-bottom:1px solid var(--border2)
+}
+.cq-questions-list{
+  display:flex;flex-direction:column;gap:24px;
+  margin-bottom:40px
+}
+.cq-question-card{
+  border-left:4px solid var(--gold);
+  background:var(--black2);
+  border-top:1px solid var(--border2);
+  border-right:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  padding:24px 28px;
+  opacity:0;animation:fadeUp .5s ease both
+}
+.cq-question-card:nth-child(1){animation-delay:.1s}
+.cq-question-card:nth-child(2){animation-delay:.2s}
+.cq-question-card:nth-child(3){animation-delay:.3s}
+.cq-question-card:nth-child(4){animation-delay:.4s}
+.cq-question-card:nth-child(5){animation-delay:.5s}
+.cq-q-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px
+}
+.cq-q-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;color:var(--white);
+  line-height:1.6;margin-bottom:20px
+}
+.cq-answer-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey2);margin-bottom:8px
+}
+.cq-textarea{
+  width:100%;background:transparent;
+  border:none;border-bottom:1px solid var(--grey2);
+  color:var(--white);
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:300;line-height:1.7;
+  padding:10px 0;
+  resize:vertical;min-height:80px;
+  outline:none;
+  transition:border-color .3s
+}
+.cq-textarea::placeholder{color:var(--grey2);font-style:italic}
+.cq-textarea:focus{border-bottom-color:var(--gold)}
+.cq-submit-btn{
+  display:block;width:100%;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  border:none;padding:20px 40px;
+  cursor:pointer;transition:all .3s;
+  margin-bottom:16px
+}
+.cq-submit-btn:hover{background:var(--gold2);transform:translateY(-2px)}
+.cq-submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cq-error{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:11px;letter-spacing:.1em;
+  color:var(--red);text-align:center;
+  display:none
+}
+.cq-error.show{display:block}
+
+/* ─────────────────────────────────────────────
+   CQ LOADING OVERLAY (same pattern as submit.html)
+───────────────────────────────────────────── */
+.cq-loading-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(8,8,8,.96);
+  z-index:2000;
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px
+}
+.cq-loading-overlay.show{display:flex}
+.cq-loading-progress-bar{
+  position:absolute;top:0;left:0;right:0;
+  height:2px;background:var(--black4)
+}
+.cq-loading-progress-inner{
+  height:100%;background:var(--gold);
+  animation:loadBar 1.8s ease infinite
+}
+@keyframes loadBar{0%{width:0}60%{width:70%}100%{width:100%}}
+.cq-loading-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--grey2);margin-bottom:64px
+}
+.cq-loading-logo em{font-style:normal;color:var(--gold)}
+.cq-loading-circle{
+  width:100px;height:100px;border-radius:50%;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 48px;position:relative
+}
+.cq-loading-circle::before{
+  content:'';position:absolute;inset:-1px;border-radius:50%;
+  border:1px solid transparent;border-top-color:var(--gold);
+  animation:spin 2s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cq-loading-initial{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;font-weight:300;color:var(--gold)
+}
+.cq-loading-message{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,3vw,28px);font-weight:300;font-style:italic;
+  color:var(--white);line-height:1.4;margin-bottom:16px
+}
+.cq-loading-sub{
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey2)
+}
+
 </style>
 </head>
 <body>
@@ -655,6 +800,47 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   <div class="empty-state-title">No screening note found.</div>
   <div class="empty-state-sub">Submit a deal to generate a screening note.</div>
   <a href="submit.html" class="btn-screen-new">Screen a New Deal →</a>
+</div>
+
+<!-- ─────────────────────────────────────────────
+     CLARIFYING QUESTIONS INTERFACE
+     Shown when Alex asks questions instead of
+     producing a full screening note.
+───────────────────────────────────────────── -->
+<div id="cqInterface" style="display:none">
+
+  <!-- Reuse the status banner in a neutral state -->
+  <div class="status-banner status-watch" style="margin-top:80px">
+    <div class="status-inner">
+      <span class="status-indicator">Clarifying Questions</span>
+      <div>
+        <div class="status-company" id="cqCompanyName">—</div>
+        <div class="status-meta">Alex has identified information gaps before completing the screening note.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+    <div class="cq-wrap">
+
+      <div class="cq-eyebrow">01 — Alex Needs More Information</div>
+      <h1 class="cq-title">Alex needs more information.</h1>
+      <p class="cq-subtitle">
+        Before completing your screening note, Alex has identified information gaps
+        that could materially change his recommendation. Please answer the questions below.
+      </p>
+
+      <!-- Question cards injected here by JS -->
+      <div class="cq-questions-list" id="cqQuestionsContainer"></div>
+
+      <button class="cq-submit-btn" id="cqSubmitBtn" onclick="submitClarifyingAnswers()">
+        Send Answers to Alex →
+      </button>
+      <div class="cq-error" id="cqError">Please answer all questions before submitting.</div>
+
+    </div>
+  </div>
+
 </div>
 
 <!-- ─────────────────────────────────────────────
@@ -853,6 +1039,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     </div>
 
   </div>
+</div>
+
+<!-- ─────────────────────────────────────────────
+     CQ LOADING OVERLAY
+     Shown while Alex processes the firm's answers
+───────────────────────────────────────────── -->
+<div class="cq-loading-overlay" id="cqLoadingOverlay">
+  <div class="cq-loading-progress-bar">
+    <div class="cq-loading-progress-inner"></div>
+  </div>
+  <div class="cq-loading-logo">G<em>7</em> Workspace</div>
+  <div class="cq-loading-circle">
+    <span class="cq-loading-initial">A</span>
+  </div>
+  <div class="cq-loading-message">Alex is completing your screening note...</div>
+  <div class="cq-loading-sub">This takes 30 – 60 seconds</div>
 </div>
 
 <!-- ─────────────────────────────────────────────
@@ -1724,6 +1926,197 @@ function handleExport() {
 
 
 // ─────────────────────────────────────────────
+// CLARIFYING QUESTIONS FLOW
+// ─────────────────────────────────────────────
+
+// Detect whether Alex is asking clarifying questions rather than
+// producing a full screening note. Returns true if CQ patterns found.
+function detectClarifyingQuestions(raw) {
+  if (!raw) return false;
+  var patterns = [
+    /ALEX\s*[—–]\s*CLARIFYING\s+QUESTIONS/i,
+    /CLARIFYING\s+QUESTIONS/i,
+    /before I complete (this|your|the) screening note/i,
+    /before completing (this|your|the) screening note/i,
+    /I need (some|a few|additional) (clarification|information|details)/i
+  ];
+  // Also catch Q1: + Q2: together (reliable signal of question list)
+  var hasQ1 = /\bQ1[.:]/i.test(raw);
+  var hasQ2 = /\bQ2[.:]/i.test(raw);
+  if (hasQ1 && hasQ2) return true;
+  return patterns.some(function(p) { return p.test(raw); });
+}
+
+// Extract individual questions from Alex's CQ response.
+// Returns array of { number, text } objects.
+function parseClarifyingQuestions(raw) {
+  var questions = [];
+
+  // Primary: "Q1: text" or "Q1. text" format, capturing multi-line text
+  // until the next Qn: or end of string
+  var re = /\bQ(\d+)[.:]\s*([\s\S]+?)(?=\bQ\d+[.:]|$)/gi;
+  var m;
+  while ((m = re.exec(raw)) !== null) {
+    var text = m[2].trim()
+      .replace(/\n{2,}/g, ' ')   // collapse multiple newlines
+      .replace(/\n/g, ' ')       // replace single newlines with space
+      .trim();
+    if (text.length > 3) {
+      questions.push({ number: parseInt(m[1], 10), text: text });
+    }
+  }
+
+  // Fallback: numbered list "1. text" or "1) text" if Q-format not found
+  if (questions.length === 0) {
+    var lines = raw.split('\n');
+    var numRe  = /^(\d+)[.)]\s+(.+)$/;
+    lines.forEach(function(line) {
+      var nm = line.trim().match(numRe);
+      if (nm && nm[2].length > 5) {
+        questions.push({ number: parseInt(nm[1], 10), text: nm[2].trim() });
+      }
+    });
+  }
+
+  return questions;
+}
+
+// Render the CQ interface — hides the normal result page and shows
+// question cards with textarea inputs for the firm to answer.
+function showClarifyingInterface(pending) {
+  var questions = parseClarifyingQuestions(pending.alexOutput);
+
+  // If we can't parse any questions, fall through to normal rendering
+  if (questions.length === 0) return false;
+
+  // Set company name in CQ banner
+  var companyName = pending.companyName || (currentDeal && currentDeal.companyName) || '—';
+  document.getElementById('cqCompanyName').textContent = companyName;
+
+  // Build question cards
+  var container = document.getElementById('cqQuestionsContainer');
+  var html = '';
+  questions.forEach(function(q) {
+    html += '<div class="cq-question-card">';
+    html += '  <div class="cq-q-label">Question ' + q.number + '</div>';
+    html += '  <div class="cq-q-text">' + escapeHtml(q.text) + '</div>';
+    html += '  <div class="cq-answer-label">Your Answer</div>';
+    html += '  <textarea class="cq-textarea" id="cqAnswer-' + q.number + '" placeholder="Your answer..." rows="3"></textarea>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+
+  // Show CQ interface, hide everything else
+  document.getElementById('cqInterface').style.display  = 'block';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('actionBar').style.display     = 'none';
+  document.getElementById('emptyState').style.display    = 'none';
+
+  // Store question count for submitClarifyingAnswers to read
+  document.getElementById('cqQuestionsContainer').dataset.count = questions.length;
+
+  return true;
+}
+
+// Handle CQ form submission — sends firm's answers back to Alex
+// and renders the final screening note.
+async function submitClarifyingAnswers() {
+  var container  = document.getElementById('cqQuestionsContainer');
+  var count      = parseInt(container.dataset.count, 10) || 0;
+  var errorEl    = document.getElementById('cqError');
+  var submitBtn  = document.getElementById('cqSubmitBtn');
+
+  // Collect answers and validate
+  var answers = [];
+  var allFilled = true;
+  for (var n = 1; n <= count; n++) {
+    var ta = document.getElementById('cqAnswer-' + n);
+    var val = ta ? ta.value.trim() : '';
+    if (!val) { allFilled = false; }
+    answers.push(val);
+  }
+
+  if (!allFilled) {
+    errorEl.classList.add('show');
+    return;
+  }
+  errorEl.classList.remove('show');
+
+  // Show loading overlay
+  submitBtn.disabled = true;
+  document.getElementById('cqLoadingOverlay').classList.add('show');
+
+  try {
+    // Re-read pending to get original deal materials and Alex's questions
+    var pendingRaw = localStorage.getItem('g7_pending_result');
+    var pending = pendingRaw ? JSON.parse(pendingRaw) : null;
+    if (!pending) throw new Error('Original deal data not found. Please resubmit the deal.');
+
+    // Parse the questions again (we need the text for the assembled message)
+    var questions = parseClarifyingQuestions(pending.alexOutput);
+
+    // Build the QA section
+    var qaLines = [];
+    questions.forEach(function(q, idx) {
+      qaLines.push('Q' + q.number + ': ' + q.text);
+      qaLines.push('Answer: ' + (answers[idx] || '(no answer provided)'));
+      qaLines.push('');
+    });
+
+    // Assemble the second-pass user message
+    var userMessage = [
+      'The following additional information has been provided in response to your clarifying questions.',
+      'Please now produce the complete screening note.',
+      '',
+      'COMPANY: ' + (pending.companyName || '—'),
+      '',
+      '─────────────────────────────────────────────',
+      'ORIGINAL DEAL MATERIALS:',
+      '─────────────────────────────────────────────',
+      (pending.dealContent || pending.alexOutput),
+      '',
+      '─────────────────────────────────────────────',
+      'YOUR CLARIFYING QUESTIONS AND THE FIRM\'S ANSWERS:',
+      '─────────────────────────────────────────────',
+      qaLines.join('\n')
+    ].join('\n');
+
+    // Call Alex with the assembled context
+    var finalOutput = await callAlexRaw(userMessage);
+
+    // Update the deal record in history — replace CQ output with full note
+    if (currentDealId) {
+      updateDealOutput(
+        currentDealId,
+        finalOutput,
+        pending.alexOutput,    // original CQ response stored as clarifyingQuestions
+        answers.join('\n---\n') // firm's answers stored as clarifyingAnswers
+      );
+    }
+
+    // Update pending result so the page re-renders the full note
+    var updatedPending = {
+      dealId:      pending.dealId,
+      companyName: pending.companyName,
+      alexOutput:  finalOutput,
+      timestamp:   pending.timestamp,
+      dealContent: pending.dealContent
+    };
+    localStorage.setItem('g7_pending_result', JSON.stringify(updatedPending));
+
+    // Reload the page — init() will now read the full screening note
+    window.location.reload();
+
+  } catch (err) {
+    document.getElementById('cqLoadingOverlay').classList.remove('show');
+    submitBtn.disabled = false;
+    errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+    errorEl.classList.add('show');
+  }
+}
+
+
+// ─────────────────────────────────────────────
 // MAIN INIT — runs on page load
 // ─────────────────────────────────────────────
 (function init() {
@@ -1758,6 +2151,14 @@ function handleExport() {
 
   // Parse Alex's raw output
   parsedData = parseAlexOutput(pending.alexOutput);
+
+  // ── CLARIFYING QUESTIONS CHECK ──
+  // If Alex is asking questions instead of producing a full note,
+  // show the CQ interface instead of the normal result page.
+  if (detectClarifyingQuestions(pending.alexOutput)) {
+    var handled = showClarifyingInterface(pending);
+    if (handled) return; // CQ interface is now showing — stop normal rendering
+  }
 
   // Show the result content, hide empty state
   document.getElementById('resultContent').style.display  = 'block';
