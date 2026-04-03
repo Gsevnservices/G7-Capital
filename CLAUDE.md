@@ -1,6 +1,6 @@
 # G7 Capital — Claude Code Project Brief
 **Read this file at the start of every session before touching any code.**
-**Last updated: March 2026**
+**Last updated: 4 April 2026**
 
 ---
 
@@ -133,38 +133,69 @@ Border white tint:     rgba(250,250,248,0.08)
 
 ---
 
-## 5. FILE STRUCTURE — CURRENT STATE
+## 5. CURRENT BUILD STATUS
+
+### Completed Pages
+
+| File | Status |
+|------|--------|
+| `index.html` | ✅ LIVE — Homepage with workspace nav link |
+| `for-firms.html` | ✅ LIVE — For PE/VC/IB firms page |
+| `workspace/onboard.html` | ✅ LIVE — 5-step firm setup |
+| `workspace/submit.html` | ✅ LIVE — Deal submission (text + PDF, stores dealContent) |
+| `workspace/result.html` | ✅ LIVE — Alex screening note (score ring, all sections, red flags, CQ flow) |
+| `workspace/history.html` | ✅ LIVE — Searchable deal history |
+| `workspace/index.html` | ✅ LIVE — Workspace dashboard |
+
+### Completed Features
+
+- [x] Alex Master Prompt v1 (`assets/alex-master-v1.js`) — 66,500 tokens: system prompt + 25 calibration rules + 30 training examples
+- [x] Core JS engine (`assets/workspace.js`) — `callAlex()`, `callAlexRaw()`, `saveDeal()`, `loadDealById()`, `loadAllDeals()`, `updateDealDecision()`, `updateDealOutput()`, `addCalibration()`, `loadFirmConfig()`, `isOnboarded()`, `exportNoteAsPDF()`, `clearWorkspace()`, `parseAlexScore()`, `formatDate()`, `requireOnboarding()`, `G7_PROXY_URL` constant
+- [x] Cloudflare Worker proxy (`cloudflare-worker.js`) — deployed at `g7-proxy.gsevnservices.workers.dev`. Fixes CORS, routes browser calls to Anthropic API, API key stored as Cloudflare env variable
+- [x] Result page — all 10 sections rendered
+- [x] Score ring with count-up animation and empty state (`?` when no score)
+- [x] Red flag severity badges — HIGH/MEDIUM/LOW with correct colours
+- [x] Narrative Drift Check table
+- [x] Thesis Dependency Chain
+- [x] Alex's Note in gold italic
+- [x] Calibration loop — partner corrections update firm KB for all future Alex calls automatically
+- [x] Clarifying Questions Flow — when Alex needs more info, shows Q&A interface, sends answers back, renders complete note
+- [x] Deal history with search and filters
+- [x] Export note as PDF
+- [x] Mobile responsive across all pages
+
+### Live URLs
 
 ```
-g7capital/
-│
-├── index.html              ✅ LIVE — Homepage
-├── for-firms.html          ✅ BUILT — For PE/VC/IB firms page
-│
-├── workspace/              🔨 BUILDING NOW
-│   ├── index.html          → Workspace dashboard (Step 7)
-│   ├── onboard.html        → Firm setup page (Step 2)
-│   ├── submit.html         → Deal submission (Step 3)
-│   ├── result.html         → Alex's screening note output (Step 5)
-│   └── history.html        → Deal history and search (Step 6)
-│
-├── assets/
-│   ├── alex-master-v1.js   → Alex's complete system prompt as JS constant (Step 1)
-│   ├── workspace.css       → Workspace-specific styles (built alongside pages)
-│   └── workspace.js        → Shared JS functions including API call (Step 4)
-│
-└── config/
-    └── firm-config.js      → Firm knowledge base template and localStorage helpers
+Homepage:         https://gsevnservices.github.io/G7-Capital
+Workspace:        https://gsevnservices.github.io/G7-Capital/workspace/onboard.html
+Cloudflare proxy: https://g7-proxy.gsevnservices.workers.dev
+```
+
+### localStorage Keys (canonical — do not rename)
+
+```
+g7_api_key              — Anthropic API key (entered during onboarding)
+g7_firm_config          — JSON object: firm configuration details
+g7_firm_knowledge_base  — Full firm KB text injected into every Alex call
+g7_onboarded            — 'true' once firm has completed onboarding
+g7_deal_history         — JSON array of all screened deals with outputs
+g7_calibration_log      — JSON array of partner corrections to Alex
+g7_pending_result       — Temp: last Alex output, read by result.html on load
+g7_view_deal_id         — Temp: dealId set by history.html before navigating to result.html
 ```
 
 ### Known Issues to Avoid (learned from previous builds)
-- Grain overlay: use `body::after` with z-index:1 NOT `body::before` with z-index:1000
+
+- Grain overlay: use `body::before` with z-index:1000 (fixed — do NOT use `body::after`)
 - Hero animations: use `both` keyword not `forwards` in animation-fill-mode
 - Reveal sections: use inline styles via JS, not class toggling
 - Cursor: starts at left:-100px top:-100px, appears on first mousemove
 - Mobile cursor: hide at max-width:480px not 768px
 - Nav z-index: 999. Mobile menu: 998
-- Always include calcSaving() function when calculator is present
+- `splitIntoSections()` uses 4-state machine — do not simplify or it breaks dual-divider format
+- `g7_pending_result` must include `dealContent` field (added in Session 2) for CQ flow to work
+- Cloudflare Worker CORS only allows `gsevnservices.github.io` and `localhost:8080`
 
 ---
 
@@ -355,18 +386,61 @@ Status: ✅ COMPLETE — 29 March 2026
 
 ## 9. CURRENT SESSION — WHAT TO BUILD TODAY
 
-**Phase 1 is complete as of 29 March 2026.**
-All 7 files built and verified — 128/128 audit checks passed.
-One critical bug found and fixed during audit:
-result.html section parser replaced with 4-state machine.
+**Phase 1 build is complete as of 4 April 2026.**
+All 7 workspace pages live and working.
+Alex successfully screening deals end to end.
+Clarifying questions flow built and deployed.
 
-**Next session task:** End-to-end browser testing on live URL.
-Then: Update CLAUDE.md with any bugs found during testing.
-Then: Begin Phase 2 planning.
+**Next session tasks (in priority order):**
+
+1. Test clarifying questions flow with Paddle deal
+2. Test full scored note with Causal deal
+3. Fix any rendering issues found during testing
+4. Prepare Christian demo
+   - One real deal from his merchant bank pipeline
+   - Side-by-side comparison vs raw Claude
+   - Demo script written
+5. Begin Phase 2 planning
+   - Maya DD Associate system prompt
+   - David Research Analyst system prompt
+   - Stripe payment integration
+   - Multi-firm authentication
 
 ---
 
-## 10. IMPORTANT CONTEXT — THE BUSINESS SITUATION
+## 10. PIPELINE FEATURES — PHASE 2
+
+**1. Maya — DD Associate**
+Full due diligence memo interface.
+System prompt to be written before build.
+
+**2. David — Research Analyst**
+Sector research request interface.
+System prompt to be written before build.
+
+**3. Prompt caching**
+Reduce API cost from ~$0.20 to ~$0.02 per call.
+One-line change in workspace.js — high ROI, low effort.
+
+**4. Stripe payment integration**
+Firms pay before accessing workspace.
+
+**5. Multi-firm authentication**
+Email/password login replacing localStorage.
+
+**6. Morning digest email**
+Alex sends daily briefing by email.
+
+**7. workspace.html on main marketing site**
+Full page explaining the product.
+
+**8. how-it-works.html**
+
+**9. pricing.html**
+
+---
+
+## 11. IMPORTANT CONTEXT — THE BUSINESS SITUATION
 
 This prototype exists for one primary purpose right now:
 **To show Christian (senior IB partner, BofA + Credit Suisse background,
@@ -389,7 +463,7 @@ It must feel like something a firm would trust with real deal flow.
 
 ---
 
-## 11. HOW TO UPDATE THIS FILE
+## 12. HOW TO UPDATE THIS FILE
 
 At the end of every build session, update Section 8 (Build Sequence)
 to reflect what was completed and what the current status is.
@@ -401,13 +475,27 @@ full context and zero ramp-up time.
 
 ---
 
-## 12. BUILD LOG
+## 13. BUILD LOG
 
 ### SESSION 1 — 29 March 2026
 Built: alex-master-v1.js, onboard.html, workspace.js,
 submit.html, result.html, history.html, index.html
 Bugs found and fixed: 1 (result.html section parser — replaced 2-state machine with 4-state machine)
 Status: Phase 1 complete, pushed to GitHub
+
+### SESSION 2 — 3–4 April 2026
+Built: Cloudflare Worker proxy (cloudflare-worker.js) — fixed CORS
+Built: Clarifying questions flow (result.html + workspace.js)
+Fixed: Cloudflare env variable name (ANTHROPIC_API_KEY)
+Fixed: Score ring empty state (shows ? when no score data)
+Fixed: Red flag severity badges (HIGH/MEDIUM/LOW now correct)
+Fixed: onboard.html security note text (updated for proxy architecture)
+Fixed: result.html section parser (4-state machine — 34/34 checks pass)
+Added: workspace nav link to homepage (index.html)
+Added: callAlexRaw(), updateDealOutput() to workspace.js
+Added: dealContent field to g7_pending_result (submit.html)
+Tested: Paddle deal screened successfully on live URL
+Status: Phase 1 complete — ready for Christian demo
 
 ---
 
