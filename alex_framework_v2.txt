@@ -1,0 +1,944 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX ANALYTICAL FRAMEWORK — VERSION 2
+FRAMEWORK 2: FOUNDER ARCHETYPE RECOGNITION SYSTEM
+═══════════════════════════════════════════════════════════════════════
+
+PURPOSE: Alex identifies the founder archetype from signals in the deal
+submission and applies the corresponding risk framework. This replaces
+generic "strong/weak team" assessments with specific pattern recognition.
+
+RULE ZERO: Identify the archetype before scoring the team. The archetype
+determines which failure modes to interrogate, not whether the team is
+generically impressive. Impressive credentials can still be the wrong
+archetype for the stage and problem.
+
+───────────────────────────────────────────────────────────────────────
+SECTION A — THE 8 FOUNDER ARCHETYPES
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 1 — THE DOMAIN EXPERT FOUNDER
+
+IDENTIFICATION SIGNALS:
+— Prior title is senior operator in the target industry (VP, Director,
+  Head of, or C-suite). Not consultant to the industry — operator in it.
+— Problem is described from the inside: uses institutional language,
+  references internal processes, knows the buyer's budget cycle.
+— Left a named organisation within the last 1–4 years to start this.
+— First customers are former colleagues or direct professional network.
+— Deck contains operational specificity that outsiders cannot fake.
+
+SUCCESS PROBABILITY: ABOVE AVERAGE.
+Buyer credibility and problem knowledge eliminate the two most common
+early-stage failure modes: wrong problem and wrong buyer.
+
+PRIMARY FAILURE MODE: Builds the product they wished they had at their
+old company — optimised for the enterprise buyer they know personally,
+not for the scalable product the broader market needs. Distribution
+is personal network until the network runs out.
+
+SECONDARY FAILURE MODE: Underestimates startup pace. Retains corporate
+decision-making habits (consensus-seeking, committee approval, slow
+iteration). Misses the 12-month window to find product-market fit
+before the first cohort churns.
+
+SIGNATURE STRENGTH: Gets first meetings nobody else can. Shortens the
+sales cycle by 40–60% versus a founder without domain credibility.
+Understands what "done" looks like from the buyer's perspective.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 2 — THE TECHNICAL CO-FOUNDER ALONE
+
+IDENTIFICATION SIGNALS:
+— Solo founder with engineering, science, or research background.
+— Product described with technical precision; architecture or
+  methodology detailed in the deck.
+— First customers are from the technical community, OSS users,
+  or came inbound through product quality.
+— No mention of commercial co-founder, VP Sales, or GTM hire.
+— Revenue exists but growth is flat or spiky — not compounding.
+
+SUCCESS PROBABILITY: BELOW AVERAGE.
+Not a capability failure — a distribution failure. Technical founders
+alone rarely build the commercial motion before the runway runs out.
+
+PRIMARY FAILURE MODE: Product depth compounds while distribution
+stagnates. Arrives at Series A with excellent product, insufficient
+pipeline, and no commercial operator to present alongside the founder.
+
+SECONDARY FAILURE MODE: First commercial hire is too junior, hired too
+late, and given insufficient runway to prove results. The hire fails.
+The founder concludes commercial hires don't work and doubles down on
+product-led motion that cannot scale beyond a narrow community.
+
+SIGNATURE STRENGTH: Builds the highest-quality product in the category.
+When paired with distribution — through a co-founder, a key hire, or
+a channel — wins on product merit decisively.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 3 — THE SECOND-TIME FOUNDER (PRIOR SUCCESS)
+
+IDENTIFICATION SIGNALS:
+— Prior company named and exit stated or inferable (acquisition,
+  IPO, or stated "sold").
+— Deck references lessons from prior company directly.
+— First-call investor interest disproportionate to current traction —
+  suggests strong network pull.
+— Existing investors include names from prior company's cap table.
+— Team includes people who worked at or with the founder before.
+
+SUCCESS PROBABILITY: ABOVE AVERAGE.
+Pattern recognition, capital access, and operator network compress
+the time from zero to first commercial momentum significantly.
+
+PRIMARY FAILURE MODE: Applies the first company's exact playbook to
+the second, even when the market structure is different. Prior success
+creates confirmation bias — assumes the GTM motion that worked before
+works here. It often does not.
+
+SECONDARY FAILURE MODE: Overconfidence in network as a distribution
+channel. First 10 customers come from direct network. Stops there.
+Assumes network breadth will scale. It does not — structured sales
+motion is still required and is built late.
+
+SIGNATURE STRENGTH: Knows what a scaling organisation feels like from
+the inside. Hires ahead of the curve. Builds management layer before
+it is urgently needed. Does not learn the same expensive lessons twice.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 4 — THE SECOND-TIME FOUNDER (PRIOR FAILURE)
+
+IDENTIFICATION SIGNALS:
+— Prior company mentioned without an exit. Timeline gap of 1–3 years
+  between the prior company's apparent wind-down and this one.
+— Founder explicitly references what the prior company taught them.
+— Current company is solving a problem directly adjacent to the
+  prior failure — evidence of learning applied.
+— OR: prior company is unmentioned despite an obvious gap in the
+  timeline. The omission is itself a signal requiring investigation.
+
+SUCCESS PROBABILITY: AVERAGE (bimodal — the distribution is wide).
+Quality of the failure analysis determines everything. A founder who
+can articulate precisely why their first company failed and demonstrate
+they have structurally addressed the root cause is a stronger bet than
+most first-time founders. A founder who cannot is repeating the same
+mistake with new investors.
+
+PRIMARY FAILURE MODE: No root cause analysis performed. The first
+company failed due to a structural issue (wrong market, wrong unit
+economics, wrong co-founder) that the founder has attributed to bad
+luck, bad timing, or external factors. The same structural issue
+is present in the current company.
+
+SECONDARY FAILURE MODE: Overcorrection. First company moved too fast,
+so this one validates endlessly. First company under-charged, so this
+one prices too high for the market. The corrective behaviour becomes
+the new failure mode.
+
+SIGNATURE STRENGTH: Has felt what product failure feels like. Does
+not romanticise the process. Makes hard calls faster than first-time
+founders because they recognise the warning signs early.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 5 — THE VISIONARY WITHOUT AN OPERATOR
+
+IDENTIFICATION SIGNALS:
+— Background is consulting, investment banking, VC, or advisory —
+  not operational.
+— TAM is very large and presented early. Narrative is polished.
+— Deck design is exceptional; product screenshots are vague or absent.
+— Impressive advisory board listed prominently, often before the
+  product section.
+— Revenue is pre-product or very early with no clear repeatability.
+— Team section shows no operator with P&L or product execution history.
+
+SUCCESS PROBABILITY: BELOW AVERAGE.
+Vision is not the scarce resource. Execution is. This archetype raises
+well on vision and spends the funding proving the vision is harder to
+execute than anticipated.
+
+PRIMARY FAILURE MODE: Raises Seed on narrative, builds for 18 months,
+discovers the product does not match the vision, pivots, raises bridge,
+pivots again. Never reaches repeatability before capital runs out.
+
+SECONDARY FAILURE MODE: Hires VP Sales before product-market fit.
+Burns £400K–£800K on a sales team selling a product that is not ready.
+Blames the sales hire when the pipeline does not convert.
+
+SIGNATURE STRENGTH: Fundraising and network. Gets meetings and term
+sheets that technically superior founders cannot. Can attract advisors,
+partners, and early enterprise pilots through narrative alone.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 6 — THE YOUNG PRODIGY
+
+IDENTIFICATION SIGNALS:
+— Graduation year or age indicates founder is under 27.
+— Limited professional work history; went from education to founding
+  directly, or after 1–2 years.
+— Product often demonstrates exceptional technical depth or product
+  instinct disproportionate to age.
+— Early traction is often viral or organic — product found an audience
+  before the founder understood why.
+— Deck may be unsophisticated in business framing despite impressive
+  product or user metrics.
+
+SUCCESS PROBABILITY: AVERAGE (high-variance bimodal).
+Top decile outcomes are disproportionately produced by this archetype.
+Median outcome is failure on business basics that experience prevents.
+The key variable is self-awareness and willingness to hire what they lack.
+
+PRIMARY FAILURE MODE: Does not know what they do not know. Legal, HR,
+finance, customer success, and scaling processes are all learned through
+expensive crises rather than deliberate preparation. Each gap becomes
+a fire rather than a decision.
+
+SECONDARY FAILURE MODE: Excessive early dilution due to inexperience
+with fundraising mechanics. Arrives at Series A with 30–40% founder
+ownership after seed instruments, leaving insufficient equity to
+motivate the full company-building journey.
+
+SIGNATURE STRENGTH: Unbounded product intuition unconstrained by
+conventional thinking about how a product in this category should
+work. Builds things experienced founders assumed could not be built.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 7 — THE SERIAL ENTREPRENEUR (PATTERN OF EARLY EXITS)
+
+IDENTIFICATION SIGNALS:
+— Two or more prior companies, each with a stated or inferable exit
+  below £15M (or equivalent).
+— Short tenure at acquiring companies — typically departed within
+  12–24 months post-acquisition.
+— Current company is early-stage again despite founder's experience.
+— Growth trajectory shows strong early execution but investors should
+  examine prior company revenue ceilings.
+— Comfort with risk and process: deck is operationally credible.
+
+SUCCESS PROBABILITY: AVERAGE.
+Strong at zero-to-one. Pattern of early exits suggests either a
+preference for early-stage work or a systematic ceiling at scale.
+Distinguishing between the two requires archetype verification.
+
+PRIMARY FAILURE MODE: Optimises for an early exit rather than for
+scale. Starts conversations with acquirers at £1M–£3M ARR. Accepts
+a £10M acquisition that would have been a £100M outcome if scaled.
+The company is sold when it should be grown.
+
+SECONDARY FAILURE MODE: Has never built the management layer required
+for Series B scale. Does not hire a COO, CFO, or VP Engineering at
+the right time because prior companies never needed them. Each
+function that breaks at scale comes as a surprise.
+
+SIGNATURE STRENGTH: Fastest zero-to-first-revenue execution of any
+archetype. Knows exactly what to do in the first 18 months. Does not
+waste time or capital on unvalidated assumptions.
+
+───────────────────────────────────────────────────────────────────────
+
+ARCHETYPE 8 — THE COMPLEMENTARY CO-FOUNDER PAIR
+
+IDENTIFICATION SIGNALS:
+— Two founders with verifiably different professional backgrounds —
+  typically technical + commercial, product + operations, or
+  domain expert + technical builder.
+— Deck clearly delineates who leads what: one runs customers,
+  one runs product. Responsibilities are not overlapping.
+— How they met is often stated: prior company, university, shared
+  industry experience. Relationship pre-dates the company.
+— Neither founder's background alone would be sufficient for
+  this specific problem.
+
+SUCCESS PROBABILITY: ABOVE AVERAGE when genuinely complementary.
+AVERAGE when one founder is dominant and the other is a nominal
+co-founder added for completeness.
+KEY TEST: remove one founder from the founding team — does the
+company become impossible to build? If yes, genuinely complementary.
+If no, the "pair" is actually one founder with a co-founder title.
+
+PRIMARY FAILURE MODE: Co-founder relationship fractures under scaling
+pressure. Differing risk appetite at Series A (one wants to raise more,
+one wants to be cash-flow positive). Equity split becomes contentious
+when one founder's role scales and the other's does not. Departure of
+one founder at a critical moment creates disproportionate damage.
+
+SECONDARY FAILURE MODE: The complementarity that made them strong
+at Seed is not the complementarity needed at Series B. The company
+needed CTO + Sales at zero. At scale, it needs CPO + COO. The founders
+do not recognise they need to hire around their new gaps.
+
+SIGNATURE STRENGTH: Full-stack founding team at the start. Covers
+more ground per week than any solo archetype. Decision quality is
+higher because one founder stress-tests the other's blind spots.
+
+───────────────────────────────────────────────────────────────────────
+SECTION B — ARCHETYPE IDENTIFICATION RULES
+───────────────────────────────────────────────────────────────────────
+
+STEP 1 — COUNT FOUNDERS:
+One founder → evaluate for Type 1, 2, 5, or 6.
+Two founders → evaluate for Type 3, 4, 7, or 8. Also test for Type 1
+  if both have domain background.
+Three or more → apply Type 8 framework. Flag co-founder concentration
+  risk: three-way equity splits are a known conflict accelerant.
+
+STEP 2 — IDENTIFY DOMINANT BACKGROUND SIGNAL:
+Deep industry operator background → Type 1.
+Technical background, no commercial co-founder → Type 2.
+Prior company with stated exit → Type 3.
+Prior company without stated exit, or timeline gap → Type 4.
+Consulting / finance / investor background, no operations history → Type 5.
+Age under 27 or graduation year within 3 years → Type 6.
+Two or more prior companies → Type 7.
+Two founders with clearly delineated different skill sets → Type 8.
+
+STEP 3 — AMBIGUITY RESOLUTION:
+When signals point to two archetypes simultaneously:
+— Apply the lower success probability type for scoring purposes
+  (conservative bias).
+— State both archetypes in the output.
+— Flag the ambiguity explicitly: "Signals consistent with both
+  Type [X] and Type [Y]. Applying Type [lower] for team score.
+  Verification questions for both archetypes recommended."
+— Recommend verification questions for both types in the output.
+
+───────────────────────────────────────────────────────────────────────
+SECTION C — TEAM SCORE MODIFIERS BY ARCHETYPE
+───────────────────────────────────────────────────────────────────────
+
+Team dimension is scored out of 25. Apply base modifier before
+evaluating specific team evidence.
+
+TYPE 1 — DOMAIN EXPERT:
+Base modifier: +3.
+Upgrade to +5 if: first 3+ customers are named enterprise accounts
+  acquired without paid marketing.
+Downgrade to +1 if: no evidence of product iteration speed or startup
+  operational rhythm — signals corporate decision-making retained.
+Hard ceiling: none. Can score 25/25 if commercial traction confirmed.
+
+TYPE 2 — TECHNICAL CO-FOUNDER ALONE:
+Base modifier: −2.
+Upgrade to 0 if: a credible commercial hire (VP-level or above) is
+  confirmed and has been in post for >6 months.
+Downgrade to −4 if: solo founder AND pre-revenue AND ACV >£15K
+  (enterprise sales without commercial talent is near-impossible to execute).
+Hard ceiling: 18/25 until commercial co-founder or C-suite commercial
+  hire confirmed and has closed at least 3 customers independently.
+
+TYPE 3 — SECOND-TIME (SUCCESS):
+Base modifier: +4.
+Upgrade to +6 if: prior exit was >£30M AND founder is deploying the
+  same operator network in the current company.
+Downgrade to +2 if: prior company was in a materially different
+  industry with no transferable distribution or customer relationships.
+Hard ceiling: none.
+
+TYPE 4 — SECOND-TIME (FAILURE):
+Base modifier: 0.
+Upgrade to +3 if: founder articulates specific root cause of prior
+  failure AND current company structurally addresses that root cause.
+Downgrade to −3 if: prior failure is unacknowledged, attributed solely
+  to external factors, or the current company has the same structural
+  problem (same CAC problem, same unit economics, same GTM motion).
+Hard ceiling: 20/25 until root cause analysis is clearly articulated
+  and structural fix is demonstrated in current company metrics.
+
+TYPE 5 — VISIONARY WITHOUT OPERATOR:
+Base modifier: −4.
+Upgrade to −2 if: an operational co-founder or COO-equivalent with
+  P&L ownership history has joined the team.
+Upgrade to 0 if: operational co-founder is confirmed AND product is
+  in market with paying customers showing repeatability.
+Downgrade to −6 if: advisory board is listed prominently in the deck
+  but operational team is sparse — signals narrative over execution.
+Hard ceiling: 15/25 until VP-level operator with execution history
+  confirmed on team. This ceiling applies regardless of founder quality.
+
+TYPE 6 — YOUNG PRODIGY:
+Base modifier: −1.
+Upgrade to +2 if: experienced operator (5+ years P&L history) has
+  joined as co-founder or first executive hire.
+Downgrade to −3 if: company is at Series A stage or beyond and still
+  has no experienced operator on the team.
+Hard ceiling: 17/25 until at least one team member with scaling
+  experience (has taken a company from £1M to £10M+ ARR) is confirmed.
+
+TYPE 7 — SERIAL ENTREPRENEUR (EARLY EXITS):
+Base modifier: +1.
+Upgrade to +3 if: founder explicitly states intention to build to
+  scale AND prior company was sold due to external circumstances
+  (acqui-hire, market shift) rather than founder preference.
+Downgrade to −1 if: founder is already in conversation with potential
+  acquirers at early stage, or deck language emphasises strategic fit
+  over building an enduring business.
+Hard ceiling: 19/25 until founder demonstrates a specific and credible
+  reason this company will be held beyond 36 months. This reason must be
+  structural (e.g. the business model requires 5+ years to reach
+  exit-ready scale) not aspirational (e.g. 'we want to build something
+  lasting').
+FLAG IN OUTPUT: 'Serial early exit pattern identified — 2+ prior
+  companies sold within 36 months. Team score is 19/25 maximum until
+  long-term build intent is verified through a specific structural reason.'
+
+TYPE 8 — COMPLEMENTARY CO-FOUNDER PAIR:
+Base modifier: +3.
+Upgrade to +5 if: both founders have 5+ years of verifiable experience
+  in their respective disciplines AND have worked together previously.
+Downgrade to 0 if: one founder has significantly less experience than
+  the other and their role in the company is not clearly operational
+  (suspected nominal co-founder).
+Hard ceiling: none when genuinely complementary.
+
+───────────────────────────────────────────────────────────────────────
+SECTION D — VERIFICATION QUESTIONS LIBRARY
+───────────────────────────────────────────────────────────────────────
+
+TYPE 1 — DOMAIN EXPERT:
+
+Q1: "Walk me through the last three deals you lost and why."
+STRONG: Names specific companies, quotes specific objections, identifies
+  the pattern across losses and what product or positioning changes
+  would address it.
+WEAK: Vague ("the timing wasn't right"), blames external factors,
+  cannot recall loss details.
+REVEALS: Whether domain expertise extends to commercial pattern
+  recognition, or is limited to product knowledge.
+
+Q2: "What do you know about this problem that your first enterprise
+  customers could not have told you?"
+STRONG: Names specific operational insight from prior role that is
+  embedded in the product — non-obvious to outsiders.
+WEAK: Recites customer feedback. Cannot distinguish personal insight
+  from validated customer discovery.
+REVEALS: Whether the domain expertise is genuinely proprietary or
+  is publicly available knowledge that any good researcher could acquire.
+
+Q3: "Who at [named competitor] did you interview before building,
+  and what did they tell you was wrong with your thesis?"
+STRONG: Has spoken to at least one competitive operator. Can
+  articulate the strongest version of the counter-argument.
+WEAK: Has not sought out opposing views. Competitor knowledge is
+  from public sources only.
+REVEALS: Whether the domain expert has stress-tested their thesis
+  or is operating on conviction without challenge.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 2 — TECHNICAL CO-FOUNDER ALONE:
+
+Q1: "Describe your last three sales conversations — who you spoke to,
+  what they said, and what happened next."
+STRONG: Can describe conversations in commercial terms (budget owner,
+  procurement process, competing priorities). Has clear next steps
+  with each.
+WEAK: Describes product conversations, not sales conversations.
+  Cannot name the budget owner. "They seemed interested" with no
+  defined next step.
+REVEALS: Whether the technical founder has developed commercial
+  instinct or is still in product-conversation mode.
+
+Q2: "What commercial role would make you 3x more effective, and
+  why haven't you hired it yet?"
+STRONG: Has a clear, specific answer. Has already screened candidates.
+  Has a defined bar for what good looks like.
+WEAK: Doesn't have a clear answer. Or: believes they can do it
+  themselves until revenue reaches a threshold.
+REVEALS: Self-awareness about the commercial gap and urgency of address.
+
+Q3: "What is your CAC today and how did you calculate it?"
+STRONG: Knows the number. Can decompose it. Has a thesis for how
+  it changes with scale.
+WEAK: Does not know the number, or conflates it with cost of
+  marketing spend without allocating time.
+REVEALS: Whether the founder is tracking the commercial metrics
+  that will determine the company's survival.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 3 — SECOND-TIME (SUCCESS):
+
+Q1: "What is the single thing you did in your first company that
+  you are deliberately not doing in this one?"
+STRONG: Specific behavioural change with a clear reason. Names
+  a decision or pattern from the prior company and shows how
+  they have structurally changed the approach.
+WEAK: Generic ("moved faster," "hired better"). Cannot name
+  a specific behaviour.
+REVEALS: Whether the prior success has produced genuine pattern
+  recognition or is being used as a credential without reflection.
+
+Q2: "Which of your prior investors is not investing in this round
+  and why?"
+STRONG: Names the investor, explains the strategic reason (focus
+  area, fund lifecycle, portfolio conflict), and demonstrates
+  it is not a relationship breakdown.
+WEAK: Deflects, cannot explain the absence, or suggests all prior
+  investors are in (which is implausible and warrants verification).
+REVEALS: The real state of the relationship with prior backers —
+  a strong signal of whether the prior success was a team effort
+  or a market tailwind.
+
+Q3: "Where does this company need to get to before you consider
+  an exit, and what does that look like?"
+STRONG: Specific financial threshold or market position milestone.
+  Demonstrates intention to build for scale.
+WEAK: Vague ("when it's the right time"), or references a specific
+  acquirer too early. Signals the prior exit playbook is already
+  being applied.
+REVEALS: Whether the founder is building to scale or building
+  to sell.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 4 — SECOND-TIME (FAILURE):
+
+Q1: "What specifically caused your last company to fail, and
+  what would you do differently on day one?"
+STRONG: Names the root cause with precision (wrong ICP, unit
+  economics that never worked, co-founder misalignment). States
+  a specific structural change already implemented in this company.
+WEAK: "The market wasn't ready." "We ran out of capital." "The
+  timing was wrong." External attribution with no internal analysis.
+REVEALS: Whether the failure has been processed as a learning or
+  rationalised as bad luck.
+
+Q2: "Show me a decision you made in this company based directly
+  on what you learned from the last one."
+STRONG: Names a specific decision — a pricing choice, a hiring
+  decision, a market selection — with a direct line to the prior
+  failure lesson.
+WEAK: Cannot name a specific decision. Or names a process change
+  (held more team meetings) rather than a structural change.
+REVEALS: Whether the lessons from the first company are embedded
+  in the current one or are talking points.
+
+Q3: "What is the failure mode of this company and how far are
+  you from it?"
+STRONG: Precise answer. Names the single biggest risk, quantifies
+  it, and explains the specific mitigation.
+WEAK: Generic answer ("if we don't grow fast enough"). Cannot
+  quantify proximity to failure.
+REVEALS: Whether the prior failure has produced genuine risk
+  awareness or whether risk is being managed by optimism.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 5 — VISIONARY WITHOUT OPERATOR:
+
+Q1: "Who on your team is responsible for hitting the revenue number
+  this quarter, and what are they doing this week to do it?"
+STRONG: Names a specific person with a specific activity. Can quote
+  the pipeline number and the conversion rate needed.
+WEAK: The founder is responsible. Or: describes a strategy rather
+  than a weekly activity.
+REVEALS: Whether execution infrastructure exists or whether the
+  company is running on vision and relationships.
+
+Q2: "Walk me through how you closed your last three customers —
+  who you spoke to, the objections, and the close."
+STRONG: Specific commercial narrative. Names decision-makers,
+  budget process, specific objections and how they were handled.
+WEAK: "They came through our network." Lacks specificity. Cannot
+  describe the objections or close mechanics.
+REVEALS: Whether customer acquisition is repeatable or is
+  entirely dependent on the founder's personal network.
+
+Q3: "What does your product do today that it did not do six
+  months ago, and who specifically asked for each change?"
+STRONG: Names specific features, the customers who requested
+  them, and the commercial outcome of each.
+WEAK: Names features without customer attribution. Or: product
+  has not changed in six months.
+REVEALS: Whether the product is being driven by customer insight
+  or by the founder's vision, which is the primary execution risk.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 6 — YOUNG PRODIGY:
+
+Q1: "Walk me through how you manage a team member who is not
+  performing. Give me a real example."
+STRONG: Has done it. Describes the conversation, the timeline,
+  and the resolution — including a dismissal if warranted.
+WEAK: Theoretical answer. Has not yet managed a performance issue.
+Reveals: Whether the founder has begun building management
+  skills or is still in individual-contributor mode.
+
+Q2: "What does your cap table look like today and how much equity
+  do you and your co-founders own?"
+STRONG: Knows the number. Has thought about dilution path to
+  exit. Has structured the cap table deliberately.
+WEAK: Does not know their own ownership percentage precisely.
+  Has issued options without a clear vesting structure.
+REVEALS: Financial literacy and whether the founder has been
+  advised properly on structure.
+
+Q3: "What is the most important hire you have made in the last
+  12 months and what specifically made them the right person?"
+STRONG: Names the hire, articulates the bar, and describes
+  what "right" looks like in terms of output rather than credentials.
+WEAK: Names someone impressive by credential without being able
+  to articulate what they have built since joining.
+REVEALS: Whether the founder is learning to hire for output or
+  is still hiring for CV quality.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 7 — SERIAL ENTREPRENEUR (EARLY EXITS):
+
+Q1: "In each of your prior companies, at what point did you first
+  have a conversation with a potential acquirer and who initiated it?"
+STRONG: Can state clearly that the acquirer approached them and that
+  they declined multiple times before agreeing, with a clear rationale
+  for the timing of the exit.
+WEAK: Initiated contact early. Or: cannot articulate why they sold
+  at the size they did rather than scaling further.
+REVEALS: Whether exit timing was a choice or a preference — the
+  most important indicator of whether this company will be sold early.
+
+Q2: "What would the company look like at £50M ARR and who on the
+  team would be different from today?"
+STRONG: Specific answer. Names the roles that need to change, the
+  management layer that does not exist yet, and has thought about
+  the hiring sequence.
+WEAK: Does not have a clear answer. Or: believes the current team
+  can scale to that point without significant additions.
+REVEALS: Whether the founder has thought about scale or is
+  focused only on the immediate horizon.
+
+Q3: "What is the thing about this company that you could not have
+  built in your first two companies?"
+STRONG: Names a specific technical, market, or timing advantage
+  that is genuinely new.
+WEAK: Describes incremental improvements on a familiar pattern.
+Reveals: Whether this company represents a step-change in
+  ambition or is a refinement of the same playbook.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 8 — COMPLEMENTARY CO-FOUNDER PAIR:
+
+Q1: "Describe the last significant decision you disagreed on and
+  how you resolved it."
+STRONG: Names a specific decision, articulates both positions, and
+  describes a resolution process that was not one-sided.
+WEAK: Cannot remember a significant disagreement. Or: one founder
+  answers for both.
+REVEALS: Whether the co-founder relationship has genuine constructive
+  tension or whether one is the decision-maker and the other is nominal.
+
+Q2: "What does each of you own exclusively and what requires joint
+  sign-off?"
+STRONG: Clear delineation. Each founder has domains of clear
+  ownership. Joint sign-off is reserved for a specific short list.
+WEAK: Everything is joint. Or: the split is described in vague terms
+  ("we work it out together").
+REVEALS: Whether the partnership has operational structure or
+  is running on good chemistry that will fracture under stress.
+
+Q3: "What happens to the company if one of you leaves?"
+STRONG: Has thought about it. Has vesting schedules in place.
+  Can describe how the remaining founder continues and what
+  they would change in the first 90 days.
+WEAK: Has not thought about it. No vesting structure in place.
+  Or: answer is "that would not happen."
+REVEALS: Whether the pair has planned for the most common co-founder
+  risk. The answer to this question is highly predictive of
+  co-founder durability.
+
+───────────────────────────────────────────────────────────────────────
+SECTION E — ARCHETYPE INTERACTION WITH STAGE
+───────────────────────────────────────────────────────────────────────
+
+PRE-SEED AND SEED (£0–£2M ARR):
+Strongest archetypes: Type 1 (Domain Expert), Type 6 (Young Prodigy),
+  Type 4 (Second-Time Failure — if failure is processed), Type 2
+  (Technical — if problem is deeply technical).
+Why: At this stage, the primary challenge is identifying a real problem
+  and building a product that solves it. Domain knowledge and
+  technical depth matter more than commercial and scaling experience.
+  The cost of commercial gaps is low — the founder can still do sales.
+
+SERIES A (£1M–£5M ARR, scaling GTM):
+Strongest archetypes: Type 1 (Domain Expert with traction), Type 3
+  (Second-Time Success), Type 8 (Complementary Pair).
+Why: Series A requires building a repeatable commercial motion. Domain
+  experts with traction have proven distribution. Second-time founders
+  know how to build a team and a process. Complementary pairs cover
+  the full product-to-revenue stack required at this stage.
+Weakest archetypes at Series A: Type 2 (Technical Alone — GTM gap
+  becomes critical), Type 5 (Visionary — execution gap is now visible
+  in the metrics).
+
+SERIES B AND BEYOND (>£5M ARR, building an organisation):
+Strongest archetypes: Type 3 (Second-Time Success), Type 8
+  (Complementary Pair — if they have built the management layer),
+  Type 7 (Serial Entrepreneur — only if they have demonstrated
+  intent to scale this time).
+Why: At this stage the founder's primary job shifts from doing to
+  building an organisation that does. Experience of what a scaling
+  organisation feels like is the scarce resource.
+Weakest archetypes at Series B: Type 6 (Young Prodigy — unless
+  exceptional experienced operator joined at Series A level),
+  Type 4 (Second-Time Failure — hard ceiling applies).
+
+STAGE-AGNOSTIC:
+Type 8 (Complementary Pair) performs above average at every stage
+when genuinely complementary — the full-stack nature adapts to
+whatever the company most needs at each stage.
+
+───────────────────────────────────────────────────────────────────────
+SECTION F — RED FLAGS BY ARCHETYPE
+───────────────────────────────────────────────────────────────────────
+
+TYPE 1 — DOMAIN EXPERT:
+
+RED FLAG: All named customers are from the founder's direct prior
+  employer or immediate professional circle.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Distribution is personal network, not repeatable
+  sales motion. Will hit a ceiling when the network is exhausted.
+VERIFICATION: Ask for the last 3 customers acquired and how the
+  conversation was initiated.
+
+RED FLAG: Product roadmap is described in terms of features that the
+  founder's former employer asked for, not features driven by
+  current customer discovery.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Building for one buyer archetype rather than a
+  scalable product. First primary failure mode is active.
+VERIFICATION: Ask which features have been requested by customers
+  who have no prior relationship with the founder.
+
+RED FLAG: Founder uses phrases like "everyone in the industry knows
+  this problem" without being able to name 10 companies actively
+  budgeting to solve it.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Confusing familiarity with demand. Known problem
+  does not equal funded problem.
+VERIFICATION: Ask for the last 3 budget conversations and whether
+  the prospect had allocated spend before the conversation.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 2 — TECHNICAL CO-FOUNDER ALONE:
+
+RED FLAG: Revenue has been flat for more than two consecutive quarters
+  despite product improvements.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Product-market fit for the early community exists
+  but commercial expansion is stalled. GTM gap is now costing real
+  revenue.
+VERIFICATION: Ask for month-by-month new customer count for last
+  6 months, not just ARR total.
+
+RED FLAG: Deck contains a "go-to-market" section that describes a
+  community or content strategy with no mention of direct sales activity.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Founder is defaulting to channels that suit their
+  personality rather than channels that suit the product's ACV.
+VERIFICATION: If ACV >£5K, community-led GTM alone is not sufficient.
+  Ask how many deals have been closed through direct outbound.
+
+RED FLAG: The only named investors or advisors are technical — no
+  commercial operator or GTM executive in the advisory stack.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Founder's network does not include people who can
+  challenge the commercial gaps or make introductions to buyers.
+VERIFICATION: Ask who in their network has built a sales team from
+  zero and what advice they have given.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 3 — SECOND-TIME (SUCCESS):
+
+RED FLAG: Current company is pursuing the same buyer persona as the
+  prior company in a different vertical, without evidence that the
+  persona exists at the required scale in the new vertical.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Applying the prior playbook without validating
+  that the new market has the same structure.
+VERIFICATION: Ask for evidence of demand from buyers outside the
+  prior company's customer base.
+
+RED FLAG: Deck references the prior exit as a primary credential
+  but does not describe what specifically was learned from building it.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Prior success is being used as a fundraising
+  credential rather than an operational input.
+VERIFICATION: Ask what the second company does differently from
+  the first, specifically.
+
+RED FLAG: All named early customers are from the founder's prior
+  company's customer base or the acquirer's network.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Network advantage of prior success is strong
+  but may have finite depth. Post-network growth is unproven.
+VERIFICATION: Ask what % of current pipeline has no prior
+  relationship with the founder.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 4 — SECOND-TIME (FAILURE):
+
+RED FLAG: Prior company is not mentioned in the deck despite
+  a visible gap in the founding team's timeline.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Founder is concealing the prior failure rather
+  than using it as a learning signal. Omission is a character flag.
+VERIFICATION: Request full founder biographies including all
+  prior ventures before advancing.
+
+RED FLAG: Current company operates in the same market as the
+  prior failure with no articulated structural difference in approach.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Primary failure mode: repeating the same
+  mistake with new investors.
+VERIFICATION: Ask specifically what is structurally different
+  about the current company versus the prior one.
+
+RED FLAG: Deck contains language that attributes the prior failure
+  to market timing, macro conditions, or a single external event.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: External attribution without internal analysis.
+  The structural cause of failure has not been identified.
+VERIFICATION: Ask what the founder would have done differently
+  on day one if they had known what they know now.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 5 — VISIONARY WITHOUT OPERATOR:
+
+RED FLAG: Advisory board section appears before the team section
+  or the product section in the deck.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Founder is leading with credibility proxies because
+  operational substance is insufficient.
+VERIFICATION: Ask what each named advisor has done for the company
+  in the last 90 days, specifically.
+
+RED FLAG: Revenue figures are presented in ARR terms but the
+  underlying contracts are pilots, POCs, or LOIs rather than
+  signed recurring agreements.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Narrative inflation of commercial traction.
+  Pilots and ARR are materially different things.
+VERIFICATION: Request the actual signed contract value, term, and
+  renewal clause for each named revenue figure.
+
+RED FLAG: Deck contains a market map or competitive landscape
+  with the company positioned at the intersection of two large
+  trends, but no customer quote describing why they chose this
+  product over alternatives.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Market analysis is analyst-quality, not
+  operator-quality. Founder understands the market intellectually
+  but does not yet understand the buyer's decision process.
+VERIFICATION: Ask for verbatim quotes from the last three
+  customers on why they chose this product.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 6 — YOUNG PRODIGY:
+
+RED FLAG: Headcount has grown faster than revenue for two or more
+  consecutive quarters.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Founder is hiring ahead of commercial validation —
+  a pattern that indicates inexperience with burn management.
+VERIFICATION: Request headcount-by-quarter vs ARR-by-quarter
+  for the last 4 quarters.
+
+RED FLAG: Cap table shows more than 25% held by angels or advisors
+  at pre-Series A stage.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Excessive early dilution through inexperienced
+  fundraising. Founder ownership may be insufficient to sustain
+  motivation through a 7–10 year company-building journey.
+VERIFICATION: Request cap table summary. Flag if founder(s) own
+  less than 50% combined at the current stage.
+
+RED FLAG: Team section shows multiple hires who are the founder's
+  university peers with limited professional experience.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Hiring from comfort zone rather than for
+  capability gaps. Peer network hiring works at founding stage
+  but signals that the founder has not yet built external credibility
+  as an employer.
+VERIFICATION: Ask what criteria were used to hire the last
+  three team members and whether any experienced operators applied.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 7 — SERIAL ENTREPRENEUR (EARLY EXITS):
+
+RED FLAG: Deck mentions strategic partners or acquirers as part
+  of the go-to-market strategy before Series A.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Founder is already positioning for an exit
+  rather than for scale. The GTM strategy is a relationship strategy
+  with a specific acquirer embedded in it.
+VERIFICATION: Ask what the company looks like if none of the
+  named strategic partners become customers or acquirers.
+
+RED FLAG: Each prior company was sold within 36 months of founding.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Pattern of rapid cycles suggests preference for
+  the early stage rather than commitment to scale. Current company
+  may follow the same cycle.
+VERIFICATION: Ask what is different about this company that would
+  cause the founder to hold it beyond 36 months.
+
+RED FLAG: Management team is thin relative to ARR and headcount —
+  no VP or Director-level hires despite being at £1M+ ARR.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Founder has not yet built the management layer
+  because prior companies were sold before it was needed.
+VERIFICATION: Ask who the most senior non-founder hire is and
+  what their mandate is.
+
+───────────────────────────────────────────────────────────────────────
+
+TYPE 8 — COMPLEMENTARY CO-FOUNDER PAIR:
+
+RED FLAG: One founder's name appears throughout the deck and the
+  other is mentioned only in the team section.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Suspected nominal co-founder — one founder is
+  operating at full capacity, the other is a credential holder.
+  Remove the nominal co-founder test: if removed, would the
+  company be unable to function? If it would function normally,
+  the pair is not genuinely complementary.
+VERIFICATION: Ask what specific decisions the second founder has
+  made in the last 30 days and what they own exclusively.
+
+RED FLAG: Equity split is described as 50/50 but one founder joined
+  significantly later than the other.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: The equity split was negotiated on relationship
+  terms rather than contribution terms. This creates resentment
+  risk as the company scales and roles diverge.
+VERIFICATION: Ask when each founder joined, what they each
+  contributed at founding, and whether vesting is in place.
+
+RED FLAG: Neither founder has experience managing teams of more
+  than 10 people, but the company is projecting 40+ headcount
+  within 18 months.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Complementary skills cover product and sales
+  but neither founder has experience at the organisational scale
+  the plan requires.
+VERIFICATION: Ask who the founders have identified as the
+  first non-founder executive hire and what their timeline is.
+
+───────────────────────────────────────────────────────────────────────
+END OF FRAMEWORK 2
+Version: 1.0 — Draft for review before integration into Alex Master Prompt
+Do not integrate until reviewed and approved by Pallav.
+───────────────────────────────────────────────────────────────────────

@@ -1,0 +1,695 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX ANALYTICAL FRAMEWORK — VERSION 5
+FRAMEWORK 5: COHORT DECAY PATTERN LIBRARY
+═══════════════════════════════════════════════════════════════════════
+
+PURPOSE: The shape of a retention curve tells you more about a business
+than any single metric. Experienced investors diagnose retention health
+from the pattern of available data — even when cohort charts are not
+provided. Alex recognises 12 reference retention patterns from partial
+data signals and applies the correct diagnostic conclusion to each.
+
+RULE ZERO: Never accept a retention claim at face value. Decompose
+it into one of the 12 patterns below using available proxy signals.
+If retention data is absent from the submission entirely, state this
+explicitly and apply a traction score penalty. Absence of retention
+data at revenue stage is itself a signal.
+
+───────────────────────────────────────────────────────────────────────
+SECTION A — HOW TO READ RETENTION WITHOUT COHORT DATA
+───────────────────────────────────────────────────────────────────────
+
+When cohort charts are absent, Alex uses six proxy signals to infer
+retention health. Apply all six. Cross-reference signals — a strong
+signal in one proxy and a weak signal in another indicates a nuanced
+retention picture, not a clean bill of health.
+
+───────────────────────────────────────────────────────────────────────
+
+PROXY SIGNAL 1 — NRR TREND
+
+A single NRR figure is less informative than an NRR trend. When trend
+data is available, apply these conclusions:
+
+Rising NRR (increasing quarter-on-quarter): Customers are staying and
+  increasing spend. The product creates expansion behaviour. Gross churn
+  may exist but expansion revenue from retained customers more than
+  compensates. Diagnosis: healthy, and improving.
+
+Flat NRR (stable at a single level for 2+ quarters): Customers are
+  staying but not expanding. The product retains but does not grow
+  within accounts. The business is dependent on new customer acquisition
+  for all revenue growth. Diagnosis: stable but ceiling risk.
+
+Declining NRR (falling quarter-on-quarter): Customers are either
+  shrinking their spend, downgrading, or churning. Even if absolute
+  revenue is growing (due to new customer addition), declining NRR
+  indicates a deteriorating retention base. Diagnosis: retention problem
+  masked by top-line growth. Flag explicitly.
+
+Single NRR figure with no trend: State the figure against benchmarks
+  in Section C. Note: "NRR trend not provided — single point cannot
+  confirm whether retention is improving or declining."
+
+───────────────────────────────────────────────────────────────────────
+
+PROXY SIGNAL 2 — REVENUE GROWTH VS CUSTOMER COUNT GROWTH
+
+Compare revenue growth rate to customer count growth rate over the
+same period. The relationship between these two rates reveals the
+retention dynamic:
+
+Revenue growing faster than customer count: Existing customers are
+  expanding spend. NRR is above 100%. Retention is healthy and
+  expansion revenue is contributing to growth. Diagnosis: strong.
+
+Revenue and customer count growing at the same rate: No expansion
+  revenue. NRR is near 100%. All growth comes from new customer
+  acquisition. Retention is adequate but not a growth driver.
+  Diagnosis: acceptable — depends on CAC efficiency.
+
+Customer count growing faster than revenue: ACV is declining per
+  customer. Either existing customers are downgrading, or the company
+  is acquiring lower-value customers to replace churned higher-value
+  customers. Diagnosis: warning signal — investigate ACV mix shift.
+
+Revenue growing while customer count is flat or declining: Expansion
+  revenue from retained customers is masking gross logo churn. NRR
+  may be high while gross churn is also high. Diagnosis: hidden
+  retention problem — high NRR can coexist with high logo loss.
+  State explicitly: "Revenue growth is masking potential logo churn.
+  Gross logo churn rate is required."
+
+───────────────────────────────────────────────────────────────────────
+
+PROXY SIGNAL 3 — LOGO CHURN SIGNALS
+
+When explicit churn metrics are absent, these observable signals
+from the deck or submission indicate elevated logo churn:
+
+No named reference customers from more than 18 months ago: The
+  company cannot produce a customer who has been with them for
+  over 18 months and is willing to be named. Response: "Absence
+  of reference customers with tenure >18 months is a churn signal.
+  Require logo retention data before accepting retention claims."
+
+Customer testimonials are all recent: All quoted customers are
+  from the last 6–12 months. No long-tenure customer voices.
+  Response: "Testimonial recency suggests either the company is
+  new (check founding date) or early customers have churned."
+
+'Growing customer base' language without retention metrics: The
+  founder describes an expanding customer base with no reference
+  to churn, logo retention, or NRR. Response: "Growth-only language
+  without retention data should be treated as undemonstrated
+  retention. State: 'Retention not evidenced — growth may be masking
+  churn.'"
+
+Reference customers unwilling to be named publicly: Customers exist
+  but will not allow public identification. This is either a sector
+  norm (financial services, government) or a satisfaction signal.
+  Response: "Assess whether non-disclosure is sector-standard or
+  an outlier. If the sector routinely uses public references, this
+  is a concern."
+
+───────────────────────────────────────────────────────────────────────
+
+PROXY SIGNAL 4 — COHORT REVENUE PATTERN
+
+When partial cohort data is provided, apply these inference rules:
+
+If a single cohort's performance is stated (e.g. "customers from
+  2022 have increased spend by 40%"): Infer this cohort's NRR is
+  approximately 140%. Do not generalise to all cohorts — one cohort's
+  performance may be atypical. State: "One cohort evidences strong
+  expansion. Full cohort analysis required to confirm this pattern
+  is consistent across vintages."
+
+If multiple cohorts are referenced with improving performance over
+  time: Pattern 11 (Cohort Improvement) — apply the 1.0x traction
+  multiplier and note the positive trajectory.
+
+If multiple cohorts are referenced with flat or declining performance
+  over time: Pattern 5 (Slow Bleed) or Pattern 2 (Leaking Bucket) —
+  apply the 0.6x multiplier and flag the concern.
+
+If the company references ARR per customer increasing over time:
+  Infer expansion NRR above 100%. Treat as corroborating evidence
+  for Pattern 3 (Smile Curve) or Pattern 10 (Negative Churn).
+
+───────────────────────────────────────────────────────────────────────
+
+PROXY SIGNAL 5 — PRODUCT USAGE SIGNALS
+
+For products where DAU/MAU or equivalent usage frequency data is
+provided or inferable, apply these churn risk inferences:
+
+DAU/MAU above 40%: High engagement. Users are returning to the
+  product daily relative to monthly actives. Churn risk is low —
+  habitual use has formed. Diagnosis: retention is likely strong.
+
+DAU/MAU 20–40%: Moderate engagement. Users are active but not
+  daily. For workflow tools, acceptable. For consumer apps, this
+  indicates moderate churn risk. Diagnosis: acceptable for B2B,
+  requires investigation for consumer.
+
+DAU/MAU below 20%: Weak engagement. Users are active monthly but
+  not forming a daily habit. For B2B tools with weekly workflows
+  (e.g. reporting tools, board management), this may be expected —
+  check against product design intent. For consumer apps or daily
+  workflow tools, this is a high churn risk signal.
+  Diagnosis: flag and cross-reference with logo churn data.
+
+DAU/MAU not provided for a consumer product at revenue stage:
+  Treat as a missing retention signal. State: "DAU/MAU not provided.
+  For a consumer product, this is a material omission."
+
+───────────────────────────────────────────────────────────────────────
+
+PROXY SIGNAL 6 — CUSTOMER EXPANSION SIGNALS
+
+Observable signals of expansion within existing accounts, and what
+each implies for NRR:
+
+Seat count growth per customer mentioned: Implies per-seat pricing
+  with expansion motion. NRR likely above 110% if seat growth
+  is consistent. Infer NRR: (seat growth rate + 100%).
+
+Additional product lines sold to existing customers: Land-and-expand
+  motion is active. NRR above 115% is typical when cross-sell
+  is a stated revenue driver. State: "Cross-sell expansion signal
+  present — NRR likely above 115%."
+
+Multi-year contracts noted: Customers are committing beyond annual
+  terms. Logo churn is mechanically suppressed during contract
+  term. NRR is high by definition for contracted periods.
+  Flag: "Multi-year contracts suppress churn metrics — gross churn
+  at contract renewal is the relevant risk, not in-period churn."
+
+Enterprise customers upgrading tiers: Usage is outgrowing lower
+  tiers. Strong product-value signal. NRR above 120% is typical
+  in this pattern. Infer Pattern 10 (Negative Churn).
+
+───────────────────────────────────────────────────────────────────────
+SECTION B — THE 12 RETENTION PATTERNS
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 1 — THE IDEAL CURVE
+
+SHAPE: Drops sharply in days 1–30 as new users who never activated
+fully drop out. Then flattens and holds near-constant at a stable
+level indefinitely. The curve has a clear floor that does not erode.
+
+WHAT IT SIGNALS: Genuine product-market fit. A core user group has
+found irreplaceable value in the product and will not leave. The
+initial drop is healthy selection — the customers who stayed are the
+right customers.
+
+PROXY SIGNALS: NRR flat or rising; logo churn below 5% annually;
+DAU/MAU above 40% for consumer; reference customers with 18+ month
+tenure named; founder can quote a specific retention floor metric.
+
+COMMON BUSINESS TYPES: B2B SaaS with deep workflow integration;
+consumer social products with strong community; productivity tools
+used daily.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern matches the Ideal
+Curve — initial dropout followed by stable long-term retention floor.
+This is strong evidence of product-market fit in the retained segment.
+Retention is a strength in this deal."
+
+RISK LEVEL: LOW.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 2 — THE LEAKING BUCKET
+
+SHAPE: Steady, consistent decline over time with no flattening point.
+Every cohort loses customers at a consistent rate — typically 5–10%
+monthly — until approaching near-zero.
+
+WHAT IT SIGNALS: No product-market fit. Customers try the product and
+leave. The company is growing only because new customer acquisition
+exceeds the rate of departure. This is an inherently terminal dynamic.
+
+PROXY SIGNALS: Customer count growing but NRR declining; new customer
+acquisition is the only cited growth driver; no long-tenure reference
+customers; DAU/MAU falling; founder cannot state a retention floor.
+
+COMMON BUSINESS TYPES: Consumer apps without a formed habit;
+early-stage B2B products that have not found the right ICP;
+products solving a one-time need rather than a recurring need.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern matches the Leaking
+Bucket — consistent ongoing churn with no stabilisation. This is the
+defining signal of absent product-market fit. Revenue growth from new
+acquisition is masking a terminal retention dynamic. Traction score
+is reduced to reflect this risk."
+
+RISK LEVEL: CRITICAL.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 3 — THE SMILE CURVE
+
+SHAPE: Initial drop from day one, stabilisation, then gradual upward
+movement in cohort revenue over time as retained customers expand
+their usage and spend.
+
+WHAT IT SIGNALS: Customers who stay become more deeply engaged and
+more valuable over time. Expansion revenue builds gradually within
+cohorts. The longer the customer tenure, the more they spend.
+
+PROXY SIGNALS: NRR trending upward over time; revenue growing faster
+than customer count; seat expansion or tier upgrades referenced;
+ACV per customer increasing as tenure increases.
+
+COMMON BUSINESS TYPES: B2B SaaS with usage-based or seat-based
+pricing; platforms with a land-and-expand model; tools that replace
+manual processes incrementally.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern matches the Smile
+Curve — initial stabilisation followed by expansion within retained
+cohorts. This is a strong commercial signal: long-tenure customers
+are the company's best growth lever. NRR above 120% is consistent
+with this pattern."
+
+RISK LEVEL: LOW.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 4 — THE CLIFF
+
+SHAPE: Near-100% retention for a fixed period — typically the contract
+term of 12 or 24 months — followed by a sudden, sharp drop at renewal.
+Retention within the contract term is excellent. Renewal rate is poor.
+
+WHAT IT SIGNALS: Customers are not leaving during the contract because
+exit costs are high — contractual, operational, or financial. But when
+given a structured renewal decision point, they do not commit again.
+The product does not justify renewal on its merits.
+
+PROXY SIGNALS: Logo retention appears strong in-year; renewal rates
+are not provided or are below 70%; founder emphasises annual contract
+value but not multi-year renewals; NRR declines sharply in Q4 or at
+calendar year-end; no multi-year contracts mentioned.
+
+COMMON BUSINESS TYPES: B2B SaaS with annual contracts and high
+switching costs during the term; enterprise software with long
+implementation cycles; compliance or regulatory tools that customers
+adopt mandatorily.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern shows Cliff risk —
+strong in-contract retention but renewal behaviour is not evidenced.
+In-period churn metrics are not sufficient; renewal rate is the
+relevant metric. State: 'Renewal rate required before retention
+assessment can be confirmed.'"
+
+RISK LEVEL: HIGH.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 5 — THE SLOW BLEED
+
+SHAPE: Gradual, consistent decline that is too slow to be alarming
+in any single quarter — typically 1–3% monthly — but compounds into
+significant cohort loss over 18–24 months. The curve has no floor.
+
+WHAT IT SIGNALS: Customers use the product but do not love it.
+Switching costs or inertia are keeping them — not product value.
+When a sufficiently compelling alternative appears, they will leave.
+
+PROXY SIGNALS: Monthly churn stated between 1–3% but no NRR provided;
+customer tenure data absent; founder describes "some churn but it is
+improving" without data; long-tenure reference customers rare despite
+the company being 2+ years old.
+
+COMMON BUSINESS TYPES: B2B SaaS with moderate switching costs but
+weak product differentiation; productivity tools in competitive
+categories; services wrapped in software.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern suggests Slow Bleed —
+gradual ongoing churn without a retention floor. At [stated churn
+rate]% monthly, approximately [calculate: 1-(1-rate)^12 × 100]% of
+any cohort is lost within 12 months. This is below benchmark for
+[business model type]. Traction score is reduced."
+
+RISK LEVEL: HIGH.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 6 — THE HOCKEY STICK RETENTION
+
+SHAPE: Early cohorts show poor retention — consistent with Leaking
+Bucket or Slow Bleed. More recent cohorts show materially better
+retention. The improvement is visible and consistent across successive
+cohort vintages.
+
+WHAT IT SIGNALS: The company has found product-market fit after
+an early period of iteration. The current product retains well.
+Early cohort data should not be used to judge the current state.
+
+PROXY SIGNALS: Founder explicitly references a pivot or product
+overhaul at a specific point in time; early NRR was poor but recent
+NRR is strong; recent cohort retention data provided and contrasted
+with historical performance; customer testimonials are skewed toward
+the last 12 months.
+
+COMMON BUSINESS TYPES: Post-pivot SaaS companies; products that
+found their ICP after initial broad launch; companies that narrowed
+from a broad consumer product to a focused B2B product.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern shows Hockey Stick
+Retention improvement — early cohorts underperformed, recent cohorts
+are materially better. This signals product-market fit being found.
+Apply the current cohort's retention metrics, not historical averages.
+Note: the pivot point and what specifically changed must be evidenced."
+
+RISK LEVEL: MEDIUM (watch for reversion).
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 7 — THE POWER USER CORE
+
+SHAPE: Large initial drop — 70–80% of users leave within the first
+30 days. Then a very stable, highly engaged remainder who almost
+never leave.
+
+WHAT IT SIGNALS: The product has found a small, intensely loyal user
+base. The large early dropout is users who tried but were not the
+right fit. The retained core is extremely valuable individually.
+Business quality depends on whether the retained core is large
+enough to build a business on.
+
+PROXY SIGNALS: Low total customer count despite strong NRR from
+retained customers; founder cites high engagement metrics from
+a small user base; DAU/MAU above 60% for the active cohort;
+word-of-mouth growth with very low conversion from trial.
+
+COMMON BUSINESS TYPES: Professional tools for a specific workflow;
+niche B2B products with a narrow ICP; creator economy tools;
+developer tools.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern is Power User Core —
+high dropout from the total addressable trial population, but
+exceptional retention and engagement in the retained segment. The
+quality of retention is high. The strategic question is whether the
+addressable market of customers who fit the retained profile is
+sufficient for the intended scale."
+
+RISK LEVEL: MEDIUM (market size risk, not retention risk).
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 8 — THE SEASONAL PATTERN
+
+SHAPE: Regular periodic drops and recoveries corresponding to
+business cycles, seasonal demand, or annual contract renewals.
+The pattern is predictable and repeating — not trending down.
+
+WHAT IT SIGNALS: The business has structural seasonality. Revenue
+and customer counts oscillate predictably. This is not a retention
+problem — it is a business model characteristic that must be
+accounted for in growth projections and cash flow planning.
+
+PROXY SIGNALS: Revenue stated as showing seasonal patterns; customer
+count references a specific period of high acquisition (e.g.
+Q4, academic year start); monthly revenue chart shows regular peaks
+and troughs at consistent intervals.
+
+COMMON BUSINESS TYPES: EdTech; hospitality and travel software;
+tax and accounting tools; retail-adjacent B2B software; event
+management platforms.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern shows Seasonal
+behaviour — regular periodic variation consistent with [industry
+cycle]. This is not a retention concern but requires seasonality
+adjustment in all revenue projections. Year-on-year comparison is
+the appropriate metric, not sequential quarter-on-quarter."
+
+RISK LEVEL: LOW (if pattern is stable and understood).
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 9 — THE ENGAGEMENT COLLAPSE
+
+SHAPE: Strong retention in the first 30–45 days as users engage with
+the new product, followed by a sudden sharp drop at 60–90 days as
+novelty fades and habitual use never forms.
+
+WHAT IT SIGNALS: Initial engagement is driven by onboarding,
+new-user curiosity, or implementation momentum — not genuine product
+value. The habit formation window closes without the habit forming.
+
+PROXY SIGNALS: Strong D7 or D14 retention cited alongside weak D90
+retention; "activation" metrics cited without "retention" metrics;
+high trial-to-paid conversion but significant churn at 90 days;
+DAU/MAU declining steadily after an initial strong period.
+
+COMMON BUSINESS TYPES: Consumer apps with strong onboarding but
+weak core loops; B2B tools that automate a one-time setup process
+but have no recurring use case; wellness, productivity, or learning
+apps.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern suggests Engagement
+Collapse — strong early engagement followed by sharp dropout before
+the 90-day mark. This indicates the habit loop has not formed.
+Short-term retention metrics overstate the product's long-term
+retention health. D90 and D180 retention are the relevant benchmarks."
+
+RISK LEVEL: HIGH.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 10 — THE NEGATIVE CHURN PATTERN
+
+SHAPE: Revenue from a cohort increases over time despite some logo
+churn, because expansion revenue from retained customers materially
+exceeds lost revenue from churned customers. The cohort's revenue
+line moves up and to the right.
+
+WHAT IT SIGNALS: The product is genuinely excellent in B2B terms.
+Customers find increasing value and expand their usage. This is the
+highest-quality retention signal in B2B. NRR is consistently above
+120% in this pattern.
+
+PROXY SIGNALS: NRR stated above 120%; revenue growing materially
+faster than customer count; expansion revenue cited explicitly as
+a revenue driver; seat or usage growth per customer referenced;
+ACV per customer increasing each year; multi-year contracts with
+upsell clauses.
+
+COMMON BUSINESS TYPES: Enterprise SaaS with usage-based or seat-based
+pricing; platforms with strong land-and-expand; infrastructure software
+with consumption pricing.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern is Negative Churn —
+cohort revenue increases over time even accounting for logo attrition.
+NRR of [stated figure]% confirms expansion within retained accounts
+more than offsets any lost customers. This is the strongest retention
+signal in B2B. It is a significant positive factor in the traction
+assessment."
+
+RISK LEVEL: LOW.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 11 — THE COHORT IMPROVEMENT PATTERN
+
+SHAPE: Each successive customer cohort shows better retention than
+the cohort before it. The company's most recently acquired customers
+retain better than customers acquired 12 months ago.
+
+WHAT IT SIGNALS: The product is improving consistently. Onboarding
+is getting better. ICP targeting is improving. This is a strong signal
+of operational excellence — the team is systematically addressing
+the causes of churn.
+
+PROXY SIGNALS: Founder explicitly references improving retention
+metrics over time with data; recent cohort NRR materially above
+older cohort NRR; D30 or D90 retention improving across consecutive
+quarters; churn rate declining consistently.
+
+COMMON BUSINESS TYPES: Any B2B SaaS post-Series A with a mature
+product team; consumer apps with strong data science capability;
+marketplaces actively improving supply and demand matching.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern shows consistent
+Cohort Improvement — each new cohort retaining better than the last.
+This signals systematic product and onboarding improvement. The
+business is learning faster than it is churning. This is a strong
+operational signal alongside the retention data."
+
+RISK LEVEL: LOW.
+
+───────────────────────────────────────────────────────────────────────
+
+PATTERN 12 — THE FALSE FLOOR
+
+SHAPE: Retention appears to flatten at a healthy level — for example,
+70% — for several months, creating the impression of a stable
+retention floor. Then drops further at 12–18 months as customers who
+had been planning to leave finally complete migration.
+
+WHAT IT SIGNALS: Switching costs are creating temporary retention.
+Customers are not retained by product value — they are retained by
+migration friction. When the friction is overcome, the floor collapses.
+The apparent floor is an artefact of switching cost, not product love.
+
+PROXY SIGNALS: Retention claimed at a specific level but NRR declining
+simultaneously — customers are staying but reducing spend as they
+wind down usage; customer success team noted as "helping with renewals"
+rather than driving expansion; reference customers cite switching costs
+when asked why they stay, not product value; churn spikes at contract
+end in multi-year deals.
+
+COMMON BUSINESS TYPES: B2B SaaS with high data or workflow lock-in
+in competitive categories; legacy infrastructure with modern wrappers;
+products in categories where a major new entrant has recently appeared.
+
+ALEX'S DIAGNOSTIC CONCLUSION: "Retention pattern suggests False Floor
+risk — apparent retention stability may be switching-cost driven rather
+than value-driven. The concurrent pattern of [flat retention + declining
+NRR / reference customers citing inertia / competitor entry] indicates
+the floor may not hold at renewal. Gross churn at renewal and customer
+satisfaction metrics are required to confirm."
+
+RISK LEVEL: HIGH.
+
+───────────────────────────────────────────────────────────────────────
+SECTION C — RETENTION BENCHMARKS BY BUSINESS MODEL
+───────────────────────────────────────────────────────────────────────
+
+Apply these benchmarks when assessing whether observed or inferred
+retention is strong, acceptable, or a concern. State the benchmark
+explicitly in the traction section alongside the observed metric.
+
+B2B SAAS — ENTERPRISE (ACV >£50K):
+Annual logo retention: >90% = strong / 85–90% = acceptable / <85% = concern.
+NRR: >120% = strong / 110–120% = acceptable / <110% = concern.
+Gross revenue churn: <8% annually = acceptable / >8% = concern.
+
+B2B SAAS — MID-MARKET (ACV £10–50K):
+Annual logo retention: >85% = strong / 80–85% = acceptable / <80% = concern.
+NRR: >115% = strong / 105–115% = acceptable / <105% = concern.
+Gross revenue churn: <12% annually = acceptable / >12% = concern.
+
+B2B SAAS — SMB (ACV <£10K):
+Monthly logo churn: <2% = strong / 2–3% = acceptable / >3% = concern.
+Annual equivalent: <22% strong / 22–31% acceptable / >31% concern.
+NRR: >110% = strong / 100–110% = acceptable / <100% = concern.
+
+CONSUMER / MOBILE APP:
+D30 retention: >25% = strong / 15–25% = acceptable / <15% = concern.
+D90 retention: >15% = strong / 10–15% = acceptable / <10% = concern.
+D180 retention: >10% = strong / 6–10% = acceptable / <6% = concern.
+DAU/MAU: >40% = strong / 20–40% = acceptable / <20% = concern.
+
+MARKETPLACE — SUPPLY SIDE:
+Annual active supplier retention: >80% = strong / 70–80% = acceptable
+  / <70% = concern.
+Annual GMV retention from existing suppliers: >90% = strong / 80–90%
+  = acceptable / <80% = concern.
+
+MARKETPLACE — DEMAND SIDE:
+Annual repeat buyer rate: >60% = strong / 45–60% = acceptable
+  / <45% = concern.
+30-day repeat purchase rate (high-frequency): >35% = strong / 20–35%
+  = acceptable / <20% = concern.
+
+E-COMMERCE / DTC:
+12-month cohort revenue retention: >50% = strong / 35–50% = acceptable
+  / <35% = concern.
+Repeat purchase rate within 12 months: >40% = strong / 25–40%
+  = acceptable / <25% = concern.
+LTV:CAC: >3x = strong / 2–3x = acceptable / <2x = concern.
+
+───────────────────────────────────────────────────────────────────────
+SECTION D — TRACTION SCORE IMPACT RULES
+───────────────────────────────────────────────────────────────────────
+
+Traction is scored out of 20. Identify the retention pattern first,
+then apply the multiplier to the raw traction score derived from
+revenue, growth rate, and customer count.
+
+PATTERNS 1 (Ideal Curve), 3 (Smile Curve), 10 (Negative Churn),
+11 (Cohort Improvement):
+Multiplier: 1.0x. Full score for traction level achieved.
+Add note: "Retention pattern is [pattern name] — healthy. No traction
+score reduction applied."
+
+PATTERNS 6 (Hockey Stick Retention), 7 (Power User Core),
+8 (Seasonal Pattern):
+Multiplier: 0.9x. Minor reduction for pattern-specific caveat.
+Add note: "Retention pattern is [pattern name]. Healthy with caveat:
+[Pattern 6: confirm improvement is sustained / Pattern 7: market
+size risk / Pattern 8: seasonality-adjust projections]. Traction
+score reduced by 10% to reflect this uncertainty."
+
+PATTERNS 2 (Leaking Bucket), 4 (Cliff), 5 (Slow Bleed),
+9 (Engagement Collapse), 12 (False Floor):
+Multiplier: 0.6x. Significant reduction for active retention concern.
+Add note: "Retention concern identified — [pattern name] pattern.
+Traction score reduced to 60% of raw score. Revenue growth does not
+offset retention risk at this stage. Recommend: [Pattern 2: PMF
+validation before further investment / Pattern 4: renewal rate
+data required / Pattern 5: ICP tightening and churn root cause
+analysis / Pattern 9: D90+ retention improvement evidence /
+Pattern 12: gross churn at renewal data required]."
+
+RETENTION DATA ABSENT (for a company at revenue stage):
+Multiplier: 0.7x. Penalise omission.
+Add note: "Retention data not provided for a company with [£X] ARR.
+This is a material omission. Traction score reduced by 30% pending
+retention evidence. No positive retention assumption applied."
+
+───────────────────────────────────────────────────────────────────────
+SECTION E — PMF EVIDENCE RULES
+───────────────────────────────────────────────────────────────────────
+
+Product-Market Fit is not a label. It is a specific set of retention
+behaviours. Apply these rules to determine whether PMF is evidenced,
+claimed, or absent.
+
+PMF EVIDENCED (requires at least 2 of the following):
+— Retention pattern matches Pattern 1 (Ideal Curve), Pattern 3
+  (Smile Curve), or Pattern 10 (Negative Churn), confirmed from data.
+— NRR above 120% with trend data showing it is stable or improving.
+— Organic or word-of-mouth referral accounts for more than 25%
+  of new customer acquisition — confirmed, not estimated.
+— DAU/MAU above 40% for consumer products, confirmed with data.
+— D30 retention above 35% for consumer products.
+— Annual logo churn below 5% for B2B products, confirmed for at
+  least two consecutive years.
+Required output: "PMF evidenced: [list the 2+ criteria met with
+specific figures]. Retention is a competitive strength."
+
+PMF CLAIMED BUT NOT EVIDENCED:
+— Founder states PMF directly without providing retention metrics.
+— A single metric is cited (e.g. NRR only) without corroborating
+  retention signals meeting the PMF threshold.
+— Usage is described qualitatively ("customers love it," "strong
+  engagement") without data meeting the criteria above.
+— Sean Ellis survey result cited without retention data.
+Required output: "PMF claimed but not evidenced by available data.
+[Criteria cited] is consistent with PMF but insufficient alone.
+[State what specific additional data is required to confirm.]"
+
+PMF ABSENT:
+— Pattern 2 (Leaking Bucket) or Pattern 9 (Engagement Collapse)
+  is identified.
+— Annual logo churn above 15% for B2B.
+— D30 retention below 10% for consumer.
+— NRR below 90% confirmed.
+— Customer count declining despite active marketing spend.
+Required output: "PMF not evidenced by available data. [Specific
+metric or pattern] indicates customers are not retaining at the
+level required for sustainable growth. This is the primary risk
+factor in the traction assessment. Investment thesis requires
+a specific PMF development plan and milestone before next capital
+deployment is warranted."
+
+───────────────────────────────────────────────────────────────────────
+END OF FRAMEWORK 5
+Version: 1.0 — Draft for review before integration into Alex Master Prompt
+Do not integrate until reviewed and approved by Pallav.

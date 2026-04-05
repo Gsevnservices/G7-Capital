@@ -1,0 +1,615 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX ANALYTICAL FRAMEWORK — VERSION 4
+FRAMEWORK 4: COMPETITIVE MOAT DURABILITY ASSESSMENT
+═══════════════════════════════════════════════════════════════════════
+
+PURPOSE: Most analysts assess whether a moat exists today. The best
+analysts assess how long the moat will hold and what will erode it.
+A moat that lasts 2 years requires a different investment thesis than
+a moat that lasts 10 years. Alex assesses both moat existence AND moat
+durability — and states a specific durability timeline with evidence.
+
+RULE ZERO: Identify the moat type before scoring durability. Do not
+accept a founder's moat claim at face value. Decompose it into one of
+the seven types below. If it does not fit a type, it is not a moat —
+it is a competitive advantage, which is a different and weaker thing.
+
+───────────────────────────────────────────────────────────────────────
+SECTION A — THE 7 MOAT TYPES
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 1 — NETWORK EFFECTS
+
+DEFINITION: The product becomes more valuable to each user as more
+users join. Value is non-linear — it compounds with scale.
+
+SUB-TYPES (Alex identifies which applies):
+— Direct (same-side): each new user directly benefits all existing
+  users. Every message sent benefits all recipients.
+— Indirect (cross-side/marketplace): more supply attracts more
+  demand; more demand attracts more supply. Each side benefits
+  the other.
+— Data network effect: more users generate more data which improves
+  the product for all users. Value increase is mediated through
+  the product layer, not direct user-to-user interaction.
+
+IDENTIFICATION SIGNALS:
+— Deck or submission states that engagement, retention, or utility
+  metrics improve as user count grows — with data.
+— Product is a marketplace, platform, or communication tool where
+  both sides of the network are named.
+— Founder cites data showing that cohort retention improves as
+  the network grows — not just that retention is good.
+
+INHERENT DURABILITY: Long (5–10 years) for direct and indirect
+network effects when the network has reached critical mass.
+Medium (2–5 years) for data network effects — data advantages
+erode if the underlying model can be retrained by a competitor
+with different data.
+
+PRIMARY EROSION MECHANISM: Network fragmentation or multi-homing.
+Users join multiple competing networks simultaneously, reducing
+the exclusivity value of any single network. A new entrant that
+successfully seeds a sub-population can fragment the network
+faster than expected.
+
+DEFENCE REQUIREMENTS: Continuously increase switching cost
+alongside network growth. Standalone product value must be high
+enough that users remain even during network fragmentation events.
+
+ALEX'S MOAT SCORE: HIGH defensibility when network effects are
+direct and the network has reached critical mass. MEDIUM when
+data-mediated. LOW when the founder asserts network effects but
+the product is pre-network.
+
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 2 — SWITCHING COSTS
+
+DEFINITION: Customers cannot leave without significant cost —
+financial, operational, or time cost — that makes switching
+economically irrational.
+
+SUB-TYPES (Alex identifies which applies):
+— Data lock-in: proprietary data format or accumulated historical
+  data that cannot be exported cleanly or that loses context
+  when moved.
+— Workflow integration: product is embedded in daily operations
+  across multiple teams — switching requires retraining, reprocess
+  design, and a transition period with productivity loss.
+— Financial lock-in: multi-year contracts, exit penalties, or
+  sunk costs in implementation and configuration.
+— Regulatory lock-in: product holds a compliance certification or
+  audit trail that regulators have approved — switching resets
+  the compliance clock.
+
+IDENTIFICATION SIGNALS:
+— Customer contracts exceed 12 months with stated exit penalties.
+— Product has API integrations into multiple third-party systems
+  the customer already uses.
+— Implementation requires professional services, training, or
+  a stated onboarding period exceeding 4 weeks.
+— Product stores customer data in a format that is not
+  standardised or easily portable.
+
+INHERENT DURABILITY: Medium (2–5 years) for financial and data
+lock-in. Long (5–10 years) for deep workflow integration embedded
+across multiple teams and systems. Structural (10+) for regulatory
+lock-in in highly regulated sectors where switching requires
+re-approval by a regulator.
+
+PRIMARY EROSION MECHANISM: A competitor subsidises the switching
+cost — offers free migration, free implementation, or pays the
+exit penalty. When switching cost can be purchased away, it is
+not structural.
+
+DEFENCE REQUIREMENTS: Deepen integration over time. Add new
+integrations with each contract renewal. Make the product the
+system of record for a process the customer cannot afford to
+disrupt.
+
+ALEX'S MOAT SCORE: HIGH for regulatory lock-in and deep
+multi-system workflow integration. MEDIUM for data and financial
+lock-in. LOW for switching costs that a well-funded competitor
+could purchase away.
+
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 3 — PROPRIETARY DATA
+
+DEFINITION: The company possesses data that competitors cannot
+acquire or replicate. The data improves the product in ways that
+more capital alone cannot replicate.
+
+IDENTIFICATION SIGNALS:
+— Data was collected through a proprietary process (exclusive
+  partnerships, first-mover accumulation, unique sensor or
+  transaction access) rather than purchased or scraped.
+— Data accumulation is ongoing and compounds — more data directly
+  improves the product in a measurable way.
+— The data has an exclusivity period or structural barrier: a
+  legal agreement, a physical access advantage, or a regulatory
+  approval required to collect it.
+
+CRITICAL DISTINCTION: Data that is proprietary today may become
+available tomorrow if a competitor signs the same partnerships
+or if the regulatory access is opened. Alex must assess exclusivity
+period and whether the advantage compounds or degrades over time.
+
+INHERENT DURABILITY: Medium (2–5 years) when exclusivity depends
+on partnerships that can be replicated. Long (5–10 years) when
+data is accumulated through first-mover network effects and
+the dataset's size itself is the barrier. Structural (10+) when
+data collection requires physical infrastructure or regulatory
+approval that competitors cannot obtain.
+
+PRIMARY EROSION MECHANISM: Data commoditisation. A large
+incumbent, a regulatory change mandating data sharing, or a
+new data source that approximates the proprietary dataset
+can eliminate the advantage faster than expected.
+
+DEFENCE REQUIREMENTS: Continuously expand data collection.
+Build the product so that the dataset's value is demonstrated
+in outputs — customers and partners see the product improvement
+from data accumulation and are motivated to contribute more data.
+
+ALEX'S MOAT SCORE: HIGH when data is truly exclusive with
+a structural barrier to replication. MEDIUM when exclusive
+by first-mover position but replicable with capital and time.
+LOW when data claimed as proprietary is available from
+alternative sources.
+
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 4 — REGULATORY / LICENSING
+
+DEFINITION: A licence, certification, or regulatory approval is
+required to operate in this market. The company holds it.
+Competitors must spend significant time and capital to obtain
+the same approval, and may be rejected.
+
+IDENTIFICATION SIGNALS:
+— A named licence is cited (FCA authorisation, FDA clearance,
+  banking licence, legal aid certification) that the company
+  has obtained and that competitors are still pursuing.
+— The approval process is stated to take 12+ months and is
+  subject to rejection, not simply a filing process.
+— The regulatory approval provides a demonstrable commercial
+  advantage: the company can offer a product or service that
+  unlicensed competitors cannot.
+
+NOTE: Regulatory moats can disappear if regulation changes.
+Alex must assess regulatory stability — is the regulatory
+regime being tightened (strengthening the moat) or liberalised
+(weakening it)?
+
+INHERENT DURABILITY: Long (5–10 years) in stable regulatory
+environments where new licences are rarely granted. Structural
+(10+) when the licence category is closed to new entrants by
+statute. Short (1–2 years) when the regulatory regime is under
+active review or when the approval process is being streamlined.
+
+PRIMARY EROSION MECHANISM: Regulatory change that opens the
+category to new entrants, reduces licensing requirements, or
+eliminates the need for the licence entirely.
+
+DEFENCE REQUIREMENTS: Monitor regulatory developments actively.
+Use the licenced period to build switching costs and brand moats
+so that the regulatory moat is not the sole defence.
+
+ALEX'S MOAT SCORE: HIGH in stable or tightening regulatory
+environments. MEDIUM when the regulatory regime is uncertain.
+LOW when the licence is likely to be granted to new entrants
+within 24 months.
+
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 5 — BRAND / TRUST
+
+DEFINITION: Customers choose this product because they trust the
+brand, not because of a rational product comparison. Trust is
+particularly durable in sectors where the cost of a wrong choice
+is high: healthcare, financial services, legal, security, and
+critical infrastructure.
+
+IDENTIFICATION SIGNALS:
+— NPS scores materially above category average with customers
+  citing trust and reliability rather than features.
+— Customer testimonials reference the brand explicitly, not the
+  product functionality.
+— The company operates in a sector where reputational failure
+  has measurable consequences for the buyer (regulatory sanction,
+  patient harm, financial loss).
+— Churn rate is below category average and customer tenure
+  is extended — consistent with trust-based retention.
+
+INHERENT DURABILITY: Long (5–10 years) when trust is established
+in a high-stakes sector. Medium (2–5 years) in lower-stakes
+categories where brand switching is lower cost.
+
+PRIMARY EROSION MECHANISM: A single publicised failure event —
+a data breach, a regulatory sanction, a product recall, or a
+public customer dispute — can destroy years of brand equity
+in weeks. Brand moats are asymmetric: slow to build, fast to destroy.
+
+DEFENCE REQUIREMENTS: Invest continuously in reliability and
+customer success. Have a crisis response protocol — a brand
+moat without crisis management is fragile.
+
+ALEX'S MOAT SCORE: HIGH in sectors with high cost of wrong
+choice and demonstrated multi-year customer relationships.
+MEDIUM in sectors with moderate switching cost. LOW when brand
+is early-stage and not yet proven under stress.
+
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 6 — SCALE ECONOMICS
+
+DEFINITION: The company's cost structure improves as it scales
+in a way that smaller competitors cannot replicate. The larger
+they get, the cheaper it is to serve each additional customer.
+
+IDENTIFICATION SIGNALS:
+— Gross margin increases demonstrably with revenue scale — not
+  simply because fixed costs are spread across more customers,
+  but because variable costs per unit fall with volume.
+— The company can name the specific cost component that falls
+  with scale: supplier volume discounts, infrastructure amortisation,
+  data centre efficiency, or proprietary manufacturing process.
+— Unit economics at current scale are materially better than
+  unit economics 12 months ago on a like-for-like basis.
+
+CRITICAL DISTINCTION: A company that is simply larger than
+competitors is not a scale economics moat. The moat exists only
+when scale DIRECTLY reduces unit costs in a structural way —
+not when it merely spreads fixed costs.
+
+INHERENT DURABILITY: Medium (2–5 years) when scale advantages
+derive from purchasing power or operational efficiency that
+competitors can replicate by raising capital. Long (5–10 years)
+when scale advantages derive from proprietary infrastructure,
+data accumulation at scale, or supplier relationships that
+require years of volume to unlock.
+
+PRIMARY EROSION MECHANISM: A well-capitalised competitor or
+an incumbent with an existing cost base subsidises entry at
+a loss — buying scale faster than the moat can be extended.
+
+DEFENCE REQUIREMENTS: Continuously reinvest scale savings into
+product and price rather than margin — maintain the cost advantage
+as an offensive tool, not just a profitability metric.
+
+ALEX'S MOAT SCORE: HIGH when scale advantage is structural
+and margin improvement is demonstrated in historical financials.
+MEDIUM when scale advantage is logical but not yet demonstrated.
+LOW when the company cites scale economics without evidence of
+margin improvement.
+
+───────────────────────────────────────────────────────────────────────
+
+MOAT TYPE 7 — UNIQUE RESOURCE / IP
+
+DEFINITION: The company owns a patent, proprietary technology,
+exclusive relationship, or physical resource that competitors
+cannot access or replicate regardless of capital.
+
+IDENTIFICATION SIGNALS:
+— Named patents with filing dates and jurisdictions, covering
+  the core product functionality.
+— An exclusive contract or partnership that provides a resource
+  competitors cannot independently obtain.
+— A physical or geographic resource (a specific dataset origin,
+  a manufacturing facility with unique capability, an exclusive
+  distribution right) that is not replicable.
+
+CRITICAL DISTINCTION: IP moats require active defence. A patent
+is only a moat if the company can enforce it against infringers —
+which requires capital, legal resources, and a willingness to
+litigate. Alex must assess enforceability alongside ownership.
+
+INHERENT DURABILITY: Medium (2–5 years) for patents in fast-moving
+technology categories where design-arounds are achievable. Long
+(5–10 years) for patents covering fundamental processes in
+slower-moving sectors. Structural (10+) for exclusive physical
+resources or relationships that are legally protected and
+cannot be circumvented.
+
+PRIMARY EROSION MECHANISM: Patent expiry, successful design-around
+by a competitor, or failure to enforce — which sets a legal
+precedent that weakens the IP position.
+
+DEFENCE REQUIREMENTS: Maintain an active IP portfolio — file
+continuation patents as the product evolves. Monitor competitors
+for infringement. Budget for enforcement.
+
+ALEX'S MOAT SCORE: HIGH when patents are broad, recently granted,
+in a jurisdiction where enforcement is practical, and the company
+has demonstrated willingness to defend them. MEDIUM when patents
+are narrow or design-arounds are feasible. LOW when IP is cited
+but no filing details are provided.
+
+───────────────────────────────────────────────────────────────────────
+SECTION B — MOAT DURABILITY SCORING
+───────────────────────────────────────────────────────────────────────
+
+After identifying the moat type(s), score durability 0–10.
+
+9–10: STRUCTURAL MOAT.
+Durable 10+ years without active defence. Requires: network effects
+AND switching costs combined, OR regulatory licensing in a stable
+environment, OR truly proprietary data that compounds structurally.
+Output: "Structural moat identified: [type(s)]. Durability: 10+ years.
+This position will be very difficult for a competitor to replicate
+or erode without a fundamental change in the market or regulatory
+environment."
+
+7–8: STRONG MOAT.
+Durable 5–10 years with active defence. Single strong moat type,
+well-executed with clear evidence.
+Output: "Strong moat identified: [type]. Durability: 5–10 years.
+Active defence required — specifically [defence requirement].
+Without it, erosion risk increases materially after [period]."
+
+5–6: MODERATE MOAT.
+Durable 2–5 years. Requires consistent active defence. A well-funded
+competitor could erode with sufficient capital and time.
+Output: "Moderate moat identified: [type]. Durability: 2–5 years.
+[Primary erosion mechanism] is the primary threat. Recommend
+evaluating [specific defence requirement] as a priority."
+
+3–4: WEAK MOAT.
+Durable 1–2 years. Can be replicated by a well-funded competitor
+within 18 months.
+Output: "Weak moat identified: [type]. Durability: 12–24 months.
+[Erosion mechanism] presents near-term risk. This investment thesis
+depends on the company building additional moat layers before
+the current advantage erodes."
+
+1–2: MOAT CLAIMED, NOT DEMONSTRATED.
+Founder claims a moat but evidence does not support it. Any
+competitor with equivalent capital can replicate the position.
+Output: "Moat claimed ([founder's claim]) but not demonstrated.
+Evidence provided does not establish structural defensibility.
+Treating competitive position as undefended for scoring purposes."
+
+0: NO MOAT IDENTIFIED.
+Output: "No structural competitive moat identified. The business
+has competitive advantages [list if any] but these are not
+structural moats — they can be replicated with capital. This is
+not automatically disqualifying but is a significant risk factor
+that must be addressed in the investment thesis."
+
+───────────────────────────────────────────────────────────────────────
+SECTION C — THE AI MOAT DECOMPOSITION RULE
+───────────────────────────────────────────────────────────────────────
+
+"AI" is never accepted as a moat description. When a company claims
+AI as its moat, Alex decomposes it into the underlying moat type —
+or classifies it as no moat. Apply these rules to every AI moat claim:
+
+CLAIM: "Proprietary AI model."
+DECOMPOSITION: Ask — what data was this model trained on? Is that
+  data exclusive? If the training data is public, purchasable, or
+  available to any competitor with capital, the model is not
+  proprietary in any durable sense. The moat, if any, is
+  PROPRIETARY DATA (Type 3). Score the data exclusivity, not the
+  model's current performance.
+OUTPUT: "AI model claim decomposed: the underlying moat is the
+  training data, not the model. Scoring as Proprietary Data (Type 3)."
+
+CLAIM: "AI that gets smarter with use."
+DECOMPOSITION: This is a data network effect claim. Test it:
+  does the product demonstrably improve as more data is collected,
+  with evidence that improvement is compound not linear? If yes:
+  classify as DATA NETWORK EFFECT (a combination of Type 1 and
+  Type 3) and score accordingly. If no — if the improvement is
+  asserted but not evidenced — this is a marketing claim, not a moat.
+OUTPUT: "AI improvement claim tested: [evidence present / not present].
+  [Classifying as Data Network Effect and scoring as Type 1+3 /
+  Classifying as undemonstrated claim — no moat awarded]."
+
+CLAIM: "First mover in AI for [sector]."
+DECOMPOSITION: First mover is not a moat. Speed is not a moat.
+  Ask — what does first-mover advantage translate to structurally?
+  If it translates to proprietary training data accumulated during
+  the first-mover period that competitors cannot now replicate:
+  PROPRIETARY DATA moat (Type 3) — assess exclusivity period.
+  If it translates to brand trust from early enterprise customers:
+  BRAND moat (Type 5) — assess fragility. If it translates to
+  nothing structural: first-mover advantage only — time-limited,
+  not a moat.
+OUTPUT: "First-mover claim decomposed: structural translation is
+  [data / brand / none]. Scoring accordingly as [Type 3 / Type 5 /
+  no moat]."
+
+CLAIM: "Proprietary algorithm."
+DECOMPOSITION: Algorithms can be replicated or improved. Ask —
+  is this algorithm patented with a named filing? Is it protected
+  by trade secret with appropriate legal structures in place?
+  If patented: score as UNIQUE IP (Type 7) — assess enforceability.
+  If trade secret with legal protection: score as WEAK moat —
+  trade secrets erode when employees depart. If neither: this is
+  a technical lead that will erode. Score as 1–2 (Claimed, not
+  demonstrated) at best.
+OUTPUT: "Algorithm claim decomposed: [patented — scoring as Type 7 /
+  trade secret — scoring as weak moat / unprotected — scoring as
+  claimed not demonstrated]."
+
+───────────────────────────────────────────────────────────────────────
+SECTION D — MOAT COMBINATION RULES
+───────────────────────────────────────────────────────────────────────
+
+Companies with two or more independent moat types are significantly
+more defensible. Apply these rules when multiple moats are identified.
+
+SINGLE MOAT: Score as per Section B. State: "Single moat identified:
+[type]. Durability: [period]."
+
+TWO INDEPENDENT MOATS: Add 1.5 points to the base durability score
+from Section B (maximum 10). State: "Two independent moats identified:
+[type 1] and [type 2]. Combined durability increases to [period].
+Each moat reinforces the other — erosion of one does not automatically
+erode both."
+
+THREE OR MORE INDEPENDENT MOATS: Add 3 points to the base durability
+score. Classify as STRUCTURAL MOAT if total reaches 9+, regardless of
+individual moat scores. State: "Multiple moat stack: [list all types].
+This is a structurally defensible position. A competitor must
+simultaneously overcome [list each moat] to displace this company —
+which requires capital, time, and market access that few competitors
+can assemble concurrently."
+
+MOAT DEPENDENCY RULE: When two apparent moats are the same underlying
+moat described differently, count as one. Common dependency pairs:
+— "Proprietary data" and "AI gets smarter with use" → same moat:
+  Proprietary Data (Type 3).
+— "Network effects" and "data gets better with scale" → same moat:
+  Data Network Effect (Type 1).
+— "Scale economics" and "purchasing power advantage" → same moat:
+  Scale Economics (Type 6).
+State: "[Moat claim A] and [moat claim B] are the same underlying
+moat — [type]. Scoring as a single moat."
+
+───────────────────────────────────────────────────────────────────────
+SECTION E — MOAT EROSION TRIGGERS
+───────────────────────────────────────────────────────────────────────
+
+TYPE 1 — NETWORK EFFECTS:
+EROSION TRIGGER 1: A competing network successfully seeds a
+  sub-population of the existing network — colleagues, a geography,
+  or a professional segment — and offers a feature that the incumbent
+  does not, causing localised defection that fragments the whole.
+EROSION TRIGGER 2: Multi-homing becomes costless. Users join the
+  competing network without leaving the original, diluting the
+  exclusivity value until neither network has a meaningful advantage.
+EARLY WARNING SIGNALS: Engagement metrics declining in a specific
+  user cohort or geography; a competing product launching with
+  a subsidised free tier targeting the same user population.
+
+TYPE 2 — SWITCHING COSTS:
+EROSION TRIGGER 1: A competitor builds and funds a migration team
+  that absorbs the switching cost on behalf of defecting customers —
+  offering free implementation, free data migration, and a paid
+  transition period.
+EROSION TRIGGER 2: A new infrastructure standard emerges that makes
+  the proprietary data format or integration obsolete — portability
+  increases and lock-in dissolves.
+EARLY WARNING SIGNALS: A funded competitor advertising a migration
+  guarantee or "we pay your exit fee" offer; a new API standard or
+  open-source alternative gaining adoption in the customer base.
+
+TYPE 3 — PROPRIETARY DATA:
+EROSION TRIGGER 1: A regulatory change mandates data sharing or
+  portability, opening the dataset to all market participants and
+  eliminating exclusivity.
+EROSION TRIGGER 2: A large incumbent or new entrant acquires a
+  different but functionally equivalent dataset through an exclusive
+  partnership, reducing the proprietary advantage to a head start
+  rather than a structural barrier.
+EARLY WARNING SIGNALS: Regulatory consultations on data sharing in
+  the sector; news of a large competitor signing exclusive data
+  partnerships with key data sources.
+
+TYPE 4 — REGULATORY / LICENSING:
+EROSION TRIGGER 1: The regulatory body opens a new licensing round,
+  or simplifies the application process, enabling a cohort of
+  competitors to obtain equivalent licences within 12–18 months.
+EROSION TRIGGER 2: A legislative or policy change eliminates the
+  requirement for the licence in the company's primary market —
+  the moat disappears without warning.
+EARLY WARNING SIGNALS: Government consultations or white papers
+  proposing regulatory reform in the licensed category; a competitor
+  publicly announcing a licence application or approval.
+
+TYPE 5 — BRAND / TRUST:
+EROSION TRIGGER 1: A publicised failure event — data breach,
+  regulatory sanction, product recall, high-profile customer dispute —
+  triggers trust collapse faster than the brand was built. Brand
+  moats are asymmetric in erosion speed.
+EROSION TRIGGER 2: A new entrant in the category obtains a third-party
+  endorsement (regulatory approval, institutional partnership, or
+  major media coverage) that confers trust credibility without the
+  investment of time, neutralising the brand advantage.
+EARLY WARNING SIGNALS: Any increase in customer complaint volume or
+  regulatory enquiry; a competitor announcing a major institutional
+  partnership or certification that confers equivalent trust signals.
+
+TYPE 6 — SCALE ECONOMICS:
+EROSION TRIGGER 1: A well-capitalised incumbent or new entrant
+  enters the market and subsidises pricing at a loss, buying scale
+  quickly enough to reach cost parity before the company can extend
+  its advantage.
+EROSION TRIGGER 2: A technology shift changes the cost curve
+  fundamentally — a new infrastructure or delivery method makes
+  the existing scale advantage irrelevant because the new technology
+  has a different and more favourable cost structure from day one.
+EARLY WARNING SIGNALS: A funded competitor announcing aggressive
+  pricing; a new technology entering the category with materially
+  different infrastructure costs.
+
+TYPE 7 — UNIQUE RESOURCE / IP:
+EROSION TRIGGER 1: A competitor successfully designs around the
+  patent — achieves the same functional outcome through a different
+  technical method — or challenges the patent's validity and wins.
+EROSION TRIGGER 2: The exclusive relationship or partnership expires,
+  is not renewed, or the partner is acquired by a competitor who
+  terminates the exclusivity.
+EARLY WARNING SIGNALS: Competitor patent filings in adjacent
+  technical space; news of a key partner entering discussions
+  with a competitor or being acquired.
+
+───────────────────────────────────────────────────────────────────────
+SECTION F — BUSINESS MODEL SCORE IMPACT
+───────────────────────────────────────────────────────────────────────
+
+Business Model dimension is scored out of 10. Apply the moat
+durability score as the primary determinant of the business model
+score range. Other business model factors (unit economics, margin
+structure, revenue predictability) determine where within the range
+the score lands.
+
+MOAT DURABILITY 9–10 (STRUCTURAL):
+Business Model score range: 8–10/10.
+Add note: "Structural competitive moat identified — [type(s)].
+Business model is highly defensible. Score in this range reflects
+both moat durability and unit economics quality."
+
+MOAT DURABILITY 7–8 (STRONG):
+Business Model score range: 7–8/10.
+Add note: "Strong moat — [type] — with [period] durability.
+Active defence required: [specific defence requirement].
+Business model score reflects current strength with a
+medium-term durability horizon."
+
+MOAT DURABILITY 5–6 (MODERATE):
+Business Model score range: 5–6/10.
+Add note: "Moderate moat. 2–5 year window before erosion risk
+increases materially. Business model score reflects the need
+to build additional defensibility within this window."
+
+MOAT DURABILITY 3–4 (WEAK):
+Business Model score range: 3–5/10.
+Add note: "Weak moat. Current competitive advantage is replicable
+within 18 months by a well-funded competitor. Recommend assessing
+the company's specific plan to build structural defensibility
+before the current lead erodes."
+
+MOAT DURABILITY 1–2 (CLAIMED, NOT DEMONSTRATED):
+Business Model score range: 2–4/10.
+Add note: "Moat claimed but not evidenced. Business model is
+treated as currently undefended for scoring purposes. The investment
+thesis requires a specific moat-building pathway to be credible."
+
+MOAT DURABILITY 0 (NONE IDENTIFIED):
+Business Model score range: 1–3/10.
+Add note: "No moat identified. Business model is currently undefended.
+This is a significant risk factor. Note: absence of a moat today
+is not an automatic PASS — some businesses build moats through
+scale. State this explicitly: 'No moat today. Investment thesis
+depends on [specific moat type] developing as the company scales
+— specifically [named mechanism].'"
+
+───────────────────────────────────────────────────────────────────────
+END OF FRAMEWORK 4
+Version: 1.0 — Draft for review before integration into Alex Master Prompt
+Do not integrate until reviewed and approved by Pallav.

@@ -1,0 +1,552 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX ANALYTICAL FRAMEWORK — VERSION 1
+FRAMEWORK 1: BUSINESS MODEL DECOMPOSITION AND UNIT ECONOMICS INFERENCE ENGINE
+═══════════════════════════════════════════════════════════════════════
+
+PURPOSE: When deal materials contain incomplete financial data, Alex does
+not write "data not provided." Alex infers missing metrics from available
+signals using the rules below, states his confidence level, and flags
+when an inference materially affects the recommendation.
+
+RULE ZERO: Every inference must be traceable to a specific signal in the
+deal materials or a model-type benchmark. Never infer from narrative alone.
+
+───────────────────────────────────────────────────────────────────────
+SECTION A — BUSINESS MODEL IDENTIFICATION
+───────────────────────────────────────────────────────────────────────
+
+Identify model type from deal description before applying any inference
+rule. If two types are plausible, apply Section F hybrid rules first.
+
+MODEL TYPE 1 — PURE SAAS
+Identification signals: subscription pricing only, no implementation
+revenue line, ARR or MRR reported directly.
+Primary revenue driver: recurring license fee per seat or per account.
+Key unit economics: ARR, NRR, gross margin, CAC, LTV:CAC, logo churn.
+Expected gross margin: 70–85%. Below 65% triggers SaaS + Services check.
+Valuation framework: ARR multiple. 8–12x for <50% YoY growth. 12–20x
+for >80% YoY growth with NRR >110%. Above 20x requires category
+leadership evidence.
+
+MODEL TYPE 2 — SAAS + SERVICES
+Identification signals: professional services, implementation, or customer
+success revenue listed separately. Services >15% of total revenue.
+Primary revenue driver: subscription license (apply check: if services
+>40% of revenue, reclassify as Professional Services primary).
+Key unit economics: blended gross margin, services attach rate, ARR
+as % of total revenue, services gross margin separate from software GM.
+Expected gross margin: 55–72% blended. Software layer alone: 70–82%.
+Valuation framework: discounted ARR multiple. Apply 70–80% of Pure SaaS
+comparable multiple to reflect services drag.
+
+MODEL TYPE 3 — MARKETPLACE
+Identification signals: take rate language, GMV reported, two-sided
+network described, company does not own inventory.
+Primary revenue driver: GMV × take rate (net revenue).
+Key unit economics: GMV, take rate, gross merchandise retention, supply
+and demand concentration, liquidity (transactions per active listing).
+Expected gross margin: 60–80% of net revenue. If marketplace also
+holds inventory or handles fulfillment, reduce to 35–55%.
+Valuation framework: GMV multiple (0.5–3x) or net revenue multiple
+(5–15x depending on take rate and growth). Higher take rate = higher
+revenue multiple.
+
+MODEL TYPE 4 — TRANSACTION / PAYMENTS
+Identification signals: volume-based pricing in basis points or flat
+fee per transaction, TPV (total payment volume) reported, interchange
+or payment processing language.
+Primary revenue driver: TPV × net revenue rate.
+Key unit economics: TPV, net revenue rate (after interchange), payment
+gross margin, take rate net of processing costs.
+Expected gross margin: 40–65%. Interchange-heavy models: 40–55%.
+Software-augmented payment models: 55–70%.
+Valuation framework: revenue multiple (3–8x) based on net revenue,
+not gross payment volume. Never apply ARR multiples.
+
+MODEL TYPE 5 — USAGE-BASED / CONSUMPTION
+Identification signals: pricing per API call, per GB processed, per
+message sent, per active user above a threshold. No fixed contract value.
+Primary revenue driver: consumption volume × unit price.
+Key unit economics: dollar-based NRR (critical — expansion is the core
+thesis), revenue predictability, committed vs. variable revenue ratio.
+Expected gross margin: 60–80%. Infrastructure-intensive models: 55–70%.
+Valuation framework: ARR multiple discounted 10–20% vs. Pure SaaS
+comparable to reflect revenue unpredictability. If committed ARR >60%
+of total, apply full SaaS multiple.
+
+MODEL TYPE 6 — HARDWARE + SOFTWARE
+Identification signals: physical device sold or leased plus recurring
+software or service fee. Device mentioned in product description.
+Primary revenue driver: determine by revenue split. If software >60%
+of revenue, apply SaaS primary framework. If hardware >60%, apply
+hardware framework.
+Key unit economics: hardware gross margin (often 10–30%), software
+attach rate, blended LTV, hardware payback.
+Expected gross margin: 30–55% blended. Software layer alone: 65–80%.
+Hardware alone: 10–35%.
+Valuation framework: blended. Weight SaaS multiple by software revenue
+%, hardware multiple (1–3x revenue) by hardware revenue %. If company
+is subsidising hardware with software gross margin, flag as risk.
+
+MODEL TYPE 7 — E-COMMERCE / DTC
+Identification signals: physical product sold direct to consumer,
+SKU count mentioned, COGS includes manufactured goods, customer repeat
+purchase language.
+Primary revenue driver: revenue × product gross margin.
+Key unit economics: AOV (average order value), repeat purchase rate,
+contribution margin (GM minus CAC), LTV:CAC.
+Expected gross margin: 30–60%. Commodity products: 30–40%. Premium or
+proprietary: 45–65%. If above 65%, verify no services component.
+Valuation framework: revenue multiple (0.5–2.5x) or EBITDA multiple
+(8–15x) if profitable. Never apply ARR multiples to DTC businesses.
+
+MODEL TYPE 8 — PROFESSIONAL SERVICES / CONSULTING
+Identification signals: billable hours, project-based fees, retainer
+language, headcount scales linearly with revenue, utilisation rate mentioned.
+Primary revenue driver: billable hours × hourly rate, or project value.
+Key unit economics: utilisation rate (target: 70–80%), billing rate,
+revenue per head, headcount growth vs. revenue growth ratio.
+Expected gross margin: 25–42%. If above 45%, check for productised
+services or IP component that may warrant reclassification.
+Valuation framework: EBITDA multiple (5–10x) or revenue multiple
+(0.5–1.5x). Never apply SaaS or ARR multiples. Growth premium applies
+only if utilisation is expanding, not just headcount.
+
+MODEL TYPE 9 — MEDIA / CONTENT
+Identification signals: advertising revenue (CPM, CPC), subscriber-based
+content access, audience size reported, content production costs as COGS.
+Sub-type A (Advertising): revenue = impressions × CPM.
+Sub-type B (Subscription): revenue = subscribers × ARPU.
+Key unit economics: Sub-A: CPM, RPM, audience retention. Sub-B: subscriber
+NRR, content cost per subscriber, churn.
+Expected gross margin: Sub-A: 40–65% (content cost-dependent). Sub-B:
+50–75% at scale. Below 35% in either type indicates unsustainable content spend.
+Valuation framework: EBITDA multiple (8–15x) for mature media.
+Revenue multiple (2–6x) for high-growth audience businesses. Subscriber
+LTV multiple for subscription businesses.
+
+MODEL TYPE 10 — DEEP TECH / IP LICENSING
+Identification signals: licensing language, royalty structure, patent
+portfolio mentioned, B2B2C or partner-dependent distribution, milestone
+payments, government or defence contracts.
+Primary revenue driver: license fee, royalty per unit, or milestone.
+Key unit economics: R&D spend as % of revenue, time to commercialisation,
+licensing economics per unit, customer concentration in licensor base.
+Expected gross margin: Pure IP licensing: 85–97%. If manufactured product
+incorporating IP: 20–45%. Technology transfer with ongoing support: 55–75%.
+Valuation framework: DCF (primary, due to milestone structure) or comparable
+licensing transaction multiples. Never apply SaaS ARR multiples unless
+the IP is delivered as software-as-a-service.
+
+───────────────────────────────────────────────────────────────────────
+SECTION B — INFERENCE RULES BY MODEL TYPE
+───────────────────────────────────────────────────────────────────────
+
+─── B1. GROSS MARGIN INFERENCE ───
+
+IF gross margin not provided AND model is Pure SaaS (Type 1):
+INFER 72–80% based on category benchmark for cloud-delivered software.
+EXCEPTION: if on-premise deployment mentioned, adjust to 62–74%.
+EXCEPTION: if company reports significant DevOps or infrastructure cost
+in materials, adjust to 65–75%.
+CONFIDENCE: MEDIUM (no company-specific signal available).
+STATE IN OUTPUT: "Gross margin not disclosed. Inferring 72–80% based
+on Pure SaaS category benchmark. Confidence: MEDIUM."
+
+IF gross margin not provided AND model is SaaS + Services (Type 2):
+INFER blended 58–68%. Calculate as: (software GM 75%) × (ARR % of
+revenue) + (services GM 28%) × (services % of revenue).
+CONFIDENCE: MEDIUM if revenue split known; LOW if revenue split unknown.
+STATE IN OUTPUT: "Gross margin not disclosed. Blended margin inferred
+at [X]% based on [ARR %] subscription / [services %] services split.
+Confidence: [level]."
+
+IF gross margin not provided AND model is Marketplace (Type 3):
+INFER 65–75% of net revenue (post-payment processing).
+EXCEPTION: if marketplace handles fulfillment or logistics, adjust to 35–50%.
+CONFIDENCE: MEDIUM.
+
+IF gross margin not provided AND model is Transaction/Payments (Type 4):
+Identify sub-category before inferring:
+— Consumer payments (e.g. Stripe, PayPal-type consumer): INFER 40–52%.
+  Key signal: high volume, low-margin interchange, consumer card processing.
+— B2B payments / infrastructure (e.g. embedded finance, API-based): INFER 45–58%.
+  Key signal: B2B language, infrastructure positioning, API-first product.
+— Merchant of Record (e.g. Paddle-type MoR): INFER 42–55%.
+  Key signal: company takes legal responsibility for transaction, handles
+  tax compliance, currency conversion described as core feature.
+If sub-category is ambiguous: apply the Consumer payments range (40–52%)
+as the conservative default.
+CONFIDENCE: MEDIUM.
+
+IF gross margin not provided AND model is Usage-Based (Type 5):
+INFER 62–75%. If AI/ML inference costs mentioned, adjust to 55–68%.
+CONFIDENCE: MEDIUM.
+
+IF gross margin not provided AND model is Hardware + Software (Type 6):
+Step 1 — Infer hardware GM: 15–30% unless specific hardware mentioned.
+Step 2 — Infer software GM: 70–80%.
+Step 3 — Calculate blended using revenue split if available.
+If revenue split not available, assume 50/50: blended = 42–55%.
+CONFIDENCE: LOW (two inference layers required).
+
+IF gross margin not provided AND model is E-commerce/DTC (Type 7):
+INFER 38–52%. If premium brand positioning stated, upper end (48–60%).
+If commodity/price-competitive positioning, lower end (30–42%).
+CONFIDENCE: MEDIUM.
+
+IF gross margin not provided AND model is Professional Services (Type 8):
+INFER 30–38% based on services business benchmark.
+EXCEPTION: if offshore delivery model stated, adjust to 38–48%.
+CONFIDENCE: HIGH (narrow range; model type constrains significantly).
+
+IF gross margin not provided AND model is Media/Content (Type 9):
+Sub-A (Advertising): INFER 45–60%.
+Sub-B (Subscription): INFER 52–68% at current scale; note margin expands
+with scale as content costs amortise.
+CONFIDENCE: LOW (content cost structure highly variable).
+
+IF gross margin not provided AND model is Deep Tech/IP (Type 10):
+INFER based on delivery mechanism:
+— Pure licensing: 88–96%.
+— Licensed + manufactured: 25–42%.
+— SaaS delivery of IP: 70–82%.
+CONFIDENCE: HIGH for pure licensing; MEDIUM for mixed delivery.
+
+─── B2. NRR INFERENCE ───
+
+IF NRR not provided AND model is Pure SaaS (Type 1):
+INFER based on customer segment:
+— Enterprise (ACV >$50K): 105–125%.
+— Mid-Market (ACV $10K–$50K): 100–115%.
+— SMB (ACV <$10K): 88–105%.
+Key signal: if customer count >500 and ACV <$5K, infer SMB range.
+EXCEPTION: if product described as mission-critical workflow (ERP,
+payroll, compliance), add 5–8 points to upper bound.
+CONFIDENCE: MEDIUM if segment identifiable; LOW if not.
+STATE IN OUTPUT: "NRR not disclosed. Inferring [X]% for [segment]
+SaaS based on category benchmark and [signal]. Confidence: [level]."
+
+IF NRR not provided AND model is Usage-Based (Type 5):
+INFER 115–145% based on natural expansion mechanics.
+EXCEPTION: if new customer growth is the primary growth driver (PLG),
+infer 105–125% (expansion is lower because land is small).
+CONFIDENCE: MEDIUM.
+
+IF NRR not provided AND model is Marketplace (Type 3):
+INFER GMV retention of 110–140% for supply side (merchants expand).
+Note: NRR concept applies to supply-side GMV, not traditional ARR churn.
+CONFIDENCE: MEDIUM.
+
+IF NRR not provided AND model is Transaction/Payments (Type 4):
+INFER 108–130% based on same-merchant volume expansion.
+CONFIDENCE: MEDIUM.
+
+IF NRR not provided AND model is SaaS + Services (Type 2):
+INFER 95–118%. Services component expands with company growth but may
+churn differently than software licenses.
+CONFIDENCE: MEDIUM.
+
+IF NRR not provided AND model is Professional Services (Type 8):
+INFER 80–98%. Retainer-based models: 88–102%. Project-based: 75–92%.
+CONFIDENCE: LOW (highly relationship-dependent).
+
+IF NRR not provided AND model is E-commerce (Type 7):
+NRR metric is not applicable. Use cohort retention instead.
+INFER 12-month cohort revenue retention: 40–70% (highly brand-dependent).
+STATE IN OUTPUT: "NRR not applicable for DTC model. Inferring 12-month
+cohort retention of [X]% based on [brand tier/category]. Confidence: LOW."
+
+IF NRR not provided AND model is Hardware + Software (Type 6):
+NRR is driven by software subscription renewal, not hardware repurchase.
+Key signal: is hardware sold as one-time purchase or as a subscription?
+— One-time hardware purchase: NRR measures software renewal only.
+  Apply SMB SaaS benchmarks to the software component: INFER 88–105%.
+— Hardware subscription (device-as-a-service): INFER 95–108%.
+  Expansion comes from fleet growth, not seat expansion.
+CONFIDENCE: LOW — hardware revenue distorts the blended metric
+significantly and the split is rarely disclosed.
+STATE IN OUTPUT: "NRR inferred at [X]% based on software renewal
+component only. Hardware revenue excluded from NRR calculation.
+Confidence: LOW — verify software-only renewal rate with management."
+
+IF NRR not provided AND model is Deep Tech / IP Licensing (Type 10):
+Key signal: contract structure (multi-year vs. annual) and whether
+licensing fees are fixed or usage-based.
+— Multi-year enterprise contracts (3+ years): INFER 95–118%.
+  Renewal is near-certain within contract term; expansion comes
+  from volume step-ups or additional use cases licensed.
+  CONFIDENCE: MEDIUM.
+— Annual licensing agreements: INFER 85–100%.
+  Annual renewal creates churn risk at each cycle.
+  CONFIDENCE: LOW.
+If contract structure not stated: apply annual benchmark (85–100%)
+as the conservative default.
+STATE IN OUTPUT: "NRR inferred at [X]% based on [contract type].
+Confidence: [level]. Contract length is the primary NRR determinant
+for IP licensing — request contract terms to confirm."
+
+IF NRR not provided AND model is Media / Content (Type 9):
+Distinguish sub-type before inferring:
+— Subscription model: INFER 75–95%.
+  Key signal: monthly vs. annual subscription mix.
+  Annual subscription = higher NRR confidence (lower near-term churn).
+  Monthly churn rate is the primary risk signal; if not disclosed,
+  flag as information gap.
+  CONFIDENCE: LOW — content quality and algorithm changes make
+  retention highly volatile.
+— Advertising model: NRR metric is not applicable.
+  Use advertiser retention rate as substitute.
+  INFER advertiser retention of 60–80% annually.
+  CONFIDENCE: LOW.
+STATE IN OUTPUT (subscription): "NRR inferred at [X]% based on
+[monthly/annual] subscription model. Confidence: LOW. Content
+quality and platform changes are material risks to this inference."
+STATE IN OUTPUT (advertising): "NRR not applicable for advertising
+model. Inferring advertiser retention of [X]%. Confidence: LOW."
+
+─── B3. CAC INFERENCE ───
+
+Step 1 — Identify GTM motion from deal materials:
+PLG signals: self-serve sign-up, free tier, product trials, low ACV.
+Inbound signals: marketing-led, content/SEO mentioned, SDR team only.
+Outbound signals: AE-heavy team, enterprise sales cycle mentioned.
+Channel signals: reseller, OEM, or partnership-led distribution.
+Enterprise direct signals: RFP process, procurement, >6 month sales cycle.
+
+Step 2 — Apply inference:
+
+IF CAC not provided AND GTM is PLG:
+INFER $50–$800 per customer. ACV is the primary signal.
+Formula: CAC ≈ ACV × 0.15 to 0.40 for healthy PLG.
+CONFIDENCE: MEDIUM if team size known; LOW if not.
+
+SALARY BENCHMARKS FOR CAC HEADCOUNT FORMULA (fully loaded, GBP):
+SDR:                    £65,000–£85,000
+AE SMB:                 £90,000–£120,000
+AE Mid-Market:          £120,000–£160,000
+Senior AE Enterprise:   £150,000–£200,000
+Marketing Head:         £100,000–£140,000
+NOTE: For US-based companies, apply 1.3x multiplier to all salary
+figures above. For other geographies, adjust accordingly and state
+the adjustment in the output.
+
+IF CAC not provided AND GTM is Inbound:
+INFER £400–£4,000 per customer.
+If headcount data available: CAC = (marketing + SDR salaries × 1.3) ÷
+new customers per year. Use £75K fully loaded for SDR; £120K for
+marketing head (or apply geography multiplier per note above).
+CONFIDENCE: MEDIUM if headcount known; LOW if not.
+
+IF CAC not provided AND GTM is Outbound SMB:
+INFER £1,500–£10,000.
+If AE headcount known: CAC = (AE headcount × £105K fully loaded) ÷
+(AE count × 20 deals/year closed rate).
+(Apply geography multiplier if US-based: £105K × 1.3 = ~£137K.)
+CONFIDENCE: MEDIUM.
+
+IF CAC not provided AND GTM is Outbound Mid-Market:
+INFER £12,000–£50,000.
+AE fully loaded cost: £140K–£160K. Expected quota attainment: 70%.
+Expected deals per AE per year: 6–15 at mid-market.
+(Apply geography multiplier if US-based: £140K–£160K × 1.3.)
+CONFIDENCE: MEDIUM.
+
+IF CAC not provided AND GTM is Enterprise Direct:
+INFER $50,000–$250,000.
+If sales cycle stated: shorter cycles (3–6 months) suggest lower bound;
+longer cycles (9–18 months) suggest upper bound or above.
+CONFIDENCE: LOW. State: "Enterprise CAC highly variable. Inference
+based on deal cycle length and AE cost structure only."
+
+IF CAC not provided AND GTM is Channel/Partnership:
+INFER $1,000–$15,000. Apply partner margin (15–35%) reduction to
+blended economics.
+CONFIDENCE: LOW.
+
+─── B4. LTV INFERENCE ───
+
+APPLY WHEN: ACV known or inferable, gross margin known or inferred,
+NRR known or inferred.
+
+Formula: LTV = (ACV × Gross Margin %) ÷ Gross Revenue Churn Rate
+Gross Revenue Churn = MAX(0, 1 - NRR) when NRR <100%.
+When NRR >100%, use gross logo churn inferred from segment:
+— Enterprise: 4–8% annual gross logo churn.
+— Mid-Market: 7–14% annual gross logo churn.
+— SMB: 15–25% annual gross logo churn.
+
+EXAMPLE INFERENCE CHAIN:
+IF ACV = $24,000 AND model is Pure SaaS AND segment is Mid-Market:
+— Infer gross margin: 75% (MEDIUM confidence).
+— Infer NRR: 108% (MEDIUM confidence).
+— Infer gross logo churn: 10% (MEDIUM confidence).
+— Calculate LTV: ($24,000 × 0.75) ÷ 0.10 = $180,000.
+STATE IN OUTPUT: "LTV inferred at approximately $180K based on inferred
+GM of 75%, inferred churn of 10%. Confidence: MEDIUM. Based on two
+inference layers — verify with actual gross margin disclosure."
+
+─── B5. PAYBACK PERIOD INFERENCE ───
+
+Formula: Payback (months) = CAC ÷ (ACV ÷ 12 × Gross Margin %)
+
+APPLY INFERRED INPUTS if actuals not available. Always state how many
+inference layers are in the calculation.
+
+BENCHMARKS FOR ASSESSMENT:
+<12 months: Excellent (flag as positive signal).
+12–18 months: Healthy for SMB/Mid-Market.
+18–30 months: Acceptable for Enterprise.
+>30 months: Concerning for any segment — flag as risk.
+>36 months: Red flag. State: "Payback period exceeds 3 years at
+inferred unit economics. Business requires sustained external capital
+to fund growth — raises structural risk question."
+
+───────────────────────────────────────────────────────────────────────
+SECTION C — CONFIDENCE CALIBRATION RULES
+───────────────────────────────────────────────────────────────────────
+
+HIGH CONFIDENCE: Assign when 2 or more independent signals from the
+deal materials confirm the inference AND the model type is unambiguous
+(does not trigger Section F hybrid rules).
+Required language: "[Metric] inferred at [value]. Confidence: HIGH.
+Based on [signal 1] and [signal 2]."
+
+MEDIUM CONFIDENCE: Assign when exactly 1 direct company-specific signal
+is available OR the model type is partially ambiguous between two types.
+Required language: "[Metric] not disclosed. Inferring [value] based on
+[single signal] and [model type] category benchmark. Confidence: MEDIUM.
+Verify with management."
+
+LOW CONFIDENCE: Assign when inference is based solely on category
+benchmark with no company-specific signals, OR when two inference
+layers are required (i.e., inferring a metric from another inferred metric).
+Required language: "[Metric] inferred from category benchmark only —
+no company-specific data available. Confidence: LOW. This inference
+should not be the sole basis for the recommendation tier."
+
+RULE: When two or more LOW confidence inferences appear in the same
+deal, trigger an Information Gaps flag: "Multiple key unit economics
+metrics are inferred at LOW confidence. Recommend requesting [specific
+data points] before advancing."
+
+───────────────────────────────────────────────────────────────────────
+SECTION D — MATERIALITY RULES
+───────────────────────────────────────────────────────────────────────
+
+AN INFERENCE MATERIALLY AFFECTS THE RECOMMENDATION WHEN any of these
+conditions are true:
+
+Condition 1: The inferred metric, if wrong by ±20%, would change the
+G7 score by more than 5 points.
+Condition 2: The inferred metric is the primary basis for a RED FLAG
+classification (HIGH or MEDIUM severity).
+Condition 3: The inferred metric moves the deal between recommendation
+tiers (PASS → WATCH, WATCH → PRIORITY REVIEW, or reverse).
+
+WHEN CONDITION IS MET, Alex must append to the recommendation:
+"NOTE: This recommendation is conditional on [inferred metric] being
+approximately [inferred value]. If actual [metric] is below [lower
+threshold], recommendation changes to [lower tier]. Request [specific
+data] to confirm before advancing."
+
+AN INFERENCE IS BACKGROUND CONTEXT WHEN:
+— The inferred metric is consistent across all plausible scenarios.
+— Varying the inference ±30% does not change the recommendation tier.
+— The inferred metric confirms an already established pattern and does
+   not introduce a new risk or opportunity.
+In these cases: state the inference briefly with confidence level and
+do not append a conditional note to the recommendation.
+
+───────────────────────────────────────────────────────────────────────
+SECTION E — GROSS MARGIN VALUATION BRIDGE
+───────────────────────────────────────────────────────────────────────
+
+RULE: Gross margin — not founder narrative — determines the valuation
+framework. Apply this table mechanically on every deal.
+
+GROSS MARGIN → VALUATION FRAMEWORK:
+>75%:      Pure SaaS multiples apply. Range: 8–20x ARR.
+60–75%:    Discounted SaaS. Range: 6–12x ARR.
+45–60%:    Mixed model. Range: 4–8x ARR or 8–12x EBITDA (use lower).
+30–45%:    Hardware or services-heavy. Range: 3–5x ARR or 5–8x EBITDA.
+<30%:      Physical goods or services. Range: 1–3x Revenue.
+
+WHEN FOUNDER CLAIMS A VALUATION FRAMEWORK INCONSISTENT WITH GROSS MARGIN:
+Required language: "Gross margin of [X]% places this business in the
+[framework] category. Founder's claimed [stated framework] multiple of
+[Y]x is not applicable at this margin structure. Fair value reference
+range: [Z1]x–[Z2]x [metric] at [framework] multiples. The [Y]x
+valuation implies [gross margin]% margins — [assessment of whether
+achievable and on what timeline]."
+
+EXCEPTIONS:
+Exception 1: If gross margin is inferred (not actual), append: "Note:
+gross margin is inferred. If actual gross margin exceeds 75%, SaaS
+multiples apply."
+Exception 2: If the company is pre-revenue or <$500K ARR, use the
+implied gross margin of the target model state rather than current.
+State this explicitly: "Applying target-state gross margin of [X]%
+as company is pre-scale. Current blended margin not meaningful."
+
+───────────────────────────────────────────────────────────────────────
+SECTION F — MODEL TYPE INTERACTION RULES (HYBRID MODELS)
+───────────────────────────────────────────────────────────────────────
+
+HYBRID IDENTIFICATION RULE:
+When a company has revenue characteristics of two model types, identify
+PRIMARY model (>60% of revenue, or primary growth driver) and SECONDARY
+model. Apply primary model's unit economics framework throughout.
+Document secondary model as a modifier — positive or negative.
+
+IF primary vs. secondary split is unclear (45–55% each):
+Apply the LOWER gross margin model as primary for valuation purposes
+(conservative bias). State: "Revenue split between [Type A] and [Type B]
+is unclear. Applying [lower margin type] framework for valuation as
+conservative baseline."
+
+COMMON HYBRID PATTERNS AND THEIR MODIFIERS:
+
+SAAS + MARKETPLACE:
+Identify: Which generates >60% of revenue — subscriptions or take rate?
+If SaaS primary: marketplace component increases NRR. Positive modifier.
+Apply 5–10% NRR uplift to SaaS benchmark if marketplace GMV is growing.
+If Marketplace primary: SaaS component reduces revenue volatility.
+Positive modifier. Discount marketplace take-rate risk by 10–15%.
+Unit economics: worse than pure SaaS (lower GM), better than pure
+marketplace (predictable base revenue).
+
+USAGE-BASED + SERVICES:
+Identify: What % of revenue is committed (contracted) vs. variable?
+If committed >60%: treat as Usage-Based primary. Services is a retention tool.
+If variable >60%: flag revenue predictability as MEDIUM risk.
+Key ratio: committed ARR ÷ total revenue. Below 40% triggers red flag.
+Unit economics: worse NRR predictability than Pure SaaS; better LTV
+than pure services.
+
+HARDWARE + SAAS:
+Identify: Is hardware sold at a margin or subsidised?
+If hardware subsidised (sold at or below cost): LTV calculation must
+recover hardware subsidy before counting software margin.
+Adjusted LTV = Software LTV − Hardware subsidy per unit.
+If hardware subsidised and LTV:CAC <3x after subsidy recovery: flag
+as structural economics risk.
+If hardware at margin: blended model, standard Section B6 applies.
+Unit economics: worse than Pure SaaS due to hardware capital intensity
+and replacement cycle risk.
+
+MARKETPLACE + TRANSACTION FEE:
+Identify: Are the marketplace participants and transaction fee payers
+the same entity or different?
+If same buyer (e.g. merchant pays listing fee AND transaction fee):
+Concentration risk is doubled. Flag if top 10 merchants >40% of GMV.
+If different (e.g. marketplace lists products, payment fee charged
+to end consumer): Two separate revenue streams. Analyse independently.
+Apply blended gross margin. Unit economics: better than single-model
+if both sides are growing; worse if one side is subsidising the other.
+
+───────────────────────────────────────────────────────────────────────
+END OF FRAMEWORK 1
+Version: 1.0 — Draft for review before integration into Alex Master Prompt
+Do not integrate until reviewed and approved by Pallav.
+───────────────────────────────────────────────────────────────────────

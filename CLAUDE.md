@@ -149,7 +149,7 @@ Border white tint:     rgba(250,250,248,0.08)
 
 ### Completed Features
 
-- [x] Alex Master Prompt v1 (`assets/alex-master-v1.js`) — 66,500 tokens: system prompt + 25 calibration rules + 30 training examples
+- [x] Alex Master Prompt v1 (`assets/alex-master-v1.js`) — ~100,000 tokens: system prompt + 25 calibration rules + 30 training examples + 6 advanced analytical frameworks (business model decomposition, founder archetypes, market timing, moat durability, cohort decay patterns, probability-weighted return model)
 - [x] Core JS engine (`assets/workspace.js`) — `callAlex()`, `callAlexRaw()`, `saveDeal()`, `loadDealById()`, `loadAllDeals()`, `updateDealDecision()`, `updateDealOutput()`, `addCalibration()`, `loadFirmConfig()`, `isOnboarded()`, `exportNoteAsPDF()`, `clearWorkspace()`, `parseAlexScore()`, `formatDate()`, `requireOnboarding()`, `G7_PROXY_URL` constant
 - [x] Cloudflare Worker proxy (`cloudflare-worker.js`) — deployed at `g7-proxy.gsevnservices.workers.dev`. Fixes CORS, routes browser calls to Anthropic API, API key stored as Cloudflare env variable
 - [x] Result page — all 10 sections rendered
@@ -214,7 +214,7 @@ This JS file exports a constant `ALEX_MASTER_PROMPT` containing:
 2. Calibration System — 25 rules encoding experienced VC partner judgment (overrides generic analysis)
 3. Training Library — 30 worked deals: 10 YES, 10 PASS, 10 WRONG CALLS with outcomes and lessons
 
-The source text file is: `alex_master_v1.txt` (in outputs folder — 266KB, ~66,500 tokens)
+The source text file is: `alex_master_v1.txt` (in project root — 453KB, ~100,000 tokens (updated April 2026 with 6 advanced frameworks))
 
 ### How the API Call Works
 Every Alex API call has three parts assembled in this order:
@@ -496,6 +496,22 @@ Added: callAlexRaw(), updateDealOutput() to workspace.js
 Added: dealContent field to g7_pending_result (submit.html)
 Tested: Paddle deal screened successfully on live URL
 Status: Phase 1 complete — ready for Christian demo
+
+### SESSION 3 — 5 April 2026
+Built: 6 advanced analytical frameworks
+  Framework 1 — Business Model Decomposition and Unit Economics
+                Inference Engine (3,740 words)
+  Framework 2 — Founder Archetype Recognition System (6,250 words)
+  Framework 3 — Market Timing Matrix (3,319 words)
+  Framework 4 — Competitive Moat Durability Assessment (4,012 words)
+  Framework 5 — Cohort Decay Pattern Library (4,396 words)
+  Framework 6 — Probability-Weighted Return Model (2,706 words)
+Total new content: 24,423 words
+Integrated: All 6 frameworks appended to alex_master_v1.txt as Component 5
+Rebuilt: assets/alex-master-v1.js (453KB, ~100,000 tokens)
+Verified: 11/11 integration checks passed
+          Context window usage: ~107K of 200K
+Status: Ready for live testing
 
 ---
 

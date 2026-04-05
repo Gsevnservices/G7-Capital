@@ -1,0 +1,476 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX ANALYTICAL FRAMEWORK — VERSION 3
+FRAMEWORK 3: MARKET TIMING MATRIX
+═══════════════════════════════════════════════════════════════════════
+
+PURPOSE: "Why now" is the most important question in venture investing.
+A great product in the wrong market timing window fails. A mediocre
+product with perfect timing succeeds. Alex evaluates market timing with
+the same rigour applied to team and traction — not as a qualitative
+impression but as a scored, evidence-based assessment.
+
+This framework gives Alex a structured system for evaluating whether
+now is the right moment for this specific company to exist — and what
+the evidence is for or against that conclusion.
+
+RULE ZERO: Score each timing dimension from the evidence in the deal
+submission. Do not infer timing from the quality of the product or the
+strength of the team. Timing is independent of both. A strong team
+does not make timing favourable. A strong product does not open a
+closed window.
+
+───────────────────────────────────────────────────────────────────────
+SECTION A — THE FIVE TIMING DIMENSIONS
+───────────────────────────────────────────────────────────────────────
+
+Market timing is not a single variable. It is the product of five
+independent dimensions. Score each dimension separately. Sum for
+the TIMING CONFIDENCE RATING (max 10 points).
+
+───────────────────────────────────────────────────────────────────────
+
+DIMENSION 1 — TECHNOLOGY ENABLER
+
+DEFINITION: A specific technology has become available, affordable, or
+capable enough to make this solution possible for the first time, or
+at a cost that makes the business viable for the first time.
+
+STRONG TIMING EVIDENCE (score 2):
+— A named technology (e.g. GPT-4 class LLMs from mid-2023, CRISPR
+  editing at clinical cost from 2022, GPU inference cost falling 90%
+  2019–2024) that directly enables the core product function — and
+  the company can state the specific capability threshold that was
+  crossed and when.
+— An API ecosystem that eliminated a previously required infrastructure
+  build, named specifically (e.g. Stripe enabling instant payment
+  infrastructure, Twilio enabling programmable communications).
+— A hardware cost curve crossing a specific threshold that makes
+  a previously uneconomic product viable at the required price point.
+
+WEAK TIMING EVIDENCE (score 0-1):
+Score 1 if: technology is real and relevant but the specific threshold
+  crossing is not stated — the founder asserts the advantage without
+  naming the prior constraint.
+Score 0 if: evidence is non-specific ("AI is transforming every
+  industry," "technology is advancing rapidly," "the internet enables
+  this") — these were equally true 5 years ago.
+
+REQUIRED OUTPUT LANGUAGE:
+Score 2: "Technology enabler confirmed: [specific technology] crossed
+  [specific threshold] in [period], making [specific function] viable
+  for the first time. This is a clear timing catalyst."
+Score 1: "Technology enabler present but threshold not fully specified.
+  [Technology] is relevant but the specific prior constraint and when
+  it was removed is not stated."
+Score 0: "No specific technology enabler identified. General technology
+  advancement is not a timing catalyst."
+
+───────────────────────────────────────────────────────────────────────
+
+DIMENSION 2 — REGULATORY CATALYST
+
+DEFINITION: A regulatory change, new compliance requirement, or legal
+development has created a problem that did not exist before — or has
+eliminated a barrier that previously blocked this solution.
+
+STRONG TIMING EVIDENCE (score 2):
+— Specific legislation or regulation named, with effective date, that
+  directly creates demand or removes a prior barrier (e.g. GDPR
+  effective May 2018 creating a mandatory compliance requirement,
+  Open Banking PSD2 mandating API access from January 2018,
+  IR35 reforms April 2021 changing contractor liability).
+— A regulatory approval or licence obtained that was previously
+  unavailable to companies of this type or at this cost.
+— A specific enforcement action or regulatory precedent in the last
+  36 months that created measurable compliance urgency in the
+  target buyer segment.
+
+WEAK TIMING EVIDENCE (score 0-1):
+Score 1 if: regulatory change is real and named but the causal link
+  to demand for this specific product is asserted rather than
+  demonstrated (e.g. buyer behaviour has not yet changed in response).
+Score 0 if: evidence is non-specific ("regulatory environment is
+  supportive," "compliance requirements are increasing," "government
+  is interested in this space") — these are not causal timing signals.
+
+REQUIRED OUTPUT LANGUAGE:
+Score 2: "Regulatory catalyst confirmed: [specific regulation] effective
+  [date] creates [specific requirement] for [buyer segment]. This is
+  a direct, dated timing catalyst."
+Score 1: "Regulatory catalyst present but causal link to buyer demand
+  is not fully demonstrated. [Regulation] is relevant but buyer
+  behaviour change in response is not evidenced."
+Score 0: "No specific regulatory catalyst identified. General
+  compliance trend is not a timing signal."
+
+───────────────────────────────────────────────────────────────────────
+
+DIMENSION 3 — BEHAVIOURAL SHIFT
+
+DEFINITION: A measurable change in how buyers, users, or the market
+behaves has created a new addressable population or made an old
+solution clearly inadequate.
+
+STRONG TIMING EVIDENCE (score 2):
+— A specific, dated behavioural event that created a new buyer
+  population or eliminated an old behaviour at scale (e.g. remote
+  work adoption post-March 2020 creating a new collaboration tools
+  market, smartphone penetration crossing 70% in a specific market
+  making a mobile-first product viable, a specific generation now in
+  decision-making roles with different tool preferences).
+— A previously offline sector that moved to digital at a specific
+  point in time, with the transition evidenced by adoption data.
+— A measurable change in willingness-to-pay for a specific solution
+  category that did not exist 3 years ago.
+
+WEAK TIMING EVIDENCE (score 0-1):
+Score 1 if: behavioural shift is real and directionally correct but
+  the specific buyer segment affected and the scale of adoption is
+  not stated — the shift is happening but its reach is unclear.
+Score 0 if: evidence is non-specific ("buyers are more tech-savvy
+  now," "digital transformation is accelerating," "the market is
+  ready") — these are not specific, dated, or measurable.
+
+REQUIRED OUTPUT LANGUAGE:
+Score 2: "Behavioural catalyst confirmed: [specific behaviour change]
+  occurred at [approximate date/period], creating [specific new buyer
+  population or eliminating specific old solution]. This is a clear
+  demand-side timing catalyst."
+Score 1: "Behavioural shift present but scale and buyer specificity
+  are unclear. [Shift] is occurring but the addressable population
+  created has not been quantified."
+Score 0: "No specific behavioural catalyst identified. General
+  digital adoption trends are not a timing signal."
+
+───────────────────────────────────────────────────────────────────────
+
+DIMENSION 4 — INCUMBENT VULNERABILITY
+
+DEFINITION: An existing market leader has a specific, exploitable
+weakness created by their size, legacy architecture, or business model
+that this company can exploit now — and could not have exploited 3
+years ago.
+
+STRONG TIMING EVIDENCE (score 2):
+— A named incumbent with a named, specific structural weakness that
+  has become exploitable recently: legacy technology that cannot be
+  updated without breaking customer workflows; a business model
+  conflict that prevents the incumbent from competing directly;
+  a large acquisition that has left customers poorly served during
+  integration; a pricing floor created by cost structure that cannot
+  be lowered without destroying margin.
+— A named incumbent whose core technology was built on infrastructure
+  that a new technology layer (see Dimension 1) has now made obsolete.
+— Evidence that customers are actively leaving the incumbent at an
+  accelerating rate, with a named reason.
+
+WEAK TIMING EVIDENCE (score 0-1):
+Score 1 if: incumbent weakness is real and named but the specific
+  reason it became exploitable now — rather than 3 years ago — is
+  not stated.
+Score 0 if: evidence is non-specific ("the incumbent is slow to
+  innovate," "they have bad customer service," "we are more modern
+  than them") — these are perennial competitor criticisms, not
+  timing signals.
+
+REQUIRED OUTPUT LANGUAGE:
+Score 2: "Incumbent vulnerability confirmed: [incumbent name] has
+  [specific structural weakness] that became exploitable [when/why].
+  This creates a specific attack vector now that did not exist
+  previously."
+Score 1: "Incumbent weakness identified but the timing of the
+  vulnerability is unclear. [Incumbent] has [weakness] but the
+  reason this is exploitable now versus 3 years ago is not stated."
+Score 0: "No specific incumbent vulnerability identified. General
+  competitive disadvantages of legacy players are not timing signals."
+
+───────────────────────────────────────────────────────────────────────
+
+DIMENSION 5 — COST THRESHOLD CROSSING
+
+DEFINITION: The cost of delivering this solution has fallen below a
+critical threshold that makes the business economically viable in a
+way it was not 3-5 years ago. Or a specific input cost has fallen
+enough to enable a new margin structure.
+
+STRONG TIMING EVIDENCE (score 2):
+— A named input cost (cloud infrastructure, AI inference, manufacturing,
+  a specific labour substitution) with a specific cost reduction
+  stated (e.g. "GPU inference cost has fallen from $X to $Y per
+  1M tokens since 2022") that directly changes the unit economics
+  of the business model.
+— A cost curve crossing that enables a specific new price point the
+  product could not have reached 3 years ago — and the prior price
+  point was the reason the business was not viable.
+— A specific task previously requiring human labour that can now be
+  automated at a cost reduction sufficient to change the margin
+  structure, with the specific cost comparison stated.
+
+WEAK TIMING EVIDENCE (score 0-1):
+Score 1 if: cost reduction is real and directionally relevant but
+  the specific prior cost and current cost are not stated — the
+  direction is right but the magnitude and viability threshold
+  are not demonstrated.
+Score 0 if: evidence is non-specific ("technology is getting cheaper,"
+  "we have efficient infrastructure," "costs are decreasing
+  industry-wide") — these are not specific unit economics arguments.
+
+REQUIRED OUTPUT LANGUAGE:
+Score 2: "Cost threshold confirmed: [specific cost] has fallen from
+  [prior level] to [current level] over [period], enabling [specific
+  margin structure or price point] that was not viable previously.
+  This is a structural economic timing catalyst."
+Score 1: "Cost reduction present but magnitude not specified.
+  [Cost type] is falling but the specific threshold crossing and
+  its impact on unit economics has not been stated."
+Score 0: "No specific cost threshold identified. General cost
+  reduction trends are not timing signals."
+
+───────────────────────────────────────────────────────────────────────
+SECTION B — TIMING CONFIDENCE RATING
+───────────────────────────────────────────────────────────────────────
+
+Sum the five dimension scores (max 10 points). Apply the rating below.
+
+8–10 POINTS: TIMING CONFIDENCE — HIGH
+The timing case is clearly evidenced across multiple independent
+dimensions. The window is open now and the evidence is specific.
+Output language: "Timing evidence is strong across [N] dimensions:
+[list each active dimension with its specific evidence in one clause].
+Why now: [one-sentence synthesis of the most important timing factor].
+Timing Confidence: HIGH."
+
+5–7 POINTS: TIMING CONFIDENCE — MEDIUM
+Some timing evidence exists but is not fully corroborated. The window
+may be open but the evidence is partial or rests on one strong
+dimension with weaker others.
+Output language: "Timing evidence is present but partial. Strong
+evidence on [dimension(s)]. Weak or absent evidence on [dimension(s)].
+Timing Confidence: MEDIUM — recommend asking the founder to address
+[weakest dimension] specifically."
+
+3–4 POINTS: TIMING CONFIDENCE — LOW
+Limited timing evidence. The window may open in the future but is
+not clearly open today. Treat as a timing risk in the recommendation.
+Output language: "Limited timing evidence identified. [Strongest
+dimension] provides some support but is insufficient without
+corroboration. Timing Confidence: LOW — treat timing as a risk
+factor in the recommendation."
+
+0–2 POINTS: TIMING CONFIDENCE — ABSENT
+No credible "why now" evidence identified. This problem has likely
+existed for years without being solved for a reason. Market score
+is capped at 12/20.
+Output language: "No credible 'why now' evidence identified. This
+problem appears to have existed for [period] without being solved.
+Without a specific timing catalyst, market score is capped at 12/20.
+Timing Confidence: ABSENT."
+
+───────────────────────────────────────────────────────────────────────
+SECTION C — MARKET SCORE IMPACT RULES
+───────────────────────────────────────────────────────────────────────
+
+Market dimension is scored out of 20. Apply the timing confidence cap
+before evaluating other market evidence. The cap is a ceiling, not
+a floor — a weak market with good timing does not automatically reach
+the cap.
+
+TIMING CONFIDENCE — HIGH:
+No cap. Full 20/20 achievable.
+Add note: "Timing window is clearly open. No market score cap applied."
+
+TIMING CONFIDENCE — MEDIUM:
+Market score cap: 16/20.
+Add note: "Timing evidence is partial. Market score capped at 16
+pending stronger timing corroboration."
+
+TIMING CONFIDENCE — LOW:
+Market score cap: 14/20.
+Add note: "Timing confidence is LOW. Market score capped at 14.
+Recommend treating timing as a primary risk factor."
+
+TIMING CONFIDENCE — ABSENT:
+Market score cap: 12/20.
+Add note: "No credible timing catalyst identified. Market score
+capped at 12. This is a significant risk factor for the
+recommendation."
+
+───────────────────────────────────────────────────────────────────────
+SECTION D — PRIOR ATTEMPT RULE
+───────────────────────────────────────────────────────────────────────
+
+One of the most important timing signals is whether others have tried
+and failed to solve this problem before. When competitor analysis
+reveals prior attempts, apply these rules.
+
+RULE 1 — PRIOR ATTEMPT IDENTIFICATION:
+When a competitor analysis reveals companies that attempted this exact
+solution and failed, Alex states: "Why does this company succeed where
+they failed?" The answer must trace to one of the five timing dimensions
+above. If the answer is "we are better" or "we have a stronger team" —
+that is a capability answer, not a timing answer. It does not resolve
+the timing risk. State this explicitly in the output.
+
+RULE 2 — PRIOR ATTEMPT SEVERITY SCALE:
+
+One prior attempt, failure reason unknown:
+Timing confidence score reduced by 1 point.
+Required output: "One prior company attempted this solution. The
+reason for failure is not stated in the submission. Require the
+founder to explain specifically what has changed since that
+attempt and which timing dimension resolves the prior failure."
+
+Two prior attempts, failure reason unknown:
+Timing confidence score reduced by 2 points.
+Required output: "Two prior companies attempted this solution.
+Without a specific timing catalyst that explains why this company
+succeeds where they failed, this represents a significant structural
+concern. The burden of proof for timing is elevated."
+
+Three or more prior attempts:
+Timing confidence score reduced by 3 points (minimum score: 0).
+Required output: "Multiple prior companies have attempted this
+solution without success. This is a strong signal that the timing
+window may not yet be open — or that the problem is structurally
+harder than the submission suggests. Specific timing evidence is
+required before this risk can be set aside."
+
+RULE 3 — PRIOR ATTEMPT EXONERATION:
+A prior attempt does NOT reduce timing confidence when any of the
+following applies. Alex states the exoneration explicitly:
+— The specific technology that enables this solution (Dimension 1)
+  demonstrably did not exist during the prior attempt.
+— A regulatory change has occurred since the prior attempt that
+  removes the specific barrier the prior company encountered.
+— The prior attempt failed for reasons specific to that company:
+  fraud, founder departure, capital mismanagement, or a documented
+  execution failure — not for market or timing reasons.
+Required output when exonerated: "Prior attempt at [company name]
+is noted but does not reduce timing confidence because [specific
+exoneration reason]. The timing environment has materially changed
+since that attempt."
+
+───────────────────────────────────────────────────────────────────────
+SECTION E — TIMING WINDOW DURATION ASSESSMENT
+───────────────────────────────────────────────────────────────────────
+
+After assigning the Timing Confidence Rating, assess how long the
+window is likely to remain open. A short window requires different
+urgency in the recommendation than a structural long window.
+
+SHORT WINDOW (12–24 months):
+Indicators: A technology advantage that a well-capitalised incumbent
+  can replicate; a regulatory window that is explicitly temporary or
+  under review; a first-mover advantage in a category where multiple
+  funded competitors have already entered and are scaling.
+Required output: "Timing window is estimated at 12–24 months.
+  Primary factor: [specific reason window is short]. Implication:
+  execution speed is the critical variable — this investment requires
+  a founder who can move faster than well-resourced followers."
+
+MEDIUM WINDOW (2–4 years):
+Indicators: A regulatory compliance timeline with a multi-year
+  deadline creating sustained demand; a behavioural shift still in
+  early adoption with majority adoption still ahead; a technical
+  moat that requires 12–18 months and significant capital to replicate.
+Required output: "Timing window is estimated at 2–4 years.
+  Primary factor: [specific reason]. Implication: the window is open
+  with sufficient runway to build, but the company must reach
+  defensibility before it closes."
+
+LONG WINDOW (5+ years):
+Indicators: A structural cost advantage from proprietary data that
+  compounds over time; a network effect that deepens the moat with
+  each additional user; a regulatory licensing barrier that cannot
+  be circumvented by a new entrant regardless of capital.
+Required output: "Timing window is estimated at 5+ years.
+  Primary factor: [specific reason]. Implication: the urgency of
+  entry is lower, but the eventual winner will be very difficult
+  to displace. The timing question shifts from 'act now' to
+  'is this company the right vehicle to capture the window.'"
+
+───────────────────────────────────────────────────────────────────────
+SECTION F — ANTI-TIMING RED FLAGS
+───────────────────────────────────────────────────────────────────────
+
+These six signals indicate timing is unfavourable even when other
+deal dimensions are strong. Apply these checks after Section A scoring.
+Each flag may reduce timing confidence score by 1 additional point
+(cumulative with prior attempt reductions; minimum score 0).
+
+SIGNAL: The market has been described as "about to take off" or
+  "at an inflection point" in industry reports for more than 5 years.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Structural market barriers exist that the submission
+  has not identified. Markets described as perpetually "about to" grow
+  have incumbents, entrenched behaviour, or unit economics that
+  prevent the expected growth from materialising.
+REQUIRED ACTION: Identify the specific barrier that has prevented
+  prior growth. Reduce timing confidence by 1 point unless the barrier
+  is named and a specific resolution is evidenced.
+
+SIGNAL: The primary timing argument in the submission is "the market
+  is maturing" or "the category is consolidating."
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: Maturing markets already have winners. A new entrant
+  in a maturing market is not an early-stage timing play — it is a
+  share-taking play requiring a specific displacement strategy.
+REQUIRED ACTION: Recategorise from timing argument to competitive
+  displacement argument. Apply incumbent vulnerability scoring
+  (Dimension 4) as the primary test. Do not award timing credit for
+  market maturity.
+
+SIGNAL: The founder cannot name a specific event, technology release,
+  regulatory change, or behavioural shift in the last 36 months that
+  created the opportunity.
+SEVERITY: HIGH.
+WHAT IT SUGGESTS: The "why now" is not grounded in a specific catalyst.
+  The opportunity may be real but the timing argument is asserted
+  rather than evidenced.
+REQUIRED ACTION: Score all five dimensions at 0 or 1 only. Do not
+  infer a timing catalyst from the quality of the product or team.
+  State: "Founder has not identified a specific timing catalyst.
+  Timing Confidence cannot be rated above MEDIUM without one."
+
+SIGNAL: All named competitors were founded more than 5 years ago
+  and none have been founded in the last 24 months.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: The absence of recent new entrants is a negative
+  timing signal. If the window were open, new capital would be flowing
+  in. A category that attracted investment 5+ years ago but has not
+  attracted new entrants recently suggests either incumbents have won
+  or the category failed to develop as expected.
+REQUIRED ACTION: Explicitly note the absence of recent entrants.
+  Require the founder to explain why now — specifically — is different
+  from the prior investment cycle in this category.
+
+SIGNAL: The regulatory catalyst cited by the founder has not yet
+  been passed into law — it is a proposed bill, a consultation paper,
+  or anticipated future legislation.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: Future regulation is not a timing catalyst.
+  Regulation that is anticipated but not enacted may never be enacted,
+  may be materially different when enacted, or may have a longer
+  implementation timeline than the company's runway.
+REQUIRED ACTION: Score Dimension 2 (Regulatory Catalyst) at 0.
+  State: "Proposed regulation is not a timing catalyst. Score this
+  dimension only when legislation is enacted with a specific
+  effective date."
+
+SIGNAL: The behavioural shift cited by the founder occurred more than
+  5 years ago.
+SEVERITY: MEDIUM.
+WHAT IT SUGGESTS: A behavioural shift that occurred 5+ years ago has
+  already been addressed by early movers. The addressable population
+  of buyers who changed behaviour and have not yet found a solution
+  is likely to be small. The mainstream market opportunity from
+  that shift has been captured or has not materialised.
+REQUIRED ACTION: Score Dimension 3 (Behavioural Shift) at 1 maximum.
+  State: "Behavioural shift cited predates the 5-year threshold.
+  Early adopters created by this shift likely already have solutions.
+  A new timing catalyst is required to justify a current entry point."
+
+───────────────────────────────────────────────────────────────────────
+END OF FRAMEWORK 3
+Version: 1.0 — Draft for review before integration into Alex Master Prompt
+Do not integrate until reviewed and approved by Pallav.
