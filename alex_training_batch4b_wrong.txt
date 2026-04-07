@@ -1,0 +1,1006 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — DEAL ANALYST TRAINING LIBRARY — BATCH 4B
+WRONG CALLS 021–030: Missed Wins and Failed Investments
+Anonymised. Pattern-based training on judgment under uncertainty.
+Built: April 2026.
+═══════════════════════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 021 — MISSED WIN: THE NON-CONSENSUS GEOGRAPHY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Non-Consensus Geography
+SECTOR: B2B SaaS — Cybersecurity Compliance Automation
+
+WHAT THE DEAL LOOKED LIKE:
+A Warsaw-based team of 7 built an automated security compliance
+platform for mid-market companies seeking SOC 2 Type II, ISO 27001,
+and GDPR certifications simultaneously. The product connects to a
+company's cloud infrastructure (AWS, Azure, GCP), maps all controls
+automatically, generates evidence reports, and tracks remediation tasks.
+Founders: two ex-engineers from a major Polish bank's cybersecurity
+team plus a former KPMG IT audit director. ARR: £680K. 32 customers —
+18 UK companies, 9 US companies, 5 German companies. Average contract:
+£21K. NRR: 124%. Growing 18% MoM. All sales conducted in English.
+All product documentation in English. Customer support in English.
+Team holds offices in Warsaw and a registered entity in London.
+Raising £3.5M Series A, seeking a UK or US lead investor.
+
+THE DECISION MADE:
+PASS. Reasoning given internally: "Geography is a risk we're not
+comfortable with. Board meetings in Warsaw. We don't know the Eastern
+European engineering talent market. Exit dynamics are uncertain —
+strategic acquirers will have concerns about buying a Polish company.
+We'd consider if they relocate HQ to London."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The customer base was already 56% UK and US at the time of the
+decision. The product was sold in English, supported in English,
+priced in GBP and USD, and incorporated in England and Wales.
+The only thing Polish about the company was the engineering team
+location — which, in cybersecurity compliance software, is a cost
+advantage (Warsaw senior engineer salaries: approximately 40–50%
+of London equivalent) not a risk. The submission clearly stated
+that 18 of 32 customers were UK-domiciled companies who had gone
+through a standard UK procurement process. The concern about
+"exit dynamics" and "buying a Polish company" was applied to a
+company that was already a UK-incorporated entity with UK and US
+customers. The headquarters geography was Warsaw (where the engineers
+sat). The product geography was UK/US. These were conflated. The
+signal in the submission: 56% of ARR from UK and US customers who
+had gone through standard procurement. That is the product geography.
+Warsaw is where the cost base sits. Both facts were disclosed.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst applied geography as a proxy for market and exit risk
+without distinguishing between team location and customer location.
+A Warsaw-based team with a UK/US customer base is not a "Polish
+company" in any commercially relevant sense — it is a UK/US company
+with a distributed engineering team. The cognitive shortcut: geography
+of headquarters = geography of market. This is almost never true
+in B2B SaaS, where customer location determines market geography and
+team location determines cost structure. Framework gap: the analyst
+did not map customer ARR by geography before concluding on market
+risk. The 18 UK customers and 9 US customers each chose this product
+through a competitive evaluation. Their procurement decision is the
+market signal. Their geography is the market.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When evaluating a company headquartered in a non-consensus geography
+(Eastern Europe, Southeast Asia, Latin America, MENA), separate
+immediately: (1) team location — where are engineers, operations,
+and finance? (2) customer location — where are paying customers
+domiciled? (3) product language and currency — what language and
+currency does the product operate in? If customer ARR is more than
+50% from UK or US customers, the market is UK/US regardless of team
+location. Evaluate the investment on customer geography, not team
+geography. Note the engineering cost advantage of the non-consensus
+team location as a positive margin signal, not a risk. Exit risk
+should be evaluated based on the acquirer's view of the customer
+base — not the team location.
+
+OUTCOME:
+The company relocated its registered HQ to Delaware 6 months later
+to satisfy US investors. Raised a £3.5M Series A from a US fund.
+Warsaw engineering team stayed in Warsaw. ARR reached £3.1M in
+18 months. Vanta (the category leader, US-based) attempted to
+acquire the company at £28M — declined. The company raised a
+Series B at £45M and was acquired 3 years later for £120M by a
+GRC platform consolidator. The passing investors' analysis of
+"exit risk for a Polish company" had been applied to a company
+that was acquired by a US strategic for £120M.
+
+PATTERN LESSON:
+When a company is headquartered in a non-consensus geography but
+more than 50% of ARR is from UK or US customers procured through
+standard commercial processes, do not apply geography-of-team as
+a market or exit risk. Map customer ARR by geography first. If
+the customer base is UK/US dominant, the investment is a UK/US
+B2B SaaS investment with a cost-advantaged engineering team.
+The non-consensus geography is a gross margin input, not an
+exit risk input.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 022 — MISSED WIN: THE BOOTSTRAPPED
+                  PROFITABILITY SIGNAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Bootstrapped Profitability Signal
+SECTOR: Vertical SaaS — Practice Management for Independent Opticians
+
+WHAT THE DEAL LOOKED LIKE:
+An optometrist turned software founder spent 8 years running his
+own independent optical practice before building a practice management
+platform for independent opticians: appointment scheduling, clinical
+records, dispensing and lab order management, NHS claims processing,
+and stock control in one system. The product launched in 2018.
+No external capital raised — ever. ARR at time of pitch (2022):
+£1.8M. 290 independent optician practices as customers. Average
+contract: £6,200. Annual customer churn: 4%. Growing 22% year-on-year.
+EBITDA margin: 28%. The founder is raising for the first time —
+£2.5M — to hire a sales team and accelerate into dental and
+veterinary practice management (adjacent verticals with near-identical
+workflow requirements). Raising at £9M pre-money.
+
+THE DECISION MADE:
+PASS. Reasoning: "22% YoY growth is below our minimum of 30% for
+a Series A equivalent. The market is too niche — 8,000 independent
+opticians in the UK is too small a base for venture returns. The
+founder has no scaling experience. The ask of £2.5M is too small
+for our minimum cheque size."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The company had £1.8M ARR with 28% EBITDA margin and 4% annual churn,
+built with zero external capital. The operational efficiency implied
+was exceptional: the founder had built a £1.8M ARR business to
+profitability entirely from customer revenue. The capital efficiency
+ratio — ARR generated per £1 of external capital raised — was infinite.
+In terms of unit economics: at £6,200 ACV and 4% annual churn,
+implied LTV (assuming 10% discount rate) was approximately £62,000.
+If CAC was below £1,500 (plausible at this price point with an
+inbound-heavy model), LTV/CAC exceeded 40x. The submission disclosed
+that 70% of new customers came through referrals from existing
+customers — the product had genuine word-of-mouth PMF. The "niche
+too small" concern was applied to the current market only: the
+submission clearly stated the expansion thesis into dental (11,000
+practices) and veterinary (6,000 clinics) as the growth path on
+equivalent TAM. Combined practice management TAM at £6,200 ACV:
+£155M ARR. That supports a venture outcome. The expansion plan
+was in the deck. It was not engaged with.
+
+WHY THE WRONG CALL WAS MADE:
+Three independent errors occurred simultaneously. First: a minimum
+growth rate filter (30% YoY) was applied to a bootstrapped profitable
+company, where 22% YoY on zero capital is structurally different from
+22% YoY with £5M of VC spend behind it. Second: TAM was assessed
+on current market only (independent opticians) without modelling
+the adjacent expansion that the founder had explicitly mapped.
+Third: the minimum cheque size constraint was applied as a reason
+to pass rather than a reason to negotiate. A £2.5M investment into
+a profitable £1.8M ARR business with 28% EBITDA and 4% churn is
+one of the most capital-efficient Series A opportunities that exists.
+Framework gap: the bootstrapped profitability signal fundamentally
+changes the risk profile of the investment. A profitable company
+does not need the capital to survive — it is choosing to raise
+to accelerate. The downside is protected by the underlying business.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a company is profitable and bootstrapped at Series A stage,
+do not apply the same growth rate benchmarks as VC-backed Series A
+companies. A VC-backed company at 22% YoY growth has spent investor
+capital to achieve that growth — the capital efficiency is partial
+information. A bootstrapped company at 22% YoY growth achieved
+that rate with zero external capital — it is a different and
+superior signal. Apply instead: (1) calculate LTV/CAC using
+disclosed churn and estimated CAC; (2) calculate capital efficiency
+as ARR per £1 of external capital — if infinite (bootstrapped),
+flag as a premium signal; (3) evaluate the expansion TAM, not just
+the current TAM, if the founder has explicitly mapped adjacent
+verticals with shared product requirements. Minimum cheque size
+constraints should not drive investment decisions — adjust the
+cheque size or syndicate, do not pass.
+
+OUTCOME:
+The company accepted £2.5M from a specialist healthcare tech fund
+6 months later. Hired 3 practice management specialists with
+sector relationships. Expanded to dental in month 8: 140 dental
+practices signed in 12 months. Veterinary launch 18 months post-raise:
+90 clinics signed. ARR reached £3.8M with EBITDA still positive
+at 14% during the expansion phase. Exit 3 years post-raise to a
+healthcare IT group for £38M — a 15x on the £2.5M investment.
+
+PATTERN LESSON:
+When a company has been profitable and bootstrapped for 3+ years
+with annual churn below 6% and explicit adjacent expansion TAM
+documented in the submission, do not apply VC-backed growth rate
+benchmarks. A bootstrapped profitable company raises to accelerate,
+not to survive. The downside risk is protected by the business.
+Evaluate capital efficiency as ARR per £1 of external capital raised:
+if the company is profitable on zero external capital, the investment
+is buying proven unit economics plus expansion optionality, not
+funding an unproven model.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 023 — MISSED WIN: THE FOUNDER WHO LOOKS
+                  WRONG FOR THE ROLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Founder Who Looks Wrong for the Role
+SECTOR: B2B SaaS — Livestock and Agricultural Traceability
+
+WHAT THE DEAL LOOKED LIKE:
+A 26-year-old founder with no agricultural background and no
+computer science degree (BSc Geography, University of Exeter)
+built a livestock traceability and movement records platform for
+UK cattle and sheep farmers. UK cattle farmers are legally required
+to register every animal movement within 3 days under the Cattle
+Tracing System administered by BCMS. The current process is paper-
+based and phone-based. His product digitises the registration,
+integrates with the BCMS API directly, and adds herd management
+and health record-keeping on top. ARR: £390K. 620 farm customers
+(average herd: 150 animals). Average contract: £630/year. Annual
+churn: 6%. NRR: 108%. Growing 19% MoM. Bootstrapped to this point.
+Raising £2M Series A. The pitch was conducted in a farmer's market
+in Somerset because the founder could not afford London meeting rooms.
+
+THE DECISION MADE:
+PASS. Reasoning given: "The founder has no relevant domain
+experience — no agricultural background, no tech background.
+We'd expect a founder in this space to have either farming
+heritage or agri-tech experience. The ACV of £630 is too low
+for our model. We'd need to see a more credible team."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+620 paying farms in 24 months. Annual churn of 6% — exceptional for
+any SaaS product; extraordinary in a customer demographic (UK cattle
+farmers, average age 57) that is widely considered resistant to
+technology adoption. The submission disclosed how the founder acquired
+his first 50 customers: he attended NFU (National Farmers Union) meetings
+in Somerset and Devon for 6 months, listened to farmers describe their
+movement recording frustrations, built a prototype in 4 weeks, and
+demoed it at the meetings. He did not have farming heritage. He had
+something more operationally useful: he had listened. The product
+evidence — 620 customers, 6% annual churn, farmers paying £630/year
+for a voluntary upgrade to a free government process — is the most
+powerful possible PMF signal in a resistant demographic. The analyst
+focused on the founder's background rather than the product's traction
+with an exceptionally difficult customer. Both data points were in
+the submission.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst applied a domain expertise archetype expectation without
+testing it against the product evidence. The expectation: a founder
+in agricultural technology should have agricultural experience. The
+evidence: a founder without agricultural experience had acquired 620
+farmers as paying customers with 6% annual churn. These two facts
+are in direct contradiction. When founder profile expectation and
+product traction evidence are in conflict, the traction evidence
+is always the stronger signal. Framework gap: archetype matching
+(Type 1 domain expert expected) was applied before product evidence
+evaluation. The correct sequence is the reverse: evaluate product
+evidence first, then understand how the founder achieved it. A founder
+who can convince 620 cattle farmers to pay £630/year for a product
+when the government offers the underlying service for free has
+demonstrated something more valuable than domain expertise —
+they have demonstrated the ability to earn trust with a resistant buyer.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Never apply a domain expertise requirement as a prerequisite for
+evaluating the product evidence. If traction with a known-resistant
+customer demographic is strong — churn below 8%, growing without
+paid acquisition — the founder has already demonstrated domain
+acquisition capability regardless of their prior background.
+The question is not "does this founder have the right background
+for this market?" The question is "has this founder proven they
+can reach and retain this customer?" If the traction data answers
+yes, the background expectation is overridden. Founder archetypes
+describe likely paths to credibility — they do not exclude founders
+who have already established credibility through demonstrated traction.
+
+OUTCOME:
+The company raised from a specialist agri-tech fund and an angel
+with NFU connections. Expanded from cattle into sheep (the only
+other UK species with mandatory traceability requirements). Added
+veterinary health records and an insurance claim pre-fill module
+(farmers with digitised health records filed insurance claims 40%
+faster). ARR reached £2.1M in 24 months post-raise. Acquired by
+a UK agricultural data company for £22M — a 11x return on the
+Series A. The founder's geography degree turned out to be relevant:
+he had studied rural land use and understood UK agricultural policy
+better than most agri-tech founders.
+
+PATTERN LESSON:
+When a founder's background does not match the expected domain
+archetype but the product has demonstrated strong traction with
+a known-resistant customer demographic (annual churn below 8%,
+growing without paid acquisition), the traction evidence overrides
+the archetype expectation. Evaluate product evidence first. If
+620 of the hardest buyers in the UK are paying for the product
+and staying, the founder has already done the hardest thing.
+Do not require a background that the traction has already made
+irrelevant.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 024 — MISSED WIN: THE NICHE THAT BECAME
+                  A PLATFORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Niche That Became a Platform
+SECTOR: Vertical SaaS — Scheduling and Operations for Specialist Music Schools
+
+WHAT THE DEAL LOOKED LIKE:
+A founder who spent 12 years running a network of music schools built
+a scheduling and operations platform for music education providers:
+teacher timetabling (accounts for instrument, room, and level requirements
+simultaneously), student lesson tracking and attendance, term billing,
+ABRSM/Trinity exam registration management, and parent communication.
+ARR: £240K. 190 music school customers (independent music schools,
+regional music hubs). Average contract: £1,260/year. Annual churn: 3%.
+Growing. Bootstrapped for 3 years. Raising £1.5M first external round.
+UK total addressable customer count at pitch time: approximately 3,500
+music schools and hubs.
+
+THE DECISION MADE:
+PASS. Reasoning: "The TAM is too small. 3,500 UK music schools at
+£1,260 ACV is a maximum £4.4M UK ARR. This is not venture-scalable.
+The product is too niche."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The submission included a section titled "Where We Go From Here"
+that mapped three expansion paths the founder had already validated
+through customer conversations: (1) Dance schools and performing arts
+academies — structural scheduling requirements identical to music
+schools, approximately 6,000 UK providers; (2) Sports coaching
+academies and swim schools — timetabling logic identical, approximately
+12,000 UK providers; (3) Tutoring networks and private tuition
+agencies — lesson tracking, billing, and parent communication modules
+directly applicable, approximately 25,000 UK providers. Combined
+addressable market at £1,260 ACV: 46,500 providers = £58.6M UK ARR.
+International expansion (the product required only localisation of
+exam board integrations): approximately 4x UK market in English-
+speaking territories. The expansion paths were in the submission.
+They were in a section called "Where We Go From Here." The TAM
+calculation in the investment decision used only the current market.
+
+WHY THE WRONG CALL WAS MADE:
+The TAM evaluation took the current customer category (music schools)
+as the boundary of the addressable market. The founder had already
+identified the expansion thesis: the product's core scheduling logic
+(multi-variable timetabling with resource constraints, recurring billing,
+parent communication) was identical across four adjacent verticals
+sharing the same operational structure. The "niche that became a
+platform" pattern occurs when the initial niche is a beachhead chosen
+for accessibility — the founder had the deepest domain knowledge in
+music education — not for its revenue ceiling. The analyst evaluated
+the beachhead as the destination. Framework gap: when a submission
+contains an expansion section mapping adjacent verticals with shared
+product requirements, evaluate total expansion TAM before concluding
+on market size. A niche with 3% annual churn and 190 customers is a
+product that works — the question is where else it can work, not
+whether the original niche is large enough.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a submission contains an expansion roadmap section naming adjacent
+verticals, never evaluate TAM using the current market only. Build a
+combined TAM model: (1) identify all named adjacent verticals; (2) for
+each, check whether the core product requirement (the scheduling logic,
+the billing model, the communication layer) is materially the same as
+in the current market; (3) if the product requirement is 80%+ identical,
+include the adjacent TAM in the total. A founder who has mapped three
+adjacent verticals with shared operational requirements has a platform
+thesis, not a niche thesis. The beachhead is the proof of concept for
+the platform. Evaluate the platform.
+
+OUTCOME:
+The company raised from an angel syndicate that included a SaaS
+operator who recognised the platform potential. Launched dance studio
+module in month 9 post-raise: 220 dance studios signed in 12 months.
+Swim school module in month 18: 340 swim schools signed. Tuition
+network module in month 28: 480 tuition agencies signed. Total
+ARR at month 36 post-raise: £2.8M from 1,400+ providers across
+four verticals. Rebranded from a music school tool to "The Operations
+Platform for Independent Education Providers." Exit to a specialist
+education software group at £32M — a 21x on the initial £1.5M raise.
+
+PATTERN LESSON:
+When a company has annual churn below 5% in its initial niche AND the
+submission maps adjacent verticals with structurally identical product
+requirements, evaluate total expansion TAM before concluding on market
+size. A niche with exceptional retention is a proven product. The initial
+niche is a beachhead. Assess whether the product logic translates to
+the adjacent verticals (same scheduling, billing, or communication
+requirements). If it does, the platform TAM replaces the niche TAM
+in the investment case.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 025 — MISSED WIN: THE SLOW START
+                  EXCEPTIONAL ACCELERATOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Slow Start Exceptional Accelerator
+SECTOR: B2B SaaS — API Security Testing and Monitoring
+
+WHAT THE DEAL LOOKED LIKE:
+A team of two — a former GCHQ security researcher and a former
+Cloudflare engineer — built an automated API security scanner: it
+ingests an application's OpenAPI specification, generates adversarial
+test cases for authentication bypass, injection, and business logic
+errors, and runs them continuously against staging and production
+environments. ARR: £490K at time of decision. 28 customers. Average
+contract: £17.5K. NRR: 131%. 18-month growth history: months 1–15,
+average 9% MoM; months 16–18, average 31% MoM. Total customers grew
+from 4 at month 12 to 28 at month 18. Raising £3.5M Series A.
+
+THE DECISION MADE:
+PASS. Reasoning: "The 18-month average MoM growth rate is approximately
+12% — below our 20% threshold. The acceleration in the last 3 months
+could be noise. We don't want to invest at the top of a random spike.
+We'd revisit in 3 months to see if the acceleration sustains."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The acceleration was not random — its cause was disclosed in the
+submission and was structural. The submission stated: "In month 15,
+we shipped a native GitHub Actions integration that enables developers
+to run our API security tests automatically on every pull request.
+This integration was built at the request of 6 existing customers.
+In the 3 months since launch, 22 of our 28 customers use it. The
+integration has also driven 14 of our last 16 new customer acquisitions
+— developers discover the tool through the GitHub marketplace listing
+and bring it to their security team." The GitHub Actions integration
+created a product-led growth motion that did not exist in the first
+15 months. The old sales motion was outbound enterprise. The new motion
+was PLG (developer discovery → enterprise adoption). This structural
+change explained the acceleration and predicted that it would continue —
+the GitHub marketplace had 5,000+ daily active visitors to the security
+tool category. The cause of the inflection was in the submission.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst averaged the 18-month growth rate (producing 12% MoM
+average) and compared it to a threshold, without distinguishing between
+the pre-integration and post-integration growth periods. These are
+two different companies: pre-integration (months 1–15, outbound
+enterprise, 9% MoM) and post-integration (months 16–18, PLG-driven,
+31% MoM). Averaging them produces a number that accurately describes
+neither period. The correct analysis was to identify the structural
+change, validate that the last 3 months were driven by a specific
+and repeatable mechanism (GitHub marketplace listing, not a one-time
+event), and evaluate the investment case on the post-change trajectory.
+Framework gap: growth rate averages should never be calculated across
+a structural business model change. When a submission discloses a
+specific product or distribution change that correlates with a growth
+inflection, evaluate the pre-change and post-change periods separately.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When growth rate data shows a step-change (defined as: the last 3-month
+average growth rate is more than 2x the prior 15-month average growth
+rate), do not average across the two periods. Identify the cause of
+the step-change from the submission. If the cause is: (a) a specific
+product feature or integration that was shipped at a specific date;
+(b) entry into a new distribution channel (marketplace listing, partner
+programme); or (c) a pricing or packaging change — then the step-change
+is structural, not noise. Evaluate the investment on the post-change
+trajectory and the sustainability of the new growth mechanism. Request
+the post-integration cohort data specifically. Do not apply a "wait
+3 months" response to a structural inflection caused by an identifiable
+mechanism — waiting 3 months costs you the pre-Series B entry price.
+
+OUTCOME:
+The company raised 3 months later from a US security-focused fund
+at a 40% higher valuation than the original ask. The GitHub marketplace
+listing continued to drive growth: 31% MoM sustained for 8 months
+post-raise. ARR reached £2.1M within 14 months of the original decision.
+The company was acquired by a security platform consolidator at £85M —
+a 24x return from the original Series A price point. The "wait 3 months"
+decision cost the passing investors the founding entry price on one of
+the sector's strongest exits that year.
+
+PATTERN LESSON:
+When a submission shows a growth rate step-change of 2x or more in the
+last 3 months relative to the prior history, do not average the rates
+and apply a threshold. Identify the cause of the inflection from the
+submission. If the cause is a specific, structural, repeatable mechanism
+— a new distribution channel, an integration that creates a PLG motion,
+a pricing change — the step-change is an investment signal, not noise.
+Evaluate on the post-change trajectory. The prior history describes
+a different company than the one being pitched.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 026 — FAILED INVESTMENT: THE NETWORK EFFECT
+                  THAT WAS NOT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Network Effect That Was Not
+SECTOR: B2B Data Platform — Salary and Compensation Benchmarking
+
+WHAT THE DEAL LOOKED LIKE:
+A compensation benchmarking platform for HR and finance teams: companies
+submit their salary data confidentially, and in return receive access
+to peer benchmarks at role, level, seniority, and geography. The more
+companies contribute data, the more granular and accurate the benchmarks
+become. ARR: £820K. 64 company subscribers. Average contract: £12.8K.
+NRR: 117%. The founder described the core moat as: "Our data network
+effect — every company that joins makes the benchmarks better for
+everyone." Raising £4.5M Series A. The "network effect moat" was the
+centrepiece of the investment thesis.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The network effect moat is highly defensible —
+the more companies contribute, the more valuable the product. This is
+a classic data flywheel. Early market leadership with network effects
+creates a winner-take-most dynamic."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The submission disclosed that the platform had 64 contributing companies.
+It also disclosed that the benchmark reports accessed most frequently
+by subscribers were the top-level reports (median salary by role and
+level) rather than the granular sub-reports (median salary by role,
+level, specific geography, company size band, and sub-sector). The
+frequently accessed top-level benchmarks reach statistical reliability
+at approximately 30–40 data contributors per cell. With 64 contributors
+in total, split across multiple industries, the platform was already
+statistically reliable for the reports customers actually used. The
+marginal improvement to benchmark quality from adding customer 65 vs
+customer 200 was negligible for the reports that drove retention.
+This meant the "network effect" — the improvement in product quality
+from each additional contributor — had already plateaued at 64 companies.
+The submission's analytics data, disclosed in a product engagement
+appendix, showed that power users accessed 3 report types on average
+and rarely navigated to the granular sub-reports where additional data
+would improve quality. The data was in the appendix.
+
+WHY THE WRONG CALL WAS MADE:
+The network effect claim was accepted without decomposing the specific
+user-to-user value mechanism. The correct decomposition requires asking:
+(1) What specific product feature improves when a new user joins?
+(2) At what contributor count does that feature reach statistical
+maturity? (3) Is the feature that improves the one customers actually
+use? In this case: (1) benchmark granularity improves; (2) it reaches
+maturity at approximately 35–50 contributors per cell; (3) most
+customers use top-level benchmarks, not granular sub-reports. All
+three answers were available from the submission data. The analyst
+accepted the network effect framing without testing it against the
+product engagement data. Framework gap: network effect claims require
+explicit decomposition into a specific user-to-user value mechanism
+before they are accepted as a moat.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a submission claims a network effect as a primary moat, decompose
+it into a specific mechanism before accepting it. Apply three tests:
+(1) Value mechanism test — what specifically improves for User A when
+User B joins? Identify the precise feature. (2) Saturation test — at
+what participant count does that improvement plateau? Is the company
+above or below that count? (3) Usage test — is the feature that improves
+the feature customers actually use, as evidenced by engagement data?
+If any of the three tests fails — the mechanism is vague, the saturation
+point is already reached, or the improving feature is not the used feature —
+flag: "NETWORK EFFECT CLAIM REQUIRES DECOMPOSITION." Do not accept
+"data flywheel" or "the more users, the more valuable" language as a
+moat without passing all three tests.
+
+OUTCOME:
+Post-investment, the product team ran an experiment: they added 30
+new data contributors and measured whether top-level benchmark accuracy
+improved. It did not materially — the platform had already reached
+statistical maturity at the top-level cell level. Customers did not
+notice an improvement. NRR held at 117% (the product was genuinely
+useful; the benchmarks were accurate and convenient) but new customer
+acquisition did not accelerate — there was no "more users, more valuable"
+pull for prospective customers because the benchmarks were already
+reliable. Competitors launched with purchased survey data at similar
+accuracy levels. The moat that justified the investment was not there.
+Company grew to £1.6M ARR but could not raise a Series B at the Series A
+valuation. Acquired by a HR tech platform for £6.4M — 1.4x the raise.
+
+PATTERN LESSON:
+When a company claims a data network effect as its primary moat, apply
+the three-part decomposition test before accepting the claim. Identify
+the specific improving feature, its statistical saturation point, and
+whether it is the feature customers actually use. If the platform is
+already above its saturation count — verifiable from the disclosed
+customer count and any engagement data — the network effect has already
+been captured. Future customer growth does not strengthen the moat.
+"Data flywheel" language is not a moat claim — it is a hypothesis
+that must be tested against product engagement data.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 027 — FAILED INVESTMENT: THE INTERNATIONAL
+                  EXPANSION THAT DESTROYED UNIT ECONOMICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: International Expansion That Destroyed Unit Economics
+SECTOR: B2B SaaS — Employment Law Compliance for SMEs
+
+WHAT THE DEAL LOOKED LIKE:
+A UK employment law compliance platform for SMEs: the product generates
+legally compliant employment contracts, holiday and sick pay calculations,
+disciplinary procedure templates, and TUPE transfer documentation in
+real time using an AI layer trained on UK employment legislation and
+case law. ARR: £1.3M. 420 UK SME customers. Average contract: £3,100.
+Annual churn: 9%. NRR: 111%. CAC: £380. LTV (at 9% churn, 10% discount):
+£3,444. LTV/CAC: 9.1x. Gross margin: 74%. Raising £5M Series A to
+expand into Germany, France, and the Netherlands. Raising at £18M pre-money.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The UK unit economics are exceptional. Employment
+law compliance is a universal need across Europe. The product logic
+translates directly to EU jurisdictions. European SME market is 5x
+the UK. The team has the operational capability to execute."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The investment thesis assumed UK unit economics (LTV/CAC 9.1x, 74%
+gross margin) would translate to EU markets. This assumption was
+untested in the submission. The signals that were available but not
+evaluated: (1) The product was built on UK employment legislation —
+German Arbeitsrecht, French Code du Travail, and Dutch Burgerlijk
+Wetboek are not adjacent to UK law; they are entirely separate legal
+systems requiring rebuilding the AI training layer from source. The
+product localisation cost was not modelled. (2) The UK GTM motion
+was inbound via Google (employment contract templates as SEO entry
+points). German SME digital marketing is dominated by XING and local
+business associations, not Google — a different acquisition channel
+with different economics. The submission did not model EU CAC. (3)
+Germany requires Datenschutzbeauftragter (Data Protection Officer)
+appointment for any HR data processor above 20 employees — a compliance
+requirement with legal and staffing cost that the UK product did not
+have. None of these costs appeared in the financial model. The EU
+expansion section of the deck showed a TAM calculation but no unit
+economics projection for the EU markets.
+
+WHY THE WRONG CALL WAS MADE:
+The investment committee extrapolated UK unit economics to EU markets
+without modelling the structural differences in product localisation
+cost, customer acquisition cost, and regulatory compliance overhead.
+The assumption was: "Employment law compliance is a universal need,
+therefore our product translates." This conflated the existence of
+market demand with the replicability of the unit economics. Demand
+exists in Germany. But the CAC to reach German SMEs through German
+channels, the product build cost to localise for Arbeitsrecht, and
+the compliance infrastructure cost for DSGVO (GDPR implementation
+in Germany) were each materially higher than the UK equivalents.
+Framework gap: when EU expansion is the primary use of Series A
+capital, model EU-specific unit economics separately before approving
+the investment. Do not assume UK metrics are portable.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a company plans to use Series A capital for international expansion
+into markets with structurally different regulatory frameworks, require
+EU-specific unit economics in the submission before evaluating the
+expansion thesis. The specific questions: (1) What is the product
+localisation cost for each target market — specifically, does the AI
+training layer require rebuilding from source legislation? (2) What
+is the customer acquisition channel in the target market, and what
+is the estimated CAC in that channel relative to the UK CAC? (3)
+What are the compliance and regulatory overhead costs specific to
+each market (data protection officers, local legal entities, works
+council requirements)? If these three costs are not modelled and
+they represent a material fraction of the raise, flag: "EU EXPANSION
+UNIT ECONOMICS UNMODELLED." Do not approve expansion capital without
+market-specific cost modelling.
+
+OUTCOME:
+Germany launch consumed £1.8M in 18 months: legal localisation
+(£420K), German-language sales team (£480K), DSGVO compliance
+infrastructure (£190K), German SEO content programme (£310K),
+German office setup (£400K). Germany CAC: £1,840 — 4.8x UK CAC.
+Germany gross margin: 44% (localisation cost allocated to COGS) —
+vs 74% UK. Germany LTV/CAC at these metrics: 1.6x. Germany AR
+in month 18: £140K from 76 customers. France launch abandoned
+at planning stage. The company retrenched to UK-only, burned
+£2.3M of the £5M raise on the failed expansion, and raised a
+bridge at a 30% discount to the Series A valuation.
+
+PATTERN LESSON:
+When a company plans EU expansion from a UK-specific product
+built on UK-specific regulation or content, require EU-specific
+unit economics modelling before approving the expansion capital.
+UK LTV/CAC does not translate to EU markets where: (1) the
+product requires legal or regulatory rebuilding from source;
+(2) the customer acquisition channel is structurally different;
+(3) market-specific compliance overhead is material. Model
+each market separately. If EU unit economics are not presented
+in the submission, treat the EU expansion as a hypothesis,
+not a plan.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 028 — FAILED INVESTMENT: THE ENTERPRISE
+                  CONTRACT WITH THE POISON PILL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Enterprise Contract with Poison Pill
+SECTOR: B2B SaaS — Facilities Management Procurement Platform
+
+WHAT THE DEAL LOOKED LIKE:
+A procurement marketplace for facilities management: buildings managers
+can source cleaning, security, catering, and maintenance contracts
+through a single platform with transparent pricing, verified suppliers,
+and standardised SLAs. Revenue model: 3% take rate on contracted value.
+The traction milestone that made the deal: a large UK property management
+group signed a contract to route all their FM procurement through the
+platform — a contract worth £540K/year in platform fees, representing
+38% of total ARR (£1.42M). NRR: 128%. Growing strongly. The enterprise
+win was described as "a landmark validation of the platform model."
+Investment made: £5.5M Series A.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The enterprise contract validates the platform
+model with a major property group. NRR of 128% shows expansion.
+The landmark win will attract the next wave of enterprise customers."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The enterprise contract was available for review in the data room.
+It was reviewed by the investment team. The contract contained a
+Most Favoured Nation (MFN) clause in clause 14.3: "The Platform
+Provider agrees that the fees charged to [Customer] shall not
+exceed the fees charged to any other customer for equivalent
+services. In the event the Platform Provider charges any other
+customer a lower fee for equivalent services, [Customer]'s fee
+shall be automatically adjusted to match the lower rate." The
+clause was identified by a junior analyst during due diligence
+and noted in the due diligence log as: "MFN clause present —
+standard for enterprise procurement agreements." It was not
+escalated to the investment committee as a risk item. The
+implication was not modelled: the enterprise customer had locked
+in a 3% take rate for equivalent services in perpetuity. Any
+future enterprise customer negotiating a lower rate would
+automatically reduce this customer's fee. The company could
+never price below 3% for any enterprise deal without triggering
+automatic fee reduction across its largest account. Growth via
+competitive pricing was permanently constrained.
+
+WHY THE WRONG CALL WAS MADE:
+The MFN clause was identified but classified as "standard" without
+evaluating its specific impact on the company's pricing flexibility
+and growth strategy. MFN clauses are standard in enterprise procurement
+agreements between buyers of similar scale — they protect a corporate
+buyer from being undercut after signing. In a two-sided marketplace
+at early scale, however, an MFN clause in the supplier contract (the
+platform is the supplier) means the platform's pricing strategy is
+locked to its first enterprise deal. The "standard" classification
+silenced further analysis. Framework gap: "standard" contract terms
+in enterprise deals are not standard for an early-stage marketplace
+business. Every contractual constraint in the first 5 enterprise
+deals has the potential to become a structural pricing ceiling.
+The due diligence finding should have been: "What does this clause
+prevent us from doing as we scale?"
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Flag in the screening note any deal where the primary traction signal
+is a single enterprise contract representing more than 25% of ARR:
+"ENTERPRISE CONTRACT TERMS REVIEW REQUIRED." Specifically require,
+before investment completion: (1) review of any MFN, price protection,
+or favoured-nation clauses in the enterprise contract; (2) modelling
+of the pricing implications — at what future price point does this
+clause activate, and what is the revenue impact on this customer?
+(3) legal assessment of whether the clause can be renegotiated at
+Series B when the company has more leverage. The term "standard
+enterprise clause" is not a classification — it is a description.
+Classification requires answering: what does this clause prevent
+the company from doing?
+
+OUTCOME:
+The company signed its second enterprise customer 14 months post-raise
+at a negotiated 2.4% take rate (the customer negotiated 20% below
+the standard rate given its portfolio volume). The MFN clause
+automatically reduced the first enterprise customer's rate from 3%
+to 2.4% — a £108K/year fee reduction on the £540K contract.
+The company's ARR dropped by £108K the month the second enterprise
+deal closed, despite adding a new enterprise customer. NRR fell from
+128% to 104%. The board discovered that two further enterprise deals
+in the pipeline were being negotiated at 2.1% (the procurement teams
+were aware of the MFN clause and were benchmarking against it).
+The pricing floor was 2.1% — not the 3% on which the investment
+economics had been modelled. Series B investors identified the
+pricing structure and applied a lower multiple. Down round.
+
+PATTERN LESSON:
+When the primary traction signal for an investment is a single
+enterprise contract representing more than 25% of ARR, review
+every clause in that contract before investment closes. Specifically
+identify: MFN clauses, price protection clauses, volume discount
+triggers, and termination for convenience rights. For each clause
+found, model the specific scenario in which it activates and the
+revenue impact. A due diligence note that classifies a clause as
+"standard" without modelling its activation scenario is not due
+diligence — it is a document review.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 029 — FAILED INVESTMENT: THE CO-FOUNDER
+                  SPLIT AT SCALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Co-Founder Split at Scale
+SECTOR: B2B SaaS — Procurement Intelligence for Manufacturing
+
+WHAT THE DEAL LOOKED LIKE:
+Two co-founders — a manufacturing procurement director (commercial
+background) and a former Palantir data engineer (technical background)
+— built a spend analytics and supplier intelligence platform for
+mid-market manufacturers. The commercial co-founder drives customer
+relationships and strategy. The technical co-founder holds the entire
+data architecture and integration layer. ARR: £960K. 11 customers.
+Average contract: £87K. NRR: 119%. Strong enterprise references.
+Equity split: 50/50. Raising £5M Series A.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "Complementary founding team with deep domain
+and technical expertise. Strong ARR and NRR. Enterprise customer
+profile validates the market."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+Three signals were available pre-investment and not pursued. First:
+the 50/50 equity split with no disclosed vesting cliff was noted
+in the cap table review. Standard VC-backed company governance
+requires co-founder vesting with a 1-year cliff — if a co-founder
+leaves before the cliff, their unvested equity is subject to
+good-leaver / bad-leaver provisions. The submission did not disclose
+a co-founder vesting agreement. This was not requested during due
+diligence. Second: the submission described the company's strategic
+direction in the executive summary as "becoming the operating system
+for manufacturing procurement" (the commercial co-founder's language)
+and in the technical roadmap section as "building the most sophisticated
+supply chain data graph in Europe" (the technical co-founder's language).
+These are different companies. The commercial co-founder was building
+a workflow tool for procurement teams. The technical co-founder was
+building a data infrastructure product. Both descriptions were in the
+same deck without resolution. Third: a reference call with a customer's
+procurement director mentioned that "the two founders have quite
+different views on where the product should go" — transcribed verbatim
+in the due diligence notes and not escalated.
+
+WHY THE WRONG CALL WAS MADE:
+Three pre-investment signals of co-founder misalignment (no vesting
+agreement, divergent strategic language, customer observation of
+disagreement) were each noted individually and not integrated into
+a combined risk assessment. The vesting gap was treated as an
+administrative oversight. The strategic language divergence was
+treated as complementary perspectives. The customer comment was
+treated as standard founder friction. No direct conversation with
+each co-founder separately about strategic direction was conducted.
+Framework gap: co-founder alignment must be tested directly and
+specifically before investment at growth-stage valuations. Three
+independent signals of misalignment, each noted separately, should
+have triggered an explicit co-founder alignment conversation with
+each founder individually.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Flag in the screening note when any of the following are true:
+(1) co-founder equity is undisclosed or 50/50 with no vesting
+cliff mentioned; (2) the submission's executive summary and
+technical roadmap describe materially different product visions;
+(3) any reference call or customer conversation mentions co-founder
+disagreement about direction. If any one of these signals is present,
+require pre-investment: (a) confirmation that a co-founder vesting
+agreement with standard cliff and good/bad leaver provisions is in
+place; (b) a direct conversation with each co-founder separately
+about the company's 3-year strategic direction; (c) explicit
+resolution of any strategic language divergence in the submission
+into a single agreed direction documented in writing. Two of the
+three signals is sufficient to make these requirements mandatory.
+Three of three is a yellow card — the deal may be fundable but
+only with explicit co-founder governance documentation.
+
+OUTCOME:
+16 months post-investment, the commercial co-founder wanted to
+expand into a SaaS workflow product for SME manufacturers at lower
+ACV and higher volume. The technical co-founder wanted to double
+down on the data infrastructure layer and sell data feeds to research
+firms and consultancies. Neither would yield. The commercial co-founder
+resigned. He retained his 50% equity with no cliff (no vesting agreement
+had been signed). He joined a competitor. He was not subject to a
+non-compete enforceable under UK employment law. The technical co-founder
+retained the product and 4 of the 11 customers who had primarily
+technical relationships. Seven customers were in the commercial co-founder's
+relationship network and reduced their engagement. ARR dropped to
+£480K. Bridge round. Company sold to a manufacturing ERP provider
+at £3.2M — less than 1x revenue and a 0.6x return on the Series A.
+
+PATTERN LESSON:
+When a co-founder company has a 50/50 equity split with no vesting
+cliff disclosed, AND the submission contains materially different
+strategic language in different sections attributed to different
+co-founders, AND any reference or customer contact mentions co-founder
+disagreement, require explicit co-founder alignment documentation
+before investment. Specifically: a vesting agreement with cliff,
+a written 3-year strategic direction agreed by both co-founders,
+and a separate conversation with each co-founder to verify
+alignment independently. Three misalignment signals together
+are not coincidence — they are evidence.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 030 — FAILED INVESTMENT: THE DEPENDENCY ON
+                  A SINGLE ENTERPRISE RELATIONSHIP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Single Enterprise Relationship Dependency
+SECTOR: B2B SaaS — Talent Marketplace for Professional Services Firms
+
+WHAT THE DEAL LOOKED LIKE:
+A talent marketplace connecting independent consultants and interim
+managers with professional services firms (accountancies, management
+consultancies, law firms) for project-based engagements. Revenue:
+12% placement fee on the first-year contract value. ARR: £1.1M.
+The deck prominently featured a partnership with a Big Four accountancy
+firm — described as a "strategic channel partner" — through which the
+platform had placed 40 interim consultants in 14 months, generating
+£480K of the £1.1M ARR (44%). The Big Four firm's Head of Workforce
+Solutions was a named advisor to the company with a small advisory
+equity stake. NRR: 122%. Growing. Raising £5M Series A.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The Big Four partnership validates the enterprise
+use case at institutional scale. 44% of ARR from a single strategic
+partner creates concentration risk but also demonstrates the repeatable
+value of the model at scale. NRR suggests expanding relationships."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The partnership was not a platform-to-firm agreement — it was a
+personal relationship between the company's CEO and the Big Four
+firm's Head of Workforce Solutions, who held the advisory equity.
+The submission described it as a "formal channel partnership" but
+the data room contained no signed partnership agreement — only a
+Memorandum of Understanding (MOU) that described the arrangement
+as exploratory and terminable with 30 days notice. Additionally,
+the Head of Workforce Solutions was 58 years old and the MOU was
+signed 14 months prior. A LinkedIn check at the time of investment
+would have shown that this individual had been at the firm for 11
+years and had announced internally (visible in comments on a team
+LinkedIn post) that he was planning to retire "within the next couple
+of years." His departure would terminate the informal arrangement.
+The MOU was in the data room. The LinkedIn post was public. Neither
+was connected to the ARR concentration risk assessment.
+
+WHY THE WRONG CALL WAS MADE:
+The 44% ARR concentration was noted and characterised as "risk but
+also scale validation." The correct characterisation was: 44% of
+ARR depends on one informal relationship held by one individual
+who is approaching retirement, documented only by an MOU with
+30-day termination. The distinction between a formal channel
+partnership (contract, minimum commitments, firm-level engagement)
+and an informal personal arrangement (MOU, individual champion,
+no firm commitment) was not made. The concentration risk framework
+was applied — "44% is above threshold" — but the qualitative
+nature of the arrangement was not examined. The LinkedIn retirement
+signal was not found because LinkedIn research on relationship
+holders was not part of the standard due diligence checklist.
+Framework gap: ARR concentration analysis must include qualitative
+assessment of the contractual and personal durability of the
+concentrated relationship, not just the percentage.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a single customer or partner represents more than 30% of ARR,
+apply a four-part durability test to that relationship:
+(1) Contractual durability — is the relationship governed by a
+signed agreement with minimum commitments and a notice period above
+90 days? If not, it is terminable at short notice.
+(2) Institutional durability — is the relationship with the firm
+(multi-stakeholder, embedded in procurement systems) or with one
+individual? If one individual holds the relationship, assess their
+tenure and departure risk.
+(3) Individual durability — what is the tenure of the individual
+relationship holder? Are there public signals of imminent departure
+(age, recent LinkedIn activity, internal announcements)?
+(4) Contractual formality — review the specific document governing
+the arrangement. An MOU is not a partnership agreement.
+If any of the four tests fails on the concentrated relationship,
+flag: "CONCENTRATION DURABILITY RISK — [X]% of ARR is in one
+relationship with [specific durability gap identified]."
+
+OUTCOME:
+14 months post-investment, the Head of Workforce Solutions retired.
+His replacement had no relationship with the company and had a
+preferred incumbent supplier for interim consultant placement.
+The Big Four channel generated £28K in placement fees in the quarter
+after his departure (down from £120K/quarter during his tenure).
+The company's ARR dropped from £1.3M to £860K as the Big Four
+revenue unwound. The CEO spent 6 months attempting to rebuild the
+relationship with the new Head of Workforce Solutions without success.
+The company pivoted to direct enterprise sales, which required
+a sales team it had not built. Growth stalled. Bridge round.
+Series B not achievable. Acquired at 1.2x revenue by a larger
+talent platform.
+
+PATTERN LESSON:
+When more than 30% of ARR is attributable to a single customer
+or partner relationship, apply the four-part durability test:
+contractual form (MOU vs signed agreement), institutional depth
+(firm-wide vs one individual), individual tenure (approaching
+retirement or transition?), and notice period (under 90 days
+is terminable at short notice). A large revenue number from a
+single informal relationship with a senior individual approaching
+retirement is not a scale validation — it is a single point of
+failure dressed as a traction signal. Assess the relationship,
+not just the revenue.
+
+═══════════════════════════════════════════════════════════════════════
+END OF BATCH 4B — WRONG CALLS 021–030
+═══════════════════════════════════════════════════════════════════════

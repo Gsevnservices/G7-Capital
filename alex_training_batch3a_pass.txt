@@ -1,0 +1,952 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — DEAL ANALYST TRAINING LIBRARY — BATCH 3A
+PASS Deals 011–020: Patterns to Identify and Decline
+Anonymised company descriptions. Pattern-based training only.
+Built: April 2026.
+═══════════════════════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 011 — THE FOUNDER VISION MISMATCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Founder Vision Mismatch
+SECTOR: Enterprise HR Technology
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 1 (Domain Expert — former CHRO, top-five FTSE company)
+
+THE DEAL AS SUBMITTED:
+Founder spent 18 years as a Chief Human Resources Officer at two FTSE 100
+companies. She experienced firsthand the chaos of quarterly performance
+review cycles — the political gaming, the recency bias, the 48-hour
+manager panic. She built a continuous performance intelligence platform:
+employees log micro-feedback in 90 seconds daily, the system surfaces
+patterns, flags disengagement 6 weeks before resignation, and generates
+objective review packs automatically. The product is technically
+exceptional. Three Fortune 500 CHROs provided glowing reference calls.
+ARR: £620K. 8 enterprise customers. Average contract: £78K. NPS: 72.
+Team: founder plus two ex-Google engineers. Raising £4M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+All 8 customers were sourced through the founder's personal network — former
+colleagues, board advisors, or direct referrals from the three reference
+CHROs. Sales cycle on network deals: 6 weeks. The one arm's-length inbound
+lead (sourced via LinkedIn content) took 11 months and has not yet signed.
+The submission mentions "strong inbound interest from our content marketing"
+but provides no converted inbound customers. Every logo in the deck traces
+back to a relationship that existed before the company was founded.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The founder is credible. The NPS is excellent. The product solves a real
+problem that any HR professional recognises immediately. The reference calls
+are from real CHROs at real companies. Junior analysts see domain expertise,
+enterprise logos, and strong retention and call it a yes. They do not
+distinguish between network-sourced traction and market-sourced traction.
+
+THE CORRECT ANALYSIS:
+Step 1 — Apply the Reference Customer Illusion test. Count customers
+sourced through pre-existing founder relationships vs arm's-length
+commercial channels. Ratio here: 8/8. This is not a commercial motion;
+it is a network liquidation event.
+
+Step 2 — Identify the buyer persona problem. The product requires the CHRO
+to champion it internally and convince line managers to participate daily.
+In practice, CHROs have authority over HR systems but cannot mandate
+behavioural change in 50,000-person organisations without CEO backing.
+The founder built for the CHRO she wishes existed — one with unlimited
+political capital. The actual CHRO buyer has the same problem she had:
+politics, middle management resistance, and a CEO who approved the budget
+but not the culture change required.
+
+Step 3 — Check sales cycle divergence. 6-week network deals vs 11+ month
+arm's-length deal is a 9x delta. This divergence is the signal. The
+product sells to people who trust the founder personally. It does not yet
+sell to people who trust the product commercially.
+
+Step 4 — Apply the TAM reachability test. There are approximately 2,400
+FTSE 350 and Fortune 500 CHROs in the UK/US. The founder knows perhaps
+80 of them. At £78K ACV, personal network addressable market = £6.2M.
+That is not a venture-scale business.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Two arm's-length enterprise deals closed from inbound or outbound channels
+with documented sales cycles under 90 days. Evidence that line managers
+are daily active users (not just HR admins logging in). CEO as economic
+buyer, not CHRO. These three signals together would indicate the product
+sells itself past the founder's personal credibility.
+
+OUTCOME IF INVESTED:
+Company reaches £1.5–2M ARR on extended network. Founder's second-degree
+network runs dry within 18 months. Inbound motion never materialises
+because the product requires a culture the buyer organisation does not have.
+Growth stalls. Team expands a sales function that cannot sell the product
+at scale. Runway exhausted. Distressed acqui-hire by an HR platform at
+sub-1x revenue.
+
+PATTERN LESSON:
+When a domain expert founder has strong early revenue but every customer
+can be traced to a pre-existing personal relationship, this is the Founder
+Vision Mismatch pattern. Apply: require minimum two arm's-length commercial
+wins and documented evidence of repeatable outbound or inbound motion
+before marking as investable.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 012 — THE ACQUI-HIRE TRAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Acqui-Hire Trap
+SECTOR: Developer Infrastructure / DevOps Tooling
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 6 (Community Builder — open-source project with 14,000 GitHub stars)
+
+THE DEAL AS SUBMITTED:
+Two Stanford CS graduates built an open-source infrastructure monitoring
+tool that automatically maps service dependencies and flags latency
+degradation before it cascades. 14,000 GitHub stars in 18 months. 4,200
+active weekly installations. Featured on Hacker News front page three
+times. Named to ThoughtWorks Technology Radar. The commercial product
+(hosted SaaS version) launched 6 months ago. ARR: £180K. 22 paying
+customers. Average contract: £8,200/year. Three inbound enterprise pilots
+underway (AWS, Shopify, a major UK bank). Raising £3.5M Series A.
+Team: 2 founders plus 4 engineers.
+
+THE SIGNAL ALEX MUST CATCH:
+The three "enterprise pilots" mentioned are not commercial agreements — they
+are free trials initiated by individual engineers inside those companies,
+none of which has an active procurement process. The AWS contact is a
+developer advocate, not a buyer. The submission uses the word "partnership"
+to describe what is actually a free usage arrangement. More critically:
+the deck mentions that "Google, Stripe, and Cloudflare have reached out
+about potential collaboration" without specifying the nature of that
+outreach. In developer tool markets, "reached out about collaboration"
+almost always means M&A or acqui-hire interest, not commercial partnership.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+14,000 GitHub stars and a Hacker News front page are genuinely impressive
+technical signals. Junior analysts are pattern-matched to see open-source
+community traction as the precursor to the HashiCorp or Grafana story.
+The enterprise logo names create excitement. The founders are clearly
+talented. The mistake is confusing engineering community respect with
+commercial buying intent.
+
+THE CORRECT ANALYSIS:
+Step 1 — Apply the traction quality test. 4,200 weekly installations, 22
+paying customers. Conversion rate from install to paid: 0.52%. This is
+not a product with commercial pull; it is a product with technical
+admiration. Benchmark for developer tools with commercial motion: 2–5%
+conversion from active free users to any paid plan.
+
+Step 2 — Analyse the ARR composition. £180K ARR from 22 customers at
+£8,200 ACV means almost all customers are individual developer seat
+licences, not team or enterprise agreements. Enterprise monitoring tools
+with genuine traction sell at £40,000–£150,000 ACV to infrastructure
+or platform teams. The pricing signals that no enterprise buyer has
+yet engaged the procurement process.
+
+Step 3 — Decode the M&A signal. In developer infrastructure, when Google,
+Stripe, and Cloudflare "reach out about collaboration" simultaneously,
+this is acqui-hire exploration, not commercial partnership. These companies
+do not outsource infrastructure tooling; they absorb the teams that build it.
+The founders likely know this and are using the inbound interest to create
+fundraising urgency. That urgency is not a reason to invest — it is a
+reason to pause.
+
+Step 4 — Check the independent build case. At £180K ARR and 0.52%
+conversion, the commercial motion has not been demonstrated. The founders
+have not shown they can sell, only that they can build something engineers
+admire. These are different skills. There is no evidence of a sales hire,
+a pricing experiment, or a documented outbound motion.
+
+WHAT WOULD CHANGE THIS TO A YES:
+ARR above £500K from at least 5 named enterprise customers (not individual
+engineer sign-ups) on annual contracts above £30K each. Evidence of a
+working outbound or PLG-to-enterprise motion with documented conversion
+rates. Founders explicitly rejecting or deprioritising M&A conversations
+in favour of independent build. These signals would indicate the team
+can commercialise, not just build.
+
+OUTCOME IF INVESTED:
+Company raises the round. Founders continue building. One of the three
+platform giants makes a serious acqui-hire offer within 12 months. Founders
+accept — the offer is too good relative to the commercial traction they
+have built. Investors get 1–1.5x on a 2-year hold. Not a disaster but
+not a venture return. The acqui-hire was always the most likely exit.
+
+PATTERN LESSON:
+When a developer tool has strong community metrics (GitHub stars, HN
+mentions) but sub-1% free-to-paid conversion and concurrent M&A
+"collaboration" outreach from large platforms, this is the Acqui-Hire
+Trap pattern. Apply: require documented enterprise commercial motion
+before investing, or price the round at acqui-hire exit multiples
+and structure for early liquidity.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 013 — THE REFERENCE CUSTOMER ILLUSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Reference Customer Illusion
+SECTOR: Enterprise Legal Technology
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 1 (Domain Expert — former Magic Circle solicitor, 11 years M&A)
+
+THE DEAL AS SUBMITTED:
+Former M&A partner left Clifford Chance to build an AI contract review
+and risk-flagging tool for in-house legal teams. The deck features logos
+from three FTSE 100 companies (a major bank, a pharmaceutical company,
+and a telecoms business) and two Magic Circle law firms. ARR stated as
+£890K. The product integrates with major DMS systems and flags
+non-standard clauses in M&A agreements in 4 minutes vs 2 hours manually.
+The founding team includes a second former solicitor and two ML engineers
+from a leading UK research lab. Raising £5M Series A at £22M pre-money.
+
+THE SIGNAL ALEX MUST CATCH:
+The £890K ARR figure appears in the submission alongside a note that
+"three of our five named customers are currently in extended pilots." An
+extended pilot in enterprise legal is a free or heavily discounted trial
+with no contractual commitment. The submission does not separate pilot
+revenue from contracted ARR. The bank and pharmaceutical logos appear in
+the deck above the ARR figure, which implies they are paying customers —
+they are not. Actual contracted ARR from arm's-length paying customers:
+approximately £160K from the two law firms (personal relationships from
+the founder's Clifford Chance career). The non-law-firm logos are not
+customers; they are pilot participants.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The logos are credible and well-known. The ARR figure of £890K sounds
+substantial. The product addresses a genuine pain point with clear ROI
+(2 hours to 4 minutes is an 1,800% productivity gain). The founder's
+credibility is unimpeachable. Junior analysts see the logo wall and the
+ARR headline and stop digging. They do not unpack what "pilot" means in
+enterprise legal, where pilots routinely run 12–18 months before a
+procurement decision.
+
+THE CORRECT ANALYSIS:
+Step 1 — Separate stated ARR from contracted ARR. The submission says
+£890K ARR with three customers "in extended pilots." Pilots are not ARR
+unless they are on a paid, renewable contract. Request a breakdown of
+ARR by customer with contract status. If this breakdown is not available
+in the submission, flag: "ARR figure requires disaggregation — pilot
+revenue must be excluded from contracted MRR."
+
+Step 2 — Apply the logo sourcing test. Who introduced the bank pilot?
+The founder's former Clifford Chance client. Who introduced the pharma
+pilot? A board advisor who sits on their legal committee. These are not
+commercial wins — they are access wins. Access is necessary but not
+sufficient for a commercial business.
+
+Step 3 — Evaluate the arm's-length conversion rate. Two genuine paying
+customers (law firms) at presumably £80K each = £160K contracted ARR.
+£160K ARR at £22M pre-money is a 137x revenue multiple. Even accounting
+for the pilot pipeline, the valuation is not justified by confirmed revenue.
+
+Step 4 — Apply the enterprise sales cycle reality test. Enterprise legal
+technology procurement involves: Legal review of the tool itself, IT
+security clearance, DPA sign-off, and CFO approval. Typical cycle: 9–18
+months from pilot to contract. The bank pilot started 14 months ago and
+has not converted. This is a signal, not a coincidence.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Three contracted, arm's-length paying customers on annual agreements above
+£100K each, with documented conversion from pilot to paid within 12 months.
+NRR data from the two existing law firm customers. Evidence of a pipeline
+that is not entirely dependent on the founder's personal network. These
+signals would indicate repeatable commercial motion.
+
+OUTCOME IF INVESTED:
+One of the three pilots converts to a contract in year two. The others
+extend their pilots indefinitely — enterprise legal procurement is
+notoriously slow and the internal champion does not have budget authority.
+The company reaches £500K–700K ARR and cannot raise a Series B at a
+credible valuation. Founder is stretched by a 3-year enterprise sales
+cycle she did not anticipate. Bridge round. Eventual acqui-hire by a
+legal DMS provider at 2–3x revenue.
+
+PATTERN LESSON:
+When an enterprise deal features impressive logos alongside mentions of
+"extended pilots," "POCs," or "evaluations," this is the Reference
+Customer Illusion pattern. Apply: strip all non-contracted revenue from
+the ARR figure before evaluating valuation. Require a customer-by-customer
+revenue schedule with contract dates and renewal terms before proceeding.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 014 — THE SECOND-TIME FOUNDER WRONG PLAYBOOK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Second-Time Founder Wrong Playbook
+SECTOR: B2B SaaS — Supply Chain Visibility
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 3 (Repeat Founder — prior exit: SME accounting SaaS, £28M acquisition by Sage)
+
+THE DEAL AS SUBMITTED:
+Founder sold his first company (a cloud accounting product for UK SMEs)
+to Sage for £28M after 5 years. 18 months later he founded a supply chain
+visibility platform for mid-market manufacturers (£20M–£200M revenue).
+The pitch is compelling: manufacturers are blind to their tier-2 and
+tier-3 supplier risk. The product aggregates supplier data, flags single-
+source dependencies, and predicts lead time disruptions. ARR: £740K.
+14 customers. Average contract: £53K. Growing 12% MoM. Prior company
+grew at 9% MoM to exit. Team: founder plus 4, including a former Sage
+VP of Product. Raising £4.5M at £18M pre-money.
+
+THE SIGNAL ALEX MUST CATCH:
+The prior company sold to SME finance directors via a self-serve trial,
+content marketing, and a 30-day sales cycle. The current product requires
+buy-in from the COO, the procurement director, the IT team (for ERP
+integration), and occasionally the CFO. The submission describes a GTM
+motion that mirrors the prior company: free trial, content marketing,
+inside sales. The sales cycle is stated as "6–8 weeks." But the product
+category (supply chain visibility for manufacturers) has a documented
+average sales cycle of 4–9 months. The gap between stated and actual
+cycle time is the signal: either the 14 customers are not genuine
+enterprise manufacturers, or the founder is not measuring sales cycle
+from first contact correctly.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+A repeat founder with a successful exit to a FTSE company at a healthy
+multiple is a strong signal. The 12% MoM growth rate is impressive.
+Junior analysts are trained to back repeat founders. The error is
+assuming that what worked in B2B SME SaaS — short cycle, self-serve,
+word of mouth — works in complex enterprise manufacturing software.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the buyer persona difference. SME finance directors
+make tool purchasing decisions alone in under 4 weeks. Manufacturing
+COOs and procurement directors make supply chain visibility decisions
+in a committee, require IT sign-off for ERP integration, and are
+measured on uptime — they are deeply risk-averse about new vendor
+relationships. These are categorically different buyers.
+
+Step 2 — Apply the playbook compatibility test. Prior company GTM:
+self-serve trial → content inbound → inside sales → 30-day close.
+Current company GTM (as described): same model. But the buyer does
+not self-serve — they require a demo, a proof of concept, a security
+questionnaire, and a reference call from an existing customer in the
+same sector. The playbook is being applied to a buyer who cannot
+engage with it.
+
+Step 3 — Interrogate the sales cycle claim. If 14 customers closed in
+6–8 weeks each on £53K contracts, one of three things is true: (a) the
+customers are not mid-market manufacturers but smaller businesses
+the founder reclassified; (b) the sales cycle is being measured from
+the first demo, not from the first contact; or (c) all 14 were warm
+introductions that bypassed the normal procurement cycle. All three
+outcomes indicate the GTM motion is not repeatable at scale.
+
+Step 4 — Check for churn leading indicators. The product requires
+ERP integration. Integration projects in manufacturing take 3–6 months.
+If customers signed 6–8 months ago and are not yet fully integrated,
+NRR data does not yet reflect integration-phase churn. This is a
+hidden risk.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A documented enterprise GTM motion — SDR/AE structure, defined sales
+stages, average cycle from first contact to close of 90–150 days —
+with 5+ customers who went through the full procurement process.
+Evidence of a strategic hire (enterprise sales leader with manufacturing
+sector experience) replacing the SME-style self-serve motion. NRR data
+from cohorts who completed ERP integration. These signals would indicate
+the founder has adapted the playbook to the new buyer.
+
+OUTCOME IF INVESTED:
+Company hires inside sales team modelled on the prior company's playbook.
+Sales cycles stretch to 5+ months. Pipeline is large but conversion is
+low. Burn increases without proportionate ARR growth. Founder eventually
+recognises the model mismatch and pivots to enterprise sales — but the
+12 months lost and capital spent on the wrong GTM is not recoverable.
+Likely outcome: Series B at flat or down valuation.
+
+PATTERN LESSON:
+When a repeat founder's prior exit was in a short-cycle, self-serve B2B
+market and the new company operates in a long-cycle, committee-driven
+enterprise market, this is the Second-Time Founder Wrong Playbook pattern.
+Apply: map the prior GTM motion against the new buyer journey explicitly.
+If they are mismatched, require evidence of adaptation before investing.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 015 — THE OVERFUNDED COMPETITOR PROBLEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Overfunded Competitor Problem
+SECTOR: B2B SaaS — Revenue Intelligence / Sales Forecasting
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 8 (Enabler — former Head of RevOps at a unicorn SaaS company)
+
+THE DEAL AS SUBMITTED:
+Founder spent 7 years running revenue operations at a £1B+ ARR SaaS
+business. He built the company's internal forecasting model, which
+outperformed Salesforce's native forecasting by 34% in accuracy.
+He productised that model. The platform ingests CRM data, call
+recordings, and email cadence signals to produce deal-level probability
+scores and pipeline forecasts. ARR: £560K. 18 customers. NRR: 118%.
+Average contract: £31K. Integration with Salesforce, HubSpot, and Outreach.
+Strong G2 reviews. Raising £3.5M Series A. The product is genuinely good.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission mentions one competitor by name ("we are aware of Clari
+but have differentiated on price and ease of integration"). It does not
+mention that Clari raised $225M in its most recent round, has 1,500+
+enterprise customers, and is actively moving downmarket. More critically,
+Gong raised $250M and is expanding from call intelligence into revenue
+intelligence, directly entering this product's core territory. The
+combined war chest of the two inbound competitors exceeds £350M. The
+founder's competitive analysis treats Clari as a single competitor;
+in reality, the company is being squeezed from above (Clari moving
+downmarket) and from the side (Gong expanding scope) simultaneously.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The product is differentiated. The NRR is strong. The founder has genuine
+domain expertise. Junior analysts focus on the product quality and the
+existing traction and treat competitive risk as a standard section to
+acknowledge and move past. They do not model what happens when a
+competitor with 300x the capital decides to compete for the same
+customer profile.
+
+THE CORRECT ANALYSIS:
+Step 1 — Map the competitive capital stack. This company: raising £3.5M.
+Clari: £225M raised, moving downmarket with freemium Salesforce integration.
+Gong: £250M raised, announced Revenue Intelligence suite expansion in 2023.
+Outreach: acquired a forecasting tool in 2022. The competitive landscape
+has consolidated around players with 50–100x this company's capital.
+
+Step 2 — Apply the capital durability test. At £560K ARR and a £3.5M
+raise, the company can fund approximately 18–24 months of operations.
+In that window, Clari's downmarket motion will reach and price-compete
+against every current and prospective customer this company has. The
+company cannot outspend Clari on sales, marketing, or integration
+engineering. It cannot out-integrate a competitor with 5,000 integrations.
+It cannot retain customers when Clari bundles forecasting into a
+broader platform the customer already buys.
+
+Step 3 — Identify the moat. The product differentiation is price and
+ease of integration. Price is not a durable moat against a competitor
+with £225M in the bank who can subsidise customer acquisition. Ease
+of integration is replicable. The company has no data network effect,
+no proprietary dataset, and no switching cost structure that locks
+customers in beyond the annual contract cycle.
+
+Step 4 — Model the exit scenario. In 3 years, the company is either
+acquired by one of the three large competitors at a distressed multiple,
+or it continues to compete at the margin while the large platforms
+consolidate the enterprise segment. There is no clear path to a £100M+
+independent outcome.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A defensible niche that the large competitors cannot efficiently serve:
+a specific vertical (e.g. financial services revenue forecasting with
+regulatory overlay) or a specific buyer persona (e.g. Series B SaaS
+companies below £5M ARR who cannot afford Clari). Evidence that the
+company's accuracy edge is based on a proprietary model trained on
+data the competitors cannot access. These would indicate a survivable
+competitive position. Generic horizontal revenue intelligence is not.
+
+OUTCOME IF INVESTED:
+Company grows to £1.5–2M ARR over 24 months. Clari launches a
+downmarket product at 60% of the current price point with native
+Salesforce integration. Three customers churn to Clari at renewal.
+NRR drops from 118% to 94%. Series B fundraising fails to close
+at a credible valuation. Bridge. Acqui-hire offer from Clari at
+1.5x ARR.
+
+PATTERN LESSON:
+When a company has a good product in a category where a competitor has
+raised 50x or more capital and is actively moving into the same market
+segment, this is the Overfunded Competitor Problem pattern. Apply:
+map competitive capital and stated expansion plans before assessing
+product quality. A good product is not sufficient if the competitive
+capital advantage is terminal.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 016 — THE TECHNICAL DEBT CEILING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Technical Debt Ceiling
+SECTOR: FinTech — SME Lending Infrastructure
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 4 (Comeback Founder — prior company failed, root cause identified as
+                  undercapitalisation, not product failure. Current company well-capitalised
+                  at seed.)
+
+THE DEAL AS SUBMITTED:
+Founder previously built an invoice financing platform that ran out of
+capital before reaching profitability. The current company is an API-
+first embedded lending infrastructure layer — it enables non-bank
+businesses (e-commerce platforms, accountancy software) to offer working
+capital to their SME customers. ARR: £1.1M. 6 B2B platform partners.
+Average partner generates £183K ARR. Partners are growing 18% QoQ as
+their underlying SME customer bases expand. NRR: 134%. The business
+appears to be working. Raising £6M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission includes a section titled "Technical Roadmap" which
+reveals that the product was built in 8 months by a 3-person team using
+a monolithic architecture and a single-threaded loan book management
+system. The CTO note states: "We plan to use Series A capital to rebuild
+our core infrastructure on a microservices architecture to support
+the volume expected at Series B." The rebuild is the signal. A company
+doing £1.1M ARR that requires a full infrastructure rebuild before it
+can grow is not at Series A stage — it is at late seed stage with a
+Series A revenue figure. The £6M raise is being used to buy time to
+build the product the Series A pitch implies already exists.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The NRR of 134% is genuinely excellent. The B2B partner model creates
+natural expansion revenue. The use case (embedded lending for SMEs) is
+large and underserved. Junior analysts focus on the revenue metrics and
+treat the technical roadmap as a standard operational plan. They do not
+understand that a monolithic architecture in a financial services API
+business is not a feature backlog problem — it is a structural ceiling
+on concurrent transactions, partner onboarding speed, and regulatory
+audit capability.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the rebuild timeline and cost. A monolithic-to-
+microservices rebuild in a regulated lending environment (FCA-authorised
+or operating under a partner licence) typically takes 14–20 months with
+a team of 6–8 engineers. At market London engineering salaries (£90–130K),
+engineering cost alone: £720K–£1.04M/year. Rebuild cost from the £6M
+raise: approximately £1.5–2M. That is 25–33% of the round.
+
+Step 2 — Model the opportunity cost. During the rebuild, the product
+cannot add major new partner types, cannot support new loan product
+configurations, and cannot scale transaction volume significantly
+without risk of system failure. 14–20 months of limited product
+development is 14–20 months of reduced partner expansion. NRR of 134%
+may compress during this period as partners cannot access new features.
+
+Step 3 — Apply the Series A stage test. Series A capital should be
+used primarily to scale a proven GTM motion and a working product.
+If £2M of a £6M raise is earmarked for rebuilding the core product,
+the company is effectively using Series A capital to finish building
+the seed-stage product. This is a misalignment of stage and capital use.
+
+Step 4 — Assess the regulatory risk during rebuild. FCA-authorised
+lending platforms must maintain operational continuity, audit trail
+integrity, and data residency requirements during infrastructure
+migration. A botched migration in a regulated environment creates
+enforcement risk. The rebuild is not only expensive — it is operationally
+dangerous.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Rebuilding the core infrastructure before the Series A raise, with a
+clean architecture that can support 10x current transaction volume
+confirmed by an independent technical review. Alternatively, a
+significantly lower raise at a lower valuation that prices the
+Series A as a late seed round, with Series A proper reserved for
+post-rebuild scale. The £6M ask at current valuation overstates
+where the business actually is.
+
+OUTCOME IF INVESTED:
+Rebuild takes 20 months instead of 14. One partner churns during the
+feature freeze because a competitor offers a capability the company
+cannot build mid-rebuild. NRR compresses to 108%. The company emerges
+from the rebuild with a scalable product but has lost 20 months of
+compounding growth. Series B is achievable but at a flat or modest
+step-up from Series A.
+
+PATTERN LESSON:
+When a company with strong revenue metrics discloses a planned full
+infrastructure rebuild using Series A capital, this is the Technical
+Debt Ceiling pattern. Apply: require an independent technical review
+of architecture before investing. If the rebuild represents more than
+15% of the round, the company is at late seed stage regardless of
+its revenue, and should be priced accordingly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 017 — THE GEOGRAPHY TRAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Geography Trap
+SECTOR: PropTech — Residential Property Management
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 8 (Enabler — former estate agency operations director)
+
+THE DEAL AS SUBMITTED:
+A Dutch founder built a property management platform for residential
+landlords with 5–50 properties. The product automates rent collection,
+maintenance ticketing, and tenancy renewal. In the Netherlands, the
+product has genuine PMF: 2,200 landlords, €1.4M ARR, 94% annual
+retention, NPS 81. The unit economics in the Netherlands are clean:
+CAC £280, LTV £1,900, LTV/CAC ratio 6.8x. The founder is now raising
+£4M to expand into the UK and Germany. Raising at £16M pre-money.
+
+THE SIGNAL ALEX MUST CATCH:
+The Netherlands residential rental market has specific characteristics
+that make this product's unit economics work: a high proportion of
+private landlords managing their own portfolios directly (no letting
+agent intermediary), a standardised tenancy agreement framework
+(no regional variation), and English-language digital adoption at
+95%+ among the landlord demographic. The UK and German markets both
+break at least one of these characteristics. UK residential: 75% of
+properties are managed by letting agents, not landlords directly —
+the product's end-user is not the economic decision-maker. Germany:
+strict Mietrecht (tenancy law) varies by state, requires localisation
+that is not trivially replicable, and has extremely low landlord
+willingness to pay for software (landlord associations provide free
+tools). The submission does not acknowledge either of these structural
+differences.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The Netherlands metrics are exceptional. LTV/CAC of 6.8x is best-in-class.
+Junior analysts extrapolate: if it works in the Netherlands, it will work
+at scale in larger markets. They treat geography as a market sizing
+variable, not a product-market fit variable. They do not investigate
+whether the buyer in the target market is structurally different from
+the buyer in the home market.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the home market structural advantage. Netherlands PMF
+is real but partially explained by market structure: a large direct-
+landlord segment, standardised legal framework, and high digital
+adoption. These are not universal.
+
+Step 2 — Stress-test the UK expansion. UK letting agent penetration
+is 75%. This means the product must either (a) sell to letting agents
+rather than landlords — a completely different buyer with a different
+business model who earns commission on management fees and has no
+incentive to automate themselves; or (b) sell only to the 25% of
+landlords managing directly, limiting the addressable market by 4x
+relative to the Netherlands. Neither path replicates Netherlands unit
+economics.
+
+Step 3 — Stress-test the Germany expansion. Germany has 4.6M private
+landlords but Mietrecht (rental law) has 16 state-level variations
+affecting deposit rules, notice periods, and rent increase mechanisms.
+Localising for Germany is a 12–18 month product project, not a
+marketing exercise. Additionally, willingness to pay among German
+landlords for software tools is significantly lower than Northern
+European peers. The CAC will be higher, the LTV lower.
+
+Step 4 — Apply the multi-market capital model. £4M to expand into
+two structurally different markets simultaneously, each requiring
+legal adaptation, language localisation, and a different buyer motion,
+will produce burn without proportionate ARR growth. The Netherlands
+expansion capex was zero (same language, same law, same buyer). UK
+and Germany are not zero.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Successful UK pilot with documented evidence that the direct-landlord
+segment can be reached efficiently (CAC below £400, retention above 88%)
+and that at least 200 UK landlords have adopted the product without
+letting agent intermediation. This would demonstrate that Netherlands
+PMF translates before the full raise. Alternatively: pivot to a UK
+letting agent product (different buyer, different model, different
+valuation case).
+
+OUTCOME IF INVESTED:
+UK launch targets the direct-landlord segment. CAC is 2.5x Netherlands
+due to smaller addressable pool and higher digital marketing competition.
+Germany launch delayed by 8 months due to Mietrecht localisation.
+Burn exceeds plan. Netherlands business continues growing but cannot
+subsidise two underperforming international expansions. Series B
+fundraising stalls. Company pivots to UK letting agents 18 months
+in — but is now competing in a different product category.
+
+PATTERN LESSON:
+When a company has genuine PMF in a small home market and is raising
+to expand into larger markets, this is the Geography Trap pattern.
+Apply: map the structural characteristics of the home market buyer
+against the target market buyer before accepting the expansion thesis.
+If the buyer, legal framework, or digital adoption profile differs
+materially, require a market validation pilot before committing capital.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 018 — THE COMPLIANCE DEPENDENCY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Compliance Dependency
+SECTOR: FinTech — Buy Now Pay Later for Healthcare
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 5 (Operator — former COO of a regulated consumer finance company)
+
+THE DEAL AS SUBMITTED:
+A healthcare BNPL platform: patients pay for elective medical procedures
+(dental, cosmetic, optical) in 3–12 monthly instalments at 0% interest.
+The clinic pays a merchant discount rate (4.5%); the patient pays nothing
+extra. The company operates under a Consumer Credit Act exemption —
+specifically the exemption for credit agreements with fewer than 12
+monthly instalments that do not charge interest. ARR: £2.1M. 340 clinic
+partners. Processing £18M in patient financing annually. Growing 22% QoQ.
+Unit economics strong: CAC per clinic £180, LTV per clinic £2,400.
+Raising £7M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The entire business model is built on Section 60C of the Consumer Credit
+Act 1974, which exempts short-term, interest-free credit from FCA
+regulation. The FCA published a discussion paper in March 2023
+explicitly stating that BNPL products — including those currently
+structured to fall within this exemption — will be brought within
+the regulatory perimeter. HM Treasury announced in October 2023 that
+legislation would follow in 2024. The BNPL regulation bill was
+introduced to Parliament in early 2024. Once enacted, the company
+will require FCA authorisation, will face affordability check
+requirements for all patient applicants, and will need to restructure
+merchant agreements to comply with credit broking rules. The exemption
+the company relies on has a documented, legislated end date. This is
+not a regulatory risk — it is a scheduled regulatory event.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The metrics are genuinely strong. Healthcare BNPL is a real need —
+patients defer necessary dental treatment because of upfront cost.
+The unit economics are clean. The team is experienced in regulated
+finance. Junior analysts see a well-run company with a clear market
+need and model the regulatory risk as something the team will manage.
+They do not investigate the specific legislative timeline or model
+the cost of compliance readiness.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the specific regulatory dependency. The company
+operates under a named exemption with a documented legislative
+end date. This is not regulatory uncertainty — it is regulatory
+certainty in an adverse direction. The exemption will end.
+
+Step 2 — Model the cost of FCA authorisation. FCA authorisation for
+a consumer credit firm requires: a fit and proper application (3–6
+months), capital adequacy requirements (minimum own funds), a
+compliance function (1–2 FTEs at £80–120K each), an affordability
+assessment system (additional product build cost), and ongoing
+regulatory reporting. Total compliance infrastructure cost:
+£400–600K in year one. This eats a significant portion of the raise.
+
+Step 3 — Model the affordability check impact on revenue. Under FCA
+credit rules, the company must assess patient affordability before
+extending credit. In a healthcare context, patients seeking elective
+treatment frequently have impaired credit histories. Affordability
+check failure rates in comparable consumer finance categories:
+25–40% of applicants. If 30% of current patients would fail FCA
+affordability checks, the clinic's utilisation rate drops materially.
+Clinic LTV drops from £2,400. CAC/LTV ratio deteriorates.
+
+Step 4 — Timeline alignment. FCA regulation of BNPL was legislated
+in 2024 with a likely implementation period of 18–24 months.
+The Series A investment period is 18–24 months before a Series B
+is expected. The regulatory change lands exactly within the
+investment horizon. This is not a risk the Series B investor absorbs
+— it is a risk the Series A investor absorbs.
+
+WHAT WOULD CHANGE THIS TO A YES:
+The company applies for FCA authorisation before the Series A closes,
+with capital specifically allocated for compliance infrastructure.
+The submission includes a modelled impact of affordability checks
+on clinic utilisation with a clear mitigation plan. The valuation
+reflects the compliance cost and operational disruption ahead.
+These signals would indicate the team is not avoiding the regulatory
+reality but building for it.
+
+OUTCOME IF INVESTED:
+FCA regulation passes. Company spends £500K and 14 months on
+authorisation. Affordability checks reduce patient approval rates by
+28%. Clinic partners see lower utilisation and some switch to a
+competitor that received FCA authorisation 6 months earlier. ARR
+growth slows from 22% to 6% QoQ during the compliance transition.
+Series B at flat valuation. Eventual path to profitability is
+achievable but the venture return is gone.
+
+PATTERN LESSON:
+When a company's business model depends on a specific regulatory
+exemption and there is documented legislative intent to close that
+exemption within the investment horizon, this is the Compliance
+Dependency pattern. Apply: the regulatory change is not a risk to
+model — it is a scheduled event to price. If the business cannot
+demonstrate viability under the forthcoming regulatory regime, pass.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 019 — THE SINGLE CHANNEL DEPENDENCY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Single Channel Dependency
+SECTOR: Consumer — Home Services Marketplace
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 8 (Enabler — former SEO director at a consumer marketplace)
+
+THE DEAL AS SUBMITTED:
+A marketplace connecting homeowners with vetted tradespeople (plumbers,
+electricians, builders) for fixed-price jobs. The product removes
+the uncertainty from hiring tradespeople: upfront pricing, vetted
+contractors, escrow payment released on job completion. Revenue model:
+15% marketplace take rate on each transaction. GMV: £4.8M trailing
+12 months. Net revenue: £720K. 8,200 homeowner transactions. Growing
+18% MoM. CAC: £12 (organic). LTV: £180. LTV/CAC: 15x. The LTV/CAC
+ratio is exceptional. Raising £3.5M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The £12 CAC is achievable only because 94% of homeowner acquisition
+comes through a single channel: organic Google search. The submission
+confirms this in the traction section: "Our SEO moat is our primary
+growth driver — we rank top-3 for 1,400 home service queries in the
+UK." The risk is structural and threefold. First, Google's algorithm
+updates have historically devastated marketplace SEO plays — in 2023,
+Google launched its own home services product (Google Local Services
+Ads) which appears above organic results for exactly the query types
+this company ranks for. Second, Google controls the distribution
+channel entirely — a single algorithm update can eliminate 90%+ of
+customer acquisition overnight. Third, the £12 CAC is only achievable
+via organic; the submission provides no data on what CAC would be
+via paid search, content marketing, or any other channel.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+LTV/CAC of 15x is genuinely exceptional and masks the underlying
+channel concentration. Junior analysts see strong unit economics and
+high growth and treat the SEO moat as a competitive advantage. They
+do not distinguish between "hard to replicate" (genuine moat) and
+"entirely controlled by a third party" (existential dependency). SEO
+ranking is not a moat — it is a position that Google can revoke.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the channel concentration. 94% of acquisition via
+one channel. Apply the platform dependency test: what happens if this
+channel is disrupted for 90 days? Revenue drops by 94% of new customer
+inflows during that period. Recovery time: unknown, because no
+alternative channel has been tested.
+
+Step 2 — Apply the Google Local Services Ads threat model. Google
+launched Local Services Ads in the UK in 2022. These ads appear above
+organic results for "plumber near me," "electrician [city]," and
+1,000+ similar queries. The company's top-3 organic rankings appear
+below Google's own product in the search results. Google has a
+documented history of launching products that directly compete with
+organic results in high-commercial-intent categories (flights, hotels,
+jobs). Home services is a category Google is actively investing in.
+
+Step 3 — Test the alternative channel CAC. The submission does not
+provide a paid search CAC. Request it. In comparable home service
+marketplaces, paid search CAC for homeowners ranges from £25–80.
+If paid CAC is £50 and LTV is £180, the LTV/CAC drops from 15x to
+3.6x — still acceptable but not exceptional, and insufficient to
+justify the current growth rate and valuation on its own.
+
+Step 4 — Evaluate the moat claim. "We rank top-3 for 1,400 queries"
+is not a moat. It is a current position. Position is maintained by
+Google's ongoing algorithmic assessment of quality signals. The
+company does not control these signals — it optimises for them.
+Any competitor can replicate the optimisation strategy. Google can
+change the signals.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Evidence that at least 3 meaningful acquisition channels each
+contribute at least 15% of new customer volume, with documented CACs
+for each. Proof that the product can achieve LTV/CAC above 4x via
+paid channels. These signals would indicate sustainable unit economics
+that do not depend on a single algorithm. The SEO advantage can
+remain the growth accelerant rather than the existential dependency.
+
+OUTCOME IF INVESTED:
+Google updates its local services algorithm (this happens 2–3 times
+per year). The company's organic rankings for 400 key queries drop
+from top-3 to page 2 over 60 days. Monthly new customer inflows
+drop 60%. The company shifts to paid acquisition. CAC rises to £48.
+At LTV/CAC of 3.75x, the growth economics are fundable but the
+hyper-growth story is over. Series B fundraising fails to attract
+the original valuation. Bridge round.
+
+PATTERN LESSON:
+When a company's LTV/CAC ratio is exceptional but 80%+ of customer
+acquisition comes from a single organic channel controlled by a third
+party, this is the Single Channel Dependency pattern. Apply: require
+at least three active acquisition channels with documented CACs before
+accepting the unit economics as durable. An exceptional LTV/CAC built
+on one channel is a risk metric, not a quality metric.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 020 — THE PREMATURE SCALING TRAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Premature Scaling Trap
+SECTOR: B2B SaaS — Procurement Automation
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 3 (Repeat Founder — prior exit: £14M trade sale of an e-procurement
+                  tool to a consultancy)
+
+THE DEAL AS SUBMITTED:
+Founder's second company automates purchase order approval workflows
+for mid-market companies. The product integrates with ERP systems
+and routes PO approvals to the correct approver tier automatically,
+eliminating the spreadsheet and email chain process most mid-market
+procurement teams use. The company raised a £2.5M seed round 14 months
+ago from a well-known London VC. ARR is currently £480K. The company
+has 22 employees. The founder is now seeking a £5M Series A to accelerate.
+Burn rate: £490K/month. Runway at current burn: approximately 5 months.
+
+THE SIGNAL ALEX MUST CATCH:
+The company has 22 employees generating £480K ARR. Revenue per employee:
+£21,800 per year. For a B2B SaaS company at Series A, revenue per employee
+should be approximately £60,000–90,000. At 22 employees on a London
+cost base, monthly burn of £490K implies an average fully-loaded employee
+cost of approximately £267K per person per year — which indicates the
+team includes senior hires (VP Sales, VP Marketing, VP Customer Success,
+VP Product) that a £480K ARR company cannot support. The company hired
+for scale before establishing that the product had a repeatable sales
+motion. Now it is burning £490K/month on a team that cannot generate
+sufficient revenue to justify its size.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The founder has a prior exit. The seed VC is credible. The product
+addresses a genuine pain point. The 5-month runway creates urgency
+that can be mistaken for investment opportunity ("we need to move fast
+or miss this"). Junior analysts sometimes interpret burn rate as a
+proxy for ambition. They see 22 people and a credible seed investor and
+assume the scale is justified by a pipeline they haven't seen.
+
+THE CORRECT ANALYSIS:
+Step 1 — Apply the revenue per employee diagnostic. £480K ARR / 22
+employees = £21,818 per employee. Benchmark for Series A B2B SaaS:
+£60,000–90,000 per employee. This company is at 24–36% of benchmark.
+The team is approximately 3x larger than the ARR supports.
+
+Step 2 — Identify the premature hires. At £480K ARR, the appropriate
+team is: 2 founders, 2–3 engineers, 1 sales hire, 1 customer success
+hire. Total: 6–8 people at London market rates = burn of £80–120K/month.
+The company is burning £490K/month. The additional £370–410K/month
+is funding a management layer that belongs at £2M+ ARR.
+
+Step 3 — Assess the seed VC position. A credible seed VC invested
+£2.5M 14 months ago. The company now has 5 months of runway and is
+fundraising at Series A. The seed VC has not provided a bridge. This
+is a signal: the seed investor has seen 14 months of performance
+data and has chosen not to bridge the company to a better fundraising
+position. This asymmetric information is material.
+
+Step 4 — Model the Series A capital use. £5M at current burn rate
+(£490K/month) provides approximately 10 months of runway. If burn
+is not reduced, the company will be fundraising for a Series B in
+8–9 months on whatever ARR it has reached. To grow ARR from £480K
+to a Series B-justifiable £2M+ in 9 months requires 300%+ growth
+from a team that has grown ARR by approximately £480K in 14 months.
+The plan does not close.
+
+Step 5 — Assess the restructuring option. The correct intervention
+is a restructuring: reduce headcount from 22 to 8–10, extend runway
+to 18–24 months, prove the repeatable sales motion, then raise
+properly. But a founder with a credible seed VC rarely accepts this
+advice under fundraising pressure. The likely outcome is a bridge
+or a down round, not a transformation.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A committed restructuring plan: headcount reduction to 10 or fewer,
+burn reduced to £150K/month or below, runway extended to 18+ months.
+Evidence from the remaining pipeline that the core sales motion is
+repeatable with 2–3 new customers closed in the last 90 days by the
+sales hire (not the founder). ARR above £800K with a clear growth
+trajectory. These signals would indicate the company is building
+toward Series A rather than fundraising to survive.
+
+OUTCOME IF INVESTED:
+£5M is deployed. Burn continues at £490K/month without restructuring
+— the founder believes in the team and does not want to make cuts
+mid-fundraise. ARR grows to £900K over 9 months. Series B is
+attempted at £3.5M ARR target but fails to reach that number in
+time. Emergency bridge from existing investors at punitive terms.
+Down round. Founder diluted heavily. Team demoralised by the cap
+table reset.
+
+PATTERN LESSON:
+When a company has raised significant capital and is burning at a rate
+materially above what its ARR supports, with a seed investor who has
+declined to bridge and a fundraising timeline driven by runway
+exhaustion rather than growth milestones, this is the Premature
+Scaling Trap pattern. Apply: calculate revenue per employee and
+compare to stage benchmark. If below 50% of benchmark, the team is
+oversized for the business. Require a restructuring plan or a
+valuation that reflects the corrective capital use before investing.
+
+═══════════════════════════════════════════════════════════════════════
+END OF BATCH 3A — PASS DEALS 011–020
+═══════════════════════════════════════════════════════════════════════

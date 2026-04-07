@@ -513,6 +513,30 @@ Verified: 11/11 integration checks passed
           Context window usage: ~107K of 200K
 Status: Ready for live testing
 
+### SESSION 4 — 8 April 2026
+Built: 70 new training examples across 7 batch files
+  20 YES deals (Batch 2A: 011–020, Batch 2B: 021–030)
+    Wise, Monzo, Checkout.com, Tractable, Multiverse, Darktrace,
+    Veeva, Snowflake, Datadog, HashiCorp, Rippling, Deel, Vinted,
+    GoCardless, Deliveroo, Plaid, Stripe, Revolut, Recursion, Wayve
+  20 PASS deals (Batch 3A: 011–020, Batch 3B: 021–030)
+    20 new failure patterns beyond the original 10
+  20 WRONG CALLS (Batch 4A: 011–020, Batch 4B: 021–030)
+    10 missed wins + 10 failed investments
+  10 INFLECTION POINT deals (Batch 5: 001–010)
+    Genuine ambiguity — one deciding factor resolves each
+Total new content: 69,117 words across full batch files
+Integrated: Component 6 appended to alex_master_v1.txt
+  (condensed pattern summary — signals and lessons only)
+  Full batch files retained on disk for human reference
+Rebuilt: assets/alex-master-v1.js (520KB)
+Token count: ~116,895 tokens system prompt
+             ~124,895 typical call total
+             ~69,105 tokens headroom (worst case)
+Alex now has: 100 worked examples total (30 YES / 30 PASS /
+              30 WRONG CALLS / 10 INFLECTION POINTS)
+Status: Ready — push to GitHub pending
+
 ---
 
 *G7 Capital — Private Equity. Powered by Intelligence.*

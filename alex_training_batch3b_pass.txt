@@ -1,0 +1,1056 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — DEAL ANALYST TRAINING LIBRARY — BATCH 3B
+PASS Deals 021–030: Patterns to Identify and Decline
+Anonymised company descriptions. Pattern-based training only.
+Built: April 2026.
+═══════════════════════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 021 — THE WINNER-TAKE-MOST LATE ENTRY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Winner-Take-Most Late Entry
+SECTOR: B2B Marketplace — Wholesale Trade / Independent Retail
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 8 (Enabler — former VP Merchandising at a major UK grocery chain)
+
+THE DEAL AS SUBMITTED:
+A wholesale marketplace connecting independent UK retailers (convenience
+stores, delis, farm shops) with 600+ small and emerging consumer brands.
+Independent retailers currently buy from 15–20 different suppliers with
+no centralisation, inconsistent credit terms, and no digital ordering.
+The product consolidates purchasing into one dashboard: order from multiple
+brands, unified invoice, 30-day credit terms on all suppliers. The founder
+spent 12 years managing supplier relationships for a top-four UK grocer.
+She knows the supply chain deeply. ARR: £340K from transaction fees (1.8%
+take rate on GMV). GMV: £18.9M annualised. 1,400 active retailers. 620
+active brands. NPS from retailers: 74. Growing 14% MoM. Raising £4M
+Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+Faire, the US-originated B2B wholesale marketplace, launched in the UK
+in 2021 and had raised $1.5B by the time this company began its Series A
+process. Faire operates in exactly this market — independent retailers,
+emerging brands, consolidated ordering, net-60 credit terms — and has
+already signed more than 700,000 retailers globally. The submission
+does not name Faire in the competitive landscape section. It lists
+"traditional wholesale distributors and trade show relationships" as
+the competition. This omission is either a red flag about founder
+awareness or a deliberate evasion. Faire is the market. The window
+to build a competitive network closed when Faire's UK retailer count
+crossed 100,000.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The founding team is credible. The product addresses a genuine friction
+point that any independent retailer would recognise. The metrics look
+healthy: 1,400 retailers, 620 brands, positive NPS, growing GMV.
+Junior analysts are drawn to the clear problem, the domain expertise,
+and the unit economics potential of marketplace businesses. They do not
+ask who else is in the market or how many retailers the leader already has.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the network effect structure. Wholesale marketplaces
+exhibit strong cross-side network effects: more retailers attract more
+brands, more brands attract more retailers. Once a marketplace reaches
+critical mass on both sides, new entrants cannot offer equivalent
+selection or liquidity. Faire has critical mass. This company has 1,400
+retailers vs Faire's 700,000+ globally, tens of thousands in the UK.
+
+Step 2 — Assess the defensibility window. In winner-take-most markets,
+the competitive window closes when the leader reaches approximately
+10x the challenger's scale on the supply or demand side. Faire's UK
+retailer base is estimated at 40,000–60,000. This company has 1,400.
+The ratio is 30–40x. The window has closed.
+
+Step 3 — Model the capital requirement to compete. To reach parity with
+Faire's UK network would require replicating their GMV subsidy programme
+(Faire offers 60-day net terms with bad debt absorption), their brand
+onboarding team, and their retailer acquisition spend. Faire's total
+capital raised: over $1.5B. This company is raising £4M. The capital
+asymmetry is not a gap — it is a wall.
+
+Step 4 — Apply the product differentiation test. The submission claims
+differentiation on "UK-first curation" and "better brand discovery tools."
+These are feature differences, not structural advantages. Faire can
+replicate UK curation with its existing brand onboarding team. Feature
+parity in a network-effect market does not create competitive advantage —
+the winner's advantage is the network itself, not the features.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A defensible niche that Faire structurally cannot serve: a specific vertical
+(e.g. UK-only artisan food with provenance certification requirements that
+Faire's global platform cannot accommodate) where the network effect is
+local rather than global, and where regulatory or certification barriers
+create a moat. Evidence of 5%+ retailer churn away from Faire toward this
+platform, with documented reasons. These signals would indicate a surviving
+niche rather than a head-on competition with a well-capitalised incumbent.
+
+OUTCOME IF INVESTED:
+Company grows to £800K–1.2M ARR over 18 months. Faire launches a UK-
+specific curation feature. Faire's brand onboarding team begins targeting
+this company's 620 brands directly with superior credit terms. Brand-side
+churn accelerates. Retailer selection thins. NPS drops. The company pivots
+to a vertical niche but is too thinly capitalised to dominate it. Distressed
+sale or shutdown.
+
+PATTERN LESSON:
+When a marketplace submission omits a well-capitalised incumbent with
+10x or greater network scale from its competitive landscape, this is the
+Winner-Take-Most Late Entry pattern. Apply: always independently identify
+the market leader in any marketplace or network business. If the leader
+has 10x or greater scale and the submission does not name them, treat the
+omission as either a strategic evasion or a founder awareness gap — both
+are disqualifying signals. Do not invest without a credible structural
+explanation for how the company survives at scale alongside the incumbent.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 022 — THE CELEBRITY FOUNDER DISTRACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Celebrity Founder Distraction
+SECTOR: EdTech / Future of Work
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 1 (Domain Expert — former Director of Learning at a top-five global
+                  consultancy, now a prominent public voice on the future of work)
+
+THE DEAL AS SUBMITTED:
+The founder is a well-known name in the talent and learning space: 180,000
+LinkedIn followers, regular contributor to Harvard Business Review, keynote
+speaker at Davos, SXSW, and the World Economic Forum. Her company builds
+a B2B skills intelligence platform: employees self-assess competencies, the
+system maps gaps against role requirements and recommends learning pathways.
+The product has been in market 22 months. ARR: £680K. 11 enterprise
+customers. NPS: 68. Average contract: £62K. The deck is exceptionally
+well-produced. The founder's personal brand is woven into every section.
+Press coverage from the FT, Wired, and Fast Company is cited. Raising
+£5M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission lists the founder's speaking engagements for the prior
+12 months: 14 keynote appearances across 9 countries. An international
+keynote requires 2–3 days of travel and preparation per engagement.
+14 keynotes = approximately 28–42 days consumed. Additionally, the founder
+wrote 3 long-form HBR articles (each typically requiring 20–30 hours of
+research and drafting) and appeared in 11 podcast interviews. Total
+estimated external commitment: 60–75 days of the prior year — equivalent
+to 3 months of a working year. The submission also discloses that product
+decisions "go through the founder" and that the sales process is "founder-
+led for enterprise deals." A founder spending 3 months per year on brand
+activities while also being the primary product decision-maker and the
+primary enterprise salesperson is structurally overcommitted. The
+£680K ARR in 22 months is not evidence of a working machine — it is
+evidence of a talented individual doing everything slowly.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+A founder with 180,000 LinkedIn followers and Harvard Business Review
+bylines signals credibility and distribution. The press coverage implies
+market validation. The keynote circuit signals that the market takes the
+founder seriously. Junior analysts often treat personal brand as a proxy
+for product-market fit. They confuse an audience with a customer base
+and media coverage with commercial traction.
+
+THE CORRECT ANALYSIS:
+Step 1 — Separate brand traction from product traction. The founder
+has significant distribution to an audience interested in the future of
+work. That audience is not the same as enterprise HR buyers with active
+procurement budgets. FT and Wired readers do not sign £62K SaaS contracts.
+
+Step 2 — Calculate the founder's operational bandwidth. 14 keynotes +
+3 HBR articles + 11 podcasts = minimum 60–75 days external in year one.
+If the founder is also responsible for enterprise sales and product
+decisions, and has been building for 22 months, the implied capacity
+for company-building is approximately 60–65% of a full working year.
+
+Step 3 — Assess ARR growth rate against operational capacity. £680K
+ARR in 22 months = £31K ARR per month. For 11 enterprise customers, this
+implies approximately 6 months average sales cycle and the founder closing
+deals personally. If the founder is spending 35–40% of their time on
+external brand activities, the counterfactual question is: how much ARR
+would exist if that 35–40% were redirected to sales and product? The
+brand may be accelerating deal sourcing but decelerating deal execution.
+
+Step 4 — Identify the post-investment dependency risk. Series A capital
+will be used to hire. But if the founder continues the keynote circuit
+at scale — which the speaking agency will push for, and which the
+founder clearly enjoys — the management layer underneath her will operate
+without consistent founder attention. This is a culture and product
+quality risk.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A credible COO or CRO hire in place before the Series A closes, with
+a documented transition of enterprise sales and product decisions to
+that hire. A written commitment from the founder to reduce speaking
+engagements to 4 or fewer per year. Evidence of at least 3 enterprise
+deals closed by someone other than the founder. These signals would
+indicate the company is becoming a business rather than a personal brand
+monetisation vehicle.
+
+OUTCOME IF INVESTED:
+Company raises the round. Founder continues the speaking circuit — the
+invitations accelerate as the fundraising announcement generates press.
+The VP Sales hired with Series A capital struggles to close deals without
+the founder in the room. Enterprise pipeline stalls. The founder's time
+is split further, not concentrated. ARR grows to £1.2M in 18 months —
+respectable, but below the Series B threshold needed at this valuation.
+The company becomes a sustainable lifestyle business for the founder,
+not a venture-scale outcome.
+
+PATTERN LESSON:
+When a founder's submission documents more than 8 external speaking
+engagements, media appearances, or published articles in the prior 12
+months while also holding founder-led responsibility for sales and product
+decisions, this is the Celebrity Founder Distraction pattern. Apply: require
+documented evidence of management layer in place before investing. Calculate
+external time commitment explicitly. If external commitments exceed 20% of
+working days, the Series A is funding a company without a full-time CEO.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 023 — THE SERVICES REVENUE MASQUERADE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Services Revenue Masquerade
+SECTOR: AI / Data Analytics — Financial Services Compliance
+SECTOR: Series A
+FOUNDER ARCHETYPE: Type 1 (Domain Expert — former Head of Financial Crime at a Tier 1 bank)
+
+THE DEAL AS SUBMITTED:
+A compliance intelligence platform for Tier 2 and Tier 3 banks and
+building societies. The product ingests transaction data, applies ML
+models to detect suspicious activity patterns, and generates SAR-ready
+reports for the MLRO. The founder spent 14 years running financial crime
+teams at Barclays. His personal network is the customer base. ARR: £1.4M.
+9 customers. Average contract: £156K. Growing. NRR: 122%. Raising £6M
+Series A. Gross margin stated as 68%. Product is described as "enterprise
+SaaS with an AI layer."
+
+THE SIGNAL ALEX MUST CATCH:
+The submission describes three revenue components: "platform licence,"
+"implementation and configuration," and "ongoing advisory." The deck
+blends all three into a single ARR figure and a single gross margin
+figure of 68%. But in a compliance technology product for regulated
+banks, "implementation and configuration" means a team of ex-compliance
+professionals spending 3–6 months mapping the bank's transaction data
+schema, configuring alert thresholds, and training the MLRO team.
+"Ongoing advisory" means the company provides a retained compliance
+expert to sit alongside the software. These are services revenues with
+gross margins of 20–35%, not 68%. The submission does not separate
+software ARR from services ARR. If the blended margin is 68%, and
+services-heavy compliance tech typically runs 20–35% services margins,
+the implied software margin of 80–85% is only achievable if software
+revenue is the majority of the ARR. The key question — what is the
+software-only ARR and what is its gross margin in isolation — is not
+answered anywhere in the submission.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+NRR of 122% appears in the summary metrics and dominates the impression.
+A financial crime domain expert founder is credible and well-networked.
+The compliance use case has genuine urgency — banks face FCA enforcement
+action for inadequate AML systems. The 68% gross margin seems acceptable
+for enterprise software. Junior analysts do not decompose the revenue
+into its constituent parts and do not apply different margin benchmarks
+to services and software revenue.
+
+THE CORRECT ANALYSIS:
+Step 1 — Request the revenue breakdown. The first diagnostic in any
+submission that uses "platform + implementation + advisory" language
+is: what is the revenue split between recurring software licence and
+professional services? If this is not in the submission, flag it
+immediately as a required clarification before proceeding.
+
+Step 2 — Apply the compliance tech services ratio test. In compliance
+and regtech, implementation services for Tier 2/3 banks typically
+represent 40–70% of total contract value in the first year, reducing
+to 10–20% in year 2+. If the company has 9 customers and only 2–3 are
+past year one, the services component of total ARR may be 55–65%.
+On a blended basis: 40% software at 80% margin + 60% services at 30%
+margin = blended margin of 50%, not 68%. The 68% margin may reflect
+a presentation of partially deferred services revenue.
+
+Step 3 — Assess scalability of the services component. A compliance
+software business that requires 3–6 months of bespoke implementation
+per customer cannot scale without proportionate headcount in the
+implementation function. This is not a leverage model — it is a
+consulting model with a software licence attached. At 9 customers and
+£1.4M ARR, the company needs approximately 6–8 implementation
+specialists. At 90 customers, it needs 60–80. That is not SaaS scaling.
+
+Step 4 — Evaluate the NRR composition. NRR of 122% sounds strong.
+But if expansion revenue is driven by additional advisory retainers
+(adding a compliance consultant day rate) rather than software seat
+expansion or module upsell, the NRR is services expansion, not software
+product expansion. Services NRR does not compound the same way
+software NRR does — it does not generate operating leverage.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Software-only ARR above £700K (50%+ of total) with documented gross
+margin on software-only revenue above 75%. Implementation timelines
+reducing as the product matures — evidence that the third customer
+implemented in 8 weeks versus the first in 20 weeks. A credible path
+to a fully self-serve or low-touch implementation model for smaller
+bank customers. These signals would indicate a genuine software
+business underneath the services wrapper.
+
+OUTCOME IF INVESTED:
+Company raises at a SaaS valuation multiple (8–10x ARR). Services
+revenue is exposed during Series B due diligence. Series B investors
+apply a blended multiple reflecting the services component — 4–5x
+blended ARR. Down round. Alternatively: the company continues to
+grow but margins do not expand because every new customer requires
+the same services investment. Profitability is permanently deferred.
+Founder eventually pivots to a pure consulting model.
+
+PATTERN LESSON:
+When a submission describes a SaaS product alongside "implementation,"
+"configuration," or "advisory" revenue components without separating
+their ARR and gross margin contributions, this is the Services Revenue
+Masquerade pattern. Apply: require a revenue schedule that separates
+recurring software licence from professional services revenue, with
+individual gross margins for each. A blended margin above 60% is only
+credible if software-only revenue is confirmed as the majority.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 024 — THE ENTERPRISE ONLY TRAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Enterprise Only Trap
+SECTOR: GovTech / Public Sector SaaS
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 1 (Domain Expert — former Director General at HM Treasury, 19 years
+                  in public sector finance)
+
+THE DEAL AS SUBMITTED:
+A former senior civil servant built a financial controls and budget
+transparency platform for local authorities and NHS Trusts. The product
+gives finance directors a consolidated view of committed spend, actuals
+vs budget by cost centre, and automated variance alerts — replacing
+the Excel-based processes used by 90% of UK public sector finance teams.
+ARR: £1.8M. 5 customers. Average contract: £360K. NRR: 108%. G-Cloud
+12 listed. Customer 1: a London borough (£380K/year). Customer 2: an
+NHS Integrated Care Board (£410K/year). Customer 3: a county council
+(£290K/year). Customers 4–5: two further NHS Trusts. All 5 were closed
+by the founder using personal relationships from her civil service career.
+Raising £7M Series A. The product is excellent.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission describes the TAM as "£2.4B — 418 local authorities,
+236 NHS Trusts, and central government departments." But the product is
+priced at £290K–410K ACV. At these price points, the product is only
+viable for: large county and metropolitan councils (approximately 60
+out of 418), NHS Integrated Care Boards and large acute Trusts (approximately
+42 out of 236 NHS bodies), and selected central government departments.
+The realistic customer universe at current pricing is 120–160 public sector
+bodies globally — all in the UK, all subject to multi-year procurement
+cycles, all requiring OJEU/Find-a-Tender compliance, and all constrained
+by annual budget cycles that limit decision-making to one annual procurement
+window. At 100% penetration of realistic customer universe at £350K ACV,
+total revenue ceiling is £42–56M. That is not a venture-scale business
+at a £28M pre-money valuation.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The founder's credentials are extraordinary. The ARR per customer is
+impressive. NRR is positive. G-Cloud listing signals procurement-readiness.
+The product clearly works — customers are paying £400K/year for it.
+Junior analysts see strong metrics and a credible domain expert and do
+not work backwards from the total customer count at the current price point.
+
+THE CORRECT ANALYSIS:
+Step 1 — Apply the customer universe cap. Not all of the stated 654 public
+sector bodies can afford or justify £350K/year for budget management software.
+Apply a realistic adoption ceiling: large local authorities (population >200K)
+= approximately 60 UK bodies. NHS ICBs and acute trusts = approximately 42.
+Government departments with devolved finance = approximately 15. Total
+realistic universe: 117 bodies. At 350K ACV average: £40.9M revenue ceiling.
+
+Step 2 — Model VC return requirement. At £28M pre-money, assuming 25%
+dilution, the post-money is £35M. A 10x return requires an exit at £350M.
+At £40.9M revenue ceiling and a 5x revenue exit multiple (generous for
+public sector software), the company is worth approximately £200M at
+maximum penetration. The return is 5.7x from a 7-year full market
+penetration scenario. That is not a venture return.
+
+Step 3 — Assess the path to a larger market. The submission describes
+expansion into "European public sector" as the growth path. But EU public
+procurement is governed by different frameworks (OJEU), different languages,
+and different budget structures in each member state. This is not a growth
+path — it is a 10-year project requiring €50M+ of localisation investment.
+There is no credible path to 10x the current customer universe without
+fundamentally changing the product or the price point.
+
+Step 4 — Evaluate the mid-market path. Could the product be repriced for
+smaller local authorities (population <100K) at £30–50K ACV? Potentially,
+but that would require a product rebuild (the current product is built for
+large finance teams with complex cost structures), a different implementation
+model (the current model is highly bespoke), and a different sales motion.
+The submission does not mention this path — the founder has not considered it.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A credible mid-market tier of the product at £40–60K ACV that can be
+deployed in 4–6 weeks with minimal implementation — expanding the customer
+universe from 117 to 400+ UK public sector bodies. Evidence that this tier
+can be sold without the founder's personal relationships (i.e. via G-Cloud
+inbound and framework agreements). The mid-market product revenue ceiling
+would be £16–24M from the UK alone, with international expansion credible
+at a lower localisation cost. Combined ceiling: £60–80M+. That is the
+beginning of a venture case.
+
+OUTCOME IF INVESTED:
+Company closes 3 more enterprise customers in year one. Founder's
+personal network is the primary pipeline — the network runs to approximately
+30 relevant relationships. After year two, inbound pipeline slows. The
+company has 8 enterprise customers, £2.9M ARR, and no clear path to 20+
+customers without replicating the founder's network. Series B investors
+identify the customer count ceiling. Bridge. The company is acquired by
+a large public sector IT integrator (Capita, Sopra Steria) for 3–4x
+revenue — a reasonable trade sale but not a venture outcome.
+
+PATTERN LESSON:
+When an enterprise product is priced at an ACV that limits the global
+customer universe to fewer than 200 realistic buyers, this is the
+Enterprise Only Trap pattern. Apply: calculate the revenue ceiling by
+multiplying realistic customer universe by ACV, then check whether a
+10x venture return is achievable from that ceiling at a credible exit
+multiple. If the answer is no at maximum penetration, the opportunity
+is a trade sale business, not a venture investment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 025 — THE PIVOT FATIGUE PATTERN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Pivot Fatigue
+SECTOR: B2B SaaS — Vertical Software for Hospitality
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 3 (Repeat Founder — prior company: a consumer app that failed to
+                  scale. Root cause presented as "consumer acquisition cost." Not
+                  a Type 4 — no specific structural analysis of what failed or why.)
+
+THE DEAL AS SUBMITTED:
+The team is now 26 months into their second company. Current product: an
+operations management platform for independent hotel groups — front-desk
+task management, housekeeping scheduling, and maintenance ticketing in
+one mobile interface. ARR: £290K. 18 hotel group customers (2–15 hotels
+each). Average contract: £16K. The product has been live in its current
+form for 8 months. NPS: 71. Growing 9% MoM. The founder is articulate,
+the deck is well-constructed, and the hospitality pain point is real.
+Raising £3M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission's "Company History" section discloses: (1) The company
+launched in month 1 as a B2C consumer app for hotel guests (digital
+concierge). (2) In month 8, after acquiring 400 guest users across 3
+hotels with no revenue, the team pivoted to B2B — selling the concierge
+app to hotels as a guest experience tool (£3K/year). (3) In month 16,
+after 6 hotel customers and £18K ARR, the team pivoted again — the hotel
+customers asked for internal operations tools, so the team built a new
+product from scratch and discontinued the guest-facing app. The current
+product (month 16–26) is version 3. The company is pitching Series A
+momentum on 8 months of data from a product that is itself the result
+of two prior failures. The three versions of the product have consumed
+22 months of the 26 available. Each pivot destroyed the prior customer
+base and reset ARR to zero.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The current product metrics are real: £290K ARR, 18 customers, 9% MoM
+growth, NPS 71. Presented in isolation, these metrics look like an early-
+stage company gaining traction. The pivot history is disclosed but framed
+as "learning and iteration" — language that normalises the pattern. Junior
+analysts are taught that successful founders iterate. They do not distinguish
+between product iteration (improving the same product based on user feedback)
+and company pivoting (abandoning the product and customer base entirely and
+starting again).
+
+THE CORRECT ANALYSIS:
+Step 1 — Apply the pivot pattern test. Three products in 26 months:
+B2C concierge (months 1–8, abandoned); B2B guest experience (months 8–16,
+abandoned); B2B operations management (months 16–26, current). Two full
+pivots in 26 months is a rate of one pivot per 13 months. Each pivot has
+consumed the prior customer base. This is not iteration — it is serial
+restarts with the same team and a depleting capital base.
+
+Step 2 — Assess residual runway and capital efficiency. The company raised
+seed capital at month 1. After 26 months and 2 pivots, they are raising
+Series A on 8 months of product data. Calculate implied capital consumed
+per month of productive output: if the seed was £500K–800K, approximately
+£350K–560K was consumed building and abandoning products 1 and 2. The
+efficient capital deployed against the product actually being pitched is
+the seed balance minus the pivot cost — which may represent only 30–40%
+of the seed round.
+
+Step 3 — Evaluate conviction in the current direction. The third product
+emerged from customer feedback during the second product phase — hotel
+customers asked for operations tools. This origin story is reassuring
+(customer-driven) but also concerning: the team did not identify the
+operations problem independently; they were told about it by customers
+who were already using a product they built. This is a reactive finding,
+not a conviction-based insight. Will the founder pivot again if the next
+set of customers asks for something different?
+
+Step 4 — Assess team attrition. Two pivots typically produce engineering
+team churn — engineers join for a product vision and leave when the
+vision is abandoned. The submission lists 6 team members but does not
+disclose the team at founding or the attrition rate. Request current
+vs original team composition.
+
+WHAT WOULD CHANGE THIS TO A YES:
+24 months of uninterrupted execution on the current product (not 8),
+with ARR growth demonstrating compounding across at least 4 sequential
+cohorts. Evidence of zero further pivots despite customer requests for
+adjacent features. A founding team with no changes since month 16. These
+signals would indicate the founder has found conviction, not just a third
+direction to explore.
+
+OUTCOME IF INVESTED:
+Company grows to £600–800K ARR over 12 months. The hospitality market
+is fragmented and the sales motion is slow (independent hotels make
+purchasing decisions annually). The founder identifies an adjacent
+opportunity — their hotel customers are asking about revenue management
+tools — and raises the idea of a fourth product pivot in a board meeting.
+Investors resist. Founder is frustrated by the constraint. Culture
+fractures. Key engineer leaves. Growth stalls. Bridge.
+
+PATTERN LESSON:
+When a submission's company history discloses two or more full product
+pivots — defined as abandoning an existing product and customer base to
+build something new — in under 30 months, this is the Pivot Fatigue
+pattern. Apply: evaluate the current product metrics only in the context
+of when the clock started on the current product. If the current product
+has fewer than 18 months of data, treat it as a seed-stage product
+regardless of total company age. Require 18+ months of consecutive
+execution on a single product before treating as Series A-ready.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 026 — THE DEPENDENCY ON KEY PERSON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Key Person Dependency
+SECTOR: B2B SaaS — Sales Intelligence for Financial Services
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 8 (Enabler — former Quant, structured derivatives background)
+
+THE DEAL AS SUBMITTED:
+A sales intelligence platform for asset managers: ingests regulatory
+filings (13F, Form ADV), fund performance data, and public market signals
+to generate contact-level intelligence on which fund managers are likely
+to be in a buying window for specific asset class products. The founder
+has deep quant and data architecture experience. The product's data
+ingestion and modelling layer is genuinely sophisticated. ARR: £760K.
+9 customers. Average contract: £84K. NRR: 128%. Growing. Raising £4.5M
+Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission includes a team section listing 8 employees. One employee
+— the Head of Data and Client Solutions, described as having "17 years
+of asset management client-facing experience at Goldman Sachs and BlackRock"
+— is mentioned in 7 of the 9 customer case studies as the primary
+relationship holder and the individual who "designed the custom data
+integration" for each client. He is not a co-founder. His equity is
+not disclosed. His title (Head of Data and Client Solutions) describes
+both a technical and a commercial function simultaneously. A separate
+line in the submission notes that "all enterprise client renewals are
+managed by [this individual]." This person holds the customer relationships,
+the technical architecture knowledge, and the renewal process. His departure
+would impair 7 of 9 customer relationships, the custom integration knowledge
+base, and the NRR figure that is the primary investment thesis signal.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The NRR of 128% is a leading indicator that customers are expanding.
+The data product is technically impressive. The founder is credible in
+the quant domain. Junior analysts read the customer case studies and
+see strong enterprise relationships without mapping those relationships
+to a specific individual. The key person dependency is only visible if
+you cross-reference the team section against the customer narrative section
+line by line.
+
+THE CORRECT ANALYSIS:
+Step 1 — Identify the key person. Cross-reference every customer story
+with the team member referenced as the primary contact. If one person
+appears in more than 50% of customer stories as the primary contact and
+is not a founder, flag the dependency.
+
+Step 2 — Assess equity and commitment. The individual's equity stake is
+not disclosed. In a company of 8 people at Series A stage, a Head of
+Data and Client Solutions with 17 years of Goldman/BlackRock experience
+has significant market value. If this person is on a salary with minimal
+equity and has no lock-up post-Series A, the dependency is an immediate
+liquidity risk: a Series A announcement increases their market visibility
+and recruiter inbound. The probability of departure in the 12 months
+post-raise is material.
+
+Step 3 — Evaluate the institutional knowledge capture. "Custom data
+integration" designed by one person for 7 clients represents undocumented
+institutional knowledge. If this person leaves, the integrations continue
+to run but cannot be maintained, updated, or replicated for new clients.
+This is a product brittleness risk that compounds over time.
+
+Step 4 — Apply the NRR recalculation. NRR of 128% is impressive.
+But if 7 of 9 customer relationships are held by one person, NRR is
+a function of that person's continued employment, not of the product's
+stickiness. Remove that person from the model: the product-native NRR
+(relationships held by the company institutionally, not individually)
+is much lower. The investment thesis on NRR is partly a bet on employee
+retention, not just product quality.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Documented equity grant to the key individual with a 4-year vest and
+1-year cliff, signed prior to the Series A close. Evidence that customer
+relationships are being transitioned to a CS team rather than held solely
+by one person (at least 3 customers with a second point of contact who has
+engaged without the key individual present). Technical documentation of
+all custom integrations, reviewed by an independent technical advisor.
+These signals would indicate the dependency is being mitigated, not ignored.
+
+OUTCOME IF INVESTED:
+Series A announced publicly. The key individual receives 3 recruiter
+calls within 30 days. A competitor makes an offer at 40% salary premium
+and 1% equity. The individual departs 8 months post-raise. Two customers
+immediately raise concerns about continuity. One does not renew. NRR
+drops from 128% to 94% in the next measurement period. The founder
+scrambles to hire a replacement but the custom integration knowledge
+is partially lost. Series B story is impaired.
+
+PATTERN LESSON:
+When a submission's customer case studies reference one non-founder
+team member in more than 50% of accounts as the primary relationship
+holder or technical architect, this is the Key Person Dependency pattern.
+Apply: require disclosure of that individual's equity position, vesting
+schedule, and contractual commitment before proceeding. NRR figures
+built on relationships held by an unequitised individual are not
+product metrics — they are employee retention metrics.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 027 — THE RACE TO THE BOTTOM PRICING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Race to the Bottom Pricing
+SECTOR: B2B SaaS — Accounting and Bookkeeping for SMEs
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 4 (Comeback Founder — prior company: online accounting services
+                  firm that was acquired at low multiple. Root cause: margin compression
+                  from undercutting. Has not identified this as a structural issue —
+                  the current company is repeating the same pattern.)
+
+THE DEAL AS SUBMITTED:
+The third entrant into UK SME cloud accounting software behind Xero and
+QuickBooks. The differentiation is price: £7/month for full bookkeeping
+functionality vs £26/month for Xero Starter. The company has 14,200
+paying subscribers in 22 months. MRR: £99,400. ARR: £1.19M. Growing
+11% MoM. Churn: 3.2% monthly. CAC: £18. The founder frames this as
+"democratising accounting software for micro-businesses who cannot
+afford Xero." The product is functional, the team is execution-focused,
+and the growth is real. Raising £4M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+Monthly churn of 3.2% implies annual churn of approximately 32%. In SME
+accounting software, where switching costs are high (migrating transaction
+history, retraining bookkeepers) and annual retention should be 85%+,
+a 32% annual churn rate is a fundamental PMF failure signal masquerading
+as growth. The company is acquiring 1,562 new subscribers per month (11%
+of 14,200) and churning approximately 454 subscribers per month (3.2% of
+14,200). Net new subscribers: 1,108/month. If the customer acquisition
+engine slows — due to competition, rising paid social CAC, or platform
+algorithm changes — the churn base erodes the existing subscriber count
+rapidly. Additionally: at £7/month ACV, even with zero churn, reaching
+£10M ARR requires 119,000 subscribers. That is a consumer acquisition
+volume, not an SME SaaS business — it requires Facebook/Instagram/TikTok
+marketing at scale, which will drive CAC above the current £18 very quickly.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+14,200 subscribers in 22 months is a large absolute number. 11% MoM growth
+sounds strong. £18 CAC sounds exceptional. Junior analysts focus on the
+absolute customer count and the growth rate. They do not calculate the
+implied steady-state churn at scale or model the CAC curve as the easy-to-
+reach subscribers are exhausted.
+
+THE CORRECT ANALYSIS:
+Step 1 — Convert monthly churn to annual. 3.2% monthly churn =
+1-(1-0.032)^12 = 32% annual churn. In SME accounting software, competitive
+annual churn benchmarks are 8–15%. A 32% annual churn rate indicates the
+product is not sticky — customers try it and leave at a rate that would
+destabilise the business if acquisition slows even modestly.
+
+Step 2 — Model the churn steady state. At 3.2% monthly churn and 1,562
+gross new subscribers per month, the subscriber base stabilises at
+approximately 48,812 subscribers (1,562 / 0.032). ARR ceiling without
+churn improvement: £4.1M. That is not a venture-scale outcome from a
+£4M Series A at implied £15M+ post-money.
+
+Step 3 — Apply the pricing moat test. Price differentiation of 73% (£7
+vs £26) is not a moat — it is a margin deficit. Xero can launch a £9/month
+tier tomorrow. QuickBooks already offers a free tier in some markets.
+When the incumbent decides to compete on price, the company's primary
+differentiation evaporates. The company has no product, data, or switching
+cost advantage — only a price advantage that any competitor can replicate.
+
+Step 4 — Model the CAC trajectory. The first 14,200 subscribers were
+acquired at £18 CAC — the low-hanging fruit of price-sensitive micro-
+businesses actively searching for Xero alternatives. The next 50,000
+subscribers will require broader media spend. Comparable consumer SaaS
+businesses see CAC double by 30,000 subscribers and triple by 80,000.
+At 3x CAC (£54) and £7/month ACV, CAC payback is 7.7 months — still
+acceptable, but the LTV at 32% annual churn is approximately £25.
+LTV/CAC: 0.46x. The unit economics are negative at scale.
+
+WHAT WOULD CHANGE THIS TO A YES:
+Monthly churn below 1.5% (annual below 17%) demonstrating genuine product
+stickiness. Evidence of a pricing tier above £7/month with positive uptake
+(e.g. a £15/month plan with payroll or VAT filing that 30%+ of subscribers
+upgrade to). LTV/CAC above 3x at current CAC. These signals would indicate
+a real product advantage driving retention, not just a temporary price
+advantage driving acquisition.
+
+OUTCOME IF INVESTED:
+Company raises the round. Xero launches a £9/month "Starter Lite" plan
+to defend the micro-business segment 8 months later. This company's
+primary acquisition message ("half the price of Xero") is neutralised.
+Gross new subscriber acquisition drops 40%. Churn continues at 3.2%.
+Subscriber count peaks at 22,000 and begins declining. Bridge. The
+company explores a pivot to vertical-specific accounting (e.g. tradespeople,
+creative freelancers) but is too thinly capitalised to execute.
+
+PATTERN LESSON:
+When a company's primary differentiation is price and monthly churn
+exceeds 2.5%, this is the Race to the Bottom Pricing pattern. Apply:
+calculate LTV at current churn and compare to CAC. If LTV/CAC is below
+2x, the unit economics are negative or marginal and price will compress
+further under competition. A company that competes on price in a market
+with well-capitalised incumbents has no durable moat. Pass.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 028 — THE SOLUTION LOOKING FOR A PROBLEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Solution Looking for a Problem
+SECTOR: Deep Tech / Industrial AI — Predictive Quality Control
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 2 (Deep Tech Founder — PhD in Computer Vision, 3 years as
+                  senior research scientist at a major semiconductor manufacturer)
+
+THE DEAL AS SUBMITTED:
+Two researchers from a leading UK engineering school have built a computer
+vision quality control system for precision manufacturing: cameras on the
+production line capture images of components at 240 frames per second;
+a custom CNN model identifies defects invisible to the human eye with
+99.3% accuracy. The system has been validated in a 6-month pilot at
+a UK automotive components supplier. The technology is impressive and
+the validation is real. The founders present a £4.8B TAM (global
+manufacturing quality control software market). No revenue. No paying
+customers. Raising £3.5M Series A with the pilot as the primary evidence
+of market fit. The pilot participant is described as a "committed design
+partner" who will "likely become a first customer."
+
+THE SIGNAL ALEX MUST CATCH:
+The submission contains a section titled "Customer Discovery" listing
+22 conversations with manufacturing quality control managers conducted
+over 12 months. The section summarises: "Strong interest in the technology
+across all conversations. 18 of 22 agreed the defect detection accuracy
+was superior to current methods." But the section also discloses the
+outcomes: of 22 conversations, zero have resulted in a Letter of Intent,
+a paid pilot, or any contractual commitment. The pilot participant itself
+is described as "likely" to become a paying customer — not confirmed.
+The founders have spoken to 22 potential customers, demonstrated a
+technically superior product, and generated universal interest — and
+have zero commercial commitments. The pattern: buyers agree the
+technology is impressive but do not have a buying problem that requires
+it. Manufacturing quality control managers already have quality control
+systems. The defect rate they currently experience is within acceptable
+process parameters. 99.3% accuracy is superior to what they have, but
+the incremental improvement does not justify a new vendor, a new
+integration, and a capital expenditure decision.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The technology is genuinely impressive and technically differentiated.
+99.3% accuracy is a hard number that sounds like product-market fit.
+A 6-month pilot at a real manufacturer provides comfort. Junior analysts
+see deep technical capability, a large TAM, and an academic pedigree and
+treat the pilot as evidence of commercial traction. They do not distinguish
+between "buyer is impressed" and "buyer has a problem that requires this
+solution right now."
+
+THE CORRECT ANALYSIS:
+Step 1 — Apply the buyer urgency test. 22 conversations, 18 positive
+responses, zero commitments. This is not a sales execution failure —
+it is a signal that the pain point does not meet the buyer's threshold
+for new vendor adoption. In precision manufacturing, quality managers
+do not switch or add inspection systems unless: (a) they have a specific
+defect rate problem that is causing recalls or customer penalties; or
+(b) a regulatory requirement demands new inspection standards. The
+submission does not identify either condition in any of the 22 conversations.
+
+Step 2 — Distinguish "technically superior" from "commercially necessary."
+99.3% vs a current system's 97.5% accuracy sounds significant. In
+automotive components manufacturing, if current defect escape rate is
+within contract tolerance, the incremental improvement does not trigger
+a budget allocation. The buyer's problem is not "we want better technology."
+The buyer's problem is "we have a defect rate we are being penalised for."
+The submission does not identify a customer with the latter problem.
+
+Step 3 — Evaluate the pilot conversion. A 6-month paid pilot that has
+not converted to a contract after 6 months is a warning sign, not a
+validation sign. The pilot participant had access to the product for
+6 months, confirmed the accuracy advantage, and still has not committed
+to purchase. This is the best possible buyer — the design partner who
+co-shaped the product — and they are still not buying.
+
+Step 4 — Assess the capital deployment plan. The £3.5M raise is described
+as funding "product development and sales hire." But the product is
+technically validated. The gap is not technical — it is commercial. A
+sales hire without a pipeline of buyers who have an active purchasing
+problem will spend 18 months conducting demonstrations to manufacturers
+who are "interested but not ready."
+
+WHAT WOULD CHANGE THIS TO A YES:
+A signed, paid contract (not a pilot) with a manufacturer who is
+experiencing a specific defect problem causing measurable financial
+penalties — and who is buying the product specifically to solve that
+problem, not to evaluate the technology. This one signal would indicate
+a genuine buyer problem, not just buyer interest. Two such contracts
+would be sufficient for a Series A conversation.
+
+OUTCOME IF INVESTED:
+Sales hire joins and conducts 60+ manufacturer demonstrations in year
+one. Conversion to paid contract: 2 deals at £40K each = £80K ARR
+from £3.5M deployed. The problem is not the product and not the sales
+hire — it is that the buyer's pain point threshold for new quality
+control adoption has not been reached. The company pivots to targeting
+manufacturers under active recall investigation or regulatory audit
+(the customers with genuine urgency) but this market is unpredictable
+and small. Runway exhausted. Technology licensed to an incumbent
+quality control hardware provider at sub-venture return.
+
+PATTERN LESSON:
+When a deep tech submission shows 15+ customer discovery conversations
+with positive technical responses but zero commercial commitments —
+including a pilot that has not converted — this is the Solution Looking
+for a Problem pattern. Apply: separate buyer interest from buyer urgency.
+"The technology is impressive" is not a buying signal. Require at least
+one paying customer who can articulate the specific problem they were
+experiencing before adopting the product, measured in financial terms.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 029 — THE MARKET CONSOLIDATION SIGNAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Market Consolidation Signal
+SECTOR: B2B SaaS — Field Service Management
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 8 (Enabler — former product director at a facilities management company)
+
+THE DEAL AS SUBMITTED:
+A field service management platform for HVAC, electrical, and plumbing
+contractors with 5–50 engineers. Replaces paper job cards and WhatsApp
+scheduling with a mobile-first job management system: engineer dispatch,
+real-time job status, quote and invoice generation, parts tracking, and
+customer communication. ARR: £820K. 62 contractor customers. Average
+contract: £13,200. NRR: 111%. Churn: 7% annually. Growing 10% MoM.
+Strong G2 ratings. The product is functional, the team is experienced,
+and the vertical is real. Raising £4M Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The field service management software category has been consolidating
+for 36 months. The submission names three competitors in its competitive
+landscape section. It does not disclose that ServiceTitan (US, $9.5B
+valuation, IPO in 2024) has been expanding into the UK since 2022;
+that Xero-backed Simpro acquired 3 UK competitors between 2021 and 2023;
+and that Salesforce acquired a field service management platform in 2022
+and is bundling field service tools into its Service Cloud at no additional
+charge for existing Salesforce customers. The consolidation pattern is clear:
+four well-capitalised acquirers are rolling up the field service management
+category. Companies in this category are being acquired at 3–5x ARR
+when they reach £2–4M ARR — before they can grow large enough to threaten
+the acquirers. This company at £820K ARR is exactly at the entry point
+of the acquisition funnel. A venture investment requires a 10x return.
+An acquisition at £2.5–4M ARR at 4x revenue = £10–16M exit. That does
+not return the fund.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+The product metrics are solid. NRR of 111% and annual churn of 7% indicate
+the product is working. 62 paying customers provides some social proof.
+The founding team has relevant domain experience. Junior analysts evaluate
+the company's metrics in isolation without mapping the competitive
+consolidation dynamic in the category. They do not ask: what is the
+most likely exit scenario and does it generate a venture return?
+
+THE CORRECT ANALYSIS:
+Step 1 — Map the consolidation activity in the category. Research M&A
+activity in field service management software in the last 36 months.
+Simpro acquisitions: 3 companies in 24 months. ServiceTitan international
+expansion with UK sales team live. Salesforce Field Service Cloud bundled
+into existing contracts. This is not a growing fragmented market — it is
+a consolidating market where the acquirers are using capital to roll up
+smaller players before they can grow independently.
+
+Step 2 — Model the exit scenarios. Scenario A: Company grows to £2–4M
+ARR, receives acquisition offer from Simpro, ServiceTitan, or Salesforce
+at 3–5x ARR = £6–20M exit. At £4M Series A post-money, the return range
+is 1.5–5x. Not a venture return. Scenario B: Company grows independently
+to £10M+ ARR and raises a Series B. But to do so, it must defend against
+ServiceTitan's UK expansion (which has 100x the marketing budget) and
+Salesforce's bundled offering (which is free to existing customers).
+The independent path requires out-competing companies with £500M+ in
+capital in a category the company has no structural moat in.
+
+Step 3 — Identify the acquirable but not scalable zone. The company is
+at £820K ARR with 10% MoM growth. In 18 months it reaches approximately
+£2.5M ARR. This is the zone where acquisition interest typically peaks
+(small enough to absorb cheaply, large enough to validate). The venture
+investment would be deployed, 18 months of growth would compound, and
+then the acquisition offer would arrive at a price that returns 2–3x
+on the Series A. This is the structural trap in consolidating categories.
+
+Step 4 — Assess the moat. The company's moat is product quality and
+switching cost (job history, invoicing history, customer records stored
+in the platform). These are real but replicable. ServiceTitan will offer
+migration tooling to reduce switching cost. The moat does not hold in
+a category where a well-capitalised acquirer is willing to subsidise
+switching cost reduction.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A specific defensible niche within field service management that is too
+small or too specialised for ServiceTitan or Simpro to pursue (e.g.
+fire safety and suppression contractors with specific regulatory reporting
+requirements, or healthcare-specific HVAC contractors with NHS compliance
+requirements). Evidence that the niche creates a moat through regulatory
+complexity that large platforms cannot efficiently replicate. This would
+indicate a survivable position even in a consolidating category.
+
+OUTCOME IF INVESTED:
+Company grows to £2.2M ARR in 18 months. Simpro makes an acquisition
+approach at £8.8M (4x ARR). Founders consider but investors push for
+continued independence. Investors provide a bridge to pursue the £10M
+ARR target. ServiceTitan UK market share grows. Two of the company's
+largest customers switch to ServiceTitan (£140K ARR lost). Growth slows.
+Eventually acquired at £9M — a 2.25x return on the £4M Series A.
+
+PATTERN LESSON:
+When a submission operates in a product category with documented M&A
+consolidation by well-capitalised acquirers in the last 24 months, this
+is the Market Consolidation Signal pattern. Apply: map all acquisition
+activity in the category before evaluating product metrics. If the
+likely exit scenario is acquisition at under 5x revenue before the
+company reaches scale, model the return and confirm it meets fund
+hurdle rates. A good product in a consolidating category may generate
+a 2–3x return — not a venture return.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS DEAL 030 — THE UNIT ECONOMICS DENIAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PATTERN: Unit Economics Denial
+SECTOR: B2B SaaS — Logistics and Last-Mile Delivery Optimisation
+STAGE: Series A
+FOUNDER ARCHETYPE: Type 3 (Repeat Founder — prior exit: a £22M acquisition of a route
+                  planning software business by a logistics group. The prior business
+                  was profitable. The current business is not, and the founder is
+                  applying a growth-first logic that contradicts the prior company's
+                  success model.)
+
+THE DEAL AS SUBMITTED:
+A last-mile delivery route optimisation platform for D2C e-commerce
+brands. The product integrates with Shopify, WooCommerce, and Magento;
+pulls all outstanding orders; and generates optimised multi-stop delivery
+routes for in-house delivery fleets or third-party courier networks,
+reducing delivery cost per parcel by an average of 22%. ARR: £1.6M.
+28 customers. Average contract: £57K. Growing 19% MoM. The submission
+headline metrics are strong. The deck is well-produced. Raising £6M
+Series A.
+
+THE SIGNAL ALEX MUST CATCH:
+The submission's financial section presents gross margin as 61% —
+acceptable for enterprise SaaS. But a footnote on the gross margin
+slide reads: "Gross margin calculated on software revenue only.
+Infrastructure and data costs allocated to R&D." This is a non-standard
+accounting treatment. In SaaS, infrastructure costs (cloud compute,
+data storage, third-party mapping APIs, courier API integration costs)
+are COGS, not R&D. Route optimisation software is computation-intensive:
+it runs optimisation algorithms across live order data, integrates with
+real-time traffic APIs, and pushes updates to courier systems. These are
+ongoing COGS, not one-time development costs. When infrastructure and
+data costs are correctly allocated to COGS, the true gross margin is
+likely 35–45%. Additionally: the submission does not disclose CAC or
+payback period anywhere in the deck. A question on CAC in the Q&A
+section of a prior investor meeting (noted in the submission's appendix)
+received the response: "We don't track CAC formally yet — we're focused
+on growth." A founder of a company at £1.6M ARR who does not track CAC
+is either unaware of a serious unit economics problem or is actively
+avoiding disclosing it.
+
+WHY THIS FOOLS JUNIOR ANALYSTS:
+19% MoM growth is a strong headline. £57K ACV is credible enterprise
+pricing. The 22% delivery cost reduction is a concrete customer ROI
+that justifies the price point. The prior founder exit to a logistics
+group signals domain credibility. Junior analysts focus on revenue growth
+and the clear customer value proposition. They do not interrogate the
+gross margin footnote or notice the absence of CAC data.
+
+THE CORRECT ANALYSIS:
+Step 1 — Reconstruct the true gross margin. Route optimisation platforms
+typically consume: AWS/GCP compute for algorithm runs ($0.08–0.40 per
+optimisation request at scale), Google Maps or HERE Maps API for real-
+time routing ($2–8 per 1,000 API calls), and courier API integration
+maintenance (engineering hours for 15+ courier integrations). At 28
+customers running daily optimisations across active delivery fleets,
+infrastructure cost is not immaterial. Allocating it to R&D understates
+COGS by £200–400K annually at current scale. True gross margin estimate:
+38–48%.
+
+Step 2 — Identify the CAC evasion. A £1.6M ARR company with 28 customers
+has an average customer count of approximately 2.3 customers per month
+over 12 months. Any founder who has been building for 12+ months knows
+the rough cost of acquiring each customer. "We don't track CAC formally"
+is not a startup-stage answer at £1.6M ARR — it is an avoidance answer.
+Request a customer acquisition schedule: for each of the 28 customers,
+what was the sales channel and approximate sales cost? This calculation
+can be constructed even without formal tracking.
+
+Step 3 — Estimate CAC from disclosed data. The company has a sales team
+(implied by the team section: "VP Sales + 2 Account Executives"). London-
+market fully loaded cost for this team: approximately £420K/year. If this
+team closed 28 customers in 12 months, sales-attributed CAC = £420K / 28
+= £15,000 per customer. At £57K ACV, that is a 3.2-month CAC payback —
+excellent. But if the marketing budget (content, events, paid search)
+added another £200K, total CAC rises to £22,143 and payback to 4.7 months —
+still acceptable. The problem is this cannot be confirmed because the
+founder doesn't disclose it. The refusal to disclose, combined with the
+non-standard gross margin treatment, is the signal.
+
+Step 4 — Apply the pattern recognition test. Non-standard COGS allocation
++ refusal to disclose CAC + strong headline revenue growth is a specific
+combination. This pattern typically indicates one of two things: (a) the
+founder genuinely does not track unit economics and is operationally unsophisticated
+about the business she is running; or (b) the founder tracks them and does
+not disclose them because they are unfavourable. Both scenarios are
+disqualifying at Series A. A sophisticated operator founder who built a
+profitable prior company should understand COGS allocation.
+
+WHAT WOULD CHANGE THIS TO A YES:
+A restated gross margin using standard COGS allocation (infrastructure
+and data costs in COGS, not R&D), confirmed above 55%. A customer
+acquisition schedule showing CAC by channel with payback below 12 months.
+An explanation from the founder of why the prior company's profitability-
+first discipline was replaced with a growth-first model, with a credible
+strategic rationale. These signals would indicate financial transparency,
+not evasion.
+
+OUTCOME IF INVESTED:
+Series A closes. Financial due diligence during the Series B reveals true
+gross margin of 41% and actual blended CAC of £28,000 (payback: 5.9
+months — still acceptable, but not Series A metrics). The Series B
+investors apply a lower revenue multiple reflecting the corrected margin.
+The valuation step-up is smaller than modelled. Existing investors are
+diluted more than expected. Trust between founder and board is damaged
+by the disclosure pattern. The company is viable but the relationship
+dynamics impair its execution.
+
+PATTERN LESSON:
+When a submission presents gross margin with a non-standard footnote
+allocating operational costs to R&D, and simultaneously declines to
+disclose CAC at £1M+ ARR, this is the Unit Economics Denial pattern.
+Apply: reconstruct COGS using standard allocation before accepting any
+gross margin figure. Require a customer acquisition schedule for every
+customer to date before accepting that CAC is not tracked. A founder
+who cannot or will not provide unit economics at Series A is either
+unsophisticated or evasive — both are disqualifying signals for a
+capital-intensive growth phase.
+
+═══════════════════════════════════════════════════════════════════════
+END OF BATCH 3B — PASS DEALS 021–030
+═══════════════════════════════════════════════════════════════════════

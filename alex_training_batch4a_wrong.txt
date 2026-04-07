@@ -1,0 +1,912 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — DEAL ANALYST TRAINING LIBRARY — BATCH 4A
+WRONG CALLS 011–020: Missed Wins and Failed Investments
+Anonymised. Pattern-based training on judgment under uncertainty.
+Built: April 2026.
+═══════════════════════════════════════════════════════════════════════
+
+NOTE ON PURPOSE:
+Wrong calls are the most valuable training material in this library.
+A correct YES or PASS confirms a pattern. A wrong call reveals a gap
+in the analytical framework — a place where the right inputs were
+available but the wrong conclusion was reached. Alex must study these
+not to memorise outcomes, but to understand which signals were
+available at the time and were either missed or discounted incorrectly.
+The test for each wrong call: could a careful analyst, with only
+the information available at the time of decision, have reached the
+right conclusion? The answer is always yes. That is why it is a lesson.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 011 — MISSED WIN: THE UNSEXY MARKET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Unsexy Market
+SECTOR: Vertical SaaS — Waste Management and Environmental Compliance
+
+WHAT THE DEAL LOOKED LIKE:
+A former operations director at a national waste management company
+built a compliance and route management platform for UK skip hire,
+hazardous waste, and liquid waste contractors. The product manages
+waste transfer notes (a legal requirement under the Environmental
+Protection Act), vehicle route optimisation, contractor license
+tracking, and Environment Agency reporting in a single mobile-first
+system. ARR: £480K. 34 customers (skip hire and hazardous waste
+contractors with 10–80 vehicles). Average contract: £14K. NRR: 119%.
+Annual churn: 8%. Growing 13% MoM for 14 months. No famous investors.
+No press coverage. The deck uses photos of skips and industrial waste
+vehicles. Raising £3M Series A at £11M pre-money.
+
+THE DECISION MADE:
+PASS. Reasoning given at the time: "The market is too fragmented and
+operationally niche. Exit multiples in waste management services are
+historically low. The customer profile (owner-operated skip hire
+businesses) will be slow to adopt SaaS and difficult to expand.
+No clear path to a large exit."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The Environment Agency announced mandatory digital waste tracking
+(the Digital Waste Tracking Service) in 2022, with implementation
+scheduled for 2024–2025. This regulation was publicly available
+at the time of the decision. Every waste contractor in the UK —
+approximately 34,000 registered waste carriers — will be legally
+required to use a digital tracking system by the implementation date.
+The company had already built the only purpose-built system compliant
+with the forthcoming framework. The £480K ARR was built against
+voluntary adoption; the regulation would make adoption mandatory
+across a 34,000-contractor TAM. The submission mentioned the regulation
+in a footnote. The analyst treated it as a future opportunity rather
+than an immediate market-sizing catalyst. This signal was in the
+submission. It was read and discounted.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst applied the "unsexy market" aesthetic filter before
+completing the market sizing. The skip hire photographs and the
+owner-operator customer profile triggered an early PASS heuristic
+based on category aesthetics. The regulatory catalyst in the footnote
+was not evaluated against the market structure — it was noted and
+moved past. The analyst failed to ask: "What happens to adoption
+if this product is legally mandated?" The framework gap: regulatory
+catalysts in footnotes must always be elevated to the primary analysis,
+not left in footnotes.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Whenever a submission mentions a regulation, legislative timeline,
+or compliance requirement — even in a footnote — stop and evaluate
+it as a potential mandatory adoption catalyst before assessing market
+aesthetics. Ask: "If this regulation passes as described, what is
+the addressable customer count that must adopt this product by law?"
+If that number exceeds 1,000 paying customers at current ACV with
+plausible adoption economics, the regulatory catalyst overrides
+the market aesthetics assessment entirely.
+
+OUTCOME:
+The mandatory digital waste tracking regulation passed. Within 18
+months of implementation, the company had 1,800 paying customers
+and £2.8M ARR. A private equity firm backed them at £28M valuation.
+The investors who passed at £11M pre-money watched a 2.5x step-up
+they did not participate in. The exit four years later: £94M to a
+waste management services group. 8.5x from the Series A price point.
+
+PATTERN LESSON:
+When a submission contains a mandatory regulatory catalyst in any
+section — however peripheral — AND the company already has a compliant
+product serving the regulated activity, do not evaluate the market on
+current voluntary adoption. Calculate the legally mandated TAM. If
+mandatory adoption economics justify a venture return, market aesthetics
+are irrelevant. A skip hire company with a regulatory moat is more
+defensible than a fintech without one.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 012 — MISSED WIN: THE STRUGGLING SECOND-TIME FOUNDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Struggling Second-Time Founder
+SECTOR: B2B SaaS — Insurance Claims Automation
+
+WHAT THE DEAL LOOKED LIKE:
+Founder sold his first company — a workflow automation tool for HR
+teams — for £18M after 4 years. His second company has been running
+for 28 months. The product automates first-notification-of-loss
+processing for mid-market insurance companies: when a policyholder
+submits a claim, the system validates coverage, routes to the correct
+adjuster team, and generates a provisional reserve estimate automatically.
+ARR: £320K. 5 customers. Average contract: £64K. The company has
+pivoted once (from a broader insurance operations product to this
+specific claims intake workflow). Growth has been slow: 7% MoM for
+the last 6 months. The deck is honest about the struggle. The founder
+describes the pivot as "painful but necessary" and identifies specifically
+why the prior product failed to find PMF (it required changes to the
+insurer's existing core system; the claims intake workflow requires no
+core system changes — it sits as a layer on top). Raising £3.5M at
+£12M pre-money.
+
+THE DECISION MADE:
+PASS. Reasoning: "The metrics don't support a Series A. 7% MoM growth
+and £320K ARR after 28 months suggests the market is not responding.
+The pivot is concerning — it's the second major directional change.
+The valuation does not reflect the risk."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The founder's root cause analysis of the pivot was available in the
+submission and was specific, structural, and correct. The original
+product required insurers to change their core claims management system
+(a 12–18 month IT project). The new product required no core system
+change — it sat above existing systems via API. This is not a direction
+change based on investor pressure or market sentiment; it is a precise
+architectural correction based on a buyer friction diagnosis that proved
+accurate. The 5 customers signed under the new model all onboarded in
+under 8 weeks (stated in the submission). Under the old model, 3 pilot
+customers each took over 6 months to onboard and 2 churned during
+implementation. The signal: onboarding velocity tripled under the new
+architecture. This was available at the time. It was not weighted
+correctly relative to the ARR and growth rate metrics.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst applied the pivot fatigue heuristic (from the PASS framework)
+too broadly. Not all pivots are created equal. The pivot fatigue pattern
+applies when a founder abandons a customer base without a specific
+structural reason. This founder identified a precise architectural
+barrier (core system dependency), corrected it, and the onboarding
+data confirmed the correction worked. The analyst pattern-matched
+"pivot" to "uncertainty" without evaluating the quality of the
+pivot analysis. Framework gap: the Type 4 ROOT CAUSE TEST exists
+precisely for this situation. It was not applied. If it had been, the
+specific vs asserted root cause distinction would have elevated this
+to a Watch or Priority Review.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a repeat founder discloses a pivot, apply the Type 4 ROOT CAUSE
+TEST immediately before evaluating the metrics. Determine: is the
+root cause of the prior failure specific and structural (identifiable
+from observable data) or asserted and attributional (self-serving
+narrative without evidence)? If specific and structural, weight the
+post-pivot operational data — onboarding time, implementation success
+rate, early churn — more heavily than the ARR growth rate in the months
+immediately following the pivot. A new product with 8-week onboarding
+replacing a product with 6-month onboarding is a structurally significant
+improvement, regardless of current ARR.
+
+OUTCOME:
+The company found PMF 6 months after the PASS decision. A tier-2 Lloyd's
+market insurer signed a £200K contract. Three more followed within 4
+months. ARR reached £1.2M within 8 months of the PASS. The company
+raised a Series A at £22M — a 5x step-up from the passed valuation.
+Exit 5 years later to a global insurance software group at £140M.
+
+PATTERN LESSON:
+When a repeat founder presents a pivot alongside a specific, structural
+root cause analysis — and post-pivot operational data (not just revenue
+data) shows measurable improvement in the identified friction point —
+do not apply the pivot fatigue framework. Apply the Type 4 ROOT CAUSE
+TEST. If the root cause is specific and the fix is verified by operational
+data, give the company 3–6 more months of observation time rather than
+a PASS at the current metrics.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 013 — MISSED WIN: THE CONTRARIAN CATEGORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Contrarian Category
+SECTOR: EdTech — Enterprise Skills Intelligence (B2B, not B2C)
+
+WHAT THE DEAL LOOKED LIKE:
+October 2022. The consumer EdTech market has just collapsed: Byju's
+valuation imploded, Chegg's stock dropped 50%, Coursera was under
+pressure. Two ex-McKinsey partners who spent 10 years each in
+workforce transformation built an enterprise skills intelligence
+platform: it ingests a company's job descriptions, performance review
+data, and learning management system records, maps actual skills
+held by each employee against skills required for each role and
+projected required skills in 3 years, and generates a board-level
+workforce risk report. The product is B2B only: sold to CHROs and
+Chief People Officers at companies with 2,000+ employees. ARR: £740K.
+7 enterprise customers. Average contract: £106K. NRR: 126%.
+No consumer exposure whatsoever. Raising £5M Series A.
+
+THE DECISION MADE:
+PASS. Reasoning stated internally: "EdTech sentiment is extremely
+negative right now. LPs are asking questions about every EdTech
+position. The market timing is wrong to lead a round in this category.
+The consumer EdTech comparison will contaminate the Series B story."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The company was not EdTech. It was workforce analytics — a category
+that overlaps structurally with HR technology, people analytics, and
+enterprise risk management. Its buyers were CHROs and CFOs measuring
+workforce capability risk, not individual learners paying subscription
+fees. The submission clearly stated: "We do not sell to individuals.
+We have no consumer revenue. Our buyer is the CHRO and our economic
+buyer is the CFO." The company's competitive set — Workday, Gloat,
+Eightfold AI — was not in the EdTech category. The EdTech category
+collapse was caused by consumer subscription models with high CAC and
+low retention. This company had B2B enterprise contracts with 126%
+NRR. The category label "EdTech" was applied by the analyst as a
+shortcut. The product was enterprise HR technology with a learning
+intelligence layer. The distinction was in the submission.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst used category label reasoning rather than business model
+reasoning. "EdTech" triggered a negative prior based on recent headline
+events (Byju's, Chegg, Coursera) without examining whether those events
+were structurally relevant to this specific company. They were not.
+Consumer EdTech failed because of consumer subscription economics.
+This company had none of those characteristics. The cognitive error:
+applying a category sentiment filter before completing a business model
+classification. Framework gap: the initial screen should classify the
+business model (B2B enterprise, B2C subscription, marketplace) before
+applying category sentiment. A company with £106K ACV enterprise
+contracts is not in the same market as a consumer EdTech subscription
+at £20/month.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Never apply category-level sentiment filters before completing a
+business model classification. Before assigning a category label,
+identify: (1) who is the buyer — an individual or an organisation?
+(2) what is the pricing model — subscription, seat licence, or ACV
+contract? (3) who are the direct competitors as named by the company?
+If the buyer is an enterprise, the ACV is above £50K, and the named
+competitors are enterprise software companies, the category label
+is "enterprise B2B SaaS" regardless of what consumer adjacency the
+technology superficially resembles. Apply category sentiment only
+within the correct business model classification.
+
+OUTCOME:
+The company raised from a US growth fund 3 months later at the same
+valuation. ARR reached £3.2M within 18 months. Workday acquired
+the company for £180M — 11x the Series A post-money. The investors
+who passed on category sentiment grounds received zero economic benefit
+from the outcome they had helped build by passing.
+
+PATTERN LESSON:
+When a submission is categorised superficially in a market where
+sentiment is negative, but the business model (buyer type, ACV, and
+named competitive set) places the company in a structurally different
+category, do not apply the category sentiment filter. Classify by
+business model first: B2B enterprise with £50K+ ACV contracts is not
+the same market as consumer subscriptions regardless of the technology
+domain. Category sentiment is only relevant within the correct
+business model category.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 014 — MISSED WIN: THE BORING METRICS HIDING
+                  EXCEPTIONAL RETENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Boring Metrics Hiding Exceptional Retention
+SECTOR: B2B SaaS — Engineering Document Control for Construction
+
+WHAT THE DEAL LOOKED LIKE:
+A former project manager on major UK infrastructure projects (Crossrail,
+Tideway Tunnel) built a document control and revision management platform
+for large construction projects. When a civil engineering project has
+3,000 active drawings and 14 subcontractors, a change to Revision B
+of a structural drawing must be propagated correctly to every party
+who holds a copy. Errors cost £50,000–500,000 per incident. The product
+automates this propagation and creates an immutable audit trail.
+ARR: £380K. 11 customers (major contractors: Balfour Beatty, Laing
+O'Rourke, Morgan Sindall). Average contract: £35K. NRR: 134%.
+Growth rate: 16% MoM. No famous investors. No London office. Team
+based in Bristol. Raising £2.5M Series A.
+
+THE DECISION MADE:
+PASS. Reasoning: "Growth rate of 16% MoM is below our threshold for
+Series A (we require 20%+). ARR of £380K after 24 months is slower
+than we'd expect for a product with this team quality. The construction
+sector has historically low tech adoption rates and the sales cycle
+will be long. We'd revisit at £600K ARR."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+NRR of 134% across 11 customers over 24 months. The submission included
+a cohort table showing D90, D180, and D365 retention by customer cohort.
+D365 retention across all cohorts: 100% (no customer had churned since
+founding). The 134% NRR was driven by project expansion: when a
+contractor used the product on one project and it saved them from a
+significant revision error, they mandated it on every subsequent
+project. The submission included a case study: one contractor started
+with one project (£18K), expanded to 7 simultaneous projects (£126K)
+over 18 months — a 7x revenue expansion from a single customer.
+The growth rate of 16% MoM was slow because sales cycles were 3–4
+months and each new customer was a major contractor requiring IT
+security approval. But once a contractor signed, they never left
+and they expanded substantially. This product did not have a growth
+problem — it had a top-of-funnel constraint that would resolve as
+the sales team scaled. The cohort table was in the submission.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst applied a minimum growth rate threshold (20% MoM) as
+a hard filter before examining retention quality. The threshold was
+designed as a proxy for product-market fit — strong growth indicates
+the market is pulling the product. But in enterprise markets with
+long sales cycles, growth rate at small ARR bases is a function of
+sales team size and deal cycle duration, not of PMF. A company with
+100% D365 retention and 134% NRR has proven PMF more conclusively
+than a company with 25% MoM growth and 85% annual retention. The
+framework gap: growth rate thresholds should not be applied before
+examining retention data. Retention is the primary signal; growth is
+the accelerator.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Never apply a minimum growth rate filter as a primary screen. Apply
+growth rate as a secondary filter only after examining retention.
+The correct sequence is: (1) evaluate NRR and cohort retention data
+first; (2) if NRR is above 120% and annual retention is above 90%,
+classify as strong PMF regardless of growth rate; (3) then evaluate
+growth rate in the context of sales cycle length — a 3–4 month sales
+cycle means a small team can close only 3–4 customers per month;
+(4) if growth rate is below threshold but PMF is confirmed and the
+bottleneck is identifiable (sales team size, sales cycle duration),
+model what growth rate becomes with scaled sales investment and
+evaluate the investment case on projected not current growth.
+
+OUTCOME:
+The company reached £600K ARR in the next 5 months without any new
+investment, using only the seed capital remaining. They raised a
+Series A at £18M — a 7x step-up from the valuation at which they
+were passed. 100% D365 retention held through the Series A. Exit 4
+years later to a major engineering software group at £85M.
+
+PATTERN LESSON:
+When NRR exceeds 120% and D365 cohort retention is above 90%,
+do not apply a minimum growth rate filter. Exceptional retention in
+an enterprise product with a documented long sales cycle is a stronger
+PMF signal than high growth rate with moderate retention. The correct
+model: confirm PMF via retention, then evaluate whether capital can
+unlock growth by resolving the identified bottleneck. Growth rate
+in the absence of retention data is meaningless; retention in the
+absence of growth data is investable.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 015 — MISSED WIN: THE REGULATORY WINDOW OPENER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: MISSED WIN
+PATTERN: Regulatory Window Opener
+SECTOR: FinTech — Open Banking Data Aggregation for Mortgage Lending
+
+WHAT THE DEAL LOOKED LIKE:
+A team of two — a former FCA policy official and a bank open banking
+lead — built a mortgage affordability verification platform using
+PSD2 open banking data. Instead of requiring applicants to submit
+3 months of bank statements (manual, slow, 40% of cases require
+resubmission), the platform pulls live transaction data directly
+from the applicant's bank via open banking API, categorises income
+and expenditure automatically, and generates an FCA-compliant
+affordability report in 4 minutes. ARR: £240K. 4 mortgage broker
+customers. Average contract: £60K. Growing. Raising £3M Series A.
+Very early stage. Limited traction data.
+
+THE DECISION MADE:
+PASS. Reasoning: "Too early. Only 4 customers. The open banking
+ecosystem is still too fragmented — bank coverage is incomplete
+and consumer consent rates are low. We'd revisit at Series A with
+more evidence of broker adoption."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The FCA published Mortgage Market Review guidance in the same quarter
+as this pitch explicitly encouraging lenders to use open banking
+data for affordability assessments. More specifically: the FCA's
+Consumer Duty regulation (effective July 2023) required mortgage
+lenders to demonstrate they had taken reasonable steps to assess
+affordability accurately — a duty that manual bank statement review
+was increasingly failing to meet in FCA supervisory visits. The
+submission disclosed that one of the 4 broker customers had adopted
+the platform following a "supervisory letter" from the FCA raising
+concerns about their manual affordability process. This single detail
+— a real FCA supervisory action driving adoption — was available in
+the submission. It indicated that regulatory pressure was converting
+the theoretical market (brokers who would benefit from open banking)
+into an urgent market (brokers who were receiving FCA letters about
+their current process). The founding team's FCA policy background
+gave them early sight of enforcement direction. This was in the deck.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst evaluated the market based on current open banking
+adoption rates (which were indeed fragmented in 2021) rather than
+on regulatory enforcement trajectory. The "too early" conclusion
+was correct as a market timing assessment in 2019. By 2021, the FCA
+Consumer Duty and the supervisory letter pattern changed the timeline.
+The founding team's regulatory background was treated as domain
+expertise (positive signal) rather than as regulatory foresight
+(primary investment signal). The analyst did not ask: "Why does
+a former FCA policy official know this market is about to move?"
+Framework gap: when a founder's background is regulatory, their
+timing thesis requires regulatory due diligence, not just market
+adoption analysis.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a founding team includes individuals with direct regulatory
+experience (former regulator, former compliance director, former
+policy official), treat their market timing claim as a regulatory
+intelligence signal requiring specific evaluation. Ask: what specific
+regulatory development is this team aware of that creates urgency?
+Request the specific FCA guidance, legislation, or enforcement trend
+they are referencing. If a current customer cites a regulator action
+as the reason for adoption (as the supervisory letter did here),
+treat this as a mandatory catalyst signal and apply the regulatory
+catalyst framework: calculate mandatory or urgency-driven TAM rather
+than voluntary adoption TAM.
+
+OUTCOME:
+Consumer Duty came into force in July 2023. Mortgage lenders and
+brokers received FCA supervisory guidance requiring documented
+affordability evidence. The company signed 42 new broker customers
+in the 6 months following implementation. ARR reached £2.8M.
+A US fintech infrastructure investor led a £12M Series A. Exit
+to a mortgage technology platform at £75M — 25x the Series A
+post-money for the investors who did invest.
+
+PATTERN LESSON:
+When a founding team has direct regulatory experience AND a current
+customer cites a specific regulatory enforcement action as their
+reason for adoption, this is a regulatory window opener signal.
+Do not evaluate market timing based on current voluntary adoption
+rates. Apply the regulatory catalyst framework: identify the specific
+regulation, map the enforcement timeline, calculate the population
+of entities that will face mandatory compliance pressure within
+24 months. If that population at current ACV generates a venture
+return, the market is not too early — it is exactly on time.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 016 — FAILED INVESTMENT: THE CHARISMATIC FRAUDSTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Charismatic Fraudster
+SECTOR: B2B SaaS — Supply Chain Risk Management
+
+WHAT THE DEAL LOOKED LIKE:
+The founder presented as a world-class operator: ex-Goldman Sachs
+supply chain finance, followed by 5 years building risk systems for
+a global logistics company. His platform monitors supplier financial
+health in real time — integrating credit agency data, Companies House
+filings, news sentiment, and payment behaviour signals to flag supplier
+distress before it disrupts the buyer's production. ARR stated as
+£1.4M. 11 customers including two named FTSE 250 companies. NRR: 131%.
+Three references provided: a CPO, a Head of Procurement, and a supplier
+risk director — all positive. The founder presented with exceptional
+clarity and self-assurance. The deck was impeccable. Investment made:
+£5M Series A.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "Exceptional founder with deep domain credibility.
+Strong ARR with meaningful enterprise names. Reference checks positive.
+The product addresses a real post-COVID supply chain risk pain point.
+Team has the right background."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+Three signals were available at the time of investment and were not
+pursued with sufficient rigour. First: the three reference contacts
+were all provided by the founder. Industry standard for reference
+checking is to find at least one reference independently — someone
+not provided by the founder, sourced from the investor's own network
+or from LinkedIn connections at the customer companies. This was not
+done. Second: the two named FTSE 250 companies appeared in the deck
+but their procurement or supply chain heads were not part of the
+reference list. The investor's network included two people at one
+of the named companies. They were not contacted. Third: the ARR
+figure of £1.4M was not verified against bank statements or audited
+accounts. The contract schedule provided showed £1.4M but was a Word
+document, not a data room export from an accounting system. The due
+diligence checklist marked "contract schedule reviewed" — it had been
+seen, but not verified against source data.
+
+WHY THE WRONG CALL WAS MADE:
+The founder's charisma and presentation quality compressed the
+due diligence timeline. The investor team felt confident after the
+founder meetings and treated the reference checks as confirmatory
+(expecting positive results) rather than investigative (trying to
+find disconfirming evidence). Provided references are coached
+references — this is true even in non-fraudulent situations. The
+cognitive bias: charisma reduces verification effort precisely
+when it should increase it. A founder who is exceptionally
+compelling, whose deck is flawless, and whose story is consistent
+without any hesitation is a founder who has rehearsed the narrative.
+That is either an excellent operator or a skilled deceiver. The
+verification required to distinguish them is the same in either case.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Alex's output must flag any investment where the following conditions
+are simultaneously true: (1) the founder is described or presents
+as exceptionally charismatic or polished; (2) all references are
+founder-provided; (3) ARR is not verified against bank statements
+or accounting system export; (4) named enterprise customers have
+not been independently contacted. In the screening note, flag:
+"VERIFICATION REQUIRED — charisma increases not decreases due
+diligence rigor. Require: one independently sourced reference not
+provided by founder; ARR verification against bank statements;
+direct contact with named enterprise accounts before closing."
+This flag does not mean PASS — it means the verification requirement
+must be completed before investment.
+
+OUTCOME:
+18 months post-investment, the Series B process began. A prospective
+Series B investor contacted the named FTSE 250 customers independently.
+One confirmed they were a customer but at £80K, not the £300K in the
+contract schedule. The other had not heard of the company. The ARR
+of £1.4M was approximately £420K of real contracted revenue with the
+rest fabricated on the contract schedule. The founder had coached the
+three provided references on what metrics to confirm. The fund lost
+£4.2M of its £5M investment in the subsequent wind-down.
+
+PATTERN LESSON:
+When a founder demonstrates exceptional charisma, presentation polish,
+and narrative consistency, this is an increased verification trigger,
+not a confidence signal. Apply: require at least one independently
+sourced reference not on the founder's reference list, sourced from
+the investor's own network or LinkedIn contacts at named customers.
+Require ARR verification against bank statements or accounting system
+export, not a founder-prepared contract schedule. Charisma is not
+a substitute for verification — it is a reason to verify more.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 017 — FAILED INVESTMENT: THE HOCKEY STICK THAT
+                  WAS ONE CUSTOMER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Hockey Stick from One Customer
+SECTOR: B2B SaaS — Energy Management for Commercial Real Estate
+
+WHAT THE DEAL LOOKED LIKE:
+An energy management platform for commercial property: the product
+connects to building management systems, meters, and HVAC controllers
+to optimise energy consumption in real time, reducing energy bills
+by an average of 18–23% with no capital expenditure required. ARR
+growth was striking: £180K in January, £820K by July of the same
+year — a 4.5x increase in 6 months. The deck showed a steep ARR
+curve. NRR: 142%. 14 customers. Raising £6M Series A in August.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The hockey stick ARR growth is exceptional.
+Energy efficiency is a compelling regulatory and commercial trend.
+18–23% cost reduction with no CapEx is an easy enterprise sale.
+NRR of 142% shows strong expansion."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The submission broke down ARR by customer in an appendix. The appendix
+was reviewed but not analysed. If the 14 customer ARRs in the appendix
+had been summed and compared to the total ARR figure, it would have
+been apparent that one customer — a large commercial property fund
+managing a 40-building portfolio — represented £520K of the £820K ARR.
+That one customer accounted for 63% of total ARR. Furthermore, the
+contract note for that customer showed a 90-day termination clause
+(standard for pilot-phase property fund contracts, which can be
+terminated if the energy savings underperform). The ARR figure was
+real. The concentration was disclosed in the appendix. The termination
+clause was in the contract note in the appendix. Neither was flagged
+in the main analysis.
+
+WHY THE WRONG CALL WAS MADE:
+The hockey stick ARR chart produced a strong anchoring effect. The
+analyst saw the curve, noted the 14 customers, and accepted the NRR
+figure without disaggregating the ARR by customer. The appendix was
+reviewed for completeness (all pages seen) but not for analytical
+signal extraction (no customer-level analysis performed). The customer
+appendix exists in most submissions for this purpose — to allow
+customer-level concentration analysis. It was treated as a supporting
+document rather than a primary analytical input. Framework gap: ARR
+curves should never be accepted without disaggregation by customer.
+Any ARR spike (defined as more than 40% ARR growth in a single quarter)
+requires identification of the source before it is treated as evidence
+of acceleration.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When a submission shows an ARR spike — more than 40% growth in a
+single quarter — flag immediately: "ARR spike requires source
+identification." In the analysis, reconstruct the ARR by customer
+using whatever data is available (customer appendix, case studies,
+reference list). Calculate: what percentage of total ARR is
+attributable to the largest single customer? If one customer exceeds
+30% of ARR, apply the Customer Concentration Trap framework. Check
+the contract for that customer for termination clauses, pilot status,
+or non-standard renewal terms. If the customer has a 90-day or
+shorter termination right, flag: "ARR CONCENTRATION RISK — [X]%
+of ARR is in one account with [termination clause]. Underlying
+ARR ex-concentration: [recalculated figure]."
+
+OUTCOME:
+The large property fund's energy savings in year one came in at 14%
+— below the 18–23% headline claim, which was an average across all
+buildings including newer, more efficient ones. The fund's asset
+manager decided not to renew at month 11 and exercised the 90-day
+termination clause. ARR dropped from £820K to £300K overnight.
+The company rebuilt over 18 months but the Series B was raised at
+a flat valuation to the Series A. Fund returned 1.1x.
+
+PATTERN LESSON:
+When ARR growth exceeds 40% in a single quarter, do not accept the
+aggregate ARR figure. Disaggregate by customer. If one customer
+represents more than 30% of ARR, apply the Customer Concentration
+Trap framework and check the contract for termination rights. A
+hockey stick caused by one contract is not a growth signal — it is
+a concentration risk. Recalculate ARR excluding the concentrated
+customer before evaluating the investment case.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 018 — FAILED INVESTMENT: THE MARKET THAT
+                  NEVER ARRIVED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Market That Never Arrived
+SECTOR: PropTech — Commercial Real Estate Tokenisation
+
+WHAT THE DEAL LOOKED LIKE:
+A platform enabling fractional ownership of commercial real estate
+through blockchain-based tokenisation: a £20M office building can
+be divided into 200,000 tokens at £100 each, allowing retail
+investors to own a fractional interest in a yield-generating asset
+historically available only to institutional investors. The platform
+handles token issuance, secondary trading, and yield distribution.
+FCA-regulated (Electronic Money Institution licence held). ARR:
+£280K from platform fees and token issuance. 3 properties tokenised.
+£4.2M of investor capital deployed into tokens. Growing. The market
+timing thesis: institutional adoption of tokenised real estate was
+forecast by McKinsey, Deloitte, and the FCA itself to reach £1.4
+trillion globally by 2027. Investment made: £4M Series A in 2021.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The regulatory framework is in place, the
+platform works, and the institutional adoption forecasts are credible.
+This is a first-mover position in a market that multiple credible
+sources confirm will be significant within 5 years."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The market timing thesis was built entirely on analyst forecasts,
+not on evidence of institutional demand. The submission included
+no institutional LP or pension fund that had participated in a
+tokenised real estate product. The three tokenised properties were
+funded by retail investors, not institutions. The institutional
+adoption forecasts cited McKinsey (2019), Deloitte (2020), and an
+FCA discussion paper (2021) — all of which predicted adoption "within
+5 years" without specifying any institutional buyer who had committed
+to participating. A search of the public record at the time of
+investment would have found: zero institutional property funds in the
+UK with a published tokenisation strategy; zero pension fund trustee
+board decisions approving tokenised assets; and no HMRC tax treatment
+guidance for tokenised property (a prerequisite for institutional
+adoption). The market timing evidence available at the time pointed
+to analyst enthusiasm, not institutional readiness.
+
+WHY THE WRONG CALL WAS MADE:
+The investment committee treated credible analyst forecasts (McKinsey,
+Deloitte) as evidence of market timing rather than as opinions about
+market timing. There is a critical distinction: analyst forecasts
+are hypotheses, not commitments. The question should have been:
+"Who has committed capital to this market, not who has predicted it?"
+Framework gap: apply the Prior Attempt Rule from Framework 3. Commercial
+real estate tokenisation had been attempted 3 times in the prior 5 years
+(Meridio, Harbour, RealBlocks — all early-stage attempts that failed
+to achieve institutional adoption). Three prior attempts without a
+single institutional commitment was a -3 timing confidence adjustment
+that reduced the Market Timing score to 4–5/10. This calculation
+was not performed.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When an investment thesis depends on market adoption that has been
+predicted by analysts but not yet commenced, apply two tests:
+(1) Prior Attempt Rule — how many prior companies attempted this
+market and why did they fail to achieve the predicted adoption?
+Three or more prior attempts is a -3 timing confidence penalty.
+(2) Institutional commitment test — has any institution that would
+need to participate in this market (pension funds, sovereign wealth
+funds, institutional REITs) made a public commitment, published
+a strategy, or committed capital? Analyst forecasts from third
+parties are not institutional commitments. If no institution has
+committed, the market remains theoretical regardless of the
+quality of the forecast.
+
+OUTCOME:
+By 2024, commercial real estate tokenisation remained a retail
+investor product in the UK. No major pension fund or institutional
+REIT had adopted tokenised real estate. HMRC published draft guidance
+in 2023 but full clarity remained pending. The platform's retail
+investor base grew modestly but institutional adoption — the thesis
+on which the £4M was invested — did not materialise within the
+investment horizon. The company was acqui-hired by a property
+management software group for £3.2M — a 0.8x return.
+
+PATTERN LESSON:
+When an investment thesis depends on market adoption that analysts
+have predicted but that has not yet commenced, apply the Prior
+Attempt Rule and the institutional commitment test before accepting
+the timing thesis. Analyst forecasts are not evidence of market
+readiness — they are hypotheses. Three or more prior attempts without
+institutional adoption is a -3 timing confidence adjustment regardless
+of forecast quality. Require at least one institutional buyer commitment
+(published strategy, capital allocation, or pilot) before accepting
+that the market is ready.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 019 — FAILED INVESTMENT: THE REFERENCE CUSTOMER
+                  WHO WAS THE FOUNDER'S FRIEND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Coached Reference Customer
+SECTOR: B2B SaaS — Mental Health Benefits Platform for Employers
+
+WHAT THE DEAL LOOKED LIKE:
+An employer mental health benefits platform: companies pay a per-seat
+licence and employees access therapy, coaching, and wellbeing content
+through the platform. A B2B model targeting HR directors in companies
+with 100–2,000 employees. ARR: £680K. 9 employer customers. Average
+contract: £75K. NRR: 114%. Three reference calls conducted before
+investment: (1) an HR Director at a 500-person tech company; (2) a
+Head of People at a professional services firm; (3) a Chief People
+Officer at a manufacturing business. All three gave glowing reviews.
+Investment made: £4.5M Series A.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "Reference checks were unanimously positive.
+The product is mission-driven and addresses real employee wellbeing
+need. ARR and NRR are solid. Team has the right HR and clinical
+background."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+Two signals were available and not pursued. First: all three references
+were provided by the founder and scheduled through the founder's
+assistant. No independent reference was sought from any of the 9
+named customers. The reference list provided by the founder included
+the company names of the three referees. A LinkedIn search of the
+three individuals at the time would have shown that two of the three
+had personal connections to the founder predating the company's
+founding — the HR Director had worked with the founder at a prior
+company; the CPO had been at university with the founder's co-founder.
+These connections were on public LinkedIn profiles. Second: the
+9-customer ARR of £680K implied an average contract of £75K. Three
+of the customers were named in the deck. The fourth customer reference
+call was offered but declined (the investor felt three was sufficient).
+Post-investment, it emerged that two of the three companies that gave
+references were personal friends of the founder who had signed nominal
+contracts at discounted rates. Their combined actual ARR contribution:
+£62K. Actual arm's-length commercial ARR: approximately £350K.
+
+WHY THE WRONG CALL WAS MADE:
+The reference check process was treated as a confirmatory step rather
+than an investigative one. Three positive references were accepted
+without: (a) verifying the personal relationship history between
+referees and the founding team; (b) independently finding one reference
+not provided by the founder; or (c) requesting a fourth call from
+the offered list. The LinkedIn check would have taken 15 minutes.
+The relationship disclosures were on public profiles. The framework
+gap: reference calls conducted without first mapping the personal
+relationship between the referee and the founder are not independent
+references — they are testimony of unknown provenance.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+Flag in the screening note whenever all references are founder-provided:
+"REFERENCE INTEGRITY CHECK REQUIRED." Before conducting any reference
+call, verify on LinkedIn whether the referee has a pre-existing
+personal connection to any member of the founding team (prior
+employer, university, prior company board). If any reference has
+a pre-existing personal connection, treat their reference as a
+character reference, not a commercial reference, and require
+it to be supplemented by an independently sourced reference.
+Independently sourced means: the investor identifies a customer
+from the publicly named customer list and contacts them directly,
+without founder introduction or scheduling.
+
+OUTCOME:
+Post-investment due diligence for a Series B 16 months later
+identified the relationship history. The actual arm's-length ARR
+of £350K could not support the Series B valuation. The company
+could not raise. Bridge was provided. The company was acquired by
+a larger employee benefits platform for £2.1M — less than half
+of the total capital invested.
+
+PATTERN LESSON:
+When all reference contacts are founder-provided, LinkedIn-verify
+the relationship between each referee and the founding team before
+the reference call. If any referee has a pre-existing personal
+connection to any founder, that call is not an independent
+commercial reference. Require at least one independently sourced
+reference — identified and contacted directly by the investor,
+not scheduled through the founder — before committing to investment.
+Personal connections on LinkedIn profiles are public information.
+There is no excuse for not checking.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WRONG CALL 020 — FAILED INVESTMENT: THE PRODUCT THAT
+                  NEEDED THE FOUNDER TO SELL IT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPE: FAILED INVESTMENT
+PATTERN: Founder-Dependent Sales Motion
+SECTOR: B2B — Cybersecurity Consulting and SaaS (vCISO Platform)
+
+WHAT THE DEAL LOOKED LIKE:
+A former Chief Information Security Officer from a FTSE 100 company
+built a platform and service for mid-market companies who need CISO-level
+security leadership but cannot afford a full-time CISO at £200K+/year.
+The product provides: a virtual CISO engagement (monthly retainer),
+a security posture assessment platform (SaaS), and board-level reporting
+tools. ARR: £1.1M. 8 enterprise customers. Average contract: £138K.
+NRR: 122%. All 8 deals closed by the founder personally. Raising
+£5M Series A. The deck specifically highlights the founder's ability
+to "speak board language" and close enterprise security deals that
+others cannot. Team of 9. No VP Sales yet — the founder intends to
+hire one with Series A capital.
+
+THE DECISION MADE:
+INVESTED. Reasoning: "The ARR and NRR are strong. The founder's
+ability to close enterprise deals demonstrates that the product
+has a genuine enterprise value proposition. A VP Sales hire will
+scale what the founder has built."
+
+THE SIGNAL THAT WAS MISSED OR IGNORED:
+The signal was in the deck. In the "Why We Win" section, the founder
+wrote: "Our success in closing enterprise security deals comes from
+my ability to engage at C-suite level and demonstrate a depth of
+security expertise that typical sales representatives cannot replicate."
+This sentence identified the problem it was meant to solve. It stated
+explicitly that the close rate was attributable to the founder's
+specific expertise and C-suite relationships — not to a product
+that any competent enterprise salesperson could sell. The founder
+intended this as a strength statement. It was a scalability warning.
+A security platform sold on the basis of one individual's C-suite
+trust and technical credibility is not a product with a repeatable
+sales motion — it is a high-value consulting service packaged as SaaS.
+The sentence was in the deck. It was treated as evidence of the
+founder's credibility rather than as a scalability risk.
+
+WHY THE WRONG CALL WAS MADE:
+The analyst conflated founder sales execution with product-market
+fit. All 8 deals being closed by the founder was noted but interpreted
+as "founder is working hard" rather than "the sales motion is founder-
+dependent." The key test — can someone other than the founder close
+this deal? — was not asked. There was no evidence in the submission
+of any deal attempt by a non-founder team member, any partner referral,
+or any inbound lead that converted without founder involvement. The
+decision to "hire a VP Sales" post-investment was accepted as a plan
+without being stress-tested against the founder's own admission that
+the close rate depended on specific personal expertise.
+
+WHAT ALEX MUST DO DIFFERENTLY:
+When all closed deals are founder-led and the submission attributes
+sales success to specific founder qualities (relationship depth, domain
+credibility, C-suite access), flag: "SALES REPEATABILITY UNPROVEN."
+Before treating founder sales success as evidence of a scalable
+commercial motion, require: evidence of at least one deal closed by
+a non-founder team member; or a pipeline of inbound leads not sourced
+from the founder's personal network that have progressed to commercial
+conversation without founder involvement. If neither exists, note in
+the screening output: "All revenue is founder-generated. VP Sales hire
+required before Series A to demonstrate sales motion is repeatable
+independent of founder. At current stage, this is a founder consulting
+business with a SaaS layer, not a scalable enterprise SaaS business."
+The question to ask explicitly: "Can your head of sales close this
+deal without you in the room?" If the answer is no, the sales motion
+is the founder.
+
+OUTCOME:
+VP Sales hired 3 months post-investment. VP Sales attempted 12
+enterprise outbound conversations in the first 6 months. Converted
+0. Brought into 4 of the founder's pipeline deals as a supporting
+presence. Converted 2. The conversion rate without the founder:
+0%. With the founder: 50% (same as before). The VP Sales resigned
+after 9 months, citing the inability to operate independently of
+the founder. A second VP Sales was hired with the same outcome.
+NRR held (the founder managed all renewals personally) but new
+ARR growth stalled. The company plateaued at £1.4M ARR. Series B
+not achievable. Founder eventually repositioned the business as a
+boutique advisory firm. Capital returned: 0.4x.
+
+PATTERN LESSON:
+When all revenue is founder-generated and the founder attributes
+sales success to personal expertise or relationship depth that
+a hired salesperson cannot replicate, require evidence of at least
+one non-founder commercial win before treating the sales motion
+as scalable. Do not accept a VP Sales hire plan as evidence of
+future scalability — it is a hypothesis. The question is not
+"will you hire a VP Sales?" but "has anyone other than you closed
+a deal?" If the answer is no, the sales motion is the founder.
+Growth-stage valuations require a growth-stage sales motion.
+
+═══════════════════════════════════════════════════════════════════════
+END OF BATCH 4A — WRONG CALLS 011–020
+═══════════════════════════════════════════════════════════════════════
