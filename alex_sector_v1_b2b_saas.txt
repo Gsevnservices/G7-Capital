@@ -1,0 +1,645 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — SECTOR INTELLIGENCE LIBRARY
+B2B SaaS — Version 1.0
+The most common deal category Alex will screen.
+Built: April 2026.
+Apply this library to every deal classified as B2B SaaS.
+═══════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════
+SECTION A — SECTOR IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════
+
+PRIMARY CLASSIFICATION SIGNALS (any one = B2B SaaS):
+— Subscription revenue model with monthly or annual recurring contracts
+— Business entities as primary paying customers (not individuals paying personally)
+— Software delivered via browser, mobile app, or API with no physical product component
+— ACV explicitly stated or inferable from pricing page or customer count vs ARR
+
+MISCLASSIFICATION WARNINGS:
+— A company that sells to businesses but charges per-transaction is a marketplace, not SaaS
+— A company with a subscription but significant services revenue is a hybrid — separate the streams
+— A company where AI inference cost is the primary COGS may have SaaS pricing but not SaaS economics
+
+SUB-CATEGORY IDENTIFICATION — SIGNALS FROM SUBMISSION:
+
+1. HORIZONTAL SaaS
+Signals: product works across all industries with no customisation; named competitive set includes
+category leaders (Salesforce, HubSpot, Slack, Notion, Asana, Zoom); buyer is a functional
+role (Head of Sales, Head of Marketing) not an industry-specific title; pricing is per-seat
+or per-user without industry premium.
+TAM: typically >£1B. Competition: high. GTM differentiation is the primary moat test.
+Key risk: cannot win on product alone — distribution and brand must differentiate.
+
+2. VERTICAL SaaS
+Signals: product requires industry-specific data structures, workflows, or regulatory
+knowledge; buyer title is industry-specific (Head of Underwriting, Practice Manager,
+Contracts Director); pricing includes industry-specific modules; competitive set is
+legacy on-premise software or spreadsheets rather than other SaaS companies.
+TAM: £50M–£500M typical. Competition: low from SaaS peers. Switching cost: HIGH.
+Key risk: TAM ceiling reached before venture returns materialise. Apply Enterprise Only
+Trap test (PASS Deal 024) if realistic customer count is below 500.
+
+3. DEVELOPER TOOLS / INFRASTRUCTURE
+Signals: primary buyer is an engineer or engineering manager; product is consumed via
+CLI, SDK, or API before a sales conversation begins; pricing includes usage-based component
+(API calls, compute hours, seats); GitHub, npm, Homebrew, or marketplace listed as
+distribution channel; free tier or open-source version exists.
+TAM: variable. PLG motion is the indicator — if no free tier exists, verify why.
+Key risk: Acqui-Hire Trap (PASS Deal 012). Check M&A interest from Datadog, Cloudflare,
+GitHub, or Hashicorp before assessing as standalone investment.
+
+4. AI-NATIVE SaaS
+Signals: AI model inference is a direct COGS line item; product output requires a
+foundation model (GPT, Claude, Gemini, or proprietary); product capability changes
+materially with each model generation; gross margin stated above 65% requires COGS
+decomposition to confirm inference costs are correctly allocated.
+TAM: large but contested. Moat question is primary: proprietary data, workflow lock-in,
+or switching cost — one of three must be present or PASS.
+Key risk: foundation model provider changes pricing, deprecates model, or releases
+competing product. Every AI-native SaaS carries this platform dependency risk.
+
+5. WORKFLOW AUTOMATION
+Signals: product replaces a specific manual process that is measurable in hours or FTEs;
+ROI is quantifiable (e.g. "reduces X hours of manual work" or "replaces Y headcount");
+buyer is operations, finance, legal, or compliance — not product or engineering;
+pricing is often per-workflow or per-document rather than per-seat.
+TAM: determined by the size of the addressable workflow. Apply Framework 1 (Business
+Model Decomposition) to verify the ROI claim is real and the buyer can measure it.
+Key risk: Services Revenue Masquerade (PASS Deal 023). Separate software licence from
+implementation and configuration revenue before accepting gross margin.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION B — STAGE-SPECIFIC METRIC BENCHMARKS
+═══════════════════════════════════════════════════════════════════════
+
+Format: STRONG (top quartile) | ACCEPTABLE (median) | CONCERN (flag) | FAIL (disqualifying)
+
+PRE-SEED — Pre-revenue to £100K ARR:
+ARR:           STRONG >£50K | ACCEPTABLE £10–50K | CONCERN <£10K | FAIL: 0 with 12+ months building
+MoM growth:    STRONG >20% | ACCEPTABLE 10–20% | CONCERN 5–10% | FAIL <5% sustained
+Paying cust.:  STRONG >15 | ACCEPTABLE 5–15 | CONCERN 2–4 | FAIL: 1 customer or 0
+ACV:           Validate against segment: SMB £1–5K | Mid-market £10–50K | Enterprise £50K+
+Gross margin:  STRONG >70% | ACCEPTABLE 55–70% | CONCERN 35–55% | FAIL <35%
+Team:          STRONG: 2 co-founders + 1 hire | ACCEPTABLE: 2 co-founders | CONCERN: solo
+
+SEED — £100K to £1M ARR:
+ARR:           STRONG >£600K | ACCEPTABLE £250–600K | CONCERN £100–250K | FAIL <£100K
+MoM growth:    STRONG >20% | ACCEPTABLE 12–20% | CONCERN 6–12% | FAIL <6%
+NRR:           STRONG >115% | ACCEPTABLE 100–115% | CONCERN 90–100% | FAIL <90%
+Gross margin:  STRONG >75% | ACCEPTABLE 65–75% | CONCERN 50–65% | FAIL <50%
+CAC payback:   STRONG <10 months | ACCEPTABLE 10–18 months | CONCERN 18–24 months | FAIL >24 months
+Burn multiple: STRONG <1.5x | ACCEPTABLE 1.5–2.5x | CONCERN 2.5–4x | FAIL >4x
+Customers:     STRONG >40 (SMB) or >8 (enterprise) | ACCEPTABLE 15–40 or 3–8 | CONCERN <5 total
+ACV:           SMB STRONG >£5K | Mid-market STRONG >£25K | Enterprise STRONG >£75K
+
+SERIES A — £1M to £5M ARR:
+ARR:           STRONG >£3M | ACCEPTABLE £1.5–3M | CONCERN £1–1.5M | FAIL <£1M
+YoY growth:    STRONG >120% | ACCEPTABLE 70–120% | CONCERN 35–70% | FAIL <35%
+NRR:           STRONG >125% | ACCEPTABLE 108–125% | CONCERN 95–108% | FAIL <95%
+Gross margin:  STRONG >80% | ACCEPTABLE 70–80% | CONCERN 60–70% | FAIL <60%
+CAC payback:   STRONG <12 months | ACCEPTABLE 12–18 months | CONCERN 18–24 months | FAIL >24 months
+Burn multiple: STRONG <1.5x | ACCEPTABLE 1.5–2.5x | CONCERN 2.5–4x | FAIL >4x
+Logo churn:    STRONG <5% annual | ACCEPTABLE 5–10% | CONCERN 10–15% | FAIL >15%
+Magic Number:  STRONG >0.75 | ACCEPTABLE 0.5–0.75 | CONCERN 0.25–0.5 | FAIL <0.25
+ACV:           STRONG growing quarter-on-quarter | CONCERN flat or declining ACV trend
+
+SERIES B — £5M to £20M ARR:
+ARR:           STRONG >£14M | ACCEPTABLE £8–14M | CONCERN £5–8M | FAIL <£5M
+YoY growth:    STRONG >90% | ACCEPTABLE 55–90% | CONCERN 30–55% | FAIL <30%
+NRR:           STRONG >125% | ACCEPTABLE 112–125% | CONCERN 100–112% | FAIL <100%
+Gross margin:  STRONG >82% | ACCEPTABLE 72–82% | CONCERN 62–72% | FAIL <62%
+CAC payback:   STRONG <14 months | ACCEPTABLE 14–20 months | CONCERN 20–28 months | FAIL >28 months
+Burn multiple: STRONG <1.5x | ACCEPTABLE 1.5–2.5x | CONCERN 2.5–4x | FAIL >4x
+Logo churn:    STRONG <4% annual | ACCEPTABLE 4–8% | CONCERN 8–12% | FAIL >12%
+Rule of 40:    STRONG >50 | ACCEPTABLE 30–50 | CONCERN 0–30 | FAIL <0
+Magic Number:  STRONG >0.75 | ACCEPTABLE 0.5–0.75 | CONCERN 0.25–0.5 | FAIL <0.25
+
+VALUATION BENCHMARKS — B2B SaaS (2025–2026 market):
+Pre-seed:    3–10x ARR (if ARR exists) | Typically valued on team + market
+Seed:        8–20x ARR | Median: ~12x | Premium deals: 20–35x
+Series A:    8–18x ARR | Median: ~12x | Top-quartile growth: 18–30x
+Series B:    10–22x ARR | Median: ~14x | Best-in-class NRR+growth: 22–35x
+Premium driver: NRR >125% adds 3–5x multiple turns. YoY growth >100% adds 4–8x turns.
+Market note: 2021 peak multiples (30–100x) have not returned. 2025 market rewards
+efficient growth — Rule of 40 above 50 commands a material premium.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION C — SECTOR-SPECIFIC RED FLAGS
+═══════════════════════════════════════════════════════════════════════
+
+01. BOOKED NOT RECOGNISED ARR
+SIGNAL: Submission states ARR that includes multi-year contracts booked upfront;
+no distinction between recognised revenue and total contract value.
+SEVERITY: HIGH
+WHAT IT MEANS: ARR is overstated; growth rate is partly an accounting choice.
+VERIFICATION: Request MRR schedule month-by-month for the last 12 months.
+If MRR does not compound consistently with stated ARR, the figure is TCV not ARR.
+
+02. NRR INCLUDING NEW LOGOS
+SIGNAL: Company defines NRR to include new customers acquired in the period.
+TRUE NRR measures only what existing customers from a prior period do.
+SEVERITY: HIGH
+WHAT IT MEANS: NRR is inflated. A company with 80% true NRR can report 110%+
+NRR by including new ARR from the cohort period. Obscures churn.
+VERIFICATION: Ask: "Is your NRR calculated on the same set of customers at start
+and end of the measurement period, excluding any customer added during the period?"
+
+03. BLENDED GROSS MARGIN HIDING SERVICES
+SIGNAL: Submission presents a single gross margin figure for a product that includes
+implementation, professional services, or managed services revenue.
+SEVERITY: HIGH
+WHAT IT MEANS: True software gross margin may be 20–30 points higher or lower than
+the blended figure. Masks whether the software business is viable standalone.
+VERIFICATION: Require disaggregated gross margin: software licence only vs services.
+Software margin below 65% in a SaaS product is a structural concern.
+
+04. LOGO CHURN DENOMINATOR MANIPULATION
+SIGNAL: Annual logo churn stated as a percentage of current customer count, not
+starting customer count. A company that grew from 20 to 40 customers and lost 4
+reports 10% churn (4/40) when the real rate is 20% (4/20).
+SEVERITY: MEDIUM
+WHAT IT MEANS: Churn rate is understated by the ratio of growth. High-growth companies
+can mask significant absolute churn behind a small percentage denominator.
+VERIFICATION: Request absolute numbers: customers at start of period, gross new adds,
+churned, ending count. Calculate: churned / starting count = true logo churn rate.
+
+05. CAC EXCLUDING FOUNDER SALES TIME
+SIGNAL: CAC is calculated on sales team salaries only; founder is primary or sole closer
+and their time is not allocated to CAC. Common in founder-led sales at seed stage.
+SEVERITY: MEDIUM
+WHAT IT MEANS: True CAC is understated. When the founder is replaced by a sales team,
+actual CAC will be 2–4x the stated figure. LTV/CAC ratio is overstated.
+VERIFICATION: Ask: "Of your last 20 customer closings, how many required the founder
+personally in the sales process?" If >50%, founder time must be allocated to CAC.
+
+06. ANNUAL PREPAY MASKING MONTHLY CHURN
+SIGNAL: Company reports low monthly churn but 80%+ of customers are on annual prepay
+contracts. Monthly churn data covers only the few customers on monthly billing.
+SEVERITY: MEDIUM
+WHAT IT MEANS: True retention signal is unknown until the first annual renewal cycle.
+First renewal churn — which occurs 12 months after customer acquisition — may be
+30–50% in consumer-facing or low-ACV SaaS. Annual prepay creates a false 12-month
+retention illusion.
+VERIFICATION: Request first-renewal retention: of all customers whose first annual
+contract reached renewal, what percentage renewed at the same or higher value?
+
+07. USAGE-BASED PRICING VOLATILE REVENUE
+SIGNAL: Company uses usage-based pricing (per API call, per compute hour, per document)
+and reports ARR by annualising the most recent month's usage. ARR fluctuates with
+customer usage cycles.
+SEVERITY: MEDIUM
+WHAT IT MEANS: ARR is not a committed revenue figure — it is a trailing usage extrapolation.
+Annualising a peak usage month overstates committed revenue.
+VERIFICATION: Request committed ARR (contractually obligated minimum) vs usage-run-rate ARR.
+Difference between the two reveals revenue predictability.
+
+08. ENTERPRISE PIPELINE THAT IS ALL PILOTS
+SIGNAL: Submission lists 5+ enterprise logos as "in pipeline" or "evaluating."
+Investigation reveals all are unpaid pilots or POCs with no commercial terms agreed.
+SEVERITY: HIGH
+WHAT IT MEANS: Reference Customer Illusion (PASS Deal 013). Pilot logos are not pipeline —
+they are evaluation relationships with no commitment. A company with 10 enterprise pilots
+and 0 closed contracts has no commercial traction.
+VERIFICATION: For each named enterprise account, ask: "Is there a signed commercial
+agreement or purchase order in place? What is the annual value?"
+
+09. CUSTOMER SUCCESS STAFF RATIO ALARM
+SIGNAL: Company has >£2M ARR and no dedicated customer success hire; all CS is handled
+by the founders or shared with the sales team.
+SEVERITY: MEDIUM
+WHAT IT MEANS: NRR and retention figures at current scale may not hold as the customer
+base grows. CS capacity is the primary limiter of NRR above 10 customers. A company
+adding 5+ customers per month without a CS hire will experience expansion revenue
+compression within 6 months.
+VERIFICATION: At what customer count did the company hire its first CS person?
+If the first CS hire has not happened above 20 customers, flag the risk.
+
+10. SALES CYCLE LENGTHENING TREND
+SIGNAL: Submission discloses average sales cycle duration and the current pipeline
+has deals that have been open longer than the stated average.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Sales cycle is lengthening — either the market is becoming more cautious,
+the ICP is shifting upmarket without a corresponding process change, or the product is
+not compelling enough to close quickly without extensive evaluation.
+VERIFICATION: Ask: "What was your average sales cycle 12 months ago vs today?"
+A lengthening trend at a growth company is a meaningful slowdown signal.
+
+11. BURN MULTIPLE ABOVE 4X WITH DECLINING GROWTH
+SIGNAL: Burn multiple (net burn / net new ARR) is above 4x for two consecutive quarters
+while YoY growth rate is declining.
+SEVERITY: HIGH
+WHAT IT MEANS: The company is spending an increasing amount to generate a declining
+amount of new revenue. This is the CAC Spiral failure pattern in early form.
+Companies with burn multiple above 4x and declining growth almost never raise
+a subsequent round at a flat or up valuation.
+VERIFICATION: Calculate burn multiple from the submission data. If not provided,
+estimate from headcount + office costs vs new ARR added.
+
+12. COHORT REVENUE CONCENTRATION IN YEAR 1
+SIGNAL: More than 60% of current ARR was generated by customers signed in the most
+recent 12 months. Older cohorts represent a small and shrinking share of ARR.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Either the business is genuinely hypergrowth (positive) or older cohorts
+are churning or contracting and being replaced by new cohort acquisition (negative).
+Must distinguish between the two.
+VERIFICATION: Request ARR waterfall by cohort year. If cohort year -2 and -3 represent
+less than 20% combined of current ARR in a company with 30%+ YoY growth, ask for
+cohort-level NRR to confirm cohort health.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION D — HISTORICAL FAILURE PATTERNS
+═══════════════════════════════════════════════════════════════════════
+
+1. THE CHURN CLIFF
+DESCRIPTION: A B2B SaaS company with excellent early retention metrics hits its first
+mass annual renewal cycle (month 12–18) and experiences 25–40% logo churn in a 90-day
+window. The prior retention metrics were all based on cohorts that had not yet reached
+renewal. The churn cliff was not visible until it arrived.
+EARLY WARNING SIGNALS: Average contract age below 10 months across the customer base;
+NRR reported from a cohort of customers all acquired in the same 6-month window;
+Customer Success team sized for acquisition, not retention; no documented renewal
+management process or QBR cadence.
+WHEN TO APPLY: Series A companies where 70%+ of customers were acquired in the last
+12 months. Any company where the stated logo churn is based on fewer than two full
+annual renewal cycles.
+
+2. THE ENTERPRISE TRAP
+DESCRIPTION: A company wins 2–3 large enterprise accounts that each represent £200K+
+ARR. The CS, implementation, and product teams are consumed by the requirements of these
+accounts. SMB customers receive no support, churn at 30–40% annually, and cease to be
+a growth engine. The company becomes a de facto services business for 3 clients.
+EARLY WARNING SIGNALS: One customer >25% of ARR; CS team spending >50% of capacity on
+one or two accounts; product roadmap driven by enterprise-specific requirements; SMB
+logo churn above 20% annually while enterprise NRR is reported as 140%+.
+WHEN TO APPLY: Companies with a mixed SMB/enterprise customer base where enterprise
+ACV is 10x+ higher than SMB ACV and the sales motion has shifted entirely to enterprise.
+
+3. THE FEATURE FACTORY
+DESCRIPTION: A company ships new features every 2–4 weeks in response to customer
+requests. The roadmap is entirely reactive. Core product experience degrades because
+no engineering time is allocated to improving the fundamental value proposition.
+NRR begins declining 6–9 months before the team notices, because expansion ARR from
+new features does not offset the quiet non-renewal of customers who never found
+the core product compelling.
+EARLY WARNING SIGNALS: Product roadmap contains more than 70% customer-requested
+features vs founder-initiated product vision; release velocity is high but DAU/MAU
+ratio is declining; NRR expansion is driven by upsell modules, not deeper usage
+of the core product; time-to-value for new customers increasing quarter-on-quarter.
+WHEN TO APPLY: Series A and B companies where the product team has grown above 8 engineers.
+
+4. THE PLG-TO-ENTERPRISE TRANSITION FAILURE
+DESCRIPTION: A company with a successful product-led growth motion (free tier → paid
+self-serve) attempts to move upmarket to enterprise. It hires an enterprise sales team
+but the product has no enterprise-grade features (SSO, RBAC, audit logs, SLA guarantees,
+procurement-compatible contracts). Enterprise deals stall in security review. The sales
+team burns through enterprise pipeline without closing. PLG self-serve growth continues
+but the enterprise investment destroys burn efficiency.
+EARLY WARNING SIGNALS: Enterprise sales team hired before enterprise product features
+shipped; no enterprise-tier pricing available; sales cycle on enterprise deals exceeding
+9 months with no signed contracts after 12 months of enterprise motion; Magic Number
+below 0.3 while burn multiple rises above 3x.
+WHEN TO APPLY: Developer tool or horizontal SaaS companies attempting upmarket move
+with £1–5M ARR and a primarily self-serve customer base.
+
+5. THE PRICING MODEL FLIP
+DESCRIPTION: A company achieves Series A traction on per-seat pricing with good NRR,
+then switches to usage-based pricing to signal enterprise market ambition. Existing
+customers on per-seat contracts continue to generate predictable ARR. New customers
+on usage-based contracts generate volatile revenue that is difficult to model. NRR
+from usage-based cohorts is lower in year 1 than per-seat cohorts were. The Series A
+NRR that secured the funding is not reproducible under the new pricing model.
+EARLY WARNING SIGNALS: Pricing model change announced mid-funding cycle; CFO presenting
+"annualised run rate" on usage data rather than contracted ARR; new cohort NRR below
+105% in first 12 months; salespeople requesting exceptions to return to per-seat pricing
+for specific deals.
+WHEN TO APPLY: Any company between Series A and Series B that has changed its
+primary pricing model within the last 18 months.
+
+6. THE CAC SPIRAL
+DESCRIPTION: Early customers were acquired cheaply via founder network, inbound
+content, or viral referral. As these channels saturate, the company increases paid
+acquisition spend to maintain growth targets. CAC rises 30–50% year-on-year while
+LTV is unchanged. Burn multiple rises from 2x to 5x. Revenue growth continues to
+look healthy in absolute terms but the unit economics of new cohorts are fundamentally
+worse than the cohorts that justified the investment.
+EARLY WARNING SIGNALS: CAC has increased more than 30% in the last 12 months while
+LTV/CAC ratio has declined below 3x; paid acquisition is above 50% of gross new ARR
+acquisition cost; blended CAC is rising while organic and referral channel volume is flat
+or declining; payback period on new cohorts exceeds 24 months.
+WHEN TO APPLY: Series A and B companies where paid acquisition is a material
+customer acquisition channel and growth rate is being maintained above 60% YoY.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION E — EXIT COMPARABLE DATABASE
+═══════════════════════════════════════════════════════════════════════
+
+ACQUISITION MULTIPLES BY SUB-CATEGORY (strategic acquirer / PE acquirer):
+
+Horizontal SaaS:    Strategic 6–15x ARR | PE 4–8x ARR
+  Premium driver: NRR >125% and growth >60% YoY commands 12–20x from strategics.
+Vertical SaaS:      Strategic 4–12x ARR | PE 3–7x ARR
+  Premium driver: Market-leading position (>30% market share) commands top of range.
+Developer Tools:    Strategic 10–25x ARR | PE rarely acquires (PLG model hard to leverage)
+  Premium driver: Network effect (number of developers using the tool) drives premium.
+AI-Native SaaS:     Strategic 10–35x ARR | PE 6–12x ARR (with stable revenue only)
+  Premium driver: Proprietary training data or irreplaceable model fine-tuning.
+Workflow Automation:Strategic 5–12x ARR | PE 4–8x ARR
+  Premium driver: Regulatory requirement driving mandatory adoption.
+
+NAMED STRATEGIC ACQUIRERS:
+
+Salesforce: Horizontal SaaS | Sales, marketing, customer service, analytics tools.
+  Typical acquisition range: £50M–£3B. Recent: Slack (£21B), Mulesoft (£6.5B),
+  Tableau (£14B). Will pay 15–25x ARR for category-defining assets.
+
+Microsoft: Developer tools, collaboration, security, productivity, AI-native.
+  Typical acquisition range: £100M–£5B+. Will pay premium (20–30x ARR) for
+  developer distribution (GitHub, npm audience) or AI capability (OpenAI investment).
+
+Google / Alphabet: Developer infrastructure, AI-native, data tools, security.
+  Typical range: £100M–£2B. Focus: developer toolchain, AI model capability,
+  cloud-native infrastructure. Often acqui-hires at sub-scale.
+
+ServiceNow: Workflow automation (IT, HR, finance, legal), AI-native in enterprise.
+  Typical range: £100M–£1B. Pays 10–18x ARR for enterprise workflow tools with
+  deep integration into large company operations.
+
+Workday: HR tech, workforce management, financial planning, talent intelligence.
+  Typical range: £50M–£1B. Acquires to extend its platform into adjacent HR workflows.
+
+SAP: ERP-adjacent, supply chain, manufacturing, financial compliance.
+  Typical range: £100M–£2B. Will pay 8–15x ARR for enterprise verticalsintegrating
+  with its core ERP customer base.
+
+Atlassian: Developer tools, project management, IT service management.
+  Typical range: £50M–£500M. Acquires to extend developer workflow coverage.
+  Focus: PLG-native products with existing developer adoption.
+
+HubSpot: Marketing, sales, CRM, customer service for SMB and mid-market.
+  Typical range: £20M–£300M. Acquires complementary SMB tools with overlapping ICP.
+
+Datadog: Monitoring, observability, security, developer toolchain.
+  Typical range: £50M–£500M. Acquires to extend platform coverage across the
+  observability and security stack.
+
+Zendesk (private, PE-backed since 2022): Customer service, CX, AI for support.
+  Typical range: £20M–£200M. Focus on AI-native customer service tooling.
+
+IPO COMPARABLES — B2B SaaS:
+
+Snowflake (2020):    ARR at IPO £650M | YoY growth 124% | IPO multiple: 75x ARR
+CrowdStrike (2019):  ARR at IPO £480M | YoY growth 82% | IPO multiple: 40x ARR
+Datadog (2019):      ARR at IPO £300M | YoY growth 83% | IPO multiple: 40x ARR
+GitLab (2021):       ARR at IPO £252M | YoY growth 69% | IPO multiple: 35x ARR
+Monday.com (2021):   ARR at IPO £235M | YoY growth 91% | IPO multiple: 42x ARR
+UiPath (2021):       ARR at IPO £607M | YoY growth 65% | IPO multiple: 30x ARR
+HashiCorp (2021):    ARR at IPO £320M | YoY growth 53% | IPO multiple: 22x ARR
+Veeva Systems (2013):ARR at IPO £130M | YoY growth 95% | IPO multiple: 18x ARR
+Klaviyo (2023):      ARR at IPO £585M | YoY growth 57% | IPO multiple: 10x ARR
+Note: Klaviyo's 2023 multiple reflects post-2022 correction. 2025-2026 market is
+intermediate — expect 12–20x ARR for IPO-quality companies, not 2021 multiples.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION F — KEY QUESTIONS FOR FOUNDER MEETING
+═══════════════════════════════════════════════════════════════════════
+
+01. NRR COMPOSITION
+QUESTION: "Can you break down your NRR into three components: seat or usage expansion
+from existing customers, new modules or products sold to existing customers, and
+offset for any contraction or churn? What is each component as a percentage of your NRR?"
+STRONG ANSWER: Specific percentages for each component; expansion from core product
+usage is the largest driver (not add-on module sales); contraction is below 5%.
+WEAK ANSWER: Cannot separate components; describes NRR as "customers buying more
+because they love the product" without quantification.
+REVEALS: Whether NRR is driven by genuine product value expansion or by upsell
+motion that could decline when the upsell pipeline is exhausted.
+
+02. CAC BY CHANNEL
+QUESTION: "What is your customer acquisition cost broken down by channel — outbound,
+inbound content, paid acquisition, partner or referral, and founder-led? And how has
+your blended CAC changed over the last four quarters?"
+STRONG ANSWER: Precise CAC by channel; identifies the highest-ROI channel; confirms
+blended CAC has been stable or declining as the team has scaled.
+WEAK ANSWER: Provides a single blended number; cannot distinguish channel economics;
+describes acquisition anecdotally rather than by cost.
+REVEALS: Whether growth is economically sustainable and whether the current team can
+continue acquiring customers at scale without the founder.
+
+03. SALES CYCLE TREND
+QUESTION: "What was your average sales cycle from first outbound or inbound contact to
+signed contract 18 months ago, and what is it today? What accounts for the change?"
+STRONG ANSWER: Specific number for both periods; if lengthening, provides a specific
+structural explanation (upmarket shift, new procurement requirements, category uncertainty).
+WEAK ANSWER: Cannot recall the 18-month-ago figure; describes it as "roughly the same."
+REVEALS: Whether competitive dynamics or deal quality are changing. A lengthening
+cycle at constant team size means falling sales capacity per head.
+
+04. LOGO CHURN BY COHORT YEAR
+QUESTION: "For customers you acquired in each of the last three years, what percentage
+reached their first annual renewal and renewed? And what percentage reached their second
+renewal and renewed? Can you give me absolute numbers?"
+STRONG ANSWER: Cohort data available; first-renewal rate above 85%; second-renewal rate
+above 90% (retention typically improves after year 2 as customers are embedded).
+WEAK ANSWER: Cannot separate by cohort; describes overall churn; has not calculated
+cohort-level renewal rates.
+REVEALS: Whether the Churn Cliff failure pattern is forming in a cohort that has not
+yet reached renewal. First renewal is the highest-risk moment in SaaS retention.
+
+05. COMPETITIVE WIN/LOSS RATE
+QUESTION: "In competitive deals — where you know the prospect evaluated at least one
+other vendor — what is your win rate? And which competitor do you lose to most often
+and why, in the customer's words?"
+STRONG ANSWER: Specific win rate (e.g. 62% in competitive evaluations); names the
+primary competitor they lose to; can quote what customers said about why they chose
+the competitor; describes what they are doing to address it.
+WEAK ANSWER: "We win most competitive deals." Cannot quantify. Describes competitors
+as "legacy tools" rather than naming the real comparison.
+REVEALS: Whether competitive moat is real or assumed. A founder who cannot describe
+why they lose competitive deals has not done the loss analysis.
+
+06. TIME TO VALUE
+QUESTION: "How long does it take from contract signature to the customer achieving
+their first measurable outcome using your product? And how has that changed in the
+last 12 months?"
+STRONG ANSWER: Specific number (e.g. "23 days to first report generated"); trend is
+decreasing as onboarding has been systematised; has a dedicated onboarding motion.
+WEAK ANSWER: "It depends on the customer." Cannot give a median figure. Does not track
+time-to-value as a metric.
+REVEALS: CS capacity and product maturity. Long or worsening time-to-value predicts
+first-renewal churn — customers who never fully onboard almost never renew.
+
+07. NET NEW ARR vs EXPANSION ARR SPLIT
+QUESTION: "In the last 12 months, what percentage of your ARR growth came from new
+logos versus expansion in existing accounts? How has that ratio changed over time?"
+STRONG ANSWER: Specific split (e.g. 60% new logo, 40% expansion); expansion percentage
+is growing over time as the customer base matures; can project what expansion ARR
+becomes as a share of growth at Series B scale.
+WEAK ANSWER: Reports total ARR growth without distinguishing source; expansion is
+described but not measured.
+REVEALS: NRR quality and business maturity. A company where expansion ARR is growing
+as a share of total growth has a compounding revenue engine. One entirely dependent
+on new logos needs perpetual acquisition investment.
+
+08. IMPLEMENTATION FAILURE RATE
+QUESTION: "Of all the customers who have signed contracts in the last 24 months, how
+many failed to fully implement the product and subsequently churned or did not renew?"
+STRONG ANSWER: Specific number and percentage; has a root cause analysis for each
+failed implementation; has changed the implementation process as a result.
+WEAK ANSWER: "It occasionally happens." Cannot quantify. Describes implementation
+failure as the customer's fault rather than a process gap.
+REVEALS: Implementation failure is the single largest predictor of first-renewal churn
+in enterprise SaaS. A company that cannot quantify implementation failure rate does not
+understand its own churn risk.
+
+09. KEY CUSTOMER CONCENTRATION
+QUESTION: "What percentage of your ARR is accounted for by your three largest customers?
+And for each of the top three, when does their contract come up for renewal and who is
+the primary relationship holder on our side?"
+STRONG ANSWER: Top three are below 30% combined; each has multiple stakeholders engaged;
+relationship is held institutionally not by a single individual.
+WEAK ANSWER: Top three exceed 40% combined; primary relationship is the founder or one
+account manager; renewal dates cluster in the same quarter.
+REVEALS: Revenue fragility and the Key Person Dependency pattern from Wrong Call 026.
+A renewal cluster in one quarter combined with concentrated ARR is a liquidity risk.
+
+10. PRICING MODEL EVOLUTION
+QUESTION: "How has your pricing model changed since you launched? Are you charging more
+or less per customer than you were 18 months ago, and why?"
+STRONG ANSWER: ACV has increased as the company has moved upmarket; has evidence that
+customers accept the higher price without extended negotiation; gross margin has improved.
+WEAK ANSWER: Pricing has declined to close deals; offering significant discounts on
+standard pricing; has not increased prices despite growth in product value.
+REVEALS: Pricing confidence and product value conviction. Companies that discount
+to close deals have not yet demonstrated that their product is must-have.
+
+11. PRODUCT ROADMAP PRIORITISATION
+QUESTION: "How do you decide what goes on the product roadmap? What percentage of
+your last three quarters' engineering output was customer-requested versus product-vision-driven?"
+STRONG ANSWER: Has a clear framework — prioritises by impact on retention or expansion
+revenue, not by customer request volume; can name 2–3 features shipped that no customer
+asked for but that drove measurable retention improvement.
+WEAK ANSWER: "We build what customers ask for." Roadmap is customer-request driven
+with no independent product vision. Cannot name a proactive product bet.
+REVEALS: Whether the Feature Factory failure pattern is forming. A 100% reactive
+roadmap indicates the product team is executing for existing customers, not building
+the future product that will win new ones.
+
+12. CUSTOMER SUCCESS EFFICIENCY
+QUESTION: "How many customers is each customer success manager responsible for today,
+and what is your target CSM-to-customer ratio at Series B ARR? How do you plan to
+get from here to there without NRR declining?"
+STRONG ANSWER: Current ratio is clear (e.g. 1 CSM per 40 customers at £15K ACV);
+target ratio is defined and benchmarked; plan for scale includes automated onboarding
+and health scoring.
+WEAK ANSWER: Cannot state current ratio; describes CS as "highly personalised" without
+acknowledging the scaling challenge; has not modelled CS headcount requirements.
+REVEALS: Whether the company has a scalable CS model or is building a relationship-
+intensive business that cannot improve margins as it grows.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION G — REGULATORY AND COMPLIANCE RISKS
+═══════════════════════════════════════════════════════════════════════
+
+DATA PRIVACY — GDPR (UK and EU):
+
+Applicability threshold: Any B2B SaaS company that processes personal data of
+EU or UK data subjects on behalf of enterprise customers is a Data Processor under
+GDPR. This applies from the first enterprise customer, not at a revenue threshold.
+
+What compliance requires at each stage:
+Pre-seed / Seed: Privacy Policy and Cookie Policy on website; Data Processing Agreement
+(DPA) template available for enterprise customers who request it; no need for a DPO
+unless processing data at scale or processing special category data.
+Series A: DPA signed with every enterprise customer; record of processing activities
+maintained; data residency documented (which region data is stored in); breach
+notification process in place; vendor DPAs signed with all sub-processors (AWS, GCP,
+Stripe, etc.).
+Series B and beyond: UK and EU Data Protection Officer required if processing >250
+employees' personal data or sensitive categories; regular GDPR audits; data retention
+schedule enforced; penetration testing of personal data systems.
+
+When non-compliance becomes material: At the first enterprise procurement process —
+typically Series A stage — enterprise buyers will request a completed security
+questionnaire. If the company cannot demonstrate basic GDPR compliance (DPA template,
+data residency documentation, breach process), deals will stall or fail.
+Material risk: ICO fines up to £17.5M or 4% of global annual turnover for UK GDPR
+breaches. Enterprise contracts increasingly include audit rights and indemnity clauses
+for data breaches.
+
+Specific questions to ask: "Do you have a signed DPA with each enterprise customer?
+Where is customer data stored and can you certify it is not transferred outside the UK/EU?
+Have you experienced any personal data breach in the last 24 months?"
+
+AI REGULATION — EU AI Act (effective 2026):
+
+High-risk AI classifications relevant to B2B SaaS:
+Recruitment and HR screening tools (automated CV screening, candidate scoring) — High Risk.
+Credit scoring and financial risk assessment tools — High Risk.
+Biometric identification systems — Prohibited in most public contexts.
+Any AI tool that makes or significantly influences decisions about individuals in
+employment, education, credit, or critical infrastructure — High Risk.
+
+Low-risk AI (most B2B SaaS applications): Text generation, document summarisation,
+code assistance, customer service chatbots, sales intelligence, marketing copy.
+These require transparency disclosures (users must know AI is involved) but no
+conformity assessment or registration.
+
+Timeline for B2B SaaS compliance:
+August 2026: Prohibited practices ban effective. Any AI system that manipulates
+users or exploits vulnerabilities becomes illegal.
+August 2027: High-risk AI systems must be registered, audited, and meet technical
+documentation requirements.
+Implication: B2B SaaS companies with high-risk AI applications must begin compliance
+preparation by mid-2025 to meet the 2027 deadline. A company selling AI-driven
+HR screening or credit tools that has not begun EU AI Act preparation is carrying
+a regulatory risk that could delay or prevent EU market entry.
+
+SECTOR-SPECIFIC COMPLIANCE — REGULATED INDUSTRY INHERITANCE:
+
+When a B2B SaaS company sells into a regulated industry, it inherits compliance
+obligations from its customers:
+
+Financial Services (FCA-regulated customers):
+The SaaS vendor becomes an "outsourced service provider" under FCA SYSC rules.
+Enterprise banks and asset managers must conduct operational resilience assessments
+of all critical third-party suppliers. This requires: SOC 2 Type II report; penetration
+test within the last 12 months; documented business continuity plan; right-to-audit clause.
+Timeline: Enterprise financial services deals will not close without SOC 2 at Series A.
+
+Healthcare (NHS or regulated health data):
+DSPT (Data Security and Protection Toolkit) required for any supplier handling NHS data.
+Cyber Essentials Plus required as minimum. Clinical data processing requires NHS DPIA.
+Timeline: No NHS enterprise deal proceeds without DSPT accreditation. Minimum 3-month
+process to obtain.
+
+Government / Public Sector:
+G-Cloud 14 framework listing required for NHS and most UK government procurement.
+Cyber Essentials (not Plus) is minimum for G-Cloud listing. Cyber Essentials Plus
+required for contracts involving sensitive government data.
+Timeline: G-Cloud application process takes 4–8 weeks. Without listing, public sector
+direct award is not possible above £10,000.
+
+CERTIFICATION TIMELINE — WHEN ENTERPRISE EXPECTS EACH:
+
+Seed stage: Privacy Policy + DPA template = minimum viable for any enterprise sales.
+Series A: SOC 2 Type I (first audit, faster) at minimum. ISO 27001 if selling to
+European enterprise. Cyber Essentials for UK public sector pipeline.
+Series B: SOC 2 Type II (annual recurring audit). ISO 27001 full certification.
+Penetration test documented and shared with enterprise security teams on request.
+
+SOC 2 Type I cost and timeline: £15,000–£40,000; 3–4 months to complete.
+SOC 2 Type II cost and timeline: £20,000–£60,000 annually; first audit takes 6 months
+(requires 6 months of operating history under audit controls).
+ISO 27001 cost and timeline: £25,000–£80,000; 9–12 months to certification.
+
+Flag to firm: If a Series A company selling to financial services, healthcare, or
+government has not begun SOC 2 preparation, every enterprise deal in the pipeline
+is at risk of stalling at security review. Ask: "What is your current certification
+status and what is your timeline for SOC 2 Type II?"
+
+═══════════════════════════════════════════════════════════════════════
+END — B2B SaaS Sector Intelligence Library v1.0
+Apply this library to every deal classified as B2B SaaS before
+completing the screening note. Reference specific sections in output.
+═══════════════════════════════════════════════════════════════════════
