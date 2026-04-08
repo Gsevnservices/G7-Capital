@@ -1,0 +1,1185 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — SECTOR INTELLIGENCE LIBRARY
+Deep Tech / Hardware — Version 1.0
+Companies where the core IP is a scientific or engineering breakthrough.
+Built: April 2026.
+Apply this library to every deal classified as Deep Tech or Hardware.
+═══════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════
+SECTION A — SECTOR IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════
+
+PRIMARY CLASSIFICATION SIGNALS (any one = Deep Tech / Hardware):
+— Core product requires a scientific breakthrough or novel engineering that took years
+  of R&D to achieve and cannot be replicated by a competent engineering team in 6–12
+  months without the same foundational research
+— Product contains physical components — hardware, materials, devices, or biological
+  constructs — not purely software running on commodity infrastructure
+— Commercial timeline from current state to first paying revenue is 18 months or more,
+  driven by technical development, regulatory approval, or manufacturing scale-up
+— Primary defensibility is IP: granted or pending patents, trade secrets, exclusive
+  licences, or proprietary datasets that took years to generate — not go-to-market speed
+— Technology Readiness Level (TRL) framework is the most appropriate stage assessment
+  rather than ARR or customer count
+
+CRITICAL DISTINCTION — DEEP TECH vs HARDWARE PRODUCT vs SOFTWARE:
+A company building a new kind of battery chemistry that requires 4 years of materials
+science R&D is Deep Tech.
+A company building a consumer IoT device using off-the-shelf sensors and a cloud
+backend is a hardware product company — apply SaaS Library benchmarks to the software
+component and consumer hardware benchmarks to the device economics.
+A company building novel AI software architectures without physical product may qualify
+as Deep Tech Software (sub-category 8) if the innovation constitutes a genuine scientific
+breakthrough — not standard ML engineering.
+Test: would a top-10 engineering school need to dedicate a funded PhD programme to
+replicate this? If yes — Deep Tech. If a talented senior engineer could replicate it
+in 12 months with existing tools — not Deep Tech.
+
+APPLYING THE MODIFIED FRAMEWORK NOTE:
+Alex's standard screening framework does not apply directly to pre-revenue deep tech.
+For companies at TRL 4–6, the screening note must substitute:
+— Revenue traction → Non-revenue validation signals (government grants, paid pilots,
+  LOIs, peer-reviewed publications, defence contracts)
+— NRR / logo churn → IP portfolio strength and freedom to operate status
+— CAC / LTV → Capital efficiency to next TRL milestone
+— Burn multiple → Capital requirement to first commercial revenue
+— Founder archetype → Type 2 modified (scientific founder framework) as defined in
+  Framework 2 of the Analytical Frameworks section
+
+MISCLASSIFICATION WARNINGS:
+— A robotics company that uses off-the-shelf motors and standard computer vision is a
+  hardware product company with SaaS software — do not apply Deep Tech protection to
+  commodity hardware assembly
+— A biotech company in clinical trials for a pharmaceutical drug is NOT covered by
+  this library — apply a pharma-specific framework (drug discovery timelines and FDA/MHRA
+  clinical trial pathways differ fundamentally from Deep Tech Hardware commercialisation)
+— A "quantum-inspired" algorithm company that runs on classical computers is a software
+  company; true quantum technology requires quantum hardware or quantum-native algorithms
+
+SUB-CATEGORY IDENTIFICATION — SIGNALS FROM SUBMISSION:
+
+1. ADVANCED MATERIALS
+Signals: product is a novel material or material processing technology with demonstrably
+superior properties (conductivity, strength, weight, biocompatibility, thermal management)
+compared to existing alternatives; submission references material characterisation data,
+synthesis routes, or manufacturing process IP; competitive set includes established
+material suppliers (BASF, DuPont, 3M, Toray) rather than software or SaaS companies;
+TRL is typically 3–7 at investment stage; development timeline is measured in years
+not months.
+Business model: typically B2B materials supply (per-kg or per-unit pricing) or licensing
+of synthesis/processing IP to manufacturers. Gross margin at scale depends heavily on
+whether the company manufactures itself (30–55%) or licences its process (60–80%).
+Key risk: materials companies face a double scale-up challenge — proving the material
+works at lab scale AND proving it can be manufactured at commercial scale with consistent
+quality. Each step requires a separate capital raise and 18–36 months.
+
+2. SEMICONDUCTORS / CHIPS
+Signals: company is designing custom silicon — AI accelerators, power management chips,
+photonic integrated circuits, RF chips, or application-specific integrated circuits
+(ASICs); submission references tape-out timeline, process node (e.g., TSMC 5nm, Samsung
+3nm), die area, or power consumption benchmarks; team includes chip architects with
+prior experience at Intel, AMD, Arm, NVIDIA, Qualcomm, or Apple silicon; funding is
+being used for EDA tooling, IP licensing, and foundry tape-out costs.
+Fabless model: company designs the chip, outsources manufacturing to TSMC, Samsung, or
+GLOBALFOUNDRIES. Capital requirement: tape-out costs range from £2M (mature node, small
+die) to £50M+ (leading-edge node, large die). No manufacturing capex but concentrated
+foundry risk.
+IDM or fab model: company builds or co-invests in its own fabrication. Capital requirement:
+£500M–£10B+. Not relevant for early-stage investment — if a startup claims to be
+building its own fab, treat as a serious red flag unless it has sovereign or strategic
+funding commitments of this scale.
+Key risk: chip design has a long cycle — from tape-out to first silicon is 12–18 months.
+A company that has not yet taped out has no verified hardware and its projected
+performance specifications are estimates, not measured results.
+
+3. ROBOTICS / AUTOMATION
+Signals: product is a physical robotic system integrating custom hardware (actuators,
+sensors, structural components) with proprietary software (perception, motion planning,
+control systems); submission references robot throughput, payload capacity, precision
+specifications, or cost per task comparison to human labour; competitive set includes
+ABB, Fanuc, KUKA, Boston Dynamics, or vertical-specific incumbents; revenue model is
+hardware sale + software subscription (the latter provides recurring revenue and
+protects the ongoing customer relationship).
+Business model: hardware margin (typically 30–50%) + software subscription per robot
+per year (typically £2K–£20K/robot/year depending on application complexity).
+Unit economics target: software subscription revenue should cover customer support and
+ongoing R&D cost within 3–4 years of first deployment.
+Key risk: hardware manufacturing introduces supply chain risk absent from software —
+component shortages (as experienced in 2021–2023) can halt production for months.
+Also: robots deployed in industrial settings require safety certification (CE marking,
+ISO 10218) which adds 6–18 months to commercial deployment timeline.
+
+4. QUANTUM COMPUTING / SENSING
+Signals: product is based on quantum mechanical principles — superposition, entanglement,
+or quantum tunnelling — that provide a genuine computational or sensing advantage over
+classical alternatives; submission references qubit count, coherence time, gate fidelity,
+or quantum volume; team includes quantum physicists with peer-reviewed publications;
+current funding is primarily from government sources (Innovate UK, DARPA, ARIA, EIC,
+national quantum programmes); competitive set includes IBM, Google, IonQ, Quantinuum,
+or Pasqal depending on the qubit modality.
+Important context: as of 2026, quantum computing has not demonstrated commercial quantum
+advantage for any real-world problem at scale. Any company claiming current commercial
+quantum advantage (not sensing, but computing) should be scrutinised carefully.
+Quantum sensing is significantly further ahead commercially — quantum magnetometers and
+quantum gyroscopes are at TRL 6–7 for defence and industrial applications.
+Business model: typically government contract and grant funded at early stage; commercial
+revenue from cloud access (quantum-as-a-service) or specialised hardware sale to defence,
+national labs, and financial institutions is a 5–8 year commercialisation path for computing.
+Key risk: very long time to commercial revenue; government funding risk if political
+priorities shift; technology may be superseded by improved classical algorithms (quantum
+advantage window is not permanent).
+
+5. SPACE TECHNOLOGY
+Signals: product is a space vehicle, satellite, ground station, or in-space service;
+submission references launch manifest, orbital parameters, satellite bus specifications,
+or Earth observation revisit frequency; regulatory licences include UK Space Agency
+licence (under UK Space Industry Act 2018), FCC frequency coordination, or ITU filing;
+revenue sources include government contracts, anchor commercial customers, and data
+product licensing; competitive set includes Airbus Defence and Space, Boeing, Lockheed
+Martin, SpaceX, Planet Labs, or sub-sector specific incumbents.
+Business model: highly variable — launch services (per-launch contracts, typically
+£5M–£100M per mission); small satellite manufacturing (£500K–£10M per satellite);
+Earth observation data products (subscription or per-image licensing).
+Key risk: extreme capital intensity; single launch failure can destroy the primary
+asset and the company simultaneously; launch windows create rigid commercial timelines;
+US ITAR regulations can restrict team composition and technology exports.
+
+6. CLEANTECH HARDWARE
+Signals: product is a physical device or system for energy production, storage, efficiency,
+or environmental remediation; submission references energy density, efficiency coefficients,
+cost per kilowatt-hour, or carbon capture rates; revenue model is hardware sale,
+performance-based contract, or energy-as-a-service; funding often includes government
+grants (Net Zero Innovation Portfolio, Innovate UK, US DOE loan programmes);
+competitive set includes established energy companies, battery manufacturers, or
+industrial equipment suppliers.
+Business model: hardware sale with installation services (gross margin 20–45%); may
+include performance monitoring SaaS (gross margin 70%+) as an overlay revenue stream.
+Key risk: policy dependency — cleantech hardware economics are often contingent on
+government subsidies, tax credits, or regulatory mandates (e.g., heat pump installation
+targets, EV charging infrastructure requirements). Policy reversal can eliminate the
+commercial rationale overnight.
+
+7. BIOTECH / SYNTHETIC BIOLOGY
+Signals: product is an engineered biological system — novel proteins, engineered microbes,
+synthetic biology platforms, biologically produced materials, or biological manufacturing
+processes; submission references expression yield, titre, selectivity, or in vivo efficacy
+data; team includes PhD-level scientists in molecular biology, biochemistry, or
+bioengineering; IP strategy centres on patents for novel organisms, processes, or
+biological constructs; competitive set includes established biotech companies, chemical
+manufacturers (BASF, DSM), or agricultural companies (Bayer, Corteva).
+Business model: varies by application — industrial biotechnology (licensing or manufacturing
+for chemicals, materials, fuels); agricultural biotech (trait licensing per acre);
+medical biotech (product sale or licensing to pharma companies).
+Key risk: biological systems are complex and often unpredictable at scale — fermentation
+scale-up from flask to industrial bioreactor introduces yield losses that can make
+economics unviable at commercial scale. Regulatory approval for GMO applications varies
+significantly between UK (post-Brexit divergence), EU, and US.
+
+8. DEEP TECH SOFTWARE
+Signals: software product is based on a novel scientific approach — not standard
+engineering using existing frameworks; examples include novel AI architectures that
+require fundamental research to develop (not fine-tuning existing models), computational
+physics simulation software that required years of algorithmic development, or
+cryptographic systems based on novel mathematical constructs; submission includes
+peer-reviewed publications from the founding team; competitive set does not include
+standard SaaS companies but rather research labs, national computing centres, or
+the R&D departments of major technology companies.
+Business model: typically SaaS subscription once productised; may include API access
+model similar to Developer Tools sub-category in B2B SaaS Library.
+Key risk: the primary risk is that the scientific advantage is narrower or shorter-lived
+than anticipated — a competitor with more compute resources can often approximate the
+results of novel algorithms within 18–24 months, especially in AI. IP protection for
+software is weaker than for hardware (patents are harder to enforce; trade secrets are
+harder to maintain).
+
+═══════════════════════════════════════════════════════════════════════
+SECTION B — STAGE-SPECIFIC METRIC BENCHMARKS
+═══════════════════════════════════════════════════════════════════════
+
+Format: STRONG (top quartile) | ACCEPTABLE (median) | CONCERN (flag) | FAIL (disqualifying)
+
+NOTE: Deep tech companies are assessed primarily on TRL progression, IP strength,
+and non-revenue validation signals at early stages. Standard SaaS revenue benchmarks
+do not apply until TRL 8–9. Apply the revenue benchmarks in this section alongside
+TRL assessment — a company at TRL 7 with £2M ARR is exceptional; at TRL 4 with no
+revenue is expected.
+
+──────────────────────────────────────────────────────────────────────
+TECHNOLOGY READINESS LEVEL (TRL) FRAMEWORK:
+──────────────────────────────────────────────────────────────────────
+
+TRL 1 — Basic principles observed and reported.
+  Research only. Not investable for VC. Appropriate for university seed grants.
+
+TRL 2 — Technology concept and application formulated.
+  Theoretical design. Not investable for VC. May attract government programme funding.
+
+TRL 3 — Analytical and experimental proof of concept.
+  Lab demonstration of core principle. Not yet investable unless IP is exceptional and
+  team is world-class. ARIA, Innovate UK Frontier grants appropriate.
+
+TRL 4 — Component and subsystem validation in laboratory environment.
+  Core technology demonstrated in lab. Pre-seed investable if: strong IP, world-class
+  team, clear path to TRL 6 within 18 months, and market need validated.
+  Investment risk: very high. Expected outcome: advance to TRL 5–6.
+
+TRL 5 — Component and subsystem validation in relevant environment.
+  Technology works outside the laboratory in conditions approaching real use.
+  Seed investable. Minimum viable for most deep tech investors.
+  Investment risk: high. Expected outcome: first customer pilots within 12–18 months.
+
+TRL 6 — System and subsystem model or prototype demonstration in relevant environment.
+  Prototype demonstrated in conditions representative of real deployment.
+  Series A appropriate when: prototype demonstrated to customers, letters of intent
+  received, clear manufacturing pathway to TRL 9 identified.
+  Investment risk: medium-high.
+
+TRL 7 — System prototype demonstration in operational environment.
+  Full-scale prototype tested in operational conditions. First paid pilots running.
+  Series A or B depending on capital requirements and revenue evidence.
+  Investment risk: medium.
+
+TRL 8 — System complete and qualified.
+  Product complete, qualified, and demonstrated in its operational environment.
+  First commercial deployments possible. Series B appropriate.
+  Investment risk: medium-low.
+
+TRL 9 — Actual system proven in operational environment.
+  Full commercial deployment. Revenue benchmark applies at this stage.
+  Investment risk: commercial execution risk (same as any early-revenue company).
+
+INVESTABILITY BY TRL AND STAGE:
+Pre-seed:  TRL 3–5 (exceptional IP + world-class team required at TRL 3–4)
+Seed:      TRL 4–6 (TRL 4 requires exceptional circumstances)
+Series A:  TRL 6–8 (TRL 6 acceptable with strong LOIs and capital plan)
+Series B:  TRL 8–9 (revenue evidence required)
+
+TRL PROGRESSION BENCHMARKS:
+STRONG: advances 1 TRL level per 12 months with planned capital | ACCEPTABLE: 1 level per 18 months
+CONCERN: 1 level per 24 months or repeated misses of TRL milestones
+FAIL: claimed TRL higher than what technical diligence supports (TRL inflation)
+
+──────────────────────────────────────────────────────────────────────
+NON-REVENUE VALIDATION SIGNALS (for TRL 4–7):
+──────────────────────────────────────────────────────────────────────
+
+TIER 1 — Strongest validation (equivalent to revenue for pre-commercial deep tech):
+— Paid pilot or proof-of-concept contract with a named strategic customer at
+  commercial-intent pricing (not a research grant or in-kind contribution)
+— Defence or government procurement contract with milestone payments
+— Signed Letter of Intent from a customer committing to purchase at commercial scale
+  contingent on TRL milestone achievement
+— Strategic partnership with a named corporate including an equity investment in
+  the company (signifies the corporate has assessed and validated the technology)
+
+TIER 2 — Strong validation:
+— Innovate UK Smart Award, Innovate UK KTP, ARIA grant, or EIC Accelerator (EU) —
+  awarded through competitive peer-review process
+— SBRI (Small Business Research Initiative) contract with UK government department
+  (MOD, NHS, UKSA, BEIS) — customer validation plus non-dilutive capital
+— DARPA or US government SBIR/STTR award for UK-US dual-listed or US subsidiary companies
+— Peer-reviewed publication in a top-10 journal for the relevant field demonstrating
+  the claimed technical performance
+
+TIER 3 — Supporting validation (not sufficient alone):
+— Academic collaboration with a named university group as co-development partner
+— Membership of a government-backed accelerator (Catapult programmes, DSTL partnerships)
+— Non-binding expression of interest from a named customer
+— Industry award or competition win (note: these validate recognition, not commercial intent)
+
+FAIL CONDITION for non-revenue validation: a deep tech company at TRL 6 with no Tier 1
+  or Tier 2 validation signals after 3+ years of development has not yet demonstrated
+  that its technology has value to any external organisation willing to pay for it.
+  This is the most important red flag in deep tech: laboratory success that no customer
+  or government programme has validated commercially.
+
+──────────────────────────────────────────────────────────────────────
+CAPITAL BENCHMARKS BY DEEP TECH SUB-CATEGORY:
+──────────────────────────────────────────────────────────────────────
+
+These are the typical total capital required from founding to first significant commercial
+revenue (£1M+ ARR or equivalent government contract value):
+
+Advanced Materials:       £5–25M (lab validation + pilot manufacturing line + first customers)
+Semiconductors (fabless): £15–60M (design + tape-out + bring-up + first customer silicon)
+Robotics:                 £5–20M (prototype + safety certification + pilot deployments)
+Quantum Computing:        £20–100M+ (qubit system + dilution refrigeration + team)
+Quantum Sensing:          £5–25M (device + calibration + first commercial deployments)
+Space Technology:         £30–200M+ (depending on mission type — small sat vs launch)
+Cleantech Hardware:       £10–50M (pilot installation + performance validation)
+Synthetic Biology:        £5–30M (strain development + fermentation scale-up + regulatory)
+Deep Tech Software:       £2–10M (research team + compute infrastructure + first customers)
+
+Flag: any deep tech company that has raised less than 50% of the expected capital requirement
+  for its sub-category and is claiming to be within 12 months of commercial revenue without
+  a credible manufacturing or deployment partner is using an unrealistic timeline.
+
+──────────────────────────────────────────────────────────────────────
+REVENUE BENCHMARKS AT TRL 8-9 (Commercial Stage):
+──────────────────────────────────────────────────────────────────────
+
+SEED (First commercial revenue — TRL 8):
+Revenue:       STRONG >£500K | ACCEPTABLE £100–500K | CONCERN <£100K with no pipeline
+Customers:     STRONG ≥3 paying at commercial pricing | ACCEPTABLE 1–2 | CONCERN: all still pilots
+Gross margin:  STRONG >45% | ACCEPTABLE 25–45% | CONCERN 10–25% | FAIL <10%
+  Note: hardware gross margin at first commercial scale is often 20–35%; concern threshold
+  is lower than SaaS because hardware margins improve with scale through manufacturing
+  learning curves. Flag if gross margin is not expected to exceed 40% at 10x volume.
+
+SERIES A (Scaling commercial deployment — TRL 9):
+Revenue:       STRONG >£3M | ACCEPTABLE £1–3M | CONCERN <£1M with no clear catalyst
+YoY growth:    STRONG >100% | ACCEPTABLE 60–100% | CONCERN 30–60% | FAIL <30%
+  Note: deep tech revenue growth rates from first commercial year are often 200–400%
+  due to the low base; the concern is below 60% from a base above £1M.
+Gross margin:  STRONG >55% (hardware) or >70% (software layer) | ACCEPTABLE 35–55% | FAIL <25%
+Pipeline:      STRONG: ≥5 named customers in formal procurement with total value >3x current ARR
+Recurring revenue %: STRONG >40% of total revenue from software subscriptions or consumables
+  Note: a deep tech company at Series A with 0% recurring revenue is entirely hardware-
+  sale dependent — lumpier cash flows and lower valuation multiple. Push for recurring
+  revenue layer evidence.
+
+SERIES B (Scaling manufacturing and market):
+Revenue:       STRONG >£10M | ACCEPTABLE £4–10M | CONCERN <£4M
+Gross margin:  STRONG >60% (hardware) | ACCEPTABLE 40–60% | CONCERN <40% | FAIL <30%
+Manufacturing capacity: STRONG: can 5x current production volume within 12 months
+  with committed capital; CONCERN: bottlenecked on single manufacturing partner
+Bill of Materials (BoM) cost trend: STRONG: declining 15–25% per doubling of units
+  (Wright's Law learning curve); CONCERN: flat BoM cost after 3x volume increase
+
+VALUATION BENCHMARKS — Deep Tech (2025–2026 market):
+Pre-seed (TRL 3–5): £1–5M enterprise value — almost entirely team + IP premium
+Seed (TRL 5–7):     £5–20M | Strong validation: £15–30M
+Series A (TRL 7–8): Revenue multiple not applicable; £20–80M based on strategic value
+Series B (TRL 9):   4–12x ARR (hardware) | 8–20x ARR (software-dominant deep tech)
+Premium driver: exclusive IP position in a market that cannot be addressed without the
+  technology. A deep tech company that is the only commercially viable path to a
+  £500M+ addressable market commands a strategic premium above any revenue multiple.
+Note: acquirer-led valuations dominate deep tech exits. Strategic acquirer premiums
+  (Intel, Qualcomm, BASF, Boeing) frequently exceed 10–20x the last private market valuation.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION C — SECTOR-SPECIFIC RED FLAGS
+═══════════════════════════════════════════════════════════════════════
+
+01. IP NOT FULLY OWNED BY THE COMPANY — UNIVERSITY SPIN-OUT RISK
+SIGNAL: Company is a spin-out from a university and the core IP was developed in a
+university laboratory. The IP licence agreement has not been reviewed or the university
+retains: (a) ownership of the underlying patents with only a field-of-use licence to the
+company; (b) sub-licensing rights; (c) the right to terminate the licence upon certain
+conditions; or (d) a significant revenue share or equity stake that creates a misaligned
+incentive at exit.
+SEVERITY: CRITICAL
+WHAT IT MEANS: A deep tech company that does not own its core IP outright cannot freely
+sell, licence, or exploit the technology without the university's consent. In an
+acquisition, the buyer is acquiring a licence — not the asset — which materially reduces
+the acquirer's willingness to pay and their ability to defend the IP post-acquisition.
+Universities have in the past blocked transactions or extracted material value from
+spin-outs at exit.
+VERIFICATION: Request the full IP assignment or licence agreement between the company
+and the originating institution. Confirm: (1) whether patents are owned by or assigned
+to the company; (2) whether there are any third-party licences, government "march-in"
+rights, or revenue share obligations attached to the IP.
+
+02. LEAD SCIENTIST HAS NO EQUITY AND NO LONG-TERM COMMITMENT
+SIGNAL: The company's primary scientific innovator — the person who invented or developed
+the core technology — is not on the founding team with equity, or is a part-time
+consultant, or remains employed by the university and only advises the company.
+SEVERITY: CRITICAL
+WHAT IT MEANS: Deep tech companies run on the lead scientist's continued active
+contribution. If the lead scientist leaves — to return to academia, join a competitor,
+or pursue a different project — the company loses its primary technical capability.
+Unlike software companies where the codebase persists after a founder departs, deep
+tech IP is often tacit knowledge — it lives in the scientist's head and in unpublished
+laboratory methods that cannot be fully documented.
+VERIFICATION: Ask: "Is [lead scientist] a full-time employee of the company with equity
+on a standard vesting schedule? What is their current employment status? If they left
+tomorrow, what would the company lose that it cannot replace within 12 months?"
+
+03. NO MANUFACTURING SCALE-UP PLAN OR BUDGET
+SIGNAL: Company is at TRL 6–7 and has demonstrated the technology in a prototype but
+has no documented manufacturing scale-up plan. The submission describes a "clear path
+to manufacturing" without naming the manufacturer, the process, the capital requirement,
+or the timeline to first production unit.
+SEVERITY: HIGH
+WHAT IT MEANS: For hardware deep tech, the gap between a working prototype and a
+manufacturable product is often as large as the gap between an idea and a prototype.
+Manufacturing scale-up requires: identifying a contract manufacturer or building in-house
+capability; qualifying the manufacturing process; achieving consistent yield; and reducing
+BoM cost to achieve target gross margin. A company that treats manufacturing as "the next
+step after technical validation" is underestimating the time and capital required by 2–4x.
+VERIFICATION: Ask: "Who is your manufacturing partner or what is your manufacturing
+plan? What is the capital requirement to achieve your first 1,000 production units?
+What is your target BoM cost and when will you achieve it? Have you done a Design for
+Manufacturing review with a contract manufacturer?"
+
+04. HARDWARE COST NOT DECLINING PER LEARNING CURVE
+SIGNAL: Company has produced 5–10 production units and the cost per unit (BoM +
+manufacturing labour) has not declined materially from the first unit. Wright's Law
+predicts that cost should decline 15–30% per doubling of cumulative production for
+most hardware categories. Flat cost after several production runs indicates either
+a novel manufacturing challenge or a BoM dominated by commodity components with no
+learning curve improvement potential.
+SEVERITY: HIGH
+WHAT IT MEANS: A deep tech product that does not benefit from manufacturing learning
+curves has a structural gross margin problem. If the target gross margin of 40%+ requires
+a BoM cost reduction that the learning curve is not delivering, the business model
+at commercial scale is financially unviable. Investors who funded the business on the
+assumption of learning-curve BoM improvement need to reassess the gross margin projection.
+VERIFICATION: Request BoM cost breakdown for each production batch to date. Calculate
+cost reduction per doubling of units. Compare against the Wright's Law expectation for
+the manufacturing process type. If cost is flat, ask: "What specifically needs to happen
+to achieve your target BoM cost? At what production volume does it become achievable?"
+
+05. TRL CLAIMED HIGHER THAN DEMONSTRATED
+SIGNAL: Company claims TRL 7 or 8 but technical diligence reveals the product has only
+been demonstrated in a controlled laboratory environment (TRL 5–6) rather than in an
+operational environment. May describe a laboratory demonstration as "field deployment"
+or a simulation as "operational testing."
+SEVERITY: HIGH
+WHAT IT MEANS: TRL inflation is common in deep tech fundraising because each TRL step
+significantly increases investability and valuation. A company claiming TRL 7 on the
+basis of a controlled lab demonstration is overstating its readiness by 12–18 months
+of development time. Investors who fund at TRL 7 valuation and discover the product
+is at TRL 5 have funded 2 TRL steps they did not price for.
+VERIFICATION: Apply the NATO/NASA TRL definitions strictly. For TRL 7, the specific
+test is: "System prototype demonstration in an operational environment." Ask: "Where
+specifically was the demonstration carried out? Was it a controlled laboratory environment
+or an environment that represents actual operational conditions? Who conducted the evaluation?"
+
+06. GOVERNMENT GRANT DEPENDENCY WITHOUT PRIVATE CAPITAL BRIDGE
+SIGNAL: Company has been funded primarily or entirely by government grants (Innovate UK,
+ARIA, Horizon Europe, MOD DSTL). It has never raised a private equity round. Its next
+development milestone requires £2M+ that it is planning to fund through another grant
+application rather than a private capital raise.
+SEVERITY: MEDIUM
+WHAT IT MEANS: A deep tech company that has never been validated by a private investor
+has an unresolved commercial question: is the technology valuable enough for someone
+who does not have a public mandate to fund science to invest their own capital? Government
+grant validation (Tier 2 in Section B) is evidence of scientific merit, not commercial
+merit. A company in a permanent grant-dependency cycle is potentially a research project
+with a company structure, not an investable business.
+VERIFICATION: Ask: "What private investment have you raised to date? Why have you not
+yet sought private venture capital? What would a private investor need to see to justify
+the capital required for your next development stage? Have you had discussions with
+venture investors?"
+
+07. SINGLE MANUFACTURING OR SUPPLY CHAIN PARTNER FOR CRITICAL COMPONENT
+SIGNAL: Company's product depends on a single supplier for a critical component — a
+specific alloy, a custom semiconductor, a biological feedstock, or a proprietary sensor
+— that cannot be sourced from an alternative supplier without a 12–24 month qualification
+process.
+SEVERITY: HIGH
+WHAT IT MEANS: Supply chain concentration is the hardware equivalent of banking partner
+concentration in Fintech. A supplier who knows they are sole-source for a critical
+component has pricing power and reliability leverage. If the supplier is acquired by
+a competitor, has a production failure, or unilaterally changes commercial terms, the
+deep tech company cannot fulfil its customer commitments.
+VERIFICATION: For each critical component in the BoM, ask: "How many qualified suppliers
+exist for this component globally? Have you qualified an alternative supplier? What is
+the lead time to qualification if your primary supplier fails?"
+
+08. NO PATH TO GROSS MARGIN ABOVE 40% AT SCALE
+SIGNAL: Product gross margin at current production volume is below 25%, and the projected
+gross margin at 100x production volume does not exceed 40% based on the BoM cost
+structure. The primary BoM cost driver is a commodity material or component that will
+not improve with the company's own scale.
+SEVERITY: HIGH
+WHAT IT MEANS: A deep tech hardware company with a structural gross margin ceiling below
+40% cannot generate sufficient margin to fund R&D, sales, and overhead at scale while
+remaining profitable. The unit economics of the business model are permanently impaired.
+This is distinct from a company with 25% gross margin today that will reach 55% at scale
+— the former is acceptable at early stage; the latter is a structural failure.
+VERIFICATION: Request the BoM at current scale and at projected 100x scale. Calculate
+gross margin at each volume level. If 100x scale gross margin is below 40%, ask: "What
+would need to change in your manufacturing process or BoM to achieve 50%+ gross margin?
+Is there a software or services layer you have not yet modelled?"
+
+09. FOUNDING TEAM IS ALL SCIENTISTS — NO COMMERCIAL OPERATOR
+SIGNAL: Founding team consists entirely of scientists or engineers with no commercial
+background. There is no CEO with commercial operator experience, no business development
+lead who has sold hardware to enterprise customers, and no finance function that has
+managed the capital requirements of a hardware scale-up.
+SEVERITY: HIGH
+WHAT IT MEANS: This is the Scientist-Only Founding Team failure pattern (Section D).
+Deep tech companies that fail commercially despite excellent science almost always share
+this characteristic. The skills required to validate a technology (scientific rigour,
+experimental methodology, peer review) are different from the skills required to
+commercialise it (customer discovery, pricing, manufacturing operations, fundraising).
+A team that has never done the second set of tasks will discover the cost of learning
+them during a period when the company's most valuable resource is the lead scientist's
+focus.
+VERIFICATION: For each founding team member, ask: "What is your experience with hardware
+commercialisation — specifically, have you taken a hardware product from TRL 7 to commercial
+revenue before? Have you managed a supply chain at production scale? Have you personally
+closed a £500K+ hardware contract?" One or more founders must answer yes.
+
+10. PATENT STRATEGY INSUFFICIENT FOR IP PROTECTION
+SIGNAL: Company's primary IP protection is a single patent or patent application in one
+jurisdiction (typically UK or US only). The patent covers the end product but not the
+manufacturing process or the enabling materials. There are no continuation applications
+covering variations that could be designed around by a competitor.
+SEVERITY: HIGH
+WHAT IT MEANS: A single patent in one jurisdiction is a limited moat. A well-resourced
+competitor (BASF, Qualcomm, Boeing) can design around a narrow patent, file in
+jurisdictions where the patent has no coverage, or simply wait for the patent to expire
+(20 years from filing). A deep tech company whose entire commercial thesis rests on
+one patent is in a fragile IP position.
+VERIFICATION: Request the IP schedule: list of all granted patents, pending applications,
+jurisdictions covered, filing dates, and expiry dates. Ask: "Who conducted the freedom
+to operate analysis? Are there any third-party patents that could block your commercial
+activity? What is your strategy if a competitor files a design-around?"
+
+11. NO CUSTOMER COMMITTED TO PAYING FOR THE COMMERCIAL PRODUCT
+SIGNAL: Company has been developing its technology for 3+ years and is at TRL 6–7
+but does not have a single customer who has committed to paying for the commercial
+product — even conditionally. Customer engagement consists of research collaborations,
+unpaid pilots, or informal expressions of interest.
+SEVERITY: HIGH
+WHAT IT MEANS: At TRL 6, a deep tech company should have at least Tier 1 or Tier 2
+validation (see Section B). If after 3 years of development no customer has been willing
+to commit money — not just interest — the technology may be solving a problem that does
+not have a commercial buyer at any price. This is the deepest form of product-market fit
+failure in deep tech: technically impressive but commercially unwanted.
+VERIFICATION: Ask: "Is there any customer who has paid you money — or committed to pay
+you money contingent on achieving a specific milestone — for your technology? What is
+the earliest such commitment? What do your most engaged potential customers say when you
+ask them what they would pay for the commercial product?"
+
+12. REGULATORY APPROVAL TIMELINE UNDERESTIMATED BY 2+ YEARS
+SIGNAL: Company's financial model projects regulatory approval and commercial launch
+within 18 months. The regulatory pathway — medical device approval, CE marking for
+a new materials class, space launch licence, or GMO authorisation — realistically
+requires 3–5 years. Company may have received informal positive signals from a
+regulatory body without a formal application in process.
+SEVERITY: HIGH
+WHAT IT MEANS: Regulatory approval is the second most common cause of deep tech company
+failure after the Valley of Death. A company that has modelled its capital requirements
+assuming an 18-month regulatory timeline and then discovers it needs 48 months will run
+out of capital mid-process. The cost of a failed regulatory application — and the time
+required to resubmit — is typically not included in financial models built by founding
+teams without regulatory counsel.
+VERIFICATION: Ask: "Who is your regulatory counsel? Have you submitted a formal
+application or had a pre-submission meeting with the relevant regulator? What is the
+official expected timeline from the regulator, in writing?"
+
+═══════════════════════════════════════════════════════════════════════
+SECTION D — HISTORICAL FAILURE PATTERNS
+═══════════════════════════════════════════════════════════════════════
+
+1. THE VALLEY OF DEATH
+DESCRIPTION: A deep tech company successfully validates its technology at TRL 4–5 in
+the laboratory and raises a seed round of £1–3M. The seed round covers laboratory
+validation, initial IP filing, and the first prototype. At TRL 6–7, the company needs
+£5–15M to build a manufacturable prototype, qualify a manufacturing process, and conduct
+customer pilots at commercial scale. This capital requirement is too large for angel
+investors and too early-stage (no revenue, TRL 7 not yet proven) for most institutional
+VCs. The company cannot bridge the gap between seed validation and Series A readiness.
+It applies for more grants, extends its runway by reducing headcount, and loses 12–18
+months of development time. Key scientific staff find more stable positions elsewhere.
+The technology is real, the IP is strong, but the company cannot raise the capital to
+get from where it is to where it needs to be to attract institutional capital. This is
+the Valley of Death — and it kills more viable deep tech companies than any competitive
+or technical failure.
+EARLY WARNING SIGNALS: Seed round was entirely government grant funded with no private
+equity; the founding team has not mapped the capital requirement from current TRL to
+commercial revenue; the company does not have a plan B if the next grant application
+is rejected; the capital requirement to Series A readiness exceeds 3x the seed round
+raised; no institutional deep tech investor has engaged with the company at seed stage.
+WHEN TO APPLY: Any deep tech company at TRL 5–7 with less than 18 months of runway
+and no institutional investor committed to the next round. The Valley of Death is not
+a metaphor — it is a specific and predictable capital gap that kills companies at this
+exact stage.
+
+2. THE MANUFACTURING SCALE-UP WALL
+DESCRIPTION: A company successfully demonstrates a product at TRL 8 — in an operational
+environment, with paying pilot customers, at acceptable performance specifications.
+It raises a Series A to scale manufacturing. In the first production run at 10x the
+pilot volume, yield is 30% below the pilot yield. The product works but the manufacturing
+process that worked at small scale introduces defects, inconsistencies, or performance
+degradation at higher throughput. The company spends 12–18 months and an additional
+£3–5M of unplanned capital resolving manufacturing quality issues. Customer deliveries
+are delayed. Pipeline customers who were waiting for commercial availability lose patience
+and evaluate alternatives. The Series A capital is consumed solving a manufacturing
+problem that the team did not anticipate because they had never scaled that manufacturing
+process before.
+EARLY WARNING SIGNALS: Product was manufactured by the founding team or in a university
+facility without a qualified contract manufacturer being involved; no Design for
+Manufacturing (DfM) review was conducted before the first production run; the team has
+no prior experience of hardware manufacturing at commercial scale; the BoM includes
+components or processes that have not been qualified at target volume; yield data from
+pilot production has not been shared with investors.
+WHEN TO APPLY: Any deep tech hardware company raising Series A capital to scale
+manufacturing without a contracted manufacturer with relevant experience at the required
+volume and without documented pilot production yield data.
+
+3. THE IP LEAKAGE TRAP
+DESCRIPTION: A university spin-out company is founded with a licence to use the
+university's patents. The founders believe — and describe to investors — that the IP
+is effectively owned by the company. A strategic acquirer conducts IP due diligence
+and discovers: the patents are owned by the university, not the company; the licence
+includes a field-of-use restriction that limits the company's ability to expand into
+adjacent markets; the university retains the right to licence the same IP to a third
+party outside the specified field; or there is a government "march-in" right (from
+government-funded research) that allows the government to licence the IP to a third
+party if the company fails to commercialise it within a specified period. The acquisition
+price is reduced materially, or the deal falls through entirely, because the acquirer
+cannot obtain clean title to the IP.
+EARLY WARNING SIGNALS: The IP schedule shows patents assigned to a university, a
+research council, or a government body rather than the company; the company describes
+its IP protection as a "licence from [university name]"; the founding agreement with
+the university was negotiated without specialist IP counsel; the company has not
+conducted a freedom-to-operate analysis; the university holds board observer rights
+or approval rights over licensing decisions.
+WHEN TO APPLY: Any university spin-out where the core IP was developed in a university
+laboratory using university facilities or funding. This is the most common structural
+failure in UK deep tech spin-outs — it is not rare, it is the default risk.
+
+4. THE SCIENTIST-ONLY FOUNDING TEAM
+DESCRIPTION: A company is founded by a team of brilliant scientists who have spent 5–10
+years developing a breakthrough technology. They are world-class at the scientific
+problem. They have no experience of hardware commercialisation, enterprise sales,
+manufacturing operations, or raising institutional capital. They raise a seed round
+on the strength of the technology. Over the next 24 months they discover: customer
+discovery is harder and slower than expected; pricing is lower than the market will
+bear for early products; manufacturing partners do not take them seriously without
+a commercial operator in the room; the process of raising a Series A requires a level
+of business narrative construction they are not trained to perform. The technology
+continues to improve. Revenue does not materialise. The company raises a bridge round
+to avoid folding, brings in an external CEO — but at this point the cultural fit between
+the scientific founders and a commercial operator is difficult, the external CEO does not
+understand the technology, and the company stalls for another 12–18 months during the
+leadership transition.
+EARLY WARNING SIGNALS: Founding team's LinkedIn profiles show no commercial operator
+experience — all career history is academic or government research; the company has
+been funded for 24+ months but has no signed commercial contracts; when asked about
+their commercial strategy, founders describe the technology rather than the customer
+problem; the board has no one with hardware commercialisation experience; the founding
+team has not yet hired a business development lead.
+WHEN TO APPLY: Any deep tech company where the founding team's collective CV contains
+no hardware commercialisation, enterprise sales, or manufacturing operations experience.
+
+5. THE GOVERNMENT GRANT DEPENDENCY
+DESCRIPTION: A company builds its entire development programme on a sequence of
+government grants — Innovate UK, ARIA, Horizon Europe, MOD DSTL. The scientific
+work is excellent. Each grant is won competitively, validating the technology's merit.
+After 4–5 years and £3–5M of grant funding, the company has reached TRL 6–7 but has
+never raised private equity. When the founding team approaches institutional venture
+investors, they discover: institutional VCs are uncomfortable with the grant-dependent
+funding history (it signals the team cannot raise commercial capital); the IP ownership
+is complex because some grants require licensing IP back to the government; the
+commercialisation milestones expected by VCs (customer pilots, LOIs, manufacturing
+partnership) have not been prioritised because grant milestones focused on scientific
+outputs; and the company's culture is closer to an academic research group than a
+commercial entity. The technology is real but the business is not commercial-ready.
+EARLY WARNING SIGNALS: Funding history is 100% grants with no private equity; company
+has never hired a commercial operator; grant reporting milestones reference publications
+and conference presentations rather than customer validations; the team describes their
+next grant application as the primary capital plan; no institutional investor has
+conducted a formal investment process (even without completing an investment).
+WHEN TO APPLY: Any deep tech company with more than £2M raised entirely from government
+grants and no private equity investors in the cap table.
+
+6. THE TECHNOLOGY OBSOLESCENCE TRAP
+DESCRIPTION: A company spends 4–6 years developing a technology to solve a problem
+that exists at the start of development. By the time the technology reaches TRL 8–9,
+an alternative approach — using different materials, different physics, or a software-
+only solution — has emerged that addresses the same problem more cheaply or more
+effectively. The company's technology is technically excellent but has been overtaken
+by an approach it could not anticipate at the start of development. This happens most
+often when: (1) the incumbent problem (e.g., battery range) improves so much through
+incremental progress that the breakthrough solution's advantage narrows from 3x to 1.2x
+by launch; (2) a foundation model or algorithm achieves in software what the company
+was building in hardware (e.g., AI replacing sensor arrays); (3) a much better-funded
+competitor (Qualcomm, Google, TSMC) releases a competing solution with a product
+development budget 100x larger than the startup's total capitalisation.
+EARLY WARNING SIGNALS: The company's competitive advantage is benchmarked against
+the current generation of competing technology, not a projection of where competing
+technology will be in 3–5 years; the founding team is focused on technical improvement
+relative to today's baseline rather than relative to the expected baseline at commercial
+launch; the problem the technology solves has been substantially addressed by an
+adjacent approach in the last 12 months; a well-funded incumbent has announced an
+R&D programme in the same technical area.
+WHEN TO APPLY: Any deep tech company with a development timeline of 4+ years where
+the competitive landscape or the problem itself may change materially before commercial
+launch. Apply Market Timing Matrix (Framework 3) — ask whether the market timing window
+will remain open for the 3–4 years remaining before commercialisation.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION E — EXIT COMPARABLE DATABASE
+═══════════════════════════════════════════════════════════════════════
+
+ACQUISITION MULTIPLES AND PATTERNS BY SUB-CATEGORY:
+
+Advanced Materials:
+  Strategic 4–12x revenue (at commercial stage) | Strategic often acquires at TRL 7–8
+  for supply chain security rather than waiting for full commercialisation.
+  Note: materials companies are frequently acquired for strategic reasons (supply chain
+  vertical integration, competitive exclusion) before commercial revenue is meaningful.
+  Acquirers pay for the IP and the team, not the P&L.
+
+Semiconductors:
+  Strategic 5–20x revenue (fabless, commercial) | Acqui-hire at pre-revenue: £20–100M
+  for exceptional team + IP.
+  Note: semiconductor acquisitions are subject to national security review — UK NSI Act,
+  US CFIUS, EU FDI screening — which can block or restructure transactions.
+  Recent example: Nvidia attempted acquisition of Arm (£40B, blocked by regulators, 2022).
+
+Robotics:
+  Strategic 4–15x revenue (hardware + software) | PE 3–8x revenue (stable cash flows)
+  Premium driver: software subscription layer as a percentage of total revenue.
+  A robotics company with 40%+ recurring software revenue trades at 10–15x total revenue;
+  hardware-only trades at 4–6x revenue.
+
+Quantum Computing / Sensing:
+  Pre-commercial: acquired on strategic value, not revenue. Valuations of £50M–£500M
+  for world-class quantum teams with demonstrable hardware capability.
+  Quantum sensing commercial: 5–15x revenue depending on defence contract value.
+  Note: quantum computing acquisitions are typically blocked or restructured by national
+  security authorities — quantum technology is classified as sensitive in UK, US, and EU.
+
+Space Technology:
+  Highly variable — launch services, satellites, and data products have entirely different
+  acquisition dynamics. Earth observation data companies trade at 5–15x ARR.
+  Satellite manufacturers: strategic value (supply chain, mission capability) drives pricing.
+  Launch vehicles: government strategic interest often trumps commercial valuation.
+
+Cleantech Hardware:
+  Strategic 2–6x revenue (hardware-only) | 4–10x revenue (with recurring data/monitoring)
+  Infrastructure fund acquirers (Macquarie, Brookfield): acquire operating assets at 8–15x EBITDA.
+  Energy majors (Shell, BP, TotalEnergies): acquire to accelerate net-zero transition commitments.
+
+Biotech / Synthetic Biology:
+  Pre-commercial (platform stage): £20–200M for platform IP + team in target application area.
+  Commercial: 4–12x revenue (industrial biotech) | 8–20x revenue (pharmaceutical enabling tech).
+  Pharma acquirers pay highest premiums for validated biological platforms with IP in their
+  therapeutic area.
+
+Deep Tech Software:
+  Apply SaaS Library multiples with a premium for genuine scientific moat: 12–25x ARR.
+
+NAMED STRATEGIC ACQUIRERS BY SUB-CATEGORY:
+
+Advanced Materials:
+  BASF: novel materials for automotive, agriculture, industrial applications. Largest
+    chemicals company globally — has acquired materials startups at TRL 6–7 for process IP.
+  DuPont: specialty materials, electronics, industrial applications. Active in novel
+    polymer and composite acquisition. Typical range: £50M–£1B.
+  3M: adhesives, abrasives, electronic materials, healthcare materials. Acquires to extend
+    its materials platform in adjacent categories. Typical range: £50M–£500M.
+  Aerospace Primes (Airbus, Boeing, Rolls-Royce): advanced composites, thermal management,
+    lightweighting materials. Acquires for supply chain security and product performance.
+
+Semiconductors:
+  Intel: processor architecture, AI chips, power management, photonics. Active M&A history
+    (Habana Labs £2B, Mobileye £14.4B). Subject to CFIUS for US acquisitions; NSI Act for UK.
+  AMD: CPU/GPU architecture, AI accelerators. Acquired Xilinx (£35B). Typical: £500M–£5B.
+  Qualcomm: mobile/IoT chips, automotive semiconductors, RF front-end. Active acquirer.
+    Attempted acquisition of Arm (with SoftBank) blocked.
+  Arm Holdings (IPO 2023): IP licensing model — acquires teams/IP to extend instruction set.
+  NVIDIA: AI accelerators, autonomous vehicles, networking chips. Attempted Arm (£40B,
+    blocked). Will pay substantial premiums for AI chip IP and teams.
+  Apple: exclusively acquires for in-house silicon (custom SoC components) — rarely disclosed.
+
+Robotics:
+  ABB Robotics: industrial automation, collaborative robots, software for robotics.
+    Typical range: £50M–£500M.
+  Fanuc: CNC systems, industrial robots, factory automation (Japanese — sensitive to UK).
+  KUKA (owned by Midea, Chinese): industrial robotics — NSI Act may apply to UK acquisitions.
+  Amazon Robotics: warehouse automation, fulfilment centre robotics. Acquired Kiva Systems
+    (£775M, 2012) — will pay strategic premiums for logistics automation.
+  Boston Dynamics (owned by Hyundai): humanoid and mobile robots.
+
+Quantum:
+  IBM: quantum computing hardware and cloud services. Active in university partnerships.
+  Google (Alphabet): superconducting quantum computing.
+  Microsoft: topological qubit development.
+  Defence Primes (BAE Systems, Raytheon, Leonardo): quantum sensing and navigation for
+    defence applications. Subject to NSI Act mandatory notification.
+
+Space:
+  Airbus Defence and Space: satellite manufacturing, Earth observation, space services.
+  Boeing: launch systems, satellite communications, government space programmes.
+  Lockheed Martin: defence space, military satellites, classified programmes. ITAR applies.
+  SpaceX: launch capacity, Starlink ecosystem — acquires sparingly.
+  Planet Labs (public): Earth observation data — acquires satellite and analytics capabilities.
+
+Cleantech Hardware:
+  Shell, BP, TotalEnergies, Equinor: energy transition hardware, battery technology, CCUS.
+  National Grid, SSE, Centrica: grid-edge hardware, flexibility services, smart energy.
+  Siemens Energy, GE Vernova: grid infrastructure, industrial energy equipment.
+  Infrastructure Funds: Macquarie, Brookfield, Stonepeak — acquire operating cleantech
+    assets at EBITDA multiples once deployed and operational.
+
+Biotech / Synthetic Biology:
+  Roche, Novartis, AstraZeneca, GSK: biotech platform IP in their therapeutic areas.
+  BASF, Bayer, Corteva (Agricultural biotech): novel proteins, crop traits, biofertilisers.
+  DSM-Firmenich: food ingredients, nutritional applications of synthetic biology.
+  Ginkgo Bioworks (public): synthetic biology platform — has acquired enabling capabilities.
+
+IPO COMPARABLES — Deep Tech:
+
+ARM Holdings (2023, Nasdaq re-IPO): Revenue £2.7B | IPO market cap £54B = 20x revenue
+  Note: ARM is a semiconductor IP licensor — multiple is for IP-dominant model.
+Oxford Nanopore (2021, LSE): Revenue £114M at IPO | IPO market cap £3.4B = 30x revenue
+  Note: genomic sequencing hardware — premium for unique technology position.
+Darktrace (2021, LSE): Revenue £215M at IPO | IPO market cap £1.7B = 8x revenue
+  Note: AI cybersecurity — borderline deep tech software.
+Sifted / UKRI data: UK deep tech IPOs are rare before £100M+ ARR. Primary exit route
+  is strategic acquisition. The LSE AIM market has historically supported deep tech
+  companies at lower revenue thresholds but with significant liquidity discount.
+US comparables: Palantir (£1.1B revenue at IPO, 20x revenue); IonQ (quantum, pre-revenue
+  IPO via SPAC at £1.5B — not a reliable comparable for private market deep tech valuation).
+Note: 2025–2026 deep tech valuations are primarily driven by strategic acquirer interest
+  and IP defensibility, not public market revenue multiples.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION F — KEY QUESTIONS FOR FOUNDER MEETING
+═══════════════════════════════════════════════════════════════════════
+
+01. TRL — CURRENT AND PATH TO 9
+QUESTION: "What is your current Technology Readiness Level using the standard NATO/NASA
+definition? What specific demonstration have you completed that justifies that TRL?
+What are the milestones and capital requirements to reach TRL 9 from where you are today?
+And what is your realistic timeline for each TRL step?"
+STRONG ANSWER: States a specific TRL with the specific evidence that defines it (e.g.,
+"TRL 6 — we demonstrated the full system in [specific operational environment] in
+[month, year] with [specific customer]"); has a documented TRL roadmap with capital
+requirements per stage and realistic timelines based on prior TRL progression speed.
+WEAK ANSWER: "We're around TRL 6–7"; describes a laboratory demonstration as TRL 7;
+cannot separate the TRL roadmap from the fundraising narrative; the timeline to
+commercial revenue is described as "12–18 months" from TRL 6.
+REVEALS: Whether the team has a realistic understanding of how far they are from commercial
+deployment and whether the financial model is built on achievable milestones.
+
+02. IP OWNERSHIP — COMPANY OR UNIVERSITY
+QUESTION: "Who legally owns the core patents? Is it the company, a university, a
+research council, or a combination? If it is a university, what are the terms of the
+licence — field of use, sub-licensing rights, revenue share, termination conditions?
+Has a specialist IP solicitor reviewed the IP assignment or licence agreement on behalf
+of the company (not the university)?"
+STRONG ANSWER: Patents are assigned to the company; any university licence is exclusive,
+broad field of use, irrevocable, and fully assigned at the company's option; a specialist
+IP firm (not the university's in-house counsel) has reviewed and advised.
+WEAK ANSWER: "The IP is licensed from the university — we have exclusive rights";
+cannot confirm whether the licence is irrevocable; "the university is supportive";
+the founding agreement was negotiated without separate IP counsel.
+REVEALS: Whether the company's core commercial asset is actually owned by the company
+or is a licence that limits commercial freedom at exit.
+
+03. MANUFACTURING PARTNER AND SCALE-UP PLAN
+QUESTION: "Who will manufacture your product at commercial scale? Have you signed a
+manufacturing agreement or heads of terms with a contract manufacturer? What is your
+target BoM cost at 1,000 units? At 10,000 units? What is the capital requirement to
+achieve your first production run of 1,000 units and what yield do you expect?"
+STRONG ANSWER: Named contract manufacturer with existing relationship; heads of terms
+or MOU in place; specific BoM cost targets with a documented learning curve projection;
+yield expectations based on actual pilot production data.
+WEAK ANSWER: "We're evaluating several manufacturers"; "manufacturing is the next step
+after we prove TRL 8"; cannot state a BoM cost target; yield projections are theoretical.
+REVEALS: Whether the company has confronted the manufacturing challenge seriously or
+is treating it as a problem to solve later — which is the Manufacturing Scale-Up Wall
+failure in formation.
+
+04. CAPITAL REQUIREMENT TO FIRST COMMERCIAL REVENUE
+QUESTION: "How much total capital do you need from today to reach your first £1M of
+commercial revenue? How is that capital allocated across: continued R&D, manufacturing
+setup, regulatory approval, sales and business development, and working capital? What
+are the three biggest risks that could increase the capital requirement beyond this figure?"
+STRONG ANSWER: Specific total capital requirement with allocation breakdown; has modelled
+the three biggest risk scenarios with capital impact; total requirement is consistent
+with sub-category benchmarks in Section B of this library.
+WEAK ANSWER: "We need £5M to reach commercial launch" without allocation detail; does
+not address risks that could inflate the requirement; total requirement is significantly
+below the sub-category benchmark (suggests underestimation rather than efficiency).
+REVEALS: Whether the team has done a rigorous capital plan or has reverse-engineered a
+fundraise target from what they think is raisable.
+
+05. LEAD SCIENTIST EQUITY AND VESTING
+QUESTION: "What equity does the lead scientist hold? Is it on a standard 4-year vesting
+schedule with a 1-year cliff? Is the lead scientist a full-time employee of the company?
+What is their employment contract term? If they left the company tomorrow, what would
+you lose that cannot be recovered or replaced within 12 months?"
+STRONG ANSWER: Lead scientist holds 10–40% equity on a standard vesting schedule; is
+a full-time employee; the company has a documented knowledge transfer and laboratory
+process documentation programme so that core methods are institutionalised, not only
+in the scientist's head.
+WEAK ANSWER: Lead scientist is a "part-time technical advisor"; equity is minimal (below
+5%) because they joined late; no standard vesting; "they're very committed to the project."
+REVEALS: Whether the company's most critical asset — the person who made the scientific
+breakthrough — is structurally committed to the company's success or could walk away
+with their knowledge and leave the company technically paralysed.
+
+06. GOVERNMENT GRANT DEPENDENCY AND BRIDGE STRATEGY
+QUESTION: "What percentage of your total funding to date has come from government grants?
+What is your next planned grant application and when do you expect to hear? If that grant
+is rejected, what is your plan B? At what point in your development plan do you expect
+private institutional capital to replace grant capital as the primary funding source?"
+STRONG ANSWER: Grants are a minority of total funding; has a private institutional investor
+interested in co-funding the next stage; has a specific grant-rejection contingency plan;
+can identify the TRL milestone at which the technology will be commercially compelling
+to institutional investors without requiring grant co-funding.
+WEAK ANSWER: Grants are 100% of funding to date; "we'll apply for the next Innovate UK
+round"; no private investor engagement; "grants are the most efficient capital for our stage."
+REVEALS: Whether the company is building a venture business or a research programme with
+a company structure — and whether the founding team understands the distinction.
+
+07. REGULATORY APPROVAL PATHWAY AND TIMELINE
+QUESTION: "What regulatory approval does your product require before first commercial
+sale? Who is your regulatory counsel? Have you had a pre-submission meeting with the
+relevant regulator? What is the regulator's stated timeline, and what happens to your
+business plan if it takes twice as long as projected?"
+STRONG ANSWER: Names the specific regulatory pathway; has regulatory counsel with
+experience in the specific product class; has had a formal pre-submission meeting with
+the regulator and can cite the outcome; financial model includes a regulatory delay
+scenario.
+WEAK ANSWER: "We've spoken informally to the regulator"; "we believe we're Class I
+so the timeline is short"; regulatory approval is not on the critical path of the
+financial model.
+REVEALS: Whether regulatory risk has been properly modelled or has been discounted
+because the founding team does not want to acknowledge the timeline it implies.
+
+08. BILL OF MATERIALS COST AND LEARNING CURVE
+QUESTION: "What is your current BoM cost per unit? What is your target BoM cost at
+1,000 units and at 10,000 units? What is the primary cost driver and when does it
+start declining? Have you seen any BoM cost reduction from your first unit to your
+most recent production batch?"
+STRONG ANSWER: Specific BoM cost at current scale and projected at target volumes;
+primary cost driver identified with a credible reduction pathway (volume discounts on
+components, process improvement, design simplification); evidence of cost decline in
+production to date.
+WEAK ANSWER: "BoM cost will improve significantly with scale" without specific numbers;
+no evidence of cost decline in pilot production; the primary cost driver is a commodity
+material with no company-controlled learning curve.
+REVEALS: Whether the gross margin projection at commercial scale is grounded in actual
+cost data or is a speculative model that has never been validated against real production costs.
+
+09. CUSTOMER COMMITTED TO PAYING FOR COMMERCIAL PRODUCT
+QUESTION: "Is there any customer who has paid you money — or signed a letter of intent
+committing to purchase at a specified commercial price — for your product? Who is it?
+What is the value? What milestone or condition triggers the commercial purchase? And
+what does your most engaged potential customer say when you ask them what they would
+pay today for the commercial product?"
+STRONG ANSWER: At least one named customer who has either paid for a pilot at commercial-
+intent pricing or has signed an LOI with a specified commercial commitment; can describe
+the specific trigger conditions and the customer's stated rationale for the commitment.
+WEAK ANSWER: "Multiple customers are very excited about the technology"; "we have verbal
+commitments"; "once we reach TRL 8 we're confident customers will pay"; cannot name a
+customer who has paid any money for any form of the product.
+REVEALS: Whether the commercial demand for the technology is real and validated or is
+the founding team's extrapolation from positive research conversations.
+
+10. FREEDOM TO OPERATE ASSESSMENT
+QUESTION: "Has a freedom-to-operate (FTO) analysis been conducted by an independent
+patent attorney? When was it last updated? Were any blocking patents identified? If so,
+what is your strategy to design around them or licence them? And have you identified all
+third-party IP that your manufacturing process relies on?"
+STRONG ANSWER: FTO analysis conducted within the last 18 months by an independent
+patent attorney; no blocking patents identified, or specific design-arounds implemented
+for identified risks; manufacturing process IP is clean or licensed.
+WEAK ANSWER: "We've reviewed the patent landscape ourselves"; "our patents are
+differentiated enough that we don't have FTO concerns"; FTO has not been conducted.
+REVEALS: Whether the company's commercial activities could be blocked by a third-party
+patent holder — which is a common and existential risk in deep tech, especially in
+crowded IP landscapes like semiconductors, biotech, and advanced materials.
+
+11. DEFENCE OR GOVERNMENT CONTRACT STATUS
+QUESTION: "Have you received any government or defence contracts — SBRI, MOD DSTL,
+UK Space Agency, Defence and Security Accelerator? What is the value, duration, and
+deliverable of each contract? And do any of those contracts include restrictions on
+who you can sell to or licence to — including foreign government or commercial restrictions?"
+STRONG ANSWER: Describes specific government contracts with values and deliverables;
+confirms whether contracts include any IP licensing restrictions, security classifications,
+or export restrictions on the resulting technology; understands the implications of
+government IP ownership clauses in contract R&D.
+WEAK ANSWER: "We're in discussions with MOD"; "we've applied to DSTL but haven't heard";
+"the government has been supportive of what we're doing"; does not address whether
+contract terms restrict commercial exploitation.
+REVEALS: Whether government validation is real (contracted and paid) or aspirational —
+and whether government contracts may inadvertently restrict future commercial freedom.
+
+12. INTERNATIONAL EXPANSION CONSTRAINTS — ITAR, EXPORT CONTROLS
+QUESTION: "Have you assessed whether your technology is subject to UK export controls
+or US ITAR? Have you had any engagement with ECJU (Export Control Joint Unit) or the US
+State Department? Does your technology have dual-use potential — applications in both
+civilian and military contexts? Are there any restrictions on who can be employed by or
+invest in the company based on technology classification?"
+STRONG ANSWER: Has taken specialist export control legal advice; knows whether the
+technology is listed on the UK Military List, Dual-Use List, or US Commerce Control List;
+understands the restrictions on foreign nationals accessing controlled technology;
+has a compliance programme in place if export controls apply.
+WEAK ANSWER: "We don't have any defence applications so ITAR doesn't apply"; "we'll
+deal with export controls when we try to sell overseas"; has not taken specialist advice.
+REVEALS: Whether the company has thought carefully about the international commercial
+restrictions that apply to its specific technology — export control failures can result
+in criminal prosecution, and the assumptions about who can invest in or acquire the
+company may be wrong.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION G — REGULATORY LANDSCAPE
+═══════════════════════════════════════════════════════════════════════
+
+UK EXPORT CONTROLS AND DUAL-USE TECHNOLOGY:
+
+Export Control Joint Unit (ECJU):
+  ECJU administers UK export controls under the Export Control Order 2008 and the
+  UK's implementation of international export control regimes (Wassenaar Arrangement,
+  Australia Group, Nuclear Suppliers Group, Missile Technology Control Regime).
+  Key lists:
+  — UK Military List: weapons systems, military electronics, military vehicles, controlled
+    software for military applications.
+  — UK Dual-Use List: technologies with both civilian and military applications —
+    including advanced materials (certain composites), semiconductors above specified
+    performance thresholds, space launch technology, advanced sensors, biotech
+    (certain micro-organisms and toxins).
+  Export licence requirement: any transfer of controlled technology — including
+    intangible transfer (email, cloud access, verbal briefing) to a non-UK person —
+    may require an export licence from ECJU.
+  Alex flag: a deep tech company with a technology on the Dual-Use List must have an
+    ECJU compliance programme. A company that has not assessed its export control
+    classification is not compliant with UK law, regardless of whether it has yet made
+    any international transfers.
+
+ITAR — INTERNATIONAL TRAFFIC IN ARMS REGULATIONS (US):
+
+  ITAR is a US regulation that controls the export and import of defence-related articles
+  and services. It has extraterritorial reach: a UK company using US-origin defence
+  technology — including technology developed in the US, by US persons, or with US
+  government funding — is subject to ITAR.
+  ITAR applies to: space technology (launch vehicles, satellites), advanced semiconductors
+    for defence applications, military-grade sensors, cryptography for defence use,
+    directed energy technologies, autonomous weapons systems.
+  ITAR Implications for UK deep tech companies:
+  — A UK company with ITAR-controlled technology cannot employ foreign nationals from
+    ITAR-restricted countries without a US State Department licence.
+  — A foreign company cannot acquire a UK company with ITAR-controlled technology
+    without US State Department approval.
+  — Non-compliance carries criminal penalties under US law.
+  Alex flag: any UK deep tech company with: (a) US investors, (b) US government contracts
+    or subcontracts, (c) US-origin technology components, or (d) technology that has
+    both civilian and military applications should have taken specialist ITAR counsel
+    advice. Ignorance of ITAR applicability is not a defence.
+
+US SEMICONDUCTOR EXPORT CONTROLS (US CHIPS ACT AND COMMERCE DEPARTMENT):
+
+  US Commerce Department BIS (Bureau of Industry and Security) expanded semiconductor
+  export controls in October 2022 and October 2023, restricting:
+  — Advanced chips (above specified logic density and memory bandwidth thresholds)
+    to China, including Huawei and affiliated entities.
+  — EDA (Electronic Design Automation) software exports to China.
+  — Advanced chip manufacturing equipment exports to China.
+  Implications for UK semiconductor companies:
+  — UK fabless design companies that use US EDA tools (Cadence, Synopsys — both US) are
+    subject to US export controls when designing chips for Chinese customers.
+  — UK companies that license US semiconductor IP (ARM architecture, RISC-V implementations
+    from US companies) may be restricted in selling to certain Chinese entities.
+  Alex flag: a UK semiconductor company with Chinese customers, investors, or manufacturing
+    partners (including SMIC) may be subject to US BIS export controls. Specialist US
+    export control counsel is required — not optional.
+
+NATIONAL SECURITY AND INVESTMENT (NSI) ACT 2021 — MANDATORY NOTIFICATION:
+
+  The NSI Act 2021 is the UK's primary foreign investment screening regime. It requires
+  mandatory notification to the Investment Security Unit (ISU) before completing certain
+  acquisitions in 17 sensitive sectors.
+  MANDATORY notification triggers (acquisition of 25%+ of shares or voting rights in
+  a qualifying entity, or acquisition of material influence over its policy):
+  1. Advanced Materials
+  2. Advanced Robotics
+  3. Artificial Intelligence
+  4. Civil Nuclear
+  5. Communications
+  6. Computing Hardware
+  7. Critical Suppliers to Government
+  8. Cryptographic Authentication
+  9. Data Infrastructure
+  10. Defence
+  11. Energy
+  12. Military and Dual-Use
+  13. Quantum Technologies
+  14. Satellite and Space Technologies
+  15. Suppliers to the Emergency Services
+  16. Synthetic Biology
+  17. Transport
+  Timeline: notification must be made before transaction completion. ISU has 30 working
+    days to decide (extendable to 45 days for complex cases).
+  Outcome options: clear unconditionally | clear with conditions | block the transaction.
+  Alex flag: ANY deep tech company in one of the 17 sectors is subject to NSI Act
+    mandatory notification on acquisition. This means: (a) any foreign acquirer must
+    factor ISU review into transaction timeline (add 3–6 months); (b) acquirers from
+    countries designated as higher-risk may face conditions or blocking; (c) Chinese
+    and Russian acquirers should be treated as high-risk for NSI Act purposes.
+    A deep tech company that is acquired without mandatory NSI notification is subject
+    to a transaction being unwound by the UK government.
+
+SPACE REGULATION — UK SPACE INDUSTRY ACT 2018:
+
+  The UK Space Industry Act 2018 established a domestic UK launch licensing regime,
+  replacing reliance on the US FAA for UK-based launches.
+  Civil Aviation Authority (CAA): regulates spaceflight activities in the UK.
+  Licence types: orbital launch licence, sub-orbital launch licence, spaceport operator
+    licence, range control services licence.
+  Application timeline: 12–18 months for an initial orbital launch licence.
+  Alex flag: any space company planning to launch from UK soil (SaxaVord Spaceport in
+    Shetland, Spaceport Cornwall) must hold a CAA licence. A company that has announced
+    UK launch dates without a licence in place is presenting a timeline that is not credible.
+
+BIOTECH / GMO REGULATION — UK POST-BREXIT DIVERGENCE:
+
+  Post-Brexit, the UK has diverged from EU GMO regulation. The Genetic Technology
+  (Precision Breeding) Act 2023 (England) permits the commercial use of precision bred
+  organisms (including gene-edited plants and animals) without the strict authorisation
+  requirements that apply to GMOs under EU law.
+  EU position: gene-edited organisms are still classified as GMOs under EU law (pending
+    revision under the EU New Genomic Techniques regulation, in progress as of 2026).
+  Implication for UK biotech companies: a precision-bred crop or animal product approved
+    in England may not be permitted to be sold in the EU without additional authorisation.
+    A UK synthetic biology company selling to EU customers must comply with EU GMO rules.
+  Alex flag: UK biotech companies selling into EU markets must maintain dual regulatory
+    compliance — UK Precision Breeding Act and EU GMO Directive — until EU legislation
+    is updated. A company that assumes UK approval is sufficient for EU sales is
+    operating on an incorrect legal assumption.
+
+INNOVATE UK AND ARIA — GRANT FRAMEWORK:
+
+  Innovate UK (part of UK Research and Innovation, UKRI) is the primary source of
+  non-dilutive early-stage funding for UK deep tech companies. Key programmes:
+  — Innovate UK Smart: competitive open grants of £25K–£500K for single companies.
+  — Innovate UK KTP (Knowledge Transfer Partnership): collaborative grants with universities.
+  — Catapult Programmes: sector-specific technology and innovation centres (High Value
+    Manufacturing Catapult, Connected Places Catapult, Digital Catapult) providing
+    facilities and expertise access.
+  ARIA (Advanced Research and Invention Agency):
+    Established in 2022 with a £800M budget over 5 years. Funds high-risk, high-reward
+    science with minimal bureaucratic constraints. Modelled on DARPA.
+    Key difference from Innovate UK: ARIA explicitly funds moonshots with >50% failure
+    probability. Winning an ARIA programme grant is strong scientific validation but
+    does not imply commercial timeline certainty.
+  IP ownership clauses:
+    Innovate UK grant conditions include IP ownership provisions — the company generally
+    retains IP but may have obligations to exploit it for UK benefit and to acknowledge
+    UKRI funding in publications and commercial activities.
+    ARIA grant IP conditions may vary by programme — review individual programme terms.
+  Alex flag: confirm whether any government grant conditions restrict IP assignment,
+    licensing to foreign entities, or require commercialisation within a specific
+    geographic or sector scope.
+
+AI SAFETY REGULATION — FRONTIER AI:
+
+  For deep tech companies developing frontier AI systems (large language models, advanced
+  AI training systems, or AI with significant dual-use or safety implications):
+  UK AI Safety Institute (AISI): established in 2023, responsible for frontier AI safety
+    evaluation. Voluntary framework as of 2026 but moving towards mandatory notification.
+  EU AI Act (in force 2024): general-purpose AI models with computational training above
+    10^25 FLOPs are subject to systemic risk provisions — mandatory adversarial testing,
+    incident reporting, and model capability disclosure.
+  International norms: the Bletchley Declaration (November 2023) established an
+    international framework for frontier AI safety; UK, US, EU, and China are signatories.
+  Alex flag: a UK deep tech software company developing a frontier AI system must be
+    aware of: (a) AISI voluntary reporting expectations; (b) EU AI Act requirements for
+    any EU deployment; (c) export control implications for advanced AI models (US BIS
+    has signalled interest in AI model export controls).
+
+═══════════════════════════════════════════════════════════════════════
+END — ALEX SECTOR INTELLIGENCE LIBRARY — DEEP TECH / HARDWARE v1.0
+═══════════════════════════════════════════════════════════════════════

@@ -1,0 +1,974 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — SECTOR INTELLIGENCE LIBRARY
+Marketplace — Version 1.0
+Two-sided and multi-sided platforms connecting supply and demand.
+Built: April 2026.
+Apply this library to every deal classified as a Marketplace.
+═══════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════
+SECTION A — SECTOR IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════
+
+PRIMARY CLASSIFICATION SIGNALS (any one = Marketplace):
+— Revenue is a percentage of GMV (Gross Merchandise Value) or a transaction fee on
+  value exchanged between two or more parties the company did not produce itself
+— Company connects a supply side (sellers, providers, workers, landlords) with a
+  demand side (buyers, customers, hirers, tenants) and takes a fee for the connection
+— Neither side of the platform owns the underlying product, service, or asset being
+  transacted — the company facilitates, not manufactures
+— Network effects are cited as the primary moat: more supply attracts more demand,
+  more demand attracts more supply
+
+CRITICAL DISTINCTION — MARKETPLACE vs RESELLER vs SaaS:
+A marketplace does not own inventory. If the company buys stock and resells it, it is
+a retailer — not a marketplace. Revenue recognition differs fundamentally.
+A company that charges suppliers a SaaS subscription to list on its platform without
+taking a transaction fee is a SaaS business with marketplace-like supply, not a marketplace.
+Test: does the company's revenue scale with the volume of transactions between third
+parties on its platform? If yes — marketplace.
+
+THE FUNDAMENTAL MARKETPLACE EQUATION:
+GMV × Take Rate = Gross Revenue
+Gross Revenue − Payment Processing − Supply Acquisition − Demand Acquisition = Contribution Margin
+Contribution Margin per Transaction must be positive before fixed cost leverage applies.
+A marketplace with negative contribution margin per transaction cannot scale to profitability
+regardless of GMV growth. This is the first and most important check for every marketplace deal.
+
+MISCLASSIFICATION WARNINGS:
+— A company that takes on delivery risk (owns the last-mile fulfilment) is a hybrid
+  logistics business, not a pure marketplace — apply a blended gross margin test
+— A labour marketplace where the company employs the workers (not contracts them) is
+  a staffing company; if workers are independent contractors, it is a marketplace
+— A financial marketplace that warehouses loans on its own balance sheet is a lending
+  company (apply Fintech Library); a marketplace that connects borrowers to lenders
+  without balance sheet risk is a true financial marketplace
+
+SUB-CATEGORY IDENTIFICATION — SIGNALS FROM SUBMISSION:
+
+1. B2C MARKETPLACE
+Signals: supply side is businesses or professional sellers; demand side is individual
+consumers; revenue is transaction fee or take rate on consumer spend; key metrics
+are GMV, consumer repeat purchase rate, and average order value; competitive set
+includes Amazon, eBay, Airbnb, Deliveroo, or a category-specific incumbent; growth
+metrics reference app downloads, consumer DAU/MAU, and supply listing count.
+Business model: take rate 10–30% of GMV (varies by category). Consumer marketplaces
+with physical delivery face COGS in the 5–15% of GMV range for payment and logistics.
+Key risk: consumer demand is fickle — retention requires habitual use or strong
+incentive. Supply quality is the primary driver of demand retention; poor quality
+control destroys NPS faster than any competitive threat.
+
+2. B2B MARKETPLACE
+Signals: both supply and demand are businesses; transactions are typically larger and
+less frequent than B2C; buyer is a procurement function or operations team; seller is
+a manufacturer, distributor, or service provider; competitive set includes Faire,
+Alibaba B2B, or industry-specific procurement platforms; key metrics include GMV,
+average transaction size, buyer repeat rate, and time to second purchase.
+Business model: take rate 8–20% of GMV; may also charge suppliers a listing fee or
+subscription in addition to the transaction fee.
+Key risk: B2B buyers at scale will build direct procurement relationships with top
+suppliers — the marketplace becomes disintermediated once buyers and sellers trust
+each other. Switching costs must be built into the platform to prevent this.
+
+3. LABOUR / SERVICES MARKETPLACE
+Signals: supply side is individual workers, freelancers, or service providers; demand
+side is employers, clients, or businesses; company facilitates the hire and may manage
+payment, contracts, and compliance; key metrics are GMV (total fees facilitated),
+repeat hire rate, time-to-match, and worker retention; competitive set includes
+Toptal, Fiverr, Malt, Workmotion, or industry-specific platforms.
+Business model: take rate 15–30% of total fees; may include employer subscription for
+access to vetted talent pool.
+Key risk: high-quality workers are acquired by the employer and transacted off-platform
+for repeat engagements once the relationship is established. The disintermediation rate
+for labour marketplaces is structurally high unless the platform provides ongoing value
+in compliance, invoicing, or benefits administration.
+
+4. FINANCIAL MARKETPLACE
+Signals: platform connects borrowers with lenders, investors with opportunities, or
+insurance buyers with underwriters; company does not warehouse financial risk on its
+own balance sheet (if it does, apply Fintech Library); revenue is an origination fee,
+platform fee, or basis points on the value arranged; key metrics are volume arranged,
+default rate of arranged loans, and investor/lender retention; competitive set includes
+Funding Circle, Seedrs, Wise for Business, or a specific financial product platform.
+Business model: origination fee 1–5% of loan or investment value; may charge ongoing
+servicing fee on the outstanding balance.
+Key risk: if the platform takes on even partial balance sheet risk, it crosses into
+regulated lending activity requiring FCA authorisation. Regulatory boundary is critical
+and must be confirmed before assessment.
+
+5. REAL ESTATE / PROPERTY MARKETPLACE
+Signals: platform connects buyers, sellers, landlords, or tenants with properties;
+supply side is agents, landlords, or developers listing properties; demand side is
+buyers or renters searching; revenue is agent subscription, listing fee, or lead
+generation fee rather than a transaction take rate (direct transaction fees on
+property sales are rare in UK models); key metrics are listing count, demand-side
+engagement (search-to-enquiry rate), and agent retention; competitive set includes
+Rightmove, Zoopla, OnTheMarket, or a vertical-specific property platform.
+Business model: primarily agent subscription (£200–£1,000/month per branch) plus
+premium listing and advertising products. Note: unlike most marketplaces, property
+platforms in the UK charge the supply side (agents) regardless of transaction completion.
+Key risk: listing count creates a strong network effect but Rightmove's monopoly position
+(80%+ of UK buyer enquiries) makes it nearly impossible to displace with a generalist
+property marketplace. New entrants must find an under-served segment (commercial,
+new build, overseas, rentals) or add a service layer (conveyancing, mortgages).
+
+6. HEALTHCARE MARKETPLACE
+Signals: platform connects patients with healthcare providers, or healthcare buyers
+with suppliers; supply side is clinicians, clinics, or hospitals; demand side is
+patients or healthcare purchasers; revenue is a booking fee, per-appointment commission,
+or supplier listing fee; key metrics are booking conversion rate, provider retention,
+repeat patient booking rate, and patient NPS; competitive set includes Doctify, Healios,
+Dispensed, or a specialist clinical platform.
+Business model: booking commission 10–20% of appointment value; may include provider
+subscription for practice management features.
+Key risk: applies the Clinical Champion Dependency (Healthtech Library PASS Flag 07)
+at the marketplace level — platform adoption depends on a small number of high-volume
+providers. Also: patient data governance requirements (DSPT, GDPR special category)
+apply to any platform handling appointment or clinical data.
+
+7. HORIZONTAL PLATFORM MARKETPLACE
+Signals: platform transacts across multiple categories; supply and demand are not
+category-specific; network effects are cross-category (a buyer in category A discovers
+category B); competitive set includes eBay, Gumtree, Vinted, or Facebook Marketplace;
+key metrics are GMV per category, category expansion rate, and cross-category buyer activity.
+Business model: take rate 5–15% of GMV; classified ads revenue; premium seller subscriptions.
+Key risk: horizontal marketplaces face competition from category-specific vertical
+marketplaces that offer better curation and supply quality in each individual category.
+Growth in GMV can mask the fact that the platform is losing its most valuable categories
+to specialists while retaining lower-value long-tail inventory.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION B — STAGE-SPECIFIC METRIC BENCHMARKS
+═══════════════════════════════════════════════════════════════════════
+
+Format: STRONG (top quartile) | ACCEPTABLE (median) | CONCERN (flag) | FAIL (disqualifying)
+
+NOTE: Marketplace benchmarks centre on GMV, take rate, and contribution margin —
+not ARR and NRR. NRR is not applicable to transactional marketplaces. Retention is
+measured on both the supply side (seller/provider retention) and demand side (buyer
+repeat purchase rate). Both sides must be measured separately — a marketplace can
+lose buyers while retaining suppliers and appear healthy until demand collapses.
+
+──────────────────────────────────────────────────────────────────────
+GMV BENCHMARKS BY STAGE:
+──────────────────────────────────────────────────────────────────────
+
+PRE-SEED — Establishing liquidity in first geography:
+GMV:               STRONG >£500K/month | ACCEPTABLE £100–500K/month | CONCERN <£100K/month
+  Note: at pre-seed, GMV absolute level matters less than GMV growth rate and
+  whether liquidity has been achieved in a single geography (see Liquidity Threshold below).
+Take rate:         STRONG >15% | ACCEPTABLE 8–15% | CONCERN <8% | FAIL: not yet defined
+Supply count:      STRONG >200 active | ACCEPTABLE 50–200 | CONCERN <50 | FAIL: <20
+Demand (buyers):   STRONG >1,000 active monthly | ACCEPTABLE 200–1,000 | CONCERN <200
+Fill rate:         STRONG >60% of searches result in transaction | ACCEPTABLE 35–60% | CONCERN <35%
+MoM GMV growth:    STRONG >20% | ACCEPTABLE 10–20% | CONCERN 5–10% | FAIL <5%
+
+SEED — Proving liquidity and unit economics:
+GMV:               STRONG >£2M/month | ACCEPTABLE £500K–2M/month | CONCERN <£500K/month
+Net revenue:       STRONG >£300K/month | ACCEPTABLE £50–300K/month | CONCERN <£50K/month
+  (Net revenue = GMV × Take rate, minus payment processing)
+Contribution margin (net revenue minus variable supply + demand acquisition):
+                   STRONG >30% of net revenue | ACCEPTABLE 10–30% | CONCERN 0–10% | FAIL <0%
+Take rate:         STRONG >18% | ACCEPTABLE 10–18% | CONCERN <10% | FAIL: declining QoQ
+Demand retention (buyers who transact again within 90 days of first purchase):
+                   STRONG >50% | ACCEPTABLE 30–50% | CONCERN 15–30% | FAIL <15%
+Supply retention (active suppliers retained month-over-month):
+                   STRONG >85% | ACCEPTABLE 70–85% | CONCERN 55–70% | FAIL <55%
+MoM GMV growth:    STRONG >15% | ACCEPTABLE 8–15% | CONCERN 3–8% | FAIL <3%
+
+SERIES A — Scaling in primary geography; beginning second geography:
+GMV:               STRONG >£5M/month | ACCEPTABLE £2–5M/month | CONCERN <£2M/month
+YoY GMV growth:    STRONG >120% | ACCEPTABLE 70–120% | CONCERN 35–70% | FAIL <35%
+Net revenue:       STRONG >£800K/month | ACCEPTABLE £200–800K/month | CONCERN <£200K/month
+Gross margin (net revenue minus payment processing COGS):
+                   STRONG >70% | ACCEPTABLE 55–70% | CONCERN 40–55% | FAIL <40%
+Contribution margin: STRONG >35% of net revenue | ACCEPTABLE 20–35% | CONCERN <20% | FAIL <0%
+Demand repeat rate (% buyers transacting 3+ times in last 12 months):
+                   STRONG >40% | ACCEPTABLE 25–40% | CONCERN 10–25% | FAIL <10%
+Supply NPS:        STRONG >50 | ACCEPTABLE 30–50 | CONCERN 10–30 | FAIL <10
+Demand NPS:        STRONG >60 | ACCEPTABLE 40–60 | CONCERN 20–40 | FAIL <20
+Disintermediation rate (estimated off-platform transactions as % of known matches):
+                   STRONG <5% | ACCEPTABLE 5–10% | CONCERN 10–20% | FAIL >20%
+
+SERIES B — Multi-geography; monetisation expansion:
+GMV:               STRONG >£20M/month | ACCEPTABLE £8–20M/month | CONCERN <£8M/month
+YoY GMV growth:    STRONG >80% | ACCEPTABLE 40–80% | CONCERN 20–40% | FAIL <20%
+Take rate:         STRONG stable or improving | CONCERN declining for 2+ consecutive quarters
+Gross margin:      STRONG >72% | ACCEPTABLE 60–72% | CONCERN 50–60% | FAIL <50%
+Contribution margin: STRONG >40% of net revenue | ACCEPTABLE 25–40% | CONCERN <25%
+Active geographies: STRONG ≥3 cities/regions with positive contribution margin each
+Supply concentration: STRONG: top 10 suppliers <20% of GMV | CONCERN: top 5 >35% | FAIL: top 3 >50%
+Demand concentration: STRONG: top 10 buyers <15% of GMV | CONCERN: top 5 >30% | FAIL: top 3 >40%
+
+──────────────────────────────────────────────────────────────────────
+TAKE RATE BENCHMARKS BY SUB-CATEGORY:
+──────────────────────────────────────────────────────────────────────
+
+B2C Marketplace (physical goods):        12–20% of GMV (Amazon: ~15%; eBay: ~12%)
+B2C Marketplace (services/experiences): 15–30% of GMV (Airbnb: ~15%; Deliveroo: 25–30%)
+B2B Marketplace:                         8–18% of GMV (Faire: 15–25% net of promotions)
+Labour / Services Marketplace:           15–30% of total fees (Fiverr: 20%; Toptal: margin embedded)
+Financial Marketplace (loan origination): 1–5% of loan value; 0.5–2% annual servicing
+Property Marketplace:                    Subscription model — take rate concept does not apply
+Healthcare Marketplace:                  10–20% of appointment value
+Horizontal Platform:                     8–15% of GMV; plus classified listing fees
+
+FAIL condition: take rate below the category minimum is only acceptable if the company
+  has an explicit plan to reach category minimum within 12 months and can demonstrate
+  why suppliers accept a below-market fee (e.g., volume guarantee, superior tools).
+
+──────────────────────────────────────────────────────────────────────
+LIQUIDITY THRESHOLD — MINIMUM VIABLE MARKETPLACE:
+──────────────────────────────────────────────────────────────────────
+
+A marketplace is self-sustaining in a geography when: a buyer searching for a
+product or service can find a suitable match within a reasonable time frame, transact,
+and return again without the platform needing to subsidise the transaction to occur.
+
+Minimum liquidity threshold signals by sub-category:
+B2C goods marketplace:        >500 active SKUs in the primary category; >200 active buyers/month;
+                              fill rate >50% of searches.
+B2C services (e.g., delivery):>200 active service providers in a city; order fill rate >85%;
+                              average wait time within category expectation (<30 min for food).
+Labour marketplace:           >300 verified active workers in primary skill; time-to-match
+                              under 48 hours for 70% of job postings.
+B2B marketplace:              >100 active suppliers across the primary category; >50 active
+                              buyers placing orders monthly; average re-order within 60 days.
+Property marketplace:         >1,000 active listings in target geography; >500 buyer searches/day.
+
+FAIL condition: company has launched a second geography before achieving the liquidity
+  threshold in its first geography. This is the geographic overextension failure pattern —
+  it creates two half-built marketplaces instead of one dominant one.
+
+──────────────────────────────────────────────────────────────────────
+VALUATION BENCHMARKS — Marketplace (2025–2026 market):
+──────────────────────────────────────────────────────────────────────
+
+Pre-seed / Seed:  1–4% of annualised GMV | OR 10–25x net revenue | premium for liquidity evidence
+Series A:         2–6% of annualised GMV | OR 8–20x net revenue | premium for positive contribution margin
+Series B:         3–8% of annualised GMV | OR 6–15x net revenue | premium for multi-geography liquidity
+Premium driver:   Positive contribution margin in all active geographies is the single
+  most powerful valuation driver. A marketplace with negative contribution margin at
+  Series B trades at a significant discount regardless of GMV scale.
+Note: Property marketplace (subscription model) values on revenue multiple: 8–20x ARR.
+  Rightmove at IPO (2006): £500M market cap on £40M revenue = 12x revenue.
+  Auto Trader (2015 IPO): £2.4B on £240M revenue = 10x revenue.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION C — SECTOR-SPECIFIC RED FLAGS
+═══════════════════════════════════════════════════════════════════════
+
+01. SUPPLY CONCENTRATION — TOP SUPPLIERS DOMINATE GMV
+SIGNAL: The top 5 suppliers account for more than 35% of total GMV. Any single supplier
+accounts for more than 15% of GMV. Company may present this as evidence that top suppliers
+love the platform — it is actually a structural fragility.
+SEVERITY: HIGH
+WHAT IT MEANS: Marketplace power is inverted when a supplier is large enough to threaten
+departure. A supplier representing 15%+ of GMV knows it can extract pricing concessions,
+lower take rates, or preferential placement by threatening to exit. More critically, if
+that supplier leaves — due to building its own direct channel, joining a competitor, or
+simply receiving a better commercial offer — the marketplace loses a disproportionate
+share of GMV and the associated demand-side NPS collapse that follows.
+VERIFICATION: Request GMV attribution by supplier for the top 10 suppliers and calculate
+Herfindahl-Hirschman Index (HHI) concentration score. Ask: "What is the contractual
+relationship with your top 3 suppliers? Are they exclusive to your platform or multi-homed?"
+
+02. DEMAND CONCENTRATION — TOP BUYERS DOMINATE GMV
+SIGNAL: The top 5 buyers account for more than 30% of GMV (B2B marketplace) or any
+single consumer accounts for more than 10% of GMV (unusual and a structural concern
+for any B2C marketplace).
+SEVERITY: HIGH
+WHAT IT MEANS: Same inversion applies on the demand side. A B2B buyer representing
+10%+ of GMV can negotiate directly with suppliers, bypassing the platform once the
+relationship is established. The marketplace has effectively spent its supply acquisition
+cost to introduce the buyer to the supplier — and will receive no ongoing benefit if
+they transact off-platform.
+VERIFICATION: For B2B marketplaces specifically, request cohort GMV breakdown by buyer
+size quartile. If the top quartile generates more than 60% of GMV, the marketplace
+is a B2B lead generator for enterprise buyers, not a true marketplace.
+
+03. DISINTERMEDIATION RATE RISING
+SIGNAL: The company discloses, or an investigation reveals, that a material percentage
+of matches made on the platform result in transactions off the platform. Rate has
+increased in the last two quarters. The company may describe this as an unverifiable
+behaviour without acknowledging it as a rising trend.
+SEVERITY: HIGH
+WHAT IT MEANS: Disintermediation is the terminal disease of marketplaces. Once supply
+and demand find each other, the platform's value is primarily in discovery — not in
+the ongoing relationship. If buyers and sellers can find each other via the platform
+and then transact directly at lower cost (by avoiding the take rate), the rational
+economic choice for both parties is to do so. A rising disintermediation rate means
+the platform is providing discovery value but failing to create sufficient lock-in for
+the ongoing relationship.
+VERIFICATION: Ask: "Do you track off-platform transactions between parties who first
+met on your platform? What is your estimate of the off-platform rate? What product
+features or contractual terms do you have in place to prevent or disincentivise this?"
+
+04. TAKE RATE COMPRESSION — DECLINING REVENUE YIELD ON GMV
+SIGNAL: Take rate (net revenue as % of GMV) has declined for two or more consecutive
+quarters. GMV continues to grow but net revenue growth is slower than GMV growth.
+Company focuses investor reporting on GMV growth without flagging the take rate decline.
+SEVERITY: HIGH
+WHAT IT MEANS: Take rate compression in a marketplace means either the company is
+discounting to win volume (pricing-driven growth with deteriorating unit economics)
+or supplier power has increased to the point where suppliers are forcing lower fees.
+Both are dangerous: the first destroys unit economics; the second signals that the
+marketplace's network effect is weaker than the supply side's bargaining power.
+VERIFICATION: Calculate take rate for each of the last 6 quarters from GMV and net
+revenue. If declining, ask: "What is causing the take rate decline? Is it deliberate
+(to win volume) or structural (supplier negotiation)? What is your floor take rate?"
+
+05. GEOGRAPHIC LIQUIDITY TOO THIN TO BE SELF-SUSTAINING
+SIGNAL: Company operates in multiple cities or regions but no single geography has
+reached the liquidity threshold (see Section B). Each city has enough supply and demand
+to generate some transactions but not enough to self-sustain without ongoing subsidies
+or marketing spend.
+SEVERITY: HIGH
+WHAT IT MEANS: A marketplace with thin liquidity in many geographies is burning supply
+and demand acquisition cost simultaneously across all markets without building a dominant
+position in any of them. This is the least capital-efficient way to build a marketplace
+and typically results in all geographies being abandoned as the company runs out of
+money, or the company retreating to one geography after burning two rounds of capital.
+VERIFICATION: For each geography, ask for monthly GMV, active supply count, active demand
+count, and fill rate. Calculate which, if any, geographies have reached the liquidity
+threshold. A company with 6 active cities and no city at self-sustaining liquidity has
+a structural problem, not a scaling story.
+
+06. SINGLE CITY OR REGION DEPENDENCY
+SIGNAL: More than 60% of GMV is generated in a single city or region. The company
+describes itself as a national or European marketplace but the operational reality is
+a city-specific business.
+SEVERITY: MEDIUM
+WHAT IT MEANS: A marketplace with 60%+ of GMV in one city is operationally a local
+marketplace with aspirations of national scale. The TAM is correspondingly smaller.
+If the primary city faces competitive attack (a well-funded competitor launches in
+that city), the entire business is threatened. Geographic concentration creates fragility
+identical to customer concentration in a SaaS business.
+VERIFICATION: Request GMV attribution by geography for the top 5 cities/regions.
+Calculate the Herfindahl-Hirschman concentration score. Ask: "What is your plan to
+reduce geographic concentration and over what timeline?"
+
+07. CHICKEN-AND-EGG UNSOLVED IN SECOND CITY
+SIGNAL: Company has achieved liquidity in its first geography. It has launched a second
+geography but after 9 months the second geography has less than 30% of the supply
+density and less than 20% of the demand volume of the first geography at the same stage.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Solving the chicken-and-egg problem in the first city often relies on
+the founder's personal network, a specific anchor supply partner, or a supply-side
+seeding strategy that was unique to that geography. Replicating the seeding strategy
+in a new city without those unique factors is systematically harder. A company that
+cannot demonstrate it has solved the chicken-and-egg problem in its second geography
+independently of its first-city playbook does not have a scalable expansion model.
+VERIFICATION: Ask: "Walk me through how you launched [second city]. What was the specific
+supply seeding strategy? How does it differ from how you launched [first city]?
+What metrics will you use to determine if [second city] is working?"
+
+08. SUPPLY ACQUISITION COST RISING FASTER THAN DEMAND
+SIGNAL: Cost to acquire each new active supplier is rising quarter-on-quarter. The
+trend is not correlated with supply quality improvement — it is simply becoming more
+expensive to attract suppliers.
+SEVERITY: HIGH
+WHAT IT MEANS: Rising supply acquisition cost signals that the marginal supply pool
+is harder to attract — either because the easy-to-acquire supply (founder network,
+existing platform, inbound referrals) has been exhausted, or because a competitor is
+bidding for the same supply. Either scenario means the marketplace's supply moat is
+weaker than its demand-side growth might suggest.
+VERIFICATION: Ask: "What is your cost per newly active supplier by acquisition channel
+for each of the last 4 quarters? Which channels are becoming more expensive and why?"
+
+09. OFF-PLATFORM TRANSACTION RATE ABOVE THRESHOLD
+SIGNAL: Company's own estimate of off-platform transaction rate (buyers and sellers
+transacting without using the platform after meeting on it) is above 10%. Or the
+company has never measured it.
+SEVERITY: HIGH
+WHAT IT MEANS: An off-platform transaction rate above 10% indicates the platform
+is not providing sufficient additional value beyond the initial match to justify its
+take rate for repeat transactions. The take rate is the cost of disintermediation
+avoidance — and if 10% of pairs are choosing not to avoid it, the take rate is too
+high relative to the platform's ongoing value delivery.
+VERIFICATION: Ask: "Have you estimated the rate at which supply and demand transact
+off your platform after meeting on it? What data do you have for this? What product
+or commercial features do you use to prevent off-platform transactions?"
+
+10. NO SUPPLY EXCLUSIVITY IN COMPETITIVE CATEGORY
+SIGNAL: In a category where competitors are actively recruiting the same supply (e.g.,
+freelancers on multiple labour platforms, restaurants on multiple delivery platforms),
+the company has no exclusivity agreements, no structural supply lock-in, and no
+proprietary tool that makes the platform meaningfully stickier than alternatives.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Multi-homed supply — supply that operates on two or more competing
+platforms simultaneously — is structurally available to the highest-paying or most
+convenient demand. A marketplace without at least partial supply lock-in is dependent
+on demand liquidity alone to retain supply. If a competitor achieves higher demand
+density, supply switches en masse. This is the fastest form of marketplace collapse.
+VERIFICATION: Ask: "What percentage of your supply is exclusively on your platform?
+What incentives or tools create supply stickiness? How many of your top 50 suppliers
+are also active on [named competitor platform]?"
+
+11. REGULATORY RISK TO CORE MARKETPLACE MODEL
+SIGNAL: Company's core marketplace model is built on a worker, housing, lending, or
+content model that is under active regulatory review — e.g., gig economy worker
+classification, short-term rental restrictions, unlicensed financial intermediation,
+or algorithmic pricing for housing.
+SEVERITY: HIGH
+WHAT IT MEANS: A regulatory reclassification of workers as employees (as happened in
+Spain, France, and the UK's Uber ruling) fundamentally changes the cost structure of
+a labour marketplace. A city restricting short-term rentals (as Berlin, Barcelona, and
+New York have done) directly reduces the supply available to property marketplaces.
+A financial marketplace facilitating lending without regulatory clarity is the Regulatory
+Sandbox Illusion pattern from the Fintech Library applied to marketplace economics.
+VERIFICATION: Ask: "Which specific regulatory changes could materially affect your
+marketplace model? What is your regulatory risk assessment? Have you received any
+regulatory correspondence or inquiries about your model?"
+
+12. NEGATIVE UNIT ECONOMICS ON SUPPLY ACQUISITION
+SIGNAL: Cost to acquire a new active supplier, amortised over that supplier's expected
+tenure on the platform, exceeds the total contribution margin expected from that supplier
+over their lifecycle. The marketplace is destroying value on every new supplier it adds.
+SEVERITY: HIGH
+WHAT IT MEANS: Negative supply-side unit economics is a structural failure, not a
+growth investment. Unlike demand-side subsidies (which are sometimes justified during
+a liquidity-building phase), paying more to acquire supply than that supply will ever
+return is not a scalable strategy — it is a cash consumption spiral dressed as growth.
+VERIFICATION: Calculate: average supply acquisition cost (by channel) ÷ average monthly
+contribution margin per supplier × average supplier tenure in months. If this ratio
+is negative or below 1.0x, unit economics are structurally broken. Ask: "What is your
+LTV:CAC for suppliers by acquisition channel?"
+
+═══════════════════════════════════════════════════════════════════════
+SECTION D — HISTORICAL FAILURE PATTERNS
+═══════════════════════════════════════════════════════════════════════
+
+1. THE LIQUIDITY COLLAPSE
+DESCRIPTION: A marketplace achieves a fragile liquidity state in its primary geography —
+enough transactions to appear healthy in aggregate, but not enough redundancy to absorb
+supply or demand exits. A competitor launches in the same geography and wins the top
+25% of supply by offering better commercial terms. Demand NPS immediately deteriorates
+because the best supply is no longer available. Lower demand NPS causes the marginal
+buyers to reduce purchase frequency. Reduced demand causes more supply to leave in
+search of better utilisation on the competitor platform. The marketplace enters a
+downward spiral — each supply exit reduces demand quality, which causes more supply
+to exit. This is a liquidity collapse: a non-linear, rapid deterioration of platform
+quality that does not stabilise until the marketplace has lost most of its volume.
+EARLY WARNING SIGNALS: Top-decile supply represents more than 40% of GMV (meaning the
+loss of 10% of suppliers would cause 40% GMV decline); supply NPS is trending down
+while demand NPS appears stable (demand does not yet know the best supply is unhappy);
+a well-funded competitor has launched in the primary geography; take rate has recently
+increased, making the competitor's lower take rate more attractive to supply; no
+supply exclusivity or lock-in mechanism exists.
+WHEN TO APPLY: Any marketplace where a well-funded competitor has entered the primary
+geography and where supply has no contractual or structural lock-in to the platform.
+
+2. THE GEOGRAPHIC OVEREXTENSION
+DESCRIPTION: A marketplace achieves early traction in its first city and raises a
+Series A. Under investor pressure to demonstrate national or European scale, it launches
+in 4–6 new cities simultaneously. Supply and demand acquisition cost in each new city
+is budgeted at the same level as the first city — but the first city benefited from
+founder relationships, press coverage, and organic referral that does not transfer.
+Each new city requires 3x the budgeted acquisition spend to reach the same supply and
+demand density. 12 months later, the company has 7 cities with half the liquidity
+threshold in each, a burn rate that is 3x the Series A budget, and none of the cities
+close to self-sustaining. It raises a bridge round at a flat valuation to consolidate
+into 2 cities. The 5 abandoned cities have been seeded with supply and demand who now
+have a bad experience of the platform and are unlikely to re-engage when the company
+tries to return.
+EARLY WARNING SIGNALS: Company has launched more than 3 geographies before any single
+geography has achieved positive contribution margin; the launch timeline for each new
+city is 6–8 weeks (insufficient to build real liquidity); the board deck shows a city
+count increasing while no city-level P&L has been shared; supply acquisition cost per
+city is increasing rather than decreasing with each new city launch (no playbook scaling).
+WHEN TO APPLY: Any marketplace at Series A or B that has launched or is planning to
+launch more than 3 geographies before its first geography is contribution-margin positive.
+
+3. THE DISINTERMEDIATION SPIRAL
+DESCRIPTION: A marketplace achieves strong early GMV growth. Investigation reveals that
+a growing percentage of buyers and sellers are using the platform for discovery and then
+transacting directly to avoid the take rate. The company receives less and less revenue
+per match made. In response, it increases investment in features to drive repeat platform
+transactions — but because supply and demand can communicate directly (via the information
+exchanged in the initial platform transaction), the features add marginal value. The
+platform's take rate is a tax on ongoing transactions between parties who no longer need
+the platform for the relationship. GMV measured on-platform stagnates while off-platform
+volume grows. The company is increasingly a directory that charges for initial discovery
+but cannot monetise the ongoing relationship.
+EARLY WARNING SIGNALS: Labour marketplaces: repeat hire rate is high but platform repeat
+hire rate is lower than inferred total repeat hire rate from worker capacity utilisation;
+B2B marketplaces: average transaction size is increasing while transaction frequency per
+buyer-seller pair is decreasing (first transaction is large, then they negotiate direct);
+company cannot produce an off-platform transaction rate estimate; buyers and sellers are
+allowed to exchange contact details within the platform interface without friction.
+WHEN TO APPLY: Any labour or B2B marketplace where transactions are high-value and
+relationship-dependent — the higher the value of a single transaction, the stronger
+the economic incentive to avoid the take rate for the next one.
+
+4. THE TAKE RATE TRAP
+DESCRIPTION: A marketplace with thin unit economics decides to improve its financials
+by raising its take rate from 12% to 18% — a 50% revenue increase for the same GMV.
+The take rate increase makes the platform economically worse for suppliers and slightly
+worse for buyers (through price increases). The top-decile suppliers, who have sufficient
+volume and direct relationships to operate independently, immediately begin routing
+demand off-platform. The marginal supply, who do not have enough volume to sustain
+off-platform operations, stay on the platform but become less engaged. GMV falls 20%
+as the top suppliers reduce platform activity. Net revenue is flat at best — the take
+rate increase was partially offset by GMV decline. The company is now in a worse position:
+lower supply quality, lower demand NPS, and supply that is actively looking for
+lower-cost alternatives.
+EARLY WARNING SIGNALS: Take rate has been increased by more than 20% in the last 12
+months; top-decile supply has no long-term contract or lock-in; supply utilisation rate
+(% of available supply capacity being used) has declined since the take rate increase;
+supply NPS has declined while demand NPS has not yet deteriorated (the lag between
+supply dissatisfaction and demand impact is typically 3–6 months).
+WHEN TO APPLY: Any marketplace considering or having recently implemented a take rate
+increase where supply has no contractual commitment to the platform.
+
+5. THE SUPPLY QUALITY COLLAPSE
+DESCRIPTION: A marketplace grows supply aggressively to meet demand growth targets.
+Onboarding standards are relaxed — from a manual vetting process to a self-serve
+registration with automated checks. In the short term, supply count doubles and fill
+rate improves. Buyers are matched faster. But quality drops: the new supply cohort
+performs worse than the original supply (lower quality products, slower delivery, worse
+service). Demand NPS falls 15 points over 6 months. Repeat purchase rate declines.
+The cost to acquire new demand increases because word-of-mouth referral (the primary
+organic demand channel for most marketplaces) weakens as existing buyers stop
+recommending the platform. The company is in a demand-side spiral driven by a supply-side
+quality decision that was optimised for fill rate rather than buyer experience.
+EARLY WARNING SIGNALS: Supply onboarding time has decreased by more than 50% in the
+last 12 months; supply approval rate has increased from below 60% to above 85% (without
+a corresponding improvement in the quality of applicants); demand NPS is declining
+despite fill rate remaining stable; first-order repeat rate (buyers who purchase a
+second time after their first order) is declining in recent cohorts.
+WHEN TO APPLY: Any marketplace that has materially increased its supply onboarding
+velocity without a documented change in the quality of the applicant pool.
+
+6. THE PLATFORM DEPENDENCY TRAP
+DESCRIPTION: A marketplace is built on top of another platform — using Instagram for
+supply discovery, WhatsApp for buyer-seller communication, Google Shopping for demand
+acquisition, or an app store for distribution. The host platform changes its algorithm,
+pricing, or API terms. The marketplace's customer acquisition cost doubles overnight,
+or its primary communication channel is cut off, or its product is removed from the
+app store. The company built a business on infrastructure it does not control and
+treated an external platform's policies as a constant rather than a variable.
+EARLY WARNING SIGNALS: More than 50% of demand acquisition comes from a single external
+platform (Meta, Google, Apple, Amazon); the marketplace's communication layer runs on
+a third-party API (WhatsApp Business API, Twilio) without fallback; supply onboarding
+or discovery depends on scraping or accessing data from a platform that has not provided
+a commercial API agreement; the company's response to "what happens if Google changes
+its algorithm?" is "we have a good relationship with our Google account manager."
+WHEN TO APPLY: Any marketplace where a single external platform's policies account for
+a critical element of demand acquisition, supply onboarding, or buyer-seller communication.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION E — EXIT COMPARABLE DATABASE
+═══════════════════════════════════════════════════════════════════════
+
+ACQUISITION MULTIPLES BY SUB-CATEGORY:
+
+B2C Marketplace (physical goods):       Strategic 2–8% of annualised GMV | PE 1–4% of GMV
+  Premium driver: unique supply curation not available elsewhere; strong brand affinity
+  in a specific consumer category; high repeat purchase rate (>50% of buyers in 90 days).
+
+B2C Marketplace (services/experiences): Strategic 3–10% of annualised GMV | PE 2–6% of GMV
+  Premium driver: network density (supply and demand per geography) is the primary
+  driver. A services marketplace that is #1 in 10+ cities commands a significant premium.
+
+B2B Marketplace:                         Strategic 6–18x net revenue | PE 4–10x net revenue
+  Premium driver: data asset (transaction history creates proprietary pricing intelligence);
+  recurring supply subscription revenue layered on top of transaction fee.
+
+Labour Marketplace:                      Strategic 5–15x net revenue | PE 4–8x net revenue
+  Premium driver: quality certification of worker supply; integration with enterprise
+  HR and payroll systems that create institutional switching cost.
+
+Financial Marketplace:                   Strategic 3–10x net revenue | PE 2–6x net revenue
+  Premium driver: regulatory licence held by the platform; proprietary credit or risk
+  scoring model validated on platform transaction data.
+
+Property Marketplace:                    Strategic 10–20x ARR | PE 6–12x ARR
+  Premium driver: listing monopoly in target geography; agent contract renewal rates
+  above 90%; data product revenue layered on top of subscription.
+
+Healthcare Marketplace:                  Strategic 4–12x net revenue | Apply Healthtech Library multiples
+  Premium driver: DSPT certification and NHS data sharing agreements.
+
+Horizontal Platform:                     Strategic 1–5% of annualised GMV | PE 1–3% of GMV
+  Note: horizontal marketplaces rarely command strategic premium — acquirers prefer
+  category leaders. Exits are more commonly PE roll-ups or asset purchases.
+
+NAMED STRATEGIC ACQUIRERS:
+
+Amazon: B2C goods marketplaces, logistics networks, B2B procurement tools.
+  Target profile: category-specific marketplaces with unique supply that Amazon cannot
+  acquire independently; logistics network assets. Amazon typically builds rather than
+  buys, so acquisitions are rare and command a higher strategic premium when they occur.
+  Recent: MGM (£7B, content), Whole Foods (£13.7B). Typical range for marketplace
+  assets: £100M–£2B.
+
+Airbnb: Short-term rental, experiences, travel experiences.
+  Target profile: category extensions (long-term stays, luxury), geographic gaps,
+  experiences in underdeveloped markets. Has pursued selective acqui-hires.
+  Typical range: £50M–£500M.
+
+Booking Holdings (Booking.com, Priceline, Kayak, OpenTable): Travel, restaurant, accommodation.
+  Target profile: vertical travel or hospitality marketplaces with significant supply
+  coverage in specific geographies. Recent: OpenTable (£1.25B), Kayak (£1.8B).
+  Typical range: £100M–£2B.
+
+Uber: Ride-hailing, food delivery, freight, mobility marketplaces.
+  Target profile: last-mile delivery, freight, geographic expansion of Eats. Recent:
+  Drizly (£1.1B, alcohol delivery). Willing to pay 5–10% of GMV for dominant
+  regional positions.
+
+Delivery Hero: Food and grocery delivery, B2C marketplace.
+  Target profile: regional food delivery marketplaces with dominant position in
+  specific geographies. Typical range: 2–6% of GMV.
+
+Prosus / Naspers: Consumer internet, classifieds, food delivery, payments.
+  Target profile: classifieds marketplaces (OLX, Avito network), food delivery,
+  education tech marketplaces. Typical range: £100M–£3B.
+  Prosus is one of the most active acquirers of marketplace assets globally.
+
+Recruit Holdings (Indeed, Glassdoor): Labour and jobs marketplaces, classifieds.
+  Target profile: jobs, labour, and services marketplaces in specific verticals or
+  geographies. Acquired Indeed (£1B, 2012) and Glassdoor (£1.2B, 2018).
+  Typical range: £100M–£1.5B.
+
+Rightmove / Auto Trader / REA Group: Property and automotive marketplaces.
+  Target profile: vertical property or automotive marketplaces in adjacent categories
+  (commercial property, new builds) or international geographies.
+  Rightmove typical range: £50M–£300M (UK only, selective).
+  Auto Trader: £50M–£500M (UK and international automotive).
+
+Schibsted: Classifieds and marketplace media across Scandinavia and beyond.
+  Target profile: horizontal and vertical classifieds marketplaces in European geographies.
+  Typical range: £50M–£500M.
+
+Private Equity — Marketplace Roll-ups:
+  Vertical marketplace consolidation is an active PE strategy across: property services,
+  healthcare staffing, legal services, and industrial B2B procurement.
+  PE acquirers: Hg (software marketplaces), Francisco Partners, KKR digital assets.
+  Typical PE acquisition: companies with >£20M net revenue and positive EBITDA.
+  PE multiple: 8–15x EBITDA on profitable marketplace businesses.
+
+IPO COMPARABLES — Marketplace:
+
+Airbnb (2020):        GMV at IPO £30B/year | Revenue £3.4B | IPO multiple: 28x revenue
+Deliveroo (2021):     GMV at IPO £7.1B/year | Revenue £1.8B | IPO multiple: 8x revenue
+Rightmove (2006):     Revenue at IPO £42M | IPO market cap £600M = 14x revenue
+Auto Trader (2015):   Revenue at IPO £240M | IPO market cap £2.4B = 10x revenue
+Etsy (2015):          GMV at IPO £2.2B | Revenue £273M | Take rate 12% | IPO: 10x revenue
+Vinted (private):     GMV £4B+ (2024) | Valued at £4.5B = ~1x GMV / 45x net revenue estimate
+Fiverr (2019):        Revenue at IPO £107M | YoY growth 42% | IPO multiple: 15x revenue
+Note: 2025–2026 marketplace IPO multiples reflect: leading B2C platforms 8–18x net revenue;
+  property subscription marketplaces 10–18x ARR; B2B marketplaces 8–15x net revenue.
+  Profitability at IPO is now effectively required — Deliveroo's 2021 loss-making IPO
+  is not a template the current market will support.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION F — KEY QUESTIONS FOR FOUNDER MEETING
+═══════════════════════════════════════════════════════════════════════
+
+01. LIQUIDITY METRICS IN THE PRIMARY GEOGRAPHY
+QUESTION: "In your primary city or region, what is your current active supply count,
+active demand count, and fill rate — the percentage of buyer searches or requests that
+result in a completed transaction? How have each of these metrics trended over the
+last six months?"
+STRONG ANSWER: Specific numbers for all three metrics; fill rate above 50% and stable
+or improving; supply count growing proportionally with demand; trends are upward.
+WEAK ANSWER: Describes the primary geography as "performing well" without specific
+numbers; cannot separate primary geography metrics from blended platform metrics; fill
+rate not tracked.
+REVEALS: Whether the marketplace has actually achieved self-sustaining liquidity or
+whether it is in a permanently subsidised, pre-liquidity state in every geography.
+
+02. DISINTERMEDIATION RATE AND TREND
+QUESTION: "What is your estimate of the rate at which buyers and sellers who meet on
+your platform transact off the platform for subsequent transactions? How do you measure
+this? Has the rate changed in the last 12 months? What specific mechanisms do you have
+in place to prevent or reduce off-platform transactions?"
+STRONG ANSWER: Specific estimate (even a range is acceptable) based on a methodology
+(survey data, repeat transaction gap analysis, worker utilisation vs platform volume);
+describes specific product or contractual mechanisms (messaging restrictions, payment
+escrow, quality guarantees only for on-platform transactions) that reduce off-platform
+incentive.
+WEAK ANSWER: "We know some transactions happen off-platform but it's not significant";
+cannot quantify the rate; describes off-platform transactions as "not measurable";
+has no specific mechanism to reduce it.
+REVEALS: Whether the company understands its biggest structural risk and is managing it
+proactively, or whether it is choosing not to measure it because the answer would be uncomfortable.
+
+03. TAKE RATE SUSTAINABILITY AND FLOOR
+QUESTION: "What is your current take rate and how has it changed over the last eight
+quarters? What is the minimum take rate at which your business model is financially
+viable? Have you tested supply price sensitivity — do you know how your top suppliers
+would respond to a take rate increase of 5 percentage points?"
+STRONG ANSWER: Stable or improving take rate with a specific history; names a floor take
+rate and explains the cost structure that determines it; has tested price sensitivity
+on a cohort and can describe the supply response.
+WEAK ANSWER: "Our take rate is in line with the market"; cannot produce quarterly
+take rate history; "we have room to increase it as we grow" without testing supply
+response; does not know where the floor is.
+REVEALS: Whether the take rate is a managed, strategic variable or an unexamined
+assumption — and whether the company has pricing power over its supply side.
+
+04. SUPPLY ACQUISITION COST AND TREND
+QUESTION: "What is your cost to acquire a new active supplier, broken down by acquisition
+channel, for each of the last four quarters? Which channels have the best LTV:CAC for
+suppliers? How has the blended supply acquisition cost trended?"
+STRONG ANSWER: Specific cost by channel; identifies the highest-ROI supply acquisition
+channel; blended supply CAC is stable or declining as the playbook matures.
+WEAK ANSWER: Provides a blended number without channel breakdown; "most supply comes
+organically" without a specific rate; cannot confirm whether supply CAC is rising.
+REVEALS: Whether supply acquisition is becoming more or less efficient and whether the
+company's supply growth is economically sustainable.
+
+05. GEOGRAPHIC EXPANSION PLAYBOOK
+QUESTION: "When you launched your second city, what specifically was different about
+the approach compared to your first city? What was the playbook and what did you learn?
+How does your cost per city to reach the liquidity threshold compare between city one
+and city two?"
+STRONG ANSWER: Describes a documented, repeatable launch playbook; second city reached
+liquidity threshold faster and at lower cost than first city; names the 3–5 critical
+steps in the playbook and explains why each one works.
+WEAK ANSWER: "Our second city is going well"; cannot articulate the specific playbook
+steps; cost per city is not tracked; describes each city launch as "unique" rather
+than as an iteration of a scalable model.
+REVEALS: Whether the company has turned geographic expansion into a repeatable capability
+or whether each expansion is an improvised, expensive experiment.
+
+06. OFF-PLATFORM TRANSACTION RATE MEASUREMENT
+QUESTION: "How specifically do you measure or estimate the off-platform transaction rate?
+What data do you use? And what contractual or product terms make it more expensive or
+less convenient for supply and demand to transact off your platform?"
+STRONG ANSWER: Describes a specific measurement methodology; has designed product
+features that make on-platform transactions more convenient (escrow, invoicing, insurance,
+quality guarantee); has contractual provisions requiring on-platform transactions for a
+defined period after the initial match.
+WEAK ANSWER: "We can't really measure it"; relies entirely on trust and marketplace
+goodwill rather than product or contractual mechanisms; "our supply loves the platform
+so they don't do this."
+REVEALS: Whether the company is proactively managing disintermediation or depending on
+goodwill that evaporates the moment a cheaper alternative appears.
+
+07. SUPPLY CONCENTRATION ANALYSIS
+QUESTION: "What percentage of your total GMV is generated by your top 10 suppliers?
+Your top 3? Is there any single supplier that accounts for more than 10% of GMV?
+What is your commercial relationship with your top 3 suppliers — are they on long-term
+contracts or do they operate month-to-month?"
+STRONG ANSWER: Top 10 suppliers represent below 25% of GMV; no single supplier above
+8%; top suppliers are on 12+ month commercial agreements; describes a specific strategy
+to reduce concentration as new supply is onboarded.
+WEAK ANSWER: Top 5 suppliers are "a significant portion" without a specific number;
+cannot confirm whether top suppliers have contractual commitments; "our top suppliers
+are very loyal."
+REVEALS: Whether the marketplace is structurally fragile to the exit of its most valuable
+supply — and whether it has taken commercial steps to reduce that fragility.
+
+08. DEMAND RETENTION BY COHORT
+QUESTION: "For buyers who first transacted in each of the last six quarter-cohorts,
+what percentage completed a second transaction within 90 days? A third within 180 days?
+How does the repeat rate trend across cohorts — are newer cohorts retaining better or
+worse than earlier cohorts?"
+STRONG ANSWER: Specific repeat rates for each cohort; newer cohorts retaining at the
+same rate or better than earlier cohorts; retention rate above 40% at 90 days.
+WEAK ANSWER: Provides a blended average repeat rate; "most buyers come back"; cannot
+produce cohort-level data; cannot confirm whether newer cohorts are retaining differently.
+REVEALS: Whether demand-side retention is improving (product is getting better at
+creating habitual use) or deteriorating (the earliest buyers were most engaged, newer
+ones less so — a signal of supply quality decline or competitor entry).
+
+09. SECOND CITY LAUNCH TIMELINE AND CRITERIA
+QUESTION: "By what specific criteria do you decide that you are ready to launch a new
+geography? What metrics must your primary city hit before you allocate capital to a
+second city? And at what point would you decide that a new city has failed and pull
+the resources?"
+STRONG ANSWER: Specific criteria stated (e.g., primary city at positive contribution
+margin, fill rate above 60%, supply retention above 80%); clear launch criteria;
+equally clear criteria for exiting a city that is underperforming.
+WEAK ANSWER: "We launch when we feel ready"; "we decide based on partner interest";
+"we don't have a fixed exit criteria — we'd evaluate at the time."
+REVEALS: Whether the company applies capital discipline to geographic expansion or
+expands based on enthusiasm and investor expectations — the two most common causes of
+geographic overextension.
+
+10. CHICKEN-AND-EGG SOLUTION IN NEW MARKETS
+QUESTION: "What is your specific supply seeding strategy for a new city? Which comes
+first — supply or demand — and why? What is the minimum supply you need before you
+activate demand acquisition? And how do you prevent early demand from having a bad
+experience because supply is still thin?"
+STRONG ANSWER: Describes a specific, tested supply-first or demand-first strategy with
+the rationale for the sequencing; names the minimum supply threshold before demand
+activation; has a strategy for managing demand expectations during the thin liquidity phase.
+WEAK ANSWER: "We build supply and demand simultaneously"; "we reach out to suppliers
+in the new city and start from there"; cannot describe how they prevent early bad
+experiences from damaging the brand in a new geography.
+REVEALS: Whether the company has a genuine, repeatable answer to the hardest problem
+in marketplace building — or whether it is planning to solve it again from scratch in
+every new city.
+
+11. REGULATORY RISK ASSESSMENT
+QUESTION: "Which specific regulatory changes would have the biggest impact on your
+marketplace model? Have you received any correspondence from regulators about your
+worker classification, your housing model, your financial facilitation, or your platform
+content? What is your regulatory risk management strategy?"
+STRONG ANSWER: Names specific regulatory risks with probability and impact assessments;
+has taken legal advice; can describe the operational change required if the risk
+materialises; has engaged proactively with relevant regulators.
+WEAK ANSWER: "We're compliant with all applicable regulations"; "we monitor regulatory
+developments"; cannot name a specific regulation that would materially change their model.
+REVEALS: Whether the company's leadership understands the regulatory landscape for their
+specific marketplace model and is managing it as a business risk or treating compliance
+as a box-tick.
+
+12. REVENUE SPLIT — TRANSACTION FEES VS SUBSCRIPTION VS DATA
+QUESTION: "What is the breakdown of your revenue between transaction fees (take rate),
+supply-side subscriptions, demand-side subscriptions, and any data or advertising
+products? How has this mix changed over the last 12 months? And what is your strategy
+for growing the non-transaction revenue components?"
+STRONG ANSWER: Specific percentage breakdown by revenue type; transaction fees are not
+the only revenue source; non-transaction revenue (subscription, data) is growing faster
+than transaction revenue as a percentage; describes a specific strategy for expanding
+the subscription or data product layer.
+WEAK ANSWER: "Almost all of our revenue is transaction fees"; "we plan to add
+subscriptions in the future"; cannot describe the roadmap or timeline for non-transaction
+revenue development.
+REVEALS: Whether the company is building a defensible, diversified revenue model or
+is entirely dependent on transaction volume growth — the latter creates existential
+vulnerability to any GMV disruption.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION G — REGULATORY LANDSCAPE
+═══════════════════════════════════════════════════════════════════════
+
+GIG ECONOMY WORKER CLASSIFICATION (UK AND EU):
+
+UK Worker Status — The Uber Ruling and Its Implications:
+  The Supreme Court's 2021 Uber judgment established that platform workers who cannot
+  set their own prices, cannot build a customer base, and operate within a system
+  controlled by the platform are "workers" under UK employment law — not independent
+  contractors.
+  Worker status in the UK grants: national minimum wage, paid annual leave, protection
+  against unlawful deduction from wages.
+  Employee status (a further step beyond worker) grants: unfair dismissal protection,
+  redundancy pay, sick pay.
+  Current platform companies affected: delivery (Deliveroo — partially), private hire
+  (Uber), cleaning (urban cleaning platforms), freelance (some elements of labour marketplaces).
+  Alex flag: any UK labour marketplace where the platform controls pricing, work allocation,
+  and customer relationships without giving workers genuine commercial independence should
+  be assessed against the Uber worker criteria. If workers meet the Uber test, the
+  current cost model does not include minimum wage and holiday pay — and the unit
+  economics will change materially if worker status is reclassified.
+
+EU Platform Work Directive (2024):
+  The EU Platform Work Directive, formally adopted in 2024, establishes a rebuttable
+  presumption of employment for platform workers across EU member states.
+  Key provisions:
+  — Workers are presumed to be employees unless the platform can demonstrate they are
+    genuinely self-employed on at least 2 of 5 prescribed criteria.
+  — Platforms must maintain transparent algorithmic management systems.
+  — Workers must be informed about how algorithmic decisions affect their work.
+  Member states have 2 years to transpose the Directive into national law.
+  Alex flag: any marketplace with EU operations that uses algorithmic dispatch, pricing,
+  or supply allocation and classifies workers as independent contractors should assess
+  its exposure to the Platform Work Directive before Series A. The cost of reclassification
+  (employer NI, paid leave, minimum wage compliance) can increase variable labour costs
+  by 25–40%.
+
+DIGITAL SERVICES ACT (DSA) — EU:
+  The DSA came into force for Very Large Online Platforms (VLOPs) with >45M EU monthly
+  active users in August 2023; for all other platforms from February 2024.
+  Key requirements for marketplace platforms:
+  — Trader verification: marketplaces must verify and display the identity of traders
+    selling on the platform ("Know Your Business Customer").
+  — Illegal content removal: platforms must have systems to detect and remove illegal
+    product listings; failure triggers significant fines.
+  — Algorithmic transparency: recommendation systems must be disclosed; users must have
+    the option to use a non-profiling-based alternative.
+  — Annual risk assessment: large platforms must conduct and publish annual risk assessments
+    for systemic risks (illegal goods, fundamental rights, electoral integrity).
+  Alex flag: any B2C marketplace with EU users has DSA obligations from February 2024.
+  Trader verification is a compliance baseline. A marketplace that has not implemented
+  KYBC (Know Your Business Customer) for EU sellers is in breach of DSA and exposed
+  to fines of up to 6% of global annual turnover.
+
+FINANCIAL MARKETPLACE REGULATION:
+  Any marketplace facilitating lending, investment, or regulated financial products
+  requires FCA authorisation. Specifically:
+  — Loan-based crowdfunding platforms: FCA authorisation as a regulated activity.
+  — Investment-based crowdfunding platforms: FCA authorisation under FSMA.
+  — Buy now pay later facilitation: BNPL regulation (imminent in 2025–2026) will
+    require FCA authorisation for platforms facilitating BNPL at checkout.
+  PSD2 / Open Banking implications: marketplaces that initiate payments on behalf of
+  buyers require PI (Payment Institution) authorisation or must partner with an
+  authorised payment processor.
+  Alex flag: any marketplace facilitating financial transactions — including BNPL at
+  checkout, escrow services, or investment facilitation — must confirm its regulatory
+  status before any revenue projection based on those products is credible.
+
+PROPERTY MARKETPLACE REGULATION — MATERIAL INFORMATION:
+  UK National Trading Standards Estate and Letting Agency Team (NTSELAT) guidance (2023)
+  requires property portals and agents to disclose Material Information in three parts:
+  Part A: Property type, tenure, price — mandatory at listing.
+  Part B: Utilities, construction, flood risk — mandatory at listing.
+  Part C: Restrictive covenants, rights of way, planning — required before sale.
+  Non-compliance: Trading Standards enforcement; Advertising Standards Authority action.
+  Alex flag: any property marketplace that does not enforce Material Information disclosure
+  at the point of listing is in breach of NTSELAT guidance and liable to enforcement action.
+  This is an operational requirement, not an optional feature.
+
+FOOD DELIVERY — FOOD SAFETY AND ALLERGEN REGULATIONS:
+  Marketplaces facilitating food delivery are subject to Food Safety Act 1990 and the
+  Food Information to Consumers (FIC) Regulation 2021.
+  Key obligations: allergen information must be displayed for all food listed on the
+  platform; marketplaces may be co-liable with restaurants for allergen failures.
+  Food Standards Agency enforcement: fixed penalty notices and prosecution for
+  non-compliant food businesses listed on a platform.
+  Alex flag: any food delivery marketplace must confirm it has an allergen information
+  display system for every listed restaurant and a process for removing non-compliant
+  listings. The Natasha's Law (2021) requirements are minimum compliance — not best practice.
+
+ONLINE SAFETY ACT 2023 — UK CONSUMER PLATFORMS:
+  The Online Safety Act 2023 (in force from 2024 under Ofcom's phased implementation)
+  imposes new duties on user-to-user platforms and search services.
+  Relevant to marketplaces: any marketplace where buyers and sellers can communicate
+  is a user-to-user platform.
+  Category 1 duties (largest platforms): illegal content duties, children's safety,
+  transparency reporting.
+  Category 2 duties (all in-scope platforms): systems and processes to identify and
+  remove illegal content; risk assessments.
+  Alex flag: consumer-facing marketplaces with user-to-user communication features must
+  have conducted an Online Safety Act risk assessment and implemented proportionate
+  systems for illegal content identification. Non-compliant platforms face Ofcom fines
+  of up to 10% of global annual turnover.
+
+TAX REPORTING — DAC7 (EU) AND HMRC (UK):
+  DAC7 (EU Directive, in force from January 2023): requires digital platforms operating
+  in the EU to report seller data (income earned through the platform, identity) to
+  EU tax authorities annually.
+  HMRC equivalent (from January 2024): UK platforms must report seller data to HMRC
+  for sellers earning above £1,000/year on the platform.
+  Affected platforms: all two-sided marketplaces where third-party sellers earn income,
+  including goods marketplaces, services marketplaces, and accommodation platforms.
+  Implementation cost: significant system development to collect, verify, and report
+  seller tax identification data in the required format.
+  Alex flag: any marketplace with EU or UK sellers must have DAC7 / HMRC reporting
+  systems in place. A marketplace that has not implemented seller tax ID collection
+  for EU sellers since January 2023 is in breach of DAC7 and exposed to enforcement
+  action in each member state where it operates.
+
+CONSUMER PROTECTION — B2C MARKETPLACE OBLIGATIONS:
+  Consumer Rights Act 2015: consumers have the right to goods that are as described,
+  of satisfactory quality, and fit for purpose. Marketplaces that present third-party
+  goods under their own brand may share liability for product failures.
+  Consumer Contracts Regulations 2013: 14-day right of return for goods purchased
+  online; marketplaces must ensure sellers comply.
+  CMA (Competition and Markets Authority): the CMA has taken enforcement action against
+  marketplaces for fake reviews (2024 Digital Markets, Competition and Consumer Act
+  powers) and for misleading pricing practices (pressure selling, countdown timers).
+  Alex flag: any B2C marketplace using countdown timers, scarcity signals ("only 2 left"),
+  or star ratings without robust review verification systems is exposed to CMA action
+  under the Digital Markets, Competition and Consumer Act 2024 — which gives the CMA
+  direct enforcement powers without requiring court action.
+
+═══════════════════════════════════════════════════════════════════════
+END — ALEX SECTOR INTELLIGENCE LIBRARY — MARKETPLACE v1.0
+═══════════════════════════════════════════════════════════════════════

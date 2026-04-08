@@ -1,0 +1,1006 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — SECTOR INTELLIGENCE LIBRARY
+Healthtech / Medtech — Version 1.0
+Technology companies operating within or alongside healthcare and medicine.
+Built: April 2026.
+Apply this library to every deal classified as Healthtech or Medtech.
+═══════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════
+SECTION A — SECTOR IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════
+
+PRIMARY CLASSIFICATION SIGNALS (any one = Healthtech / Medtech):
+— Product is used in the diagnosis, treatment, monitoring, or management of patients
+  or health conditions — whether by clinicians or directly by consumers
+— Primary buyer is the NHS, a private hospital group, a GP practice, an ICB, a pharma
+  company, or a health insurance company — rather than a generic enterprise buyer
+— Company requires or is seeking regulatory approval (MHRA, CE mark, UKCA, FDA) to
+  commercialise the product or make clinical claims about it
+— Revenue model includes reimbursement pathway (NHS tariff, insurance reimbursement,
+  DTx prescription), clinician licensing, or hospital system contracts with procurement
+  frameworks (NHS Supply Chain, G-Cloud, Crown Commercial Service)
+— Product handles patient data classified as special category under GDPR and Data
+  Protection Act 2018 — requiring explicit consent and specific security controls
+
+CRITICAL CLASSIFICATION DISTINCTION — HEALTHTECH ENABLER vs CLINICAL PRODUCT:
+A company selling procurement or HR software to NHS trusts is a B2B SaaS company
+that happens to sell into healthcare. Apply the SaaS Library.
+A company whose product touches patients, makes clinical claims, or is used in a
+clinical pathway is a Healthtech company. Apply this Library.
+Test: does the product affect a clinical decision, involve patient data, or make
+a health outcome claim? If yes — Healthtech. If no — B2B SaaS.
+
+MISCLASSIFICATION WARNINGS:
+— A mental health app without clinical evidence and sold as a wellness product is
+  Consumer Health (sub-category 7), not a Digital Therapeutic — do not apply DTx
+  regulatory requirements unless the company has made clinical claims
+— A company building AI for hospital operations (scheduling, bed management, staffing)
+  may be classified as Software as a Medical Device depending on whether clinical
+  decisions are influenced — check MHRA AIaMD guidance before classifying
+— Genomics companies with a B2B data licensing model are Health Data companies
+  (sub-category 4), not Medtech — the distinction matters for regulatory treatment
+
+SUB-CATEGORY IDENTIFICATION — SIGNALS FROM SUBMISSION:
+
+1. CLINICAL DECISION SUPPORT (CDS)
+Signals: product is used by clinicians (GPs, radiologists, nurses, surgeons) to aid
+diagnosis, triage, or treatment decisions; output of the product influences a clinical
+choice; uses AI, machine learning, or clinical algorithms to generate recommendations;
+competitive set includes existing clinical guidelines, radiology reading software,
+or pathology analysis tools; company may be classified as Software as a Medical Device
+(SaMD) under MHRA / FDA guidance.
+Regulatory threshold: if the product influences a clinical decision that could harm a
+patient if wrong, it is likely a medical device. MHRA classification: Class I (low
+risk) to Class III (highest risk). AI used in diagnostic imaging is typically Class IIb
+or Class III.
+Key risk: clinical evidence requirement for enterprise NHS procurement is high.
+A product with no peer-reviewed published evidence will not pass NHS Digital Technology
+Assessment Criteria (DTAC) procurement scrutiny.
+
+2. ELECTRONIC HEALTH RECORDS / CLINICAL WORKFLOW
+Signals: product manages patient records, clinical notes, appointment scheduling,
+referral management, or care coordination across a clinical setting; buyer is an NHS
+trust, GP practice, private hospital, or community care provider; submission references
+HL7 FHIR integration, NHS Spine connectivity, or compatibility with EMIS/SystmOne/TPP;
+ACV is typically high (£50K–£2M per trust) with multi-year contracts.
+Key risk: NHS procurement cycles are 12–24 months; NHS Digital service standards and
+DTAC compliance add 3–6 months of due diligence before contract award. Sales cycles
+are project-managed, not salesforce-driven.
+Misclassification risk: check whether the product is SNOMED CT or HL7 FHIR-coded —
+if not, it may not integrate with NHS infrastructure and the stated pipeline may be
+aspirational rather than achievable.
+
+3. DIGITAL THERAPEUTICS (DTx)
+Signals: product is software intended to prevent, manage, or treat a medical condition;
+company uses terms like "prescription digital therapeutic," "clinically validated,"
+or "evidence-based"; submission references randomised controlled trials (RCTs),
+NICE submission, or clinical trial registration (ClinicalTrials.gov or ISRCTN);
+product is prescribed by a clinician or recommended by a healthcare pathway, not
+self-selected by a consumer.
+Regulatory threshold: a DTx making clinical claims is likely a medical device under
+MHRA classification. Must hold UKCA mark or be in CE mark transition to be legally
+prescribed. A DTx without a mark cannot be prescribed on the NHS.
+Business model: NHS reimbursement (via Innovation and Technology Payment, ITP, or
+formulary listing), private pay clinic networks, employer self-insured benefits.
+Key risk: NICE evidence standards are high. A company with one pilot RCT of 60 patients
+cannot secure formulary listing. The evidence bar is typically: two RCTs, minimum 12-
+month follow-up, pre-specified endpoints, peer-reviewed publication.
+
+4. HEALTH DATA / ANALYTICS
+Signals: primary product is the aggregation, structuring, or analysis of health data —
+not the delivery of care; revenue is from pharma, insurers, NHS bodies, or academic
+institutions paying for access to real-world data or analytical insights; submission
+references anonymisation, data linkage, or de-identification processes; company may
+hold NHS data sharing agreements; competitive set includes IQVIA, Veeva, Medidata, or
+academic health data networks.
+Key risk: patient data is special category under GDPR — any re-identification risk,
+inadequate consent, or data sharing outside the approved purpose triggers ICO action.
+NHS data sharing agreements are institution-specific and not transferable — losing one
+hospital trust partner can remove access to a material portion of the dataset.
+Regulatory note: health data companies are not typically classified as medical devices.
+But they must hold NHS DSPT certification and comply with the NHS Data Security and
+Protection Toolkit at the level appropriate to their data access.
+
+5. MEDTECH / MEDICAL DEVICES
+Signals: product is a physical device combined with software; submission references
+hardware components, manufacturing, CE/UKCA mark, or FDA 510(k)/PMA clearance; product
+claims include diagnostic or therapeutic action (measuring, monitoring, or treating);
+competitive set includes established medical device companies (Medtronic, Abbott,
+Roche Diagnostics, Philips, Siemens); investor materials reference clinical trials
+and regulatory timelines alongside commercial milestones.
+Regulatory requirement: all medical devices sold in the UK must be registered with
+the MHRA and carry appropriate conformity marking. Post-Brexit, CE marks from EU
+notified bodies are accepted in the UK under transitional provisions until 30 June 2030,
+after which UKCA marking is required from a UK Approved Body.
+Key risk: hardware manufacturing introduces COGS complexity absent from pure software.
+Gross margins are typically 50–70% vs 70–85% for software. Unit economics must be
+assessed on the hardware-inclusive cost structure.
+
+6. HEALTHTECH ENABLERS / INFRASTRUCTURE
+Signals: product supports NHS or private healthcare operations without directly touching
+patients or making clinical claims; examples include clinical trial management systems,
+pharmacy dispensing software, NHS procurement and supply chain tools, medical coding
+and billing software, healthcare workforce management; buyer is an NHS trust operations
+team, a pharmaceutical company clinical operations department, or a private hospital
+group procurement function.
+Regulatory note: infrastructure products typically do not require MHRA registration unless
+they influence a clinical decision or process patient data in a way that constitutes SaMD.
+Apply SaaS Library benchmarks with the following adjustment: sales cycles are 50–100%
+longer than standard enterprise SaaS due to NHS procurement frameworks. A 6-month SaaS
+sales cycle becomes 12–18 months in an NHS context.
+Key risk: NHS procurement risk is highest for infrastructure companies — framework
+compliance (Crown Commercial Service, NHS Supply Chain frameworks) is mandatory for many
+trust buyers. A company not on any NHS procurement framework cannot sell to most trusts.
+
+7. DIRECT TO CONSUMER HEALTH (D2C Health)
+Signals: product is purchased directly by consumers (patients) without a clinical
+prescription or referral; revenue is primarily subscription, one-time purchase, or
+freemium-to-paid conversion; marketing channels include social media, influencer
+content, and app stores; competitive set includes consumer wellness apps, OTC products,
+or gym and fitness services; clinical claims are either absent or mild (does not claim
+to diagnose or treat a specific condition).
+Key risk: the distinction between a wellness product (not a medical device) and a health
+product making clinical claims (potentially a medical device) determines whether MHRA
+registration is required. A D2C health company that begins making clinical efficacy
+claims to acquire users without regulatory registration is creating a liability.
+Apply SaaS/consumer benchmarks adjusted for health context: Day-90 retention below 20%
+in chronic disease management apps is a structural failure — the product is not creating
+a daily behaviour change. Mental health apps typically see 80%+ of users disengage
+within 30 days.
+
+8. HEALTH INSURANCE TECH / BENEFITS
+Signals: product is used by health insurance companies, self-insured employers, or
+employee benefits administrators to manage claims, model risk, or administer benefits;
+revenue is B2B SaaS subscription or percentage of claims processed; submission references
+claims automation, prior authorisation, benefits navigation, or population health risk
+scoring; competitive set includes legacy benefits administration platforms (Mercer, Aon),
+claims processors, or TPA (Third Party Administrator) software vendors.
+Regulatory note: if the product influences insurance underwriting decisions or claims
+payment decisions, it may be subject to FCA and PRA supervision in the UK depending
+on whether the company or its customers are regulated insurers. Confirm regulatory
+boundary clearly.
+Apply SaaS Library benchmarks. Healthcare context adjustment: ACV is higher than
+standard HR SaaS (£50K–£500K per insurer); sales cycles are 9–18 months; data
+security requirements mirror GDPR special category data requirements.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION B — STAGE-SPECIFIC METRIC BENCHMARKS
+═══════════════════════════════════════════════════════════════════════
+
+Format: STRONG (top quartile) | ACCEPTABLE (median) | CONCERN (flag) | FAIL (disqualifying)
+
+NOTE: Healthtech benchmarks adjust for longer sales cycles and regulatory timelines.
+A company at Series A with £500K ARR but five signed NHS trust contracts at £100K ACV
+in implementation is a materially different risk profile from a B2B SaaS company at
+the same ARR. Context matters — always assess revenue in the context of pipeline stage
+and buyer cycle.
+
+──────────────────────────────────────────────────────────────────────
+SALES CYCLE BENCHMARKS BY BUYER TYPE:
+──────────────────────────────────────────────────────────────────────
+
+NHS Trust (secondary care — hospital):
+  STRONG: 12 months first contract signed | ACCEPTABLE: 12–18 months | CONCERN: >18 months
+  Note: contracts typically require DTAC compliance, IG toolkit sign-off, clinical
+  champion endorsement, and procurement committee approval before award.
+
+NHS Primary Care / GP Practice:
+  STRONG: 3–6 months | ACCEPTABLE: 6–9 months | CONCERN: >9 months
+  Note: GP practice buyers are smaller and faster but have smaller budgets (£5–£50K ACV).
+  ICB-level contracts for primary care networks (PCNs) revert to NHS Trust timelines.
+
+Integrated Care Board (ICB) / ICS System-Level:
+  STRONG: 18 months | ACCEPTABLE: 18–24 months | CONCERN: >24 months
+  Note: ICB contracts are the largest NHS opportunity but require system-level clinical
+  buy-in from multiple trusts. Pilot programmes within ICBs are common — do not count
+  as commercial traction until a funded contract is signed.
+
+Private Hospital Group (Spire, Ramsay, HCA):
+  STRONG: 6–9 months | ACCEPTABLE: 9–15 months | CONCERN: >15 months
+
+Pharma / Life Sciences (clinical trial, data, or commercial):
+  STRONG: 6–12 months | ACCEPTABLE: 12–18 months | CONCERN: >18 months
+
+Direct to Consumer:
+  Apply standard SaaS/consumer benchmarks. Note that CAC in health apps is high
+  due to regulatory constraints on health advertising (£15–£60 per install typical).
+
+──────────────────────────────────────────────────────────────────────
+CLINICAL SOFTWARE (CDS, EHR/Workflow, DTx, Enablers) — ARR Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+PRE-SEED — Pre-revenue to £100K ARR:
+ARR:           STRONG >£50K | ACCEPTABLE £10–50K | CONCERN <£10K | FAIL: 0 ARR with 24+ months building
+Pilot sites:   STRONG ≥3 paid pilots | ACCEPTABLE 1–2 paid | CONCERN: pilots all unpaid
+Regulatory:    STRONG: DTAC compliance in progress or complete | CONCERN: not started
+Clinical evidence: STRONG: at least 1 published or pre-print study | CONCERN: none planned
+
+SEED — £100K to £1M ARR:
+ARR:           STRONG >£500K | ACCEPTABLE £150–500K | CONCERN £100–150K | FAIL <£100K
+Customers:     STRONG ≥5 paying NHS trusts or ≥3 ICB contracts | ACCEPTABLE 2–4 trusts | CONCERN: 1 trust
+NRR:           STRONG >110% | ACCEPTABLE 95–110% | CONCERN 85–95% | FAIL <85%
+Gross margin:  STRONG >72% | ACCEPTABLE 60–72% | CONCERN 45–60% | FAIL <45%
+Sales cycle:   Flag if average first contract took >18 months — indicates structural procurement challenge
+Regulatory:    STRONG: DTAC complete, NHS DSPT certified | CONCERN: either incomplete
+
+SERIES A — £1M to £5M ARR:
+ARR:           STRONG >£3M | ACCEPTABLE £1.5–3M | CONCERN £1–1.5M | FAIL <£1M
+YoY growth:    STRONG >80% | ACCEPTABLE 50–80% | CONCERN 25–50% | FAIL <25%
+  Note: 80% YoY growth in NHS is exceptional. Apply context — 50% growth with 5 NHS
+  trust contracts is a strong signal; 50% growth with 50 GP practice customers is weaker.
+NRR:           STRONG >120% | ACCEPTABLE 105–120% | CONCERN 90–105% | FAIL <90%
+Gross margin:  STRONG >75% | ACCEPTABLE 65–75% | CONCERN 50–65% | FAIL <50%
+CAC payback:   STRONG <18 months | ACCEPTABLE 18–30 months | CONCERN 30–42 months | FAIL >42 months
+  Note: healthcare CAC payback benchmarks are 6–12 months longer than standard SaaS
+  because of the sales cycle length. A 30-month CAC payback with NHS trust ACV of £150K
+  and multi-year contracts is acceptable; the same payback for an SMB buyer is not.
+Logo churn:    STRONG <3% | ACCEPTABLE 3–8% | CONCERN 8–15% | FAIL >15%
+  Note: healthcare switching costs are very high — logo churn above 8% in a clinical
+  software product signals a fundamental product-market fit problem, not just sales execution.
+Clinical evidence: STRONG: ≥2 peer-reviewed publications | ACCEPTABLE: 1 publication + 1 in progress
+Pipeline:      STRONG: ≥5 NHS trusts in advanced procurement | CONCERN: pipeline is all early-stage
+
+SERIES B — £5M to £20M ARR:
+ARR:           STRONG >£12M | ACCEPTABLE £6–12M | CONCERN £5–6M | FAIL <£5M
+YoY growth:    STRONG >70% | ACCEPTABLE 40–70% | CONCERN 20–40% | FAIL <20%
+NRR:           STRONG >125% | ACCEPTABLE 108–125% | CONCERN 95–108% | FAIL <95%
+Gross margin:  STRONG >78% | ACCEPTABLE 68–78% | CONCERN 58–68% | FAIL <58%
+Logo churn:    STRONG <3% annual | ACCEPTABLE 3–6% | CONCERN 6–10% | FAIL >10%
+Rule of 40:    STRONG >40 | ACCEPTABLE 20–40 | CONCERN 0–20 | FAIL <0
+  Note: healthtech Rule of 40 benchmarks are lower than pure SaaS due to longer sales
+  cycles and higher pre-sales costs. Adjust expectation accordingly.
+
+──────────────────────────────────────────────────────────────────────
+MEDTECH / MEDICAL DEVICES — Additional Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+Regulatory approval status:
+  Pre-revenue: STRONG: UKCA/CE mark in application or granted | FAIL: no regulatory plan
+  Seed:        STRONG: UKCA/CE mark granted or 510(k) cleared | CONCERN: mark not in place
+  Series A:    FAIL: no regulatory mark and making clinical claims
+
+Gross margin (hardware + software combined):
+  STRONG >65% | ACCEPTABLE 50–65% | CONCERN 35–50% | FAIL <35%
+  Note: hardware COGS reduce gross margin vs pure software. A medtech gross margin
+  above 65% typically requires a significant recurring software or consumables revenue
+  layer on top of the initial device sale.
+
+Consumables or software attach rate (recurring revenue per device):
+  STRONG: recurring ARR per device >50% of device ASP per year | ACCEPTABLE 25–50%
+  CONCERN: device-only model with no recurring revenue — creates lumpy revenue and
+  high re-selling cost per customer.
+
+Regulatory timeline to first commercial sale:
+  Class I SaMD: 6–18 months
+  Class IIa/IIb: 18–36 months (requires Notified Body assessment)
+  Class III: 3–6 years (requires full PMA or De Novo for US)
+  Flag: any medtech company projecting revenue from a Class IIb/III device within 18
+  months that has not yet begun a Notified Body assessment is using an impossible timeline.
+
+──────────────────────────────────────────────────────────────────────
+DIRECT TO CONSUMER HEALTH — Key Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+Day-30 retention:   STRONG >40% | ACCEPTABLE 25–40% | CONCERN 15–25% | FAIL <15%
+Day-90 retention:   STRONG >25% | ACCEPTABLE 15–25% | CONCERN 8–15% | FAIL <8%
+  Note: chronic disease management apps (diabetes, hypertension, weight management)
+  require Day-90 retention above 25% to demonstrate genuine behaviour change.
+  A wellness app with 10% Day-90 retention is a media business, not a health product.
+
+Annual subscription retention:  STRONG >65% | ACCEPTABLE 50–65% | CONCERN 35–50% | FAIL <35%
+CAC:                            STRONG <£20 | ACCEPTABLE £20–50 | CONCERN £50–80 | FAIL >£80
+LTV/CAC:                        STRONG >4x | ACCEPTABLE 2.5–4x | CONCERN 1.5–2.5x | FAIL <1.5x
+
+VALUATION BENCHMARKS — Healthtech (2025–2026 market):
+Clinical SaaS (NHS buyers):   8–18x ARR | Premium for multi-trust coverage and high NRR
+Medtech (device + software):  3–8x revenue | Premium for recurring consumables/software layer
+DTx:                          Valued on pipeline stage + evidence status, not revenue multiple
+                              Pre-NICE approval: £10–50M enterprise value typical
+                              Post-NICE approval with NHS formulary: 15–25x ARR
+Health Data:                  4–12x ARR or 1–3% of managed dataset value
+D2C Health:                   3–8x ARR | Premium for retention above 30% at Day-90
+Benefits / Insurance Tech:    Apply SaaS Library multiples
+
+═══════════════════════════════════════════════════════════════════════
+SECTION C — SECTOR-SPECIFIC RED FLAGS
+═══════════════════════════════════════════════════════════════════════
+
+01. REGULATORY APPROVAL ABSENT FOR DEVICE OR DTx CLAIM
+SIGNAL: Company's product makes clinical claims (diagnoses, treats, monitors, or
+recommends a clinical action) but does not hold a UKCA mark, CE mark, or MHRA
+registration for that claim. Company may describe itself as "in regulatory process"
+or state that the claim is "informational, not diagnostic."
+SEVERITY: CRITICAL
+WHAT IT MEANS: A product making a clinical claim without regulatory registration is
+operating illegally under the Medical Devices Regulations 2002 (as amended post-Brexit).
+The MHRA can issue a Warning Notice or Field Safety Corrective Action, forcing the
+product off the market. Any NHS trust using an unregistered device is also exposed to
+liability.
+VERIFICATION: Request the MHRA registration reference number or UKCA/CE Notified Body
+certificate. Search the MHRA device register (devices.mhra.gov.uk) for the company name.
+If not found, ask: "Under what regulatory classification do you currently operate?"
+
+02. REIMBURSEMENT PATHWAY UNDEFINED
+SIGNAL: Company is building a product for NHS adoption but has not identified whether
+it will sell through NHS tariff reimbursement, an Innovation and Technology Payment
+(ITP) designation, direct trust procurement, or the NHS Innovation Accelerator programme.
+Company may assume that if the product works, the NHS will pay for it.
+SEVERITY: HIGH
+WHAT IT MEANS: The NHS does not buy products because they work. It buys products that
+are on an approved procurement framework, have DTAC compliance, and fit within existing
+budget codes. A company without a specific reimbursement pathway is building without
+a route to revenue at scale — however good the clinical evidence is.
+VERIFICATION: Ask: "What is the specific route by which an NHS trust pays for your
+product? Is it a capital purchase, a revenue budget line item, or reimbursed via a
+specific tariff or ITP designation? Who at NHSE have you spoken to about a pathway?"
+
+03. CLINICAL EVIDENCE INSUFFICIENT FOR TARGET BUYER
+SIGNAL: Company is targeting NHS trust procurement or NICE guidance submission but
+its clinical evidence base consists of a single pilot study, a non-randomised
+observational study, or data from fewer than 100 patients.
+SEVERITY: HIGH
+WHAT IT MEANS: NHS DTAC and NICE evidence standards require: for clinical tools, at
+least two peer-reviewed studies with pre-specified endpoints and an appropriate
+control condition. A company that has not yet met this standard cannot realistically
+win NHS procurement beyond a single early-adopter trust.
+VERIFICATION: Ask: "What peer-reviewed clinical evidence has been published for your
+product? What is the sample size, trial design, and journal? Are you registered on
+ClinicalTrials.gov or ISRCTN for any current or planned trials?"
+
+04. SINGLE NHS TRUST PILOT MISREPRESENTED AS COMMERCIAL TRACTION
+SIGNAL: Submission references one NHS trust as a customer or pilot site and implies
+this represents validated commercial demand. Investigation reveals the trust is using
+the product as a funded pilot, not under a commercial contract, and the relationship
+was initiated by a personal connection between the founder and a specific clinician.
+SEVERITY: HIGH
+WHAT IT MEANS: This is the healthtech equivalent of the Reference Customer Illusion
+(PASS Deal 013 in Training Library). A single trust pilot driven by a clinical champion
+is not commercial traction. If the clinical champion moves, leaves, or loses interest,
+the pilot ends. It is a proof of concept, not evidence of scalable procurement.
+VERIFICATION: Ask: "Is your relationship with [trust name] governed by a signed commercial
+contract with a specified annual value? Or is it a funded pilot or evaluation? Who
+is the primary sponsor of the relationship within the trust — and what happens to the
+relationship if they leave?"
+
+05. NHS PROCUREMENT FRAMEWORK ABSENT
+SIGNAL: Company is selling to NHS trusts but is not listed on any of the major NHS
+procurement frameworks — Crown Commercial Service, NHS Supply Chain, G-Cloud, or
+specific category frameworks for clinical software.
+SEVERITY: HIGH
+WHAT IT MEANS: The majority of NHS trusts cannot legally purchase products above their
+local procurement threshold (typically £10K–£25K per year) without going through an
+approved framework. A company not on any framework must either sell below the threshold,
+persuade a trust to conduct a standalone procurement exercise (12+ months), or join
+a framework (6–18 month process). Without framework access, the TAM is dramatically
+smaller than the total NHS addressable market.
+VERIFICATION: Ask: "Which NHS procurement frameworks are you listed on? If not yet
+listed, what is your plan and timeline for achieving framework inclusion?"
+
+06. PATIENT DATA GOVERNANCE GAPS
+SIGNAL: Company accesses, stores, or processes patient data but has not completed
+NHS Data Security and Protection Toolkit (DSPT) certification, does not hold a Data
+Protection Impact Assessment (DPIA) for its data processing activities, or has not
+described its data sharing agreement with NHS data suppliers.
+SEVERITY: HIGH
+WHAT IT MEANS: NHS data is among the most regulated data in the UK. A company without
+DSPT certification cannot access NHS patient data under any NHS data sharing agreement.
+An ICO investigation triggered by a patient data breach can destroy a healthtech company
+faster than any commercial failure — enforcement notices, fines of up to 4% of global
+turnover, and reputational damage with NHS buyers are all consequences of inadequate
+data governance.
+VERIFICATION: Ask: "What is your DSPT certification status? Have you completed a DPIA
+for your data processing activities? Do you have a signed Data Sharing Agreement in
+place with each organisation that provides you with patient data?"
+
+07. KEY OPINION LEADER / CLINICAL CHAMPION DEPENDENCY
+SIGNAL: Company's adoption in two or more NHS trusts can be traced directly to a single
+clinician (or a small group of 2–3 clinicians) who have championed the product internally.
+There is no evidence of independent adoption — every site has been brought in by a
+personal referral from the same clinical network.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Clinical champion dependency is the healthtech equivalent of single-channel
+dependency. If the champion loses interest, changes role, retires, or moves to a competing
+product, adoption at all their associated sites is at risk. A company with six NHS trust
+"customers" all brought in by one radiologist is operationally fragile.
+VERIFICATION: Ask: "For each NHS trust you work with, who initiated the relationship?
+Is there more than one clinical advocate within each trust? Has any trust adopted the
+product independently — without a direct introduction from your existing clinical network?"
+
+08. CE MARK OR UKCA MARK ABSENT FOR DEVICE
+SIGNAL: Company is selling or demonstrating a medical device in the UK without a valid
+UKCA or CE mark (the latter accepted under transitional provisions until June 2030).
+May describe the device as "in research phase" or "being used in an observational study"
+to avoid the registration requirement.
+SEVERITY: CRITICAL
+WHAT IT MEANS: Selling an unregistered medical device in the UK is a criminal offence
+under the Medical Devices Regulations 2002. An NHS trust procurement officer who
+discovers the device is unregistered will immediately halt the trial and may report
+the company to the MHRA. Criminal liability attaches to the directors.
+VERIFICATION: Check the MHRA device register. For any device used in NHS settings,
+request the device class and registration reference. Any device described as "research
+only" that is being used in clinical care — even informally — is in scope of the
+Medical Devices Regulations.
+
+09. CLINICAL LIABILITY INSURANCE ABSENT OR INSUFFICIENT
+SIGNAL: Company does not hold product liability insurance for clinical use of its software
+or device, or the coverage is below £5M per claim for a product used in an NHS clinical
+pathway.
+SEVERITY: HIGH
+WHAT IT MEANS: NHS trusts require minimum product liability insurance levels as a
+condition of any procurement agreement. For clinical decision support or diagnostic
+tools, the standard requirement is £5M–£10M per claim minimum. A company without
+this insurance cannot sign an NHS contract. If a patient adverse event occurs and the
+company has no liability insurance, a single claim can destroy the company.
+VERIFICATION: Ask: "What product liability insurance do you hold? What is the per-claim
+and annual limit? Does it specifically cover NHS clinical use of your product?"
+
+10. OUTCOME CLAIMS NOT SUPPORTED BY EVIDENCE
+SIGNAL: Company's marketing materials or investor deck claim a specific clinical outcome
+improvement ("reduces misdiagnosis rate by 40%," "improves medication adherence by
+60%") without citing a published peer-reviewed study. The claim may be based on
+a small internal pilot or a single centre's retrospective analysis.
+SEVERITY: MEDIUM
+WHAT IT MEANS: If an NHS clinician relies on an unsupported outcome claim and a patient
+is harmed, the company faces both regulatory action (MHRA) and litigation. More
+immediately, NHS procurement due diligence teams will validate every outcome claim —
+a claim that cannot be evidenced will end a procurement process and damage the company's
+credibility across the trust network.
+VERIFICATION: For each specific outcome claim, ask: "Is this claim supported by a
+peer-reviewed, published study? Can you share the citation?" If the answer is "we have
+internal data showing this" — it is not an evidence-supported claim for procurement purposes.
+
+11. CONSUMER HEALTH CHURN BEFORE DAY 90
+SIGNAL: D2C health company reports strong downloads (50K–500K) but does not disclose
+Day-30 or Day-90 retention. Monthly active users are a small fraction of total registered
+users. Company focuses investor communications on top-of-funnel metrics (downloads, sign-ups)
+rather than retention or paying conversion.
+SEVERITY: HIGH
+WHAT IT MEANS: Consumer health apps have some of the worst retention rates of any software
+category. If 90-day retention is below 15%, the product is not creating a behaviour change
+— it is a novelty. The business model depends on continuously acquiring new users to
+replace those who disengage, which is structurally unsound unless CAC is extremely low.
+VERIFICATION: Ask: "What percentage of users who sign up are still active at Day 30?
+Day 90? What percentage have converted to a paying plan?"
+
+12. REGULATORY RECLASSIFICATION RISK MID-SCALE
+SIGNAL: Company has been operating under a specific regulatory classification (e.g.,
+general wellness device, Class I SaMD, or non-device software) and has recently
+expanded its product to include features that may trigger reclassification to a higher
+risk class by the MHRA.
+SEVERITY: MEDIUM
+WHAT IT MEANS: MHRA can reclassify a product mid-market if new functionality makes
+clinical claims that the existing registration does not cover. Reclassification to
+Class IIb or Class III stops commercial sales while new regulatory approval is sought.
+Revenue growth halts during the approval process.
+VERIFICATION: Ask: "Has your product changed materially since your original regulatory
+registration? Have you notified your Notified Body of any new features? Has the MHRA
+or your regulatory affairs team reviewed the current version against your registration?"
+
+═══════════════════════════════════════════════════════════════════════
+SECTION D — HISTORICAL FAILURE PATTERNS
+═══════════════════════════════════════════════════════════════════════
+
+1. THE CLINICAL EVIDENCE GAP
+DESCRIPTION: A healthtech company with a product that demonstrably works in small
+pilots secures seed or Series A funding on the strength of early clinical data.
+The founders, confident in their product, begin scaling commercially to NHS trusts.
+Enterprise procurement teams request NICE-standard evidence — two RCTs, peer-reviewed
+publication, pre-specified endpoints. The company's evidence base is a single-centre
+observational pilot with 40 patients. Every enterprise procurement conversation stalls
+at the due diligence stage. Revenue plateaus at 2–3 early-adopter trusts willing to
+take a risk. The company runs out of runway before its own RCT completes. The product
+worked — but it could never be proven to the standards that justify NHS-wide adoption.
+EARLY WARNING SIGNALS: Clinical evidence at Series A is a single pilot study below
+100 patients; no RCT registered or in planning; company's slide deck describes the
+evidence as "strong preliminary data" rather than "published peer-reviewed evidence";
+enterprise NHS sales pipeline is all early-stage with no procurement decisions expected
+within 12 months; founder describes NHS procurement as "slow" rather than understanding
+that the procurement delay is an evidence gap.
+WHEN TO APPLY: Any clinical tool targeting NHS trust-level procurement where the
+company cannot provide at least one published peer-reviewed study and an RCT in progress.
+
+2. THE NHS PROCUREMENT WALL
+DESCRIPTION: A healthtech company builds a product that clinical users love. It is
+used informally by clinicians at several trusts who have adopted it personally (on
+personal devices or under departmental discretionary spend). The company attempts
+to convert these informal users into formal institutional contracts. It discovers that
+formal procurement requires DTAC compliance, information governance sign-off, clinical
+procurement committee approval, and a legal framework agreement — a process that takes
+12–18 months per trust even when everyone wants to proceed. The company cannot convert
+its enthusiastic users into contracted revenue fast enough to survive. It runs out of
+money while its procurement pipeline is processing.
+EARLY WARNING SIGNALS: Multiple trusts described as "very interested" but no signed
+contracts after 12 months of commercial activity; company describes its sales motion as
+"relationship-driven" or "clinician-led" without a formal procurement team; DTAC
+compliance has not been completed; company is not on any NHS procurement framework;
+pipeline includes trusts where no formal procurement case has been submitted.
+WHEN TO APPLY: Any NHS-focused product company where the ratio of "interested" or "in
+discussion" trusts to signed contracts is greater than 5:1.
+
+3. THE REIMBURSEMENT PIVOT
+DESCRIPTION: A digital therapeutics or clinical software company builds for NHS
+reimbursement — a specific pathway where the NHS will pay for the product per patient
+treated. The founders have received encouraging informal signals from NHS England. The
+company raises a Series A on the assumption that NHS reimbursement will arrive within
+18 months. NHSE does not finalise the pathway. The clinical evidence is not yet at
+NICE submission standard. With no reimbursement pathway, the company cannot generate
+volume revenue — each trust procurement is a one-off deal generating £50–200K. The
+company restructures to pursue direct-pay private clinic networks and employer benefits,
+which has a different and smaller TAM than the NHS pathway it was built for. Investors
+who funded the NHS thesis are now funding a materially different business.
+EARLY WARNING SIGNALS: Business plan explicitly references NHS Innovation and Technology
+Payment (ITP) designation or NICE formulary listing as the primary revenue pathway;
+no ITP application has been submitted; NICE engagement has not begun; company has
+informal signals but no formal written commitment from NHSE; the Series A valuation
+assumes NHS reimbursement revenue within 24 months.
+WHEN TO APPLY: Any DTx or clinical technology company where the financial model depends
+on a specific NHS reimbursement pathway that is not yet formally agreed.
+
+4. THE REGULATORY RECLASSIFICATION TRAP
+DESCRIPTION: A software company sells a product that analyses health data or assists
+clinical decision-making and operates under a minimal regulatory classification —
+"general wellness," Class I SaMD, or no classification at all. As it scales and the
+product matures, new AI features are added that clearly influence clinical decisions.
+The MHRA or a Notified Body review triggers a reclassification of the product to Class
+IIb or Class III. The company must immediately cease commercial sales of the reclassified
+product and begin a Notified Body conformity assessment — a process that takes 18–36
+months and costs £500K–£2M. Existing contracts with NHS trusts must be suspended pending
+the new approval. Revenue drops to near zero while the approval is in progress.
+EARLY WARNING SIGNALS: AI feature set has expanded substantially since original
+regulatory classification review; new features generate clinical recommendations that
+influence prescribing, diagnosis, or treatment pathway decisions; the company has not
+conducted a new regulatory classification review after adding AI capabilities; the
+regulatory affairs function is understaffed or treated as a compliance box-tick rather
+than a core business function.
+WHEN TO APPLY: Any AI-enabled clinical tool that started as a Class I or unregistered
+product and has since added features that generate clinical recommendations, diagnostic
+outputs, or risk scores that clinicians rely on for patient decisions.
+
+5. THE CONSUMER HEALTH CHURN CLIFF
+DESCRIPTION: A D2C health app launches and achieves strong early traction — 100K+
+downloads, press coverage, and impressive Month-1 retention. Investor interest follows.
+The company raises seed funding on the strength of its growth metrics. In the 6 months
+after raising, the founders and investors discover that Day-90 retention is 8%. The
+cohort of users who downloaded in Month 1 has almost entirely disengaged. New user
+acquisition via paid marketing is required to replace the disengaged cohort. CAC rises.
+LTV/CAC ratios collapse. The company is not building a health behaviour product —
+it is acquiring and discarding users faster than it can monetise them. The product
+never generates the clinical evidence needed for NHS adoption because users disengage
+before completing a meaningful intervention period.
+EARLY WARNING SIGNALS: Investor materials focus on total registered users or downloads
+rather than MAU/DAU ratio; Day-30 and Day-90 retention not disclosed; NPS is high
+but does not correlate with sustained engagement; paid acquisition is the primary
+growth channel; the product has not changed a health behaviour for any user cohort
+that can be measured over 90+ days.
+WHEN TO APPLY: Any D2C health app or digital wellbeing product where Day-90 retention
+has not been disclosed or is below 20%.
+
+6. THE CLINICAL CHAMPION DEPENDENCY
+DESCRIPTION: A clinical software or decision support company achieves adoption in 8–12
+NHS trusts. Investigation reveals that 7 of the 12 trusts were introduced by a single
+clinical champion — a professor, consultant, or clinical director who is personally
+enthusiastic about the technology and has used their professional network to facilitate
+introductions. The company treats this as business development success. When the clinical
+champion takes a new position, moves to a competing product, retires, or experiences a
+falling out with the company, the introductions stop. The 7 trusts associated with the
+champion enter a period of uncertainty. Without the champion's advocacy, renewal
+conversations become difficult. The company's apparent momentum was entirely dependent
+on one person's enthusiasm and professional relationships — neither of which are assets
+on the balance sheet.
+EARLY WARNING SIGNALS: Founder cannot describe the company's institutional relationships
+independently of specific named clinicians; more than 50% of trust relationships were
+introduced by the same clinical advisor or champion; clinical advisors are equity-holders
+or have financial interests in the company's success; no trust has adopted the product
+through an independent procurement process without a personal introduction.
+WHEN TO APPLY: Any NHS-facing clinical company where the founder describes growth
+primarily in terms of clinical relationships rather than institutional contracts.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION E — EXIT COMPARABLE DATABASE
+═══════════════════════════════════════════════════════════════════════
+
+ACQUISITION MULTIPLES BY SUB-CATEGORY:
+
+Clinical Decision Support / AI Diagnostics:
+  Strategic 8–25x ARR | PE 5–12x ARR
+  Premium driver: FDA/MHRA clearance for a specific clinical indication; peer-reviewed
+  clinical evidence demonstrating outcome improvement; exclusive data partnerships with
+  major academic medical centres.
+
+EHR / Clinical Workflow:
+  Strategic 4–12x ARR | PE 3–8x ARR
+  Premium driver: deep integration with NHS infrastructure (NHS Spine, EMIS, SystmOne);
+  multi-year NHS framework contracts with high switching cost.
+
+Digital Therapeutics:
+  Strategic 3–20x ARR (post-evidence) | Pre-revenue: acquirer pays for pipeline value
+  Premium driver: NICE-approved DTx with NHS formulary listing commands highest multiple.
+  Pre-approval: acquirer pays primarily for the evidence package and regulatory pathway.
+
+Health Data / Analytics:
+  Strategic 3–10x ARR | PE 3–7x ARR
+  Premium driver: dataset uniqueness (longitudinal patient data, rare disease cohort);
+  data sharing agreements that are not replicable by the acquirer organically.
+
+Medtech / Medical Devices:
+  Strategic 3–8x revenue | PE 2–5x revenue
+  Premium driver: recurring consumables revenue stream; cleared in multiple geographies;
+  a dominant market position in a specific clinical indication.
+
+Healthtech Infrastructure:
+  Strategic 4–10x ARR | PE 3–7x ARR (apply SaaS Library benchmarks with healthcare premium)
+
+D2C Health:
+  Strategic 2–6x ARR | PE 2–5x ARR (retention-dependent)
+  Premium driver: Day-90 retention above 30%; clinically validated behaviour change outcome.
+
+Health Insurance / Benefits:
+  Strategic 5–12x ARR | PE 4–8x ARR (apply SaaS Library benchmarks)
+
+NAMED STRATEGIC ACQUIRERS:
+
+Epic Systems: EHR, clinical workflow, population health, patient engagement.
+  Target profile: tools that integrate natively with the Epic platform and extend its
+  capability for NHS and US hospital buyers. Epic does not acquire frequently but commands
+  access to the largest installed EHR base in the world.
+  Typical range: £50M–£500M.
+
+Oracle Health (Cerner): EHR, clinical data, health analytics, population health.
+  Target profile: NHS-facing clinical data and workflow tools; AI for clinical decision
+  support that extends the Oracle Health platform. Oracle acquired Cerner for £28B (2022).
+  Typical acquisition range: £50M–£300M for tuck-in acquisitions.
+
+Philips Healthcare: Imaging AI, patient monitoring, clinical informatics, digital pathology.
+  Target profile: AI for diagnostic imaging (radiology, pathology, cardiology); connected
+  care monitoring platforms. Philips has been an active acquirer of AI diagnostics companies.
+  Typical range: £50M–£1B.
+
+Siemens Healthineers: Diagnostic imaging, laboratory diagnostics, healthcare IT.
+  Target profile: AI in diagnostic imaging; laboratory data analytics; precision medicine
+  tools. Acquired Varian Medical Systems (£13.4B, 2021) — largest medtech deal in
+  recent years.
+  Typical range: £50M–£2B for strategic assets.
+
+GE Healthcare: Imaging, monitoring, pharmaceutical diagnostics, digital health.
+  Target profile: AI for radiology and cardiology; patient monitoring software;
+  clinical workflow tools that integrate with GE device infrastructure.
+  Typical range: £50M–£500M.
+
+Roper Technologies: Vertical SaaS in healthcare (Strata Decision, Civco Radiotherapy).
+  Target profile: healthcare operations software with high switching cost and recurring
+  revenue. Acquires assets with EBITDA margins above 30%.
+  Typical range: £100M–£1B. Pays on EBITDA, not revenue multiple.
+
+Veeva Systems: Life sciences cloud, clinical trial management, medical affairs.
+  Target profile: clinical data management, regulatory submissions, medical evidence
+  platforms used by pharma companies. Acquires to extend the Veeva Vault platform.
+  Typical range: £50M–£300M.
+
+Roche (Digital Health): Diagnostics, personalised medicine, digital biomarkers.
+  Target profile: digital diagnostics, real-world evidence platforms, AI for drug
+  development. Has acquired Flatiron Health (£1.6B) and Foundation Medicine (£1.3B).
+  Typical range: £100M–£2B.
+
+AstraZeneca / GSK (Digital Ventures): Digital therapeutics, AI drug discovery, genomics.
+  Target profile: DTx with clinical evidence in AZ/GSK therapeutic areas (oncology,
+  respiratory, cardiovascular); AI tools for drug discovery and trial design.
+  Typical range: £50M–£500M. Pharma acquirers often prefer licensing to acquisition
+  at early stage.
+
+NHS Supply Chain / NHS England: Rarely acquires companies; more commonly establishes
+  long-term framework contracts or Innovation Technology Payment designations that
+  provide guaranteed revenue to suppliers.
+
+IPO COMPARABLES — Healthtech:
+
+Veeva Systems (2013):   ARR at IPO £130M | YoY growth 95% | IPO multiple: 18x ARR
+Phreesia (2019):        Revenue at IPO £150M | YoY growth 30% | IPO multiple: 10x revenue
+Health Catalyst (2019): Revenue at IPO £160M | YoY growth 27% | IPO multiple: 8x revenue
+Doximity (2021):        Revenue at IPO £190M | YoY growth 78% | IPO multiple: 28x revenue
+Nuvation Bio (2021):    Clinical-stage; valued on pipeline, not revenue
+Invacare / Medtech note: Medtech hardware companies trade at 2–4x revenue vs 8–20x for
+  software-dominant clinical tech — software attach rate is the primary valuation driver.
+Note: UK healthtech IPOs remain rare. Primary exit route is strategic acquisition by a
+  global healthcare technology company. 2025–2026 market: clinical SaaS IPO-quality
+  companies valued at 10–18x ARR; evidence-backed DTx at 12–20x ARR post-NICE approval.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION F — KEY QUESTIONS FOR FOUNDER MEETING
+═══════════════════════════════════════════════════════════════════════
+
+01. REGULATORY APPROVAL STATUS AND PATHWAY
+QUESTION: "What is the regulatory classification of your product under MHRA guidance?
+Do you hold a UKCA mark, a CE mark, or any other device registration? If in process,
+who is your Notified Body and what stage is the conformity assessment at?"
+STRONG ANSWER: Specific MHRA device class stated; registration reference number available;
+Notified Body named with a specific conformity assessment stage and expected timeline.
+WEAK ANSWER: "We're working through the regulatory process"; "we believe we're Class I
+so we don't need a Notified Body"; describes the regulatory pathway without specifics.
+REVEALS: Whether the company can legally continue selling and whether a regulatory
+approval gap will halt commercial sales at scale.
+
+02. CLINICAL EVIDENCE — STATUS AND STANDARD
+QUESTION: "What peer-reviewed clinical evidence has been published for your product?
+What are the trial design, sample size, primary endpoints, and journal? Are you
+registered on ClinicalTrials.gov or ISRCTN for any ongoing or planned RCTs?"
+STRONG ANSWER: Cites at least one published study with journal name, sample size, and
+trial design; has a second RCT registered or in recruitment; endpoints are pre-specified
+and clinically meaningful (not proxy measures).
+WEAK ANSWER: "We have strong preliminary data" from an internal pilot; "we're planning
+to run a study"; cites unpublished conference presentations or white papers.
+REVEALS: Whether the company has the evidence required for NHS enterprise procurement
+and whether it is investing in generating it.
+
+03. REIMBURSEMENT PATHWAY — SPECIFIC ROUTE
+QUESTION: "What is the specific route by which the NHS pays for your product? Is it
+via a framework contract, a trust-level capital purchase, a specific tariff or payment
+code, an Innovation and Technology Payment designation, or NHS Innovation Accelerator
+support? Have you had written confirmation of this pathway from NHS England?"
+STRONG ANSWER: Names a specific reimbursement route with written confirmation; has either
+an ITP designation, is on a named framework, or has signed contracts that specify the
+exact budget code the trust is using.
+WEAK ANSWER: "The NHS will pay for products that work"; "we're in conversations with
+NHS England"; "trusts can fund it from their innovation budget."
+REVEALS: Whether there is a real and specific route to NHS revenue at scale or whether
+the company is operating on the assumption that a pathway will materialise.
+
+04. NHS PROCUREMENT FRAMEWORK ACCESS
+QUESTION: "Which NHS procurement frameworks are you listed on — Crown Commercial Service,
+NHS Supply Chain, G-Cloud, or category-specific frameworks? If not yet listed, what is
+the timeline and who is leading your framework application?"
+STRONG ANSWER: Named on at least one NHS procurement framework relevant to its product
+category; can describe the lot and category number; understands the process for renewal.
+WEAK ANSWER: "Most of our customers find ways to procure directly"; "we're not on a
+framework yet but it hasn't been a problem"; cannot name any procurement framework.
+REVEALS: Whether the company can scale NHS sales beyond early-adopter trusts that are
+willing to conduct standalone procurement processes.
+
+05. NHS TRUST CONTRACT INDEPENDENCE FROM CLINICAL CHAMPION
+QUESTION: "For each NHS trust you work with, who initiated the relationship? Is the
+primary contract held at trust level with institutional sign-off, or is it a departmental
+relationship driven by a specific clinician? If the key clinical contact left tomorrow,
+what would happen to the contract?"
+STRONG ANSWER: Contracts are signed at trust or procurement level; multiple clinical
+stakeholders are engaged at each site; at least two trusts adopted the product through
+an independent procurement process without a direct introduction from the same network.
+WEAK ANSWER: "Our relationships are very much driven by [named clinician]"; cannot
+describe institutional ownership of the contract; "the contract would probably continue
+but we'd need to rebuild the relationship."
+REVEALS: Whether commercial traction is institutionally embedded or is a single person's
+enthusiasm expressed as a contract.
+
+06. PATIENT DATA GOVERNANCE — CERTIFICATION STATUS
+QUESTION: "What is your DSPT certification level? Have you completed a Data Protection
+Impact Assessment for all data processing activities involving patient data? Do you have
+signed Data Sharing Agreements in place with every organisation that provides patient data?"
+STRONG ANSWER: DSPT certified at the appropriate level; DPIA completed and up-to-date;
+all data sharing agreements signed and in scope for the current data use; data minimisation
+principles applied.
+WEAK ANSWER: "We're working on the DSPT"; "we treat all data as confidential"; cannot
+confirm whether DSAs are in place for all data sources; describes GDPR compliance
+generically without addressing the NHS-specific requirements.
+REVEALS: Whether the company can access NHS patient data legally and whether a data
+governance failure could halt operations.
+
+07. CLINICAL LIABILITY INSURANCE
+QUESTION: "What product liability insurance do you hold? What is the per-claim limit
+and the annual aggregate limit? Does the policy specifically cover NHS clinical use of
+your product, including use in a clinical decision pathway? Have you disclosed your
+current product version to your insurer?"
+STRONG ANSWER: Names insurer, states per-claim and annual limits (minimum £5M for
+clinical tools); confirms NHS clinical use is explicitly covered; insurer has been
+notified of current product version.
+WEAK ANSWER: "We have general liability insurance"; cannot confirm clinical coverage;
+"we haven't had any claims so it hasn't been an issue."
+REVEALS: Whether an adverse clinical event would be financially survivable or would
+destroy the company — and whether the company understands its clinical liability exposure.
+
+08. TIME TO FIRST NHS TRUST GO-LIVE
+QUESTION: "For your existing NHS trust contracts, what was the time between first
+commercial conversation and clinical go-live? What caused the longest delays in that
+process and what would you change?"
+STRONG ANSWER: Specific timelines for each trust; demonstrates learning — subsequent
+trusts went live faster than the first; identifies specific DTAC, IG, or procurement
+steps that created delays and has a process to address them.
+WEAK ANSWER: "It varies a lot between trusts"; cannot provide specific timelines; blames
+NHS bureaucracy without demonstrating a strategy to navigate it faster.
+REVEALS: Whether the company understands the NHS implementation process as a repeatable
+operation or as an unpredictable event — the former suggests scalability, the latter does not.
+
+09. ICB / ICS RELATIONSHIP AND PIPELINE
+QUESTION: "Are you working at the ICB or ICS level, or primarily at individual trust
+level? Have any ICBs committed to funding your product for their whole system? And
+what is your strategy for moving from individual trust contracts to system-wide adoption?"
+STRONG ANSWER: Has at least one ICB-level conversation in advanced stage; can describe
+the specific ICB contact (CCIO, CMO, Director of Digital) and the nature of the
+commitment; has a clear strategy for how a trust contract becomes an ICB conversation.
+WEAK ANSWER: "We're focused on individual trusts for now"; "ICBs are on the roadmap";
+cannot describe any specific ICB relationship.
+REVEALS: Whether the company's growth strategy includes the system-level contracts that
+generate £500K–£3M+ annual values, or whether it is building a long tail of small
+departmental relationships that will be expensive to maintain.
+
+10. NICE GUIDANCE — STATUS OR PLAN
+QUESTION: "Have you engaged with NICE regarding any guidance, technology appraisal,
+or evidence standards framework review for your product? If so, what has the engagement
+produced? If not, why not — and what evidence standard would NICE require?"
+STRONG ANSWER: Has had a formal NICE engagement (even exploratory); can describe the
+evidence standard required for a technology appraisal; has a plan and timeline for
+NICE submission aligned with its RCT completion.
+WEAK ANSWER: "We'll engage with NICE when the evidence is stronger"; cannot describe
+the NICE evidence standards framework; treats NICE as a distant regulatory step rather
+than a strategic milestone.
+REVEALS: Whether the company is building evidence with NICE submission in mind or
+building a product that may never reach the evidence bar required for NHS-wide adoption.
+
+11. FUNDING AND RUNWAY TO NEXT REGULATORY OR EVIDENCE MILESTONE
+QUESTION: "What is your next major regulatory or clinical evidence milestone — and what
+is your funding runway to reach it? Is your current funding sufficient to complete the
+RCT, obtain the mark, or reach NICE submission without another fundraise?"
+STRONG ANSWER: Clear milestone (e.g., "CE mark by Q3 2026," "RCT results published Q4
+2026"); funding runway covers the milestone with 3+ months to spare; has modelled the
+cost of the milestone with a contingency.
+WEAK ANSWER: "We have 12 months of runway and we're working on multiple milestones";
+cannot confirm whether current funding covers the next milestone; describes fundraising
+as "ongoing."
+REVEALS: Whether the company is at risk of running out of money before reaching the
+evidence or regulatory milestone that its valuation is based on — a common and
+catastrophic failure mode in capital-intensive healthtech.
+
+12. AI MODEL VALIDATION AND CLINICAL SAFETY
+QUESTION: "If your product uses AI or machine learning to generate clinical recommendations
+or outputs: how was the model validated? On what patient population? Has it been tested
+for performance across different demographic groups to detect bias? Who is the named
+responsible person under SMCR for the AI's clinical outputs?"
+STRONG ANSWER: External clinical validation study with a demographically diverse patient
+population; bias testing completed and results disclosed; named clinical safety officer;
+MHRA AIaMD guidance applied.
+WEAK ANSWER: "The model performs well on our training data"; validated internally only;
+"we use a third-party AI model so the validation is their responsibility"; cannot name
+a responsible person for AI clinical outputs.
+REVEALS: Whether the company has addressed the clinical safety requirements for AI in
+healthcare — a regulatory and liability exposure that is increasingly on the MHRA's
+enforcement agenda.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION G — REGULATORY LANDSCAPE
+═══════════════════════════════════════════════════════════════════════
+
+MHRA MEDICAL DEVICE CLASSIFICATION (UK — POST-BREXIT):
+
+The UK operates its own medical device regulatory framework post-Brexit, implemented
+through the Medical Devices Regulations 2002 (as amended by SI 2019/791 and subsequent
+statutory instruments). Key classifications:
+
+Class I (Low Risk): General medical devices with no invasive or measuring function.
+  Examples: wound dressings, stethoscopes, most general wellness devices.
+  Registration: self-declaration; MHRA registration required from 1 July 2023.
+  Notified Body: not required for Class I (except sterile or measuring devices).
+
+Class IIa (Low–Medium Risk): Devices used in diagnosis, monitoring, or temporary
+  implantation. Examples: blood pressure monitors, dental drills, contact lenses.
+  Registration: requires UK Approved Body conformity assessment.
+
+Class IIb (Medium–High Risk): Devices with higher potential for harm, including most
+  Software as a Medical Device that influences clinical decisions.
+  Examples: AI diagnostic software, blood glucose monitors, infusion pumps.
+  Registration: requires UK Approved Body conformity assessment; clinical investigation
+  data typically required.
+
+Class III (Highest Risk): Devices that sustain life, are implanted long-term, or carry
+  highest risk of harm. Examples: pacemakers, joint replacements, IVDs for high-risk
+  conditions.
+  Registration: full clinical evidence package required; MHRA/PRA approval pathway.
+
+Software as a Medical Device (SaMD):
+  MHRA applies a specific decision framework for software. Software is a medical device
+  if it influences a clinical decision that could harm a patient if wrong.
+  AI as a Medical Device (AIaMD): MHRA published specific guidance (2024) requiring:
+  — Pre-market: clinical validation, transparent performance metrics, bias assessment.
+  — Post-market: continuous performance monitoring, adverse event reporting.
+  — Accountability: named responsible person for each AI clinical output under SMCR.
+  Alex flag: any AI tool used in clinical decision-making must be assessed against
+  AIaMD guidance regardless of its current regulatory classification.
+
+CE MARK VS UKCA MARK TRANSITION:
+  Post-Brexit, UK introduced UKCA marking for medical devices sold in Great Britain.
+  Current transitional provisions (as of April 2026):
+  — CE marks issued by EU Notified Bodies are accepted in Great Britain until 30 June 2030.
+  — After 30 June 2030, UKCA marking from a UK Approved Body will be required.
+  — Northern Ireland: CE marking remains the requirement (NI Protocol / Windsor Framework).
+  — EU sales: UK companies selling into the EU still require CE marking from an EU Notified Body.
+  Practical implication: a company targeting both UK and EU markets needs both UKCA
+  (or transitional CE) for the UK and CE for EU. Two Notified Body processes.
+
+FDA PATHWAYS (FOR US EXPANSION):
+  510(k) Clearance: demonstrates substantial equivalence to a predicate device. Most
+    common pathway for Class II medical devices. Timeline: 3–12 months.
+  De Novo Request: for novel devices with no predicate. Creates a new device classification.
+    Timeline: 12–24 months.
+  PMA (Pre-Market Approval): required for Class III devices. Full clinical evidence package.
+    Timeline: 2–5 years. Most expensive and rigorous pathway.
+  FDA Breakthrough Device Designation: expedited review for devices addressing serious
+    conditions. Reduces FDA review timeline by 50%+. Must apply and be granted.
+  Alex flag: a UK healthtech company targeting the US market with a Class IIb or III
+  device should have FDA clearance or a clear PMA timeline as a condition of investment.
+  A company that mentions "US expansion" without a named FDA pathway is not planning
+  a US launch — it is aspirationally discussing one.
+
+NHS DIGITAL TECHNOLOGY ASSESSMENT CRITERIA (DTAC):
+  DTAC is the NHS England framework for assessing digital health technologies before
+  NHS procurement. Five domains: clinical safety, data protection, technical security,
+  interoperability, usability and accessibility.
+  Mandatory for most NHS trust and ICB procurement decisions above local thresholds.
+  Completion timeline: 3–6 months for a company with existing clinical evidence and
+    information governance documentation.
+  Alex flag: a company targeting NHS procurement that has not begun DTAC should add
+    6+ months to every projected NHS contract signing timeline.
+
+NICE EVIDENCE STANDARDS FRAMEWORK (ESF):
+  NICE categorises evidence requirements for digital health technologies into four tiers:
+  Tier A: First in class or low risk — feasibility and acceptability evidence required.
+  Tier B: Novel technologies with moderate claims — proof of concept, comparative data.
+  Tier C: Technologies making clinical outcome claims — RCT-level evidence required,
+    peer-reviewed publication, health economic model.
+  Tier D: Technologies that should replace current standard of care — systematic review
+    level evidence required.
+  Most clinical decision support and DTx products target Tier C or D.
+  Alex flag: a company pitching a Tier C or D clinical claim without at least one RCT
+    in progress is not on a realistic NICE approval trajectory within a 3-year investment horizon.
+
+DATA SECURITY AND PROTECTION TOOLKIT (DSPT):
+  Mandatory for all organisations accessing NHS patient data.
+  Three certification levels: Approaching Standards | Standards Met | Standards Exceeded.
+  NHS trusts cannot share patient data with third-party companies that have not achieved
+  at least "Approaching Standards" status.
+  Annual renewal: DSPT must be re-assessed and resubmitted each year.
+  Alex flag: any company claiming to work with NHS patient data that cannot confirm
+    their current DSPT status is operating outside NHS data governance requirements.
+
+PATIENT DATA GOVERNANCE — SPECIAL CATEGORY DATA:
+  Under GDPR and Data Protection Act 2018, health data is special category data.
+  Requirements beyond standard GDPR:
+  — Explicit consent or another specific lawful basis (often substantial public interest
+    or medical purpose under Schedule 1, DPA 2018).
+  — Data Protection Impact Assessment (DPIA) is mandatory for large-scale processing
+    of health data.
+  — Data minimisation: only data necessary for the stated purpose may be processed.
+  — NHS Data Sharing Agreements: required before any patient data is shared between
+    organisations. Institution-specific — not transferable.
+  — National Data Opt-Out: patients who have opted out of NHS data sharing for research
+    must be excluded from datasets. Companies must query and apply the opt-out register.
+  Alex flag: a health data company that does not describe its National Data Opt-Out
+    compliance is not meeting NHS data governance requirements.
+
+CQC REGISTRATION:
+  Care Quality Commission registration is required for providers of regulated activities
+  in England — including clinical care, diagnostics, and treatment.
+  Applies to: providers of clinical services (not software vendors, unless the software
+    constitutes the clinical service itself).
+  Digital-physical hybrid models: companies providing clinical consultations via app
+    or remote diagnostic services may be CQC-registerable.
+  Alex flag: any company providing clinical consultations, treatment recommendations,
+    or diagnostic services directly to patients — even digitally — should clarify
+    its CQC registration status.
+
+AI AS MEDICAL DEVICE (AIaMD) — MHRA GUIDANCE (2024):
+  MHRA's AIaMD framework applies to any AI system used in clinical decision-making.
+  Key requirements:
+  — Pre-deployment validation on a patient population representative of the intended
+    clinical use population.
+  — Bias and fairness testing across protected characteristics (age, sex, ethnicity).
+  — Post-market surveillance: continuous monitoring of AI performance in deployment;
+    adverse event reporting to MHRA.
+  — Transparency: clinicians must be informed they are using an AI tool; the AI must
+    not present as a human clinical judgement.
+  — Explainability: the reasoning behind AI outputs must be explainable to clinicians
+    in terms they can evaluate.
+  EU AI Act (applicable to UK companies with EU operations): AI used in medical devices
+    is classified as HIGH RISK. Conformity assessment, human oversight, accuracy testing,
+    and EU database registration are all required. In force from August 2026 for
+    high-risk AI providers.
+
+═══════════════════════════════════════════════════════════════════════
+END — ALEX SECTOR INTELLIGENCE LIBRARY — HEALTHTECH / MEDTECH v1.0
+═══════════════════════════════════════════════════════════════════════

@@ -1,0 +1,1191 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — SECTOR INTELLIGENCE LIBRARY
+Climate / Impact — Version 1.0
+Technology and business models addressing climate change and sustainability.
+Built: April 2026.
+Apply this library to every deal classified as Climate, CleanTech, or Impact.
+═══════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════
+SECTION A — SECTOR IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════
+
+PRIMARY CLASSIFICATION SIGNALS (any one = Climate / Impact):
+— Product or service directly reduces, avoids, removes, or measures greenhouse gas
+  emissions — or addresses a related environmental or social challenge
+— Revenue depends at least partially on carbon pricing, government energy subsidies,
+  green procurement mandates, sustainability reporting regulations, or impact investment
+— Company explicitly describes its primary mission in environmental or social terms
+  alongside (or instead of) purely commercial terms
+— Exit pathway includes infrastructure funds, energy majors, or mission-aligned
+  investors (alongside or instead of traditional technology acquirers)
+
+THE MOST IMPORTANT DISTINCTION ALEX MUST MAKE FIRST — TYPE A vs TYPE B:
+
+TYPE A — TECHNOLOGY COMPANY IN CLIMATE:
+The product is primarily software, data, or a technology platform that happens to
+address a climate or sustainability problem. Unit economics are driven by software
+economics: high gross margins, low marginal cost, scalable without proportional
+capital increase. Appropriate analytical framework: SaaS Library or relevant sector
+library alongside this Climate Library.
+Examples: Corporate carbon accounting SaaS, climate risk data platform, grid
+optimisation software, precision agriculture analytics, EV fleet management software.
+Valuation framework: revenue multiple (8–25x ARR depending on growth and NRR).
+
+TYPE B — INFRASTRUCTURE OR PROJECT COMPANY IN CLIMATE:
+The product requires physical asset deployment — energy assets, carbon sequestration
+land, hardware installations, manufacturing capacity. Unit economics are driven by
+asset returns: lower gross margins, high upfront capital, long payback periods,
+predictable long-term cash flows once deployed. Appropriate analytical framework:
+project finance and infrastructure fund analysis alongside this Climate Library.
+Examples: EV charging network operator, solar farm developer, battery storage project,
+nature-based carbon credit developer, green hydrogen production facility.
+Valuation framework: asset value, EBITDA multiple, or discounted cash flow on the
+contracted revenue stream — NOT a revenue multiple.
+
+CRITICAL MISTAKE TO AVOID: A Type B infrastructure company that has been pitched
+to investors at a SaaS revenue multiple will experience severe multiple compression
+at Series B when institutional infrastructure investors apply the correct framework.
+A company raising at 15x revenue on the basis of "climate SaaS" that is actually an
+infrastructure deployment business will be valued at 5–8x EBITDA (or 1–3x revenue)
+by the infrastructure investor who eventually needs to fund it at scale. Identify this
+mismatch at the earliest possible stage.
+
+HOW TO DISTINGUISH TYPE A FROM TYPE B IN A SUBMISSION:
+Type A signals: gross margin above 60%, revenue scales without proportional asset
+  deployment, customers are enterprises paying a subscription or data fee, company
+  does not own the physical asset generating the impact.
+Type B signals: gross margin below 40%, revenue scales with physical deployment (more
+  panels, more chargers, more land), company deploys or owns physical assets, payback
+  period is measured in years not months, blended finance or project debt is in the
+  capital structure.
+Mixed: many climate companies have both elements. A building energy management SaaS
+  (Type A) that also installs hardware under a managed service contract (Type B)
+  should be assessed on a disaggregated basis: what are the software economics and what
+  are the hardware deployment economics?
+
+MISCLASSIFICATION WARNINGS:
+— A company selling ESG consulting services is a professional services firm, not a
+  climate technology company — it does not belong in this library unless it has a
+  proprietary technology or data platform
+— A company primarily earning revenue from commodity carbon credit trading without
+  originating or verifying the credits is a financial intermediary — apply Fintech
+  Library for the trading business; apply this library for any origination or
+  measurement technology
+— A company whose "climate" positioning is purely marketing — without a measurable
+  impact metric and a mechanism that generates it — is not a climate company
+
+SUB-CATEGORY IDENTIFICATION — SIGNALS FROM SUBMISSION:
+
+1. CLEAN ENERGY TECHNOLOGY
+Signals: product generates, stores, distributes, or optimises energy; submission
+references energy output (MWh), efficiency improvements, levelised cost of energy
+(LCOE), or grid integration; revenue may include power purchase agreements (PPAs),
+energy-as-a-service contracts, government Contracts for Difference (CfD), or hardware
+sale; competitive set includes incumbent energy companies, grid operators, or clean
+energy hardware manufacturers.
+Type A examples: Grid optimisation software, virtual power plant platforms, energy
+  trading algorithms, battery management software, demand response SaaS.
+Type B examples: Battery storage deployment companies, solar farm developers, offshore
+  wind project companies, hydrogen production facilities, grid infrastructure operators.
+Key metric split: Type A — ARR, NRR, margin. Type B — installed capacity (MW/MWh),
+  cost per kWh, LCOE, capacity factor, contracted revenue under PPA or CfD.
+
+2. CARBON MARKETS AND MEASUREMENT
+Signals: company generates, verifies, registers, trades, or tracks carbon credits or
+carbon emissions; submission references tonnes of CO2 equivalent (tCO2e), carbon
+credit price (£/tonne), or corporate net-zero commitment pipelines; key standards
+referenced include Verra VCS, Gold Standard, ICVCM Core Carbon Principles, or EU ETS
+/ UK ETS compliance credits.
+Type A examples: Corporate carbon accounting SaaS, carbon credit registry platforms,
+  emissions measurement and reporting tools, MRV (Measurement, Reporting, Verification)
+  software.
+Type B examples: Nature-based carbon credit developers (forestry, soil carbon, wetland
+  restoration), engineered carbon removal projects (DACCS, BECCS), blue carbon projects.
+Key risk: voluntary carbon credit quality is a systemic risk — Guardian/Financial Times
+  investigations in 2023 challenged the additionality of a significant proportion of
+  voluntary credits, triggering corporate buyer disengagement. Any carbon company must
+  have independently verified additionality.
+
+3. SUSTAINABLE FOOD AND AGRICULTURE
+Signals: product reduces the environmental impact of food production or enables
+sustainable agriculture; submission references carbon intensity per kg of food produced,
+water usage reduction, land use efficiency, or alternative protein production cost;
+competitive set includes agricultural technology companies, food manufacturers, or
+upstream food suppliers.
+Type A examples: Precision agriculture analytics, food waste reduction platforms, supply
+  chain sustainability tracking, crop disease prediction.
+Type B examples: Vertical farming facilities, alternative protein manufacturing,
+  insect protein production, cultivated meat bioreactors.
+Key risk: food production economics are notoriously difficult to improve — vertical
+farming companies have consistently struggled to achieve gross margins that justify
+the capital intensity relative to conventional agriculture. Apply extreme scrutiny to
+any vertical farming deal claiming imminent unit economics parity with conventional methods.
+
+4. CIRCULAR ECONOMY AND WASTE
+Signals: company extends product lifecycles, enables material recovery, or reduces
+waste generation; submission references materials diverted from landfill (tonnes),
+recycling rate improvements, product-as-a-service economics, or circular supply chain
+integration; competitive set includes waste management companies, recycling operators,
+or materials recovery businesses.
+Type A examples: Waste management optimisation software, reverse logistics platforms,
+  materials marketplace for recycled inputs, product lifecycle extension SaaS.
+Type B examples: Advanced recycling technology plants, chemical recycling facilities,
+  take-back and refurbishment operations.
+Key risk: circular economy companies face competition from the low cost of virgin
+materials — the economics of recycling depend on a spread between the cost of recycled
+material and the price of virgin materials, which compresses when oil and commodity
+prices are low.
+
+5. GREEN BUILDINGS AND CONSTRUCTION
+Signals: product reduces energy consumption in buildings, enables sustainable
+construction, or improves the environmental performance of built assets; submission
+references energy use intensity (kWh/m²/year), carbon emissions per m² of construction,
+heat pump installation rates, or building performance certificates; buyer is typically
+a property owner, facilities manager, construction company, or local authority.
+Type A examples: Building energy management SaaS, HVAC optimisation platforms, smart
+  meter data analytics, retrofit planning software, embodied carbon measurement.
+Type B examples: Heat pump installation operations, building retrofit services,
+  onsite energy generation and storage assets.
+Key risk: the UK building retrofit market is highly policy-dependent — the UK
+Boiler Upgrade Scheme, EPCs (Energy Performance Certificates), and MEES (Minimum
+Energy Efficiency Standards) for rental properties drive the market. Policy reversal
+or underfunding of retrofit grants directly suppresses demand.
+
+6. SUSTAINABLE MOBILITY
+Signals: product electrifies transport, optimises logistics for lower emissions, or
+enables sustainable mobility infrastructure; submission references CO2 per km, charge
+point count or utilisation rate, EV fleet conversion rate, or electric vehicle range
+and efficiency; buyer is a fleet operator, local authority, property developer, or
+individual EV owner; competitive set includes established charge point operators,
+fleet management software vendors, or automotive OEMs.
+Type A examples: EV fleet management software, route optimisation for emissions reduction,
+  EV charging network management software, logistics sustainability analytics.
+Type B examples: EV charging network operators, hydrogen refuelling infrastructure,
+  electric bus fleet operators.
+Key risk: EV charging infrastructure economics depend on utilisation — a charging
+network with below 20% utilisation is losing money on each charger. The UK public
+charging infrastructure rollout is years behind government targets, creating both
+opportunity and risk for companies dependent on public charging network density.
+
+7. CLIMATE DATA AND ANALYTICS
+Signals: company provides data, analytics, or intelligence on climate risk, emissions,
+biodiversity, or sustainability performance; buyer is a financial institution, a
+corporation with sustainability reporting obligations, a government body, or an
+infrastructure owner; revenue is SaaS subscription or data licence; submission
+references data sets covered (physical climate risk models, satellite imagery,
+corporate emissions databases); competitive set includes Moody's ESG Solutions,
+MSCI ESG, Sustainalytics, or specialist climate data providers.
+Type A always: Climate data and analytics companies are Type A technology companies.
+  Apply SaaS Library benchmarks alongside this Climate Library.
+Key risk: regulatory tailwinds (CSRD, TCFD mandatory reporting, TNFD) drive demand
+but also create a commoditisation risk — as reporting requirements standardise, the
+data required becomes more uniform, and pricing power for niche data providers
+is competed away by larger platforms with broader data sets.
+
+8. IMPACT TECH (BROAD)
+Signals: company addresses a social or environmental challenge beyond pure climate —
+water scarcity, biodiversity loss, financial inclusion, access to education or
+healthcare in underserved markets; submission explicitly describes impact metrics
+alongside financial metrics; revenue may include blended finance (public capital +
+private capital), development finance institution investment, or impact-first contracts.
+Type A or B: impact tech companies may be either — water treatment technology with
+  recurring subscription revenue (Type A) or water infrastructure deployment (Type B).
+Key risk: the impact investor market is smaller and more concentrated than mainstream
+  VC — exit options are limited to strategic acquirers with a genuine impact mandate
+  or specialist impact PE funds. Ensure the exit pathway is credible before assessing
+  the investment thesis.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION B — STAGE-SPECIFIC METRIC BENCHMARKS
+═══════════════════════════════════════════════════════════════════════
+
+Format: STRONG (top quartile) | ACCEPTABLE (median) | CONCERN (flag) | FAIL (disqualifying)
+
+NOTE: Climate benchmarks operate on a dual framework. Every climate company must be
+assessed on both FINANCIAL metrics and IMPACT metrics simultaneously. A company with
+excellent financial metrics and unverified impact claims is a greenwashing risk.
+A company with verified impact but broken unit economics is a charity, not an investment.
+Both frameworks must be satisfied for a PRIORITY REVIEW recommendation.
+
+──────────────────────────────────────────────────────────────────────
+FINANCIAL METRICS — TYPE A (TECHNOLOGY / SOFTWARE):
+──────────────────────────────────────────────────────────────────────
+
+Apply the SaaS Library benchmarks (Section B of SaaS Library) for ARR, NRR, gross
+margin, CAC payback, and burn multiple. Climate context adjustments:
+
+Gross margin adjustment for climate SaaS:
+  Climate data / analytics:    STRONG >75% | ACCEPTABLE 60–75% | CONCERN <60%
+  Grid / energy SaaS:          STRONG >70% | ACCEPTABLE 55–70% | CONCERN <55%
+  ESG reporting platforms:     STRONG >75% | ACCEPTABLE 65–75% | CONCERN <65%
+
+Government dependency adjustment:
+  If more than 30% of ARR is from government contracts (not private sector customers),
+  apply a government dependency flag. Government contracts are valuable but represent
+  a concentrated revenue risk — single procurement decisions can add or remove large
+  ARR chunks in a single quarter.
+
+──────────────────────────────────────────────────────────────────────
+FINANCIAL METRICS — TYPE B (INFRASTRUCTURE / PROJECT):
+──────────────────────────────────────────────────────────────────────
+
+For Type B companies, replace standard SaaS metrics with:
+
+Installed or contracted capacity:
+  Energy storage / generation:
+    Seed:     STRONG >5 MW deployed or contracted | ACCEPTABLE 1–5 MW | CONCERN <1 MW
+    Series A: STRONG >20 MW deployed or contracted | ACCEPTABLE 5–20 MW | CONCERN <5 MW
+    Series B: STRONG >100 MW deployed or contracted | ACCEPTABLE 30–100 MW | CONCERN <30 MW
+
+Revenue per unit of output:
+  Solar / wind (contracted):    Revenue per MWh under PPA: STRONG £40–80/MWh (CfD) | CONCERN: no contracted offtake
+  Battery storage:              Revenue per MWh cycled: STRONG £50–120/MWh | CONCERN below grid arbitrage threshold
+  EV charging (per charger):    Revenue per charger per day: STRONG >£25 | ACCEPTABLE £10–25 | CONCERN <£10
+
+Gross margin (hardware deployment + installation):
+  Clean energy hardware:        STRONG >35% | ACCEPTABLE 20–35% | CONCERN 10–20% | FAIL <10%
+  EV charging (hardware + ops): STRONG >30% | ACCEPTABLE 15–30% | CONCERN <15%
+  Note: Type B gross margins are structurally lower than Type A. The investment
+  thesis for Type B is long-term contracted cash flows, not margin expansion.
+
+Levelised Cost of Energy (LCOE) — for energy generation companies:
+  STRONG: LCOE below grid parity (below £60/MWh in UK 2025–2026)
+  ACCEPTABLE: LCOE approaching grid parity with a credible cost reduction path
+  CONCERN: LCOE significantly above grid parity with no scale-driven improvement
+  FAIL: LCOE above grid parity with subsidies included in the calculation
+
+Payback period (project-level):
+  STRONG <7 years | ACCEPTABLE 7–12 years | CONCERN 12–20 years | FAIL >20 years
+  Note: infrastructure investors (Macquarie, Brookfield) will fund 20-year payback
+  projects if the cash flow is contracted and the counterparty is creditworthy.
+  Venture capital investors will not — the payback period is incompatible with a
+  7–10 year fund life. Align the payback period with the investor type.
+
+Subsidy dependency ratio (revenue from subsidies / total revenue):
+  STRONG <20% | ACCEPTABLE 20–40% | CONCERN 40–60% | FAIL >60% with a subsidy cliff date
+  Note: UK energy companies receiving Contracts for Difference (CfD) have contracted
+  government revenue for 15 years — this is acceptable subsidy dependency because it is
+  long-term and legally contracted. A company dependent on an annual discretionary
+  government grant programme is a FAIL condition.
+
+──────────────────────────────────────────────────────────────────────
+IMPACT METRICS — ALL CLIMATE COMPANIES:
+──────────────────────────────────────────────────────────────────────
+
+CO2 avoided or removed (tonnes per year):
+  Define whether the metric is avoided (emissions not produced) or removed
+  (emissions taken from atmosphere). These are different and should not be conflated.
+  STRONG: independently verified by a recognised standard (Verra, Gold Standard, ICVCM,
+    or equivalent for removal projects)
+  ACCEPTABLE: third-party verification in progress with a credible verifier named
+  CONCERN: self-reported without methodology disclosure
+  FAIL: company cannot quantify its CO2 impact at all
+
+Cost per tonne of CO2 avoided or removed:
+  Nature-based removal:          STRONG <£20/tonne | ACCEPTABLE £20–50 | CONCERN £50–150 | FAIL >£150
+  Engineered removal (DACCS):    STRONG <£150/tonne | ACCEPTABLE £150–400 | CONCERN >£400
+    Note: DACCS is currently £300–500/tonne commercially; below £150 would represent
+    a major breakthrough. Apply scepticism to any DACCS company claiming sub-£100/tonne
+    without peer-reviewed cost verification.
+  Technology deployment (avoided): STRONG <£10/tonne | ACCEPTABLE £10–30 | CONCERN >£30
+
+Additionality test (would this emissions reduction have happened anyway?):
+  STRONG: additionality verified by independent third party using approved methodology;
+    counterfactual baseline documented and peer-reviewed
+  ACCEPTABLE: additionality assessment in progress; methodology disclosed
+  CONCERN: additionality claimed without methodology; "we would not exist without investment"
+    is not an additionality argument
+  FAIL: no additionality consideration disclosed
+
+Permanence assessment (how long does the impact last?):
+  Most relevant for: nature-based carbon credits, soil carbon, forest protection.
+  STRONG: 100-year permanence buffer with insurance or equivalent protection against
+    reversal (wildfire, disease, policy change in host country)
+  ACCEPTABLE: 25–100 year permanence with documented risk buffer
+  CONCERN: permanence below 25 years or no reversal buffer
+  FAIL: permanence not addressed for a nature-based or sequestration product
+
+Impact verification standard:
+  STRONG: Verra VCS, Gold Standard, ICVCM Core Carbon Principles, or equivalent
+    (for carbon markets); GRI, SASB, or TNFD (for broader impact reporting)
+  ACCEPTABLE: ISO 14064 or equivalent emissions accounting standard
+  CONCERN: proprietary measurement methodology with no external standard alignment
+  FAIL: self-reported with no methodology disclosed
+
+CARBON MARKET PRICE BENCHMARKS (April 2026 reference):
+  EU ETS (compliance): approximately £55–65/tonne CO2 (subject to market volatility)
+  UK ETS (compliance): approximately £35–45/tonne CO2 (subject to market volatility)
+  Voluntary high-quality (ICVCM-aligned): £15–35/tonne CO2
+  Voluntary standard quality: £3–12/tonne CO2
+  Nature-based (REDD+/forest): £5–20/tonne CO2 (quality-dependent)
+  Engineered removal (biochar, enhanced weathering): £50–150/tonne CO2
+  DACCS (direct air capture): £300–500/tonne CO2 (commercially deployed)
+  Note: voluntary carbon market prices fell significantly in 2023 following the
+  quality crisis. A business plan assuming £25/tonne voluntary credits should be
+  stress-tested at £8/tonne to assess viability under a market dislocation scenario.
+
+──────────────────────────────────────────────────────────────────────
+VALUATION BENCHMARKS — Climate (2025–2026 market):
+──────────────────────────────────────────────────────────────────────
+
+Type A (Climate SaaS / Data):
+  ARR <£1M:    £3–8M enterprise value | SaaS Library benchmarks apply
+  ARR £1–5M:   8–20x ARR | Premium for regulatory tailwind + strong NRR
+  ARR £5M+:    8–18x ARR | Market normalisation from 2021 peak
+
+Type B (Infrastructure / Project):
+  Pre-revenue project:  Valued on contracted capacity + cost to completion
+  Operational asset:    6–12x EBITDA (contracted cash flows) | 1.5–3x replacement cost
+  Portfolio:            Infrastructure funds apply 5–10% target IRR for contracted
+                        clean energy assets; higher for development-stage projects
+
+Carbon project (Nature-based):
+  Valued on: (annual credit issuance × expected credit price) ÷ discount rate + option value
+  Typical: £10–30M per 100,000 tCO2/year credit issuance potential (quality-dependent)
+
+Premium drivers: regulatory tailwind (CSRD, UK ETS expansion, CfD allocation); contracted
+  offtake from creditworthy counterparty; independently verified impact metrics;
+  subsidy independence demonstrated.
+Discount factors: policy dependency without contracted protection; unverified impact;
+  Type B business priced as Type A; single offtaker concentration.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION C — SECTOR-SPECIFIC RED FLAGS
+═══════════════════════════════════════════════════════════════════════
+
+01. POLICY DEPENDENCY — BUSINESS MODEL FAILS WITHOUT A SPECIFIC SUBSIDY
+SIGNAL: The company's financial model is viable only because of a specific government
+subsidy, tax credit, or mandate — and that support either has a stated end date, is
+subject to annual budget review, or is under active political discussion for reform.
+The company has not modelled a scenario where the subsidy is reduced by 50% or removed.
+SEVERITY: CRITICAL
+WHAT IT MEANS: A business model that requires a government subsidy to be economically
+viable is not a business model — it is a beneficiary of government spending. When that
+spending changes — as UK heat pump subsidies, solar feed-in tariffs, and EV purchase
+grants all have within the last decade — the business case evaporates. Every climate
+company built on a subsidy must demonstrate the point at which it becomes subsidy-
+independent. If no such point exists in the financial model, this is a PASS.
+VERIFICATION: Ask: "If the [specific subsidy] was reduced by 50% tomorrow, would your
+business model remain viable? At what carbon or energy price does your business break
+even without any government support? When does your model show subsidy independence?"
+
+02. CARBON CREDIT QUALITY — ADDITIONALITY AND PERMANENCE NOT VERIFIED
+SIGNAL: Company is originating, selling, or building a marketplace for voluntary carbon
+credits, but the additionality of the credits (would the emissions reduction have
+happened without the project?) and the permanence (how long does the sequestration last?)
+have not been verified by an independent third party using a recognised standard.
+SEVERITY: CRITICAL
+WHAT IT MEANS: The voluntary carbon market was significantly damaged in 2023 when
+investigative journalism revealed that a substantial proportion of REDD+ forest credits
+had no verified additionality — the forests being protected were not at risk of deforestation
+without the credit programme. Corporate buyers who had retired these credits reversed their
+net-zero claims, suffered reputational damage, and withdrew from the voluntary market.
+A carbon credit without verified additionality is not worth its stated tonne price.
+Any investor in a carbon company is exposed to the same credibility risk.
+VERIFICATION: Ask: "Which third-party verifier has assessed the additionality of your
+credits? Which standard are you using (Verra VCS, Gold Standard, ICVCM Core Carbon
+Principles)? What is the permanence period and reversal buffer for your project type?"
+
+03. GREENWASHING RISK — CLAIMS NOT SUPPORTED BY VERIFIED DATA
+SIGNAL: Company's marketing materials, website, or investor deck make specific
+quantified impact claims ("removed 500,000 tonnes of CO2," "reduced customer
+emissions by 40%") without disclosing the measurement methodology, the verifier,
+or the boundary of what is included in the figure.
+SEVERITY: HIGH
+WHAT IT MEANS: Greenwashing is an active enforcement target for the CMA (under DMCCA
+2024), the FCA (for financial products), the EU (Corporate Sustainability Reporting
+Directive), and the ASA (advertising claims). A company that makes unsubstantiated
+impact claims risks: CMA enforcement action (fines up to 10% of global turnover),
+reputational damage when claims are challenged, and corporate buyer withdrawal when
+due diligence reveals the claims cannot be substantiated.
+VERIFICATION: For each quantified impact claim in the submission, ask: "Who measured
+this figure? What methodology was used? What is the system boundary — does it include
+Scope 1, 2, and 3 emissions? Has the figure been independently verified?"
+
+04. HARDWARE GROSS MARGIN BELOW 20% — NO PATH TO IMPROVEMENT
+SIGNAL: Hardware-heavy climate company has gross margin below 20% at current
+deployment scale. The financial model does not demonstrate how gross margin will
+exceed 35% at 10x deployment volume. The primary cost driver is a commodity material
+(lithium, silicon, steel, copper) that the company cannot control or substitute.
+SEVERITY: HIGH
+WHAT IT MEANS: A gross margin below 20% with no improvement path means the business
+cannot generate sufficient profit to fund sales, R&D, and overhead while remaining
+solvent. This is not a scale problem — it is a structural economics problem. Apply the
+Deep Tech Library's BoM learning curve analysis: is cost declining with volume? If
+not, why not, and what changes at 10x volume to change this?
+VERIFICATION: Request the BoM cost breakdown. Calculate gross margin at current volume
+and project at 10x volume. Ask: "What is the primary cost driver in your hardware?
+What is your target gross margin at scale, and what specific manufacturing or design
+changes will achieve it?"
+
+05. SINGLE OFFTAKER — ONE BUYER FOR ALL OUTPUT
+SIGNAL: The company's revenue is entirely or predominantly from a single corporate
+offtake agreement, government contract, or energy purchase agreement. The submission
+presents this as evidence of commercial validation without acknowledging the
+concentration risk.
+SEVERITY: HIGH
+WHAT IT MEANS: Single-offtaker concentration in a climate company is identical to
+customer concentration in a SaaS business — except the consequences of loss are more
+severe because the contracted revenue stream is often the basis for project financing.
+If the offtaker defaults, changes its sustainability policy, or exercises a break clause,
+the project finance structure may trigger early repayment obligations simultaneously.
+VERIFICATION: Ask: "What percentage of your revenue comes from your largest offtake
+agreement? What is the term and break clause structure? If that offtaker cancelled the
+agreement today, what would happen to your ability to service your project debt?"
+
+06. SUBSIDY CLIFF — CURRENT ECONOMICS DEPEND ON SUPPORT WITH A KNOWN END DATE
+SIGNAL: A specific government subsidy, feed-in tariff, or tax credit that the company
+depends on has a stated end date (e.g., UK Boiler Upgrade Scheme annual budget,
+Contracts for Difference auction round, US IRA production tax credit sunset). The
+company's financial model does not show viability beyond the subsidy end date, and
+no concrete plan exists for the transition.
+SEVERITY: HIGH
+WHAT IT MEANS: The Subsidy Cliff failure pattern (Section D) kills climate companies
+at predictable intervals. Unlike policy dependency (Red Flag 01, which is about
+whether the business works without subsidies at all), the Subsidy Cliff is specifically
+about a known event horizon. The company is building value that will be partially or
+fully destroyed on a specific date.
+VERIFICATION: Ask: "What subsidies is your business currently receiving? When do each
+of those subsidies end or come up for renewal? What is your business plan for the 12
+months following each subsidy end date?"
+
+07. TECHNOLOGY NOT PROVEN AT SCALE — TRL TOO LOW FOR CAPITAL DEPLOYMENT
+SIGNAL: Company is asking for Series A capital to deploy assets or scale production
+of a technology that is at TRL 5–6 — demonstrated in laboratory or pilot conditions
+but not yet proven in operational deployment at commercial scale. The capital is
+intended for commercial deployment, not further technology development.
+SEVERITY: HIGH
+WHAT IT MEANS: Deploying large amounts of capital into unproven technology is venture
+risk masquerading as infrastructure risk. Infrastructure investors expect TRL 9 before
+deployment capital is invested. Venture investors expect TRL 6–7 as a condition of
+Series A. A climate company asking for Series A deployment capital against TRL 5–6
+technology is asking investors to accept both technology risk and deployment risk
+simultaneously — a combination that rarely ends well.
+VERIFICATION: Apply TRL assessment (Deep Tech Library, Section B). Ask: "What is your
+TRL? Has the technology been demonstrated in conditions representative of your target
+deployment environment? What are the outstanding technical risks at your current TRL?"
+
+08. LONG PAYBACK CREATES INVESTOR-MODEL MISMATCH
+SIGNAL: Climate company's unit payback period exceeds 12 years but the company is
+raising from venture capital funds with a 7–10 year fund life. The company is structured
+as a growth-stage technology business but the underlying asset returns timeline is
+incompatible with the investor base being targeted.
+SEVERITY: HIGH
+WHAT IT MEANS: This is the Infrastructure Company Mispositioned as a Tech Company
+failure pattern. A venture fund cannot wait 15 years for its investment to generate
+returns. A climate company that belongs in an infrastructure fund cannot raise the
+necessary capital from VCs because the asset life exceeds the fund life. The misalignment
+leads to a permanent underfunding problem — too early for infrastructure funds, wrong
+structure for venture funds.
+VERIFICATION: Calculate the payback period from the submission data. If it exceeds
+10 years, ask: "Have you had conversations with infrastructure funds or development
+finance institutions about your capital structure? Have you considered project debt or
+blended finance to separate the infrastructure returns from the technology returns?"
+
+09. IMPACT NOT INDEPENDENTLY VERIFIED
+SIGNAL: Company claims a specific impact outcome (CO2 reduced, water treated,
+biodiversity improved) in its submission and investor materials but the measurement
+methodology has not been reviewed by any external party. The company self-reports
+its impact using its own model.
+SEVERITY: HIGH
+WHAT IT MEANS: Unverified impact claims are increasingly a commercial risk, not just
+a reputational one. Institutional investors (pension funds, sovereign wealth funds,
+development finance institutions) require independently verified impact metrics as a
+condition of investment. Corporate buyers of carbon credits require third-party
+verification as a condition of purchase. A climate company without verified impact
+metrics is structurally excluded from the fastest-growing part of the climate capital
+market — institutional money that is now flowing at scale.
+VERIFICATION: Ask: "Who has independently verified your impact metrics? Which
+methodology or standard do they use? When was the last verification completed, and
+when is the next scheduled?"
+
+10. NO PATH TO SUBSIDY INDEPENDENCE
+SIGNAL: The financial model shows the company depending on government support at every
+stage of its development — current subsidies fund operations, future subsidies fund scale.
+There is no point in the five-year model at which the company achieves viable unit
+economics without government support.
+SEVERITY: HIGH
+WHAT IT MEANS: This is distinct from legitimate government contract revenue (a
+SBRI contract or CfD is a contracted revenue stream, not a recurring subsidy). It
+describes a company whose product cannot be sold at a price that covers its cost of
+production without a third-party subsidy. If the technology has learning curves
+(costs decline with scale), there may be a path to subsidy independence — but
+the model must show it explicitly, at a specific volume, with specific cost drivers.
+VERIFICATION: Ask: "At what deployment volume or unit cost does your technology
+achieve viability without government subsidy? What is the specific cost driver that
+unlocks subsidy independence, and what is the capital requirement to reach that point?"
+
+11. REGULATORY RISK — CARBON MARKET STILL BEING DEFINED
+SIGNAL: Company's business model depends on a carbon market regulation, policy,
+or pricing mechanism that is under active government review, consultation, or reform.
+Examples: UK ETS price reform, voluntary carbon market integrity framework changes,
+CSRD scope changes for SMEs, or biodiversity credit market rules.
+SEVERITY: MEDIUM
+WHAT IT MEANS: A regulatory regime "under consultation" can change materially.
+A company building its revenue model on the assumption that a current or proposed
+regulatory framework will remain stable is exposed to the Policy Reversal failure
+pattern. Carbon markets in particular have been subject to significant regulatory
+evolution — UK ETS replaced EU ETS post-Brexit; voluntary carbon markets are being
+restructured by ICVCM and VCMI; CSRD reporting requirements are being phased and may
+be adjusted. Any revenue model dependent on current regulatory configuration should
+be stress-tested against a scenario where the relevant regulation is revised.
+VERIFICATION: Ask: "Which specific regulatory frameworks does your revenue model
+depend on? Have any of those frameworks been announced for review or consultation?
+What is your revenue model if the regulation changes materially?"
+
+12. COMPETITION FROM INCUMBENTS WITH LOWER COST OF CAPITAL
+SIGNAL: Company is competing in a market where established energy companies, utilities,
+or infrastructure operators have a structural cost-of-capital advantage for the same
+assets. A £50M wind project funded by a startup at 15% cost of capital cannot compete
+with the same project funded by Ørsted or National Grid at 5% cost of capital.
+SEVERITY: MEDIUM
+WHAT IT MEANS: In most infrastructure-style climate markets, the cost of capital is
+the primary competitive advantage. A startup deploying infrastructure capital at
+venture returns expectations is fundamentally uncompetitive against a utility or
+infrastructure fund deploying the same assets at lower cost. The startup's sustainable
+competitive position must be in the technology or platform layer — not in the
+capital deployment of standard infrastructure.
+VERIFICATION: Ask: "Why can your company deploy this infrastructure more cost-effectively
+than an incumbent utility or infrastructure fund? Is your competitive advantage
+in the technology, the customer relationships, the operational model, or something
+else? Could a utility replicate your model in 18 months if they chose to?"
+
+═══════════════════════════════════════════════════════════════════════
+SECTION D — HISTORICAL FAILURE PATTERNS
+═══════════════════════════════════════════════════════════════════════
+
+1. THE SUBSIDY CLIFF
+DESCRIPTION: A clean energy or cleantech company builds a successful business on the
+back of a government subsidy programme — the UK Feed-in Tariff for solar, the Boiler
+Upgrade Scheme for heat pumps, or EV purchase grants. Unit economics are positive
+with the subsidy. The company grows rapidly, raises capital based on subsidy-supported
+projections, and scales its team and operations accordingly. The government either
+reduces the subsidy, caps its total budget, or closes the programme entirely. The
+subsidy reduction may be sudden (the UK solar feed-in tariff was cut 64% in 2011 with
+six weeks notice), partial, or announced 12 months in advance. In every case, the
+company's revenue model is invalidated. Pipeline customers cancel. The company is
+left with a cost base built for subsidy-era growth and a revenue opportunity that has
+shrunk materially. The Series A or B investors who funded the growth phase are left
+holding a business that needs to fundamentally rebuild its unit economics.
+EARLY WARNING SIGNALS: Subsidy dependency ratio above 60%; the company's five-year
+model makes no reference to subsidy end dates or reduction scenarios; management
+describes the subsidy as "long-term policy" without acknowledging that every subsidy
+has a precedent of reform; competitor companies that received the same subsidy have
+not yet demonstrated viability at below-subsidy pricing; the company has raised capital
+specifically to accelerate growth before an anticipated subsidy end date rather than
+to build subsidy-independent economics.
+WHEN TO APPLY: Any climate company where the subsidy dependency ratio is above 40%
+and the subsidy is not contracted for the full investment horizon (i.e., it is subject
+to annual budget review or known end date).
+
+2. THE CARBON CREDIT QUALITY CRISIS
+DESCRIPTION: A company generates, sells, or intermediates voluntary carbon credits.
+Its business model depends on corporate buyers purchasing and retiring credits to
+offset their reported emissions. An investigative report, academic paper, or standard
+body review finds that the methodology used to calculate the credits' impact was flawed —
+either the additionality was not genuine (the forest was not at real risk of deforestation)
+or the permanence was overstated (the sequestered carbon was released by wildfire or
+pest). The credits are retrospectively invalidated by the standard body. Corporate
+buyers who have publicly claimed to be "net zero" on the basis of those credits face
+reputational damage, withdraw from the voluntary market, and demand refunds. The
+company's revenue pipeline collapses simultaneously with its reputation. This is not
+a hypothetical — it is the pattern of what happened to Verra REDD+ credits in 2023,
+removing $1B+ of claimed impact from corporate net-zero accounts.
+EARLY WARNING SIGNALS: Credits use a high-discount-rate baseline methodology for
+additionality without independent sensitivity analysis; the permanence buffer is self-
+assessed rather than independently verified; the host country's regulatory environment
+is unstable (increasing risk of policy reversal that exposes the "protected" forest);
+the company has never had a sample of its projects independently audited at the field
+level; the company's impact claims appear in marketing materials at a higher tonne count
+than the total issuances registered with the standard body.
+WHEN TO APPLY: Any voluntary carbon credit originator, aggregator, or marketplace where
+the credit quality verification process has not been conducted by an independent third
+party using ICVCM Core Carbon Principles or equivalent.
+
+3. THE HARDWARE SCALE-UP COST SPIRAL
+DESCRIPTION: A climate hardware company (battery storage, advanced recycling, green
+hydrogen) demonstrates excellent economics at pilot scale — £0.08/kWh storage cost,
+30% gross margin at 10 MWh deployed. It raises a Series A to scale to 100 MWh. At
+scale, several cost assumptions prove incorrect: the contract manufacturer's volume
+discount is 40% less than modelled; the installation labour cost in target geographies
+is higher than expected; the primary raw material (lithium, platinum, rare earth)
+price has increased 30% since the financial model was built. The 30% gross margin at
+pilot scale does not materialise at commercial scale. The company needs a larger round
+than planned to reach the volume where the economics actually improve. But it cannot
+raise the larger round because it has not demonstrated the unit economics it promised
+at Series A. It is stuck in a capital trap: the economics do not work at current scale,
+require more capital to reach the next scale, but investors will not fund the next
+scale without evidence that the economics work.
+EARLY WARNING SIGNALS: Financial model gross margin at scale has not been validated
+against actual pilot production costs; bill of materials cost projection relies on
+volume discounts not yet contracted with suppliers; the capital requirement to reach
+target-economics scale is more than 3x the current fundraise amount; raw material
+prices are modelled at current spot prices rather than stressed at +30%; the founding
+team has not managed a manufacturing scale-up before and has not engaged a contract
+manufacturer with experience at the target volume.
+WHEN TO APPLY: Any climate hardware company raising Series A or B capital to scale
+production where gross margin improvement is dependent on volume not yet achieved
+and the capital required to reach that volume has not been fully committed.
+
+4. THE POLICY REVERSAL
+DESCRIPTION: A company builds its commercial model on a government policy that changes.
+The UK government cancelled the Zero Carbon Homes standard in 2015 with no replacement.
+The previous government's net-zero heat pump rollout targets were downgraded in 2023.
+The EU revised CSRD scope in 2024, reducing the number of companies required to comply.
+In each case, companies that had built commercial plans based on the regulatory certainty
+of these policies found their addressable market materially smaller than projected.
+Policy reversals are not rare in climate — the sector is inherently politically sensitive
+because it involves costs to consumers and businesses, and political administrations
+change their cost-benefit calculus on climate action in response to electoral pressures.
+EARLY WARNING SIGNALS: The company's TAM calculation assumes a specific regulatory
+mandate will remain in force without scenario analysis; the founding team cites
+"government commitment" to a net-zero target as evidence that a specific policy
+instrument will persist; the business model is only viable at current regulatory
+requirements — a regulation rollback to the previous standard would eliminate 50%+
+of the addressable market; the company is exposed to a change of government with
+different climate priorities in the next 24 months.
+WHEN TO APPLY: Any climate company whose primary growth lever is a specific government
+regulation or mandate that is subject to democratic revision within the investment horizon.
+
+5. THE IMPACT MEASUREMENT GAP
+DESCRIPTION: A climate company raises capital from impact-oriented investors on the
+strength of compelling impact metrics — CO2 avoided, hectares of biodiversity protected,
+tonnes of waste diverted. As the company scales, it faces requests from institutional
+investors, corporate customers, and standard bodies for independently verified impact
+data. The company discovers that its proprietary measurement methodology does not
+align with industry standards — it has been counting avoided emissions using a baseline
+that is more conservative than accepted practice, double-counting credits that have
+been partially sold to multiple buyers, or reporting Scope 1 impacts without Scope 3
+context that would reduce the net figure. When verification is conducted, the independently
+certified impact is 30–60% lower than the company has claimed. Institutional investors
+withdraw. Corporate buyers reduce their purchases. The fundraise fails.
+EARLY WARNING SIGNALS: Impact metrics are self-reported without external verification;
+the measurement methodology is proprietary and not aligned to any published standard;
+the company has not sought alignment with Verra, Gold Standard, SBTi, or equivalent;
+the founding team resists the cost and complexity of third-party verification because
+"our methodology is superior"; the impact figures have been growing faster than the
+operational activity that generates them (a mathematical impossibility).
+WHEN TO APPLY: Any climate company making specific quantified impact claims that have
+not been independently verified and where those claims are material to the investment
+thesis.
+
+6. THE INFRASTRUCTURE COMPANY MISPOSITIONED AS A TECH COMPANY
+DESCRIPTION: A company deploys clean energy assets or carbon sequestration infrastructure.
+It describes itself as a "technology company" because it uses software to manage
+its assets. It raises seed and Series A from technology-focused venture capital firms
+at 15–20x revenue multiples, arguing that its software layer makes it more like Stripe
+than like a power company. At Series B, it approaches the institutional infrastructure
+funds and energy majors who need to finance the scale-up. These investors conduct
+their own analysis and value the company on EBITDA and asset returns — not revenue
+multiples. The Series B valuation implied by infrastructure economics is 40–60% below
+the Series A valuation implied by SaaS economics. Existing investors face significant
+dilution to accept the infrastructure valuation. The management team, believing in the
+tech narrative, refuses to accept the infrastructure valuation. The round fails. The
+company runs out of capital before the scale required for infrastructure economics to
+materialise.
+EARLY WARNING SIGNALS: The company describes itself as a "technology company" in a
+domain where revenue scales with physical asset deployment; gross margin is below 40%
+but the company is presenting revenue multiple valuations without an EBITDA framework;
+the founding team has not had conversations with infrastructure fund investors to
+understand their valuation framework; the company's capital structure contains no
+project debt (which is the appropriate instrument for infrastructure asset financing);
+existing investors have no infrastructure investment experience.
+WHEN TO APPLY: Any company where more than 50% of revenue scales with physical asset
+deployment and the company has raised from venture capital at implied revenue multiples
+above 8x. Identify the mismatch early and reframe the capital structure before the
+Series B.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION E — EXIT COMPARABLE DATABASE
+═══════════════════════════════════════════════════════════════════════
+
+ACQUISITION MULTIPLES BY SUB-CATEGORY:
+
+Clean Energy Technology (Type A — software):
+  Strategic 8–20x ARR | PE 6–12x ARR
+  Premium driver: recurring contracted revenue from utilities or grid operators;
+  regulatory tailwind (UK REMA, EU electricity market reform) driving mandatory adoption.
+
+Clean Energy Technology (Type B — infrastructure):
+  Strategic 1.5–3x replacement cost | Infrastructure fund 6–12x EBITDA (contracted)
+  Premium driver: long-term contracted cash flow (CfD, PPA) with creditworthy counterparty;
+  portfolio diversification across geographies and technologies.
+
+Carbon Markets and Measurement (Type A platform):
+  Strategic 4–15x ARR | Premium for regulatory compliance necessity (CSRD, UK ETS)
+  Note: S&P acquired IHS Markit (including Trucost carbon data) at ~£20B; ICE acquired
+  Climate X risk data assets. Corporate carbon accounting becoming infrastructure.
+
+Nature-based Carbon Credits (Type B):
+  Valued on credit issuance pipeline at verified prices — not a revenue multiple.
+  Strategic (energy major): pays for reputation and net-zero commitment coverage.
+  Typical: £5–20M per 100,000 tCO2/year verified issuance capacity.
+
+Sustainable Food / AgTech (Type A):
+  Strategic 6–14x ARR | PE 4–8x ARR
+  Premium driver: food company strategic buyer (Nestlé, Unilever, Bayer) paying
+  for sustainability claims in supply chain alongside technology value.
+
+Circular Economy (Type A):
+  Strategic 5–12x ARR | PE 4–8x ARR (positive EBITDA required)
+
+Green Buildings (Type A — software):
+  Strategic 6–14x ARR | PE 5–10x ARR
+  Premium driver: building decarbonisation regulatory mandate (UK EPC requirements,
+  EU EPBD recast) driving mandatory adoption.
+
+Climate Data / ESG Reporting (Type A):
+  Strategic 8–20x ARR | Premium driven by CSRD and TCFD mandates
+  Note: MSCI acquired RiskMetrics (£1.5B), Sustainalytics (£550M), and Carbon Delta for
+  climate data capabilities. Moody's acquired Vigeo Eiris and V.E for ESG intelligence.
+  This is an active acquisition market — major financial data incumbents are building
+  climate data capability through acquisition.
+
+Sustainable Mobility (Type A — software):
+  Strategic 6–15x ARR | PE 5–10x ARR
+
+EV Charging (Type B — infrastructure):
+  Strategic 1.5–2.5x replacement cost | Infrastructure fund 8–14x EBITDA
+  Note: BP acquired BPCS (was BP Chargemaster), Shell acquired Ubitricity — utilities
+  acquiring EV charging infrastructure as a grid management and customer retention asset.
+
+NAMED STRATEGIC ACQUIRERS:
+
+BP: clean energy assets, EV charging, bioenergy, carbon capture. Transition-focused
+  M&A budget allocated to acquiring stakes in or full ownership of clean energy
+  assets (BP acquired BPCS, Lightsource bp). Typical range: £50M–£2B.
+
+Shell: offshore wind, hydrogen, EV charging, carbon offsets, LNG transition.
+  Shell has made significant acquisitions in clean energy — acquired Ubitricity (EV
+  charging, £169M), invested in Nature Energy (biogas). Typical range: £100M–£3B.
+
+Equinor: offshore wind, carbon capture, hydrogen, energy storage.
+  Nordic sovereign energy company — significant clean energy M&A budget.
+  Typical range: £100M–£2B.
+
+TotalEnergies: solar, wind, batteries, clean energy services, EV charging.
+  Active European and global clean energy acquirer. Typical range: £100M–£3B.
+
+National Grid: grid infrastructure, demand flexibility, energy data.
+  Acquires grid-adjacent technology and infrastructure. UK grid operator.
+  Typical range: £50M–£500M.
+
+E.ON / Octopus Energy: consumer energy, smart metering, grid services, EV.
+  Octopus Energy (a UK scale-up itself) is an active acquirer of energy technology.
+  E.ON acquires energy management software and smart home technology.
+
+Ørsted: offshore wind, onshore wind, solar — renewable energy infrastructure.
+  Danish company; global offshore wind leader. Typical range: £100M–£3B.
+
+Siemens Energy / Siemens Smart Infrastructure: grid technology, building management,
+  industrial decarbonisation. Acquires to extend platform capability. Typical: £50M–£1B.
+
+Schneider Electric: building and industrial energy management, grid edge software.
+  Has acquired EcoStruxure ecosystem companies. Typical range: £50M–£500M.
+
+ABB: industrial automation, grid infrastructure, e-mobility, electrification.
+  Acquires complementary technology for its electrification and automation platforms.
+  Typical range: £50M–£500M.
+
+Macquarie Asset Management (Green Investment Group): infrastructure assets.
+  Largest infrastructure fund manager globally. Acquires operating clean energy
+  assets at 5–9% target IRR. Deal size: £50M–£3B+.
+
+Brookfield Renewable Partners: renewable energy generation, storage, infrastructure.
+  Largest pure-play renewable infrastructure fund. Deal size: £100M–£5B+.
+
+BlackRock Infrastructure: clean energy, transport, digital infrastructure.
+  BlackRock's infrastructure platform. Deal size: £100M–£3B+.
+
+S&P Global / Moody's / MSCI: climate data, ESG ratings, carbon pricing data.
+  Financial data platforms actively acquiring climate and ESG data capabilities.
+  S&P acquired IHS Markit (environmental data); MSCI acquired Burgiss, Carbon Delta.
+  Typical data acquisition range: £20M–£500M.
+
+ICE (Intercontinental Exchange): carbon markets, emissions trading, climate data.
+  Operates EU ETS, UK ETS, and RGGI markets. Acquires complementary climate
+  market data and analytics. Typical range: £20M–£500M.
+
+IPO COMPARABLES — Climate and CleanTech:
+
+Ørsted (Copenhagen 2016):       Revenue at IPO £7.4B | Market cap £14B = 2x revenue (utilities multiple)
+Northvolt (bankruptcy 2024):    Warning case — £6B raised; manufacturing scale-up failed
+  Note: Northvolt is the definitive example of the Hardware Scale-Up Cost Spiral — raised
+  $15B, could not achieve battery cell yield at scale, filed for bankruptcy in November 2024.
+Octopus Energy (private, ~£5B): Revenue £3B | ~1.5x revenue (energy company multiple)
+Oxford PV (private):            Deep tech solar — funded on IP value, not revenue
+Zeroavia (private):             Hydrogen aviation — TRL-gated, not revenue-valued
+Arrival (2021, SPAC, failed):   EV trucks — Type B mispositioned as Type A; valuation collapse
+  Note: Arrival is the definitive example of the Infrastructure Company Mispositioned as
+  a Tech Company — SPAC at £10B valuation, collapsed to near-zero; manufacturing
+  economics destroyed the SaaS-like narrative.
+Climeworks (private):           DACCS at £300/tonne; funded by high-quality removal buyers
+Note: pure-play climate IPOs in the UK are rare. The dominant exit routes are strategic
+  acquisition (energy majors, industrial conglomerates) and infrastructure fund purchase
+  of operating assets. Climate SaaS companies exit at technology company multiples;
+  climate infrastructure companies exit at infrastructure fund multiples.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION F — KEY QUESTIONS FOR FOUNDER MEETING
+═══════════════════════════════════════════════════════════════════════
+
+01. POLICY DEPENDENCY — DOES THE BUSINESS WORK WITHOUT SUBSIDIES?
+QUESTION: "If every government subsidy, tax credit, and mandate that currently supports
+your business was removed tomorrow, at what point in your five-year plan would you still
+be commercially viable? What is the specific cost or price at which your technology
+becomes subsidy-independent? How close are you to that point today?"
+STRONG ANSWER: Names the specific point of subsidy independence (e.g., "at 50 MWh
+deployed, our LCOE is below grid parity without subsidy"); has a financial model showing
+the pathway; the timeline to subsidy independence is within the investment horizon.
+WEAK ANSWER: "Subsidies accelerate our growth but aren't essential" without a specific
+viability model; "the government is committed to net zero so subsidies will continue";
+cannot model the subsidy-free scenario.
+REVEALS: Whether the company is building a real business or a subsidy arbitrage vehicle
+that cannot survive a policy change.
+
+02. CARBON CREDIT ADDITIONALITY AND VERIFICATION METHODOLOGY
+QUESTION: "For each project generating carbon credits: what is the additionality
+methodology? Who conducted the additionality assessment — a third-party verifier or
+an internal team? Which standard body (Verra, Gold Standard, ICVCM) has registered
+the credits? What is the permanence period and what is the reversal buffer mechanism?"
+STRONG ANSWER: Names the third-party verifier; states the specific standard and
+methodology (e.g., "Verra VCS VM0007, verified by SCS Global Services"); permanence
+buffer is a standard industry reversal buffer pool; all credits are registered on
+the standard body's public registry.
+WEAK ANSWER: "Our methodology is proprietary and more accurate than Verra's"; "we're
+in the process of getting verified"; cannot name the verifier or the standard.
+REVEALS: Whether the credits being sold have any defensible quality basis or whether
+they will face the same challenge that destroyed Verra REDD+ credit credibility in 2023.
+
+03. IMPACT MEASUREMENT — WHO VERIFIES THE IMPACT CLAIMS?
+QUESTION: "For your headline impact claim [cite specific figure from submission]: what
+is the measurement boundary, the methodology, and who has independently verified the
+figure? Does it include Scope 1, 2, and 3 emissions? Is it avoided or removed emissions?
+How frequently is the measurement updated?"
+STRONG ANSWER: Specific methodology with boundary clearly defined; independent verifier
+named with their standard; distinction between avoided and removed explicitly stated;
+annual re-verification scheduled.
+WEAK ANSWER: "We calculate this ourselves using industry-standard assumptions"; "it's
+been reviewed by our auditors"; conflates avoided emissions with removed emissions;
+cannot state the measurement boundary.
+REVEALS: Whether the company's impact claims will survive due diligence from an
+institutional investor or a corporate sustainability director — both of whom will ask
+exactly these questions.
+
+04. HARDWARE GROSS MARGIN PATH TO 30%+ AT SCALE
+QUESTION: "What is your current gross margin on hardware deployment? What is your target
+gross margin at 10x your current deployment volume? What are the specific cost drivers
+that will enable that improvement — volume discounts on materials, manufacturing process
+improvement, or design changes? And have you seen any margin improvement from your
+first deployment to your most recent?"
+STRONG ANSWER: Current gross margin with actual data; specific target at scale with
+the cost driver identified; evidence of margin improvement in deployment to date
+(even small improvement shows the learning curve is working).
+WEAK ANSWER: "Margins will improve significantly at scale" without a specific driver;
+"our bill of materials will benefit from volume discounts" without contracted prices;
+no evidence of margin improvement in pilot deployments.
+REVEALS: Whether the unit economics improvement story is a model or a demonstrated reality.
+
+05. SUBSIDY DEPENDENCY RATIO AND CLIFF DATE
+QUESTION: "What percentage of your total revenue in the last 12 months came from
+government subsidies, grants, or mandated payments rather than direct commercial
+customers choosing to pay for your product? Which specific subsidies? And for each
+one — when does it end, how much notice would you get if it was reduced, and what is
+your plan for the 12 months following that event?"
+STRONG ANSWER: Specific dependency ratio; each subsidy named with its end date
+and renewal mechanism; a scenario model for the largest subsidy ending shows the
+business remains viable.
+WEAK ANSWER: "Subsidies are a small part of our revenue" without a percentage;
+describes CfD revenue as "not really a subsidy" because it is contractually committed
+(valid distinction — but should be explained); no plan for subsidy end dates.
+REVEALS: Whether the company is managing its policy dependency as a financial risk
+or assuming government support will continue indefinitely.
+
+06. OFFTAKER CONCENTRATION
+QUESTION: "Who are your current offtakers or buyers for your product, energy output,
+or carbon credits? What is the revenue concentration — what percentage comes from
+your largest single buyer? What is the contract term and break clause structure for
+your top 3 buyers? And if your largest offtaker cancelled their contract today, how
+would you replace that revenue?"
+STRONG ANSWER: No single offtaker above 30% of revenue; multi-year contracts with
+creditworthy counterparties; limited break clauses or step-in protections; active
+pipeline of alternative buyers.
+WEAK ANSWER: One offtaker accounts for more than 50% of revenue; the contract has
+annual break clauses; "the relationship is very strong" as the primary risk mitigation.
+REVEALS: Whether the revenue foundation is structurally sound or whether one commercial
+decision by one counterparty can destroy the business case.
+
+07. TRL AND PATH TO COMMERCIAL SCALE
+QUESTION: "What is your current Technology Readiness Level? Has the technology been
+demonstrated in conditions representative of full commercial deployment — not just in
+a laboratory or a single pilot? What are the outstanding technical risks between
+your current TRL and TRL 9? And what capital is required to resolve each one?"
+Apply the TRL framework from the Deep Tech Library (Section B) to assess TRL claims.
+STRONG ANSWER: Specific TRL with the evidence that justifies it; outstanding risks
+quantified with capital requirements; the capital being raised now is sufficient to
+advance at least two TRL steps.
+WEAK ANSWER: "We're at commercial readiness" without a formal TRL assessment; pilot
+demonstration conflated with operational deployment; "our technology works — we've
+proven it in the lab."
+REVEALS: Whether the company has been honest about how far it is from commercial scale
+and whether the capital plan is sufficient for the technical risk remaining.
+
+08. CORPORATE BUYER PIPELINE AND NET-ZERO COMMITMENT QUALITY
+QUESTION: "Walk me through your top 5 corporate buyers or pipeline opportunities.
+For each: what is their stated net-zero target? Is it SBTi-verified? What is the
+specific emissions source they are trying to address? And have they paid you money —
+or is the relationship still at the letter of intent or MoU stage?"
+STRONG ANSWER: Named corporate buyers with SBTi-verified targets; at least two have
+paid for a product or signed a commercial contract; the emissions source matches the
+company's product; buyers are in sectors with regulated reporting obligations (CSRD).
+WEAK ANSWER: "We have several large companies very interested"; buyers have general
+ESG commitments without SBTi verification; all relationships are at MoU or expression
+of interest stage; the buyers' stated interest is for marketing purposes rather than
+a specific emissions reduction obligation.
+REVEALS: Whether the corporate demand is driven by genuine compliance obligation
+(durable) or voluntary reputation management (fragile and often the first budget cut
+in a downturn).
+
+09. REGULATORY RISK SCENARIO — CARBON MARKET PRICE FALLS 50%
+QUESTION: "If the UK ETS price fell from its current level to £20/tonne, what would
+happen to your revenue? If voluntary carbon credit prices fell to £5/tonne, how does
+your business model change? And if the CSRD reporting requirement for your target
+customer size was suspended, how would that affect your pipeline?"
+STRONG ANSWER: Has modelled these specific scenarios; business remains viable (perhaps
+less profitable) at the stressed price; demonstrates which buyer segments would still
+purchase at lower prices.
+WEAK ANSWER: "Carbon markets will continue to rise long-term"; "our customers are
+committed to net zero regardless of price"; has not stress-tested the carbon price
+scenarios.
+REVEALS: Whether the company's commercial model has genuine revenue drivers beyond
+policy-induced demand, or whether it is entirely dependent on the current carbon
+price level and regulatory configuration.
+
+10. BLENDED FINANCE STRUCTURE
+QUESTION: "Have you considered or used blended finance — combining public capital
+(government grants, development finance institution concessional loans) with private
+equity — to de-risk your infrastructure assets? Do you have project debt or revolving
+credit facility for working capital on deployed assets? And how does your capital
+structure change as you move from development stage to operational assets?"
+STRONG ANSWER: Has engaged with UK Innovate Finance, UKIB (UK Infrastructure Bank),
+BEIS Net Zero Innovation Portfolio, or equivalent; understands the role of project
+finance for operational assets; has a plan to transition from equity funding to debt
+funding as assets become operational.
+WEAK ANSWER: "We're funded entirely by equity"; does not understand project finance;
+describes blended finance as "too complex for our stage."
+REVEALS: Whether the founding team understands climate infrastructure capital markets
+well enough to optimise their cost of capital as they scale — and whether they are
+leaving significant value on the table by funding infrastructure assets with equity.
+
+11. CO-BENEFITS MEASURED AND VERIFIED
+QUESTION: "Beyond CO2, what co-benefits does your product or project generate —
+biodiversity, water quality, community employment, food security? How do you measure
+these? Have any co-benefits been verified by a third party? Are any of your buyers
+or investors paying a premium because of specific co-benefits?"
+STRONG ANSWER: Names specific co-benefits with measurement methodology; at least one
+co-benefit independently verified; corporate buyers or institutional investors have
+placed a premium on specific co-benefits (e.g., TNFD-aligned biodiversity credits
+command premium pricing over standard carbon credits).
+WEAK ANSWER: "Our project creates local jobs and protects biodiversity" without
+quantification; no measurement of co-benefits; no buyer has paid a premium for them.
+REVEALS: Whether the company is positioned to capture the growing market for high-
+integrity credits that bundle multiple environmental benefits — and whether it understands
+the TNFD and biodiversity credit market that is developing alongside the carbon market.
+
+12. EXIT PATHWAY — INFRASTRUCTURE FUND OR STRATEGIC ACQUIRER?
+QUESTION: "Have you had conversations with infrastructure funds about your long-term
+capital structure? Or with strategic acquirers — energy companies, utilities — about
+a potential acquisition? Which type of exit do you believe is most likely? And is
+your current investor base (if primarily VC) aligned with that exit profile?"
+STRONG ANSWER: Has had early conversations with at least one infrastructure fund or
+strategic acquirer; understands the valuation framework of each type of buyer;
+current investors are aware of the infrastructure fund exit scenario and have agreed
+to the timeline.
+WEAK ANSWER: "We'll figure out the exit when we're bigger"; assumes a technology
+company IPO as the primary exit; has not had conversations with infrastructure investors
+because "we're too early for that."
+REVEALS: Whether the company has matched its capital structure to its exit pathway —
+a critical question for any climate infrastructure company that is currently funded
+by venture capital.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION G — REGULATORY LANDSCAPE
+═══════════════════════════════════════════════════════════════════════
+
+UK EMISSIONS TRADING SCHEME (UK ETS):
+
+The UK ETS launched in January 2021 following Brexit, replacing the UK's participation
+in the EU ETS. It covers: power generation, heavy industry, aviation within the UK.
+Price trajectory: UK ETS launched at ~£40/tonne; peaked at ~£95/tonne in 2022;
+  stabilised at approximately £35–45/tonne in 2025–2026.
+Expansion: the UK government has committed to expanding UK ETS coverage to include
+  waste, shipping, and potentially buildings and road transport by 2030.
+  Each expansion creates new demand for emissions measurement, reduction technology,
+  and carbon credit solutions.
+Cap trajectory: the UK ETS cap declines annually, creating a structural scarcity
+  that should support prices long-term absent policy reversal.
+Alex flag: UK ETS price volatility is significant — a company whose unit economics
+  require a UK ETS price above £50/tonne should be stress-tested at £25/tonne.
+  Any investment predicated on a rising ETS price is speculative.
+
+CARBON BORDER ADJUSTMENT MECHANISM (CBAM):
+
+EU CBAM is in transition phase (2023–2025) and full operation from January 2026.
+  It levies a carbon price on imports of cement, steel, aluminium, fertilisers,
+  electricity, and hydrogen from countries without equivalent carbon pricing.
+UK CBAM: the UK government has committed to implementing its own CBAM from 2027,
+  covering similar product categories.
+Implications for climate companies:
+  — Clean steel, green hydrogen, and low-carbon materials companies gain a competitive
+    advantage relative to carbon-intensive imports as CBAM is implemented.
+  — Companies providing carbon accounting and emissions verification for supply chains
+    benefit from CBAM reporting requirements.
+  — Technology companies that help manufacturers reduce embodied carbon qualify as
+    CBAM-enabling businesses.
+Alex flag: any company whose business case cites CBAM as a tailwind should confirm
+  whether the specific product category and geography of its customers are within
+  CBAM scope.
+
+CORPORATE SUSTAINABILITY REPORTING DIRECTIVE (CSRD) — EU:
+
+CSRD is the EU's mandatory sustainability reporting regulation, replacing the NFRD.
+Phased implementation:
+  2025 reporting (FY2024): largest EU companies (>500 employees, public interest entities)
+  2026 reporting (FY2025): large EU companies (>250 employees or €40M turnover)
+  2027 reporting (FY2026): listed SMEs (with opt-out until 2028)
+  UK listed companies: subject to TCFD mandatory reporting (see below) rather than CSRD,
+  but UK subsidiaries of EU groups must comply with CSRD at group level.
+CSRD scope: double materiality assessment; disclosure against European Sustainability
+  Reporting Standards (ESRS); assurance requirement (limited assurance initially,
+  reasonable assurance from 2028).
+Climate company implication: CSRD creates mandatory demand for:
+  — Carbon accounting software (to calculate and report Scope 1, 2, and 3 emissions)
+  — Climate risk data (physical risk, transition risk assessment)
+  — ESG reporting platforms and assurance-ready data management
+  CSRD is the single most powerful regulatory demand driver for Type A climate data
+  and analytics companies in Europe.
+Alex flag: A climate data or reporting company whose primary market is EU corporates
+  should have a CSRD compliance product roadmap. A company that is not ESRS-aligned
+  will lose enterprise customers to competitors who are.
+
+TCFD MANDATORY REPORTING — UK:
+
+The UK made TCFD-aligned climate disclosures mandatory for:
+  — UK-listed companies (premium and standard segment): effective January 2022
+  — Large private companies (>500 employees, >£500M turnover): effective April 2022
+  — Large LLPs: effective April 2023
+TCFD requirements: governance, strategy, risk management, and metrics and targets
+  disclosures on climate-related financial risks and opportunities.
+Alex flag: UK climate data companies providing physical risk models, transition risk
+  assessments, or scenario analysis tools benefit from TCFD mandatory demand. Any
+  climate risk company that has not built its product against TCFD disclosure categories
+  will not serve the UK mandatory reporting market adequately.
+
+BIODIVERSITY NET GAIN (BNG) — UK:
+
+The Environment Act 2021 mandated Biodiversity Net Gain for most new developments
+in England from February 2024. Developers must deliver at least 10% net gain in
+biodiversity units, either on-site or by purchasing off-site biodiversity units
+or statutory biodiversity credits.
+Market creation: BNG creates a new biodiversity credit market in England.
+  Off-site units can be sold by landowners who create or restore habitats.
+  Biodiversity unit prices: £20,000–£100,000 per biodiversity unit depending on habitat
+  type and location.
+Climate company implication: companies that can measure, verify, and trade biodiversity
+  units (alongside or instead of carbon credits) are well-positioned in a growing
+  regulatory-mandated market.
+Alex flag: nature-based carbon companies should assess whether their projects generate
+  biodiversity co-benefits that can be monetised as BNG units under the UK framework.
+  Stacking carbon credits with BNG units on the same project is legally constrained —
+  confirm the specific stacking rules before modelling dual revenue.
+
+GREEN TAXONOMY — UK AND EU:
+
+EU Taxonomy for Sustainable Finance: defines which economic activities qualify as
+  "environmentally sustainable" for EU investment purposes. Six objectives; four criteria
+  (substantial contribution, do no significant harm, minimum social safeguards, technical
+  screening criteria).
+UK Green Taxonomy: the UK has committed to developing its own taxonomy, aligned with
+  but not identical to the EU taxonomy. As of April 2026, the UK taxonomy framework
+  is in development — not yet in force.
+Relevance for climate companies:
+  — EU taxonomy alignment is increasingly required by EU institutional investors for
+    investment in green assets. A climate company seeking EU investor capital should
+    confirm whether its activities qualify under the taxonomy.
+  — SFDR (Sustainable Finance Disclosure Regulation) Article 8 and 9 fund classifications
+    determine which funds can invest in the company — taxonomy alignment affects this.
+Alex flag: a climate company raising from EU-domiciled funds should confirm whether
+  the specific activities are EU taxonomy-aligned. Non-alignment may reduce the pool
+  of eligible investors.
+
+VOLUNTARY CARBON MARKET STANDARDS:
+
+Verra Verified Carbon Standard (VCS): the most widely used standard for voluntary
+  carbon credits globally. ~77% of all voluntary credits by volume. Subject to the
+  2023 quality crisis for REDD+ credits. Has since updated its methodology requirements.
+
+Gold Standard: founded by WWF; applies more rigorous social and environmental co-benefit
+  requirements alongside carbon accounting. Premium to VCS on price (~20–40% premium).
+
+ICVCM Core Carbon Principles: the Integrity Council for the Voluntary Carbon Market's
+  new quality framework for voluntary credits, launched 2023. Designed to restore
+  market confidence after the 2023 crisis. Becoming the benchmark for institutional-
+  grade voluntary credits.
+
+VCMI Claims Code of Practice: governs what claims a company can make when using
+  voluntary credits toward its net-zero commitments. Distinguishes between "credible
+  contribution" claims and compliance claims.
+
+Alex flag: any voluntary carbon company that is not pursuing ICVCM label accreditation
+  for its credits will face increasing difficulty selling to institutional buyers. The
+  ICVCM is becoming the minimum standard for credits used by listed companies making
+  public net-zero claims.
+
+CONTRACTS FOR DIFFERENCE (CfD) — UK RENEWABLE ENERGY:
+
+CfDs are long-term contracts (typically 15 years) between renewable energy generators
+and the Low Carbon Contracts Company (LCCC, a UK government entity). They guarantee
+the generator a "strike price" above the wholesale market price, reducing revenue
+uncertainty for new clean energy projects.
+Allocation rounds: CfD allocation happens in competitive auctions (AR6 was 2024).
+  Strike prices for solar: ~£52/MWh | Offshore wind: ~£73/MWh | Tidal: £>200/MWh.
+Benefit for investors: a CfD-contracted project has 15 years of contracted revenue
+  from a AAA-rated government counterparty — substantially de-risking the investment.
+Alex flag: a clean energy project without a CfD or equivalent long-term offtake is
+  exposed to merchant power price risk. Uncontracted energy price risk is a significant
+  concern for project finance and infrastructure fund investors. Always confirm whether
+  the project has contracted revenue or is selling at spot.
+
+UK BOILER UPGRADE SCHEME AND BUILDING RETROFIT POLICY:
+
+UK Boiler Upgrade Scheme (BUS): provides grants of £7,500 for heat pump installations.
+  Budget: annually allocated; can be exhausted before year-end.
+MEES (Minimum Energy Efficiency Standards): landlords cannot let properties below
+  EPC Band E (current); proposed tightening to EPC Band C for new tenancies (2028),
+  all tenancies by 2030 — subject to political revision.
+Alex flag: building retrofit companies dependent on BUS grant demand should model the
+  scenario where BUS is not renewed (happened for the previous Green Homes Grant scheme).
+  MEES tightening is the more durable demand driver — but it is also subject to political
+  revision as demonstrated by the 2023 rollback of heat pump installation targets.
+
+US INFLATION REDUCTION ACT (IRA) — COMPETITIVENESS IMPLICATIONS FOR UK:
+
+The US IRA (signed August 2022) committed ~$370B to clean energy subsidies,
+  tax credits, and manufacturing incentives over 10 years.
+Impact on UK climate companies:
+  — US IRA attracts clean energy manufacturing investment to the US, potentially at
+    the expense of UK-based manufacturing scale-up.
+  — UK companies with US subsidiaries or US project plans can access IRA credits.
+  — UK-only companies face a structural competitive disadvantage vs US peers in
+    hardware manufacturing due to the IRA manufacturing tax credits.
+  — The EU responded with the Green Deal Industrial Plan — state aid flexibilities.
+    The UK has not matched US or EU incentive scale.
+Alex flag: any UK clean energy hardware manufacturer should assess whether the US IRA
+  creates an incentive to establish US manufacturing operations — and whether the
+  lack of an equivalent UK incentive is already disadvantaging the company in attracting
+  capital relative to US or EU-headquartered competitors.
+
+═══════════════════════════════════════════════════════════════════════
+END — ALEX SECTOR INTELLIGENCE LIBRARY — CLIMATE / IMPACT v1.0
+═══════════════════════════════════════════════════════════════════════

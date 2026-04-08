@@ -1,0 +1,939 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — SECTOR INTELLIGENCE LIBRARY
+Fintech — Financial Technology — Version 1.0
+Technology companies operating within or alongside financial services.
+Built: April 2026.
+Apply this library to every deal classified as Fintech.
+═══════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════
+SECTION A — SECTOR IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════
+
+PRIMARY CLASSIFICATION SIGNALS (any one = Fintech):
+— Revenue is derived from financial flows: take rates on GMV/TPV, net interest margin,
+  insurance premiums, AUM-based fees, or interchange from card transactions
+— Company requires or holds a financial regulatory licence to operate legally
+  (EMI, PI, banking licence, insurance authorisation, FCA-regulated activity permission)
+— Primary value proposition is moving, lending, insuring, or investing money on behalf
+  of end users — not selling software tools to people who do those things
+— Unit economics reference financial terms: NIM, combined ratio, loss rate, take rate,
+  TPV, AUM — rather than ARR, NRR, or CAC in isolation
+
+IMPORTANT DISTINCTION — FINTECH VS REGTECH:
+A company selling compliance software to banks is B2B SaaS (Section A of SaaS Library).
+A company providing regulated payment or lending services to end users is Fintech.
+Test: does the company hold the regulatory risk, or does its customer hold the risk?
+If the company holds the risk — it is Fintech.
+
+MISCLASSIFICATION WARNINGS:
+— A company with a "fintech platform" that earns pure SaaS subscription fees from banks
+  without holding any regulatory licence or financial risk is B2B SaaS, not Fintech
+— A marketplace connecting lenders to borrowers that bears no credit risk is a marketplace;
+  if it bears credit risk, it is a lending company
+— Crypto and DeFi protocols follow distinct economics — classify separately and apply
+  deep regulatory scrutiny before any PRIORITY REVIEW recommendation
+
+SUB-CATEGORY IDENTIFICATION — SIGNALS FROM SUBMISSION:
+
+1. PAYMENTS INFRASTRUCTURE
+Signals: revenue stated as a percentage of GMV, TPV, or transaction volume; primary
+metric is Total Payment Volume with take rate layered on top; technology sits in the
+payment authorisation, processing, or settlement flow; named competitive set includes
+Stripe, Checkout.com, Adyen, Worldpay, or Braintree; company may hold PI or EMI licence.
+Business model: take rate on GMV. Benchmark take rate: 0.10%–0.35% for infrastructure
+plays; 1.5%–3.0% for SMB-facing payment gateways.
+Key risk: take rate compression from Visa/Mastercard scheme changes and competitive
+intensity at the gateway layer.
+
+2. NEOBANK / CHALLENGER BANK
+Signals: company holds a full banking licence or EMI licence and offers current accounts,
+savings, or debit cards; revenue stated as a blend of interchange, premium subscription,
+and lending margin; metric references include active accounts, card spend, and revenue
+per user; competitive set includes Monzo, Revolut, Starling, N26, or traditional banks.
+Business model: interchange on card spend + subscription premium tier + lending margin
+on credit products. UK debit interchange is regulated at ~0.2%; credit card interchange
+0.3% under interchange fee regulation.
+Key risk: customer acquisition cost is high (£40–£120 per active account) and revenue
+per user is low until credit products are added (£20–£80/year for transactional-only users).
+
+3. LENDING / CREDIT
+Signals: company originates, funds, or facilitates loans; revenue is primarily net interest
+margin or origination fees; submission references loan book size, default rates, or credit
+loss provisions; regulated under FCA Consumer Credit Act permissions or institutional
+lending exemptions; competitive set includes Iwoca, Funding Circle, OakNorth, or Tide.
+Business model: net interest margin (gross interest rate minus cost of funds minus loss
+provision minus servicing cost). NIM benchmark: 4%–12% for SMB lending; 1%–4%
+for consumer credit in competitive segments.
+Key risk: credit loss rate can spike acyclically; funding line withdrawal risk;
+regulatory action on irresponsible lending.
+
+4. INSURTECH
+Signals: company holds insurance authorisation or operates as an MGA (Managing General
+Agent); revenue is gross written premium minus claims minus operating costs; submission
+references combined ratio, loss ratio, or claims frequency; competitive set includes
+Lemonade, Zego, Marshmallow, Bought By Many, or incumbent insurers.
+Business model: insurance premiums minus claims (loss ratio) minus operating expenses
+(expense ratio) = operating profit. Combined ratio = loss ratio + expense ratio.
+Combined ratio below 100% = underwriting profit; above 100% = underwriting loss.
+Key risk: a single catastrophic claims event or adverse weather season can trigger
+regulatory capital breach; pricing models may misprice risk at scale.
+
+5. WEALTHTECH / INVESTMENT
+Signals: company manages or facilitates the management of investment assets; revenue
+is a percentage of AUM, flat subscription, or trading commission; submission references
+AUM growth, assets per user, or investment returns; regulated under FCA investment
+management or investment advisory permissions; competitive set includes Nutmeg (acquired
+by JP Morgan), Freetrade, Plum, Moneybox, or Hargreaves Lansdown.
+Business model: AUM-based fee (0.15%–0.75% per annum) or flat subscription (£3–£15/month).
+Revenue scales linearly with AUM; AUM grows with market returns + net new deposits.
+Key risk: market drawdown simultaneously reduces AUM (and revenue) while increasing
+customer churn; subscription model requires very high customer acquisition volume at
+low ARPU to generate venture returns.
+
+6. REGTECH / COMPLIANCE TECHNOLOGY
+Signals: company sells software specifically to financial services firms to manage
+regulatory obligations (AML, KYC, transaction monitoring, sanctions screening, regulatory
+reporting); buyer titles include Chief Compliance Officer, Head of Financial Crime,
+MLRO, or Head of Risk; the company does not itself hold a licence but its customers are
+all regulated; competitive set includes ComplyAdvantage, Onfido, Featurespace, Napier,
+or NICE Actimize.
+Business model: SaaS subscription to regulated entities. Apply B2B SaaS benchmarks
+(Section B of SaaS Library) with fintech-specific adjustments: ACV typically £50K–£500K;
+enterprise sales cycles 6–18 months; deep compliance review required before any go-live.
+Key risk: regulatory requirement changes can accelerate or obsolete the product overnight;
+a single false negative (missed criminal transaction) can trigger regulatory action on
+the company's bank customers, creating reputational liability.
+
+7. OPEN BANKING / API INFRASTRUCTURE
+Signals: company enables bank account access, payment initiation, or financial data
+aggregation via API; revenue is per-API-call or platform fee; operates under Open Banking
+or PSD2/PSD3 framework; primary customers are other fintech companies or enterprise
+businesses building financial features; competitive set includes TrueLayer, Plaid (US),
+Tink (acquired by Visa), Token, or Yapily.
+Business model: API call volume fees + platform access fees + data product fees.
+Take rate equivalent: £0.05–£0.50 per API call for account data; £0.10–£1.00 per
+payment initiation depending on volume tier.
+Key risk: bank API quality and coverage in the UK/EU is inconsistent; banks have
+incentive to degrade API performance for third-party access; regulatory mandate may
+weaken under PSD3 if political appetite for open banking declines.
+
+8. EMBEDDED FINANCE / BANKING AS A SERVICE (BaaS)
+Signals: company provides banking infrastructure (IBAN issuance, card issuing, lending
+rails) to non-financial companies as a white-label product; revenue is a mix of BaaS
+platform fees and interchange from cards issued; primary customers are B2B SaaS
+companies, marketplaces, and fintechs building financial products without a licence;
+competitive set includes Railsbank (now Railsr), Solaris, Marqeta, Synapse, or ClearBank.
+Business model: BaaS platform fee (£5K–£100K per month per customer) + interchange
+on cards issued through the platform (0.2%–0.4% of card spend).
+Key risk: regulatory compliance failures at a single customer can trigger FCA action
+against the BaaS provider; a single large customer exiting the platform creates
+revenue cliff; end-customer fraud is a shared regulatory liability.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION B — STAGE-SPECIFIC METRIC BENCHMARKS
+═══════════════════════════════════════════════════════════════════════
+
+Format: STRONG (top quartile) | ACCEPTABLE (median) | CONCERN (flag) | FAIL (disqualifying)
+
+NOTE: Fintech metrics vary significantly by sub-category. Core benchmarks by sub-category
+follow the standard stage framework. Where fintech-specific metrics differ from SaaS,
+the fintech benchmark applies. SaaS-equivalent metrics (NRR, gross margin) are shown
+where applicable (Regtech sub-category uses SaaS Library benchmarks directly).
+
+──────────────────────────────────────────────────────────────────────
+PAYMENTS INFRASTRUCTURE — Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+TPV (Total Payment Volume):
+Seed:      STRONG >£10M/month | ACCEPTABLE £1–10M/month | CONCERN <£1M/month
+Series A:  STRONG >£50M/month | ACCEPTABLE £10–50M/month | CONCERN <£10M/month
+Series B:  STRONG >£200M/month | ACCEPTABLE £50–200M/month | CONCERN <£50M/month
+
+Take Rate:
+Infrastructure: STRONG 0.20–0.35% | ACCEPTABLE 0.10–0.20% | CONCERN <0.10% | FAIL: stated but not sustained
+SMB gateway:    STRONG 2.0–3.0% | ACCEPTABLE 1.4–2.0% | CONCERN <1.4% | FAIL: take rate declining QoQ
+
+Revenue (net take):
+Seed:      STRONG >£500K ARR equivalent | ACCEPTABLE £100–500K | CONCERN <£100K
+Series A:  STRONG >£2M net revenue | ACCEPTABLE £500K–2M | CONCERN <£500K
+
+Transaction cost (payment processing COGS):
+STRONG: processing cost <30% of take rate revenue | CONCERN: >50% | FAIL: >70%
+
+Gross margin (net revenue minus processing costs):
+STRONG >65% | ACCEPTABLE 50–65% | CONCERN 35–50% | FAIL <35%
+
+TPV growth MoM:
+STRONG >20% | ACCEPTABLE 10–20% | CONCERN 5–10% | FAIL <5%
+
+──────────────────────────────────────────────────────────────────────
+NEOBANK / CHALLENGER BANK — Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+Active accounts (defined as transacted in last 30 days):
+Seed:      STRONG >30K | ACCEPTABLE 5–30K | CONCERN <5K
+Series A:  STRONG >150K | ACCEPTABLE 50–150K | CONCERN <50K
+Series B:  STRONG >750K | ACCEPTABLE 200–750K | CONCERN <200K
+
+Revenue per active account per year:
+Transactional only: STRONG >£60 | ACCEPTABLE £30–60 | CONCERN <£30 | FAIL <£15
+With credit product: STRONG >£150 | ACCEPTABLE £80–150 | CONCERN <£80
+
+Monthly active rate (active accounts / registered accounts):
+STRONG >55% | ACCEPTABLE 35–55% | CONCERN 20–35% | FAIL <20%
+
+Customer acquisition cost (CAC):
+STRONG <£25 per active account | ACCEPTABLE £25–60 | CONCERN £60–100 | FAIL >£100
+
+Interchange revenue as % of total revenue:
+STRONG <50% (diversified) | CONCERN >70% (interchange-dependent, vulnerable to regulation)
+FAIL: >85% and no credit or subscription product in pipeline
+
+──────────────────────────────────────────────────────────────────────
+LENDING / CREDIT — Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+Loan book size:
+Seed:      STRONG >£5M | ACCEPTABLE £1–5M | CONCERN <£1M
+Series A:  STRONG >£30M | ACCEPTABLE £10–30M | CONCERN <£10M
+Series B:  STRONG >£100M | ACCEPTABLE £40–100M | CONCERN <£40M
+
+Net Interest Margin (NIM = gross interest rate minus cost of funds minus servicing):
+SMB lending:    STRONG >8% | ACCEPTABLE 5–8% | CONCERN 3–5% | FAIL <3%
+Consumer credit: STRONG >6% | ACCEPTABLE 3–6% | CONCERN <3% | FAIL: NIM not tracked
+Revenue-based finance: STRONG >15% | ACCEPTABLE 10–15% | CONCERN <10%
+
+Net Loss Rate (actual credit losses as % of loan book):
+SMB lending:    STRONG <2% | ACCEPTABLE 2–4% | CONCERN 4–7% | FAIL >7%
+Consumer credit: STRONG <3% | ACCEPTABLE 3–6% | CONCERN 6–10% | FAIL >10%
+Note: loss rates above concern threshold during underwriting model maturation (first
+12 months of a new segment) require vintage analysis — apply Framework 5 (Cohort Decay).
+
+Cost of funds (average blended rate on funding lines):
+STRONG <4% | ACCEPTABLE 4–7% | CONCERN 7–10% | FAIL >10% or single-source funding only
+
+Funding line headroom (uncommitted loan book as % of available facility):
+STRONG >40% headroom | ACCEPTABLE 20–40% | CONCERN <20% | FAIL: facility at 95%+ utilisation
+
+──────────────────────────────────────────────────────────────────────
+INSURTECH — Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+Gross Written Premium (GWP):
+Seed:      STRONG >£5M GWP | ACCEPTABLE £1–5M | CONCERN <£1M
+Series A:  STRONG >£20M GWP | ACCEPTABLE £8–20M | CONCERN <£8M
+Series B:  STRONG >£70M GWP | ACCEPTABLE £25–70M | CONCERN <£25M
+
+Loss Ratio (claims paid / premiums earned):
+STRONG <55% | ACCEPTABLE 55–70% | CONCERN 70–85% | FAIL >85%
+Note: loss ratios above 100% are possible in catastrophe years; any LR above 80%
+in a non-catastrophe period triggers mandatory claims model review.
+
+Expense Ratio (operating expenses / premiums earned):
+STRONG <30% | ACCEPTABLE 30–45% | CONCERN 45–60% | FAIL >60%
+
+Combined Ratio (loss ratio + expense ratio):
+STRONG <85% | ACCEPTABLE 85–100% | CONCERN 100–110% | FAIL >110%
+Note: combined ratio above 100% means the company loses money on insurance operations;
+acceptable only if investment income or scale-driven expense improvement is imminent.
+
+Policy retention rate (renewal rate):
+STRONG >80% | ACCEPTABLE 65–80% | CONCERN 50–65% | FAIL <50%
+
+──────────────────────────────────────────────────────────────────────
+WEALTHTECH / INVESTMENT — Benchmarks:
+──────────────────────────────────────────────────────────────────────
+
+AUM (Assets Under Management):
+Seed:      STRONG >£100M | ACCEPTABLE £20–100M | CONCERN <£20M
+Series A:  STRONG >£500M | ACCEPTABLE £150–500M | CONCERN <£150M
+Series B:  STRONG >£2B | ACCEPTABLE £700M–2B | CONCERN <£700M
+
+Revenue yield on AUM:
+AUM-fee model: STRONG 0.5–0.75% | ACCEPTABLE 0.25–0.5% | CONCERN <0.25% | FAIL <0.15%
+Subscription:  Apply SaaS MRR benchmarks — AUM is secondary
+
+AUM growth (net flows, market returns excluded):
+STRONG >5% of AUM per month in new deposits | ACCEPTABLE 2–5% | CONCERN <2% | FAIL: net outflows
+
+Customer assets per user:
+STRONG >£15K average balance | ACCEPTABLE £3–15K | CONCERN <£3K
+Note: revenue scales with balances; a company with 200K users and £500 average balance
+generates ~£150K annual revenue at 0.15% yield — rarely a venture-scale opportunity.
+
+Churn (accounts closed or fully withdrawn per year as % of accounts):
+STRONG <8% | ACCEPTABLE 8–15% | CONCERN 15–25% | FAIL >25%
+
+──────────────────────────────────────────────────────────────────────
+STAGE-SPECIFIC REGULATORY CAPITAL BENCHMARKS (all sub-categories):
+──────────────────────────────────────────────────────────────────────
+
+EMI (Electronic Money Institution): FCA requires minimum capital of €350K.
+Payment Institution: FCA requires minimum capital of €125K.
+Full Banking Licence: PRA requires minimum £1M + risk-weighted asset calculation.
+Insurance MGA: dependent on capacity provider requirements — typically £50K–£500K.
+Lending (FCA-authorised): no specific capital requirement but FCA monitors net assets.
+
+FAIL condition: company is within 12 months of regulatory capital breach with no
+  clear plan to raise additional capital before the breach.
+CONCERN condition: company has reached 80% of its regulatory capital minimum.
+
+VALUATION BENCHMARKS — Fintech (2025–2026 market):
+Payments:     2–6x GMV (infrastructure) | 6–15x net revenue (gateway)
+Neobank:      1–4x total revenue | premium for 50%+ monthly active rate
+Lending:      0.8–1.5x loan book (mature book) | 1.5–3x loan book (high-growth, low losses)
+Insurtech:    1.0–2.5x GWP (established combined ratio <95%) | distressed if combined >110%
+Wealthtech:   1–3% of AUM (profitable) | 0.5–1.5% AUM (growth-stage, loss-making)
+Regtech:      Apply B2B SaaS multiples (Section B, SaaS Library)
+Open Banking: 8–20x net revenue (pre-scale) | 3–10x at Series B
+Embedded Finance: 5–12x net revenue | premium for multi-bank-partner diversification
+
+═══════════════════════════════════════════════════════════════════════
+SECTION C — SECTOR-SPECIFIC RED FLAGS
+═══════════════════════════════════════════════════════════════════════
+
+01. REGULATORY LICENCE RISK — OPERATING WITHOUT AUTHORISATION
+SIGNAL: Company is processing payments, holding customer funds, or originating loans
+in a jurisdiction where it does not hold the required regulatory licence. May describe
+this as "operating under an exemption," "partnering with a licensed entity," or
+"in the process of applying."
+SEVERITY: CRITICAL
+WHAT IT MEANS: The company can be shut down by the FCA or equivalent regulator with
+24–48 hours notice. All revenue earned without a licence may be clawable. Investors
+in unlicensed fintech face potential liability exposure.
+VERIFICATION: Request the regulatory licence number (FCA registration number in the UK).
+Search the FCA register directly. If the company says "we are in application," ask:
+"What is the expected licence grant date and what is your business plan if it is delayed
+by 6 months?" An uncertain answer is grounds for PASS.
+
+02. BANKING PARTNER CONCENTRATION
+SIGNAL: Company operates through a single banking partner (e.g., one EMI partner bank,
+one BaaS provider, or one acquiring bank) that provides its core infrastructure.
+SEVERITY: HIGH
+WHAT IT MEANS: If the banking partner withdraws (due to its own regulatory issues, a
+commercial decision, or a compliance concern about the fintech's customer base), the
+company's operations can halt within 30–90 days. This is a single point of operational
+failure, not a commercial risk — it is an existential risk.
+VERIFICATION: Ask: "How many banking partners do you have? If [named partner] gave you
+90 days notice tomorrow, what is your operational continuity plan?"
+
+03. FRAUD RATE ABOVE INDUSTRY THRESHOLD
+SIGNAL: Fraud losses stated or inferable above 0.10% of TPV for payments; above 5% of
+accounts flagged for suspicious activity in neobanks; above 3% of policy count for
+insurtech. Company may disclose fraud losses as "within acceptable range" without
+providing the absolute figure.
+SEVERITY: HIGH
+WHAT IT MEANS: Fraud losses above threshold indicate either inadequate controls
+(attracting fraudsters) or a fundamentally fraudulent customer base (acquired cheaply
+because it was not screened properly). Regulators will act on a company with material
+fraud rates — FCA Consumer Duty requires firms to prevent harm.
+VERIFICATION: Request fraud loss rate as % of TPV and as £ absolute for the last 4
+quarters. A company that cannot produce this number has inadequate fraud monitoring.
+
+04. CREDIT LOSS RATE ACCELERATION
+SIGNAL: Net loss rate on the loan book has increased by more than 1.5 percentage
+points in the last two quarters, or vintage analysis shows newer cohorts defaulting
+faster than older cohorts at the same loan age.
+SEVERITY: HIGH
+WHAT IT MEANS: The underwriting model is deteriorating — either because the company
+expanded into a riskier customer segment to maintain growth, or because the model
+is not predictive of actual credit behaviour at scale. A credit loss spiral can
+consume equity capital faster than any other fintech failure mode.
+VERIFICATION: Request vintage loss curves for each cohort quarter over the last 8
+quarters. Overlay with underwriting criteria changes. If the company cannot produce
+vintage analysis, the credit book is not being managed to institutional standard.
+
+05. TAKE RATE COMPRESSION TREND
+SIGNAL: Take rate (revenue as % of GMV) has declined for two or more consecutive
+quarters while TPV has grown. Total revenue growth appears strong but the revenue
+yield on each transaction is falling.
+SEVERITY: HIGH
+WHAT IT MEANS: Either the company is discounting to win volume (price-driven growth
+with deteriorating unit economics) or payment scheme changes (Visa/Mastercard
+interchange updates, PSD2 caps) are compressing margins structurally. Revenue
+growth cannot sustain against permanent take rate compression.
+VERIFICATION: Calculate take rate for each of the last 6 quarters from TPV and net
+revenue. If the trend is downward, ask: "What is your floor take rate at which the
+business is still operationally viable? How close are you to that floor?"
+
+06. AML / KYC COMPLIANCE GAPS
+SIGNAL: Company has not described its AML programme, has not named its Money Laundering
+Reporting Officer (MLRO), or describes KYC as a "friction reduction" initiative rather
+than a core compliance function. May describe onboarding as "frictionless" without
+explaining what KYC checks are in place.
+SEVERITY: HIGH
+WHAT IT MEANS: FCA requires all regulated entities to maintain adequate AML controls.
+A fintech that has minimised KYC for growth purposes is either not in compliance with
+its licence conditions or is attracting the criminal and fraudulent accounts that properly
+screened competitors reject. The FCA's Skilled Persons reviews (Section 166) and
+enforcement actions have been levied specifically for AML failures.
+VERIFICATION: Ask: "Who is your MLRO and what is their background? What is your
+Suspicious Activity Report filing rate per quarter? What is your automated vs manual
+KYC process?" An MLRO who cannot be named is a disqualifying flag.
+
+07. REGULATORY CAPITAL APPROACHING MINIMUM
+SIGNAL: Company's liquid capital is within 20% of its regulatory minimum requirement.
+Company has not disclosed a plan to raise additional capital before the breach point.
+May describe the position as "comfortable" without providing absolute figures.
+SEVERITY: HIGH
+WHAT IT MEANS: A regulatory capital breach triggers immediate FCA notification,
+potential business restriction, and mandatory remediation. The FCA can appoint a Skilled
+Person at the firm's cost and restrict its ability to take on new customers. A capital
+breach can destroy a fintech in weeks.
+VERIFICATION: Request the current regulatory capital position vs minimum requirement
+and the quarterly burn rate against the regulatory capital floor.
+
+08. SINGLE PAYMENT SCHEME DEPENDENCY
+SIGNAL: All card processing runs through a single scheme (Visa only or Mastercard only).
+Or all open banking connectivity routes through a single bank API provider with no
+fallback infrastructure.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Visa or Mastercard can change their technical requirements, pricing
+schedule, or acceptance criteria in ways that materially affect the business. A company
+with no scheme diversification has no negotiating power and no operational resilience.
+VERIFICATION: Ask: "Which payment schemes do you process across? Do you have redundant
+open banking connectivity if your primary API provider has an outage?"
+
+09. CUSTOMER FUNDS RECONCILIATION RISK
+SIGNAL: Company holds customer funds (e-money or deposits) and cannot demonstrate
+real-time or daily reconciliation between customer balances and segregated safeguarding
+accounts. Any reconciliation break — even temporary — is a serious regulatory issue.
+SEVERITY: HIGH
+WHAT IT MEANS: FCA safeguarding requirements mandate that e-money institutions segregate
+customer funds from their own funds at all times. A reconciliation break means customer
+funds may not be protected in insolvency. This is the most serious operational compliance
+failure for an EMI or neobank.
+VERIFICATION: Ask: "How frequently do you reconcile customer funds to your safeguarding
+account? What is your process when you identify a reconciliation break?"
+
+10. FUNDING LINE RENEWAL RISK
+SIGNAL: Lending company's primary funding facility is within 6 months of its renewal
+date. The facility provider has not confirmed renewal terms. The company has no backup
+facility and cannot continue originating at current pace without the primary line.
+SEVERITY: HIGH
+WHAT IT MEANS: Funding line withdrawal is the most common cause of lending fintech
+collapse — more common than credit losses. A lender without a committed funding facility
+for at least 18 months ahead is operating with existential liquidity risk.
+VERIFICATION: Ask: "When does your primary funding facility expire? What is your backup
+funding plan? At what notice period can your lender withdraw the facility?"
+
+11. INSURANCE CLAIMS MODEL UNVALIDATED AT SCALE
+SIGNAL: Insurtech has grown GWP rapidly in the last 12 months but its claims model
+was built on the first 12–18 months of data from a materially smaller book. The current
+book size is 5–10x the size of the validation dataset.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Actuarial models trained on small datasets can misprice risk significantly.
+A company writing £50M GWP whose pricing model was validated on £5M GWP data is
+underwriting in largely uncharted territory. Loss ratios can spike sharply in the 12–18
+months following a rapid scaling event.
+VERIFICATION: Ask: "At what GWP size was your current pricing model validated against
+actual claims data? How is your loss ratio trending in the most recent cohorts relative
+to the model's predictions?"
+
+12. INTERCHANGE REVENUE REGULATORY DEPENDENCY
+SIGNAL: A neobank's primary revenue source is UK or EU interchange fees on debit or
+credit transactions. Regulation has already capped UK debit interchange at 0.2% and
+EU debit interchange at 0.2% under IFR. The company's financial model projects
+interchange revenue at a rate that assumes the current cap is not further reduced.
+SEVERITY: MEDIUM
+WHAT IT MEANS: Interchange is a politically and regulatorily sensitive revenue stream.
+The UK and EU have already reduced it once; further reductions are a realistic risk.
+A neobank with 70%+ of revenue from interchange and no credit or subscription revenue
+is building on a potentially eroding foundation.
+VERIFICATION: Calculate interchange as % of total revenue. If above 60%, ask: "What
+is your plan if interchange is reduced by a further 50%?"
+
+═══════════════════════════════════════════════════════════════════════
+SECTION D — HISTORICAL FAILURE PATTERNS
+═══════════════════════════════════════════════════════════════════════
+
+1. THE REGULATORY CLIFF
+DESCRIPTION: A fintech company operates for 12–24 months under an exemption, e-money
+licence from a partner bank, or regulatory tolerance while its own licence application
+is in process. Revenue grows. The team assumes the licence will be granted. The FCA
+rejects the application or grants it with conditions that require operational changes
+that cost 12 months and £2M+ to implement. Revenue cannot grow during the remediation
+period. Investors who funded on the assumption of a clean licence receive a company
+that is commercially stalled and facing regulatory bills it was not budgeted for.
+EARLY WARNING SIGNALS: Licence application submitted more than 18 months ago with no
+decision letter; FCA has issued Requests for Information more than twice; company
+has changed external legal counsel mid-application; MLRO has resigned or been replaced
+in the last 6 months; company describes the licence status as "expected shortly" without
+a specific date.
+WHEN TO APPLY: Any pre-licensed fintech where the licence is a condition of the
+operational or revenue plan — i.e., the company cannot scale legally without it.
+
+2. THE FRAUD SPIKE
+DESCRIPTION: A payments or neobank company experiences rapid growth driven partly
+by acquiring customers other regulated competitors rejected. Fraud controls are
+calibrated for a smaller, better-screened book. At scale, fraud losses grow
+non-linearly — criminals actively identify and target companies with weak controls.
+The company faces a choice: tighten controls (which restricts growth) or absorb fraud
+losses (which destroys economics). Investors discover the situation at a board meeting
+where "fraud provision" appears as a new P&L line.
+EARLY WARNING SIGNALS: Customer acquisition cost is 40%+ below industry average for
+the same segment (cheap acquisition often means scraping the segments better-screened
+competitors rejected); fraud losses not disclosed separately in board reporting; customer
+onboarding described as "instant" with no description of the underlying KYC checks;
+chargebacks or disputes per 1,000 transactions rising quarter-on-quarter.
+WHEN TO APPLY: Any consumer-facing payment or neobank company growing faster than 20%
+MoM that has not disclosed its fraud loss rate in the submission.
+
+3. THE CREDIT LOSS SPIRAL
+DESCRIPTION: A lending company grows its loan book rapidly by relaxing underwriting
+criteria. Initial cohorts perform well because they were conservatively underwritten.
+Newer cohorts are looser. By the time the newer cohorts mature (12–18 months after
+origination), loss rates are significantly above model predictions. The company must
+simultaneously provision for elevated losses, tighten underwriting (reducing origination
+volume), and raise equity to replace the consumed capital. Investors face a choice between
+injecting further capital at distressed terms or accepting the company's failure.
+EARLY WARNING SIGNALS: Underwriting criteria have been changed (loosened) more than
+twice in the last 18 months; average loan size has grown materially without a
+corresponding improvement in the credit score distribution; vintage loss data shows
+newer cohorts defaulting faster than older cohorts at the same loan age; the company
+has raised equity capital to replace credit losses rather than to fund growth.
+WHEN TO APPLY: Any lending company where the loan book has grown more than 3x in
+18 months and the underwriting model has not been independently validated at the new scale.
+
+4. THE BANKING PARTNER EXIT
+DESCRIPTION: A neobank or embedded finance company builds its entire operational
+infrastructure on a single banking partner. The partner bank is acquired, exits the
+fintech-as-a-service market, receives its own regulatory sanction, or simply decides
+the commercial arrangement is not worth the regulatory risk. It gives 90 days notice.
+The fintech has 90 days to migrate all customer accounts, payment rails, and card
+issuing to a new partner — a process that typically takes 9–18 months. The company
+cannot serve new customers during the migration. Existing customers leave. The
+company does not survive the migration period.
+EARLY WARNING SIGNALS: Single banking partner disclosed; partner bank has announced
+strategic review of its BaaS business; news reports of the partner bank's regulatory
+issues; fintech's contract with the banking partner has a termination clause of 90
+days or less; the company has never tested a partial migration or built connectivity
+with a second banking partner.
+WHEN TO APPLY: Any neobank, BaaS consumer, or embedded finance company with a single
+banking or infrastructure partner and no documented continuity plan.
+
+5. THE TAKE RATE COMPRESSION DEATH SPIRAL
+DESCRIPTION: A payments company competes primarily on price. To win enterprise clients,
+it offers below-market take rates that are sustainable only at high volume. It raises
+a Series B on projected TPV that assumes it can win large clients at those rates. The
+large clients sign, the TPV grows, but the revenue per transaction is so low that gross
+margin is structurally insufficient to fund the sales and engineering teams required
+to serve the enterprise client base. The company is simultaneously too successful (TPV
+growing) and commercially unsound (margin per transaction cannot support the cost base).
+EARLY WARNING SIGNALS: Take rate is below 0.10% of TPV for an SMB-facing business;
+large client contract has a pricing schedule that drops the effective take rate below
+0.05% at volume milestones; gross margin below 40% on payment revenue; sales team
+is offering pricing exceptions that are not in the standard rate card.
+WHEN TO APPLY: Any payments company where a significant portion of TPV comes from
+1–3 large contracts negotiated at rates materially below the standard pricing schedule.
+
+6. THE REGULATORY SANDBOX ILLUSION
+DESCRIPTION: A fintech company is built around a regulatory pilot, sandbox, or
+temporary exemption that was granted by a regulator as an experiment, not as a
+permanent policy position. The company grows within the sandbox and raises equity
+capital. When the sandbox ends, the mainstream regulatory framework does not accommodate
+the company's business model. The company must either fundamentally change its model
+(destroying the product and economics it raised money for) or exit the market.
+Common in: BNPL (built before BNPL regulation); crypto (built under FCA temporary
+registration); AI-driven lending (built under model risk exemptions).
+EARLY WARNING SIGNALS: Company describes its regulatory environment as a "pilot," a
+"sandbox approval," or "operating under transitional provisions"; the underlying regulation
+for the company's model has not been finalised; the company's legal counsel describes
+its compliance as "good faith" rather than "fully compliant"; the submission contains
+language like "we believe the FCA will permit this" rather than "we have confirmed with
+the FCA that this is permitted."
+WHEN TO APPLY: Any fintech operating in BNPL, crypto, AI-based underwriting, or any
+other area where the regulatory framework has been described as "evolving."
+
+═══════════════════════════════════════════════════════════════════════
+SECTION E — EXIT COMPARABLE DATABASE
+═══════════════════════════════════════════════════════════════════════
+
+ACQUISITION MULTIPLES BY SUB-CATEGORY:
+
+Payments Infrastructure:    Strategic 5–15x net revenue | PE 3–7x net revenue
+  Premium driver: processing volume diversification across geographies and currencies.
+  At scale (>£500M TPV/month), strategic buyers pay for the network effect of existing
+  merchant relationships. Infrastructure with >95% uptime track record commands premium.
+
+Neobank / Challenger Bank:  Strategic 1–5x revenue | Rare PE exits (balance sheet complexity)
+  Premium driver: active user count and average revenue per account. A neobank with
+  >500K monthly active users and revenue >£80/year/user is an attractive acquisition
+  for a traditional bank seeking digital distribution.
+
+Lending / Credit:           Strategic 0.8–2.0x loan book | PE 1.0–1.8x book (quality-dependent)
+  Premium driver: a clean vintage book with <2% net loss rate commands top of range.
+  A book with deteriorating vintages is valued at or below par.
+
+Insurtech:                  Strategic 1.0–2.5x GWP | PE 1.5–3.0x GWP (combined ratio <90%)
+  Premium driver: proprietary risk model validated at scale; specialist niche with
+  underwriting expertise not available to the acquirer organically.
+
+Wealthtech:                 Strategic 1–3% of AUM | PE rarely acquires sub-£2B AUM platforms
+  Premium driver: customer age profile (younger customers = longer revenue runway)
+  and product depth (ISA + SIPP + GIA platform commands higher multiple than ISA-only).
+
+Regtech:                    Strategic 5–15x ARR | PE 4–8x ARR (apply SaaS Library multiples)
+  Premium driver: regulatory mandate driving mandatory adoption.
+
+Open Banking:               Strategic 3–15x net revenue | acquirer competition from banks and payments
+  Note: Tink acquired by Visa for £1.6B (2022) at ~20x net revenue — a premium for
+  pan-European coverage and regulatory relationships not replicable organically.
+
+Embedded Finance / BaaS:    Strategic 4–12x net revenue | PE 3–6x net revenue
+  Premium driver: number of live bank partnerships and regulatory capital held by
+  the platform (acquirer inherits the licence).
+
+NAMED STRATEGIC ACQUIRERS:
+
+Visa: Open banking infrastructure, payment processing, fraud analytics, identity.
+  Target profile: pan-European coverage, API quality, bank API relationships.
+  Recent: Tink (£1.6B), Currencycloud (£700M). Will pay 15–25x net revenue for
+  category-defining coverage. Blocked Plaid acquisition ($5.3B, abandoned 2021) due
+  to US antitrust — similar scrutiny likely for any future large payments acquisition.
+
+Mastercard: Data analytics, open banking, identity, cross-border payments, B2B payments.
+  Target profile: data assets, fraud prevention, B2B payment flow ownership.
+  Recent: Aiia (Danish open banking), Verizon Media data assets. Typical range: £100M–£3B.
+
+PayPal: Consumer payments, merchant checkout, BNPL, SMB financial services.
+  Target profile: consumer payment flows, SMB lending assets, international markets.
+  Recent: Paidy (£2.2B, Japan BNPL), iZettle (£2.2B, merchant payments).
+  Typical range: £200M–£3B.
+
+Stripe: Developer payment infrastructure, financial services for platforms, banking APIs.
+  Target profile: infrastructure-layer payments, developer-first products, EU geography.
+  Recent: multiple small acqui-hires. Typical: £50M–£500M for technology and team.
+  Note: Stripe is pre-IPO and uses acquisitions to extend platform coverage.
+
+Adyen: Enterprise merchant acquiring, embedded payments, financial services for platforms.
+  Target profile: specialist acquiring in verticals Adyen does not serve (gaming,
+  regulated industries, specific geographies). Typical range: £50M–£300M.
+
+Revolut: Consumer financial services, SMB banking, cross-border payments.
+  Target profile: technology capability, regulatory licences in new geographies.
+  Has pursued organic growth over acquisition historically.
+
+HSBC: Retail banking capability, SMB lending, trade finance, digital distribution.
+  Target profile: digital-first retail or SMB banking with strong customer acquisition.
+  Recent: Silicon Valley Bank UK (acquired during SVB collapse, 2023, £1 notional).
+  Typical commercial acquisition range: £100M–£1B.
+
+Barclays: Retail banking, credit cards, investment banking technology.
+  Target profile: consumer credit technology, payment processing, open banking data.
+  Recent: Kensington Mortgage Company (£2.3B). Not aggressive acquirer of early-stage fintech.
+
+Lloyds Banking Group: Retail and SMB banking, insurance, mortgage, wealth.
+  Target profile: digital distribution, SMB financial services, insurance technology.
+  Typical range: £50M–£500M. Prefers integration over acqui-hire.
+
+Aviva / Legal & General / AXA (Insurance acquirers): Insurtech.
+  Target profile: technology-enabled distribution, specialist niche underwriting,
+  motor or home insurance with proprietary risk model.
+  Typical range: £50M–£500M. AXA acquisitions include Direct Line for Business assets.
+
+BlackRock / Schroders / Hargreaves Lansdown (Wealth acquirers): Wealthtech.
+  Target profile: digital-first asset management or retail investment platforms with
+  >£500M AUM and strong demographic of customers under 45.
+  Typical range: 1–2.5% of AUM.
+
+IPO COMPARABLES — Fintech:
+
+Adyen (2018):        Revenue at IPO £339M | YoY growth 59% | IPO multiple: 50x revenue
+Wise (2021, direct listing): Revenue at IPO £421M | YoY growth 39% | IPO multiple: 30x revenue
+Revolut (2025 target): Revenue £2.2B (2023) | Expected valuation: £40–45B = 18–20x revenue
+Monzo (IPO pipeline): Revenue £670M (FY2024) | Valuation: £4–5B = 6–8x revenue
+Checkout.com:       Private at £10B peak (2021) | Revenue ~£400M = 25x revenue at peak
+Nu Holdings (2021): Revenue at IPO £1B | YoY growth 99% | IPO multiple: 20x revenue
+SoFi (2021):        Revenue at IPO £565M | YoY growth 63% | IPO multiple: 8x revenue
+Note: Post-2022 correction. 2025–2026 fintech IPO multiples reflect: payments/infrastructure
+10–20x net revenue; consumer lending 3–8x revenue; neobanks 5–12x revenue.
+Regulatory capital cost, banking partner independence, and path to profitability are
+primary drivers of valuation premium in current market.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION F — KEY QUESTIONS FOR FOUNDER MEETING
+═══════════════════════════════════════════════════════════════════════
+
+01. REGULATORY LICENCE STATUS
+QUESTION: "What is your exact regulatory status? Do you hold a licence directly, operate
+under another company's licence, or rely on an exemption? If you are in application,
+what stage is the application at and what is the FCA's expected timeline for a decision?"
+STRONG ANSWER: Specific FCA registration number; clear description of the licence type
+and what it permits; if in application, a specific FCA case officer reference and written
+evidence of progress.
+WEAK ANSWER: "We're FCA-regulated" without specifying the licence type; "we operate
+under a partner's licence" without naming the partner or describing the terms; "we're
+in the process of applying" with no specifics.
+REVEALS: Whether the company can legally continue its current operations and whether
+regulatory risk is an existential threat or a managed compliance matter.
+
+02. BANKING PARTNER STRUCTURE
+QUESTION: "How many banking partners do you operate with? Who are they? What is the
+contractual notice period if they decide to terminate? What percentage of your operational
+infrastructure — settlement, card issuing, safeguarding — depends on each partner?"
+STRONG ANSWER: Two or more live banking partners; longest notice period to terminate is
+at least 12 months; active process to add a third partner; describes what happens
+operationally if the primary partner gives notice.
+WEAK ANSWER: Single banking partner; describes it as "a strong partnership" without
+contractual detail; cannot confirm the termination notice period.
+REVEALS: Whether the company has an existential single point of failure in its
+infrastructure that is outside its direct control.
+
+03. FRAUD RATE AND TREND
+QUESTION: "What is your fraud loss rate as a percentage of TPV or total transaction
+volume for each of the last four quarters? What is the trend? And what specific controls
+have you added in the last 12 months?"
+STRONG ANSWER: Specific quarterly fraud rates; stable or declining trend; names specific
+controls (machine learning fraud model, velocity checks, device fingerprinting); fraud
+losses below 0.10% of TPV.
+WEAK ANSWER: Describes fraud as "below industry average" without a specific figure;
+cannot produce quarterly data; describes fraud controls as "industry standard."
+REVEALS: Whether the company is managing fraud proactively or masking a growing problem
+behind aggregate volume metrics.
+
+04. CREDIT LOSS RATE BY VINTAGE
+QUESTION: "For each loan cohort originated by quarter over the last 8 quarters, what is
+the actual net loss rate at 12 months of age? How does this compare to your model
+predictions at the time of origination?"
+STRONG ANSWER: Specific vintage loss curve for each quarter; loss rates below 4% at
+12-month maturity for SMB; model predictions and actuals within 1 percentage point.
+WEAK ANSWER: Reports a single blended loss rate across the entire book; cannot separate
+vintages; describes the model as "performing within expectations" without specific figures.
+REVEALS: Whether the underwriting model is predictive and whether newer cohorts are
+performing differently from the cohorts that established the company's track record.
+
+05. REGULATORY CAPITAL POSITION
+QUESTION: "What is your current regulatory capital surplus above the minimum requirement?
+At your current burn rate, when would you breach the minimum if you do not raise
+additional equity? What is your buffer plan?"
+STRONG ANSWER: Specific capital surplus figure; runway to breach is more than 24 months
+at current burn; has a committed facility or board-approved equity plan to maintain the
+buffer.
+WEAK ANSWER: "We're comfortably above the minimum" without a figure; cannot state
+the breach point; describes it as "not a near-term concern."
+REVEALS: Whether the company has modelled its regulatory capital requirement properly
+and whether a capital breach is a realistic short-term risk.
+
+06. TAKE RATE TRAJECTORY
+QUESTION: "What is your take rate — revenue as a percentage of GMV or TPV — for each
+of the last six quarters? What is driving the trend? What is the minimum take rate at
+which your business model is financially viable?"
+STRONG ANSWER: Stable or improving take rate; specific minimum floor with a clear
+explanation of the cost structure that determines it; any compression explained by a
+specific strategic decision (e.g., enterprise pricing) rather than structural market pressure.
+WEAK ANSWER: Cannot produce a quarterly take rate history; describes pricing as "competitive"
+without specifying the rate; suggests the take rate "has room to improve with scale."
+REVEALS: Whether revenue growth is genuine or is TPV growth at deteriorating yield
+that will not translate to profitable unit economics at scale.
+
+07. AML / KYC PROGRAMME SPECIFICS
+QUESTION: "Who is your MLRO? How many Suspicious Activity Reports did you file in the
+last 12 months? What is your customer onboarding rejection rate for KYC failures? And
+how do you monitor for transaction monitoring alerts?"
+STRONG ANSWER: Names the MLRO and their background; specific SAR count; onboarding
+rejection rate between 3–15% (lower suggests insufficient screening; higher suggests
+customer acquisition is structurally challenged); automated transaction monitoring with
+named vendor or proprietary system.
+WEAK ANSWER: MLRO role "currently being filled"; no SAR count; describes KYC as
+"automated" without specifics; onboarding rejection rate of 0% or not known.
+REVEALS: Whether the company has a real compliance programme or whether it has
+minimised compliance friction at the expense of regulatory compliance.
+
+08. KEY PERSON RISK IN COMPLIANCE
+QUESTION: "Is your MLRO or Chief Compliance Officer an approved person under FCA
+Senior Managers and Certification Regime? What happens to your regulatory permissions
+if they leave? Do you have succession coverage for the compliance leadership role?"
+STRONG ANSWER: Named SMF16 (compliance oversight) or SMF17 (MLRO) approved person;
+describes a documented succession plan; deputy MLRO named.
+WEAK ANSWER: Cannot confirm whether compliance leadership is an FCA-approved person;
+describes succession as "we'd hire quickly"; MLRO joined in last 3 months with no track
+record in the role.
+REVEALS: Whether a single compliance leadership departure could trigger a regulatory
+event — the FCA requires approved persons to be in role and may restrict activities
+if a key approved person leaves without a successor.
+
+09. FUNDING LINE STRUCTURE (LENDING COMPANIES)
+QUESTION: "What is the total size of your committed funding facility? When does it
+expire? What is the advance rate and what covenants could trigger early repayment?
+Do you have a backup facility? What is your origination plan if your primary funder
+gives 90 days notice?"
+STRONG ANSWER: Facility of at least 2x the current loan book; expiry at least 18 months
+ahead; named backup facility or advanced discussions with a second funder; covenant
+thresholds clearly understood and managed.
+WEAK ANSWER: Facility size not disclosed; expiry within 12 months; no named backup
+facility; describes the funder relationship as "strong" without contractual specifics.
+REVEALS: Whether the lending business can continue operating if its primary funding
+source changes its risk appetite or commercial terms.
+
+10. INSURANCE CLAIMS MODEL VALIDATION
+QUESTION: "At what GWP size was your current pricing model validated? Who validated it —
+internally or by an independent actuary? How is the actual loss ratio in your most recent
+cohorts tracking against model predictions? And what is your plan if actual losses
+exceed model predictions by more than 10 percentage points?"
+STRONG ANSWER: Independent actuarial validation at scale close to current GWP; specific
+comparison of model predictions vs actual loss ratios by cohort; a documented response
+plan for loss ratio deterioration.
+WEAK ANSWER: "The model has been validated internally"; cannot specify at what GWP
+size validation occurred; describes loss ratios as "performing well" without specific figures.
+REVEALS: Whether the company is underwriting at scale with a validated risk model or
+with a model that may be materially mispricing risk at current size.
+
+11. REVENUE MODEL STRESS TEST (NEOBANK)
+QUESTION: "If UK interchange regulation reduced debit interchange by a further 50%
+tomorrow, what would that do to your annual revenue? What is your plan to replace
+that revenue?"
+STRONG ANSWER: Can quantify the interchange dependency; has a specific plan (credit
+product revenue, subscription tier expansion, embedded lending) that would replace
+it within 18 months; the plan is already in development.
+WEAK ANSWER: "Interchange is only a portion of our revenue" without a specific figure;
+describes a future product that would compensate but has no development timeline.
+REVEALS: Whether the business is built on a structurally robust revenue mix or whether
+it is exposed to a regulatory event that is not improbable.
+
+12. PATH TO REGULATORY INDEPENDENCE
+QUESTION: "If your banking partner exited and you needed to operate independently under
+your own licence — or with a new banking partner — what would that require operationally
+and financially? Have you modelled that scenario?"
+STRONG ANSWER: Has modelled the scenario; knows the cost (typically £1–5M and 12–24
+months for a new banking partner); has a documented operational continuity plan;
+may have already initiated a relationship with a backup partner.
+WEAK ANSWER: Has not modelled the scenario; describes the current partner relationship
+as low-risk without addressing the hypothetical; "we'd cross that bridge if we came to it."
+REVEALS: Whether the company's management team understands that their banking partner
+is not a vendor — it is a lifeline — and whether they are managing that dependency
+with the seriousness it deserves.
+
+═══════════════════════════════════════════════════════════════════════
+SECTION G — REGULATORY LANDSCAPE
+═══════════════════════════════════════════════════════════════════════
+
+FCA AUTHORISATION TYPES AND TIMELINES:
+
+Electronic Money Institution (EMI) — Full Authorisation:
+  Permits: issuing e-money, providing payment services, safeguarding customer funds.
+  Capital requirement: €350,000 minimum.
+  Application timeline: 12–18 months typical from submission to decision.
+  FCA approval rate: approximately 60–70% of submitted applications.
+  Conditions commonly attached: restrictions on customer onboarding volume until
+  operational controls are validated; requirement for a Skilled Person review.
+  Key considerations for Alex: an EMI licence is the minimum viable licence for a
+  neobank or consumer payments company. "Small EMI" registration (under £3M annual
+  e-money in issue) does not permit holding customer funds in the same way.
+
+Payment Institution (PI) — Full Authorisation:
+  Permits: payment initiation, account information services, payment processing.
+  Does NOT permit: issuing e-money or holding customer funds in segregated accounts.
+  Capital requirement: €125,000 minimum.
+  Application timeline: 9–15 months.
+  Key considerations for Alex: a PI licence is insufficient for a company that wants
+  to hold customer balances. If a company describes itself as "FCA-authorised" but
+  holds customer funds under a PI licence, this is a compliance error.
+
+Full Banking Licence (PRA + FCA dual-regulated):
+  Permits: deposit-taking, lending, full banking services.
+  Capital requirement: minimum £1M + ongoing risk-weighted assets calculation.
+  Application timeline: 3–5 years from application to mobilisation licence.
+  Post-mobilisation restrictions: banks operate under restrictions for up to 3 years
+  before full authorisation is granted. Restricted licence limits deposit-taking.
+  Key considerations for Alex: a company claiming a "banking licence application"
+  that is less than 18 months old is at the very beginning of a 3–5 year process.
+  Do not let management present a banking licence as a near-term milestone.
+
+FCA Consumer Credit Authorisation:
+  Permits: lending, credit brokering, debt collecting.
+  Application timeline: 6–12 months.
+  Key considerations for Alex: required for any consumer lending company. Not required
+  for B2B or institutional lending. Check whether the lending company is authorised
+  for the specific credit activities it is performing.
+
+FCA Investment Management / Advisory Permissions:
+  Permits: managing investments on behalf of clients, providing investment advice.
+  Application timeline: 6–18 months depending on complexity.
+  Key considerations for Alex: a wealthtech company managing money without these
+  permissions is operating illegally. Always verify for wealthtech and robo-advisory deals.
+
+OPEN BANKING — REGULATION AND OPPORTUNITY:
+
+PSD2 Status (UK): The UK retained PSD2 post-Brexit under the Payment Services
+  Regulations 2017. The FCA has been developing the next framework under the
+  Edinburgh Reforms (2023) and consultation on Payment Services Regulation updates.
+  Banks must provide FCA-registered AISPs and PISPs with API access.
+
+PSD3 (EU — in force 2026): The EU is implementing PSD3, which strengthens open
+  banking requirements, improves API quality standards, and extends SCA requirements.
+  UK companies with EU operations should plan for PSD3 compliance by 2026.
+  Key opportunity: PSD3 mandates higher-quality bank APIs across 27 EU member states —
+  creates a structural tailwind for open banking infrastructure companies.
+
+CONSUMER DUTY (FCA) — Effective July 2023:
+  Requirement: All FCA-regulated firms must demonstrate they are delivering good
+  outcomes for retail customers in four areas: products and services, price and value,
+  consumer understanding, and consumer support.
+  Impact on fintech: Consumer Duty significantly increases the compliance burden for
+  neobanks, consumer lenders, and investment platforms. Firms must evidence outcomes
+  — not just implement processes. The FCA has conducted enforcement actions for
+  Consumer Duty failures.
+  Alex flag: Any consumer-facing fintech that does not mention Consumer Duty in its
+  compliance framework is operating with a significant FCA risk.
+
+BNPL REGULATION (UK — Imminent):
+  Status as of April 2026: BNPL regulation has been through multiple consultation
+  rounds. The Financial Services and Markets Act 2023 includes powers to regulate BNPL.
+  The FCA is expected to bring BNPL under Consumer Credit regulation, requiring:
+  — Affordability checks before each BNPL transaction
+  — FCA authorisation for BNPL providers
+  — Mandatory credit agreement disclosures
+  Impact on fintech: Any BNPL company built on a model that cannot withstand
+  mandatory affordability checks faces a regulatory cliff when the rules land.
+  Klarna, Clearpay, and Laybuy have all adjusted models in anticipation. New BNPL
+  entrants face high regulatory uncertainty.
+  Alex flag: PASS any BNPL company that cannot demonstrate its model is viable
+  under the anticipated Consumer Credit Act framework.
+
+CRYPTO ASSET REGULATION (UK — FCA):
+  Current status: FCA crypto asset registration (under MLR 2017) has a ~70%+
+  rejection rate for firms that have applied. FCA has published a roadmap for full
+  crypto regulation under the Financial Services and Markets Act 2023 framework.
+  The FCA's full crypto regulatory regime is expected 2025–2026.
+  For stablecoins specifically: FCA and Bank of England have consulted on a payment
+  stablecoin regime; systemic stablecoins (£10B+ in circulation) would be regulated
+  by the Bank of England. Consumer stablecoins by the FCA.
+  Alex flag: Any crypto company operating without FCA registration is operating
+  illegally under UK money laundering regulations. Any crypto company operating under
+  FCA registration should be treated with high regulatory scrutiny — not as a clean
+  compliance status.
+
+AI IN FINANCIAL SERVICES (FCA GUIDANCE):
+  FCA Discussion Paper DP5/22 (2022) on AI in financial services established that:
+  — Accountability: all AI decisions in regulated activities require a named human
+    accountable person under SMCR.
+  — Explainability: firms must be able to explain AI-driven decisions to customers.
+  — Bias and fairness: AI models used in credit, insurance, or investment decisions
+    must be tested for discriminatory outcomes.
+  EU AI Act (in force 2024): AI systems used in credit scoring, insurance pricing,
+  and financial services are classified as HIGH RISK under the EU AI Act.
+  High-risk AI requirements: mandatory conformity assessment, human oversight,
+  accuracy and robustness testing, and registration in the EU AI database.
+  Alex flag: Any fintech using AI in credit underwriting, insurance pricing, or
+  investment recommendation must demonstrate compliance with FCA AI guidance (UK)
+  and EU AI Act high-risk requirements (EU operations). A company that describes its
+  AI as "proprietary" without addressing explainability or fairness testing is
+  carrying a material regulatory liability.
+
+SANCTIONS COMPLIANCE:
+  UK: Office of Financial Sanctions Implementation (OFSI) maintains the UK sanctions
+  list. All FCA-regulated firms must screen customers and transactions against OFSI.
+  EU: European Commission sanctions list. Non-compliance carries criminal liability
+  for directors.
+  US: OFAC sanctions carry extraterritorial reach — a UK fintech processing USD
+  transactions or serving US persons is subject to OFAC compliance obligations.
+  Alex flag: Any fintech processing cross-border transactions that does not describe
+  its sanctions screening programme (automated screening, escalation process, OFSI/OFAC
+  coverage) is carrying an unquantified sanctions compliance risk. Ask specifically about
+  exposure to high-risk jurisdictions and the frequency of sanctions list updates applied.
+
+═══════════════════════════════════════════════════════════════════════
+END — ALEX SECTOR INTELLIGENCE LIBRARY — FINTECH v1.0
+═══════════════════════════════════════════════════════════════════════
