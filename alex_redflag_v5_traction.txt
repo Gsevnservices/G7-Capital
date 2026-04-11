@@ -1,0 +1,935 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 5: TRACTION RED FLAGS
+Version 1.0. Built: April 2026.
+15 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 15 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+Traction flags are the most immediate signals Alex has access to —
+they reflect what is happening right now in the business, not what
+happened at founding or what may happen at scale. Weight them accordingly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR01: GROWTH RATE DECLINING — THREE OR MORE CONSECUTIVE QUARTERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+MoM or YoY revenue growth rate has declined in each of the last 3 or more consecutive
+quarters — not a single-quarter dip explained by seasonality or a one-time event,
+but a sustained, consistent deceleration. Detectable when quarterly ARR additions
+show a declining trend over 3 or more periods: Q1 +£300K, Q2 +£250K, Q3 +£190K,
+Q4 +£140K. The absolute growth may still be positive — the flag is the direction
+of change in the growth rate, not the absolute level.
+
+WHAT IT MEANS:
+A sustained growth deceleration is the most reliable leading indicator of a company
+that will fail to achieve its forecast. Three consecutive quarters of deceleration
+is not noise — it is a trend. The causes are predictable: (1) the early-adopter
+market is saturated and the company has not yet broken into the mainstream buyer pool;
+(2) the product is not delivering sufficient retention to maintain compounding —
+churn is increasing as the customer base grows beyond the founder network; (3) the
+sales motion that worked for the first 30 customers is not working for customers
+31 through 100 — the playbook needs to change but has not. The financial consequence
+of a decelerating growth rate is a compounding problem: a company growing at 12% MoM
+that decelerates to 7% MoM within 12 months will have 40% less ARR than its baseline
+forecast implies — which means it will run out of runway or fail its next fundraise
+on the timeline the current raise assumes.
+
+DISQUALIFYING WHEN:
+Growth rate has declined in each of the last 4 or more consecutive quarters AND
+the most recent quarter's growth rate is below 5% MoM (for a pre-Series A company)
+or below 20% YoY (for a Series A company) AND the company's financial model projects
+re-acceleration without a specific identified driver — the model assumes a recovery
+that the data does not support.
+
+MANAGEABLE WHEN:
+(a) One quarter of the three is explained by a specific, non-recurring event —
+a key customer delayed renewal, a seasonal market pause, a product release delayed
+a major deal by one quarter — and the deceleration is two true trend quarters plus
+one explained outlier.
+(b) The deceleration was driven by a deliberate strategic decision — moving upmarket
+to enterprise (which lengthens sales cycles and temporarily depresses new customer
+additions), or removing a low-quality free tier — and the new growth motion is showing
+early signs of re-acceleration in the most recent data.
+(c) The company is at an early stage (below £500K ARR) where the growth rate is
+volatile due to the small denominator and individual deal timing effects are large.
+
+VERIFICATION:
+Request quarterly ARR data for the last 6 quarters broken into: gross new ARR,
+expansion ARR, churned ARR, net new ARR. Calculate the MoM or QoQ net new ARR
+trend. Ask: "Your net new ARR has been declining for [X] quarters — what is the
+primary driver and what specific change have you made or plan to make to reverse it?"
+The specificity of the answer — is there a concrete driver identified and a concrete
+response planned — is the primary signal.
+
+PATTERN LESSON:
+When net new ARR has declined for three or more consecutive quarters, calculate the
+implied ARR at the current deceleration rate 12 months forward and compare it to
+the financial model — if the model assumes re-acceleration without a specific identified
+driver, the forecast is not credible.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR02: COHORT QUALITY DECLINING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+More recent customer cohorts — customers acquired in the last 12 months — show
+measurably worse retention at the same age as older cohorts. Detectable from:
+cohort retention tables that show newer cohort lines below older cohort lines at
+equivalent time points; a company that states NRR across all cohorts while NRR
+within recent cohorts alone is materially lower; or a company that reports a
+declining first-renewal retention rate as more customers reach their 12-month mark.
+
+COHORT QUALITY CALCULATION:
+For each acquisition cohort (e.g. Q1 2024, Q2 2024), calculate ARR retained at
+12 months as a percentage of ARR at signing. Compare the 12-month retention rates
+across cohorts. A declining trend — cohort 2024 Q1 retains 85%, Q2 retains 79%,
+Q3 retains 71% — is cohort quality deterioration regardless of what the blended
+NRR figure shows.
+
+WHAT IT MEANS:
+Cohort quality deterioration is more alarming than a low current NRR because it
+predicts future NRR — the blended NRR figure today includes all cohorts, many of
+which are healthy early customers. As the lower-quality recent cohorts grow to
+represent a larger share of the total customer base, the blended NRR will decline.
+A company that reports 112% NRR today but has recent cohort retention declining
+from 85% to 70% will likely be reporting sub-100% NRR in 12–18 months. The causes
+of cohort quality decline: (1) the ICP has shifted — the company is acquiring customers
+who are a worse fit for the product than early adopters were; (2) the product has
+degraded relative to expectations — more customers, more churn sources, product quality
+is not keeping up with the retention promise; (3) the sales motion is creating
+unrealistic expectations — new customers are being closed on promises the product
+cannot keep.
+
+DISQUALIFYING WHEN:
+Three or more consecutive cohorts show declining 12-month retention AND the most
+recent cohort's 12-month retention is more than 15 percentage points below the
+oldest cohort measured AND the company does not have a documented explanation for
+the deterioration or a remediation plan in execution.
+
+MANAGEABLE WHEN:
+(a) The deterioration is attributed to a specific, bounded ICP expansion — the company
+deliberately acquired 20 customers outside its core ICP in one quarter to test a
+new segment. Those customers retained at 65% while the core ICP retains at 88%.
+The cohort data shows the experiment and its result; the core ICP cohort data is stable.
+(b) Cohort data is sparse — fewer than 3 full cohorts have reached 12-month maturity
+and the variation is within statistical noise for small cohort sizes.
+(c) The retention deterioration is fully explained by customers lost in the first
+90 days due to an onboarding problem that has since been identified and fixed —
+the at-12-month retention of customers who survive 90 days is stable.
+
+VERIFICATION:
+Request a cohort retention table: customers acquired by quarter for the last 6 quarters,
+with their ARR retained at 3 months, 6 months, and 12 months. Plot the 12-month
+retention line across cohorts. Ask: "Have your recent customer cohorts been retaining
+at the same rate as your earlier cohorts at the same point in their lifecycle?" If
+the answer is yes, request the data to confirm. If the answer is no, ask: "What
+do you attribute the change to?"
+
+PATTERN LESSON:
+When NRR is reported as a blended figure across all cohorts, request cohort-level
+retention data for the last 6 acquisition cohorts — declining retention in recent
+cohorts predicts declining blended NRR with a 12–18 month lag that will not be
+visible in current headline metrics.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR03: NET REVENUE RETENTION BELOW 100%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH (NRR 90–100%) | CRITICAL (NRR below 90%)
+
+SIGNAL:
+NRR — calculated on the same cohort of customers at the start and end of a 12-month
+period, excluding any customer acquired during the period — is below 100%. Meaning:
+the ARR generated by existing customers at the end of the period is less than the
+ARR they generated at the start, even before accounting for any new customers added.
+
+CALCULATION CONFIRMATION:
+NRR = (Starting cohort ARR + Expansion ARR − Contraction ARR − Churned ARR) ÷ Starting cohort ARR
+If NRR is below 100%, the existing customer base is net shrinking. All new customer
+ARR is required to offset the decline in existing ARR before net growth can begin.
+
+WHAT IT MEANS:
+Sub-100% NRR means the company is on a leaky bucket model: it must continuously
+acquire new customers just to maintain flat total ARR. Every £1 of new customer ARR
+acquired replaces a £1 of existing ARR that has left — the company is running to
+stand still. The compounding consequence: as the customer base grows, the absolute
+amount of ARR to replace grows with it. A company with £5M ARR and 95% NRR must
+add £250K of new ARR quarterly just to maintain flat ARR — before any growth occurs.
+At 90% NRR with £10M ARR, the required quarterly replacement is £1M — which demands
+a sales machine that is running full-speed without producing any visible ARR growth.
+Below 90% NRR, the bucket has a structural hole that new customer acquisition alone
+cannot fill at realistic growth rates.
+
+DISQUALIFYING WHEN:
+NRR is below 90% AND the customer base has more than 30 logos (so the figure is
+statistically meaningful, not distorted by 1–2 large churns) AND the trend in NRR
+is flat or declining AND the company is projecting NRR improvement without a specific
+structural change to the retention motion — the model assumes a recovery that the
+retention data does not support.
+
+MANAGEABLE WHEN:
+(a) NRR is between 95–100% for a company at pre-seed or seed with fewer than 15
+customers — a single logo churn or contraction creates a below-100% figure that
+is not statistically representative.
+(b) The sub-100% NRR is entirely attributable to a known, bounded event — one large
+customer who churned due to their own business failure (bankruptcy, acquisition,
+shutdown) rather than product dissatisfaction — and the rest of the cohort shows
+stable retention.
+(c) NRR has been sub-100% historically but a specific remediation action (a customer
+success hire, a product fix, a pricing model change) was implemented in the most recent
+quarter and early data shows improvement.
+
+VERIFICATION:
+Request NRR decomposed into: gross renewal rate, expansion rate, contraction rate,
+and churn rate for the last 4 quarters. Calculate NRR from components. If the
+company provides a single NRR figure without decomposition, request the component
+data. The most important component is gross renewal rate — below 80% gross renewal
+is a product failure signal; above 90% gross renewal with sub-100% NRR is a
+low-expansion signal (different problem, different fix).
+
+PATTERN LESSON:
+When NRR is below 100%, decompose into gross renewal rate and net expansion rate
+separately — below-80% gross renewal signals product failure; 85%+ gross renewal
+with sub-100% NRR signals an expansion motion problem — each requires a different
+response and carries a different severity.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR04: LOGO CHURN ABOVE SECTOR BENCHMARK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+Annual logo churn — calculated as logos churned ÷ logos at the start of the period —
+exceeds the sector benchmark for the business model type and stage. Note: this flag
+requires correct denominator calculation (see below). A company that grew from 50
+to 80 customers and lost 8 has a logo churn rate of 16% (8÷50), not 10% (8÷80).
+
+SECTOR LOGO CHURN BENCHMARKS (ANNUAL):
+Enterprise software (ACV >£100K): STRONG <3% | CONCERN >7% | FAIL >12%
+Mid-market SaaS (ACV £10–100K):   STRONG <5% | CONCERN >10% | FAIL >15%
+SMB SaaS (ACV <£10K):             STRONG <10% | CONCERN >20% | FAIL >30%
+Consumer subscription (annual):   STRONG <10% | CONCERN >25% | FAIL >40%
+Marketplace (seller side):        STRONG <15% | CONCERN >30% | FAIL >50%
+
+WHAT IT MEANS:
+Logo churn above the sector benchmark means the company is losing customers at
+a rate that its sector peers sustain below. This is not merely a financial signal —
+it is a product signal. Logo churn above benchmark indicates one or more of: the
+ICP is wrong (acquiring customers who should not have been acquired); the product
+does not deliver on its value promise (customers try it and leave); the customer
+success motion is insufficient (customers are not supported through adoption);
+or competitive alternatives are improving and customers are switching at renewal.
+High logo churn also has a non-financial consequence: every churned customer is a
+failed reference, a potential negative-word-of-mouth source, and a case study the
+company cannot use. At scale, high logo churn creates a reputational headwind that
+slows new customer acquisition even as the company invests more in marketing.
+
+DISQUALIFYING WHEN:
+Annual logo churn exceeds the FAIL threshold for the sector AND the company has
+more than 20 customers (so the figure is statistically meaningful) AND churn has
+been above the FAIL threshold for 2 or more consecutive measurement periods AND
+the company does not have a documented CS intervention programme targeting the
+at-risk customer segments.
+
+MANAGEABLE WHEN:
+(a) Logo churn is above benchmark but NRR is above 100% — high logo churn in SMB
+combined with strong expansion in enterprise can produce healthy NRR. The logo churn
+is a distribution mix issue, not a retention crisis.
+(b) Logo churn has declined materially in the most recent measurement period due to
+an identified and implemented remediation (a CS hire, an onboarding redesign, a
+product fix) — the trend is moving in the right direction with a specific causal explanation.
+(c) A one-time cohort event — a customer segment acquired under a promotional pricing
+campaign that was not sustainable — has been identified and removed from the cohort,
+and the underlying logo churn is within benchmark.
+
+VERIFICATION:
+Request the logo churn calculation with the correct denominator: logos at start of
+period, not end of period. Ask: "Of your customers 12 months ago, how many are still
+active today?" Calculate logo churn from this figure. Then ask: "What were the
+primary reasons given by customers who churned?" The stated reasons — price, product,
+competitor, own business failure — determine whether churn is addressable.
+
+PATTERN LESSON:
+When logo churn is disclosed or calculable, verify the denominator is the starting
+customer count not the ending count, and then compare the result to the sector
+benchmark — denominator manipulation is the most common way logo churn is
+understated, and the corrected figure often exceeds the benchmark by 5–10 percentage points.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR05: ALL GROWTH FROM ONE UNOWNED CHANNEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+100% or near-100% of new customer acquisition comes from a single channel that the
+company does not own or control — a single referral partner, a single marketplace
+or app store, a single API integration partner, a single community or platform —
+such that if that channel changed its terms, reduced its distribution, or was acquired,
+new customer acquisition would halt. Detectable from: all named customer sources in
+the submission come from the same partner; the submission references a strategic
+partnership as the exclusive source of growth; the GTM section describes a single
+channel without any diversification plan.
+
+WHAT IT MEANS:
+Channel concentration is the distribution equivalent of customer concentration —
+the business is structurally dependent on one relationship it does not control.
+The specific failure modes: (1) the channel partner changes its revenue share terms,
+referral fee, or integration policies — the economics of customer acquisition change
+overnight; (2) the channel partner launches a competing product and deprioritises
+or terminates the relationship — customer acquisition drops to zero without warning;
+(3) the channel partner is acquired by a strategic competitor — the acquirer terminates
+the partnership; (4) the channel experiences external disruption (app store policy
+change, platform algorithm change, partner financial difficulty) — the company inherits
+the disruption with no alternative acquisition source. The company that grows entirely
+through one unowned channel has not built a GTM capability — it has built a dependency.
+
+DISQUALIFYING WHEN:
+More than 85% of all new customer acquisition in the last 12 months came from a
+single unowned channel AND the channel has notified the company of a policy or
+commercial term change in the last 6 months AND the company has no documented
+plan to build a second acquisition channel with a specific investment and timeline.
+
+MANAGEABLE WHEN:
+(a) The single channel is the deliberate go-to-market for the early stage — the company
+is focused on proving the channel before diversifying. The concentration is intentional
+and the channel is performing well. A second channel is planned and resourced once
+the first is proven, not abandoned.
+(b) The company owns the economic relationship with the end customer even if the
+acquisition came through a partner — meaning the partner is a referral source but
+not a gatekeeper to renewal, expansion, or ongoing relationship.
+(c) The channel partner relationship is governed by an exclusive contract with minimum
+volume commitments and a penalty for termination — the concentration risk is mitigated
+by contractual protection for the investment horizon.
+
+VERIFICATION:
+Request the new customer acquisition source breakdown for the last 12 months by channel.
+Ask: "If [named channel] stopped sending you customers tomorrow, what would your
+new customer acquisition rate be in the following month?" A company with genuine
+channel diversification will describe alternatives. A company with channel dependency
+will describe a crisis scenario.
+
+PATTERN LESSON:
+When all new customer acquisition is attributable to one channel, verify whether
+the company owns the end-customer relationship or whether the channel partner
+does — a company that loses the channel and loses the customer simultaneously
+has no business without the partner.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR06: GROWTH RATE SPIKE WITHOUT EXPLANATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: MEDIUM
+
+SIGNAL:
+Revenue or ARR in a specific quarter is materially higher than the growth trend —
+typically 2x or more of the average quarterly ARR addition — with no explanation
+offered in the submission for the spike. The spike is either the most recent quarter
+(which the company is using as the basis for its growth narrative) or a historical
+quarter that distorts the reported YoY growth rate.
+
+WHAT IT MEANS:
+A growth spike without explanation is not necessarily negative — it may represent
+a large enterprise deal closing, a viral moment, a partnership activation, or a
+press event driving inbound demand. But when the spike is unexplained, Alex cannot
+assess whether it is: (a) repeatable — a product-led flywheel that will continue;
+(b) one-time — a single large deal or event that will not recur; or (c) a metric
+manipulation — ARR recognised from a multi-year contract in the spike quarter
+that should have been recognised ratably, creating an artificial spike in one
+quarter and a corresponding trough in subsequent quarters. The most common misleading
+use of a growth spike: a company that signs a 3-year £900K contract and recognises
+£900K as ARR in the signing quarter, then reports "ARR tripled last quarter" without
+disclosing that the prior quarters' growth rates were flat.
+
+DISQUALIFYING WHEN:
+The growth spike represents more than 30% of total cumulative ARR AND is in the
+most recent quarter AND the company's forward projections assume the spike-level
+quarterly addition as the new run rate AND no explanation for the spike is provided —
+the growth story and the financial model are built on a number whose repeatability
+cannot be assessed.
+
+MANAGEABLE WHEN:
+(a) The spike is explicitly explained in the submission — a named enterprise deal,
+a named partnership activation, a named press event — and the company's projection
+treats the spike as a one-time addition rather than the new run rate.
+(b) The spike reflects a genuine product-led viral moment — a feature launch that
+drove significant inbound — and usage data supports that the acquired users are
+retained and active, suggesting durability.
+(c) The spike was in a historical quarter that is now 12+ months old — it affects
+the YoY comparison but not the current growth trajectory assessment.
+
+VERIFICATION:
+Request the quarterly ARR breakdown for the last 8 quarters. Identify the spike quarter.
+Ask: "What drove the unusually high ARR addition in [quarter]? Is that growth driver
+still active, and what is your expectation for a similar quarter in the next 12 months?"
+The answer to whether the driver is still active determines whether the spike is
+structural or one-time.
+
+PATTERN LESSON:
+When a single quarter's ARR addition is more than 2x the trailing average, ask for
+the specific driver and assess whether it is repeatable before using that quarter's
+growth rate as the basis for forward projections.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR07: USAGE METRICS NOT PROVIDED AT SERIES A
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+A company at Series A — defined as £1M+ ARR or a disclosed Series A raise — provides
+detailed ARR and growth metrics but cannot or will not provide any product usage data:
+no daily or monthly active users, no feature adoption rates, no session frequency,
+no engagement metrics. Note: this flag is the traction-category companion to Product
+Flag P09 — they address the same omission from different analytical angles. Both can
+apply simultaneously.
+
+WHAT IT MEANS:
+ARR is a contractual measure. Usage is the behavioural measure. The gap between what
+customers have agreed to pay and how actively they are using the product is the best
+forward indicator of retention. A Series A company that has built a billing infrastructure
+sufficient to invoice £1M+ in ARR but has not built the product instrumentation to
+know how often customers use the product has prioritised revenue extraction over
+product health monitoring — which is a specific choice that predicts specific problems.
+Three outcomes from non-measurement: (1) customers who are not using the product are
+not detected before renewal — the first signal is the non-renewal, not a preventable
+warning 90 days before; (2) the product team cannot identify which features are
+driving value and which are unused — prioritisation is based on assumption, not data;
+(3) the NRR figure cannot be explained by reference to usage — when NRR declines,
+the team does not know whether it is driven by usage decline, product failure, or
+competitive displacement.
+
+DISQUALIFYING WHEN:
+The company has more than £1M ARR AND more than 20 customers AND has been operating
+for more than 18 months AND cannot provide any usage metric for any customer AND
+does not have product analytics tooling in place (Mixpanel, Amplitude, Segment,
+or custom instrumentation) — at this stage, the absence of measurement is not a
+tooling gap, it is a product management philosophy that will compound into a
+retention problem.
+
+MANAGEABLE WHEN:
+(a) The product is an enterprise software with a small number of large accounts
+where usage is monitored through CS engagement logs and QBR reporting rather
+than automated instrumentation — the company can describe specific usage behaviour
+for each account even without a DAU/MAU dashboard.
+(b) The product is a regulated healthcare or financial services product where automated
+usage tracking requires patient or customer consent and the implementation is in
+progress — the absence is a compliance timeline, not an oversight.
+(c) The company has recently implemented product analytics (within the last 60 days)
+and early data is available — the absence was historical but the gap is being addressed.
+
+VERIFICATION:
+Ask: "What is your DAU/MAU ratio? What percentage of your customers logged in at
+least once in the last 30 days? Which features do your most active customers use
+most? And which customers are at risk based on usage data?" A company with product
+instrumentation answers all four questions immediately. A company without it gives
+qualitative answers to all four. The quality of the answers reveals the measurement
+maturity independent of what the numbers say.
+
+PATTERN LESSON:
+When usage metrics are absent alongside ARR data at Series A, ask for the specific
+tooling the company uses to track product engagement — the name of the tool and
+the date it was implemented tells Alex whether the omission is structural or transitional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR08: CAC PAYBACK PERIOD EXTENDING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+CAC payback period — calculated as CAC ÷ (ACV × gross margin) expressed in months —
+has increased quarter-on-quarter for 2 or more consecutive quarters. Detectable when
+the company discloses CAC and gross margin across multiple periods, or when the ratio
+of sales and marketing spend to net new ARR is increasing over time. Can also be
+inferred when the company reports rising CAC or declining ACV or declining gross
+margin, any of which would extend payback arithmetically.
+
+PAYBACK PERIOD CALCULATION:
+CAC payback (months) = CAC ÷ (Monthly Gross Profit per customer)
+Monthly Gross Profit per customer = (ACV × gross margin) ÷ 12
+If CAC is rising, ACV is falling, or gross margin is compressing — or any combination
+of the three — payback period extends. Alex should calculate this from component data
+if the payback period is not directly disclosed.
+
+WHAT IT MEANS:
+An extending payback period means the company is becoming less efficient at recovering
+its customer acquisition cost — the unit economics of the business are moving in the
+wrong direction. Three specific failure modes that an extending payback reveals: (1)
+CAC spiral in early formation (Financial Flag F10) — paid acquisition channels are
+saturating and each additional customer costs more to acquire; (2) ACV compression —
+the company is closing deals at lower ACV, either through discounting or by shifting
+to lower-tier customers, reducing the revenue per unit of acquisition cost; (3) gross
+margin compression — COGS are rising as the business scales (AI inference costs,
+implementation costs, support costs) reducing the profit earned per customer per month.
+Any one of the three extends payback — all three simultaneously is a structural unit
+economics failure.
+
+DISQUALIFYING WHEN:
+Payback period has extended by more than 50% over 4 or more consecutive quarters AND
+the current payback period exceeds the sector threshold (24 months for SMB SaaS,
+36 months for enterprise) AND the company cannot identify a specific driver and
+a specific remediation — the efficiency regression is unexplained and unchecked.
+
+MANAGEABLE WHEN:
+(a) Payback extension is entirely attributable to a deliberate move upmarket — ACV
+is increasing but the sales cycle is longer, which extends the payback calculation
+temporarily while the higher ACV compounds. The absolute LTV is improving even as
+payback extends — the unit economics are better, not worse.
+(b) Extension is due to a planned increase in sales team capacity ahead of a pipeline
+that is 90 days from closing — a temporary increase in CAC numerator that will
+normalise when the new hires reach quota.
+(c) Payback period has extended but remains within the sector benchmark — the extension
+is visible in the trend but not yet at a problematic absolute level.
+
+VERIFICATION:
+Request quarterly CAC, ACV, and gross margin for the last 6 quarters. Calculate the
+payback period for each quarter. Ask: "Has your customer acquisition cost changed in
+the last 12 months? If so, what has driven the change?" Then ask about ACV and gross
+margin separately. The combination of the three data points reveals whether payback
+extension is a pricing issue, a cost issue, or an efficiency issue.
+
+PATTERN LESSON:
+When payback period is disclosed or calculable and has extended for 2 or more consecutive
+quarters, decompose the extension into its CAC, ACV, and gross margin components —
+the source of the extension determines whether it is a sales efficiency problem,
+a pricing problem, or a margin problem, and each requires a different response.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR09: EXPANSION REVENUE CONCENTRATED IN ONE OR TWO ACCOUNTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+NRR is above 100% — which appears positive — but the expansion ARR driving it is
+concentrated in one or two large accounts. If those accounts are removed from the
+NRR calculation, NRR falls below 100%. Detectable when: one customer appears in
+expansion case studies disproportionately; the company's total expansion ARR in a
+period is close to the ACV of a single named account expansion; or the company's
+customer count is growing but total ARR is growing faster, with one account responsible
+for most of the excess.
+
+WHAT IT MEANS:
+A 115% NRR that is entirely driven by one account expanding from £200K to £600K ARR
+is not evidence of a healthy land-and-expand motion — it is evidence of one exceptional
+relationship that has disguised what may be a flat or declining customer base. When
+that account's expansion is complete, NRR will revert to the underlying base rate —
+which may be sub-100%. This flag is the expansion equivalent of revenue concentration
+(Financial Flag F01): the metric looks healthy in aggregate but the underlying
+distribution is fragile. Additionally, the expanding account may be approaching
+its maximum spend — there is a ceiling on how much any single customer will pay —
+and when that ceiling is reached, the expansion contributor that has been inflating
+NRR disappears from the metric entirely.
+
+DISQUALIFYING WHEN:
+Excluding the top 2 expansion accounts, NRR falls below 95% AND the company has
+more than 15 customers (so the exclusion is statistically meaningful) AND the top
+2 accounts represent more than 50% of total expansion ARR in the period — the
+headline NRR is not representative of the underlying customer base health.
+
+MANAGEABLE WHEN:
+(a) The concentrated expansion is in the earliest cohort of enterprise accounts —
+those customers are inherently the largest spenders because they were the first to
+see value and have had the longest time to expand. The expansion concentration is
+a cohort timing effect, not a structural concentration.
+(b) There are 3 or more accounts with meaningful expansion in the period — the
+concentration in one or two is proportional but not exclusive. Other accounts are
+also expanding, even if at smaller scale.
+(c) The concentrated expansion reflects a genuine step-change in the account's
+use case — the account expanded to new departments, new geographies, or a new
+product module that will now be repeatable with other accounts.
+
+VERIFICATION:
+Request expansion ARR by account for the last 4 quarters. Calculate NRR excluding
+the top 2 expansion accounts. Ask: "If you remove your two largest expanding accounts
+from the NRR calculation, what is the NRR for the rest of the base?" A company that
+has a healthy broad-based expansion motion will answer confidently. A company whose
+NRR is concentrated will either not have the calculation ready or will reveal a
+materially lower underlying figure.
+
+PATTERN LESSON:
+When NRR is above 110%, calculate what NRR would be excluding the top 2 expansion
+accounts — a high headline NRR concentrated in one or two accounts is a concentration
+risk, not an expansion motion, and the two require entirely different responses.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR10: PILOT-TO-PAID CONVERSION RATE BELOW 50%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+The company runs product pilots or proof-of-concept periods as part of its sales
+motion, and fewer than 50% of completed pilots convert to a paid contract. Detectable
+when: the submission mentions pilots as part of the sales process and describes the
+number of current pilots; the conversion rate is stated; or the ratio of pipeline
+described as "in pilot" to closed deals implies a conversion rate below 50%.
+
+WHAT IT MEANS:
+A sub-50% pilot-to-paid conversion rate means the majority of the company's most
+advanced sales-stage opportunities do not become customers. This has two interpretations:
+(1) The product does not deliver sufficient proof of value in the pilot period —
+the customer evaluates it, does not see the ROI they expected, and does not convert.
+This is a product-market fit signal.
+(2) The sales process is not designed to create conversion commitment — pilots are
+being run without a success criterion, a commercial agreement, or a conversion plan.
+The customer uses the pilot, finds value, but has no obligation or incentive to
+convert — and the sales team has not created one. This is a sales process signal.
+Both signals require different responses, but both indicate that the company's most
+resource-intensive sales investment (implementing a pilot) is producing a negative
+outcome in more than half of cases — a direct hit on sales efficiency.
+
+DISQUALIFYING WHEN:
+Pilot conversion rate is below 30% AND the company has completed more than 10 pilots
+(so the figure is statistically meaningful) AND no root cause analysis of failed
+conversions has been conducted or documented — more than 7 in 10 pilots are failing
+and the company does not know why.
+
+MANAGEABLE WHEN:
+(a) Pilots include a paid component — even a small fee (£2–5K for a 90-day pilot)
+— which confirms buyer intent. Paid pilots convert at 70–85%; free pilots convert
+at 30–50%. If the company is running paid pilots, the sub-50% threshold is applied
+at a higher base conversion expectation.
+(b) The conversion rate is calculated on pilots that have formally ended — many
+pilots that have not yet converted are still active and within their evaluation period.
+The at-completion conversion rate is a different figure from the at-point-in-time
+conversion rate.
+(c) Each pilot failure has been documented with a reason — lost to competitor (competitive
+signal), not enough budget (timing signal), or decision-maker changed (champion dependency
+signal) — and the company is using the failure data to improve pilot design.
+
+VERIFICATION:
+Request a pilot log: all pilots conducted in the last 18 months, their outcome (converted,
+failed to convert, ongoing), and for each failed conversion, the stated reason. Ask:
+"Of pilots completed in the last 12 months, what percentage converted to a paid contract?
+And what were the most common reasons for the non-conversions?" The reasons reveal
+whether the problem is product, process, or pricing.
+
+PATTERN LESSON:
+When pilots are part of the sales motion, request the pilot log with outcomes and
+stated conversion reasons before accepting the pilot pipeline as evidence of commercial
+traction — a pipeline full of active pilots with a historical conversion rate below
+50% is not a commercial pipeline, it is a prospect list with an expensive evaluation model.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR11: SALES CYCLE EXTENDING QUARTER-ON-QUARTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: MEDIUM
+
+SIGNAL:
+Average time from first qualified contact to signed contract has increased in each
+of the last 2 or more consecutive quarters. Detectable when: the company discloses
+sales cycle length across multiple periods; the submission mentions that deals are
+"taking longer to close"; the pipeline age data shows deals that have been open for
+materially longer than the stated average; or the number of deals in pipeline has
+grown without a corresponding increase in closed deals.
+
+WHAT IT MEANS:
+An extending sales cycle means each unit of sales capacity is producing less output
+in a given period. A salesperson who could close 2 deals per quarter when the cycle
+was 3 months closes 1 deal per quarter when the cycle extends to 6 months — for the
+same headcount cost. The causes of sales cycle extension in order of frequency:
+(1) The company is moving upmarket without adapting its sales process — enterprise
+buyers require more stakeholders, more legal review, and more security diligence than
+the mid-market motion the company was built for; (2) the market is becoming more
+cautious — buyers are taking longer to approve software spend and adding more
+stakeholder checkpoints; (3) the product is not compelling enough to drive urgency —
+buyers are evaluating but not deciding because the pain is not sufficient to justify
+the effort of procurement; (4) a specific procurement friction has emerged (security
+review, contract terms dispute) that is common across multiple deals.
+
+DISQUALIFYING WHEN:
+Sales cycle has extended by more than 50% over 4 or more consecutive quarters AND
+the company has not identified the specific cause AND the financial model assumes
+a sales cycle that is 30% shorter than the current measured average — the model
+is built on a sales productivity assumption that the current sales data contradicts.
+
+MANAGEABLE WHEN:
+(a) Sales cycle extension is entirely explained by a deliberate move upmarket — the
+company is now selling to enterprise buyers who have longer cycles, but ACV has
+increased proportionally with the cycle length, maintaining sales productivity
+in revenue terms even if not in deal count terms.
+(b) Extension is in a specific deal stage (legal review, security review) that the
+company has identified and is addressing — hiring a dedicated legal or compliance
+resource to manage the bottleneck.
+(c) The extension is within the range of normal variation for the company's stage
+and sector — a 1-month extension in a 9-month enterprise cycle is noise.
+
+VERIFICATION:
+Request pipeline data with deal open dates. Ask: "What was your average sales cycle
+12 months ago versus today? And which stage of the sales process has extended most —
+initial evaluation, procurement, legal, or security?" The bottleneck stage identifies
+the fix. An extending evaluation stage is a product or positioning problem; an extending
+legal stage is a contract or security infrastructure problem.
+
+PATTERN LESSON:
+When sales cycle length has extended across consecutive quarters, identify the specific
+stage in the pipeline where deals are stalling before accepting the extension as an
+unavoidable market condition — stage-level bottleneck analysis reveals a fixable
+process problem more often than a structural market problem.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR12: MAGIC NUMBER BELOW 0.5
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+The Magic Number — calculated as Net New ARR in the quarter × 4, divided by sales
+and marketing spend in the prior quarter — is below 0.5. This means the company
+is generating less than £0.50 of annualised new ARR for every £1 of sales and
+marketing spend. Directly observable when both net new ARR and S&M spend are
+disclosed; estimable from headcount and ARR data when not directly stated.
+
+MAGIC NUMBER CALCULATION:
+Magic Number = (Net New ARR Q2 × 4) ÷ S&M Spend Q1
+Where Net New ARR = Ending ARR − Beginning ARR + Churned ARR
+A Magic Number above 0.75 is STRONG. Below 0.5 indicates the sales and marketing
+investment is not efficiently converting to recurring revenue.
+
+WHAT IT MEANS:
+The Magic Number measures sales efficiency — how much annualised revenue is generated
+per unit of sales investment. Below 0.5 means the company is spending £2 or more
+to generate £1 of annualised new revenue. This has a direct implication for burn
+efficiency: a company with a Magic Number of 0.3 must spend £3.30 of capital to
+generate £1 of ARR, which means at a 5x ARR valuation, every £1 of ARR generated
+requires £3.30 of capital investment — significantly destroying the return profile
+before any other costs are considered. The Magic Number below 0.5 also means that
+doubling the sales and marketing spend will not double revenue — the efficiency
+problem will compound.
+
+DISQUALIFYING WHEN:
+Magic Number has been below 0.5 for 3 or more consecutive quarters AND is not
+improving AND the company's financial model projects ARR growth that is only
+achievable by increasing S&M spend further — the model is projecting growth through
+an investment that has already demonstrated poor efficiency.
+
+MANAGEABLE WHEN:
+(a) The Magic Number is temporarily depressed by a new sales team ramp — a company
+that hired 5 salespeople in Q1 will show a very low Magic Number in Q2 (high S&M
+spend, low new ARR from reps still in ramp) and a recovering Magic Number in Q3–Q4
+as the new hires reach productivity.
+(b) The Magic Number calculation excludes a significant inbound or PLG component —
+if 40% of new ARR comes from organic inbound that has near-zero S&M cost, the
+measured S&M spend overstates the cost of the total ARR addition.
+(c) The company is at a very early stage (below £500K ARR) where the S&M spend is
+building pipeline for deals that will close in a future quarter — the 90-day lag
+between spend and close creates a temporarily low Magic Number that will normalise.
+
+VERIFICATION:
+Calculate Magic Number from the last 4 quarters of disclosed data. Ask: "What is
+your Magic Number and how has it trended over the last 4 quarters?" If the company
+does not know its Magic Number, this is itself a signal about financial discipline.
+Ask for S&M spend by quarter alongside net new ARR by quarter to calculate independently.
+
+PATTERN LESSON:
+When the Magic Number is below 0.5, identify whether the cause is rising S&M spend
+(efficiency problem) or declining net new ARR (product or market problem) — the
+two require opposite responses and conflating them leads to the wrong intervention.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR13: FREEMIUM PRODUCT — CONVERSION BELOW 2% AFTER 12 MONTHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+A freemium product that has been live for 12 or more months has a free-to-paid
+conversion rate below 2% — meaning fewer than 1 in 50 free users become paying
+customers. Detectable when total registered or free user count and total paying
+customer count are both disclosed or calculable.
+
+BENCHMARK:
+Free-to-paid conversion rates by model:
+B2B freemium (SMB target): STRONG >8% | ACCEPTABLE 3–8% | CONCERN 2–3% | FAIL <2%
+Consumer freemium: STRONG >5% | ACCEPTABLE 2–5% | CONCERN 1–2% | FAIL <1%
+A company reporting 50,000 users and 500 paying customers has a 1% conversion rate
+regardless of what it claims about its "engaged user base."
+
+WHAT IT MEANS:
+A sub-2% conversion rate in a B2B freemium product after 12 months means one of
+three things: (1) the free tier is too generous — users receive full or near-full
+value from the free tier and have no material incentive to upgrade; (2) the paid
+tier upgrade triggers do not align with genuine user needs — users hit the paywall
+on features they could live without, and simply stop using those features rather
+than paying; (3) the free users are not the target buyer profile — the product is
+attracting users who would never pay (students, individuals, hobby users) while
+the intended enterprise or SMB buyer is not adopting the free tier at all.
+The consequence: the company is running an infrastructure, support, and customer
+success operation for thousands of free users who are generating no revenue while
+the paid tier revenue is insufficient to cover those costs.
+
+DISQUALIFYING WHEN:
+Conversion rate has been below 2% for more than 12 months AND free user base is
+above 5,000 (so the rate is statistically meaningful) AND the company has not
+made a structural change to the free/paid tier boundary — the model has been given
+sufficient time to prove itself and has not.
+
+MANAGEABLE WHEN:
+(a) The company has deliberately maintained a generous free tier as a category-building
+strategy during an early market development phase, and has a documented plan to adjust
+the free/paid boundary with a specific timeline.
+(b) The free tier is a consumer acquisition channel for a B2B product — free individual
+users at a company organically become a paid enterprise contract through bottom-up
+adoption. Conversion from individual free user to enterprise contract is tracked
+separately and is above 5%.
+(c) The conversion rate has been improving quarter-on-quarter even if still below
+2% — a trend from 0.8% to 1.5% over 6 quarters indicates the model is working
+but still developing.
+
+VERIFICATION:
+Request monthly free user additions, paying customer additions, and the conversion
+rate calculation for the last 6 months. Ask: "What does a free user who converts
+to paid look like — what is the trigger? And what is the most common reason free
+users do not convert?" The trigger story reveals whether there is a genuine upgrade
+event or whether conversion is incidental.
+
+PATTERN LESSON:
+When a freemium product has a conversion rate below 2% after 12 months, test whether
+the free tier is providing full value at zero cost — if free users can accomplish
+the primary job-to-be-done without paying, the conversion problem is structural
+and requires a tier redesign, not a marketing improvement.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR14: REFERENCE CUSTOMERS DECLINING TO SPEAK PUBLICLY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: HIGH
+
+SIGNAL:
+The company has 5 or more paying customers and cannot produce a single customer
+who will: (a) take a 20-minute reference call with an investor without a structured
+NDA; or (b) be named on the company's website or in a case study with their own
+name and company attached. All references offered are anonymous, under strict NDA,
+or unavailable for timing or confidentiality reasons. Note: this flag also appears
+as Team Flag T15 — it is included in both categories because it signals both a team
+quality issue (champion relationships are not strong enough to generate advocacy)
+and a traction quality issue (customers are not receiving enough value to advocate).
+
+WHAT IT MEANS:
+A paying customer who declines to be a public reference is sending a clear signal:
+the product or relationship is not valuable enough to the customer to justify the
+small effort of advocacy. There are three legitimate exceptions — regulated industries
+(financial services, healthcare, government) where disclosure of technology vendors
+is restricted; extremely early relationships where the customer has not yet seen
+enough value to advocate; or enterprise companies with strict marketing approval
+processes that slow, not prevent, reference cases. Beyond these exceptions, customer
+reference unwillingness is the most direct possible signal that product-market fit
+is not confirmed at the level the submission implies. A customer who loves a product
+and uses it actively is almost always willing to say so — the advocacy reluctance
+is inversely correlated with the depth of the value delivered.
+
+DISQUALIFYING WHEN:
+The company has more than 10 paying customers AND none are willing to be named
+publicly AND the company does not operate in a sector where disclosure is structurally
+restricted AND the company is presenting customer satisfaction as strong (high NPS,
+positive anecdotes) — the disconnect between claimed satisfaction and absence of
+advocacy is a material credibility signal.
+
+MANAGEABLE WHEN:
+(a) The company operates in a sector where vendor disclosure is structurally restricted
+— NHS trusts and financial services firms routinely restrict technology vendor naming
+in press — and the company can provide reference calls under NDA with senior decision-makers.
+(b) The company is very early (fewer than 5 customers) and relationships are new —
+customers have not yet had a 12-month experience to reflect on.
+(c) The company has 1 or more public case studies but the rest of the base prefers
+anonymity — the flag triggers when zero customers will be publicly named, not when
+the majority declines.
+
+VERIFICATION:
+Request 3 reference customers — senior decision-makers willing to take a 20-minute
+call without a structured NDA — as a standard part of screening. If the company
+cannot provide 3 within 5 business days after having 10+ customers, ask: "Can you
+share why your customers prefer to remain anonymous? Is this sector-specific or
+have specific customers expressed concerns about the reference?" The answer either
+identifies a legitimate structural reason or reveals a relationship quality issue.
+
+PATTERN LESSON:
+When reference customers decline to speak publicly with more than 5 paying customers
+in the base, ask directly whether the reluctance is sector-structural or relationship-based
+— the distinction determines whether it is a constraint to be managed or a product
+satisfaction signal to be investigated.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG TR15: ARR GROWTH DRIVEN BY PRICE INCREASES NOT VOLUME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Traction
+SEVERITY: MEDIUM
+
+SIGNAL:
+ARR growth in the reported period is driven primarily by price increases applied to
+existing customers — not by new customer acquisition, not by genuine seat or usage
+expansion — and the underlying volume growth (new logos, new seats, new use cases)
+is flat or declining. Detectable when: the company reports strong NRR but flat or
+declining new logo count; the submission describes a pricing action applied in the
+period that accounts for a significant portion of the ARR increase; or average ACV
+per customer has increased while customer count has not.
+
+WHAT IT MEANS:
+A price increase that customers accept and renew at is positive evidence of pricing
+power. But when price increases mask stagnant volume, three problems emerge:
+(1) The price increase is a one-time event — it cannot be repeated in the next period
+at the same magnitude without risking churn. The ARR growth contribution from pricing
+is non-recurring even if the revenue is contractually recurring.
+(2) Volume stagnation signals that the product is not attracting enough new buyers
+at the new price point — the higher price may be correct for current customers but
+is pricing out new customers who would have converted at the prior price.
+(3) Existing customers who accepted the increase once may resist a second increase
+at renewal — the customer who paid £80K instead of £60K this year may not accept
+£100K next year, and the loss of one large account at renewal will be larger
+than the gain from the price increase.
+ARR growth driven entirely by price is not product-led growth — it is yield management,
+and it is not indefinitely sustainable as the primary growth lever.
+
+DISQUALIFYING WHEN:
+More than 70% of net new ARR in the last 12 months came from price increases on
+existing customers AND new logo count has been flat or declining for 2 or more
+consecutive quarters AND the company's financial model projects continued ARR growth
+at the same rate — implying either continued price increases or new volume that
+the current data does not support.
+
+MANAGEABLE WHEN:
+(a) The price increase reflects genuine value increase — a major product improvement,
+a new module with tangible ROI — rather than a pure yield extraction. Customers
+who receive more value paying more is not a red flag; it is appropriate pricing.
+(b) Price increases represent less than 30% of net new ARR and volume growth is
+the primary driver — the pricing action is additive, not substitutive.
+(c) The company is at an early stage correcting a systematic under-pricing from
+the initial go-to-market — a one-time correction that moves customers from £10K
+to £20K ACV is not a volume substitution, it is a pricing model correction.
+
+VERIFICATION:
+Request net new ARR broken into components: new logos × new logo ACV, existing
+customer expansions (seat/usage), and pricing adjustments on existing contracts.
+Ask: "Of your ARR growth in the last 12 months, how much came from new customers
+versus existing customers expanding their usage versus price increases?" The breakdown
+reveals whether growth is volume-led, expansion-led, or yield-led.
+
+PATTERN LESSON:
+When new logo count is flat while ARR is growing, decompose the ARR growth into
+new logos, seat and usage expansion, and price increases — if more than 50% of net
+new ARR is from price increases, the growth story is not a volume story, and the
+sustainability of that growth depends on whether the company can repeat the pricing
+action or convert price acceptance into genuine volume growth.
+
+═══════════════════════════════════════════════════════════════════════
+END OF RED FLAG LIBRARY — CATEGORY 5: TRACTION
+15 flags. Apply all 15 mechanically to every deal submission.
+Next category: Governance Red Flags (G01–G10).
+═══════════════════════════════════════════════════════════════════════

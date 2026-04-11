@@ -149,7 +149,7 @@ Border white tint:     rgba(250,250,248,0.08)
 
 ### Completed Features
 
-- [x] Alex Master Prompt v1 (`assets/alex-master-v1.js`) — 559.7 KB, ~125,975 tokens: system prompt + 25 calibration rules + 100 training examples + 6 advanced analytical frameworks + Component 7: 8 sector intelligence libraries (B2B SaaS, Fintech, Healthtech, Marketplace, Deep Tech, Consumer, Climate, Enterprise)
+- [x] Alex Master Prompt v1 (`assets/alex-master-v1.js`) — 663.0 KB, ~151,369 tokens: system prompt + 25 calibration rules + 100 training examples + 6 advanced analytical frameworks + Component 7: 8 sector intelligence libraries + Component 8: Red Flag Library (100 flags, 8 categories)
 - [x] Core JS engine (`assets/workspace.js`) — `callAlex()`, `callAlexRaw()`, `saveDeal()`, `loadDealById()`, `loadAllDeals()`, `updateDealDecision()`, `updateDealOutput()`, `addCalibration()`, `loadFirmConfig()`, `isOnboarded()`, `exportNoteAsPDF()`, `clearWorkspace()`, `parseAlexScore()`, `formatDate()`, `requireOnboarding()`, `G7_PROXY_URL` constant
 - [x] Cloudflare Worker proxy (`cloudflare-worker.js`) — deployed at `g7-proxy.gsevnservices.workers.dev`. Fixes CORS, routes browser calls to Anthropic API, API key stored as Cloudflare env variable
 - [x] Result page — all 10 sections rendered
@@ -555,6 +555,27 @@ Token count: ~125,975 tokens system prompt
              ~133,975 typical call total (with user message)
              ~59,025 tokens headroom to 185K budget
 Status: Week 3 complete — ready for testing
+
+### SESSION 6 — 11 April 2026
+Built: Red Flag Library — 8 categories, 100 flags total
+  Category 1 — Financial (15 flags, F01–F15, 6,976 words)
+  Category 2 — Team (15 flags, T01–T15, 8,034 words)
+  Category 3 — Market (10 flags, M01–M10, 5,655 words)
+  Category 4 — Product (10 flags, P01–P10, 5,914 words)
+  Category 5 — Traction (15 flags, TR01–TR15, 8,523 words)
+  Category 6 — Governance (10 flags, G01–G10, 6,030 words)
+  Category 7 — Deal Structure (10 flags, DS01–DS10, 6,389 words)
+  Category 8 — Founder Behaviour (15 flags, FB01–FB15, 9,462 words)
+Total: 100 flags / 57,983 words across 8 full library files
+Note: Flag count is 100 (not 95 — recount confirmed during integration)
+Integrated: Component 8 condensed into alex_master_v1.txt
+  (alex_redflag_condensed.txt — 15,404 words / ~25,244 tokens)
+  Full flag category files retained on disk for reference
+Rebuilt: assets/alex-master-v1.js (663.0 KB)
+Token count: ~151,369 tokens system prompt
+             ~159,369 typical call total (with user message)
+             ~33,631 tokens headroom to 185K budget
+Status: Week 4 complete — Red Flag Library integrated
 
 ---
 

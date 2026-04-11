@@ -1,0 +1,846 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 1: FINANCIAL RED FLAGS
+Version 1.0. Built: April 2026.
+15 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 15 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+CRITICAL flag + confirmed by verification = strong PASS presumption.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F01: REVENUE CONCENTRATION — TOP CUSTOMER ABOVE THRESHOLD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH (single customer 30–50% of ARR) | CRITICAL (single customer above 50% of ARR)
+
+SIGNAL:
+Submission states, implies, or allows calculation that one named or unnamed customer
+represents 30% or more of current ARR — either through explicit disclosure, named
+case study revenue figures, or customer count vs ARR that implies concentration.
+
+WHAT IT MEANS:
+A single customer above 30% of ARR creates a business with two distinct failure modes
+running simultaneously: (1) the customer can extract price concessions at renewal because
+the vendor cannot afford to lose them — NRR figures from this account are not negotiated
+at arm's length; (2) if the customer churns, misses an expansion, or is acquired and
+consolidates vendors, the company misses its ARR plan by 30%+ in a single event.
+Above 50%, the company is operationally a single-customer relationship with a startup
+attached. All prior growth metrics, NRR, and expansion data are dominated by one
+relationship and tell Alex almost nothing about the underlying product-market fit.
+
+DISQUALIFYING WHEN:
+The single customer represents more than 50% of ARR AND the company is pre-Series A
+AND the customer has not yet committed to a multi-year renewal AND there are no other
+customers with ACV above £20K. All four conditions together = PASS on concentration grounds.
+At Series A and beyond: single customer above 40% of ARR is disqualifying unless a
+signed multi-year contract is in place locking in at least 24 months of revenue at
+the current or higher ACV.
+
+MANAGEABLE WHEN:
+(a) The concentrated customer has a signed multi-year contract (24+ months) with a
+stated minimum ACV, eliminating single-event churn risk for the investment horizon.
+(b) The customer is a household-name enterprise account and the relationship is actively
+expanding — concentration is a consequence of product success, not customer scarcity.
+(c) The company has 3+ other customers at ACV above £50K and the concentration customer
+was the first — concentration is a timing artefact of early sales motion, not structural.
+(d) The company is deliberately a single-enterprise deployment product (e.g. bespoke
+infrastructure for one regulated institution) — in which case it is not a SaaS business
+and should be assessed on different terms.
+
+VERIFICATION:
+Request ARR waterfall by customer for the last 12 months: customer name (or anonymised
+reference), ACV at start of period, expansions, contractions, end ACV. Calculate top
+customer as percentage of total ending ARR. Ask: "If your largest customer did not renew,
+what would your NRR be?" A company that cannot answer this has not modelled its own
+concentration risk.
+
+PATTERN LESSON:
+When a single customer represents more than 30% of ARR, calculate what the company's
+growth rate and NRR look like excluding that customer before accepting any headline metric.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F02: ADJUSTED METRICS WITHOUT DISCLOSURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+Submission presents "adjusted EBITDA," "adjusted gross margin," "adjusted burn,"
+"contribution margin," or any profitability metric prefixed with "adjusted,"
+"normalised," "pro forma," or "excluding" — without explicitly disclosing every
+line item being excluded and the total value of exclusions.
+
+WHAT IT MEANS:
+Adjusted metrics are not inherently fraudulent, but they are the most common vector
+for early-stage financial obfuscation. The most frequent exclusions: stock-based
+compensation (real economic cost to existing shareholders), founder salaries below
+market rate (cost structure is understated relative to a scaled business),
+one-time costs described as exceptional but recurring annually, and customer
+acquisition costs allocated to a separate marketing budget line that is excluded
+from the reported CAC. When exclusions are undisclosed, Alex cannot verify whether
+the adjustment is legitimate or whether the unadjusted metric is worse by a small
+amount or by a factor of 3.
+
+DISQUALIFYING WHEN:
+The submission presents only adjusted metrics with no GAAP or unadjusted equivalent
+disclosed, AND the adjustments are not individually listed with values, AND the company
+is at Series A or beyond (where financial reporting standards should be established).
+At pre-seed and seed stage, partial financial reporting is common — apply lower
+severity (MEDIUM) and request the underlying figures.
+
+MANAGEABLE WHEN:
+(a) Every exclusion is listed individually with the value: "Adjusted EBITDA excludes
+£1.2M SBC, £0.4M one-time legal settlement, and £0.3M office relocation costs —
+unadjusted EBITDA is -£2.1M."
+(b) The adjustment is standard for the business model (e.g. gross merchandise value
+vs net revenue in a marketplace — a disclosed adjustment, not a hidden one).
+(c) The submission provides both adjusted and unadjusted figures and explains the
+business rationale for the adjustment in the context of investor decision-making.
+
+VERIFICATION:
+Request the income statement or management accounts in unadjusted form for the last
+4 quarters. List each item excluded from the adjusted figure and confirm its value.
+Calculate the unadjusted equivalent of every adjusted metric presented. If the company
+cannot produce an unadjusted figure, the adjusted metric is unverifiable and should
+not be accepted as evidence of financial performance.
+
+PATTERN LESSON:
+When a submission uses any adjusted financial metric, request the unadjusted equivalent
+and the complete list of exclusions before using the metric in the screening analysis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F03: ARR INFLATION — PILOTS AND POCs INCLUDED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+Submission states an ARR figure that, when cross-referenced with disclosed customer
+count, named customer logos, pipeline description, or stage of commercialisation,
+implies inclusion of pilots, POCs, LOIs, verbal commitments, or free trials — i.e.
+revenue that is not yet contracted, signed, and invoiced at a stated annual rate.
+
+SIGNALS THAT INDICATE INFLATION:
+— "ARR includes our pilot with [enterprise name] which converts in Q3"
+— ARR per customer implied by ARR ÷ customer count is above stated ACV
+— Customer count described as "paying and evaluating" without separation
+— Pipeline conversion event described as "when X signs, ARR becomes Y"
+— ARR growth between the last two disclosure dates outpaces the number of
+  new contracts described in the same period
+
+WHAT IT MEANS:
+ARR means Annual Recurring Revenue: contracted, signed, invoiced revenue that will
+recur for at least 12 months unless the customer actively cancels. Pilots, POCs,
+and LOIs are pipeline, not ARR. A company that inflates ARR by 20–40% through
+inclusion of non-contracted relationships will report false growth rates, false
+NRR figures (if expansions of pilots are counted), and false CAC payback periods.
+All downstream metrics built on the inflated ARR number are unreliable.
+
+DISQUALIFYING WHEN:
+The ARR figure includes any revenue from a customer that has not signed a commercial
+agreement with a stated minimum commitment and invoice schedule AND the inflation
+represents more than 15% of total stated ARR AND the company is at Series A or beyond.
+At seed stage with ARR below £500K: any pilot inclusion that represents more than
+25% of the stated figure is disqualifying.
+
+MANAGEABLE WHEN:
+(a) The submission clearly separates contracted ARR from pipeline ARR and the flag
+applies only to the pipeline figure, which is labelled as such.
+(b) A pilot is structured as a paid pilot with a contractual conversion obligation
+at a stated rate — this is contracted revenue, not a pilot in the usual sense.
+(c) The inflation is small (below 10% of total ARR) and is explicitly disclosed.
+
+VERIFICATION:
+Request a signed contract or purchase order for each customer included in the ARR
+figure. Ask: "Can you send me the signed agreement and first invoice for each of
+your top 5 ARR contributors?" Any customer without a signed agreement is removed
+from ARR for the purposes of the screening analysis, and the corrected ARR is
+used in all subsequent metric calculations.
+
+PATTERN LESSON:
+When ARR per customer implied by the submission materially exceeds the stated ACV
+range, or when pipeline events are described as affecting ARR, assume ARR is inflated
+and request signed contracts for the top 5 revenue contributors before proceeding.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F04: DECLINING GROSS MARGIN TREND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+Submission discloses gross margin figures across multiple periods — quarterly or
+annually — showing a decline of 3 or more percentage points over 3 or more consecutive
+quarters; or a current gross margin is materially below the sector benchmark with
+no explanation offered.
+
+WHAT IT MEANS:
+Gross margin is the foundation of every other profitability metric. A declining gross
+margin trend in a software business predicts one or more of four structural problems:
+(1) AI inference costs rising faster than revenue as usage scales; (2) professional
+services headcount growing to support customer implementations — services are being
+added to retain customers who would otherwise churn; (3) pricing is being discounted
+at renewal to retain at-risk customers — effective ACV is falling while listed ACV
+is unchanged; (4) COGS line items (cloud hosting, data costs, support) are scaling
+faster than revenue, indicating a business model without operating leverage.
+A SaaS business should have expanding gross margins as it scales. Declining margins
+contradict the fundamental economics of the business model.
+
+DISQUALIFYING WHEN:
+Gross margin has declined more than 8 percentage points over 4 consecutive quarters
+AND the company cannot identify the specific COGS driver causing the decline AND is
+claiming a valuation multiple consistent with a high-margin software business.
+
+MANAGEABLE WHEN:
+(a) The decline is explicitly attributed to a planned and temporary increase in
+implementation costs for a cohort of new enterprise customers — with a stated date
+by which margins will recover as those customers go live.
+(b) The decline reflects a deliberate pricing strategy to win market share in a
+competitive window, with a stated plan to return to target margins within 12 months.
+(c) The business is early-stage and margin is volatile due to small absolute revenue —
+a move from 71% to 68% across three quarters in a £200K ARR business is noise,
+not a structural signal.
+
+VERIFICATION:
+Request quarterly P&L for the last 6 quarters with COGS decomposed into specific
+line items: hosting/infrastructure, third-party APIs, customer support, implementation
+and professional services, and other. Identify which line item is growing as a
+percentage of revenue. The driver of the margin decline determines whether it is
+structural or temporary.
+
+PATTERN LESSON:
+When gross margin has declined for 3 or more consecutive quarters, request the
+COGS breakdown and identify the specific line item causing the compression before
+accepting the company's explanation of the trend.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F05: BURN MULTIPLE ABOVE 2x AT SERIES A AND BEYOND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH (2–3x) | CRITICAL (above 4x with declining growth)
+
+SIGNAL:
+Net burn divided by net new ARR for the trailing 12 months exceeds 2.0x —
+i.e. the company is spending more than £2 to generate each £1 of net new ARR.
+Observable from submission when both burn rate and ARR growth are disclosed,
+or calculable from headcount × average fully-loaded cost vs net ARR adds.
+
+BURN MULTIPLE CALCULATION:
+Net burn (12 months) ÷ Net new ARR (12 months) = Burn Multiple
+Net new ARR = ending ARR − beginning ARR + churned ARR
+(This is the correct denominator — it includes expansion and accounts for churn)
+
+WHAT IT MEANS:
+Burn multiple measures the capital efficiency of growth. A burn multiple above 2x
+means the company is in an unsustainable growth mode: it is buying revenue rather
+than earning it. Companies with burn multiples above 3x at Series A almost never
+improve to below 1.5x without a painful cost restructuring. The pattern: high burn
+multiple is caused by over-hiring ahead of revenue (sales team, CS team, engineering)
+on the assumption that ARR will follow — when ARR growth disappoints, the headcount
+is fixed and the burn multiple rises further. The correction requires layoffs,
+which damage morale and slow the very growth the company needs.
+Above 4x with declining growth: the company is in a death spiral where each quarter
+of declining growth makes the burn multiple worse, which requires more capital,
+which runs out before growth recovers.
+
+DISQUALIFYING WHEN:
+Burn multiple above 4x for two consecutive quarters AND YoY ARR growth is declining
+AND the company is raising its next round at a higher valuation than the previous —
+the growth story is not supported by the capital efficiency, and the valuation is
+not sustainable on the current trajectory.
+
+MANAGEABLE WHEN:
+(a) Burn multiple above 2x at pre-seed or seed stage where absolute burn is small
+(below £150K/month) and the spending is on founding team and product development
+ahead of first revenue — this is expected, not alarming.
+(b) Burn multiple temporarily elevated due to a deliberate market-entry investment
+(e.g. hiring a 10-person enterprise sales team ahead of a pipeline that is 60 days
+from closing) — must be temporary with a stated date by which multiple normalises.
+(c) Industry-specific capital intensity: deep tech, biotech, or hardware companies
+where pre-revenue capital deployment is structural — apply the Deep Tech framework
+instead and use capital-to-milestone ratio as the primary metric.
+
+VERIFICATION:
+Calculate burn multiple from submission data. If not directly calculable, estimate:
+headcount × £8K average fully-loaded monthly cost = monthly burn estimate.
+Net new ARR = current ARR − ARR 12 months ago. If the company provides a different
+burn figure, request the monthly bank statement cash balance for the last 12 months
+to verify net cash consumed.
+
+PATTERN LESSON:
+When burn multiple exceeds 2x, verify whether growth rate is accelerating or
+decelerating — accelerating growth at 2x burn is a growth investment; decelerating
+growth at 2x burn is a structural efficiency problem that compounds.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F06: RUNWAY BELOW 12 MONTHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: CRITICAL (below 6 months) | HIGH (6–12 months)
+
+SIGNAL:
+Cash on hand divided by monthly net burn produces a runway figure below 12 months —
+observable when both cash balance and burn rate are stated, or when the last funding
+date, amount raised, and monthly burn allow estimation of current cash position.
+
+RUNWAY ESTIMATION FROM SUBMISSION:
+If cash balance not stated: (Last raise amount) − (months since raise × monthly burn)
+= estimated current cash. If burn rate not stated: headcount × £8K/month estimate.
+Flag this estimation in the note and request confirmation.
+
+WHAT IT MEANS:
+A company with less than 12 months of runway is in active fundraising mode whether
+or not it acknowledges this. The dynamics of a sub-12-month runway deal:
+(1) The founder's primary job is fundraising, not building — execution slows.
+(2) Customers sense urgency and defer decisions — "let's see if they survive" is an
+unspoken procurement response to a startup clearly under financial pressure.
+(3) The company may accept any terms from an investor because the alternative is zero.
+(4) Key hires reject offers because runway uncertainty makes offers unattractive.
+Below 6 months: the company cannot complete a standard venture fundraise (diligence +
+term sheet + close typically takes 3–6 months). A bridge or emergency capital event
+is the only realistic option — which almost always happens at a punitive valuation.
+
+DISQUALIFYING WHEN:
+Runway is below 6 months AND the company is not yet in active fundraising AND has
+no signed term sheets AND has no existing investor committed to a bridge. This is a
+situation where any investment from a new investor would likely be diluted by a
+bridge from an existing investor who has priority — the deal terms are not investable
+without full cap table transparency.
+
+MANAGEABLE WHEN:
+(a) The company is already in a signed term sheet or final close process with a
+lead investor — the runway is short because the round is imminent, not because
+the company is in distress.
+(b) The company has reached profitability or cash flow breakeven at current burn —
+the 12-month runway calculation is based on historical burn that is no longer the
+operating rate because the business is now self-sustaining.
+(c) The company has a signed revenue contract or grant that will extend runway by
+6+ months within 30 days — the timing of the cash event is certain.
+
+VERIFICATION:
+Request the most recent bank statement showing cash balance and the most recent
+monthly management accounts showing net cash consumed. Ask: "At your current burn
+rate, when does the company run out of cash if this round does not close?" A founder
+who cannot answer this question precisely is not managing their financial position.
+
+PATTERN LESSON:
+When runway is calculable at below 12 months, confirm whether the company is already
+in a closing process before assessing the submission — a company that is 60 days from
+close with a strong lead is a different risk profile from a company with no active process.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F07: REVENUE RECOGNITION MISMATCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+Submission states or implies that revenue from multi-year contracts is recognised at
+signing (upfront) rather than ratably over the contract period — detectable when:
+(a) Total Contract Value (TCV) and Annual Recurring Revenue (ARR) are presented as
+equivalent or ARR is described as "booked"; (b) revenue in a single quarter
+materially exceeds the run-rate implied by the stated ARR; (c) the company
+describes "recognising" a multi-year deal at signing as a revenue event.
+
+WHAT IT MEANS:
+Subscription and SaaS revenue should be recognised ratably — one-twelfth per month
+of the annual contract value, over the contract period. A company that recognises a
+3-year £300K contract as £300K revenue at signing is reporting £300K revenue where
+the correct IFRS 15 / UK GAAP figure is £8.3K per month. This creates three problems:
+(1) The reported revenue in the signing quarter is artificially high and the following
+quarters will show a "decline" in revenue that is purely an accounting artefact.
+(2) The ARR metric (which should reflect annualised recurring revenue) is conflated
+with TCV — a fundamentally different measure.
+(3) At acquisition or IPO, auditors will require revenue restatement — a company
+built on upfront recognition may have to restate 2–3 years of revenue, destroying
+the growth story that justified the valuation.
+
+DISQUALIFYING WHEN:
+The company is at Series A or beyond AND has not engaged an auditor or accountant
+to establish a compliant revenue recognition policy AND cannot produce an ARR schedule
+distinct from a TCV schedule. At this stage, the financial infrastructure required
+to raise institutional capital does not exist.
+
+MANAGEABLE WHEN:
+(a) The company explicitly separates TCV and ARR in the submission and correctly
+defines ARR as the annualised value of current-period contracted recurring revenue.
+(b) The business model legitimately recognises revenue upfront because the service
+is fully delivered at a point in time (e.g. a one-time implementation with no
+recurring component) — this is not a mismatch, it is a different business model.
+(c) The company has a Big 4 or regional accountancy firm reviewing its revenue
+recognition and can confirm IFRS 15 compliance on request.
+
+VERIFICATION:
+Request an ARR schedule showing: (a) customer name, (b) contract start date,
+(c) contract end date, (d) total contract value, (e) ARR (annualised value).
+If TCV and ARR are different figures for multi-year contracts, revenue recognition
+is correct. If TCV and ARR are the same figure for a 3-year contract, recognition
+is wrong and all revenue figures in the submission must be recalculated.
+
+PATTERN LESSON:
+When a submission uses the words "booked," "recognised," or "signed" to describe
+ARR additions, verify that the ARR figure reflects annualised contract value and not
+total contract value before using any revenue metric.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F08: DEFERRED REVENUE DECLINING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: MEDIUM
+
+SIGNAL:
+Deferred revenue balance on the balance sheet has declined quarter-on-quarter for
+2 or more consecutive quarters — observable when balance sheet data is included in
+the submission or management accounts, or when a company describes a shift from
+multi-year to monthly/annual contracts in the same period.
+
+WHAT IT MEANS:
+Deferred revenue is revenue collected from customers but not yet recognised —
+it represents the future revenue the company has already been paid for. A growing
+deferred revenue balance is a strong indicator of business health: it means the
+company is collecting cash in advance, winning multi-year contracts, and locking in
+future revenue. A declining deferred revenue balance means one or more of: fewer
+multi-year contracts being signed (customers unwilling to commit longer term);
+existing multi-year contracts reaching their end without renewal as multi-year;
+or a deliberate shift to monthly billing (which increases churn risk and reduces
+future revenue visibility). It is a leading indicator — the revenue decline it
+predicts typically shows up 2–4 quarters later.
+
+DISQUALIFYING WHEN:
+Deferred revenue has declined for 3 or more consecutive quarters AND the company
+has simultaneously shifted from annual prepay to monthly billing AND logo churn is
+above 10% annually — all three together indicate customers are no longer willing
+to commit to the product at annual terms, which is a retention crisis in early form.
+
+MANAGEABLE WHEN:
+(a) The decline is explained by a single large multi-year contract that ended in the
+period — one contract expiry distorts a small deferred revenue base significantly.
+(b) The company deliberately shifted to monthly billing for a strategic reason (e.g.
+removing the prepayment barrier to accelerate new customer acquisition) and ARR
+growth has accelerated as a result.
+(c) The deferred revenue balance is very small relative to total ARR (below 5%)
+and is therefore not a material forward indicator.
+
+VERIFICATION:
+Request the balance sheet for the last 6 quarters and extract the deferred revenue
+line. Plot the trend. Ask: "Has your mix of annual vs multi-year contracts changed
+over the last 12 months? And what percentage of your ARR is prepaid vs invoiced
+monthly?" The answers will confirm whether the trend is structural or situational.
+
+PATTERN LESSON:
+When deferred revenue is declining and ARR is growing, request the contract length
+mix to determine whether customers are becoming less willing to commit — deferred
+revenue is a leading indicator that arrives 2–4 quarters before the ARR impact.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F09: GROSS MARGIN BELOW SECTOR THRESHOLD WITH INCONSISTENT VALUATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+Stated gross margin is materially below the sector benchmark for the claimed
+business model — AND the company is seeking or has accepted a valuation multiple
+consistent with a high-margin business of its type. The valuation multiple and the
+gross margin are structurally inconsistent.
+
+SECTOR GROSS MARGIN THRESHOLDS (MINIMUM FOR SOFTWARE-GRADE MULTIPLE):
+Pure SaaS / subscription software: 70% minimum
+Marketplace (net revenue):          50% minimum
+Fintech (payments, lending blended): 40% minimum
+Enterprise software (blended):       60% minimum (software-only: 70%+)
+Consumer subscription:               60% minimum
+AI-native SaaS (after inference costs): 60% minimum
+
+WHAT IT MEANS:
+Valuation multiples for software companies are justified by the expectation that
+gross margins will expand toward 80%+ as the business scales. A company with 45%
+gross margin claiming a 20x ARR multiple is asking an investor to pay a software
+price for a services or hardware economics business. The implied future gross margin
+that would need to materialise to justify the multiple may be structurally impossible
+given the COGS drivers (inference costs, services headcount, hardware).
+This is not a moral failure — it is a modelling error on the part of the founder
+or, more concerning, a deliberate framing choice that will correct painfully at
+the next funding round when a more rigorous investor analyses the unit economics.
+
+DISQUALIFYING WHEN:
+Gross margin is below 50% AND the company is seeking a valuation above 15x ARR
+AND cannot identify a specific COGS reduction driver that will increase gross margin
+to above 65% within 18 months AND the business model is described as SaaS or software.
+
+MANAGEABLE WHEN:
+(a) The company explicitly acknowledges that its current gross margin reflects its
+early stage (implementation-heavy, high support cost) and presents a credible model
+showing margin expansion to >70% within 3–4 years as the implementation burden
+reduces and the customer base scales.
+(b) The company is not a SaaS business — it is a marketplace, fintech, or hardware
+business — and the valuation multiple reflects the correct comparable set for
+that business model type.
+(c) The low gross margin is entirely attributable to a transitional professional
+services burden that will be eliminated as a partner implementation ecosystem develops.
+
+VERIFICATION:
+Decompose gross margin into its COGS components. Identify which specific line items
+are causing the margin to fall below the sector threshold. Model each line item as
+a percentage of revenue at 3x the current ARR. If the structural margin at scale
+is still below 65% for a claimed SaaS business, the valuation multiple is not
+justified by the gross margin trajectory.
+
+PATTERN LESSON:
+When gross margin is below the sector threshold, calculate what the gross margin
+will be at 3x current ARR under each COGS assumption before assessing whether the
+requested valuation multiple is supportable.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F10: CUSTOMER ACQUISITION COST RISING WHILE LTV IS FLAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+Submission discloses or allows calculation of CAC across multiple periods — showing
+an increase of 20% or more over 2 or more consecutive quarters — while LTV (or its
+proxy: ACV × gross margin ÷ logo churn rate) is flat or declining over the same period.
+
+CAC ESTIMATION WHEN NOT DIRECTLY DISCLOSED:
+(Total sales and marketing spend in period) ÷ (New customers acquired in period) = CAC
+If sales and marketing spend is not separately disclosed: headcount in sales + marketing
+roles × £8K fully-loaded monthly cost = estimated sales and marketing spend.
+
+WHAT IT MEANS:
+A rising CAC with flat LTV means the LTV/CAC ratio is contracting — the fundamental
+unit economics of customer acquisition are deteriorating. The most common causes:
+(1) Early channel saturation — the cheapest, highest-intent customers have been
+acquired and the company is now reaching lower-quality audiences at higher cost.
+(2) Competitive pressure — new entrants or incumbent responses have raised the cost
+of paid acquisition or lengthened sales cycles (time-based CAC increase).
+(3) ICP drift — the company has moved upmarket or changed its target customer without
+updating its acquisition model, and the new customer type costs more to acquire.
+(4) Declining referral and organic contribution — early customers were acquired through
+founder network and word-of-mouth; this channel is exhausting and is being replaced by
+more expensive paid channels without a corresponding LTV increase. This is the early
+stage of the CAC Spiral failure pattern.
+
+DISQUALIFYING WHEN:
+CAC has increased more than 40% over 4 consecutive quarters AND LTV/CAC ratio is
+below 2x AND the company cannot identify the specific channel or driver causing the
+increase AND is projecting LTV/CAC improvement without a structural channel change planned.
+
+MANAGEABLE WHEN:
+(a) The CAC increase is attributable to a deliberate move upmarket — ACV has increased
+proportionally with CAC, maintaining the LTV/CAC ratio.
+(b) The CAC increase is a temporary effect of hiring a new sales team (fixed cost
+increase in sales salaries without a corresponding immediate ARR increase) — and the
+pipeline build from the new team is visible and quantifiable.
+(c) The increase is within the natural statistical noise for a company with fewer
+than 5 new customers per quarter — small denominators create volatile CAC measurements.
+
+VERIFICATION:
+Request a channel-by-channel CAC breakdown for the last 4 quarters: paid search, paid
+social, events/outbound, inbound/organic, partner/referral, founder network. Identify
+which channels have increased in cost and which have increased in volume. A CAC increase
+in paid channels accompanied by growth in organic channels is less alarming than a
+CAC increase with organic channel decline.
+
+PATTERN LESSON:
+When CAC is rising and the company attributes it to a planned investment in growth,
+verify that LTV/CAC ratio is maintained — if LTV has not increased with CAC, the
+investment in growth is destroying unit economics, not funding them.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F11: NET REVENUE RETENTION DECLINING TREND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+NRR has declined more than 5 percentage points over 2 or more consecutive quarters —
+even if the current NRR remains above 100%. Detectable when the submission discloses
+NRR across multiple periods, or when the ratio of net new ARR from expansion vs new
+logos shifts materially quarter-on-quarter.
+
+WHAT IT MEANS:
+A declining NRR trend is more alarming than a low NRR in isolation, because it
+indicates the trajectory is moving in the wrong direction. A company at 115% NRR
+declining to 107% over two quarters will likely be at 99% within two more —
+at which point the business requires all new logo ARR just to maintain flat total ARR.
+The causes of NRR decline typically precede visible churn by 2–4 quarters:
+(1) Expansion ARR from existing customers is slowing — the product has delivered
+its initial value and customers are not finding incremental use cases to pay for.
+(2) A cohort of early-adopter customers is reaching its first renewal — the initial
+cohort, acquired under conditions more favourable than today's market, is churning
+at a higher rate than the reported average.
+(3) A competitive product is being evaluated at renewal — customers are not churning
+immediately but are reducing their contract scope while they evaluate alternatives.
+(4) Pricing concessions are being granted at renewal — the ACV of existing customers
+is declining even when the logo count is not.
+
+DISQUALIFYING WHEN:
+NRR has declined more than 10 percentage points over 3 consecutive quarters AND the
+decline is driven by both contraction and churn (not just slower expansion) AND the
+company does not have a documented customer success programme with QBR cadences
+that would catch retention risk before renewal.
+
+MANAGEABLE WHEN:
+(a) The NRR decline is explained by the graduation of one or two large early customers
+from an introductory pricing tier to a standard tier — a one-time compression event.
+(b) The business deliberately reduced its enterprise ACV threshold to expand the
+addressable customer base — lower individual ACVs temporarily suppress NRR while
+the new ICP cohort builds.
+(c) The NRR decline is within 3 percentage points over 2 quarters in a business with
+fewer than 20 customers — small cohort statistical noise.
+
+VERIFICATION:
+Request NRR broken down into its components for the last 4 quarters: (a) gross renewal
+rate (% of expiring ACV that renews at the same or higher value), (b) expansion ARR
+from existing customers, (c) contraction ARR from existing customers. Identify which
+component is driving the decline — gross renewal deterioration is more alarming than
+slower expansion.
+
+PATTERN LESSON:
+When NRR is declining across consecutive periods, decompose into gross renewal rate
+and expansion rate separately — gross renewal rate decline indicates a retention crisis;
+expansion rate decline indicates a product depth problem — each requires a different response.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F12: PAYABLES CONCENTRATION — SINGLE SUPPLIER ABOVE 40% OF COGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: MEDIUM
+
+SIGNAL:
+A single vendor, cloud provider, API supplier, or infrastructure partner is responsible
+for more than 40% of cost of goods sold — detectable when the submission mentions
+a specific infrastructure dependency (e.g. "our product runs on AWS," "all AI inference
+is via OpenAI API," "our banking infrastructure is provided by [BaaS partner]") where
+the cost of that dependency is implied to be the dominant COGS line item.
+
+WHAT IT MEANS:
+Supplier concentration creates a mirror-image risk to customer concentration.
+Three specific failure modes:
+(1) The supplier raises prices — the vendor has no negotiating power and cannot switch
+without a major engineering effort. Gross margin compresses immediately.
+(2) The supplier changes its terms, deprecates an API, or exits the market — the vendor
+must rebuild a critical dependency in an emergency, consuming engineering capacity
+at the worst possible time and creating customer-facing service disruption.
+(3) The supplier acquires a competitor or enters the vendor's market directly —
+the vendor is simultaneously dependent on and in competition with the same company.
+The most common instance in 2025: AI-native SaaS products where OpenAI inference
+represents 40–60% of COGS — OpenAI's pricing decisions are a direct determinant of
+the vendor's gross margin.
+
+DISQUALIFYING WHEN:
+A single supplier represents more than 60% of COGS AND the supplier has raised prices
+in the last 12 months AND the company has no contractual protection against further
+price increases AND there is no viable alternative supplier that could be integrated
+within 6 months.
+
+MANAGEABLE WHEN:
+(a) The dependency is on a commodity infrastructure provider (AWS, GCP, Azure) where
+pricing is stable, alternatives exist, and the switching cost is high but achievable.
+(b) The company has a negotiated enterprise agreement with the supplier that locks in
+pricing for 24+ months, removing the near-term price risk.
+(c) The company is actively building a multi-model or multi-supplier architecture that
+will reduce concentration below 40% within 12 months — and engineering time is already
+allocated to this work.
+
+VERIFICATION:
+Request the COGS breakdown and identify the top 3 suppliers by cost. Ask: "If [named
+supplier] doubled their prices tomorrow, what would your gross margin be? And how long
+would it take you to migrate to an alternative?" The answer reveals both the financial
+exposure and the operational dependency level.
+
+PATTERN LESSON:
+When a product's COGS is dominated by a single API provider or infrastructure partner,
+model the gross margin impact of a 50% price increase from that supplier before accepting
+the stated margin as the sustainable operating figure.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F13: RELATED PARTY TRANSACTIONS — UNDISCLOSED OR UNDERPLAYED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: HIGH
+
+SIGNAL:
+A significant portion of revenue — more than 10% — comes from customers with a
+direct relationship to the founding team: founders' previous employers, founders'
+family businesses, co-founders' other ventures, investors' own portfolio companies,
+or any entity where the purchasing decision was influenced by a personal or financial
+relationship rather than arm's-length commercial evaluation. Detectable from: named
+customer logos that overlap with founder biography; customer descriptions that use
+the word "relationship" rather than "sales process"; or ARR growth that is
+disproportionate to the sales infrastructure that exists to generate it.
+
+WHAT IT MEANS:
+Related party revenue is not inherently fraudulent — a founder's previous employer
+becoming a customer is a legitimate first reference. But it is not evidence of
+product-market fit. A buyer who purchases because of a personal relationship rather
+than a commercial evaluation is: (a) more likely to accept below-market pricing;
+(b) less likely to be a replicable acquisition — the channel cannot be scaled;
+(c) unlikely to be an objective reference — they will not give a balanced view
+of the product to prospective customers. If related party revenue represents more
+than 20% of ARR, the commercial traction is materially overstated.
+More seriously: undisclosed related party transactions suggest a founder who is
+not transparent about their business — which is the most important character signal
+Alex can observe from a submission.
+
+DISQUALIFYING WHEN:
+Related party transactions are identified and were not disclosed in the submission
+AND represent more than 20% of ARR AND the affected customers are being used as
+reference accounts or evidence of commercial traction in the submission materials.
+The lack of disclosure is disqualifying independent of the amount.
+
+MANAGEABLE WHEN:
+(a) The related party transaction is explicitly disclosed, the ACV is at or above
+market rate (confirmed by the pricing of independent customers), and the related
+party customer is not being cited as evidence of arm's-length commercial traction.
+(b) The revenue is a small portion (below 5% of ARR) and is explicitly described
+as a founder-facilitated early sale — a starting point, not a proof point.
+
+VERIFICATION:
+Cross-reference named customer logos with founder LinkedIn profiles, prior employment,
+and known investor portfolio. Search company names in the submission against the
+founders' professional history. If a match is identified, ask directly: "Is [customer]
+a company where you or a co-founder has a personal or professional relationship?"
+An honest answer resolves the flag. Evasion does not.
+
+PATTERN LESSON:
+When named customers cannot be verified as arm's-length through public information,
+ask directly whether any revenue comes from relationships with the founding team
+before using that revenue as evidence of commercial traction.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F14: CAPITALISED R&D MASKING BURN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: MEDIUM
+
+SIGNAL:
+Submission discloses a capitalised R&D or software development cost line item on
+the balance sheet — OR the company reports an EBITDA or operating loss that is
+materially lower than cash burn, in a company without significant fixed asset
+purchases — suggesting that development costs are being capitalised rather than
+expensed in the period incurred.
+
+DETECTION METHOD:
+Cash burn − Reported operating loss > £200K per quarter in a company without
+significant CapEx: the gap is likely capitalised R&D. If the company mentions
+"capitalised development costs" or "intangible assets — software" on the balance
+sheet, this confirms the practice.
+
+WHAT IT MEANS:
+Under IFRS and UK GAAP, software development costs that meet specific criteria
+(technical feasibility established, intention to complete, ability to use or sell)
+can be capitalised as an intangible asset and amortised. This is a legitimate
+accounting treatment. However, early-stage companies that capitalise R&D reduce
+their reported operating expenses — making the business appear closer to profitability
+than it actually is on a cash basis. The effect: reported EBITDA may show -£500K
+while actual cash consumed is -£1.2M. An investor using the reported loss to
+estimate burn multiple or runway will underestimate both. At exit or acquisition,
+the capitalised R&D will be scrutinised — if it does not meet the strict criteria
+for capitalisation, it will be written off, reducing net assets and potentially
+triggering a goodwill impairment on prior-period accounts.
+
+DISQUALIFYING WHEN:
+Capitalised R&D represents more than 25% of total reported operating expenses AND
+the company is presenting EBITDA-based burn metrics to investors without disclosing
+that cash burn is materially higher AND the company is at Series A or beyond where
+institutional accounting standards should be applied.
+
+MANAGEABLE WHEN:
+(a) The capitalisation is explicitly disclosed and the submission provides both
+the reported (GAAP) operating loss and the cash burn figure separately.
+(b) The capitalised amounts relate to a clearly identifiable product development
+project that is commercially deployed and generating revenue — the accounting
+treatment is defensible.
+(c) The amounts are small relative to total expenses and the effect on burn
+multiple calculation is below one-quarter turn.
+
+VERIFICATION:
+Request the full P&L and balance sheet for the last 4 quarters. Identify the
+capitalised R&D line on the balance sheet. Calculate actual cash burn: operating
+loss + amortisation of capitalised development + any other non-cash charges.
+Use cash burn, not operating loss, for all efficiency metric calculations.
+
+PATTERN LESSON:
+When reported operating loss is materially lower than disclosed monthly cash burn,
+request the balance sheet to identify capitalised R&D and recalculate all efficiency
+metrics using the cash-basis burn figure.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG F15: CASH FLOW POSITIVE BUT ACCRUAL NEGATIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Financial
+SEVERITY: MEDIUM
+
+SIGNAL:
+Submission describes the company as "cash flow positive" or "cash generative"
+while simultaneously disclosing a net income or operating loss that is materially
+negative — a gap that is unexplained by non-cash items (depreciation, amortisation,
+or stock-based compensation). OR the company explicitly states that cash flow
+turned positive in a specific quarter while ARR growth did not accelerate.
+
+WHAT IT MEANS:
+Positive cash flow while accrual-basis profitability is negative occurs in two
+legitimate scenarios and two misleading ones.
+
+LEGITIMATE — Deferred revenue drawdown: a subscription business collects cash
+annually in advance and recognises it monthly. The business is cash positive because
+customers pay upfront but accrual-negative because revenue is recognised ratably.
+This is healthy and expected in prepaid SaaS.
+
+LEGITIMATE — Accounts payable extension: a business temporarily delays paying
+its suppliers, generating cash inflow. This is a one-time cash management tactic,
+not recurring cash generation.
+
+MISLEADING — Deferred revenue drawdown masking decline: the company is cash positive
+because it is drawing down a stock of previously collected deferred revenue — but new
+deferred revenue additions are below the drawdown rate. The cash positive position
+will reverse when the deferred revenue pool is exhausted.
+
+MISLEADING — Delayed payables signalling supplier stress: the company is not paying
+suppliers on time because it cannot — the apparent cash positivity is a precursor to
+a payables crisis.
+
+DISQUALIFYING WHEN:
+The company describes itself as "cash flow positive" as evidence of financial health
+in a fundraising context AND deferred revenue has been declining for 2+ quarters
+(indicating the cash positive position is temporary drawdown) AND accrual-basis
+losses are more than 2x operating cash flow positive — the accounting basis of
+the "positive" claim is misleading to investors.
+
+MANAGEABLE WHEN:
+(a) The cash flow positive position is correctly attributed to prepaid annual
+contracts in the submission — the company explicitly acknowledges it is cash
+positive due to advance collections, not accrual profitability.
+(b) The cash flow positive position is accompanied by growing deferred revenue
+— meaning new prepayments are exceeding existing drawdowns, which is a genuine
+positive signal.
+
+VERIFICATION:
+Request the cash flow statement for the last 4 quarters broken into: (a) operating
+cash flow, (b) change in deferred revenue, (c) change in accounts receivable,
+(d) change in accounts payable. If operating cash flow is positive but deferred
+revenue is declining, the business is drawing down pre-collected cash, not generating
+genuine operating cash flow. Ask: "Will you be cash flow positive next quarter if
+no new annual contracts are signed?"
+
+PATTERN LESSON:
+When a company claims to be cash flow positive, verify whether the positive cash
+position is driven by growing deferred revenue (healthy) or declining deferred
+revenue drawdown (temporary and declining) before using cash flow positivity as
+evidence of financial health.
+
+═══════════════════════════════════════════════════════════════════════
+END OF RED FLAG LIBRARY — CATEGORY 1: FINANCIAL
+15 flags. Apply all 15 mechanically to every deal submission.
+Next category: Operational Red Flags (F16–F30).
+═══════════════════════════════════════════════════════════════════════

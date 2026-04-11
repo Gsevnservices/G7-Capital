@@ -1,0 +1,1235 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 8: FOUNDER BEHAVIOUR RED FLAGS
+Version 1.0. Built: April 2026.
+15 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission or public sources
+without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 15 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+Founder behaviour flags are the most difficult category to apply
+consistently because the instinct is to dismiss behavioural signals
+as subjective. They are not. Every flag in this category describes
+an observable, documentable signal — a numeric inconsistency in the
+deck, a LinkedIn post, a Companies House filing, a definition missing
+from a metrics table — not an impression or a feeling. Apply these
+flags to what is written and what is publicly available. Never apply
+them to what was said in a meeting or what Alex infers from tone.
+The purpose of this category is not to psychoanalyse founders.
+It is to document the observable signals that predict whether the
+person asking for capital will use it in the way they describe.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB01: INCONSISTENT NARRATIVE ACROSS MATERIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+The founding story, the problem statement, or the key metrics are
+described differently in different sections of the submission or
+across different public sources. Observable by comparing: (1) the
+company description in the submission deck versus the company
+description on the company website; (2) the founding year stated
+in the deck versus the incorporation date on Companies House;
+(3) the ARR or customer count figure cited in the executive summary
+versus the figure cited in the traction section of the same deck;
+(4) the problem framing in the deck versus the problem framing in
+the most recent press coverage or investor update. A single minor
+discrepancy is noise. Two or more material inconsistencies — where
+the divergence changes the nature of the claim — are a flag.
+
+WHAT IT MEANS:
+Narrative inconsistency is the foundational signal that a company's
+materials have been assembled from multiple sources without coherent
+authorship — which is itself informative — or that the company's
+story has evolved to fit different audiences without the underlying
+facts being updated consistently. The three failure modes: (1) the
+company has been pitching different stories to different investor
+types — a technical story to deep-tech investors, a commercial story
+to growth investors — and the materials reflect this without the
+founder noticing the contradictions; (2) the metrics were updated
+in one section of the deck but not all sections, producing stale
+data in one place and current data in another — which means the
+metrics themselves may not be reliably tracked; (3) the founding
+story has been retroactively adjusted to better fit the current
+narrative — a common phenomenon where the "aha moment" moves, the
+founding team composition changes in the retelling, or the timeline
+compresses. None of these patterns is necessarily malicious, but
+all of them indicate that the company's materials cannot be taken
+at face value — every material claim requires independent verification.
+
+DISQUALIFYING WHEN:
+A key financial metric — ARR, customer count, revenue, or funding
+raised — is stated at materially different levels in different
+sections of the same submission document, with no explanation
+for the discrepancy. A company that cannot maintain consistent
+financial data within a single document is a company that either
+does not have reliable data or has presented data that has been
+selectively chosen for different audiences.
+
+MANAGEABLE WHEN:
+(a) The inconsistency is in a secondary narrative detail —
+the founding story has been updated to reflect a more accurate
+timeline, the problem statement has evolved as the market
+understanding has improved — and the core financial and
+operational metrics are consistent throughout.
+(b) The inconsistency is explained by a specific known event:
+the company rebranded, pivoted, or restated figures following
+an accounting change, and the different descriptions reflect
+pre- and post- event states.
+(c) The discrepancy is in public sources (press, LinkedIn) that
+predate the current materials by more than 12 months — narratives
+legitimately evolve over time and historic public statements are
+not always updated to reflect current positioning.
+
+VERIFICATION:
+Cross-reference: (1) founding date in deck vs Companies House
+incorporation date; (2) ARR/revenue figures in summary vs traction
+section vs financial appendix; (3) customer count in the problem
+statement vs the traction slide vs any press releases. Document
+each inconsistency with the specific discrepancy and the source.
+Ask: "Your deck states [figure A] in the executive summary and
+[figure B] in the traction section — which is the current number
+and what does the other figure refer to?"
+
+PATTERN LESSON:
+When two or more material metrics are stated at different levels
+in different sections of the submission, document each inconsistency
+and request a reconciliation before advancing — decks with internal
+metric inconsistencies reliably produce data quality problems in
+diligence and indicate that the financial reporting is not reliable
+enough to base an investment decision on.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB02: METRICS PRESENTED WITHOUT STANDARD DEFINITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+ARR, NRR, DAU, MAU, GMV, or other commonly-defined industry metrics
+are cited in the submission without stating the definition used —
+allowing for non-standard calculation that would inflate the headline
+number relative to the industry standard. Observable from any metrics
+table or traction slide that presents a metric without a footnote,
+appendix, or inline definition specifying exactly what is included
+in the calculation. The flag triggers specifically when the metric
+is one where non-standard definitions are common: ARR that may include
+one-time professional services; NRR calculated on an ending rather
+than starting cohort; DAU that counts any app open rather than a
+qualifying action; GMV that includes cancelled or refunded transactions.
+
+WHAT IT MEANS:
+The presentation of undefined metrics is how a company communicates
+a number that appears to be one thing and is actually another.
+The most common manipulations, each observable from context clues:
+(1) ARR that includes professional services or one-time fees — detectable
+when the ARR figure is cited alongside a revenue figure that is lower
+than the ARR would imply, suggesting the ARR contains non-recurring
+components; (2) NRR calculated on ending cohort rather than starting
+cohort — detectable when the NRR figure is higher than the company's
+gross retention and expansion metrics would independently suggest;
+(3) GMV presented for a marketplace where the company retains only
+a small take rate — the £50M GMV company with a 5% take rate has
+£2.5M revenue, not £50M, and the distinction matters acutely for
+valuation multiples; (4) MAU that counts bot traffic, trial users,
+or single-action sessions — detectable when the MAU figure implies
+an engagement rate that is implausible for the category. A company
+that presents metrics without definitions either does not know the
+standard definitions (concerning) or knows them and prefers not
+to disclose which definition they are using (disqualifying).
+
+DISQUALIFYING WHEN:
+The company has previously provided different definitions of the
+same metric to different investors — observable when two investor
+updates from different periods define ARR or NRR differently —
+indicating that the metric definition is being adjusted to produce
+the most favourable headline in each context.
+
+MANAGEABLE WHEN:
+(a) The company provides definitions when asked and the definitions
+align with standard industry practice — the omission from the
+deck was an editing decision, not a concealment strategy.
+(b) The metric in question has a company-specific definition
+that is disclosed and explained — e.g. "our ARR includes only
+committed recurring contract value, excluding all professional
+services and one-time fees" — and the definition is more
+conservative than the industry standard.
+(c) The metric is not a headline commercial metric — the undefined
+term is a technical product metric (session length, feature
+adoption rate) where no standard industry definition exists.
+
+VERIFICATION:
+For every metric cited without a definition, ask: "How do you
+define [metric]? Specifically: (1) what is included and excluded;
+(2) what is the calculation methodology; (3) is this definition
+consistent with how you have calculated this metric historically?"
+Then cross-check the defined metric against other metrics in the
+deck to test internal consistency — a correctly-defined ARR
+implies a specific range of customer count at the stated ACV;
+a correctly-defined NRR implies a specific gross retention rate.
+Internal consistency is the verification, not just the definition.
+
+PATTERN LESSON:
+When a traction slide presents ARR, NRR, or GMV without definitions,
+request the metric definitions and then cross-check the defined
+figures against other disclosed metrics for internal consistency
+before accepting the headline numbers — non-standard metric
+definitions are the most common source of materially overstated
+traction in early-stage submissions.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB03: SELECTIVE DISCLOSURE OF TIME PERIODS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+Growth metrics in the submission cite a specific time period that
+is materially shorter or differently bounded than the standard
+reporting period — and the non-standard period has the effect
+of producing a more favourable growth rate than the standard period
+would show. Observable when: (1) a deck cites "last 6 months" growth
+rather than trailing 12 months, and the last 6 months include a
+period of unusually high growth that is not representative of the
+full year; (2) growth is cited "since our last funding round" rather
+than since a calendar start date — allowing the company to choose
+a low starting point; (3) a company with declining growth cites
+only the period before the deceleration began; (4) a company cites
+"since product launch" when the launch date was chosen to coincide
+with an unusually strong period.
+
+WHAT IT MEANS:
+Selective time period disclosure is one of the most reliable signals
+of deliberate metric management. The mechanism: any business has
+some period in its history — a product launch, a viral moment,
+a partnership announcement, a seasonal spike — where growth was
+above average. By selecting that period as the baseline or endpoint
+for a growth claim, a founder can cite a growth rate that is true
+for that window but unrepresentative of the underlying business
+trajectory. The tell is always in the specificity of the period
+chosen: "last 6 months" when all other metrics are reported annually;
+"since we launched our enterprise product" when the launch date
+is seven months ago and the preceding period showed declining growth.
+A business with genuine, consistent growth has no reason to select
+a non-standard reporting period — it presents trailing twelve months
+because the trailing twelve months is its best evidence.
+
+DISQUALIFYING WHEN:
+The company cites a growth rate for a cherry-picked period AND
+refuses to provide trailing twelve month growth data when asked —
+the refusal to provide the standard metric after a specific request
+is a disqualifying behaviour signal, not merely a presentation issue.
+
+MANAGEABLE WHEN:
+(a) The non-standard period has a specific, disclosed reason that
+is unrelated to growth optimisation — "since our product launch"
+is appropriate when the product was launched in the reporting period
+and there are no prior periods of meaningful revenue to include.
+(b) The company provides both the period cited and the trailing
+twelve month comparison, noting that the shorter period is provided
+for a specific operational reason.
+(c) The metric in question is genuinely only measurable from a
+specific start point — a marketplace's GMV since launch is only
+meaningful since launch if the product did not exist before.
+
+VERIFICATION:
+For every growth metric that uses a non-standard time period,
+calculate the same metric on a trailing twelve month basis using
+the data available in the submission. Ask: "What is your trailing
+twelve month growth rate for [metric]? Can you provide quarterly
+data for the last 8 quarters so we can see the full growth trend?"
+The response to a request for trailing twelve month data — whether
+it is provided promptly and without comment, or whether it triggers
+hesitation, alternative figures, or deflection — is itself informative.
+
+PATTERN LESSON:
+When growth metrics are cited for non-standard periods that produce
+a more favourable result than trailing twelve months would, calculate
+the implied trailing twelve month rate from the available data and
+note the divergence — selectively bounded growth claims are the
+most common technique for presenting a decelerating business as
+a growing one without making a technically false statement.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB04: COMPETITIVE LANDSCAPE SYSTEMATICALLY UNDERSTATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+Every competitor mentioned in the deck or submission is described
+as significantly inferior across all dimensions — slower, more
+expensive, worse product, shrinking customer base — with no
+acknowledgment of any competitor strength. Observable from the
+competitive landscape slide or section where the standard 2×2
+matrix places the company in the top-right quadrant with all
+competitors in the bottom-left, or where each named competitor
+is described only through its weaknesses. The flag triggers when
+the competitive assessment is uniformly negative across all
+competitors and when no competitor is credited with a single
+genuine strength.
+
+WHAT IT MEANS:
+A founder who cannot name a competitor's genuine strength does not
+understand the competitive landscape, has not done serious competitive
+analysis, or has chosen to present a misleading competitive picture.
+In any market with more than £10M of capital deployed, some competitors
+are good at something. A B2B SaaS market with three funded competitors
+will have at least one with better sales execution, at least one
+with a deeper product in a specific vertical, and at least one with
+stronger brand recognition among a specific buyer persona. A founder
+who cannot articulate what each competitor does well has either
+not talked to enough customers — who will be able to tell them —
+or is not presenting honestly. The downstream consequence: a founder
+who does not understand the competitive landscape will be surprised
+by it. They will lose deals to competitors they described as inferior
+and will struggle to explain the losses. They will hire a sales team
+that does not know how to handle competitive objections because
+no one told them to expect any. They will price against a market
+they have not correctly mapped. The competitive assessment is not
+just a slide — it is a diagnostic of how the founder thinks about
+the market they are operating in.
+
+DISQUALIFYING WHEN:
+The submission claims there is no significant competition in a
+market where a 5-minute Google search identifies multiple funded
+competitors — this is not a nuanced competitive assessment but
+a factual inaccuracy that must be explained before any further
+engagement. See also Flag FB13.
+
+MANAGEABLE WHEN:
+(a) The founder explicitly acknowledges specific competitor strengths
+in the submission and explains how the company's positioning either
+avoids direct competition on those dimensions or counters them —
+a genuinely differentiated analysis acknowledges and then addresses
+competitive strength.
+(b) The company competes in a market segment that the named competitors
+have not entered — the competitive landscape is segmented, and the
+founder can articulate why.
+(c) The competitive analysis covers only the current state and notes
+that the landscape is evolving — an honest assessment of a fast-
+moving market may legitimately place the company ahead of current
+competitors while acknowledging that the competitive picture will
+change.
+
+VERIFICATION:
+Run a 5-minute competitive research exercise before reviewing the
+company's competitive claims: search for the top 3 competitors
+in the space, identify their product reviews, their customer
+testimonials, and their fundraising trajectory on Crunchbase.
+Then compare what the company says about each competitor to what
+is publicly known. Specifically note any competitor strength that
+the company's analysis omits. Ask: "What does [competitor name]
+do well? Where have you lost deals to them and why?"
+
+PATTERN LESSON:
+When the competitive landscape slide credits no competitor with
+a single genuine strength, run an independent 5-minute search
+on each named competitor before accepting the framing — a company
+that has not correctly mapped competitive strengths will be unable
+to articulate a credible competitive response when asked in diligence,
+and the gap between the submitted narrative and external reality
+is itself a signal about market understanding.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB05: PRIOR INVESTOR RELATIONSHIPS NOT DISCLOSED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+Prior investors or angels are not listed on the cap table or
+mentioned in the deck despite being discoverable through public
+records. Observable by cross-referencing the disclosed cap table
+against: (1) Companies House shareholder register, which lists
+all shareholders holding more than 25% (PSC register) and, in
+the annual confirmation statement, all shareholders by name;
+(2) Crunchbase or LinkedIn investor announcements from prior
+fundraising rounds; (3) press coverage of prior funding events
+that named investors who do not appear on the current cap table.
+The flag triggers when a named investor in a prior funding
+announcement does not appear on the current cap table and
+the discrepancy is not explained.
+
+WHAT IT MEANS:
+An investor who has been removed from the cap table since a prior
+public announcement is there for one of three reasons: (1) they
+were bought out — the company or other investors purchased their
+stake — and the buyout is not disclosed; (2) there was a dispute
+that resulted in equity transfer — a non-disclosed legal settlement;
+(3) the prior announcement was inaccurate — the investor did not
+actually invest and was named in error, which is itself a misleading
+practice. None of these explanations is benign from a diligence
+perspective. An undisclosed buyout means the company spent capital
+to repurchase equity rather than deploy it in the business — where
+did the capital come from? An undisclosed legal settlement means
+the company has had a shareholder dispute that produced litigation
+or a negotiated exit — the nature of the dispute is relevant to
+how the company handles investor relationships. The additional
+concern: a cap table that does not match public records is a cap
+table that may have other inaccuracies not detectable from public
+sources. If one investor is missing, others may be as well.
+
+DISQUALIFYING WHEN:
+A prior investor is absent from the current cap table AND the
+company cannot provide a clear, documented explanation for the
+absence — an equity transfer agreement, a buyout confirmation,
+or a correction to the prior announcement. The absence of an
+explanation for a missing shareholder is a due diligence failure
+that must be resolved before any further engagement.
+
+MANAGEABLE WHEN:
+(a) The missing investor is explained by a documented, arm's-length
+buyout at a disclosed price with disclosed funding — the company
+can show where the buyout capital came from and that it was
+properly approved by the board.
+(b) The prior funding announcement was genuinely in error —
+the named investor did not complete the investment — and this
+is verifiable through the investor's own public records or
+confirmation.
+(c) The investor transferred their stake to a connected entity
+that does appear on the cap table — a fund to a fund vehicle,
+or an individual to a holding company — and the transfer is
+documented.
+
+VERIFICATION:
+Run a Companies House confirmation statement check for all UK-
+incorporated companies — the most recent confirmation statement
+lists all shareholders. Cross-reference against Crunchbase for
+all announced investors. Cross-reference against any press coverage
+naming investors. Identify any investor present in public records
+who is absent from the submitted cap table. Ask: "Your cap table
+does not include [named investor] who was named in [source] as
+an investor. Can you explain why they are not on the current cap table?"
+
+PATTERN LESSON:
+When a Companies House or Crunchbase search identifies prior
+investors not present on the submitted cap table, request a
+documented explanation before advancing — a cap table with missing
+shareholders has a provenance problem that must be resolved before
+legal due diligence can produce a clean title opinion.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB06: FUNDRAISING URGENCY MANUFACTURED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+The submission or accompanying communications create artificial
+closing urgency — "closing in 2 weeks," "term sheet from [named firm]
+expiring," "allocation filling fast" — without providing verifiable
+evidence. Observable from any written communication, deck footnote,
+or submission note that uses time-bounded pressure language without
+an attached document confirming the stated condition: a countersigned
+term sheet, a round closing confirmation, or a written oversubscription
+statement from the lead investor.
+
+WHAT IT MEANS:
+Manufactured fundraising urgency is a negotiating tactic — it is
+designed to compress the investor's diligence timeline and extract
+a commitment before the investor has gathered sufficient evidence
+to make a decision. The tactic is informative about the founder
+because it trades short-term process advantage for long-term
+relationship damage: professional investors recognise manufactured
+urgency because they see it regularly, and it consistently produces
+the opposite of its intended effect — investors slow down rather
+than speed up, and become more sceptical of all other claims in
+the materials. The deeper signal: a founder who uses artificial
+urgency is a founder who believes their business cannot attract
+capital on the merits alone — and the self-assessment embedded
+in that belief is relevant data. Genuinely competitive rounds
+generate real urgency from real oversubscription — and that urgency
+is verifiable through the lead investor. A verifiable term sheet
+expiry is not manufactured urgency. An unverifiable claim about
+one is.
+
+DISQUALIFYING WHEN:
+The founder claims a term sheet from a named investor as urgency
+leverage, the named investor is a real institutional firm, and when
+contacted (directly or through a network reference) the firm either
+denies the term sheet or indicates it is not on the terms described.
+This is not a deal process tactic — it is a misrepresentation.
+
+MANAGEABLE WHEN:
+(a) The urgency is real and verifiable — a countersigned term sheet
+with an expiry date is shared upon request, and the timeline is
+genuine rather than manufactured.
+(b) The company is genuinely oversubscribed and provides a
+round status update from the lead investor — not the founder —
+confirming limited remaining allocation.
+(c) The urgency reflects a genuine operational timeline — a
+government grant match-funding deadline, a customer contract
+requiring balance sheet confirmation, a partnership closing date —
+that is documentable and not under the founder's control.
+
+VERIFICATION:
+Request evidence for any urgency claim before adjusting diligence
+pace: (1) for a term sheet claim, request the countersigned term
+sheet with the stated expiry date; (2) for a closing claim, request
+a round status update from the lead investor; (3) for an allocation
+claim, request written confirmation from the lead that the round
+is oversubscribed. If evidence is not provided within 48 hours,
+proceed at normal pace. Ask: "Can you share the term sheet you
+mentioned so we can calibrate our timeline accordingly?"
+
+PATTERN LESSON:
+When fundraising urgency is claimed without verifiable evidence,
+continue at normal diligence pace and request the supporting
+document — manufactured urgency that is called out and unsubstantiated
+typically disappears without affecting the deal, and the founder's
+response to the request for evidence is itself informative about
+how they handle pressure and factual challenges.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB07: FOUNDER PUBLICLY CRITICAL OF PRIOR INVESTORS OR EMPLOYERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+Public statements by the founder — on LinkedIn, Twitter/X, in
+interviews, podcasts, or published articles — contain significant
+criticism of prior investors, former employers, co-founders, or
+team members by name or in a way that makes them identifiable.
+Observable by searching the founder's name on LinkedIn and Twitter/X
+and reviewing the last 24 months of public posts and long-form
+content. The flag triggers for criticism that is: (1) directed at
+a specific named or identifiable individual or firm; (2) describes
+a grievance about professional conduct, competence, or character;
+(3) was posted publicly rather than shared privately.
+
+WHAT IT MEANS:
+Founders who are publicly critical of prior investors, employers,
+or colleagues are providing direct evidence about how they handle
+professional disappointment, disagreement, and conflict. The
+investor-specific version of this flag is the most directly relevant:
+a founder who has publicly criticised prior investors is a founder
+who, when the relationship with the current investor becomes difficult
+(as it inevitably will at some point in the company's life), may
+respond the same way. The employer criticism version is related:
+every successful founder has worked somewhere they did not enjoy
+or left under difficult circumstances. The founder who discusses
+these experiences publicly, with named criticism of former colleagues,
+has not developed the professional judgement to distinguish between
+what is useful to share and what is damaging to themselves and
+others. This judgement deficit is the same one that produces bad
+decisions about customer communication, team management, and
+regulatory relationships. The flag is not about protecting
+the feelings of prior investors or employers. It is about
+documenting that the founder's judgement in a category directly
+related to the investor relationship is demonstrably limited.
+
+DISQUALIFYING WHEN:
+The founder has made public statements that are potentially
+defamatory, that have resulted in legal proceedings, or that
+name a specific investor by name in a way that constitutes
+a public allegation of misconduct without documented evidence.
+These are not professional misjudgements — they are legal risks
+that transfer to any company the founder leads.
+
+MANAGEABLE WHEN:
+(a) The public criticism is of an institution or a system —
+a critique of the VC model, a criticism of an industry practice,
+a public commentary on a policy issue — rather than a personal
+criticism of a named individual or firm's conduct.
+(b) The criticism is historical (more than 3 years old) and
+the founder has demonstrably built constructive public relationships
+with investors and professional contacts since — the historic
+statement is not predictive of current behaviour.
+(c) The criticism refers to a well-documented public event —
+a company collapse, a published fraud investigation, a publicly
+known governance failure — where the criticism is factual and
+contextually appropriate.
+
+VERIFICATION:
+Search: founder full name + "LinkedIn", founder full name + "Twitter",
+founder full name + interview/podcast. Review the last 24 months
+of public content. Specifically look for: (1) posts naming
+prior investors or employers critically; (2) threads describing
+professional conflicts; (3) interview quotes about prior
+relationships. Document specific statements found, not impressions.
+
+PATTERN LESSON:
+When a founder has published significant public criticism of prior
+investors or employers, note this in the Risk Assessment and reference
+check directly with one of the individuals or firms named — the
+subject of the criticism is often the most informative reference
+check available and their account of events is a direct test of
+whether the founder's public narrative is accurate.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB08: DECK LANGUAGE SHIFTS BETWEEN SECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+The language, vocabulary, and analytical sophistication vary
+significantly between different sections of the submission deck —
+the market sizing section uses institutional investment terminology
+and advanced financial modelling that is inconsistent with the
+writing style and conceptual level of the problem/solution section,
+or vice versa. Observable from a close reading of the submission
+for: (1) vocabulary shifts (casual language in the product section,
+technical finance language in the financial model); (2) formatting
+inconsistency (professional graphic design in some slides, amateur
+formatting in others); (3) conceptual sophistication gaps (a
+complex bottoms-up market sizing methodology in the TAM slide,
+a vague problem statement with no supporting evidence in the
+problem slide). The flag strengthens when the founder cannot
+fluently discuss the technical or financial content of the
+sections that appear authored by someone else.
+
+WHAT IT MEANS:
+A deck with inconsistent authorship signals that the founders
+have assembled materials from multiple sources — hired consultants,
+investor templates, borrowed slides from peers — without fully
+internalising the content. This is not a presentation quality
+issue. It is a signal about whether the founder can credibly
+represent the full depth of their business plan. The specific
+risk: an investor who discovers mid-diligence that the founder
+cannot explain the assumptions behind their financial model,
+or cannot discuss the methodology behind their market sizing,
+loses confidence in the accuracy of every other claim in the
+materials — because the claims were produced by someone with
+more expertise than the founder demonstrably has. The second
+signal: a founder who has used external support to produce
+a deck they cannot defend is a founder who will use the same
+approach when producing investor updates, board materials,
+and customer proposals — and the quality of those materials will
+decline when external support is not available.
+
+DISQUALIFYING WHEN:
+The founder confirms in written Q&A that specific sections
+of the deck were produced by a third party (investment bank,
+consultant, pitch deck service) and cannot explain the assumptions
+underlying the financial model or the methodology behind the
+market sizing — these are the two sections of the deck that
+are most predictive of the founder's planning quality, and
+inability to defend them after submission is a fundamental
+credibility failure.
+
+MANAGEABLE WHEN:
+(a) The language inconsistency is in the design and visual
+formatting rather than the substantive content — a founder who
+hired a designer to make the deck look professional has not
+misrepresented their analytical capability.
+(b) The deck clearly attributes specific sections to co-founders
+or advisors — a CTO-authored technical architecture section in
+a different voice to the CEO-authored go-to-market section is
+appropriate and transparent.
+(c) The founder can fluently explain and defend all sections
+of the deck when asked — the inconsistency was in presentation
+style, not in the depth of understanding.
+
+VERIFICATION:
+In written Q&A or clarifying question responses, ask the founder
+to explain the methodology behind the market sizing and the
+key assumptions in the financial model in their own words.
+The response should demonstrate that they understand and can
+defend the content — not just recite the slide. Ask: "Walk me
+through your market sizing methodology — how did you arrive
+at the SAM figure?" and "What are the 3 biggest assumptions
+in your financial model and how sensitive are the projections
+to each one?"
+
+PATTERN LESSON:
+When the deck shows significant language or sophistication
+inconsistency between sections, ask the founder to explain
+the financial model assumptions and market sizing methodology
+in writing before advancing — a founder who cannot defend the
+analytical content of their own deck in plain language has not
+produced the plan themselves, and the quality of execution will
+reflect the quality of thinking, not the quality of the consultants.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB09: FINANCIAL PROJECTIONS WITH NO ASSUMPTIONS STATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+A detailed financial model — revenue projections, headcount plan,
+unit economics forecast — is provided in the submission but no
+assumptions are stated for any of the key growth drivers. Observable
+from any financial appendix or model that shows revenue projections
+without specifying: (1) the assumed new customer acquisition rate
+and how it changes over time; (2) the assumed ACV or price per
+customer and whether it changes; (3) the assumed churn rate;
+(4) the assumed hiring timeline and the revenue per head ratio
+the model implies; (5) the assumed S&M efficiency or CAC payback
+period. A financial model with outputs but no inputs is a projection
+without a plan.
+
+WHAT IT MEANS:
+Financial projections without stated assumptions cannot be evaluated,
+challenged, or updated. They are not a plan — they are a target.
+The distinction matters: a plan specifies the inputs (hire 3 AEs
+per quarter at £120K OTE, each generating £600K ARR in year 2 at
+a 12-month ramp) and derives the output from those inputs. A target
+specifies the output (£5M ARR by end of year 2) and leaves the
+inputs unstated. The investor who receives a target cannot test
+whether the assumptions are realistic — because there are no
+assumptions to test. The founder who built a target rather than
+a plan either does not know what assumptions are required to build
+the model (which means the projections are not credible) or knows
+but has chosen not to state them (which means they do not want
+the assumptions scrutinised). The practical consequence: a company
+that cannot articulate its growth assumptions before investment
+will not have a clear operational plan post-investment, and will
+not be able to explain variance to the plan when actuals diverge
+from projection — because there was no plan, only a target.
+
+DISQUALIFYING WHEN:
+The financial model shows a >5× revenue increase in year 2 with
+no stated assumptions for the growth drivers, and when asked,
+the founder cannot identify the specific operational activities
+that will produce the revenue step-up — the model is aspirational,
+not operational.
+
+MANAGEABLE WHEN:
+(a) The assumptions are available in a separate financial model
+file that was not included in the submission deck — common when
+founders keep assumptions in a working spreadsheet that they
+share in the data room rather than in the deck.
+(b) The projections are presented only as an order-of-magnitude
+range with explicit acknowledgment that they are illustrative —
+a £5M–£10M ARR range by end of year 2, noted as illustrative,
+is more honest than an unexplained £7.3M projection.
+(c) The company is at a very early stage where a detailed bottom-up
+model is not possible — pre-product-market fit companies
+legitimately cannot model customer acquisition at the same
+specificity as a company with 50 customers and 18 months of
+cohort data.
+
+VERIFICATION:
+Request the financial model in spreadsheet form with all
+assumptions visible. The model should allow Alex to: (1) change
+the assumed churn rate and see the revenue impact; (2) change
+the assumed AE quota attainment and see the ARR impact; (3) change
+the assumed S&M spend and see the CAC payback impact. A model
+that is hard-coded rather than assumption-driven is not a
+financial model — it is a table of numbers. Ask: "Can you share
+the financial model in editable format with assumptions visible?
+What is your assumed monthly new customer acquisition rate in
+year 1, year 2, and year 3?"
+
+PATTERN LESSON:
+When a financial model provides revenue projections without stated
+assumptions, request the working model in editable format before
+evaluating the financial plan — a model with hidden or absent
+assumptions cannot be stress-tested, and a founder who cannot
+explain the operational levers behind their revenue projection
+has not planned the business, only described a desired outcome.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB10: RESPONSE TO HARD QUESTIONS IS DEFLECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+In written Q&A, clarifying question responses, or email exchanges
+with the firm, the founder consistently redirects difficult questions
+rather than answering them directly. Observable from written responses
+that: (1) restate the question and then pivot to a different topic
+without addressing the original question; (2) answer a related
+but easier question than the one asked; (3) provide extensive
+context about why the question is less important than it seems,
+without addressing the substance; (4) respond to a specific metric
+question by citing a different metric that is more favourable;
+(5) promise to follow up with information that is not subsequently
+provided. The flag requires a pattern — two or more instances of
+deflection in response to different difficult questions.
+
+WHAT IT MEANS:
+Deflection in written responses is a high-quality behaviour signal
+because it is documentable. Unlike impressions from a verbal meeting,
+a written response that deflects a question leaves evidence. The
+failure mode the deflection predicts: a founder who deflects hard
+questions from an investor during fundraising will deflect hard
+questions from the board during governance, and will deflect hard
+operational realities from themselves during execution — the same
+cognitive pattern operates in all three contexts. The specific
+risk to the investor: information that would have been disclosed
+during diligence — and might have changed the investment decision —
+is withheld through deflection. Post-investment, the same
+information surfaces as a surprise in a board meeting, at which
+point the investor's recourse is limited. Founders who deflect
+are not necessarily hiding something catastrophic. They are often
+protecting themselves from a conversation they find uncomfortable.
+But the protection comes at the cost of the investor's ability to
+make an informed decision, and the pattern reliably produces
+information asymmetry that benefits the founder and disadvantages
+the investor.
+
+DISQUALIFYING WHEN:
+The founder deflects a direct question about a specific financial
+metric — customer churn rate, burn rate, runway, NRR — that is
+material to the investment decision and for which the founder
+demonstrably has the answer, as evidenced by the same data being
+referenced elsewhere in the materials. Deflection on a question
+the founder has the answer to is not a communication style issue.
+It is a disclosure choice.
+
+MANAGEABLE WHEN:
+(a) The deflection is on a single question that the founder
+subsequently answers directly when the question is restated more
+specifically — a misunderstanding rather than a pattern.
+(b) The founder acknowledges the question directly, explains why
+they cannot provide the full answer at this stage (e.g. commercially
+sensitive data, ongoing legal process), and offers a specific
+alternative that partially addresses the question.
+(c) The question is genuinely outside the founder's current
+knowledge and they respond with "I don't know but will find out"
+and then provide the answer — intellectual honesty about uncertainty
+is not deflection.
+
+VERIFICATION:
+In the clarifying questions flow, ask two or three questions that
+are directly challenging — a question about churn if the deck
+does not disclose it, a question about a prior pivot or failure
+if the timeline implies one, a question about a gap in the use
+of proceeds. Evaluate the responses specifically: (1) did the
+founder answer the question asked; (2) did they provide a specific
+data point or a narrative; (3) did they promise follow-up data
+that was subsequently provided. Document each question and the
+nature of the response for the Risk Assessment section.
+
+PATTERN LESSON:
+When two or more written responses to direct questions deflect
+rather than answer, note this pattern explicitly in the Risk
+Assessment and request the specific unanswered data points as
+a precondition for advancing — deflection in due diligence is
+reliably predictive of information withholding post-investment,
+and the questions that were deflected are usually the most
+important ones to have answered before capital is committed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB11: PRIOR COMPANY LEGAL DISPUTES NOT DISCLOSED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+Publicly available records — Companies House filings, court records
+accessible through the Cause List or BAILII, news coverage, or
+creditors' voluntary liquidation notices — reveal legal disputes,
+CCJs (County Court Judgements), insolvency proceedings, or material
+regulatory actions at prior companies associated with the founder,
+that the founder has not proactively disclosed in the submission.
+Observable by searching: (1) the founder's name in Companies House
+for all current and past directorships, then checking each dissolved
+company for liquidation circumstances; (2) the founder's name
+combined with "lawsuit", "CCJ", "dispute", or "tribunal" in
+public search; (3) the founder's name on BAILII for any court
+proceedings naming them as a party.
+
+WHAT IT MEANS:
+Prior legal disputes are not automatically disqualifying — every
+founder who has built more than one company is likely to have
+encountered commercial disputes, employment tribunal claims,
+or supplier disagreements at some point. The flag triggers on
+non-disclosure rather than on the existence of a dispute. A founder
+who has experienced a prior business failure involving a legal
+dispute and proactively discloses it — explaining what happened,
+what they learned, and what they would do differently — demonstrates
+the self-awareness and transparency that experienced investors
+value. A founder who has the same history and does not disclose
+it is either unaware that the information is publicly available
+(unlikely at the data room stage) or has made a decision not to
+disclose something that a reasonable investor would want to know.
+The specific risks: (1) a prior CCJ indicates that the founder
+failed to pay a creditor — which is relevant to how they manage
+cash and obligations; (2) a prior insolvency involving director
+conduct is relevant to governance standards; (3) a prior employment
+tribunal involving discrimination or harassment is directly relevant
+to the company culture the founder will create.
+
+DISQUALIFYING WHEN:
+A Companies House search reveals that a prior company associated
+with the founder was subject to a Compulsory Liquidation (as
+opposed to a voluntary liquidation) with documented creditor
+losses — and the founder has not disclosed this in the submission.
+Compulsory liquidation suggests the company continued trading while
+insolvent — which is a directorial conduct issue, not simply a
+business failure.
+
+MANAGEABLE WHEN:
+(a) The legal dispute is historical (more than 5 years ago), was
+disclosed proactively by the founder, and the founder can provide
+a clear account of what happened and what was learned.
+(b) The dispute is a commercial arbitration that was resolved
+in the company's favour or settled without admission of liability
+— disclosed proactively and documented.
+(c) The dissolved company was a dormant vehicle or a failed startup
+that was wound down cleanly through a members' voluntary liquidation
+with no outstanding creditor claims.
+
+VERIFICATION:
+Search Companies House for all directorships associated with the
+founder's full name. For each dissolved company, check: (1) the
+dissolution circumstances (voluntary vs compulsory); (2) the final
+accounts filed; (3) any liquidator's report filed as part of the
+dissolution. Search BAILII and public court records for any
+proceedings naming the founder individually. Ask: "Have you
+been involved in any legal disputes, regulatory actions, or
+insolvency proceedings at any prior company in any capacity?
+Is there anything in your background that you think we should
+know about?"
+
+PATTERN LESSON:
+When a Companies House search reveals prior directorships at
+dissolved companies without prior proactive disclosure from
+the founder, investigate the dissolution circumstances of each
+before advancing — non-disclosure of a publicly accessible
+legal or insolvency record is the clearest indicator that the
+founder has decided what information to share with investors,
+which is a fundamentally different relationship than one founded
+on full disclosure.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB12: CUSTOMER REFERENCE COACHING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+Written testimonials, reference customer quotes, or case studies
+provided by the company use identical or near-identical language,
+emphasis, or superlatives across multiple customers — suggesting
+that reference customers were briefed on what to say rather than
+speaking independently. Observable from any customer testimonials
+section where multiple quotes use the same key phrases ("transformed
+our workflow", "10× productivity", "game changer"), the same
+structure (problem → solution → outcome), or the same numerical
+claims applied to different customers in different verticals.
+Also observable when a reference customer, when contacted for an
+independent reference check, uses the same framing as the written
+testimonial with no variation.
+
+WHAT IT MEANS:
+Customer references are the most valuable diligence signal available
+at the screening stage — they are independent third parties with
+no economic reason to misrepresent their experience. A customer
+who has been coached on what to say is not an independent signal.
+They are a managed signal, which is functionally the same as no
+signal. The coaching may range from providing key talking points
+("make sure you mention the time savings and the integration with
+Salesforce") to more active preparation ("we have a call before
+you speak to the investor to make sure you're comfortable with
+the questions"). Both forms of coaching produce reference calls
+that confirm the founder's narrative rather than independently
+validate it. The tell at the screening stage — before reference
+calls are possible — is in the written testimonials. Genuine
+customer testimonials are specific, idiosyncratic, and slightly
+imperfect — they reference details particular to that customer's
+implementation, use the customer's own vocabulary, and often
+include a qualification or a suggestion alongside the praise.
+Coached testimonials are uniformly positive, use marketing language,
+and describe the product in terms that match the company's own
+pitch materials.
+
+DISQUALIFYING WHEN:
+The company provides multiple written testimonials that are
+structurally identical and use the same key phrases, AND when
+independently contacted, the reference customers confirm they
+were provided with talking points or a template before speaking
+to investors. Managed references that misrepresent themselves
+as independent are a disclosure failure.
+
+MANAGEABLE WHEN:
+(a) The testimonials are in the customer's own words with
+individual specificity — each references their particular use
+case, their specific team, and their particular outcome — and
+the language variation across customers reflects genuine
+independent authorship.
+(b) The company discloses upfront that testimonials were submitted
+in response to a structured request (e.g. a survey with specific
+questions) — structured collection produces some linguistic
+similarity and is transparent.
+(c) The written testimonials are supplemented by unsolicited
+evidence of customer satisfaction: unprompted LinkedIn recommendations,
+public product reviews on G2 or Capterra, or case studies produced
+by the customer's own marketing team.
+
+VERIFICATION:
+Compare written testimonials across customers for: (1) identical
+key phrases; (2) identical structure (problem-solution-outcome);
+(3) identical numerical claims. Note any testimonials that use
+language directly from the company's marketing materials. During
+reference calls, ask customers open-ended questions first —
+"How would you describe the product to a colleague?" — before
+asking the structured questions, to elicit unprepared language.
+Compare the unprepared response to the written testimonial.
+
+PATTERN LESSON:
+When written testimonials from multiple customers use identical
+language or structure, conduct reference calls with open-ended
+questions before structured ones — the divergence between
+a customer's unprepared description and their coached testimonial
+is the most reliable signal of whether the reference is independent
+or managed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB13: FOUNDER DESCRIBES COMPETITION AS "NO COMPETITION"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+The founder explicitly states or strongly implies that there is
+no meaningful competition in their market, in a market where:
+(1) a 5-minute Crunchbase search identifies funded competitors;
+(2) the product category described has established incumbents;
+or (3) the customer problem addressed is being solved — by any
+means, including manual processes or adjacent software — by a
+significant proportion of potential customers. Observable from
+any competitive analysis section that identifies zero named
+competitors, uses language like "we are creating a new category
+with no existing solution," or dismisses all alternatives as
+"not truly competitive." See also Flag FB04 (systematic
+understatement), which is a related but distinct pattern.
+
+WHAT IT MEANS:
+"No competition" in a real market is not a competitive advantage —
+it is a market signal. The three explanations for a genuinely
+empty competitive landscape are: (1) the market does not exist —
+no one has built a solution because there is no viable business
+model, insufficient demand, or a regulatory barrier that makes
+the category unattractive; (2) the company is in a very early
+market where category creation is possible but where the absence
+of competition is evidence of risk, not of opportunity; (3) the
+founder has not looked. In a functioning startup ecosystem, every
+market that has attracted one funded company will attract others.
+The founder who claims no competition has either defined their
+market so narrowly that competitors who would take their customers
+are excluded from the analysis, or has not conducted a meaningful
+competitive assessment. Both failures predict the same operational
+outcome: the company will encounter competitors in the field
+that they did not anticipate, will not have prepared their sales
+team to address competitive objections, and will lose deals they
+did not know they were at risk of losing.
+
+DISQUALIFYING WHEN:
+The founder claims no competition in a market where a 5-minute
+search identifies a well-funded competitor (>£5M raised) with
+a directly overlapping product, and the founder cannot explain
+why that competitor does not compete with them. This is not
+a framing issue — it is a factual error about the market the
+company is operating in.
+
+MANAGEABLE WHEN:
+(a) The company is genuinely creating a new category where no
+prior commercial solution existed — the claim of no competition
+is supported by the absence of results in a thorough search and
+by customer testimony that they previously had no tool for the
+problem.
+(b) The "no competition" claim is limited to a specific sub-segment
+that the company has carved out — "no competition for [specific
+vertical + specific buyer persona]" — with competitors acknowledged
+in the adjacent segments.
+(c) The founder distinguishes between direct competition (no
+other product does this exact thing) and indirect competition
+(customers currently use [alternative] which is not designed
+for this purpose) — an honest and useful distinction if clearly
+articulated.
+
+VERIFICATION:
+Before reviewing the founder's competitive claims, conduct an
+independent 5-minute search: Crunchbase for companies in the
+same category with raised capital, Google for "[problem] software"
+and "[category] platform," and Product Hunt for recent launches
+in the space. Then compare the search results to the companies
+listed as competitors. Ask: "I found [named company] through
+a search — where do they fit in your competitive landscape
+and how do you differentiate against them specifically?"
+
+PATTERN LESSON:
+When a founder claims no meaningful competition, run an independent
+search before accepting the claim — a competitive landscape that
+looks empty from the submission but contains funded players
+discoverable in 5 minutes is the clearest available signal that
+the competitive analysis has not been conducted at a standard
+sufficient for the investment decision.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB14: SALARY ABOVE MARKET FOR STAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: MEDIUM
+
+SIGNAL:
+The founder is paying themselves a salary that is materially above
+the market rate for the company's current stage and capital position.
+Observable from: (1) the use of proceeds section showing a salary
+line for founder/CEO that exceeds £100K at seed stage pre-product-
+market fit; (2) the financial model showing a founder salary line
+that is growing in line with or faster than the company's revenue;
+(3) a direct statement by the founder of their current compensation
+in the submission or Q&A that exceeds the following stage benchmarks:
+pre-seed: £40–70K; seed: £60–90K; Series A: £90–130K; Series B:
+£130–200K. These are London/UK benchmarks for 2026. Adjust ±20%
+for significantly higher or lower cost-of-living markets.
+
+WHAT IT MEANS:
+Founder salary above market for stage is a direct capital allocation
+decision — the company is spending investor money to pay the founder
+a salary that is above what the stage justifies. The failure modes:
+(1) capital depletion: a £150K founder salary at seed stage costs
+the company £50–90K more per year than a market-rate salary,
+which at a £1M seed round represents 5–9% of raised capital spent
+on above-market founder compensation before a single product decision
+is made; (2) incentive misalignment: a founder who has de-risked
+their personal income relative to the stage has reduced the urgency
+that produces strong execution — the company needs to succeed for
+the founder to succeed financially, and above-market salary partially
+decouples those two things; (3) team morale: a founder who pays
+themselves £150K while the first engineers are on £80K has set
+a compensation tone that experienced employees notice and that
+produces recruiting and retention friction in the subsequent period.
+The above-market salary is also informative about the founder's
+relationship to capital: they are treating the raised capital as
+income replacement rather than as fuel for growth, which predicts
+slower burn discipline throughout the business.
+
+DISQUALIFYING WHEN:
+The founder is paying themselves a salary above the Series A
+benchmark (>£130K) on a pre-seed or seed raise, AND the use
+of proceeds shows that salary costs represent more than 30%
+of the total raise — the investor's capital is being deployed
+primarily to fund founder income, not to fund the business.
+
+MANAGEABLE WHEN:
+(a) The founder has meaningful personal financial obligations
+(mortgage, family) and is taking a salary at the lower end of
+the market range for stage — this is a reasonable need for
+a sustainable personal baseline, not extraction.
+(b) The company has raised a Series A or beyond and the founder
+salary is in the market range for that stage — above-market salary
+is a seed and pre-seed signal, not a late-stage one.
+(c) The founder is a technical founder whose salary replaces
+a contract engineering cost that the company would otherwise
+pay to a third party — a CTO at £100K seed stage who is the
+sole engineer is saving the company more than the salary costs.
+
+VERIFICATION:
+Request: the use of proceeds breakdown showing all personnel costs
+including founder salaries. Compare each founder salary to the
+stage benchmark above. Calculate founder salary as a percentage
+of the total raise. Ask: "What salary are the founders taking
+and how did you determine that level? Has it changed since the
+last funding round?"
+
+PATTERN LESSON:
+When a founder salary is above the stage benchmark, compare it
+as a percentage of the total raise and include this in the
+financial analysis — above-market founder compensation at early
+stage is a capital efficiency flag, not a personal judgement,
+and it compounds: a founder who starts above market typically
+increases their salary faster than the business grows.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG FB15: TIMELINE INCONSISTENCIES IN COMPANY HISTORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Founder Behaviour
+SEVERITY: HIGH
+
+SIGNAL:
+The dates in the submission — founding date, first customer date,
+first revenue date, prior funding dates — do not form a coherent
+chronological narrative when cross-referenced against each other
+and against public records. Observable by: (1) comparing the
+incorporation date on Companies House against the founding date
+stated in the deck; (2) comparing the stated first revenue date
+against the product launch date — revenue cannot precede launch;
+(3) comparing the stated funding dates against Crunchbase or press
+coverage of announced rounds; (4) comparing the stated team join
+dates against LinkedIn profile dates for key team members;
+(5) checking whether the stated customer acquisition date for
+"flagship" customers precedes the stated product launch date.
+The flag triggers when two or more dates are materially inconsistent
+and the inconsistency cannot be explained by a straightforward
+definition difference.
+
+WHAT IT MEANS:
+Timeline inconsistencies are the most precisely verifiable form
+of narrative inaccuracy — every date can in principle be verified
+against an external record. A company that presents inconsistent
+dates has either made careless errors in its materials or has
+adjusted dates to support a more favourable narrative. Both are
+informative. The most common patterns of date adjustment and what
+they signal: (1) founding date earlier than incorporation — common
+when founders want to appear more experienced; the delta between
+"when we started working on this" and "when the company was
+incorporated" is legitimate in principle but must be disclosed as
+such; (2) first customer before product launch — sometimes explained
+by a design partner or beta user, but requires explanation to be
+credible; (3) funding dates inconsistent with Crunchbase — often
+explained by the difference between close and announcement dates,
+but a discrepancy of more than 6 months requires explanation;
+(4) team member join dates inconsistent with LinkedIn — the most
+common source of unintentional inconsistency, because LinkedIn
+profiles are maintained by the individual and not always updated
+to reflect current roles accurately. Each inconsistency by itself
+is manageable. A pattern of two or more inconsistencies is a flag
+about the reliability of the materials as a whole.
+
+DISQUALIFYING WHEN:
+The stated "first revenue" date precedes the company's
+Companies House incorporation date — a company cannot have
+revenue before it legally exists — and the founder cannot
+explain the discrepancy with documentation. This is not a
+narrative inconsistency. It is a factual impossibility.
+
+MANAGEABLE WHEN:
+(a) The inconsistencies are all explained by a single specific
+factor — a pivot that redefined "founding" from the original
+entity to the current one, an acquisition that brought in a
+prior customer relationship, a pre-incorporation trading period
+that preceded formal registration — and the explanation is
+consistent with the documentary evidence.
+(b) The timeline inconsistency is in a public data source
+(Crunchbase, LinkedIn) rather than in the company's own
+materials — third-party data is less reliable than primary
+documents and inconsistencies between third-party sources
+and primary documents are lower severity.
+(c) The dates are internally consistent within the submission
+but inconsistent with a single third-party source — a single
+external inconsistency requires explanation but is not a pattern.
+
+VERIFICATION:
+Build a timeline table: incorporation date (Companies House),
+founding date (deck), first product (deck), first customer (deck),
+first revenue (deck), each funding round (deck vs Crunchbase),
+key team join dates (deck vs LinkedIn). Flag every date that
+is inconsistent across sources. For each inconsistency ask:
+"Your deck states [date A] for [event] but [source] shows [date B].
+Can you explain the difference?" The response — whether it
+provides a clear factual explanation or a defensive narrative —
+is itself informative.
+
+PATTERN LESSON:
+When two or more dates in the submission are inconsistent with
+public records, build a full timeline table comparing deck dates
+to Companies House, Crunchbase, and LinkedIn before advancing —
+a company whose materials contain multiple verifiable date
+errors has not maintained sufficient document discipline to
+support the level of due diligence that institutional investment
+requires.
+
+═══════════════════════════════════════════════════════════════════════
+END OF CATEGORY 8: FOUNDER BEHAVIOUR RED FLAGS
+15 flags total. FB01–FB15.
+Version 1.0. Built: April 2026.
+═══════════════════════════════════════════════════════════════════════

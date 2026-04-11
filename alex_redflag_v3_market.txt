@@ -1,0 +1,640 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 3: MARKET RED FLAGS
+Version 1.0. Built: April 2026.
+10 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 10 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+Market flags often interact with financial flags — a shrinking market
+combined with declining NRR is more serious than either alone.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M01: NO CREDIBLE WHY NOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: HIGH
+
+SIGNAL:
+The submission cannot articulate a specific enabling event — a regulatory change,
+a technology inflection, a cost threshold crossed, a behaviour shift — that occurred
+in the last 36 months and created this market opportunity now, where it did not
+exist or was not viable 5 years ago. The "Why Now" section of the pitch, if present,
+describes the market opportunity in general terms (e.g. "digital transformation,"
+"the rise of AI," "growing demand for X") rather than a specific, dateable event.
+
+WHAT IT MEANS:
+Market timing is one of the most significant factors in venture outcomes — a correct
+idea entered at the wrong time produces the same financial return as a wrong idea.
+The Why Now test identifies whether the company has identified a genuine timing
+inflection or is simply entering an established market hoping to take share through
+execution alone. Without a credible Why Now, three risks materialise:
+(1) The company is entering a market that is already maturing — the early-mover
+advantage has been captured by incumbents and the startup is competing on features
+against well-resourced players without structural advantage.
+(2) The technology or infrastructure that makes the product viable has not yet arrived —
+the company is ahead of the market, which is economically equivalent to being wrong.
+(3) The market timing rationale has not been thought through — which raises questions
+about the depth of the founder's understanding of their own market.
+The best Why Now statements are specific and verifiable: "The FDA approved AI-assisted
+diagnostic software in 2023, creating the first reimbursable pathway for our product";
+"GPT-4 reduced inference cost 94% since 2022, making our unit economics viable for
+the first time"; "The FCA's Consumer Duty requirement (July 2023) made our compliance
+product mandatory for every UK retail financial firm."
+
+DISQUALIFYING WHEN:
+The submission contains no Why Now rationale AND the market has existed in recognisable
+form for more than 7 years AND at least two well-funded companies have already attempted
+the same product category — the combination suggests not a timing inflection but
+a repeated entry into a market that has not been cracked, with no new structural advantage.
+
+MANAGEABLE WHEN:
+(a) The founder articulates a specific Why Now in the meeting that was absent from
+the written submission — the omission is a presentation gap, not a thinking gap.
+(b) The Why Now is implied by verifiable public events (a specific regulation,
+a technology release date, a market event) that are in the submission even if not
+explicitly framed as the timing rationale.
+(c) The company is a market share play in an established, growing market where
+timing is less critical than execution — in which case Alex should note the absence
+of a timing inflection and assess the competitive differentiation instead.
+
+VERIFICATION:
+Ask directly: "What happened in the last 3 years that makes this the right moment
+to build this company? What would have prevented you from building this 5 years ago?"
+A founder who has genuinely thought about market timing answers immediately with
+a specific event. A founder who has not gives a general answer about market growth
+or customer demand that could apply to any point in the last decade.
+
+PATTERN LESSON:
+When the Why Now is absent or described in general terms, ask the founder to name
+the specific event in the last 36 months that created the window — the specificity
+and confidence of the answer determines whether timing is a structural advantage
+or an assumption.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M02: MARKET DEFINED TOO BROADLY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: MEDIUM
+
+SIGNAL:
+The TAM figure in the submission is sourced from an industry report that measures
+the total size of a broad industry category rather than the specific segment this
+product addresses at this price point for this buyer profile. Common indicators:
+TAM is described as "the global [industry] market" rather than "the addressable
+market for [specific product type] sold to [specific buyer type]"; the TAM figure
+is in the trillions or tens of billions for a product with an ACV below £20K;
+the TAM figure comes from a research firm (Gartner, IDC, McKinsey) measuring
+an industry category that is 5–10x broader than the company's actual serviceable market.
+
+SPECIFIC PATTERNS THAT TRIGGER THIS FLAG:
+— "The global HR software market is £18B" for a product that serves only UK SMBs
+— "The healthcare market is £3T" for a specific NHS workflow tool with a £30K ACV
+— "The cybersecurity market is £200B" for a point solution addressing one specific threat vector
+— TAM figure does not change materially if the company's product is removed from
+  the market — which means the TAM does not measure the company's specific opportunity
+
+WHAT IT MEANS:
+An inflated TAM does not change the underlying business — but it does reveal one
+of two things: (a) the founder has not done the analytical work to calculate their
+actual serviceable addressable market (SAM), which raises questions about the rigour
+applied to financial planning and market sizing generally; or (b) the founder has
+done the work and the real SAM is too small to present to investors, so the broader
+market figure is used as a substitute. The second case is more common and more
+concerning. The true market size matters for one practical reason: a company that
+cannot build a £50M+ ARR business in its primary market cannot return a fund-moving
+result at venture scale, regardless of execution quality.
+
+DISQUALIFYING WHEN:
+The stated TAM is more than 20x the implied SAM (calculated as: ACV × realistic
+buyer universe in the company's primary market) AND the company is seeking Series A
+capital at a valuation that implies a 10x return requiring £500M+ ARR — the
+return requirement cannot be achieved within the realistic addressable market.
+
+MANAGEABLE WHEN:
+(a) The submission distinguishes between TAM (total industry), SAM (addressable
+with current product), and SOM (realistically capturable in 5 years) — the TAM
+figure is context, not the investment case.
+(b) The company has a credible multi-product or multi-market expansion path
+that converts the broader TAM into a reachable addressable market over a
+10-year horizon, with stage-gated milestones for each market entry.
+(c) The SAM is large enough on its own to support the investment thesis — the
+TAM figure is irrelevant if the SAM calculation is sound.
+
+VERIFICATION:
+Calculate the implied SAM: identify the company's specific buyer profile (title,
+company size, geography), estimate the realistic universe of such buyers, multiply
+by ACV. Ask: "How many companies of the type you target exist in the UK/EU market?
+What percentage do you think you could realistically capture at full penetration?"
+The arithmetic either supports the investment thesis or does not — the reported
+TAM from a research firm does not change the calculation.
+
+PATTERN LESSON:
+When the TAM figure comes from a broad industry report, calculate the implied SAM
+from buyer universe × ACV and test whether the investment thesis survives the
+smaller number before accepting the reported TAM as the addressable opportunity.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M03: PRIOR FAILED ATTEMPTS UNADDRESSED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: HIGH
+
+SIGNAL:
+Two or more companies have raised venture capital, built a product in this exact
+category, and subsequently failed (shut down, pivoted away entirely, or been acquired
+at distressed valuation) — and the submission does not acknowledge these prior attempts
+or explain what structural difference makes this attempt different. The prior failures
+are identifiable through a basic Crunchbase or press search for the product category.
+
+WHAT IT MEANS:
+A category with prior failed funded attempts is not automatically uninvestable —
+many great companies succeeded where predecessors failed because a specific enabling
+condition changed. But the founder's treatment of prior failures is diagnostic:
+(a) A founder who proactively acknowledges prior failures and explains the structural
+difference demonstrates market knowledge and intellectual honesty. This is a positive signal.
+(b) A founder who is unaware of prior failures has not done the basic competitive
+and market research expected of a company in this space. This is a negative signal
+about preparation.
+(c) A founder who is aware of prior failures and omits them from the pitch is hoping
+the investor does not find them — a transparency failure that is more serious than
+the failures themselves.
+The specific question the prior failures answer: was this market not viable because
+of the wrong technology, the wrong timing, the wrong team, the wrong business model —
+or because the market simply does not want this solution at any price?
+
+DISQUALIFYING WHEN:
+Three or more funded companies have failed in this exact category within the last
+7 years AND the current submission does not acknowledge any of them AND the current
+company cannot articulate a structural difference from the prior attempts beyond
+"better execution" or "we have a better team" — because execution quality alone
+is not a structural market insight.
+
+MANAGEABLE WHEN:
+(a) The prior failures are proactively disclosed in the submission with a specific
+account of why each failed and why the current company is structurally different —
+the Why Now (M01) answers the prior failure question simultaneously.
+(b) The prior failures were in an adjacent but distinct category — a different
+buyer type, a different technology approach, or a different price point — and the
+current company's approach genuinely differs.
+(c) The prior failures occurred more than 10 years ago and the technology, regulatory,
+or economic context has changed materially since then.
+
+VERIFICATION:
+Search Crunchbase for the product category + "shutdown" or "acquired." Search
+TechCrunch and press archives for the category name from 3–10 years ago. Identify
+any company that raised more than £2M in this category and is no longer operating.
+Present the findings to the founder: "We found [X] and [Y] who attempted this between
+[years]. What happened and what is different about your approach?" The quality of
+the answer is the primary signal.
+
+PATTERN LESSON:
+When the product category has prior funded failures, present the specific companies
+and ask the founder to explain the structural difference — a founder who cannot name
+or explain the prior failures has not done the market research that underpins the investment thesis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M04: MARKET CONSOLIDATING AROUND INCUMBENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: HIGH
+
+SIGNAL:
+The addressable market is in an active consolidation phase — 2 or more large players
+have made acquisitions of the category's earlier startups within the last 24 months,
+the number of independent funded competitors has declined, and press coverage of
+the category has shifted from "emerging market" to "dominated by X and Y." Detectable
+from Crunchbase M&A data, press coverage of the category, and the competitive landscape
+described in the submission.
+
+WHAT IT MEANS:
+Market consolidation creates a closing window for new entrants — specifically, it means:
+(1) The best-performing startups in the category have already been acquired, which
+means the most credible exit pathway for a new entrant now requires out-competing
+entrenched acquiree products with the resources of a large company behind them.
+(2) The remaining independent competitors are either the category leaders who have
+not yet exited or the laggards who could not attract an acquisition offer — neither
+profile is a good signal for a new entrant.
+(3) Enterprise buyers in a consolidating market begin standardising on the dominant
+platforms, making it progressively harder for a new entrant to get procurement
+consideration — the buyer says "we're going all-in on Salesforce / ServiceNow /
+Microsoft" and the new entrant has no answer.
+The window for a new entrant to achieve venture-scale traction in a consolidating
+market is typically 24–36 months from the point of consolidation onset — after which
+the structural headwinds become prohibitive without a true category-defining differentiation.
+
+DISQUALIFYING WHEN:
+The category has seen 3 or more M&A transactions in the last 24 months AND the
+acquirers include at least 2 of the company's potential exit counterparties AND
+the company does not have a differentiation that is materially distinct from the
+acquired products — because the exit pathway has narrowed to a small number of
+buyers who have already made their strategic bets.
+
+MANAGEABLE WHEN:
+(a) The company occupies a specific sub-segment of the consolidating market that
+has not yet been acquired and where the large acquirers have demonstrated no interest —
+a wedge strategy that targets the underserved segment the incumbents cannot or will
+not address.
+(b) The consolidation is creating customer dissatisfaction — acquiree products are
+being under-invested, pricing is rising, and customers are actively looking for
+alternatives — creating a counter-cycle opportunity.
+(c) The company has already established a relationship with one of the consolidating
+incumbents as a strategic partner — which makes it a potential acquisition target
+rather than a new entrant competing against them.
+
+VERIFICATION:
+Search Crunchbase M&A for the product category in the last 24 months. Identify
+acquirers and acquired companies. Ask: "Which companies in your category have been
+acquired in the last 2 years, and who acquired them? What does that mean for your
+exit strategy?" A founder who sees the consolidation as an opportunity (potential
+acquirer list) rather than only a threat has thought through the competitive dynamics.
+
+PATTERN LESSON:
+When a category shows 2 or more M&A transactions among potential exit counterparties
+in the last 24 months, assess whether the consolidation is creating a closing window
+or a counter-cycle opportunity — the two scenarios require opposite investment decisions.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M05: REGULATORY DEPENDENCY FOR MARKET EXISTENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: CRITICAL
+
+SIGNAL:
+The entire commercial opportunity depends on a specific regulation, government
+mandate, or subsidy regime remaining in place — AND that regulation or mandate
+is currently under active review, facing political challenge, or subject to a
+consultation process that could result in its withdrawal or significant modification
+within the investment horizon. Detectable from: the product's value proposition
+explicitly citing a specific regulation as the source of customer obligation;
+a statutory review or consultation documented in public record; or a change of
+government or regulatory body leadership that signals policy direction.
+
+WHAT IT MEANS:
+A regulatory tailwind is a legitimate market timing advantage — but a business
+whose existence depends on a single regulation is not a technology business,
+it is a regulatory arbitrage. When the regulation changes, the market disappears.
+Three specific risk profiles:
+(1) The regulation is removed: the customer no longer has an obligation to buy the
+product. Revenue drops to zero in the next contract cycle. There is no alternative
+use case — the product was built to solve a compliance requirement, not a business problem.
+(2) The regulation is modified: the product's compliance applicability is reduced.
+Revenue from affected use cases declines. The company must rebuild for the new
+regulatory perimeter.
+(3) The regulation is delayed in implementation: customers defer purchase decisions
+while waiting for enforcement clarity. Revenue that was imminent moves by 12–24 months.
+See also Climate Sector Library (Subsidy Cliff failure pattern) and Fintech Sector
+Library (Regulatory Licence Trap) for sector-specific instantiations of this flag.
+
+DISQUALIFYING WHEN:
+More than 60% of the company's current or projected ARR comes from a compliance
+obligation created by a single specific regulation AND that regulation is currently
+subject to an active government consultation, statutory review, or legal challenge
+that could result in its removal or significant modification within 36 months.
+
+MANAGEABLE WHEN:
+(a) The regulation creates the initial market entry but the product solves an
+underlying business problem that exists independently of the regulation — compliance
+is the wedge, not the entire value proposition. Customers would continue using
+the product even if the compliance obligation was removed because it delivers
+operational value.
+(b) The regulation is well-established, bipartisan in political support, and has
+survived multiple government changes without substantive challenge — the regulatory
+risk is theoretical rather than live.
+(c) The company has already diversified beyond the single regulatory driver —
+other revenue streams represent more than 40% of ARR and are growing faster than
+the compliance-driven revenue.
+
+VERIFICATION:
+Identify the specific regulation cited as the market driver. Search the relevant
+government body (FCA, MHRA, OFGEM, DESNZ, EU Commission) for any open consultation,
+statutory review, or reform proposal affecting that regulation. Ask: "If this
+regulation was withdrawn or substantially modified tomorrow, what percentage of
+your current customers would still use your product? For what reason?" The answer
+reveals whether the product has standalone value or is purely compliance-driven.
+
+PATTERN LESSON:
+When the entire market opportunity is attributed to a specific regulation, verify
+whether the regulation is under active review and whether the product delivers
+value independently of the compliance obligation — the answers determine whether
+the company is building a business or a regulatory arbitrage.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M06: GEOGRAPHY TOO SMALL FOR VENTURE RETURNS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: HIGH
+
+SIGNAL:
+The company's primary addressable market — applying the correct buyer universe
+and ACV — is insufficient to produce a venture-scale return (£100M+ ARR or
+£500M+ enterprise value) even at full market penetration within the company's
+stated geography, and the submission contains no credible path to market expansion
+beyond the primary geography.
+
+CALCULATION METHOD:
+Realistic buyer universe in stated geography × ACV = Maximum SAM at 100% penetration.
+Venture-grade threshold: SAM must support £50M+ ARR at 20–30% realistic penetration.
+A company with 500 potential buyers at £50K ACV has a SAM of £25M — maximum ARR
+at 100% penetration is £25M. At a realistic 25% penetration, ARR is £6.25M.
+This is not venture-scale in isolation.
+Geography-specific ceilings that frequently trigger this flag:
+— UK-only B2B products with fewer than 2,000 realistic buyers
+— Single EU country products with fewer than 5,000 realistic buyers
+— Vertical SaaS with a UK buyer universe below 500 companies
+— Gov-tech products limited to a single government department
+
+WHAT IT MEANS:
+A geography-constrained market is not inherently a bad business — it can be an
+excellent private equity, growth equity, or bootstrapped business. But venture
+capital requires returns that come from a fund-moving exit: a company must achieve
+£500M+ enterprise value to return a meaningful portion of a £50M+ fund. A company
+that achieves 100% of its UK market and generates £20M ARR at 8x multiple produces
+£160M enterprise value — which is a reasonable outcome but not a venture fund-returner.
+The question is not whether the business is good — it is whether the market structure
+allows the company to grow to venture-scale.
+
+DISQUALIFYING WHEN:
+The realistic SAM (buyer universe × ACV) in the primary geography is below £30M
+AND the submission contains no evidence of a credible expansion plan beyond the
+primary geography AND the company is seeking venture capital at a valuation implying
+a £100M+ exit.
+
+MANAGEABLE WHEN:
+(a) The submission includes a staged expansion plan with specific market entry dates,
+GTM strategy, and evidence of demand in secondary markets — UK is the proof of
+concept for a global rollout.
+(b) The ACV expansion path is credible — the company will sell more modules or expand
+from one buyer type to adjacent buyer types, increasing the SAM without geographic expansion.
+(c) The business is raising growth equity or PE-track capital, not traditional VC —
+in which case the geography constraint is not a disqualifier because the return
+expectation is different.
+
+VERIFICATION:
+Calculate the realistic buyer universe from first principles: company size filter ×
+industry filter × geography filter = number of potential buyers. Multiply by ACV.
+Ask: "At 25% market penetration in the UK alone — which would be exceptional —
+what would your ARR be? And what is your plan for the markets beyond the UK?"
+The arithmetic and the answer reveal whether the company has a viable venture path.
+
+PATTERN LESSON:
+When the stated geography is UK-only or a single country, calculate the realistic
+SAM from buyer universe × ACV before assessing growth rate — a company growing
+at 100% annually in a market that caps at £15M ARR is not a venture investment
+regardless of the growth trajectory.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M07: MARKET TIMING PEAK ALREADY PASSED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: HIGH
+
+SIGNAL:
+Industry-level data — VC investment into the category, media coverage volume, search
+trend data, or disclosed revenue growth rates of the category's public comparables —
+shows a clear peak 2–3 years ago followed by a sustained decline, while the company
+in the submission is entering the category for the first time or has only been
+operating for 12–18 months. The category's early winners have already consolidated
+market share and the growth rates of public comparables in the space have declined
+materially from their peak.
+
+DETECTABLE FROM:
+— Category VC investment peaked in 2021–2022 (common for many SaaS categories that
+  benefited from COVID tailwinds) and has declined 40–60% annually since
+— Public company peers in the space are trading at 5–8x ARR vs 30–50x at peak
+— Press coverage of the category has shifted from "the future of X" to "X faces
+  headwinds" or "consolidation in the X market"
+— Growth rates of the category's best performers have declined from 80–100% YoY
+  to 20–40% YoY
+
+WHAT IT MEANS:
+Entering a market after the timing peak is not impossible — late entrants can win
+with genuine differentiation. But the structural conditions at peak and post-peak
+are different in ways that matter for venture returns:
+(1) Customer willingness to adopt new solutions is lower post-peak — the early
+adopters have already adopted something, and the mainstream buyers are now waiting
+for the market to stabilise before switching.
+(2) The available pool of equity capital for the category is contracting —
+investors who funded the category at peak are managing existing portfolio
+companies through a down-cycle, not deploying into new ones.
+(3) Exit multiples have compressed — a company that exits at 8x ARR in a category
+that peaked at 30x ARR requires much higher ARR to produce the same absolute return.
+
+DISQUALIFYING WHEN:
+Industry-level VC investment into the category has declined more than 50% from its
+3-year peak AND the company is entering the category with less than £500K ARR
+AND has no structural differentiation from the companies that built the category
+during its growth phase — a late entrant with no differentiation in a declining
+category faces two headwinds simultaneously: weak market and strong competition.
+
+MANAGEABLE WHEN:
+(a) The company has identified a sub-segment of the category that has not yet
+been served by the peak-era companies — the market timing is late for the
+category overall but early for this specific application.
+(b) The company has a genuinely disruptive cost position or technology advantage
+that allows it to serve customers the peak-era companies could not reach —
+creating new demand rather than competing for existing demand.
+(c) The category declined due to macro conditions (interest rate shock, COVID
+normalisation) rather than structural market failure — and the underlying demand
+has persisted, creating a re-entry opportunity.
+
+VERIFICATION:
+Search Crunchbase for VC investment into the category by year. Search Google Trends
+for the category's primary keywords. Look at the revenue growth rates disclosed by
+the category's leading public companies or late-stage private companies over the last
+3 years. Ask: "How do you view the timing of your entry into this market relative to
+when the category was established? What advantages does late entry give you?"
+
+PATTERN LESSON:
+When VC investment into the category peaked more than 2 years ago and has since
+declined, assess whether the company has a structural advantage that compensates
+for adverse timing — late entry without differentiation in a declining category
+is one of the most common patterns in deals that fail to reach Series B.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M08: TARGET CUSTOMER DOES NOT HAVE BUDGET FOR THIS CATEGORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: MEDIUM
+
+SIGNAL:
+The stated target customer type does not typically have an existing budget allocated
+to the product category — meaning every sale requires the customer to create a new
+budget line rather than redirecting spend from an existing category. Detectable when:
+the target customer is a small or micro-business (fewer than 10 employees) being
+asked to pay above £3K/year for a B2B SaaS product; or the target buyer is a
+department or function that does not conventionally control discretionary software
+spend (e.g. a clinical team being asked to approve a £50K software purchase,
+or a manufacturing floor manager being asked to approve a £30K data analytics tool).
+
+WHAT IT MEANS:
+B2B sales are fastest and most capital-efficient when the product replaces an
+existing budget line — the customer is already spending money on this problem,
+and the vendor is simply redirecting that spend. When no budget line exists, every
+sale is a budget creation event: the founder must convince the customer that the
+problem is worth funding, get that funding approved through a budget process that
+may run on an annual cycle, and then compete for approval alongside other new budget
+requests. This extends sales cycles, increases churn risk (unbudgeted spend is the
+first thing cut in a downturn), and makes the revenue structurally less durable than
+spend that comes from an established budget category.
+
+DISQUALIFYING WHEN:
+The target customer is a company with fewer than 20 employees AND the ACV is above
+£10K AND the product category does not have an established budget precedent in
+companies of that size AND there is no evidence in the submission that customers
+have created new budget lines to pay for the product — the sales story is theoretical.
+
+MANAGEABLE WHEN:
+(a) The product demonstrably displaces an existing spend — it replaces a headcount,
+eliminates a third-party service cost, or reduces a measurable operational expense
+by an amount that creates a clear ROI case that justifies the new budget creation.
+(b) The company sells at a price point low enough to be approved from discretionary
+spend without a formal budget process (below £500/month for most SMB buyers).
+(c) The company's evidence shows that customers have in fact created new budget lines —
+the theoretical concern is contradicted by actual commercial behaviour.
+
+VERIFICATION:
+Ask: "When a customer decides to buy your product, what budget does it come from?
+Is that budget already allocated before they meet you, or do they have to create a
+new budget line?" The answer tells you whether the company is capturing existing
+spend or creating new spend — and whether the sales cycle reflects budget cycle
+dependency or product willingness-to-pay.
+
+PATTERN LESSON:
+When the target customer type does not have an established budget category for the
+product, verify whether existing customers are paying from a pre-existing budget line
+or from a new discretionary allocation — the difference determines the structural
+durability of the revenue and the length of the sales cycle.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M09: MARKET REQUIRES SIMULTANEOUS BEHAVIOUR CHANGE AT SCALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: MEDIUM
+
+SIGNAL:
+The product's core value proposition only materialises when a critical mass of users,
+suppliers, or buyers adopts it simultaneously — before this critical mass is reached,
+the product delivers little or no value to individual early adopters, creating a cold
+start problem that the company has not yet solved. Detectable from language like
+"once enough companies use our platform," "the value increases as more suppliers
+join," or from a network-effects business model description where the early-adopter
+value proposition is weak.
+
+WHAT IT MEANS:
+Products that require simultaneous adoption face the most difficult GTM challenge
+in technology — the chicken-and-egg problem. Every individual early adopter has
+less incentive to adopt because the network is not yet valuable, which means the
+network does not become valuable, which means the next early adopter has even
+less incentive. The companies that have solved this problem historically did so
+through one of three strategies: (1) subsidising one side of the market heavily
+until critical mass is reached (Uber, Airbnb); (2) targeting a highly concentrated
+geography or community where critical mass is achievable with limited capital (dating
+apps, local marketplaces); (3) building standalone value that does not require
+the network to be useful in its early form (Slack — useful as a team communication
+tool for 2 people before it became a platform). Without one of these three strategies
+explicitly described in the submission, the behaviour change problem is unsolved.
+
+DISQUALIFYING WHEN:
+The product delivers zero standalone value to a single early adopter AND the company
+has not subsidised one side of the market AND critical mass has not been achieved in
+any defined geography or customer segment AND the company is at Series A or beyond
+— meaning the cold start problem has persisted through seed without resolution.
+
+MANAGEABLE WHEN:
+(a) The company has a documented critical mass strategy — a specific geography,
+community, or customer segment where they will achieve minimum viable density before
+expanding — and has early evidence that the strategy is working in the target segment.
+(b) The product delivers standalone value to individual early adopters that is
+independent of the network — the network effect is an enhancement, not the minimum
+viable value proposition.
+(c) The company has already achieved critical mass in one market segment and is
+using that as the reference case for subsequent expansions.
+
+VERIFICATION:
+Ask: "What is the value of your product to the first customer who adopts it, before
+any other customers are using it?" If the answer is "limited" or "it's better with
+more users," ask: "What is your strategy for reaching the critical mass required
+for your core value proposition to work? And where are you in that journey?"
+
+PATTERN LESSON:
+When the core value proposition requires simultaneous adoption by multiple parties,
+verify whether the company has achieved critical mass in any segment and has a
+documented strategy for each subsequent segment — the absence of a specific critical
+mass milestone is a cold start problem that does not resolve through additional capital alone.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG M10: COMPETITIVE LANDSCAPE OMITS FUNDED COMPETITORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Market
+SEVERITY: HIGH
+
+SIGNAL:
+The submission's competitive analysis — whether a 2x2 matrix, a list, or a narrative
+description — omits one or more competitors that are (a) verifiably operating in the
+same product category, (b) have raised more than £2M in disclosed funding, and (c)
+are identifiable within 5 minutes of a basic Crunchbase or Google search for the
+product category. The omission may be of direct competitors, well-funded near-competitors
+whose expansion trajectory brings them into direct competition, or large incumbents
+who have announced a competing product in the last 12 months.
+
+WHAT IT MEANS:
+The competitive landscape slide is one of the most systematically distorted elements
+of a pitch deck. Founders have a structural incentive to minimise the competition —
+a crowded competitive landscape is harder to fund. The result is competitive slides
+that are technically accurate but strategically incomplete: they show the weakest
+competitors (legacy on-premise systems, expensive consultants, Excel spreadsheets)
+and omit the most dangerous ones (well-funded startups with similar approaches
+that are 18 months ahead). This creates three problems:
+(1) Alex and the firm make investment decisions based on an incomplete competitive
+picture — materially affecting the market position assessment.
+(2) The omission signals that the founder either does not know about the competitor
+(lack of market research) or knows and omitted them deliberately (lack of transparency).
+Neither is reassuring.
+(3) The undisclosed competitor is likely to be the first thing due diligence surfaces —
+which damages the firm's confidence in the accuracy of other submission claims.
+
+DISQUALIFYING WHEN:
+A funded competitor with more than £5M raised and materially similar product is
+omitted from the competitive analysis AND when the omission is identified, the founder
+either cannot explain the competitor's approach or provides an explanation that reveals
+they were unaware of a major competitive development (e.g. a product launch, a major
+customer win) in the last 12 months.
+
+MANAGEABLE WHEN:
+(a) The omitted company is in an adjacent category and the founder has a clear and
+credible explanation for why it is not a direct competitor — the omission was a
+deliberate categorisation decision, not an oversight.
+(b) The omission is of a large incumbent whose product the founder has analysed in
+detail and can speak to — the incumbent appears in their analysis but not on the
+competitive matrix because it operates on a different competitive dimension.
+(c) The omitted company is very recently funded (within the last 90 days) and the
+submission predates the news — a timing gap, not a research failure.
+
+VERIFICATION:
+Before every meeting, run a 5-minute Crunchbase search for the product category
+and identify any company with more than £2M raised operating in the space. Cross-
+reference against the submission's competitive slide. If a funded company is not
+mentioned, ask: "We noticed [Company X] is operating in a similar space and has
+raised [£Y] — how do you view their approach and where do you see the main
+differences between your product and theirs?" The depth of the answer reveals
+the quality of the founder's competitive intelligence.
+
+PATTERN LESSON:
+When the competitive landscape appears incomplete, run a 5-minute Crunchbase search
+before the first meeting and identify any funded company omitted from the analysis —
+the founder's response to the question reveals whether the omission was research
+failure or deliberate framing, and both are material signals.
+
+═══════════════════════════════════════════════════════════════════════
+END OF RED FLAG LIBRARY — CATEGORY 3: MARKET
+10 flags. Apply all 10 mechanically to every deal submission.
+Next category: Product Red Flags (P01–P10).
+═══════════════════════════════════════════════════════════════════════

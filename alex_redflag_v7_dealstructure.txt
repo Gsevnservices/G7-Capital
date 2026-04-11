@@ -1,0 +1,810 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 7: DEAL STRUCTURE RED FLAGS
+Version 1.0. Built: April 2026.
+10 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 10 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+Deal structure flags operate differently from business quality flags.
+A structurally broken deal can contain an excellent business —
+and a structurally clean deal can contain a mediocre one. These flags
+are not signals about business quality. They are signals about whether
+the investment terms, as presented, allow a new investor to achieve
+returns proportionate to the risk they are taking. A deal that scores
+well on every business dimension but fails two or more deal structure
+flags is a deal that requires renegotiation, not a pass — but the
+renegotiation must happen before capital is committed, not after.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS01: VALUATION INCONSISTENT WITH METRICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: HIGH
+
+SIGNAL:
+The asking valuation — expressed as a pre-money valuation relative to
+the disclosed ARR — implies an ARR multiple that is materially above
+the sector benchmark for the growth rate and gross margin presented.
+Observable by dividing the pre-money valuation by the stated ARR to
+derive the implied revenue multiple, then comparing that multiple to
+the current market benchmark for the company's growth rate tier and
+gross margin profile. A B2B SaaS company growing at 80% YoY with 70%
+gross margin asking at 20× ARR in Q2 2026 is at the upper boundary
+of market. The same metrics asking at 40× ARR is materially above
+benchmark. The signal is the gap between the implied multiple and
+what a comparable company at a comparable stage would achieve in
+the current fundraising environment.
+
+WHAT IT MEANS:
+An above-market valuation is not automatically a reason to pass —
+premium companies command premium multiples. The flag triggers
+when the valuation is above market and the metrics do not justify
+the premium. The failure modes are distinct: (1) the company will
+struggle to raise its next round at a higher valuation because the
+metrics do not support the step-up — creating a flat round or a
+down round that triggers anti-dilution provisions and damages
+investor returns; (2) the current investor enters at a price that
+compresses the return multiple to below the fund's threshold — a
+5× gross return target at entry requires at least a 5× multiple
+on exit before fees, and entry at an inflated valuation makes this
+mathematically difficult at any realistic exit scenario; (3) the
+company has anchored its self-worth to a valuation that the
+current investors' expectation of 3–5 years of compounding cannot
+support, creating a misalignment between founder expectations and
+investor return requirements that surfaces acutely at exit. The
+2021–2022 vintage of deals at 50–100× ARR multiples is the
+reference class: the majority of those companies either failed
+to raise a subsequent round or raised at a significant down round,
+with the downstream governance and incentive consequences documented
+in the Governance and Traction red flag libraries.
+
+DISQUALIFYING WHEN:
+The implied ARR multiple is more than 3× the current sector benchmark
+for the company's growth rate AND the company's ARR is below £2M —
+early-stage companies with small ARR bases have high valuation
+uncertainty and a 3× premium over sector benchmark at this size
+implies either an unsupported narrative premium or a founder
+expectation that is incompatible with institutional investment terms.
+
+MANAGEABLE WHEN:
+(a) The company has a documented reason for the premium: a signed
+LOI or term sheet from a strategic acquirer at a premium valuation,
+a proprietary dataset or network effect that creates genuine scarcity
+value, or a competitive process with multiple term sheets at the
+same price — external validation replaces analyst judgement on
+what the market will pay.
+(b) The ARR multiple is above benchmark but the company's growth
+rate is in the top quartile for its stage — premium growth justifies
+a premium multiple up to approximately 1.5× the sector benchmark.
+(c) The company is willing to restructure the deal with a lower
+pre-money valuation and warrants or milestone-based step-ups that
+tie the premium to performance — converting a valuation dispute
+into an alignment mechanism.
+
+VERIFICATION:
+Calculate: pre-money valuation ÷ ARR = implied multiple. Compare
+to current sector benchmark for the company's growth rate tier:
+growth >150% YoY: 15–25× ARR fair value range; growth 80–150%:
+8–15×; growth 40–80%: 5–8×; growth <40%: 2–5×. These are
+indicative ranges for 2026 — apply sector adjustments for
+gross margin and market size. Ask: "How did you arrive at your
+valuation? What comparable transactions or multiples did you use
+as reference points?"
+
+PATTERN LESSON:
+When the implied ARR multiple is more than 1.5× the sector benchmark
+for the stated growth rate, model the return at entry valuation under
+three exit scenarios (1× sector average, 2× sector average, 3× sector
+average) — if the fund return threshold is not achievable under the
+2× scenario, the valuation is the deal-breaker, not the business.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS02: LIQUIDATION PREFERENCE ABOVE 1×
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: HIGH
+
+SIGNAL:
+Prior round investor documentation, term sheet history, or shareholder
+agreement disclosures show any series holding a 2× or higher
+liquidation preference on their invested capital. Observable from
+any term sheet, shareholder agreement extract, or investor rights
+summary disclosed in the data room or deal materials. Also detectable
+when the cap table shows a liquidation preference amount that exceeds
+the total capital raised by the series — i.e. a £5M Series A with
+a £10M liquidation preference indicates a 2× or higher multiple.
+
+WHAT IT MEANS:
+A 2× liquidation preference means the series holding it receives
+twice their invested capital before any other equity class receives
+anything. At a 1× preference, a £5M invested at a £20M pre-money
+valuation holds a £5M liquidation preference — reasonable protection.
+At 2×, the same investment holds a £10M preference. The practical
+consequence: in any exit below the sum of all liquidation preferences
+across all series, common shareholders receive zero. With multiple
+series each holding 2× preferences, the threshold below which common
+shareholders receive zero becomes very high — often exceeding the
+realistic exit range for the business. The incentive consequences
+are direct: employees holding common stock or options see their
+equity as worthless, leave for companies where their equity has
+value, and the company loses the team it needs to achieve the exit
+that would clear the preference stack. The above-market liquidation
+preference is also a signal about the circumstances of a prior round:
+2× preferences are typically negotiated when founders were in a weak
+position — low runway, struggling metrics, a failed prior process —
+and accepted harsh terms to stay alive. The deal history that produced
+the 2× preference is therefore itself a red flag about a prior
+operating crisis that may not be disclosed in the current materials.
+
+DISQUALIFYING WHEN:
+The sum of all liquidation preferences across all series exceeds
+the pre-money valuation of the current round — meaning that in a
+sale at the current round's valuation, existing preference holders
+would take 100% of the proceeds before the current round investor
+receives anything. This is a structural condition that makes the
+deal uninvestable at the proposed terms.
+
+MANAGEABLE WHEN:
+(a) The current round includes a renegotiation of prior liquidation
+preferences as a condition of the round — converting 2× preferences
+to 1× non-participating, with existing investors agreeing to this
+restructuring in the term sheet.
+(b) The 2× preference is held by a single prior investor at a very
+small investment amount (under £500K) where the absolute preference
+amount does not materially affect the waterfall at any plausible
+exit scenario.
+(c) The company's exit range — based on current metrics and sector
+comparables — comfortably exceeds the sum of all liquidation
+preferences, such that the preference stack is not binding in
+any realistic outcome.
+
+VERIFICATION:
+Request the complete liquidation waterfall model showing each series,
+the preference amount, the preference multiple, whether the preference
+is participating or non-participating, and the exit value at which
+common shareholders first receive proceeds. Calculate: sum of all
+liquidation preferences across all series ÷ pre-money valuation
+of the current round = preference coverage ratio. Ask: "Can you
+provide a full waterfall analysis showing proceeds by share class
+at your target exit valuation?"
+
+PATTERN LESSON:
+When any prior round holds a 2× or higher liquidation preference,
+model the waterfall at the expected exit range before advancing —
+preference stacks that consume the entire exit proceed in the
+realistic outcome range make the deal uninvestable for any new
+investor whose return depends on exit proceeds above the preference.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS03: FULL RATCHET ANTI-DILUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: HIGH
+
+SIGNAL:
+The shareholder agreement, term sheet, or investor rights summary
+for any prior round contains a full ratchet anti-dilution provision —
+meaning that in the event of a down round, the prior series is
+re-priced to the new lower price on a share-for-share basis, without
+the weighted-average adjustment that is standard market practice.
+Observable from any investor rights agreement extract or term sheet
+summary that uses the language "full ratchet" explicitly, or from
+provisions stating that prior investors receive additional shares
+at the new round price to make them whole on a per-share basis
+rather than a weighted-average basis.
+
+WHAT IT MEANS:
+Full ratchet anti-dilution is the most founder-punishing and
+co-investor-punishing anti-dilution mechanism available in a term
+sheet. The mechanics: a company raises a Series A at £1 per share,
+then raises a Series B down round at £0.50 per share. Under broad-
+based weighted-average anti-dilution — the market standard — the
+Series A conversion price adjusts modestly, reflecting the dilution
+proportionately to the amount raised in the down round. Under full
+ratchet, the entire Series A converts to shares priced at £0.50 —
+the Series A investor effectively doubles their share count at the
+expense of every other shareholder. In a company with 10 million
+shares and a full ratchet Series A of 2 million shares at £1, a
+down round at £0.50 converts the Series A to 4 million shares —
+an additional 2 million shares materialise, diluting founders,
+employees, and any other investors who do not hold full ratchet
+protections. The consequence is reliably catastrophic: the dilution
+to common holders after the full ratchet triggers makes option
+grants worthless, founders' equity negligible, and the company
+effectively impossible to finance further because new investors
+will not accept the terms that created the situation in the first place.
+
+DISQUALIFYING WHEN:
+A prior round holds full ratchet anti-dilution provisions AND the
+company's current metrics suggest a down round is a plausible
+outcome within the next 12–18 months — i.e. the current round
+valuation is above sector benchmark for the current metrics,
+the growth rate is decelerating, and the runway post-current-round
+is under 18 months. In this scenario the full ratchet is not
+a latent risk but an imminent one.
+
+MANAGEABLE WHEN:
+(a) The full ratchet provision is held by an investor who has
+already agreed in writing to convert to broad-based weighted-average
+anti-dilution as a condition of the current round — and this
+conversion is documented in the current term sheet.
+(b) The company's metrics are strong enough that a down round
+is genuinely implausible within a 5-year horizon — strong NRR,
+declining burn multiple, clear path to profitability — and the
+full ratchet is a legacy term from an earlier, weaker period
+that is very unlikely to ever be triggered.
+(c) The full ratchet is held by an investor with a very small
+share count (under 1% fully diluted) where even a full ratchet
+trigger produces a dilution amount that is not material to the
+overall cap table.
+
+VERIFICATION:
+Request: all existing shareholder agreements and investor rights
+agreements — specifically the anti-dilution provisions for each
+series. Confirm whether the mechanism is (a) no anti-dilution,
+(b) ratchet (full), (c) weighted-average (narrow-based),
+or (d) weighted-average (broad-based). Standard market practice
+is (d). Any series using (b) requires immediate escalation.
+Ask: "Do any prior rounds contain full ratchet anti-dilution
+provisions? If so, has the existing investor agreed to convert
+this to weighted-average as part of the current round?"
+
+PATTERN LESSON:
+When any prior round contains full ratchet anti-dilution provisions,
+request the full investor rights agreement and model the dilution
+impact of a 30% down round on all other shareholders before advancing —
+full ratchet provisions that have not been removed before a difficult
+fundraising environment are the primary reason otherwise-recoverable
+companies become uninvestable.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS04: ROUND NOT FULLY COMMITTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: MEDIUM
+
+SIGNAL:
+The current round has no confirmed lead investor — either the deck
+describes the round as "open" with no committed lead, or the founder
+confirms in the submission that they are raising without a lead and
+seeking commitments from multiple investors simultaneously. Also
+detectable when the founder's language implies they are using one
+investor's interest to attract another: "We're in conversations with
+[named firm] and looking to fill the remaining allocation" without
+evidence of a firm commitment from [named firm]. Observable from
+any description of the current round structure in the deck, data room,
+or submission that does not name a lead investor with a confirmed
+commitment.
+
+WHAT IT MEANS:
+A round without a committed lead is a round that no institutional
+investor has yet chosen to own. The implications are specific:
+(1) no lead means no one has done sufficient diligence to commit
+capital — which either means the company has not yet been through
+serious diligence or that it has and the lead investor has not
+emerged, both of which are informative; (2) a round raised from
+many small commitments without a lead tends to produce a fragmented
+cap table of investors who each hold too little to be actively helpful
+but collectively have enough votes to be disruptive; (3) a company
+that is using one investor's soft interest to attract others is
+a company that is managing its process through social proof rather
+than through the quality of the business — which is a founder
+behaviour signal as much as a deal structure signal; (4) first-close
+dynamics: a round that does not close quickly after the first
+commitment often does not close at all. The absence of a lead
+is the most reliable leading indicator of a round that will take
+longer than the company's runway allows.
+
+DISQUALIFYING WHEN:
+The company is raising a Series A or larger round (over £3M) and
+has been in market for more than 6 months with no lead investor
+confirmed. A round that has been open for 6 months at Series A
+level without producing a lead has been rejected by a large fraction
+of the relevant investor universe — the absence of a lead is not
+a search problem but an evidence problem.
+
+MANAGEABLE WHEN:
+(a) The company is raising a seed or pre-seed round where lead
+investors are less common and syndicates of smaller cheques are
+the standard market structure.
+(b) The company has a confirmed lead at the term sheet stage
+but has not yet announced it publicly — confidentiality around
+lead investor name is normal until legal documents are signed.
+(c) The firm reviewing the deal is itself the proposed lead —
+in which case the absence of a prior lead is the deal structure,
+not a red flag.
+
+VERIFICATION:
+Ask directly: "Who is the lead investor in this round? Do you
+have a signed term sheet or commitment letter? How long have you
+been raising and how much is committed to date?" Request evidence
+of the lead commitment — a countersigned term sheet or a commitment
+letter from the lead is the minimum standard. Soft interest,
+verbal commitments, and "in advanced conversations" are not
+confirmed commitments.
+
+PATTERN LESSON:
+When a round is presented without a named lead investor or confirmed
+commitment, ask directly for the lead name and commitment evidence
+before investing time in deep diligence — rounds without committed
+leads fail to close at a materially higher rate than led rounds,
+and the diligence cost of a failed close is not recoverable.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS05: INSIDER-LED ROUND WITHOUT EXTERNAL VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: MEDIUM
+
+SIGNAL:
+The current round is entirely composed of existing investors —
+existing Series A investors leading a Series B, existing angels
+filling the entire seed extension — with no new external investor
+participating. Observable when the cap table post-round shows
+no new investor names, or when the founder confirms in the
+submission that all committed capital is from prior investors
+with no new external participation at any size. Also observable
+when the deck describes the round as a "pro-rata exercise" by
+existing investors without mentioning any new external capital.
+
+WHAT IT MEANS:
+An insider-led round with no external validation has two distinct
+readings and the difference matters: (1) the company has attempted
+to raise from external investors, failed to attract new capital,
+and existing investors are bridging to avoid writing off their
+prior investment — this is the adverse interpretation and is the
+more common one; (2) the company's existing investors are so
+convinced of the opportunity that they are exercising full pro-rata
+rights and deliberately pre-empting the process before external
+investors can participate — this is the positive interpretation
+and is less common. The flag's purpose is to determine which
+scenario is operative. The signal is informative precisely because
+existing investors have the most information about the company —
+they have seen board meetings, monthly metrics, and management
+in action. When existing investors are willing to put in more money,
+that is a positive signal. When external investors who have seen
+the same data are not willing to participate, that is a negative
+signal. The conflict between these two signals is what makes the
+flag worth investigating.
+
+DISQUALIFYING WHEN:
+The company has been running an external fundraising process for
+more than 4 months, has met with more than 20 institutional investors,
+and has received no external term sheet — and existing investors
+are bridging the gap. This pattern — broad process, no external
+lead, existing investors preserving optionality — is the clearest
+signal that the external market has assessed the company and declined.
+
+MANAGEABLE WHEN:
+(a) Existing investors are exercising pro-rata rights in a
+competitive round where external investors were offered allocation
+but the round was oversubscribed by existing investors — pro-rata
+exercise in a hot round is a positive signal, not a negative one.
+(b) The company is deliberately avoiding a broad external process
+to maintain confidentiality around a strategic initiative or M&A
+process — and external capital was available but not sought.
+(c) The firm reviewing the deal is being invited as the new
+external investor for an allocation that existing investors have
+not taken — the insider-led dynamic is the context, not the
+structure being offered.
+
+VERIFICATION:
+Ask: "Have you run an external fundraising process for this round?
+How many external investors did you approach and what was the outcome?
+Is the current round open to external investors or is it exclusively
+for existing investors exercising pro-rata?" The specificity and
+directness of the response — how many investors, what feedback —
+is more informative than the answer itself.
+
+PATTERN LESSON:
+When the current round is entirely insider-led with no external
+participation, ask directly how many external investors were
+approached and what their feedback was — the answer distinguishes
+between a genuinely pre-emptive round (positive signal) and a
+round that external investors have already declined (negative
+signal requiring a full independent assessment of why).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS06: BRIDGE ROUND MASQUERADING AS SERIES ROUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: HIGH
+
+SIGNAL:
+The round is labelled "Series A" or "Series B" but the capital
+raised is insufficient to reach the next fundable milestone within
+the timeline implied by the financial model. Detectable by comparing
+the post-round cash runway to the time required to achieve the
+milestone that would justify the next round. Observable when:
+(1) the round size is below £3M for a "Series A" label; (2) the
+runway post-round is under 18 months when the financial model
+implies the next meaningful milestone requires 24 or more months
+to achieve; (3) the financial model shows a second raise required
+within 9 months of closing the current round under the base case
+scenario. Also observable when the use of proceeds is described
+as "extending runway" rather than "achieving X milestone."
+
+WHAT IT MEANS:
+A bridge disguised as a Series round is structurally dangerous for
+a new investor for three compounding reasons: (1) the investor
+enters at a Series A valuation with Series B risk — they are
+paying for a company that has not yet achieved Series A milestones,
+because if it had, the round would be large enough to reach the
+next milestone; (2) the company will be back in market within 9
+months, raising from a position of urgency and without having achieved
+the milestones the current round was supposed to fund — which means
+the next round will be at equal or lower valuation (a flat or down
+round), triggering anti-dilution provisions and damaging the current
+investor's entry economics; (3) the 9-month fundraise clock begins
+immediately after closing — the founders spend the first 6 months
+post-close trying to execute against the milestone plan and the
+last 3 months back in fundraising mode, leaving the company in a
+permanent capital-raising cycle that prevents focused execution.
+The labelling also matters: founders who present a bridge as a
+Series round are either unaware that the capital is insufficient
+(worrying) or aware and choosing not to disclose it (disqualifying).
+
+DISQUALIFYING WHEN:
+The current round will provide less than 12 months of runway at
+the stated burn rate AND the company's most recent quarter showed
+increasing rather than decreasing burn — a company with less than
+12 months of runway on an increasing burn trajectory is raising
+in survival mode, not growth mode, and the current round does not
+change the underlying trajectory.
+
+MANAGEABLE WHEN:
+(a) The round is explicitly structured as a bridge with full
+disclosure — the founder is raising a £1.5M bridge to reach a
+specific milestone (e.g. signing a named customer or reaching
+£500K MRR) that will unlock a £5M Series A on defined terms,
+and the bridge terms reflect this — lower valuation, warrants,
+conversion discount to the Series A. Transparency about the
+bridge nature converts a deceptive structure into a normal
+early-stage financing instrument.
+(b) The company has a committed Series A investor who has agreed
+to lead the next round contingent on the milestone, making the
+bridge de-risked from a financing perspective even if the
+milestone itself remains uncertain.
+
+VERIFICATION:
+Calculate: post-close cash ÷ current monthly burn = months of
+runway. Then ask: "What specific milestone does this round fund
+you to? When do you expect to begin raising the next round?
+What does the financial model show as the break-even date under
+the base case?" The answers triangulate whether the round is
+genuinely milestone-funded or whether the company will be
+raising again before it can demonstrate the results this round
+was supposed to produce.
+
+PATTERN LESSON:
+When post-round runway is under 18 months and the financial model
+implies the next meaningful milestone requires more time than that,
+model the company's capital needs through to the following round
+before committing — a bridge-as-Series-round is frequently the
+last institutional funding a company receives before a restructuring,
+because the investors who funded the bridge are the only ones with
+the relationship and the basis to fund the follow-on.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS07: DRAG-ALONG RIGHTS ABSENT OR WEAK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: MEDIUM
+
+SIGNAL:
+The shareholder agreement either does not contain a drag-along
+provision, or contains a drag-along that requires the consent of
+minority shareholders representing more than 10% of the company
+to exercise — giving a small group of shareholders effective veto
+power over an exit that the board, the founders, and the majority
+of investors have approved. Observable from any shareholder agreement
+extract, term sheet, or investor rights summary that describes the
+drag-along mechanism. Also observable from absence: a shareholder
+agreement disclosed in the data room that does not mention drag-along
+rights is a de facto absence of the provision.
+
+WHAT IT MEANS:
+Drag-along rights allow a defined majority of shareholders to compel
+all other shareholders to accept an acquisition on the same terms.
+Without adequate drag-along provisions, any shareholder — including
+a former employee with 0.5% in unvested options, a departed
+co-founder, or a small angel with 2% — can block an acquisition
+by refusing to sign the sale agreement. The blocking scenario is
+not theoretical: it occurs in almost every contested exit where
+the consideration is not uniformly attractive to all shareholder
+classes. The specific scenarios where absent or weak drag-along
+becomes a live issue: (1) a strategic acquirer offers a price that
+is excellent for preference holders but leaves common shareholders
+at or near zero — common holders have no economic incentive to sign
+and may hold out for a renegotiation; (2) a departed co-founder
+who left on bad terms uses their signature as leverage to extract
+a side payment or enhanced terms; (3) a former employee who was
+improperly managed out attempts to use their unsigned status to
+revisit their departure terms. Each of these scenarios adds months
+to an exit process and in some cases has caused acquirers to walk.
+
+DISQUALIFYING WHEN:
+The company has a fragmented early shareholder base with more than
+20 individual shareholders and no drag-along provision at all —
+in this structure, securing unanimous shareholder consent for an
+exit requires contacting and obtaining signatures from all shareholders,
+some of whom may be unreachable, deceased, or uncooperative. An
+exit in this structure is a legal project, not a commercial one.
+
+MANAGEABLE WHEN:
+(a) The shareholder agreement contains a drag-along that requires
+a simple majority of shareholders by value (not by count), with
+a threshold of 50% or higher — this is sufficient to prevent
+minority blocking in most scenarios.
+(b) The company's shareholder base is small (under 10 shareholders)
+and all shareholders are professional investors or active founders
+who have signed a shareholders' agreement that includes standard
+exit cooperation provisions.
+(c) The company is proposing to add a drag-along provision as
+part of the current round's shareholder agreement update — and
+existing investors have agreed to the updated terms.
+
+VERIFICATION:
+Request the shareholders' agreement and identify the drag-along
+provision: (1) what percentage threshold triggers the drag-along;
+(2) which share classes must consent; (3) whether the drag-along
+extends to option holders and warrant holders; (4) whether there
+are carve-outs for any shareholders who are not subject to drag.
+Ask: "If the board and majority investors agreed to an acquisition,
+could any minority shareholder block the sale? Are there shareholders
+who have not signed the current shareholders' agreement?"
+
+PATTERN LESSON:
+When the shareholder agreement contains no drag-along or a drag-along
+with a threshold above simple majority by value, include an updated
+drag-along provision as a condition of investment — the legal cost
+of installing adequate drag-along at investment is trivial compared
+to the cost of resolving a blocked exit under time pressure from
+an acquirer.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS08: INFORMATION RIGHTS INADEQUATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: MEDIUM
+
+SIGNAL:
+The shareholder agreement or investor rights agreement for prior
+rounds does not include standard information rights — specifically:
+(1) monthly or quarterly management accounts delivered within 30
+days of period end; (2) annual audited accounts; (3) board observer
+rights for investors above a defined threshold (typically £250K+);
+(4) prompt notification of material events (a key customer loss,
+a regulatory action, a founder departure). Observable from any
+investor rights agreement or shareholders' agreement that is
+disclosed in the data room, or from founders who confirm that
+prior investors "don't require regular reporting."
+
+WHAT IT MEANS:
+Information rights are not a bureaucratic nicety — they are the
+mechanism by which investors detect problems early enough to act.
+A company whose prior investor agreements do not require regular
+reporting has been operating without investor oversight, which
+creates two compounding risks for a new investor: (1) the absence
+of a reporting culture means the company has not been building
+the financial discipline and management information systems that
+institutional investors require — the new investor's first request
+for monthly accounts may reveal that these accounts have never
+been produced; (2) a company that has not been held to regular
+reporting obligations may have accumulated problems — customer
+churn, cash flow deterioration, team departures — that are known
+to management and existing investors but have not been formally
+disclosed because there was no mechanism requiring disclosure.
+The absence of information rights in prior rounds also tells you
+something about the quality of the prior investors: professional
+institutional investors always include standard information rights.
+If prior investors did not, they are likely angels or friends-and-
+family investors who were not in a position to negotiate, which
+means the company has not been professionally investor-governed.
+
+DISQUALIFYING WHEN:
+A company at Series A or later with prior institutional investors
+who hold no information rights — if an institutional investor with
+a board seat did not require quarterly reporting as a condition of
+investment, either the investor was not acting professionally or
+the terms were renegotiated away, and both explanations are relevant
+to how the company has been run.
+
+MANAGEABLE WHEN:
+(a) The new investment round includes a full investor rights agreement
+with standard information rights as a condition of investment —
+the gap in prior rounds is remediated for the current round forward.
+(b) The company has been providing voluntary regular reporting to
+all investors despite the absence of a contractual obligation —
+verifiable by requesting the last 6 months of investor updates
+sent to all shareholders.
+(c) Prior rounds were from friends and family investors who are not
+actively engaged as investors — the information rights gap reflects
+the investor composition, not the company's reporting practice.
+
+VERIFICATION:
+Request: all investor rights agreements and shareholders' agreements
+showing information rights provisions. Confirm the frequency, format,
+and timeline for required reporting. Ask: "What financial reporting
+do you currently provide to existing investors and on what schedule?
+Can you share the last 3 board packs or investor updates as examples?"
+
+PATTERN LESSON:
+When prior investor agreements contain no standard information rights
+and the company cannot produce a track record of voluntary reporting,
+include robust information rights as a non-negotiable condition of
+investment and request the last 6 months of management accounts
+during diligence — companies with no prior reporting obligations
+frequently have management account quality issues that surface only
+when a new investor requires them.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS09: PRO-RATA RIGHTS BLOCKING NEW INVESTOR OWNERSHIP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: MEDIUM
+
+SIGNAL:
+Prior investors hold pro-rata rights — the right to maintain their
+percentage ownership in future rounds — that, if fully exercised,
+would fill the majority of the current round's allocation before
+any new investor can participate. Observable when the cap table
+shows prior investors with pro-rata rights on a total stake that
+represents more than 50% of the proposed round size, such that
+full exercise leaves a new lead investor with a position too small
+to justify leading. Also detectable when the founder confirms that
+the current round "has limited room for new investors" or that
+existing investors have "first right of allocation."
+
+WHAT IT MEANS:
+Pro-rata rights are standard and investor-friendly in isolation —
+they protect investors from dilution and are a mark of a well-
+negotiated prior round. The structural problem emerges specifically
+for new investors when pro-rata rights are sufficiently concentrated
+that they prevent a new lead investor from building a meaningful
+ownership position. A new lead investor who can only achieve 3%
+ownership (because existing investors exercise pro-rata on the
+remaining 97%) has a position too small to justify the diligence
+cost, the board seat, and the active management the investment
+requires. The second-order problem: a company where existing investors
+fully exercise pro-rata in every round does not have a new price
+discovery mechanism — the valuation at each round is set between
+the company and its existing investors, without an independent
+external investor assessing and validating the price. Valuations
+set without external validation tend to drift above market,
+creating the conditions for Flag DS01.
+
+DISQUALIFYING WHEN:
+Existing investors hold pro-rata rights on 80% or more of the
+current round's proposed allocation AND they have confirmed they
+intend to exercise those rights — leaving less than 20% of the
+round available for new investors. A new lead investor cannot
+lead a round where they receive less than 20% of the capital
+deployed without the economics making the deal unworkable.
+
+MANAGEABLE WHEN:
+(a) Existing investors with pro-rata rights are willing to waive
+some or all of their pro-rata allocation to allow a new lead
+investor to build a meaningful position — waiver letters from
+existing investors confirming the available allocation are the
+required evidence.
+(b) The round is structured with a new investor allocation carved
+out from the start — the term sheet defines a new investor tranche
+that is not subject to pro-rata rights from prior investors.
+(c) The new investor's target ownership is achievable even after
+existing investors exercise full pro-rata — the deal is large
+enough to accommodate both.
+
+VERIFICATION:
+Request: all investor rights agreements showing pro-rata provisions,
+including the percentage and share class to which the right applies.
+Calculate: sum of all pro-rata allocations ÷ proposed round size =
+percentage of round consumed by existing investor pro-rata if
+fully exercised. Ask: "If existing investors exercise their full
+pro-rata rights, how much allocation is available for a new lead
+investor? Are existing investors committed to exercising their
+pro-rata in this round?"
+
+PATTERN LESSON:
+When existing pro-rata rights would consume more than 50% of the
+proposed round, request a written waiver or allocation carve-out
+from existing investors before advancing — a diligence process
+completed without confirming available allocation frequently results
+in a deal that cannot close because the new investor cannot achieve
+the ownership position their investment thesis requires.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG DS10: CONVERTIBLE NOTE OVERHANG NOT MODELLED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Deal Structure
+SEVERITY: HIGH
+
+SIGNAL:
+The cap table presented to new investors does not include the
+dilutive effect of convertible notes that will convert at or before
+the current round — or the deck presents a pre-money valuation
+and implied ownership stakes that are calculated before accounting
+for the conversion of outstanding notes. Detectable when: (1) the
+deal materials mention convertible notes, SAFEs, or ASAs outstanding
+but the cap table does not show their post-conversion impact on the
+fully diluted share count; (2) the implied ownership percentage
+a new investor receives (calculated as investment amount ÷ (pre-money
+valuation + investment amount)) does not match the actual ownership
+they will hold post-conversion of all outstanding instruments;
+(3) the founder discloses notes outstanding but states a pre-money
+valuation that excludes the notes from the calculation, presenting
+an ownership percentage to new investors that overstates their
+actual post-conversion stake.
+
+WHAT IT MEANS:
+Convertible note overhang is the single most common source of
+ownership surprise at close. The mechanics: a company has raised
+£1M in convertible notes at a 20% discount to the next round
+with a £5M valuation cap. When the Series A closes at £8M pre-money,
+the notes convert at the cap (£5M equivalent price), issuing more
+shares than the founder's cap table shows — because the founder
+built the cap table using the £8M pre-money price for everyone.
+The new Series A investor who was told they would own 20% of the
+company post-round actually owns 15%, because the notes converted
+at a lower price and diluted everyone including the Series A.
+This is not a theoretical error — it is the most common source of
+post-close investor complaints in early-stage deals. The founder
+may not have done this deliberately: many founders do not correctly
+model note conversion and genuinely do not understand the dilution
+impact until a lawyer explains it at close. But the effect on
+the new investor is identical whether the omission was deliberate
+or innocent: they paid for ownership they do not receive.
+
+DISQUALIFYING WHEN:
+The convertible notes outstanding represent more than 20% of the
+post-conversion fully diluted share count AND the founder presented
+a cap table that did not include the notes — this is a material
+misrepresentation of the new investor's actual ownership stake,
+and the deal cannot proceed on the disclosed terms.
+
+MANAGEABLE WHEN:
+(a) The founder acknowledges the notes, provides a full post-conversion
+cap table including all outstanding instruments at their conversion
+terms, and the new investor's actual post-conversion ownership
+matches their investment thesis requirements.
+(b) The notes are small relative to the round (under 5% dilution
+on a post-conversion fully diluted basis) and the founder has
+disclosed them completely — the dilution is real but not material
+enough to change the deal economics.
+(c) The notes are being repaid in cash rather than converting —
+the principal is returned to note holders at close and does not
+result in new share issuance.
+
+VERIFICATION:
+Request: (1) a complete list of all convertible instruments
+outstanding — notes, SAFEs, ASAs, warrants — including principal,
+discount rate, valuation cap, and maturity date for each; (2) a
+post-conversion, fully diluted cap table that shows the share
+count and ownership percentage for every investor after all
+instruments convert at the current round price; (3) confirmation
+that the new investor's stated ownership percentage is calculated
+on a post-conversion, fully diluted basis. Ask: "Can you provide
+a fully diluted cap table showing the ownership of all parties —
+including all convertible note holders — after this round closes
+and all instruments convert?"
+
+PATTERN LESSON:
+When a company has outstanding convertible notes and has not
+provided a post-conversion fully diluted cap table, require this
+document before issuing a term sheet — undisclosed note overhang
+is the most common source of post-term-sheet ownership disputes
+and is entirely preventable with a correct pre-term-sheet cap table.
+
+═══════════════════════════════════════════════════════════════════════
+END OF CATEGORY 7: DEAL STRUCTURE RED FLAGS
+10 flags total. DS01–DS10.
+Version 1.0. Built: April 2026.
+═══════════════════════════════════════════════════════════════════════

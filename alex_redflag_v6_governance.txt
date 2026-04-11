@@ -1,0 +1,771 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 6: GOVERNANCE RED FLAGS
+Version 1.0. Built: April 2026.
+10 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 10 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+Governance flags are frequently underweighted by early-stage investors
+because they feel like admin problems rather than business problems.
+They are not. Governance failures destroy otherwise-good investments:
+they prevent exits, trigger legal disputes, reduce acquirer interest,
+and give founders leverage they should not have. A governance flag
+caught early can be remedied in a week. Caught at Series B, it can
+unwind an entire syndicate or block an acquisition. Apply every flag.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G01: NO VESTING CLIFF ON FOUNDER EQUITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: CRITICAL
+
+SIGNAL:
+The cap table or shareholder agreement shows founders hold fully vested
+equity — or the deal materials do not mention vesting schedules at all.
+Observable from any cap table or shareholders' agreement excerpt.
+Detectable from absence: if a deck presents a cap table with founders
+holding large equity stakes and no reference to vesting, cliff, or
+good-leaver / bad-leaver provisions, the default assumption is that
+equity is fully vested or on non-standard terms.
+
+WHAT IT MEANS:
+Unverted or cliff-free founder equity creates the most predictable
+governance disaster in early-stage investing: a co-founder departs
+after six months, retains 25–40% of the company, contributes nothing
+further, and either (a) blocks or complicates future fundraising by
+appearing on the cap table as an unengaged holder, (b) demands a
+buyout that the company cannot afford, or (c) simply sits on the cap
+table as dead weight that dilutes the incentive pool available for
+new hires. Without a cliff, even a founder who departs on day one
+retains their full equity allocation in many jurisdictions unless
+the shareholders' agreement has explicit bad-leaver provisions.
+The second-order problem: acquirers run cap table due diligence.
+A departed co-founder with 30% equity on non-standard vesting is
+a deal-stopper at exit — acquirers will not proceed until the
+structure is resolved, and resolving it at exit, under time pressure,
+costs the company significantly more than resolving it at founding.
+
+DISQUALIFYING WHEN:
+The founders have been working together for three or more years, both
+remain fully committed and active in day-to-day operations, AND the
+shareholders' agreement contains detailed good-leaver / bad-leaver
+provisions that effectively replicate the economic outcome of vesting
+— i.e., a departing founder's equity is subject to compulsory
+transfer at a defined price. Even in this case, the absence of formal
+vesting is a flag requiring explicit confirmation that the
+good-leaver / bad-leaver provisions are investor-drafted, not
+founder-drafted.
+
+MANAGEABLE WHEN:
+(a) Founders acknowledge the gap and agree to implement a standard
+4-year vest with 1-year cliff as a condition of the investment round.
+(b) Company is a sole founder with no co-founder equity split risk —
+vesting still matters for key-person replacement value but the
+co-founder departure scenario does not apply.
+(c) All founders have been working together for more than five years
+with an established track record of the relationship under stress.
+
+VERIFICATION:
+Request: shareholders' agreement or term sheet showing vesting schedule
+for all founders and senior team equity holders. Specifically look for:
+(1) total vesting period (standard: 4 years), (2) cliff length
+(standard: 12 months), (3) good-leaver / bad-leaver definitions and
+the price at which equity transfers on bad-leaver event, (4) whether
+reverse vesting applies to existing shares or only new grants.
+Ask: "Can you share the vesting schedule and good-leaver provisions
+for all founders? What happens to a co-founder's equity if they leave
+within 12 months of our investment?"
+
+PATTERN LESSON:
+When founders hold fully vested or cliff-free equity with no disclosed
+vesting terms, request the shareholders' agreement before advancing
+to due diligence — a co-founder departure on these terms has ended
+multiple otherwise-fundable deals and is a structural flaw that cannot
+be remediated retroactively without co-founder agreement.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G02: CAP TABLE COMPLEXITY AT EARLY STAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: MEDIUM
+
+SIGNAL:
+A pre-Series A company's cap table shows more than 15 individual
+shareholders, more than 2 share classes, convertible notes from more
+than 3 separate investors on differing terms, or any shareholder holding
+more than 15% who is unidentified or described only as a "family office"
+or "strategic investor" with no further detail. Observable from any
+cap table extract, data room summary, or shareholder list in the deck.
+
+WHAT IT MEANS:
+Cap table complexity at early stage is almost always the result of
+one of four scenarios: (1) the founders raised a seed round via a
+friends-and-family round with many small cheques and no professional
+lead — common, but creates a shareholder consent management problem
+for every future round; (2) the company previously attempted a raise
+that partially closed, leaving a messy stub of convertible notes
+on non-standard terms — common in companies that struggled to close
+their previous round; (3) there is a historic employee or contractor
+equity grant that was not properly documented as options — these
+create ghost equity holders with uncertain entitlements; (4) a
+strategic investor or early customer holds equity as part of a
+commercial arrangement — which creates a conflict of interest at exit
+if that strategic investor is also a potential acquirer or a competitor
+of the most likely acquirer. Complex cap tables increase legal costs
+at every subsequent round (each holder may need separate consent),
+can create blocking minorities at inconvenient moments, and reduce
+acquirer appetite by adding friction to exit structuring.
+
+DISQUALIFYING WHEN:
+There is a shareholder holding more than 10% of the company whose
+identity or ultimate beneficial ownership cannot be confirmed — this
+moves from a structural governance flag to a potential AML / KYC risk
+that requires immediate escalation before any further engagement.
+
+MANAGEABLE WHEN:
+(a) The company has already appointed a company secretary or law firm
+to manage shareholder communications and the cap table is administered
+on a recognised platform (Carta, Capdesk, or equivalent) — complexity
+is manageable when it is professionally administered.
+(b) The complexity is from convertible notes that all convert on the
+same event and on substantially the same terms — complexity that
+resolves at the next funding event is manageable complexity.
+(c) The company has already engaged a law firm to run a cap table
+clean-up and the timeline and cost are known.
+
+VERIFICATION:
+Request a full cap table showing: each shareholder name, equity class,
+percentage holding on a fully diluted basis (including all option pools,
+warrants, and convertible instruments), and the vesting status of each
+holding. For any convertible notes, request: principal amount, interest
+rate, conversion discount, valuation cap, and maturity date. Ask:
+"Are there any shareholders who are not on this cap table — including
+anyone with a verbal agreement, a promised equity allocation, or a
+right of first refusal?"
+
+PATTERN LESSON:
+When a pre-Series A company has more than 15 shareholders or more than
+two share classes, request the full cap table and all convertible
+note terms before advancing — the cost to restructure a messy cap table
+rises exponentially with each subsequent funding round and is cheapest
+to fix before the current round closes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G03: MISSING IP ASSIGNMENT AGREEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: CRITICAL
+
+SIGNAL:
+Any of the following are present or absent: (1) the company was founded
+by a team where one or more founders previously worked at a large
+technology company, a university, or a research institution — and the
+deal materials do not mention IP assignment or Freedom to Operate
+confirmation; (2) the deck or submission mentions that the technology
+was developed while a founder was at a previous employer without
+explicitly stating that IP rights have been legally confirmed as
+belonging to the company; (3) the company relies on open-source
+components but does not mention a licence audit or confirm that
+all OSS components are permissively licensed (MIT, Apache 2.0)
+rather than copyleft (GPL, LGPL, AGPL).
+
+WHAT IT MEANS:
+IP ownership is the foundational asset of a technology company.
+If the IP does not unambiguously belong to the company — not to a
+founder personally, not to a previous employer, not to a university
+technology transfer office, and not encumbered by copyleft open-source
+obligations — the company has no legally defensible moat and cannot
+be sold. The three failure modes are distinct:
+(1) Founder-developed IP: most employment contracts at technology
+companies contain IP assignment clauses covering work done in the
+employee's own time if it relates to the employer's business. A founder
+who left Google and built a product adjacent to Google's business
+may have inadvertently assigned their IP to Google. This is not a
+theoretical risk — it has destroyed real companies (Mattel v. MGA,
+Blizzard v. Bossland, multiple university spin-out disputes).
+(2) University spin-outs: universities typically retain rights to
+IP developed using university resources. The technology transfer
+office must have formally assigned rights to the spin-out vehicle
+and that assignment must be documented. TTOs have blocked exits
+by asserting rights mid-process.
+(3) Copyleft contamination: a single GPL-licensed component used
+in a commercial product can — under strict reading of the GPL —
+require the entire product to be open-sourced. This is a latent
+liability that surfaces during acquirer due diligence.
+
+DISQUALIFYING WHEN:
+The primary technology of the company was developed while a founder
+was at a previous employer, no IP assignment opinion has been obtained,
+and the previous employer is a technology company that operates in
+the same or adjacent space — in this scenario the IP risk is not
+theoretical and the deal cannot proceed without a clean IP opinion
+from external counsel.
+
+MANAGEABLE WHEN:
+(a) The company has already obtained a written IP opinion from external
+counsel confirming that (i) all founder IP created pre-incorporation
+has been assigned to the company, (ii) no previous employer has a
+plausible claim, and (iii) all OSS components are permissively
+licensed or properly ring-fenced.
+(b) The technology was developed entirely post-incorporation by
+employees under standard employment contracts containing IP
+assignment clauses — and all such contracts are in place.
+(c) The company is a university spin-out with a formal licence
+agreement or IP assignment from the TTO already executed.
+
+VERIFICATION:
+Request: (1) IP assignment agreements for all founders — confirm
+they cover work done prior to incorporation; (2) employment contracts
+for all technical staff — confirm IP assignment clause is present;
+(3) open-source audit or software bill of materials confirming
+no copyleft-licensed components in the commercial product stack;
+(4) any correspondence with previous employers or university TTOs
+regarding IP claims. Ask: "Has any previous employer or university
+made any claim, inquiry, or communication regarding ownership of
+any technology used in the product?"
+
+PATTERN LESSON:
+When a founder team includes anyone from a major technology company,
+university, or research institution and the submission does not
+explicitly confirm IP assignment, flag this as CRITICAL and request
+the IP opinion before advancing — IP ownership disputes are the
+most common cause of acquirer withdrawal at the exclusivity stage.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G04: BOARD WITHOUT INDEPENDENT DIRECTOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: MEDIUM
+
+SIGNAL:
+A Series A or later-stage company whose board composition consists
+entirely of founders and investor representatives, with no independent
+director — or a company that has completed more than £5M in cumulative
+funding with no independent director on the board. Observable from
+any board composition disclosure in the deck, shareholder agreement
+summary, or Companies House filing showing current directors.
+
+WHAT IT MEANS:
+A board with only founders and investor representatives has a structural
+conflict of interest baked into every major decision: founders want
+operational autonomy and are reluctant to acknowledge when the business
+model is not working; investors want returns and may push for decisions
+(secondary sales, M&A, down-round recapitalisations) that benefit
+their fund economics over the company's long-term health. An
+independent director — a non-executive with no equity stake in the
+fund and no employment relationship with the company — provides the
+neutral arbiter function that prevents governance paralysis in founder-
+investor disputes, provides a credible sounding board for the CEO
+without the conflict that investor board members carry, and signals
+to the next round of investors that the company is professionally
+governed. The absence of an independent director at Series A and
+beyond is a signal that the founders are resisting accountability
+structures — which is a leading indicator of governance breakdown
+when the business hits its first serious operating challenge.
+
+DISQUALIFYING WHEN:
+The board has previously voted to remove a CEO or independent director
+without cause or due process and the deal materials do not explain
+the circumstances — this is not a missing-director flag but a
+governance conduct flag that is disqualifying on its own.
+
+MANAGEABLE WHEN:
+(a) The company is pre-Series A and the board is still in the
+informal advisory phase — independent directors are standard at
+Series A, optional pre-Series A.
+(b) The company has identified a specific independent director
+candidate and the appointment is a condition of the current round
+closing — the gap exists because the round has not yet closed,
+not because management is resisting governance.
+(c) The company has an active advisory board that includes one or
+more senior independent operators with relevant domain experience,
+and a formal independent director appointment is part of the
+Series A governance terms being negotiated.
+
+VERIFICATION:
+Request: current board composition showing name, role (founder /
+investor representative / independent), and date of appointment.
+For any independent directors, confirm they hold no equity in the
+investing fund and are not currently employed by the company.
+Ask: "What is your current board composition and do you have
+an independent director? If not, is this something you are
+planning to address in this round?"
+
+PATTERN LESSON:
+When a post-Series A company has no independent director and no
+documented plan to appoint one, raise this in the Risk Assessment
+and include it as a condition of investment — governance structures
+installed at Series A cost almost nothing; the same structures
+installed during a crisis cost relationships, legal fees, and time.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G05: OPTION POOL INSUFFICIENT FOR HIRING PLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: MEDIUM
+
+SIGNAL:
+The company's hiring plan includes 3 or more senior roles (VP level
+or above) or a CTO / CPO / CFO hire, but the remaining unallocated
+option pool represents less than 10% of the fully diluted cap table.
+Observable when a deck includes a hiring plan alongside a cap table —
+the mismatch between the two is the signal. Also observable when the
+deck describes needing to hire a leadership team but the cap table
+shows the option pool is already 80% or more allocated.
+
+WHAT IT MEANS:
+Option pool insufficiency forces the company into one of three
+sub-optimal outcomes, all of which are avoidable: (1) the company
+offers insufficient equity to attract the calibre of hire the plan
+requires, settles for a weaker candidate, and the weaker hire becomes
+the reason the business does not scale — the classic scaling failure
+where the seed-stage team cannot operate at Series B speed; (2) the
+company goes back to existing shareholders to expand the option pool
+before the hire — which is dilutive to everyone on a timeline that
+is rarely controlled; (3) the company uses cash compensation to
+substitute for equity, which increases burn at precisely the stage
+where burn discipline matters most. The second-order problem is that
+option pool top-ups at later stages are typically done pre-money,
+meaning the dilution falls on existing shareholders in a way that
+is often not properly modelled in the financial plan. A company
+that claims it needs £5M to hit its next milestone but has not
+modelled the dilutive cost of expanding the option pool to hire the
+team the plan requires is presenting an incomplete financial picture.
+
+DISQUALIFYING WHEN:
+The option pool is less than 5% unallocated and the company's hiring
+plan requires 5 or more senior hires — at this level the option pool
+expansion required before hires can be made will cause meaningful
+dilution to current shareholders and the financial model does not
+reflect this cost. This is not automatically a pass but it is a
+material financial modelling error that must be corrected before
+a term sheet is issued.
+
+MANAGEABLE WHEN:
+(a) The current round includes an explicit option pool top-up as
+part of the round structure and the post-money cap table reflects
+the expanded pool — meaning the dilution has been modelled and
+disclosed.
+(b) The company is hiring below VP level for the next 18 months
+and the existing pool is sufficient for those grants at standard
+percentages (0.1–0.5% for senior individual contributors).
+(c) The company has already made the senior hires it needs and
+the plan is for individual contributor growth — the option pool
+is tight but the critical positions are already filled.
+
+VERIFICATION:
+Request: (1) the full option pool on a fully diluted basis showing
+allocated, unallocated, and vested/unvested breakdown; (2) the
+hiring plan with titles, expected start dates, and expected equity
+grant size for each planned hire; (3) the financial model to confirm
+whether option pool expansion cost has been modelled into the dilution
+waterfall. Ask: "Is the proposed option pool in this round large
+enough to cover your full hiring plan through the next funding round?
+If not, how are you planning to address the gap?"
+
+PATTERN LESSON:
+When a company presents a senior hiring plan alongside a cap table
+with less than 10% unallocated option pool, model the dilution from
+the required pool expansion before issuing a term sheet — option pool
+shortfalls discovered during closing add cost and delay that could
+have been addressed in term sheet negotiation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G06: RELATED PARTY LOANS TO FOUNDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: HIGH
+
+SIGNAL:
+The company's balance sheet, financial statements, or notes to accounts
+show loans from the company to one or more founders, directors, or
+their connected parties — or the cap table or shareholder agreement
+reveals a shareholder loan structure where founders have extracted
+capital from the company as loans rather than salary or dividends.
+Observable in any financial statement showing a debtor balance owed
+by a connected party, or in any note describing a "director's loan"
+or "shareholder loan" on terms that differ from arm's-length.
+
+WHAT IT MEANS:
+Related party loans to founders are one of the clearest signals of
+poor financial governance and are illegal in certain forms under the
+Companies Act 2006 (for loans above £10,000 to directors of public
+companies without shareholder approval — and the equivalent provisions
+for private companies require disclosure). The business failure modes
+are distinct: (1) the loan is in substance a disguised dividend —
+the founder has extracted company capital in a form that avoids tax,
+reduces the assets available to investors, and signals that the
+founder treats the company's cash as personally accessible — a
+fundamental governance breach; (2) the loan is a working capital
+mechanism — the founder lent money to the company, the company is
+obliged to repay it, and that repayment obligation represents a
+debt senior to equity that the investor's money may effectively
+service; (3) the loan exists on paper only and represents a prior
+undisclosed financial arrangement with a connected party. None of
+these three scenarios is acceptable without full disclosure and
+investor-approved terms. The reputational implication is also
+significant: a founder who has used the company as a personal
+lending vehicle before raising institutional capital is demonstrating
+the governance instincts that cause problems at scale.
+
+DISQUALIFYING WHEN:
+A loan from the company to a founder is outstanding at the time of
+investment, has no documented repayment terms, is at below-market
+interest rates, and exceeds £25,000 — this is a Companies Act
+breach risk, a governance red flag, and a signal of financial
+conduct that disqualifies the deal until the loan is fully repaid
+and the accounts are restated.
+
+MANAGEABLE WHEN:
+(a) A founder previously lent money to the company to cover operating
+expenses before external funding was available — a founder loan to
+the company (not from the company to the founder) is common and
+acceptable if on documented arm's-length terms and the repayment
+plan does not create a cash flow drain during the investment period.
+(b) The related party loan has been fully disclosed in the company's
+accounts, was approved by independent directors or shareholders,
+is at market interest rates, and has a defined repayment schedule
+that does not materially impact the company's working capital.
+(c) The loan is a historical artefact of an earlier period that
+has already been repaid and restated in the current accounts.
+
+VERIFICATION:
+Request: (1) the most recent annual accounts and management accounts
+showing any debtor or creditor balances with connected parties;
+(2) any shareholder loan agreements currently outstanding;
+(3) the Companies House filing to cross-reference director loans
+disclosed in the statutory accounts. Ask: "Are there any outstanding
+loans between the company and any founder, director, or connected
+party? If yes, what are the terms and when will they be repaid?"
+
+PATTERN LESSON:
+When the balance sheet shows a debtor balance associated with a
+director or connected party, request the loan documentation and
+Companies House statutory accounts before advancing — founder loans
+from company funds discovered post-term-sheet create a retrading
+risk and are the most common governance issue requiring legal
+remediation before close.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G07: MULTIPLE SHARE CLASSES WITH EXTREME PREFERENCE STACKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: HIGH
+
+SIGNAL:
+The cap table shows three or more distinct series of preferred shares
+(Series A, Series B, Series C or equivalent), with participating
+preferred provisions in two or more series, or a total liquidation
+preference stack that exceeds 1.5× the last round valuation — meaning
+investors would need to realise more than 1.5× the current round
+price before common shareholders (founders and employees) receive
+any proceeds. Observable from any cap table disclosure, term sheet
+summary, or investor rights agreement excerpt that shows liquidation
+preference multiples by series.
+
+WHAT IT MEANS:
+Extreme liquidation preference stacks are the most reliable predictor
+of a waterfall problem at exit — and the waterfall problem is what
+turns a moderate exit into a zero for everyone other than the most
+senior preferred holders. The mechanics: if a company has raised
+£20M across three rounds with participating preferred at 1× liquidation
+preference in each series, and the company sells for £30M, the first
+£20M goes to preferred shareholders in order of seniority, leaving
+£10M split between common holders — but because preferred also
+participates in the common pool (participating preferred), preferred
+holders take their pro-rata share of the remaining £10M as well.
+In this structure, founders and employees with common stock receive
+approximately 20–30% of the headline number — and the option pool
+holders (typically employees) receive a number that may not cover
+their strike price. The practical consequence: employees understand
+their options are worthless, the best ones leave, and the company
+cannot hire replacements at a competitive cost of capital. The
+acquirer recognises the misaligned incentive structure and adjusts
+its offer. The preference stack is the primary reason that companies
+with £30M exit headlines produce £2M founder proceeds.
+
+DISQUALIFYING WHEN:
+The liquidation preference stack exceeds 2× the current round
+valuation AND the participating preferred provisions mean that common
+holders receive less than 10% of a plausible exit scenario AND the
+company's most recent 409A or share valuation places the common
+share value at less than 20% of the preferred price — indicating
+that the market already prices the common as near-worthless. This
+is not a governance flag — it is a structural indicator that the
+company is an effective zombie from an equity incentive perspective
+and the deal economics for any buyer will require a full
+recapitalisation as a condition of acquisition.
+
+MANAGEABLE WHEN:
+(a) Preferences are non-participating (investors receive either
+their liquidation preference or their pro-rata common share,
+whichever is higher, but not both) — non-participating preferred
+is standard market practice and is not a flag.
+(b) The preference stack is from a single funding round with a
+1× non-participating preference — this is the cleanest structure
+and creates no waterfall problem.
+(c) The company is preparing a preference stack clean-up as part
+of the current round, converting prior preferred to common or
+to a simplified single-class preference structure, and the
+current round investors are leading this recapitalisation.
+
+VERIFICATION:
+Request: the complete waterfall model showing proceeds to each
+share class at three exit scenarios: 1× current round valuation,
+2× current round valuation, and 5× current round valuation.
+The waterfall model must show the exact break-even exit value
+at which common shareholders begin to participate. Ask:
+"Can you share the full liquidation preference stack and a
+waterfall analysis? At what exit value do founders and
+employees begin to receive proceeds?"
+
+PATTERN LESSON:
+When a cap table shows three or more preferred series with
+participating provisions, model the waterfall at three exit
+scenarios before advancing — preference stacks that destroy
+employee incentives are the primary reason why technically
+strong companies fail to retain the team required to achieve
+the exit value the model assumes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G08: NO DATA ROOM OR INCOMPLETE DATA ROOM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: MEDIUM
+
+SIGNAL:
+A company raising a Series A or later-stage round (or any round above
+£2M) has not provided — and does not appear to have prepared — a
+formal data room containing: (1) audited or management accounts for
+the last 2 years, (2) cap table on fully diluted basis, (3) all
+shareholder and investor agreements, (4) key customer contracts,
+(5) IP assignment and employment agreements, and (6) corporate
+structure documents. Observable when the entire submission consists
+of a pitch deck and verbal financial claims with no supporting
+documentation, or when the company describes itself as "in process
+of preparing" the data room after more than one investor meeting.
+
+WHAT IT MEANS:
+The absence of a data room at Series A is not a neutral administrative
+fact — it is a signal about how the company is run. Professional
+operators preparing for an institutional raise begin data room
+assembly 60–90 days before they begin investor conversations.
+A company that begins investor conversations without a data room
+is either: (1) raising opportunistically before being ready —
+common in founders who mistake deck quality for deal-readiness;
+(2) hiding something — a gap in the documentation that would
+be apparent in due diligence (an unsigned contract, an IP dispute,
+an unresolved tax liability); or (3) operationally unprepared for
+the governance requirements that come with institutional investment.
+The second-order implication: an investor who completes due
+diligence on a company with an incomplete data room will spend
+more time, incur higher legal costs, and discover more issues
+late in the process — each of which increases the probability
+of a retrade or a failed close.
+
+DISQUALIFYING WHEN:
+A company that has previously represented to investors that a data
+room is "ready" or "available on request" and then provides a folder
+of incomplete documents when due diligence begins — this is a
+misrepresentation that changes the nature of the deal and requires
+a direct conversation about what else may have been misrepresented.
+
+MANAGEABLE WHEN:
+(a) The company is at pre-seed or seed stage raising less than
+£1M — data rooms are not standard at this stage and the flag
+does not apply below this threshold.
+(b) The company is at a very early stage of the process (first
+investor conversation) and has a documented timeline for data
+room completion within 4 weeks.
+(c) The data room exists but has not been shared pending NDA
+execution — this is standard practice and is not a flag.
+
+VERIFICATION:
+Request: data room access or a data room index showing what is
+available and what is still in preparation. The index itself
+is diagnostic — a company that can produce a data room index
+with clear completion status for each section is operationally
+ready for due diligence. Ask: "Do you have a data room prepared?
+Can you share the index so we can confirm we have everything
+we need before proceeding to due diligence?"
+
+PATTERN LESSON:
+When a Series A company has no data room and no clear timeline
+to produce one, delay advancing to due diligence until the core
+documents are available — due diligence commenced without a
+data room routinely extends closing timelines by 4–8 weeks and
+increases the probability of a retrade on financial terms.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G09: AUDITED ACCOUNTS NOT AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: HIGH
+
+SIGNAL:
+A company raising Series A or later-stage funding (or any round
+above £3M) that has been trading for more than 18 months cannot
+produce audited accounts for its most recently completed financial
+year — and provides only management accounts, which have not been
+independently verified. Observable from deal materials that rely
+exclusively on unaudited management accounts, or from a Companies
+House filing showing the company has filed dormant accounts or
+abbreviated accounts without an audit opinion despite trading activity.
+
+WHAT IT MEANS:
+Audited accounts are the most basic form of independent financial
+verification available to an investor. A company with 18 or more
+months of trading history that cannot produce audited accounts has
+one of four explanations, none of which is neutral: (1) the company
+has not engaged auditors because it believed it could raise on
+management accounts alone — which signals inexperience with
+institutional fundraising standards; (2) the audit is in process
+but has not been completed — which raises the question of what
+issues the auditors have raised that are delaying completion;
+(3) the company failed to file accounts on time with Companies
+House — which is a legal compliance failure that signals
+administrative disorder and can result in directors' personal
+liability; (4) the audit revealed issues (revenue recognition,
+related party transactions, going concern qualifications) that
+the founders have not disclosed to investors. The going concern
+qualification scenario is the highest-risk: an auditor who has
+qualified the accounts is expressing a professional opinion that
+the company may not be able to continue as a going concern —
+which, if undisclosed, constitutes a material misrepresentation
+to investors.
+
+DISQUALIFYING WHEN:
+The company has audited accounts from a prior period but has not
+filed them with Companies House on the required timeline, and
+the filing is more than 6 months overdue — this is a Companies
+Act compliance failure that can result in automatic strike-off
+of the company and personal liability for directors. A company
+in this position has a legal problem, not an administrative one.
+
+MANAGEABLE WHEN:
+(a) The company is less than 18 months old and the first financial
+year has not yet been completed — the flag does not apply to
+companies that have not yet reached their first audit deadline.
+(b) The audit is in process with a named firm and an expected
+completion date within 8 weeks — the gap is an administrative
+timing issue, not a concealment issue.
+(c) The company is below the Companies Act audit threshold
+(turnover <£10.2M, balance sheet total <£5.1M, fewer than
+50 employees) and has chosen to use the small company exemption,
+but has provided a full set of independently reviewed management
+accounts prepared by a qualified accountant.
+
+VERIFICATION:
+Request: (1) Companies House filing history showing all accounts
+filed to date; (2) most recent audited accounts or, if not yet
+audited, the management accounts and the name of the audit firm
+engaged; (3) confirmation of whether the audit opinion is clean,
+qualified, or contains a going concern note. Ask: "Have your
+accounts been audited? If not, why not — and are there any
+issues your auditors have raised that we should be aware of?"
+
+PATTERN LESSON:
+When a Series A company has no audited accounts and has been
+trading for more than 18 months, request a Companies House
+filing check and the audit engagement letter before advancing —
+accounts that are overdue or qualify going concern are the
+most common financial disclosure issue discovered after term
+sheets are issued and are the primary cause of retrades on
+financial representations.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG G10: GDPR OR DATA COMPLIANCE NOT IMPLEMENTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Governance
+SEVERITY: HIGH
+
+SIGNAL:
+A company that processes personal data of EU or UK individuals —
+which includes almost every B2C company, every B2B company with
+employee data, and every company using any analytics platform —
+cannot demonstrate: (1) a registered ICO data controller number
+(UK); (2) a documented lawful basis for processing for each data
+category; (3) a privacy notice on the product; (4) a data processing
+agreement with each third-party processor (including analytics, cloud,
+CRM providers); or (5) a documented process for handling data subject
+access requests (DSARs). Observable from product screenshots with
+no visible privacy notice, from the absence of ICO registration
+in the data room, or from deal materials that do not mention data
+compliance despite a clearly data-intensive product.
+
+WHAT IT MEANS:
+GDPR non-compliance is not a theoretical legal risk — it is a live
+ICO enforcement risk with penalties of up to 4% of global annual
+turnover or £17.5M (UK GDPR), whichever is higher. The practical
+business failure modes are: (1) an ICO investigation or enforcement
+action triggered by a data subject complaint or a breach — the
+ICO has been actively enforcing since 2020 and enforcement against
+SMEs has accelerated since 2023; (2) acquirer due diligence uncovers
+GDPR non-compliance and either reduces the acquisition price to
+account for the remediation cost and liability tail, or uses the
+compliance gap as grounds for price chipping or deal withdrawal;
+(3) enterprise customers discover non-compliance during their own
+vendor due diligence — a significant and growing proportion of
+enterprise procurement processes include a data compliance review,
+and a failed vendor assessment from a key customer can trigger
+contract termination under standard data processing terms.
+The EU dimension adds DORA (Digital Operational Resilience Act,
+January 2025) for financial services companies operating in the EU —
+DORA requires ICT risk management frameworks, third-party vendor
+risk management, and incident reporting that go beyond standard
+GDPR compliance and are frequently overlooked by UK-incorporated
+companies that have EU customers.
+
+DISQUALIFYING WHEN:
+The company has already received an ICO enforcement notice or is
+currently under active ICO investigation — this is a live regulatory
+enforcement action that creates a material liability on the balance
+sheet and must be fully disclosed. A company under active ICO
+investigation cannot provide clean regulatory representations in
+an investment agreement.
+
+MANAGEABLE WHEN:
+(a) The company has a documented GDPR compliance programme in
+progress — a named DPO or privacy counsel, a data mapping exercise
+completed, and a remediation timeline of 60 days or fewer to close
+the remaining gaps.
+(b) The company processes only B2B data under contracts where
+GDPR compliance is the primary responsibility of the data controller
+(the customer) and the company's role is limited to data processor
+with appropriate DPAs in place.
+(c) The company is at an early pre-launch stage and has not yet
+processed any personal data — the flag applies from the point
+of first personal data processing, not from incorporation.
+
+VERIFICATION:
+Request: (1) ICO registration certificate (UK) or lead supervisory
+authority registration (EU); (2) data processing register or ROPA
+(Record of Processing Activities); (3) DPAs with all third-party
+processors; (4) privacy notice from the live product; (5) for
+financial services companies with EU customers, DORA compliance
+assessment or confirmation that DORA has been assessed as
+not applicable. Ask: "Are you registered with the ICO? Do you
+have a data processing register and DPAs with all your third-party
+processors? Has anyone in the team reviewed your GDPR obligations
+formally?"
+
+PATTERN LESSON:
+When a data-intensive company cannot demonstrate ICO registration
+and a basic GDPR compliance framework, escalate to legal review
+before advancing — GDPR non-compliance discovered post-investment
+is remediated at the company's cost and represents an unpriced
+liability that should have been flagged at screening.
+
+═══════════════════════════════════════════════════════════════════════
+END OF CATEGORY 6: GOVERNANCE RED FLAGS
+10 flags total. G01–G10.
+Version 1.0. Built: April 2026.
+═══════════════════════════════════════════════════════════════════════

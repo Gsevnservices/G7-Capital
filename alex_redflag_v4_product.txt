@@ -1,0 +1,667 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 4: PRODUCT RED FLAGS
+Version 1.0. Built: April 2026.
+10 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 10 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+Product flags interact with financial flags — a product with HIGH
+implementation risk combined with a burn multiple above 3x is a
+compounding risk, not two independent concerns.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P01: NO WORKING PRODUCT DEMO AT SERIES A OR BEYOND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: HIGH
+
+SIGNAL:
+A company at Series A or beyond — defined as £1M+ ARR or a disclosed Series A
+funding round — is unable to provide a live product demo on request, offering instead
+screenshots, mockups, pre-recorded video, or a staged environment that does not
+reflect the current production product. Detectable from: submission describes
+features that are not yet built; demo request is met with scheduling delays or
+a staged walkthrough; the product screenshots in the submission do not correspond
+to a live URL; or the company describes its product in future tense for core features
+that should be live at this stage.
+
+WHAT IT MEANS:
+At Series A, the product exists. Customers are using it. The inability to demo
+a live product to a potential investor is explicable in a small number of legitimate
+scenarios (security-sensitive enterprise product, regulated environment with strict
+data handling requirements) — but in most cases it signals one of the following:
+(1) Core features described in the pitch are not yet built — the product is
+presented as more complete than it is. The submission is describing the roadmap,
+not the current state.
+(2) The live product is unstable, slow, or contains significant UX problems that
+the founder does not want an investor to see — the demo environment is curated.
+(3) The company does not have a demo environment set up and has never been asked
+for a live demo — which raises questions about the maturity of the sales process.
+A product that cannot be demoed live at Series A has not been used extensively
+enough by enough customers to have driven the ARR claimed.
+
+DISQUALIFYING WHEN:
+The company has stated ARR above £500K AND cannot provide any form of live product
+access or demo within 5 business days of request AND the submission contains
+feature descriptions that appear to be future-state rather than current-state —
+the ARR claim is not consistent with a product that cannot be demonstrated.
+
+MANAGEABLE WHEN:
+(a) The product operates in a regulated environment where data security requirements
+prevent a generic demo environment — the product exists and is used, but live demos
+require signed NDAs and specific data environments. The company can provide a
+reference customer who will confirm usage in a call.
+(b) The product is a hardware-software combination where a live software demo is
+possible but the hardware component cannot be demoed remotely — the software can
+be demonstrated and the hardware component can be described with customer testimonials.
+(c) The product is genuinely in closed beta with a small number of design partners
+and is not yet at Series A stage — the flag applies to the stage claim, not the demo.
+
+VERIFICATION:
+Request a live product demo or sandbox access as a standard part of screening.
+Ask: "Can you give us a live walkthrough of the product as it works today for
+a current customer?" If this request generates delay, caveats, or an offer of
+a pre-recorded video instead, flag the inconsistency with the claimed ARR and
+request a direct customer reference call to confirm active usage.
+
+PATTERN LESSON:
+When a company at Series A cannot provide a live product demo within a standard
+timeframe, verify that the ARR claim is consistent with the product's actual
+state before proceeding — the inability to demo a live product at this stage
+is a product completeness signal, not a scheduling issue.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P02: CORE FEATURE BUILT ON A SINGLE THIRD-PARTY API
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: HIGH
+
+SIGNAL:
+The primary value-creating feature of the product — the capability that customers
+pay for — is entirely dependent on a single third-party API whose pricing, availability,
+or terms of service could change unilaterally. Detectable from: the submission
+describes the product's AI capability as powered exclusively by one foundation model
+provider; the core data feed comes from a single licensed source; the primary workflow
+integration is with one platform (Salesforce, Stripe, Plaid) where the vendor's
+API terms explicitly restrict competitive use cases.
+
+COMMON INSTANCES IN 2025–2026:
+— AI-native SaaS product where all inference is via OpenAI API with no multi-model
+  architecture or proprietary model component
+— Fintech product where all bank data is accessed via a single open banking
+  aggregator (TrueLayer, Plaid) with no alternative data source
+— Productivity tool built as a single plugin to one platform (Salesforce, HubSpot,
+  Notion) where the platform's developer terms restrict the product's monetisation
+— Healthcare data product where all NHS data access is through a single integration
+  partner whose contract is up for renewal
+
+WHAT IT MEANS:
+Third-party API dependency creates four specific risk vectors:
+(1) Price risk: the API provider raises prices. The vendor's gross margin compresses
+immediately and proportionally to the API's share of COGS. In AI inference, this
+has materialised in both directions — OpenAI reduced prices 94% between 2022 and 2025,
+but has also changed model capabilities, pricing tiers, and rate limits multiple times.
+(2) Terms risk: the API provider changes its terms of service to restrict use cases,
+require revenue sharing, or prohibit competitive products. The vendor's product may
+become non-compliant with terms overnight.
+(3) Availability risk: the API provider experiences downtime, exits the market, or
+is acquired. In each case, the vendor's product fails alongside the provider.
+(4) Platform displacement risk: the API provider launches a competing product that
+uses the same underlying API — the vendor is building distribution for a future competitor.
+
+DISQUALIFYING WHEN:
+More than 70% of the core product's primary value-creating feature is dependent on
+a single third-party API AND that provider has launched or announced a competing
+product in the last 24 months AND the vendor has no documented roadmap for building
+a proprietary alternative or adding a second provider — the platform displacement
+risk is no longer theoretical.
+
+MANAGEABLE WHEN:
+(a) The company has a documented multi-provider architecture — it uses multiple
+foundation models, data sources, or integration points and can switch between them.
+Even if one provider is currently primary, the ability to switch within 30 days
+materially reduces the risk.
+(b) The dependency is on a commodity infrastructure provider (AWS, GCP, Azure)
+where pricing is stable, alternatives are equally capable, and the switching cost
+is high but achievable — this is infrastructure dependency, not core feature dependency.
+(c) The company has a signed API agreement with pricing and availability guarantees
+that cover the investment horizon — the contractual protection addresses the price
+and availability risk even if the platform displacement risk remains.
+
+VERIFICATION:
+Ask: "If [primary API provider] doubled their prices or changed their terms tomorrow,
+what would happen to your gross margin and your product? And how long would it take
+you to migrate to an alternative?" The answer reveals both the financial exposure
+and the engineering optionality. Also ask: "Has [primary API provider] launched or
+announced any product that competes with yours?" If yes and the vendor is unaware,
+the competitive intelligence gap is as concerning as the dependency itself.
+
+PATTERN LESSON:
+When the core product value is delivered through a single third-party API, model
+the gross margin impact of a 50% price increase from that provider and ask whether
+the provider has launched a competing product — the two questions together determine
+the severity of the dependency.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P03: TECHNICAL DEBT — FULL REBUILD ACKNOWLEDGED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: HIGH
+
+SIGNAL:
+The submission, CTO note, or technical architecture description explicitly
+acknowledges that the current product requires a complete rewrite or rebuild
+before it can scale to enterprise use or handle the next order of magnitude
+of usage — or the description of the technical architecture uses language that
+implies a rebuild requirement ("we're currently on a monolith that won't scale,"
+"we're in the process of moving to a microservices architecture," "v2 of the
+product is being built from scratch").
+
+WHAT IT MEANS:
+A technical rebuild is one of the most capital-intensive and timeline-risky events
+in a startup's life. The specific failure modes:
+(1) The rebuild takes 2–3x longer than planned. During the rebuild, new feature
+development for existing customers slows or stops. Customers request features that
+cannot be delivered on the old architecture. Churn increases while the team is
+focused inward on the rebuild rather than outward on customers.
+(2) The rebuild consumes a disproportionate share of engineering capacity — typically
+50–70% of the engineering team for 12–18 months. This is capital that was raised
+for product development and market expansion but is consumed by technical remediation.
+(3) The rebuild creates a period of instability where the old architecture is no
+longer invested in and the new architecture is not yet production-ready — a trough
+of unreliability that damages customer confidence at exactly the wrong time.
+(4) The rebuild itself may encounter new architectural problems — the team that
+built the first version is often not the team with the skills to architect the second.
+
+DISQUALIFYING WHEN:
+A complete rebuild is acknowledged as necessary AND the rebuild timeline is estimated
+at more than 12 months AND the company's current burn will be exhausted before the
+rebuild is complete AND the company is using this fundraise to fund the rebuild rather
+than to accelerate commercial growth — the capital deployment rationale is remediation,
+not expansion.
+
+MANAGEABLE WHEN:
+(a) The rebuild is a partial technical modernisation — specific components being
+refactored while the core product remains operational — not a full rebuild that
+leaves customers on an unsupported legacy system.
+(b) The company has sufficient runway (18+ months) to complete the rebuild without
+racing against capital depletion — the engineering risk is real but the timeline
+pressure does not compound it.
+(c) The rebuild is driven by a strategic expansion requirement (adding enterprise-grade
+SSO, RBAC, audit logs to a previously SMB product) rather than by instability —
+this is a planned investment in enterprise readiness, not emergency remediation.
+
+VERIFICATION:
+Ask: "How much of the current product will be reused in the v2 architecture? What
+is the estimated timeline for the rebuild? And how will you maintain feature delivery
+for existing customers while the rebuild is underway?" A team that has planned the
+rebuild rigorously will have specific answers. A team that has not planned it will
+give optimistic estimates that do not account for the overhead of running parallel
+systems.
+
+PATTERN LESSON:
+When a technical rebuild is acknowledged, estimate the engineering capacity it will
+consume and the timeline before the new architecture is production-ready — if the
+rebuild will consume more than 50% of engineering capacity for more than 9 months,
+model it as a growth pause, not a growth investment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P04: NO PROPRIETARY DATA ACCUMULATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: MEDIUM
+
+SIGNAL:
+The product does not accumulate proprietary data through customer usage — every
+new customer starts from zero and gains no benefit from the prior usage of other
+customers or from their own historical data within the platform. The product is
+functionally equivalent on day 1 and day 365 from a data perspective. Detectable
+from: no mention of proprietary datasets, training data, or data network effects
+in the submission; the product is described purely as a workflow tool with no
+data accumulation component; competitive moat claims rely entirely on features
+or UX rather than data.
+
+WHAT IT MEANS:
+Proprietary data accumulation is one of the strongest moats in software — it creates
+compounding switching costs (the customer's historical data is within the product),
+improves the product over time without additional development investment (the model
+gets better as more customers use it), and makes the product defensible against
+feature-parity competitors (they can copy the features but not the data). Without
+data accumulation: (1) switching costs are low — a competitor that matches the
+feature set can win a customer's renewal; (2) the product does not improve over
+time through usage — improvements require deliberate engineering investment rather
+than emergent from data; (3) the competitive moat is purely execution-based —
+a better-funded or larger competitor can replicate the product.
+This flag does not disqualify on its own — many excellent businesses have low
+data accumulation and win through distribution, brand, or integration depth.
+But it requires that the moat claim be reassessed.
+
+DISQUALIFYING WHEN:
+The submission explicitly claims data moat, proprietary data advantage, or AI
+capability improvement through usage as a key competitive differentiator AND the
+product architecture reveals no data accumulation mechanism — the claimed moat
+does not exist. The mismatch between the moat claim and the product reality is
+more concerning than the absence of the moat itself.
+
+MANAGEABLE WHEN:
+(a) The product's moat is explicitly and credibly attributed to something other
+than data — switching costs through workflow integration, network effects between
+users, distribution advantage, or regulatory expertise embedded in the product.
+(b) The product is early enough that data accumulation is a planned future capability
+with a specific architecture described — the current version does not accumulate
+data but v2 will, and the plan is credible.
+(c) Data accumulation within a single customer account (personalisation, historical
+analytics) exists even if cross-customer data network effects do not — intra-customer
+data creates meaningful switching costs even without inter-customer data sharing.
+
+VERIFICATION:
+Ask: "Does your product improve for a specific customer the longer they use it?
+And does it improve for new customers because of what existing customers have done?"
+The first question tests intra-customer data accumulation. The second tests
+cross-customer data network effects. If both answers are no, the moat question
+must be answered on a different dimension.
+
+PATTERN LESSON:
+When the submission claims a data moat but the product architecture contains no
+data accumulation mechanism, test the moat claim against the actual product design —
+a moat claim that is inconsistent with the product architecture is more concerning
+than the absence of a data moat.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P05: FEATURE PARITY WITH FREE ALTERNATIVES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: MEDIUM
+
+SIGNAL:
+Core product features are materially equivalent to free capabilities provided by
+established platforms — Google Workspace, Microsoft 365, Notion, Slack, HubSpot
+free tier, Canva, GitHub Copilot, or similar — and the differentiation claim is
+based primarily on UX improvement, design quality, or marginal feature additions
+rather than a category-defining capability that free alternatives cannot provide.
+Detectable from: competitive analysis that acknowledges free alternatives but
+dismisses them based on UX ("our product is much more intuitive"); pricing that
+implies willingness-to-pay significantly above zero for a product category that
+is available free; or a demo that replicates functionality already present in a
+widely distributed free product.
+
+WHAT IT MEANS:
+Free alternatives create the most structurally difficult competitive position in
+software — the customer has no financial incentive to switch and the vendor must
+justify a price premium based on a benefit differential that the customer may not
+value sufficiently to pay for. The specific failure modes:
+(1) Enterprise buyers use the free alternative for the same use case and the startup
+cannot displace it because IT already supports the free product.
+(2) The startup's users are power users who adopted it for marginal UX reasons —
+a feature update to the free alternative eliminates the differential and triggers churn.
+(3) The switching cost argument does not hold — customers can export data and
+migrate to the free alternative in a day.
+UX alone is not a durable competitive moat at the prices required for venture returns.
+Microsoft, Google, and Notion invest billions in UX — a startup's UX advantage
+has a measured half-life.
+
+DISQUALIFYING WHEN:
+Core features are directly replicable using a free tier of a product the company's
+target customers already use AND the pricing is above £100/month per user AND
+the differentiation claim is entirely UX-based AND there is no evidence of
+integrations, data accumulation, or workflow lock-in that the free alternative
+cannot provide.
+
+MANAGEABLE WHEN:
+(a) The product solves a specific workflow problem that the free alternatives address
+generically — the specificity of the solution creates value that the generic free
+alternative cannot replicate with the same time investment.
+(b) The product has compliance, security, or audit capabilities that the free
+alternatives do not — which is a genuine capability gap in regulated industries,
+not a marginal UX improvement.
+(c) The product is sold to enterprises where the free alternative is not approved
+by IT security (consumer-grade products with weaker security profiles) — the
+enterprise-grade version of the capability is the product.
+
+VERIFICATION:
+Test the core value proposition against the free alternative. Ask: "Could a technically
+competent user replicate your core workflow in [free alternative] in less than a day?
+If not, what specifically prevents them?" A product that cannot answer this question
+with a specific, technical barrier to replication has a free alternative problem that
+will surface at renewal conversations.
+
+PATTERN LESSON:
+When the competitive differentiation relies on UX superiority over a free alternative,
+verify whether the differential is quantifiably meaningful to the target buyer —
+a 10% UX improvement over a free product does not sustain a £10K/year price premium
+in a downturn budget review.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P06: PRODUCT REQUIRES SIGNIFICANT WORKFLOW CHANGE FOR VALUE DELIVERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: MEDIUM (LOW for enterprise ACV above £200K | HIGH for SMB ACV below £10K)
+
+SIGNAL:
+The product's primary value proposition requires the customer to substantially change
+an existing workflow — replacing a process they have used for years with a new one —
+rather than slotting into an existing workflow as a direct replacement or augmentation.
+Detectable from: onboarding is described as requiring "training" or "change management";
+time-to-value is stated as 3+ months; the submission describes a "transformation"
+rather than a "replacement"; or early churn in the customer base is attributed to
+"adoption challenges."
+
+WHAT IT MEANS:
+Behaviour change at the individual level is expensive to achieve and expensive to sustain.
+Enterprise buyers who must run change management programmes for a new software product
+face a cost and timeline that reduces willingness-to-pay and increases churn risk.
+SMB buyers who must change their workflow simply do not — they revert to the familiar
+process or abandon the product before reaching the value threshold.
+The severity of this flag is highly dependent on ACV:
+— At £200K+ ACV enterprise: behaviour change is tolerable because the ROI justification
+  is large, dedicated implementation support is included, and the customer has a change
+  management function. This is LOW severity.
+— At £10K ACV SMB: behaviour change is FATAL. SMB customers will not invest 3 months
+  to change their workflow for a £10K/year product. They will try it for 30 days,
+  not change their process, and cancel.
+The classic signal of this problem in the metrics: high trial-to-paid conversion
+combined with very high 90-day churn — the product attracts customers but cannot
+retain them through the behaviour change barrier.
+
+DISQUALIFYING WHEN:
+The product requires significant workflow change AND the ACV is below £15K AND the
+90-day churn rate (or trial cancellation rate) is above 25% AND the submission
+attributes early churn to "customer education" or "adoption" rather than to a
+product problem — the product is asking SMB customers to bear a change management
+cost that is out of proportion to the value.
+
+MANAGEABLE WHEN:
+(a) The product is sold into enterprise at ACV above £150K where behaviour change
+is expected, professional services are included to manage it, and the ROI justification
+is sufficiently large to drive internal change management investment by the buyer.
+(b) The product delivers measurable value within the first 14 days — even if the
+full value requires workflow change, there is a quick win that demonstrates the
+benefit before the full change investment is required.
+(c) The submission demonstrates that the 90-day retention rate is high (above 85%)
+despite the workflow change requirement — customers are changing their workflows
+because the value is compelling enough to justify it.
+
+VERIFICATION:
+Ask: "What does a customer's first 90 days look like? What do they have to change
+about how they work to get value from your product? And what is your 90-day
+retention rate?" The combination of the workflow change description and the 90-day
+retention rate tells you whether customers are making the change and finding it
+worth it — or abandoning the product before completing the transition.
+
+PATTERN LESSON:
+When the product requires significant workflow change, check the ACV against the
+severity threshold — a £200K enterprise product with workflow change is LOW risk;
+a £5K SMB product with workflow change is HIGH risk — and verify the 90-day
+retention rate before accepting the adoption story.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P07: AI CAPABILITY NOT DEFENSIBLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: HIGH
+
+SIGNAL:
+The product is described as AI-powered and the AI capability is presented as a
+core differentiator — but all described AI features could be replicated within
+30 days by a developer with access to the same public foundation model APIs, with
+no proprietary training data, no fine-tuned model, no proprietary architecture,
+and no customer-specific data accumulation that improves the output. Detectable from:
+AI capability is described purely in terms of the output quality without any description
+of what makes the underlying model or data proprietary; the competitive moat is claimed
+to be "AI" generically rather than a specific proprietary AI component; the submission
+describes the product as "built on GPT-4" or "powered by Claude" as if the API access
+itself is a differentiator.
+
+WHAT IT MEANS:
+In 2025–2026, wrapping a public foundation model API is not a defensible AI product —
+it is a thin integration layer over a commodity API. Any competitor, including the
+API provider itself, can build the same output with the same inputs. The specific
+failure mode is the Foundation Model Displacement Risk from the AI-Native SaaS section
+of the B2B SaaS Sector Library: the API provider improves its base model to achieve
+the same output the vendor is providing as a premium feature, and the vendor's product
+becomes a more expensive version of the base API.
+Genuine AI defensibility requires at least one of:
+(1) Proprietary training data that is not available to competitors and improves
+    model performance on the specific task above the base model level.
+(2) A proprietary fine-tuned model trained on accumulated customer data that gets
+    better with each customer use.
+(3) A workflow integration architecture so deep that switching away from the AI
+    component requires rebuilding the surrounding workflow — the AI is embedded,
+    not a standalone feature.
+(4) Proprietary evaluation infrastructure — the ability to measure and improve
+    AI output quality faster than competitors in the specific domain.
+
+DISQUALIFYING WHEN:
+The submission describes AI as the primary competitive moat AND the AI capability
+is entirely via public API calls with no proprietary data, training, or architecture
+AND the API provider has already announced or released a feature that directly
+competes with the vendor's primary use case — the moat has already been eroded.
+
+MANAGEABLE WHEN:
+(a) The proprietary element is the workflow and data integration surrounding the AI —
+the AI output itself is commodity, but the structured data inputs and workflow
+embedding create a product that is substantially more useful than a raw API call
+in the specific use case.
+(b) The company is accumulating proprietary data with each customer interaction that
+is being used to improve output quality — the current output may not be differentiated
+but the data flywheel will create differentiation within 12–18 months.
+(c) The company's differentiation is the domain expertise embedded in the prompting
+architecture, evaluation framework, and output structure — which is genuinely
+proprietary and non-obvious, even if the base model is shared.
+
+VERIFICATION:
+Ask: "If OpenAI or Anthropic released a GPT-5 or Claude 4 that natively performed
+your core use case at your quality level, how long would it take for your customers
+to switch to the raw API? What would they lose?" The answer reveals whether the value
+is in the AI output (commoditisable) or in the surrounding product architecture (durable).
+
+PATTERN LESSON:
+When AI is described as the primary moat, test whether the moat is in the model
+(usually not defensible) or in the data, workflow, and architecture surrounding the
+model (potentially defensible) — a product whose AI can be replicated by a developer
+in 30 days has a distribution or workflow moat, not an AI moat.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P08: IMPLEMENTATION TIME EXCEEDS 6 MONTHS BEFORE FIRST VALUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: HIGH
+
+SIGNAL:
+The submission states or implies that enterprise customers require more than 6 months
+of implementation before experiencing any measurable value from the product — detectable
+from stated implementation timelines, professional services descriptions that reference
+multi-phase implementations spanning multiple quarters, or customer case studies where
+the go-live date is described as 9–18 months after contract signing.
+
+NOTE: This flag overlaps with Enterprise Red Flag F02 (Implementation Failure Rate)
+but addresses a different risk dimension — not whether implementations fail, but
+whether the time-to-first-value is structurally too long for customers to remain
+committed through the process. Both flags can apply simultaneously.
+
+WHAT IT MEANS:
+A 6-month implementation before first value creates three compounding risks:
+(1) Buying champion turnover. Enterprise buying champions change roles, companies,
+or priorities on an 18–24 month cycle. A 6-month implementation to first value
+means the champion who signed the contract has a 25–30% probability of having
+changed roles before the customer has received any return on the investment.
+When the champion leaves mid-implementation, the new executive inherits a project
+with 6 months of cost and no visible value — and the first question is whether to
+continue or cut the programme.
+(2) Budget re-evaluation. Enterprise budgets are reviewed quarterly and annually.
+A product that has consumed 6 months of budget without visible value output is
+at risk of being cut in the next budget cycle, regardless of the contracted term.
+(3) Competitor displacement window. A competitor has 6 months to enter the account,
+demonstrate quick-win value, and present itself as the alternative to the incumbent
+who has not yet delivered.
+
+DISQUALIFYING WHEN:
+Average implementation time before first value is more than 9 months AND the ACV
+is below £200K AND the company has a documented case of a customer churning or
+failing to renew after a long implementation — the implementation risk has already
+converted into a commercial outcome.
+
+MANAGEABLE WHEN:
+(a) The implementation delivers documented interim value at defined milestones
+before the 6-month mark — the final go-live may take 12 months but the customer
+has a working component generating measurable output by month 2.
+(b) The implementation is for an ERP or core systems replacement where 6–12 month
+timelines are industry standard and customers are experienced in managing the process.
+(c) The ACV is above £500K — at this price point, customers have an internal project
+team, executive sponsorship, and formal programme management that reduces champion
+turnover risk and budget re-evaluation risk during implementation.
+
+VERIFICATION:
+Request the implementation timeline for each of the last 5 go-lives: contract
+signing date, first measurable value delivery date, and full go-live date. Ask:
+"What value does the customer receive in the first 90 days after signing? And
+what does the 90-day experience look like from the customer's perspective?" A company
+that can describe specific 90-day value milestones has engineered the implementation
+for retention; one that describes only the end-state has not.
+
+PATTERN LESSON:
+When implementation time before first value exceeds 6 months, assess whether there
+are documented 90-day value milestones within the implementation — the presence or
+absence of early value milestones is the primary predictor of whether customers
+survive the long implementation without churning or de-prioritising the project.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P09: NO PRODUCT USAGE DATA PROVIDED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: HIGH
+
+SIGNAL:
+The submission contains ARR and customer count data but no product usage metrics —
+no daily or monthly active users, no feature adoption rates, no session frequency,
+no engagement depth indicators — despite the company being at a stage where product
+instrumentation should be standard. Detectable from: the submission discusses
+customer satisfaction in qualitative terms only ("customers love the product,"
+"strong NPS") without any usage data; or product usage data is absent in a submission
+that otherwise contains detailed financial metrics.
+
+WHAT IT MEANS:
+ARR is a measure of contracted revenue — it tells Alex how much customers have agreed
+to pay. Usage data tells Alex how much customers are actually using the product they
+paid for. The gap between the two is the retention risk indicator. A company with
+£2M ARR and zero usage data has told Alex the first half of the story and withheld
+the second. Three possible reasons for the omission:
+(1) Usage data is unflattering. Active usage is low relative to the customer count
+or ARR — customers have paid but are not using the product. This is a leading indicator
+of churn: customers who do not use a product do not renew it.
+(2) Usage is not tracked. The company has not instrumented its product. This is a
+product management maturity problem at seed stage and a serious gap at Series A —
+a company that does not measure usage does not know where its product is creating
+value and where it is not.
+(3) The usage data is not considered relevant by the founder. This is a signal about
+the founder's product instincts — a founder who does not think about usage metrics
+is not running a product-led company, which may or may not be appropriate for the
+business model.
+In all three cases, the absence of usage data reduces Alex's ability to assess
+the true retention outlook.
+
+DISQUALIFYING WHEN:
+The company is at Series A with more than £1M ARR AND has no product usage tracking
+infrastructure in place AND the submission cannot provide any usage metric for any
+customer — the product intelligence gap means the company cannot optimise for
+retention or identify at-risk customers before they churn.
+
+MANAGEABLE WHEN:
+(a) The product is enterprise software with a small number of large accounts where
+usage is tracked through customer success activity logs rather than automated
+instrumentation — the company can describe specific usage behaviour per account.
+(b) The product is genuinely new (less than 6 months post-launch) and instrumentation
+is being built as part of the current engineering sprint — the omission is a
+timing gap, not a structural gap.
+(c) The product operates in a regulated environment where automated usage tracking
+requires customer consent and data governance that has not yet been established —
+the absence is a compliance consideration, not an oversight.
+
+VERIFICATION:
+Ask: "What is your DAU/MAU ratio? What percentage of your customers logged in
+in the last 30 days? What is your most-used feature?" A product team that is
+tracking usage will answer immediately with specifics. A team that is not tracking
+usage will give qualitative answers ("customers use it regularly") without numbers.
+The quality of the answer tells Alex more than the metric itself.
+
+PATTERN LESSON:
+When no product usage data is provided alongside ARR, ask for DAU/MAU and 30-day
+active rate for the last 3 months — if the answer is qualitative rather than
+numeric, treat the retention outlook as unverified and note this in the risk section.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG P10: PRODUCT ROADMAP DRIVEN ENTIRELY BY CUSTOMER REQUESTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Product
+SEVERITY: MEDIUM
+
+SIGNAL:
+The product roadmap described in the submission consists entirely of features
+requested by existing customers, with no evidence of proactive category development,
+founder-initiated product vision, or investment in capabilities that customers have
+not yet asked for. Detectable from: the roadmap is described as "driven by customer
+feedback"; every roadmap item has a named customer attached; the product's past
+release notes list features that were each requested by specific accounts; or the
+founder cannot describe a product bet they made that customers did not anticipate needing.
+
+WHAT IT MEANS:
+A product roadmap that is 100% customer-request-driven has a specific failure mode —
+the Feature Factory (Training Library, PASS Deal pattern). The product becomes a
+custom software shop rather than a category-defining product. The specific risks:
+(1) The product becomes increasingly specific to the needs of existing customers
+and increasingly irrelevant to the next generation of target customers — who have
+different needs that the product does not address.
+(2) Core product experience deteriorates. No engineering time is allocated to
+improving the fundamental value proposition — only to adding features on the margins.
+DAU/MAU declines 6–9 months before the team notices because engagement with the
+core product is weakening even as the feature count grows.
+(3) The product loses coherence. A roadmap assembled from individual customer requests
+does not have an underlying vision — features conflict, the UX becomes inconsistent,
+and onboarding new customers becomes harder as the product adds complexity.
+(4) Expansion sales become harder. A customer who bought the product for a specific
+use case finds that the roadmap does not extend the product into adjacent use cases
+they care about — NRR stalls because the product is not growing in the directions
+the customers want to expand into.
+
+DISQUALIFYING WHEN:
+More than 80% of the last 12 months of shipped features were customer-requested AND
+DAU/MAU or core feature engagement has declined in the same period AND the founding
+team cannot describe a single proactive product bet they have made in the last 12
+months — the product is in Feature Factory mode and the NRR impact is already beginning.
+
+MANAGEABLE WHEN:
+(a) Customer-driven features represent less than 60% of the roadmap and the remaining
+40% is founder-initiated product vision — customer input informs but does not entirely
+determine the roadmap.
+(b) The company is in a customer discovery phase at seed stage where the primary goal
+is to learn from early customers — a 100% customer-driven roadmap at seed is appropriate;
+at Series A it is a concern.
+(c) The customer-requested features are clustered around a coherent product thesis —
+the requests are pointing in the same direction and the founder is synthesising them
+into a category-defining product strategy, not just building each request independently.
+
+VERIFICATION:
+Ask: "Tell me about the last significant product bet you made that customers did not
+ask for. What was the hypothesis and how did it play out?" A product-led founder
+will have a clear answer — a product vision bet, a category-creating feature, a
+pricing innovation. A founder in Feature Factory mode will struggle to answer because
+every product decision has been customer-reactive rather than vision-driven.
+
+PATTERN LESSON:
+When the product roadmap is described as customer-driven, ask the founder to describe
+the last proactive product bet they made that no customer asked for — the ability
+to answer this question distinguishes a product vision from a feature backlog.
+
+═══════════════════════════════════════════════════════════════════════
+END OF RED FLAG LIBRARY — CATEGORY 4: PRODUCT
+10 flags. Apply all 10 mechanically to every deal submission.
+Next category: Founder / Character Red Flags (C01–C10).
+═══════════════════════════════════════════════════════════════════════

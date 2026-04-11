@@ -1,0 +1,913 @@
+═══════════════════════════════════════════════════════════════════════
+ALEX — RED FLAG LIBRARY
+CATEGORY 2: TEAM RED FLAGS
+Version 1.0. Built: April 2026.
+15 flags. Apply mechanically to every deal submission.
+These flags are observable from a submission without a meeting.
+Two analysts applying these rules reach the same conclusion.
+═══════════════════════════════════════════════════════════════════════
+
+APPLICATION RULE:
+For every deal submission, Alex checks all 15 flags before completing
+the screening note. Flags are not discretionary — if the signal is
+present, the flag is raised. Flags are then weighed in aggregate.
+One CRITICAL flag = automatic deep investigation required.
+Two or more HIGH flags = note this in the Risk Assessment section.
+CRITICAL flag + confirmed by verification = strong PASS presumption.
+Team flags interact with financial and market flags — a team flag alone
+rarely disqualifies; a team flag combined with a financial flag is more
+serious than either in isolation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T01: FOUNDER BACKGROUND UNVERIFIABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+Key credentials claimed in the submission — specific employer names, role titles,
+revenue figures managed, deals closed, or qualifications — cannot be independently
+confirmed through LinkedIn, company websites, Companies House, press coverage,
+academic institution records, or other public sources. The gap between the claimed
+background and the publicly verifiable record is material (e.g. claims to have been
+VP Sales at a named company but that person does not appear in the company's LinkedIn
+employee history, press mentions, or alumni network).
+
+DETECTABLE SIGNALS IN SUBMISSION:
+— Employer names are vague or unverifiable ("a major US tech company," "a global bank")
+  without named organisations
+— Role titles claimed are unusually senior relative to the founder's age and graduation
+  date, with no verifying press coverage or professional endorsement
+— Academic qualifications listed at institutions that do not award the claimed degree
+— Exit or revenue figures from prior ventures that cannot be cross-referenced against
+  any public record of the company
+
+WHAT IT MEANS:
+An unverifiable background is not necessarily fraudulent — some founders worked in
+roles that left no public record, particularly in government, defence, or early-stage
+companies. However, it creates two risks: (1) the claimed expertise that underpins
+the market insight or domain advantage is not real, removing the primary differentiator
+the team is claiming; (2) a founder willing to exaggerate credentials in a pitch will
+exaggerate elsewhere — the character signal is material. The most serious form: a
+claimed exit or successful prior company that cannot be verified, presented as evidence
+of execution capability, which is the primary justification for the team score.
+
+DISQUALIFYING WHEN:
+A specific credential is cited as the primary reason the team is qualified to build
+this company — "we are uniquely positioned because our CEO ran [X division] at [Y
+company]" — and that credential cannot be confirmed through any public source after
+a reasonable search effort (20+ minutes of structured verification).
+
+MANAGEABLE WHEN:
+(a) The unverifiable element is peripheral — a supporting credential rather than
+the primary expertise justification — and the rest of the background is fully
+verifiable and consistent.
+(b) The founder proactively explains the verification gap (e.g. "my NHS work is
+not publicised for patient data reasons — I can provide my manager as a reference")
+and offers a specific named reference for direct confirmation.
+(c) The credential in question is a junior early-career role where no public record
+would be expected — the gap is not suspicious in context.
+
+VERIFICATION:
+Search LinkedIn for the founder's full name + named employer. Search Companies House
+for prior company directorships. Search Google for the founder's name + named employer
++ named role. Search academic institution alumni records where a degree is claimed.
+If a named prior company is stated: verify the company existed, check the founder's
+tenure dates against the company's founding and exit dates, and confirm the claimed
+revenue or headcount against any press coverage or public filing.
+
+PATTERN LESSON:
+When a key credential underpins the team's right to win in a specific market, verify
+it independently before weighting the team section of the screening note — unverifiable
+credentials are treated as unconfirmed, not as confirmed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T02: SERIAL FOUNDER WITH UNDISCLOSED PRIOR FAILURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+The founder's LinkedIn profile, Companies House record, or Crunchbase profile reveals
+one or more prior companies that were dissolved, placed into administration, or quietly
+wound down — none of which are mentioned in the submission. Timeline gaps of 12+
+months between roles that are not explained by the current company's founding date
+suggest undisclosed ventures.
+
+DETECTION METHOD:
+Search Companies House for the founder's name under "Officers" — this returns every
+UK company they have been a director of, including dissolved entities. Cross-reference
+Crunchbase and AngelList. Compare the founding dates of any discovered prior companies
+against the timeline presented in the submission. Any company dissolved within 3 years
+of founding that is not mentioned in the submission is a flag.
+
+WHAT IT MEANS:
+Prior failure is not disqualifying — many of the best founders failed before succeeding,
+and the lessons from a failed company are often the most valuable preparation for
+building the next one. The flag is the non-disclosure, not the failure. A founder
+who proactively says "my last company failed for X reason — here is what I learned
+and why this company is different" demonstrates self-awareness and honesty. A founder
+who omits prior failures entirely is either not self-aware or deliberately concealing
+information from an investor they are asking to trust them with capital. The non-disclosure
+also raises the question of what else is not being mentioned — it is a character signal
+that extends beyond the specific omission.
+
+DISQUALIFYING WHEN:
+The prior company was dissolved within the last 24 months AND the circumstances of
+dissolution are not disclosed AND the current company is in the same sector or
+targeting the same customer type as the failed company — suggesting the failure was
+not a learning event but a repeated attempt at a fundamentally flawed model.
+
+MANAGEABLE WHEN:
+(a) The prior failure is proactively disclosed in the submission with a specific
+account of what went wrong and what structural change in the current company
+addresses that failure mode.
+(b) The prior company was dissolved due to external circumstances (co-founder
+departure, market timing, COVID impact) with clear evidence rather than product
+or execution failure.
+(c) The prior company is not a failure — it was a small side project or freelance
+vehicle dissolved after a few months when the founder took a full-time role — the
+Companies House record exists but the economic reality is not a meaningful failure.
+
+VERIFICATION:
+Run a Companies House officers search for every founder named in the submission.
+List all directorships including dissolved entities. For each dissolved company
+not mentioned in the submission, search for press coverage, Crunchbase entries,
+or LinkedIn descriptions that explain the outcome. Present the findings directly:
+"We identified a prior company, [X], dissolved in [year] — can you tell us about
+that venture and why it did not continue?"
+
+PATTERN LESSON:
+When Companies House reveals a dissolved prior company not mentioned in the submission,
+treat the non-disclosure as the primary flag — request the founder's account of the
+venture before assessing the business itself.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T03: FOUNDING TEAM ALL FROM SAME PROFESSIONAL BACKGROUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: MEDIUM
+
+SIGNAL:
+All co-founders share the same primary professional background — all engineers from
+the same company, all McKinsey consultants, all academics from the same department,
+all ex-bankers from the same team — with no complementary skill set visibly present
+in the founding team to cover the other core functions of building a company.
+
+SPECIFIC COMBINATIONS THAT TRIGGER THIS FLAG:
+— All founders are engineers: no commercial, sales, or domain expertise in founding team
+— All founders are domain experts (e.g. all doctors, all lawyers): no technical or
+  commercial execution capability in founding team
+— All founders are ex-consultants: strong analysis, weak product and sales execution
+— All founders are ex-bankers: financial modelling capability, no engineering or GTM
+
+WHAT IT MEANS:
+Building a company requires three distinct capabilities: building the product
+(technical), selling the product (commercial), and knowing what to build (domain).
+A team that is strong in one and absent in the other two is not a founding team —
+it is a group of smart people with one shared skill set attempting to operate
+in territory they have not demonstrated they can navigate. The missing capabilities
+will either be hired at high cost and late (by which time the product may be going
+in the wrong direction) or not hired at all (in which case one function of the
+company will be permanently under-resourced). The most common consequence: all-engineer
+teams build products nobody wants to buy, and all-commercial teams commission products
+that cannot be built on schedule.
+
+DISQUALIFYING WHEN:
+All founders share the same background AND the business requires expertise in the
+missing area as a critical path dependency — for example, an all-engineer team
+building enterprise software for financial services buyers where regulatory domain
+knowledge and sales credibility with CISOs are essential to close the first deal.
+
+MANAGEABLE WHEN:
+(a) The missing capability is explicitly addressed by a named senior hire already
+in place at or above VP level — the team gap exists at founding team level but
+not at leadership level.
+(b) The business model in its early stage genuinely requires only one capability —
+a deep tech company at TRL 3–5 needs engineering depth above all else; commercial
+expertise is appropriately staged later.
+(c) One founder has genuinely diverse experience (e.g. an engineer who spent
+3 years in a commercial role before returning to engineering) and the apparent
+homogeneity is surface-level.
+
+VERIFICATION:
+Read each co-founder's full LinkedIn profile, not just the headline. Identify
+the primary function they performed in each role. Map the founding team against
+three axes: product/technical, commercial/sales, domain/market. Identify which
+axis is unrepresented. Ask: "Who owns the commercial/technical/domain function
+in the founding team today, and what is their background in that area?"
+
+PATTERN LESSON:
+When all founders share the same professional background, identify the missing
+function and ask how the company plans to fill it before assessing the team score —
+the answer reveals whether the founders understand their own limitation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T04: KEY TECHNICAL ROLE UNFILLED AT SERIES A
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+A company at Series A stage — defined as £1M+ ARR or an announced Series A round —
+does not have a named CTO or VP Engineering in the founding team or senior leadership,
+or the person holding that role has fewer than 3 years of engineering leadership
+experience and has never built or managed a team of more than 5 engineers.
+
+WHAT IT MEANS:
+The Series A is the stage at which a company begins scaling its engineering team —
+typically from 3–6 engineers to 10–20 within 18 months. This transition requires a
+technical leader who can: (a) architect the product for scale rather than for the
+next customer; (b) hire and manage an engineering team without the founder's daily
+involvement; (c) maintain engineering quality and velocity as headcount increases.
+Without an experienced technical leader at Series A, one of three things happens:
+the CEO micromanages engineering (slowing both product and commercial execution);
+the engineering team makes architectural decisions that require expensive rebuilds
+at Series B (technical debt spiral); or the best engineers leave because there is
+no technical leader to learn from and no clear engineering culture. The last failure
+mode is the most costly — top engineers choose employers based heavily on the
+quality of their technical leadership.
+
+DISQUALIFYING WHEN:
+The company is at Series A AND the CTO role is described as "being recruited" AND
+the current engineering team is above 8 people AND the product has experienced
+visible performance or reliability issues cited in customer feedback — the
+leadership gap is already causing product quality risk.
+
+MANAGEABLE WHEN:
+(a) One of the co-founders is a genuinely experienced technical leader — former
+CTO of a company that scaled from 5 to 50 engineers, or a staff engineer at a
+top-tier technology company — even if their title is CEO or CPO rather than CTO.
+(b) The company is a deep tech or hardware company where "CTO" is replaced by
+a Chief Scientist or Head of Engineering who has the relevant domain expertise,
+even if their management experience is limited.
+(c) The company is at the very early end of Series A (£1–2M ARR) and the engineering
+team is still below 5 people — the scaling challenge has not yet arrived and the
+hire is appropriately staged.
+
+VERIFICATION:
+Identify the most senior technical person in the company from the submission's team
+slide or LinkedIn. Find their full employment history. Identify the largest engineering
+team they have previously led and the stage of company at which they did so. Ask:
+"Who owns the technical architecture and the engineering roadmap today? And what
+is the largest engineering team they have previously built from scratch?"
+
+PATTERN LESSON:
+When no experienced technical leader is present at Series A, model the engineering
+scaling risk explicitly — the absence of technical leadership is a compounding cost
+that gets more expensive to fix at every subsequent funding stage.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T05: EXCESSIVE EARLY DILUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: MEDIUM
+
+SIGNAL:
+The founding team collectively owns less than 50% of the company at seed stage
+before the current funding round — detectable when the cap table is disclosed
+in the submission, or when the founding story involves multiple pre-seed investment
+rounds, convertible notes, or significant advisor equity grants that collectively
+dilute the founders below the threshold.
+
+DETECTION METHOD:
+If the cap table is not disclosed: a company that has raised more than £1M at
+pre-seed, has 3+ investor names on the cap table, and is now raising seed suggests
+meaningful dilution. If advisors hold more than 3% collectively this is also a
+signal. If the founder's percentage holding is stated below 50% at seed this
+triggers the flag directly.
+
+WHAT IT MEANS:
+Founders who are below 50% combined equity at seed face a compounding motivation
+problem. After a seed round (typically 15–20% dilution) they may own 40% or less.
+After Series A (20–25% dilution) they may own 30% or less. By Series B, the founders
+may own so little of the company that the financial return required to make the
+venture meaningful to them personally is so high it is unlikely to materialise —
+and the practical reality of running a company they do not control (below 50% is
+effectively minority ownership) affects decision-making, retention, and recruiting.
+The secondary concern: excessive dilution at early stages often reflects poor
+negotiation, desperation for capital (which raises questions about why early capital
+was hard to raise), or a pattern of giving equity as a substitute for management.
+
+DISQUALIFYING WHEN:
+Combined founder ownership is below 40% at seed stage AND more than 5% of the cap
+table is held by advisors with no clear commercial deliverable attached AND the
+company is seeking a Series A from institutional investors — because institutional
+VCs typically require 70–80% founder ownership at seed entry for the long-term
+dilution model to work. Below 40% combined at seed means founders may be below
+20% by Series B, which is often below the threshold for sustained founder motivation.
+
+MANAGEABLE WHEN:
+(a) Dilution below 50% reflects a deliberate strategy — a corporate spin-out where
+the parent company holds equity as part of the founding structure, or a company
+where a key industry partner took early equity in lieu of a commercial partnership fee.
+(b) One co-founder holds significantly more than 50% while others hold less —
+the combined figure is below 50% but one founder is well-incentivised.
+(c) The company has already completed a seed round and the cap table reflects
+post-seed dilution — the flag applies to pre-money seed cap table, not post-round.
+
+VERIFICATION:
+Request the current cap table showing all shareholders, share classes, and percentages.
+Ask: "What percentage does each founder own today, before this round? And what
+will their ownership be post-round and post-option pool creation?" If the cap table
+is withheld at this stage, note this — early-stage companies that do not share
+their cap table with investors in diligence are unusual.
+
+PATTERN LESSON:
+When founders collectively own less than 50% at seed stage, model their ownership
+trajectory through Series A and B and assess whether residual ownership at exit
+provides sufficient motivation for the level of commitment the company requires.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T06: NO VESTING SCHEDULE DISCLOSED FOR FOUNDING TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+The submission does not disclose vesting terms for the founding team — either because
+the deck has no cap table information and no mention of vesting, or because when
+prompted, the founders describe equity as fully vested or already issued without
+a time-based or milestone-based vesting schedule attached to founder shares.
+
+WHAT IT MEANS:
+A vesting schedule — typically 4 years with a 1-year cliff — is the primary
+structural mechanism that prevents a co-founder departure from being catastrophic.
+Without vesting, a co-founder who leaves after 6 months retains 100% of their
+equity, which creates three simultaneous problems: (1) the departing founder holds
+a large equity stake in a company they no longer contribute to, which suppresses
+the equity available to replace them and alienates the remaining team; (2) future
+investors will require a resolution before investing — the vesting gap must be
+negotiated retrospectively with the departed founder, which is expensive and often
+contentious; (3) the remaining founders and employees see the departure and its
+consequence, which damages morale. The absence of vesting at a company that has
+not yet raised institutional capital suggests the founders did not receive basic
+legal advice — which raises questions about the rigour applied to other contractual
+and structural decisions.
+
+DISQUALIFYING WHEN:
+The company has 2 or more co-founders AND no vesting schedule is in place for any
+of them AND the company is seeking a Series A from institutional investors — because
+every institutional investor will require vesting to be established before closing,
+and if vesting must be retrofitted onto a fully-issued cap table, it requires each
+co-founder's consent and creates legal complexity that delays and sometimes destroys
+the round.
+
+MANAGEABLE WHEN:
+(a) The company has only one founder — vesting is less critical without co-founder
+departure risk, though employee equity vesting is still required.
+(b) The founders confirm that vesting schedules exist but were not disclosed in the
+submission — the schedules should be shared as part of standard diligence.
+(c) The company is genuinely pre-incorporation and is setting up legal structure as
+part of the fundraise — the absence of vesting is a timing issue, not a structural
+omission, provided the founders commit to standard terms before close.
+
+VERIFICATION:
+Request the shareholder agreement and any founders' service agreements. Confirm: the
+vesting start date for each co-founder, the cliff period, the total vesting period,
+and whether vesting accelerates on a change of control. Ask: "If a co-founder left
+tomorrow, how much equity would they retain?" The answer should be: "Only the vested
+portion — the rest returns to the pool." Any other answer means vesting is not in place.
+
+PATTERN LESSON:
+When vesting terms are not disclosed in a multi-founder company, treat this as a
+CRITICAL structural question and require written confirmation of vesting schedules
+before any investment committee discussion — retrofit vesting after a co-founder
+departure is orders of magnitude harder than establishing it before.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T07: ADVISOR EQUITY WITHOUT DELIVERABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: MEDIUM
+
+SIGNAL:
+The submission lists an advisory board whose collective equity holdings represent
+5% or more of the fully diluted cap table — and no specific deliverable, committed
+time, or milestone is attached to any individual advisor's role. Advisors are
+described in general terms ("strategic advisor," "industry veteran," "former CEO of X")
+without any statement of what they are actively contributing or have already delivered.
+
+WHAT IT MEANS:
+Advisor equity grants are intended to incentivise specific contributions: an introduction
+to a strategic partner, a regulatory navigation commitment, a customer reference, or
+a board-level governance input. When advisors collectively hold 5%+ with no attached
+deliverable, the equity is not incentivising anything — it was granted to signal
+credibility to investors rather than to obtain specific value. This creates two problems:
+(1) The 5%+ is dilution that costs every future investor and every employee —
+the economic cost is real even if the advisors are not providing active value in return.
+(2) The advisor roster is a credentialing exercise, not a capability extension —
+which means the team is trying to substitute name recognition for operational capability
+it does not possess internally. The most common pattern: advisors who took equity in
+return for a single warm introduction that happened 18 months ago and have not been
+actively involved since.
+
+DISQUALIFYING WHEN:
+Advisors collectively hold more than 8% of the fully diluted cap table AND the company
+is at Series A AND no advisor is described with a specific past deliverable or active
+current commitment AND the advisor equity is presented in the deck as evidence of
+the team's strength — the credentialing substitution problem is most serious when
+the underlying team has verifiable gaps.
+
+MANAGEABLE WHEN:
+(a) Each advisor's equity is below 0.5% individually and 3% collectively — small
+grants in exchange for occasional guidance are standard and not a structural concern.
+(b) One or more advisors hold equity above 0.5% and a specific, verifiable
+contribution is disclosed — "introduced us to our first 3 enterprise customers"
+or "providing weekly guidance on our FDA 510(k) submission."
+(c) The advisor equity is on a vesting schedule tied to ongoing participation —
+unvested equity that lapses if the advisor disengages is not a dilution problem.
+
+VERIFICATION:
+Request the advisor equity schedule: each advisor's name, equity percentage, vesting
+terms, and the specific contribution for which the equity was granted. For each
+advisor holding more than 0.25%, ask: "What has this advisor done for the company
+in the last 6 months?" If the answer is "they're available to advise when we need
+them," the equity is not being earned and should be treated as sunk dilution.
+
+PATTERN LESSON:
+When advisors hold more than 5% collectively, request a contribution log for each
+advisor — if no specific contribution is identifiable, treat the equity as wasted
+dilution and reduce the team score accordingly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T08: FOUNDER PREVIOUSLY REMOVED BY BOARD — UNDISCLOSED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+Public record — press coverage, Companies House resignation date that does not
+align with stated tenure, LinkedIn date discrepancy, or investor community knowledge —
+indicates that a founder left a prior company earlier than their stated departure,
+under circumstances suggesting they were removed or asked to step down rather than
+voluntarily departing. This is not disclosed in the submission.
+
+DETECTION METHOD:
+Compare the founder's stated departure date from a prior company against Companies
+House officer resignation records for that company. A discrepancy of 3+ months
+between the two, combined with a LinkedIn departure description that does not match
+the company timeline (e.g. "left to pursue new venture" but the current company was
+not incorporated until 12 months after departure), warrants investigation.
+Check for press coverage of the prior company during the departure period for any
+news that would explain the timing.
+
+WHAT IT MEANS:
+A board-initiated founder removal is a serious event that carries specific risk signals
+for a new investment: (1) the founder may have management or interpersonal behaviours
+that caused the board to lose confidence — patterns that are likely to recur;
+(2) the founder's shareholders, co-founders, or employees at the prior company may
+have negative firsthand experience that is relevant to the current investment thesis;
+(3) the non-disclosure of a board removal — especially when the departure timing is
+clearly unusual — is a transparency failure. A founder who has been removed by a
+board and proactively discloses it with a clear account of what happened and what
+they learned is providing important information. A founder who conceals it is asking
+an investor to discover it during diligence and draw their own conclusions without
+the founder's framing — which is always worse for the founder.
+
+DISQUALIFYING WHEN:
+Evidence of a prior board removal exists AND the founder has not disclosed it AND
+the reason for removal, when researched, relates to financial mismanagement, investor
+relations failures, or dishonesty — behaviours that are directly relevant to
+the trust required in a new investor-founder relationship.
+
+MANAGEABLE WHEN:
+(a) The founder proactively discloses the removal in the submission with a specific,
+credible account of the circumstances — disagreement with investor direction, a
+co-founder conflict, or a board that wanted a different CEO profile for a later stage.
+(b) The removal occurred more than 7 years ago, the founder has since built and
+exited another company successfully, and there is no pattern of repeated removal.
+(c) The circumstances of removal are verifiably external — company ran out of capital,
+merger required a different CEO, regulatory event forced a leadership change.
+
+VERIFICATION:
+Search Companies House for the prior company and check the director resignation date
+for the founder. Cross-reference with their LinkedIn departure date. Search press
+archives for the prior company name + founder name during the departure period.
+If discrepancies are found, ask directly: "Can you walk us through your departure
+from [company] — our records suggest you left earlier than you have described."
+The response to the direct question is itself a data point.
+
+PATTERN LESSON:
+When a founder's Companies House resignation date does not align with their stated
+departure from a prior company, investigate the circumstances before forming a view
+on the team — the most important character signal is how the founder responds to
+the direct question, not the event itself.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T09: KEY PERSON CONCENTRATION IN A NON-FOUNDER EMPLOYEE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+A non-founder employee — a head of sales, lead engineer, head of customer success,
+or technical architect — is responsible for a majority of commercial relationships,
+technical IP, or customer retention, with no succession plan or institutional backup.
+Detectable when: customer names appear alongside a specific employee (not founder)
+in case studies; one engineer is described as "the person who built X" without
+co-authorship; or the submission describes an employee as "critical" or "irreplaceable"
+without describing how they would be replaced.
+
+WHAT IT MEANS:
+Key person concentration in a non-founder employee creates a risk that is in some
+ways more acute than founder dependency — founders have equity incentives and usually
+strong conviction about the mission; a non-founder employee can leave for a competitor
+at standard notice (typically 1–3 months) and take their institutional knowledge,
+customer relationships, or technical skills with them. The most damaging scenarios:
+(1) The lead engineer who holds the architectural knowledge of a complex technical
+system departs — replacement requires 6–12 months of onboarding, during which
+product development slows or stops; (2) the head of sales who owns 80% of the active
+pipeline departs — pipeline confidence drops and committed ARR becomes uncertain;
+(3) the head of customer success who is the primary relationship at 5 enterprise
+accounts departs — renewal risk at those accounts immediately increases.
+
+DISQUALIFYING WHEN:
+A single non-founder employee is responsible for more than 30% of active pipeline,
+more than 40% of customer relationships by ARR, or is the sole possessor of critical
+technical architecture knowledge AND the company does not have a documented succession
+or knowledge transfer plan AND the employee's equity stake is below standard market
+rate (creating an elevated attrition incentive).
+
+MANAGEABLE WHEN:
+(a) The key person is a co-founder or has co-founder-equivalent equity (above 3%)
+and strong mission alignment — the retention incentive is structurally embedded.
+(b) The company has documented processes, technical specifications, and customer
+playbooks that mean the departure of the individual would be painful but survivable
+within 3 months.
+(c) The key person is early in a long vesting schedule with significant unvested
+equity — the financial cost of departure is high and the retention risk is lower
+than the title suggests.
+
+VERIFICATION:
+Ask: "If [named employee] left tomorrow, what would be the impact on the business
+in the next 90 days? Who else knows what they know?" A founder who says "we'd be
+fine" about a described-as-critical employee is either not taking the question
+seriously or has built better redundancy than the submission implies. Either way,
+the specific answer is a data point about operational resilience.
+
+PATTERN LESSON:
+When a non-founder employee is described as critical to commercial relationships
+or technical architecture, assess their equity stake, vesting status, and tenure —
+low equity plus short remaining vesting is a key person departure signal that
+should be scored as HIGH risk regardless of the current relationship quality.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T10: REFERENCE CUSTOMERS ALL FOUNDER-CONNECTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+Every named reference customer in the submission has a direct prior relationship
+with the founding team — former employers, co-founders' business contacts, family
+businesses, or companies where a founder served as an advisor or board member —
+with no customer who came through an arm's-length commercial sales process.
+Detectable by cross-referencing named customer companies against founders' LinkedIn
+profiles, prior employers, and advisory roles.
+
+WHAT IT MEANS:
+The first 3–5 customers of a startup are almost always founder-connected — this is
+expected and not a flag in isolation. The flag triggers when all named reference
+customers are founder-connected and the company is presenting them as evidence of
+product-market fit, demand validation, or commercial traction. Founder-connected
+customers are not evidence of arm's-length commercial demand — they are evidence
+of the founder's network and their willingness to support a friend's company.
+Three specific distortions this creates: (1) pricing may be below market rate
+because the buyer is being friendly; (2) the sales process was not a commercial
+evaluation — the product was adopted as a favour and may not be used actively;
+(3) these customers cannot be asked to speak objectively to future buyers —
+their reference is coloured by the personal relationship.
+If the company is at Series A with all founder-connected customers, it has not
+yet proven it can sell to someone who did not previously know the founder.
+
+DISQUALIFYING WHEN:
+All 5 or more named customers are verifiably founder-connected AND the company is
+at Series A AND no arm's-length commercial win can be identified in the last 24 months
+AND the submission presents these customers as evidence of product-market fit. The
+combination of all four conditions means commercial traction has not been demonstrated.
+
+MANAGEABLE WHEN:
+(a) The company is at pre-seed or seed stage and all customers being founder-connected
+is expected — the flag is a watch item for the next stage, not a current disqualifier.
+(b) One or more founder-connected customers has provided a documented, arm's-length
+product evaluation and has chosen to continue paying above an agreed minimum — the
+relationship may have introduced the connection but the purchase decision was commercial.
+(c) A new customer in the last 6 months came through an inbound or outbound process
+with no prior founder relationship — the pattern is breaking, even if only once.
+
+VERIFICATION:
+Cross-reference every named customer against every founder's LinkedIn profile,
+Companies House directorships, and advisory roles. For any match, ask: "How did
+you first make contact with [customer]? Who made the buying decision and what
+evaluation process did they run?" An arm's-length buyer will have run a comparison,
+reviewed alternatives, and made a decision based on product merit — not a favour.
+
+PATTERN LESSON:
+When all named customers are verifiable as founder-connected, treat commercial
+traction as undemonstrated and look for the earliest stage at which an arm's-length
+customer acquisition occurred — the absence of any arm's-length win by Series A
+is a PMF concern, not a team concern.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T11: TEAM GROWTH OUTPACING REVENUE GROWTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+Headcount has grown at a faster rate than revenue for 3 or more consecutive quarters —
+observable when the submission discloses both headcount history and ARR history,
+or when the founding story describes significant hiring rounds that preceded revenue
+milestones. Calculable as: headcount growth rate % − revenue growth rate % = the
+overhire indicator. A positive number means the company is hiring ahead of revenue;
+a persistently positive number over 3 quarters means the gap is structural.
+
+WHAT IT MEANS:
+Hiring ahead of revenue is a deliberate strategy in some growth contexts — a company
+building an enterprise sales team ahead of a pipeline it expects to close, or scaling
+engineering capacity to build a product that will generate revenue in 9 months.
+The problem arises when headcount growth consistently outpaces revenue growth because:
+(1) revenue per employee is declining — the team is becoming less productive, not more;
+(2) burn multiple is increasing — each unit of new ARR is costing more capital to acquire;
+(3) the company has hired to a growth forecast that has not materialised, creating a
+cost base that cannot be sustained at the actual revenue level. The consequence is
+always the same: a correction event — either a layoff that damages culture and morale,
+or a fundraise at a punitive valuation to buy time for revenue to catch up.
+
+DISQUALIFYING WHEN:
+Headcount has grown more than 40% in the last 12 months AND ARR has grown less than
+20% in the same period AND burn multiple is above 3x AND the company is raising
+its next round based on a growth trajectory that requires the higher headcount
+to deliver — the capital efficiency assumption of the model is already broken.
+
+MANAGEABLE WHEN:
+(a) Headcount growth preceded revenue by design and the pipeline can explain the lag —
+a company that hired 10 enterprise salespeople in Q1 and is showing revenue conversion
+from those hires beginning in Q3 is executing a predictable model, not overhiring.
+(b) Headcount growth is in engineering for a product launch that occurs within
+6 months — the revenue impact of the engineering capacity is staged but identifiable.
+(c) The headcount includes a significant number of recent hires who have not yet
+reached full productivity — ramp time for enterprise sales is 6–9 months, and the
+headcount growth is inflated relative to the productive contribution during ramp.
+
+VERIFICATION:
+Request the headcount by function for the last 6 quarters alongside ARR for the same
+periods. Calculate revenue per employee quarter-on-quarter. A declining revenue per
+employee trend is the most concise summary of the problem. Ask: "What is your revenue
+per employee today compared to 12 months ago? And what is your target revenue per
+employee at the end of this funding period?"
+
+PATTERN LESSON:
+When headcount has grown faster than revenue for 3 or more consecutive quarters,
+calculate revenue per employee and burn multiple across the same period before
+accepting the company's explanation for the growth investment — the trend line
+is the most reliable predictor of the next quarterly result.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T12: VP SALES HIRED BEFORE PRODUCT-MARKET FIT IS DEMONSTRATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: MEDIUM
+
+SIGNAL:
+A VP Sales or Head of Sales has been hired and assigned a revenue target before
+the company has demonstrated repeatable sales without the founder — defined as
+3 or more arm's-length commercial wins closed by a non-founder salesperson. The VP
+Sales hire was made while the founder was still the primary closer and had not yet
+documented the sales process in a repeatable form.
+
+WHAT IT MEANS:
+A VP Sales is a scaling hire, not a building hire. Their job is to take a repeatable
+sales process and build a team around it — not to discover the sales motion from scratch.
+A VP Sales hired before PMF is demonstrated will try to apply the playbooks they
+know from their prior company to a sales motion that does not yet exist — creating
+three common failure modes: (1) they hire junior salespeople who fail because there
+is no defined ICP, pitch, or process to guide them; (2) they hit targets in month 1–3
+on their personal network, mask the underlying process problem, and the team quota
+collapses in month 4–6; (3) they correctly identify that the company does not have
+PMF, and leave within 9 months — which costs the company 6 months of their salary,
+an option grant, and the time to recruit their replacement. The VP Sales hire before
+PMF is one of the most commonly cited early hiring mistakes in post-mortem analyses
+of failed startups.
+
+DISQUALIFYING WHEN:
+A VP Sales has been hired AND has been in role for more than 6 months AND has not
+yet closed a single arm's-length commercial deal without the founder AND the company
+is presenting the VP Sales as evidence of commercial maturity in the fundraising process.
+
+MANAGEABLE WHEN:
+(a) The VP Sales has domain expertise that is genuinely additive to the sales process
+at this stage — for example, a CISO-turned-sales-leader at a cybersecurity company,
+where their credibility opens doors that no standard sales hire could — and their
+first deals are closing.
+(b) The VP Sales was hired with an explicit brief to work alongside the founder to
+document and systematise the sales process before scaling — a process-building role,
+not a team-scaling role.
+(c) The company has 5+ arm's-length commercial wins and the VP Sales hire is within
+the last 3 months — the timing is right, the execution is yet to be assessed.
+
+VERIFICATION:
+Ask: "Of your last 10 customer closings, how many were led by the VP Sales without
+the CEO in the room? And what is the VP Sales' quota attainment for the last two
+quarters?" A VP Sales who has been in role 6+ months and has not yet closed a
+deal without the founder is not adding the value the title implies.
+
+PATTERN LESSON:
+When a VP Sales is described as a key recent hire, ask for their quota attainment
+and the number of deals they have closed without the founder — time in role without
+a closed deal signals either wrong hire or pre-PMF stage, and both require the
+same follow-up.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T13: GEOGRAPHIC TEAM SPLIT WITHOUT CLEAR RATIONALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: MEDIUM
+
+SIGNAL:
+The founding team is split across 2 or more countries or cities — detectable from
+LinkedIn profiles showing different locations for co-founders, or from submission
+language referencing "our team in London and New York" or "our UK and US offices"
+at a stage (seed or early Series A) where geographic separation has no clear
+commercial or operational justification.
+
+WHAT IT MEANS:
+Geographic splits in early-stage founding teams are almost always explained by one
+of three things: a personal circumstance (a co-founder who cannot or will not relocate),
+a co-founder relationship that was formed across locations (online, academic conference),
+or a deliberate US/UK dual-market strategy. The first two are risk signals; the third
+is a strategy that must be evaluated on its own merits.
+The operational cost of geographic splitting at early stage is consistently
+underestimated: (1) collaboration is asynchronous and slower — product and commercial
+decisions take longer to make when the team is not in the same room; (2) culture
+is harder to build — the team naturally splits into geographic sub-groups with
+different norms and information flows; (3) the company often ends up with a
+"real" headquarters where the senior team spends most of their time and a secondary
+location that gradually becomes the home of whoever cannot or will not relocate —
+creating a two-tier team structure that damages morale and retention.
+
+DISQUALIFYING WHEN:
+The founding team is split across more than 2 geographies AND the company has fewer
+than 10 employees AND no clear market or operational reason exists for the geographic
+distribution AND the submission describes the split as "we're a remote-first company"
+without addressing the coordination cost — at this stage, remote-first is not a
+strategy, it is an accommodation.
+
+MANAGEABLE WHEN:
+(a) One co-founder is in the primary customer geography (e.g. US) and one is in
+the development geography (e.g. UK or Eastern Europe) — a deliberate GTM and talent
+cost arbitrage strategy with a clear plan for how it will be consolidated as the
+company scales.
+(b) The geographic split is temporary — a co-founder is relocating within 6 months
+and the split is a transition artefact.
+(c) The company is genuinely remote-native (developer tool, open-source, or PLG
+product) where geographic presence is not a core operational input and the team
+has demonstrated effective distributed collaboration.
+
+VERIFICATION:
+Check each co-founder's current LinkedIn location. Ask: "Where does the founding
+team spend the majority of their working time? And is there a plan to consolidate
+to one location?" The answer reveals whether the split is a strategic choice or
+a personal accommodation that has been reframed as strategy.
+
+PATTERN LESSON:
+When co-founders are in different countries without a stated market rationale,
+ask directly about the collaboration cadence and any plan to consolidate — the
+answer distinguishes between a deliberate two-market strategy and a co-founder
+relationship that is being managed across geographies by circumstance.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T14: FOUNDER ACADEMIC TITLE WITHOUT COMMERCIAL TRACK RECORD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: MEDIUM (context-dependent — LOW in deep tech, HIGH in consumer or GTM-led)
+
+SIGNAL:
+The founder leads with academic credentials — Professor, Reader, Principal Investigator,
+PhD, post-doctoral researcher — as their primary qualification for building the company,
+and the submission contains no evidence of prior commercial execution: no prior company
+built, no commercial role in industry, no revenue generated outside academia. The
+founder's LinkedIn or submission bio is dominated by academic publications, grants,
+and research positions rather than commercial achievements.
+
+WHAT IT MEANS:
+Academic excellence and commercial execution are distinct skill sets that overlap less
+than founders and investors often assume. A Professor with 50 peer-reviewed publications
+and a £3M research grant portfolio has demonstrated: the ability to identify a novel
+scientific problem, secure non-commercial funding from research bodies, manage a
+small team of PhD students and postdocs, and publish findings that survive peer review.
+None of these skills directly maps to: identifying a customer willing to pay for the
+problem's solution, selling that solution at a price that funds the company, managing
+a commercially driven team under financial pressure, or making decisions under
+uncertainty without the institutional support of a university.
+This flag is context-dependent: in deep tech, quantum, biotech, and advanced materials,
+academic founding is not a risk — the technology is the product and the founder's
+academic depth is the primary differentiator. In consumer, SaaS, fintech, and
+marketplace businesses, it is a HIGH risk because the primary challenge is
+not technical — it is commercial.
+
+DISQUALIFYING WHEN:
+The founder is an academic founding a consumer or SaaS business AND has no prior
+commercial role AND has not hired or partnered with a commercially experienced
+co-founder or COO AND is seeking a Series A with less than £500K ARR — the commercial
+execution gap is the critical path dependency and it is unaddressed.
+
+MANAGEABLE WHEN:
+(a) The company is a deep tech spinout where the technology is the core differentiator
+and academic depth is the primary credential — apply the Deep Tech framework.
+(b) The academic founder has a commercially experienced co-founder who owns the GTM
+function with a verifiable track record.
+(c) The academic founder has prior commercial experience that is not the headline
+of the submission — a Professor who spent 5 years in industry before returning
+to academia has relevant commercial reference points even if they are not leading
+the bio.
+(d) The company has already demonstrated commercial execution at seed stage —
+£500K+ ARR from arm's-length customers is evidence that the founder can sell,
+regardless of academic background.
+
+VERIFICATION:
+Search for the founder's full career history including industry roles before or during
+academia. Ask: "Have you ever been responsible for commercial revenue — either in a
+prior company or in an industry role — and if so, what was the context?" The question
+probes for commercial execution experience that may not be visible in an academic-led
+bio. If the answer is no, assess whether the commercial gap is addressed by co-founder
+or hire.
+
+PATTERN LESSON:
+When the founder is primarily academic and the business is commercial rather than
+deep tech, assess whether a commercially experienced co-founder or operator is
+present before weighting the team score — academic excellence is the right foundation
+for the technology but not for the sales motion.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLAG T15: NO VERIFIABLE REFERENCE FROM NAMED PRIOR EMPLOYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY: Team
+SEVERITY: HIGH
+
+SIGNAL:
+A founder claims a senior role — VP, Director, Head of, or equivalent — at a named
+prior employer that is verifiable as a real organisation, but no public record
+(LinkedIn endorsements, press mentions, company publications, conference speaker
+bios, or professional directory listings) confirms the founder held that specific
+role at that seniority level at that organisation during the stated tenure period.
+
+DETECTION METHOD:
+Search LinkedIn for the named employer's employee history and look for the founder's
+profile in their former employees. Search the named company's press releases and
+blog posts for the founder's name during the stated tenure. Search Google for
+the founder's name + named employer + role title. Search the named employer's
+website for historical content that would reference the founder at their stated level.
+A complete absence of any corroborating reference for a senior role at a major
+organisation after a 15-minute structured search is a flag — not proof of fabrication,
+but sufficient to require direct verification.
+
+WHAT IT MEANS:
+Senior roles at recognisable employers are verifiable — a VP at Goldman Sachs,
+a Director at Google, or a Head of Product at Monzo will appear in press coverage,
+conference agendas, LinkedIn endorsements, or internal publications in most cases.
+The complete absence of any corroborating evidence for a senior role is either
+explained by an unusual circumstance (classified government role, NDA-bound private
+equity position, extremely small company where the title was internally meaningful
+but externally invisible) or by embellishment. The distinction matters because:
+(1) if the role was at the claimed seniority and scale, it is the primary evidence
+that the founder can operate at that level — and if it cannot be verified, neither
+can the claim; (2) a founder who overstates a prior role will overstate other things.
+
+DISQUALIFYING WHEN:
+The unverifiable senior role is cited as the primary justification for why the
+founder is uniquely qualified to build this specific company AND no alternative
+evidence of comparable capability exists (no prior company, no visible product,
+no industry recognition) AND the founder is evasive when asked to provide a
+reference from the named employer.
+
+MANAGEABLE WHEN:
+(a) The founder immediately offers a named reference at the prior employer who can
+confirm the role — the gap is a public record issue, not a credential issue.
+(b) The role was at a company or in a context where public record would not be
+expected — government advisory role, early-stage startup, or private-market firm
+where external visibility is structurally low — and the explanation is coherent.
+(c) The role in question is peripheral to the investment thesis — a supporting
+credential rather than the primary justification for the founder's ability to
+execute in this market.
+
+VERIFICATION:
+Ask directly: "Could you provide the name and contact details of a manager or peer
+from your time at [named employer] who could speak to your role and scope?" An honest
+founder with a genuine senior role will immediately provide a name. Hesitation,
+deflection ("they've moved on"), or the offer of a self-selected junior colleague
+rather than a manager is a flag requiring escalation. The reference call itself —
+even if not conducted at this stage — is a standard diligence step.
+
+PATTERN LESSON:
+When a senior prior role is the primary credential justifying the team score and
+cannot be independently verified after a structured search, request a specific named
+reference from that role before completing the team assessment — the response to
+the request is itself a signal about transparency.
+
+═══════════════════════════════════════════════════════════════════════
+END OF RED FLAG LIBRARY — CATEGORY 2: TEAM
+15 flags. Apply all 15 mechanically to every deal submission.
+Next category: Market Red Flags (T16 — or M01 onwards).
+═══════════════════════════════════════════════════════════════════════

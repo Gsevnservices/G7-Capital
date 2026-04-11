@@ -10156,3 +10156,675 @@ END OF SECTOR INTELLIGENCE LIBRARIES — CONDENSED SUMMARIES
 For full benchmarks, red flags, failure patterns, founder questions,
 exit comparables, and regulatory detail: read the full sector library file.
 ═══════════════════════════════════════════════════════════════════════
+
+
+═══════════════════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════
+COMPONENT 8 — RED FLAG LIBRARY
+100 flags across 8 categories.
+Condensed signal and rule format.
+Full library files retained on disk.
+Built: April 2026. Version 1.0.
+Apply all 8 categories to every deal.
+CRITICAL flags are disqualifying.
+HIGH flags require explicit resolution.
+MEDIUM flags require noting.
+═══════════════════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════
+
+══════════════════════════════════════════════════════════════════════
+COMPONENT 8 — RED FLAG LIBRARY
+100 flags across 8 categories.
+Condensed signal and rule format.
+Full library files retained on disk.
+Built: April 2026. Version 1.0.
+Apply all 8 categories to every deal.
+CRITICAL flags are disqualifying.
+HIGH flags require explicit resolution.
+MEDIUM flags require noting.
+══════════════════════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 1: FINANCIAL RED FLAGS — 15 FLAGS (F01–F15)
+These signals are observable from financial statements, management accounts, or stated metrics in the submission.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+F01: REVENUE CONCENTRATION — TOP CUSTOMER ABOVE THRESHOLD
+SEVERITY: HIGH (single customer 30–50% of ARR) | CRITICAL (single customer above 50% of ARR)
+SIGNAL: Submission states, implies, or allows calculation that one named or unnamed customer represents 30% or more of current ARR — either through explicit disclosure, named case study revenue figures, or customer count vs ARR that implies concentration.
+DISQUALIFYING WHEN: The single customer represents more than 50% of ARR AND the company is pre-Series A AND the customer has not yet committed to a multi-year renewal AND there are no other customers with ACV above £20K.
+PATTERN LESSON: When a single customer represents more than 30% of ARR, calculate what the company's growth rate and NRR look like excluding that customer before accepting any headline metric.
+
+F02: ADJUSTED METRICS WITHOUT DISCLOSURE
+SEVERITY: HIGH
+SIGNAL: Submission presents "adjusted EBITDA," "adjusted gross margin," "adjusted burn," "contribution margin," or any profitability metric prefixed with "adjusted," "normalised," "pro forma," or "excluding" — without explicitly disclosing every line item being excluded and the total value of exclusions.
+DISQUALIFYING WHEN: The submission presents only adjusted metrics with no GAAP or unadjusted equivalent disclosed, AND the adjustments are not individually listed with values, AND the company is at Series A or beyond (where financial reporting standards should be established).
+PATTERN LESSON: When a submission uses any adjusted financial metric, request the unadjusted equivalent and the complete list of exclusions before using the metric in the screening analysis.
+
+F03: ARR INFLATION — PILOTS AND POCs INCLUDED
+SEVERITY: HIGH
+SIGNAL: Submission states an ARR figure that, when cross-referenced with disclosed customer count, named customer logos, pipeline description, or stage of commercialisation, implies inclusion of pilots, POCs, LOIs, verbal commitments, or free trials — i.e.
+DISQUALIFYING WHEN: The ARR figure includes any revenue from a customer that has not signed a commercial agreement with a stated minimum commitment and invoice schedule AND the inflation represents more than 15% of total stated ARR AND the company is at Series A or beyond.
+PATTERN LESSON: When ARR per customer implied by the submission materially exceeds the stated ACV range, or when pipeline events are described as affecting ARR, assume ARR is inflated and request signed contracts for the top 5 revenue contributors before proceeding.
+
+F04: DECLINING GROSS MARGIN TREND
+SEVERITY: HIGH
+SIGNAL: Submission discloses gross margin figures across multiple periods — quarterly or annually — showing a decline of 3 or more percentage points over 3 or more consecutive quarters; or a current gross margin is materially below the sector benchmark with no explanation offered.
+DISQUALIFYING WHEN: Gross margin has declined more than 8 percentage points over 4 consecutive quarters AND the company cannot identify the specific COGS driver causing the decline AND is claiming a valuation multiple consistent with a high-margin software business.
+PATTERN LESSON: When gross margin has declined for 3 or more consecutive quarters, request the COGS breakdown and identify the specific line item causing the compression before accepting the company's explanation of the trend.
+
+F05: BURN MULTIPLE ABOVE 2x AT SERIES A AND BEYOND
+SEVERITY: HIGH (2–3x) | CRITICAL (above 4x with declining growth)
+SIGNAL: Net burn divided by net new ARR for the trailing 12 months exceeds 2.0x — i.e.
+DISQUALIFYING WHEN: Burn multiple above 4x for two consecutive quarters AND YoY ARR growth is declining AND the company is raising its next round at a higher valuation than the previous — the growth story is not supported by the capital efficiency, and the valuation is not sustainable on the current trajectory.
+PATTERN LESSON: When burn multiple exceeds 2x, verify whether growth rate is accelerating or decelerating — accelerating growth at 2x burn is a growth investment; decelerating growth at 2x burn is a structural efficiency problem that compounds.
+
+F06: RUNWAY BELOW 12 MONTHS
+SEVERITY: CRITICAL (below 6 months) | HIGH (6–12 months)
+SIGNAL: Cash on hand divided by monthly net burn produces a runway figure below 12 months — observable when both cash balance and burn rate are stated, or when the last funding date, amount raised, and monthly burn allow estimation of current cash position.
+DISQUALIFYING WHEN: Runway is below 6 months AND the company is not yet in active fundraising AND has no signed term sheets AND has no existing investor committed to a bridge.
+PATTERN LESSON: When runway is calculable at below 12 months, confirm whether the company is already in a closing process before assessing the submission — a company that is 60 days from close with a strong lead is a different risk profile from a company with no active process.
+
+F07: REVENUE RECOGNITION MISMATCH
+SEVERITY: HIGH
+SIGNAL: Submission states or implies that revenue from multi-year contracts is recognised at signing (upfront) rather than ratably over the contract period — detectable when: (a) Total Contract Value (TCV) and Annual Recurring Revenue (ARR) are presented as equivalent or ARR is described as "booked"; (b) revenue in a single quarter materially exceeds the run-rate implied by the stated ARR; (c) the company describes "recognising" a multi-year deal at signing as a revenue event.
+DISQUALIFYING WHEN: The company is at Series A or beyond AND has not engaged an auditor or accountant to establish a compliant revenue recognition policy AND cannot produce an ARR schedule distinct from a TCV schedule.
+PATTERN LESSON: When a submission uses the words "booked," "recognised," or "signed" to describe ARR additions, verify that the ARR figure reflects annualised contract value and not total contract value before using any revenue metric.
+
+F08: DEFERRED REVENUE DECLINING
+SEVERITY: MEDIUM
+SIGNAL: Deferred revenue balance on the balance sheet has declined quarter-on-quarter for 2 or more consecutive quarters — observable when balance sheet data is included in the submission or management accounts, or when a company describes a shift from multi-year to monthly/annual contracts in the same period.
+DISQUALIFYING WHEN: Deferred revenue has declined for 3 or more consecutive quarters AND the company has simultaneously shifted from annual prepay to monthly billing AND logo churn is above 10% annually — all three together indicate customers are no longer willing to commit to the product at annual terms, which is a retention crisis in early form.
+PATTERN LESSON: When deferred revenue is declining and ARR is growing, request the contract length mix to determine whether customers are becoming less willing to commit — deferred revenue is a leading indicator that arrives 2–4 quarters before the ARR impact.
+
+F09: GROSS MARGIN BELOW SECTOR THRESHOLD WITH INCONSISTENT VALUATION
+SEVERITY: HIGH
+SIGNAL: Stated gross margin is materially below the sector benchmark for the claimed business model — AND the company is seeking or has accepted a valuation multiple consistent with a high-margin business of its type.
+DISQUALIFYING WHEN: Gross margin is below 50% AND the company is seeking a valuation above 15x ARR AND cannot identify a specific COGS reduction driver that will increase gross margin to above 65% within 18 months AND the business model is described as SaaS or software.
+PATTERN LESSON: When gross margin is below the sector threshold, calculate what the gross margin will be at 3x current ARR under each COGS assumption before assessing whether the requested valuation multiple is supportable.
+
+F10: CUSTOMER ACQUISITION COST RISING WHILE LTV IS FLAT
+SEVERITY: HIGH
+SIGNAL: Submission discloses or allows calculation of CAC across multiple periods — showing an increase of 20% or more over 2 or more consecutive quarters — while LTV (or its proxy: ACV × gross margin ÷ logo churn rate) is flat or declining over the same period.
+DISQUALIFYING WHEN: CAC has increased more than 40% over 4 consecutive quarters AND LTV/CAC ratio is below 2x AND the company cannot identify the specific channel or driver causing the increase AND is projecting LTV/CAC improvement without a structural channel change planned.
+PATTERN LESSON: When CAC is rising and the company attributes it to a planned investment in growth, verify that LTV/CAC ratio is maintained — if LTV has not increased with CAC, the investment in growth is destroying unit economics, not funding them.
+
+F11: NET REVENUE RETENTION DECLINING TREND
+SEVERITY: HIGH
+SIGNAL: NRR has declined more than 5 percentage points over 2 or more consecutive quarters — even if the current NRR remains above 100%.
+DISQUALIFYING WHEN: NRR has declined more than 10 percentage points over 3 consecutive quarters AND the decline is driven by both contraction and churn (not just slower expansion) AND the company does not have a documented customer success programme with QBR cadences that would catch retention risk before renewal.
+PATTERN LESSON: When NRR is declining across consecutive periods, decompose into gross renewal rate and expansion rate separately — gross renewal rate decline indicates a retention crisis; expansion rate decline indicates a product depth problem — each requires a different response.
+
+F12: PAYABLES CONCENTRATION — SINGLE SUPPLIER ABOVE 40% OF COGS
+SEVERITY: MEDIUM
+SIGNAL: A single vendor, cloud provider, API supplier, or infrastructure partner is responsible for more than 40% of cost of goods sold — detectable when the submission mentions a specific infrastructure dependency (e.g.
+DISQUALIFYING WHEN: A single supplier represents more than 60% of COGS AND the supplier has raised prices in the last 12 months AND the company has no contractual protection against further price increases AND there is no viable alternative supplier that could be integrated within 6 months.
+PATTERN LESSON: When a product's COGS is dominated by a single API provider or infrastructure partner, model the gross margin impact of a 50% price increase from that supplier before accepting the stated margin as the sustainable operating figure.
+
+F13: RELATED PARTY TRANSACTIONS — UNDISCLOSED OR UNDERPLAYED
+SEVERITY: HIGH
+SIGNAL: A significant portion of revenue — more than 10% — comes from customers with a direct relationship to the founding team: founders' previous employers, founders' family businesses, co-founders' other ventures, investors' own portfolio companies, or any entity where the purchasing decision was influenced by a personal or financial relationship rather than arm's-length commercial evaluation.
+DISQUALIFYING WHEN: Related party transactions are identified and were not disclosed in the submission AND represent more than 20% of ARR AND the affected customers are being used as reference accounts or evidence of commercial traction in the submission materials.
+PATTERN LESSON: When named customers cannot be verified as arm's-length through public information, ask directly whether any revenue comes from relationships with the founding team before using that revenue as evidence of commercial traction.
+
+F14: CAPITALISED R&D MASKING BURN
+SEVERITY: MEDIUM
+SIGNAL: Submission discloses a capitalised R&D or software development cost line item on the balance sheet — OR the company reports an EBITDA or operating loss that is materially lower than cash burn, in a company without significant fixed asset purchases — suggesting that development costs are being capitalised rather than expensed in the period incurred.
+DISQUALIFYING WHEN: Capitalised R&D represents more than 25% of total reported operating expenses AND the company is presenting EBITDA-based burn metrics to investors without disclosing that cash burn is materially higher AND the company is at Series A or beyond where institutional accounting standards should be applied.
+PATTERN LESSON: When reported operating loss is materially lower than disclosed monthly cash burn, request the balance sheet to identify capitalised R&D and recalculate all efficiency metrics using the cash-basis burn figure.
+
+F15: CASH FLOW POSITIVE BUT ACCRUAL NEGATIVE
+SEVERITY: MEDIUM
+SIGNAL: Submission describes the company as "cash flow positive" or "cash generative" while simultaneously disclosing a net income or operating loss that is materially negative — a gap that is unexplained by non-cash items (depreciation, amortisation, or stock-based compensation).
+DISQUALIFYING WHEN: The company describes itself as "cash flow positive" as evidence of financial health in a fundraising context AND deferred revenue has been declining for 2+ quarters (indicating the cash positive position is temporary drawdown) AND accrual-basis losses are more than 2x operating cash flow positive — the accounting basis of the "positive" claim is misleading to investors.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 2: TEAM RED FLAGS — 15 FLAGS (T01–T15)
+These signals are observable from submitted CVs, LinkedIn profiles, Companies House directorships, and team section of the deck.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+T01: FOUNDER BACKGROUND UNVERIFIABLE
+SEVERITY: HIGH
+SIGNAL: Key credentials claimed in the submission — specific employer names, role titles, revenue figures managed, deals closed, or qualifications — cannot be independently confirmed through LinkedIn, company websites, Companies House, press coverage, academic institution records, or other public sources.
+DISQUALIFYING WHEN: A specific credential is cited as the primary reason the team is qualified to build this company — "we are uniquely positioned because our CEO ran [X division] at [Y company]" — and that credential cannot be confirmed through any public source after a reasonable search effort (20+ minutes of structured verification).
+PATTERN LESSON: When a key credential underpins the team's right to win in a specific market, verify it independently before weighting the team section of the screening note — unverifiable credentials are treated as unconfirmed, not as confirmed.
+
+T02: SERIAL FOUNDER WITH UNDISCLOSED PRIOR FAILURES
+SEVERITY: HIGH
+SIGNAL: The founder's LinkedIn profile, Companies House record, or Crunchbase profile reveals one or more prior companies that were dissolved, placed into administration, or quietly wound down — none of which are mentioned in the submission.
+DISQUALIFYING WHEN: The prior company was dissolved within the last 24 months AND the circumstances of dissolution are not disclosed AND the current company is in the same sector or targeting the same customer type as the failed company — suggesting the failure was not a learning event but a repeated attempt at a fundamentally flawed model.
+PATTERN LESSON: When Companies House reveals a dissolved prior company not mentioned in the submission, treat the non-disclosure as the primary flag — request the founder's account of the venture before assessing the business itself.
+
+T03: FOUNDING TEAM ALL FROM SAME PROFESSIONAL BACKGROUND
+SEVERITY: MEDIUM
+SIGNAL: All co-founders share the same primary professional background — all engineers from the same company, all McKinsey consultants, all academics from the same department, all ex-bankers from the same team — with no complementary skill set visibly present in the founding team to cover the other core functions of building a company.
+DISQUALIFYING WHEN: All founders share the same background AND the business requires expertise in the missing area as a critical path dependency — for example, an all-engineer team building enterprise software for financial services buyers where regulatory domain knowledge and sales credibility with CISOs are essential to close the first deal.
+PATTERN LESSON: When all founders share the same professional background, identify the missing function and ask how the company plans to fill it before assessing the team score — the answer reveals whether the founders understand their own limitation.
+
+T04: KEY TECHNICAL ROLE UNFILLED AT SERIES A
+SEVERITY: HIGH
+SIGNAL: A company at Series A stage — defined as £1M+ ARR or an announced Series A round — does not have a named CTO or VP Engineering in the founding team or senior leadership, or the person holding that role has fewer than 3 years of engineering leadership experience and has never built or managed a team of more than 5 engineers.
+DISQUALIFYING WHEN: The company is at Series A AND the CTO role is described as "being recruited" AND the current engineering team is above 8 people AND the product has experienced visible performance or reliability issues cited in customer feedback — the leadership gap is already causing product quality risk.
+PATTERN LESSON: When no experienced technical leader is present at Series A, model the engineering scaling risk explicitly — the absence of technical leadership is a compounding cost that gets more expensive to fix at every subsequent funding stage.
+
+T05: EXCESSIVE EARLY DILUTION
+SEVERITY: MEDIUM
+SIGNAL: The founding team collectively owns less than 50% of the company at seed stage before the current funding round — detectable when the cap table is disclosed in the submission, or when the founding story involves multiple pre-seed investment rounds, convertible notes, or significant advisor equity grants that collectively dilute the founders below the threshold.
+DISQUALIFYING WHEN: Combined founder ownership is below 40% at seed stage AND more than 5% of the cap table is held by advisors with no clear commercial deliverable attached AND the company is seeking a Series A from institutional investors — because institutional VCs typically require 70–80% founder ownership at seed entry for the long-term dilution model to work.
+PATTERN LESSON: When founders collectively own less than 50% at seed stage, model their ownership trajectory through Series A and B and assess whether residual ownership at exit provides sufficient motivation for the level of commitment the company requires.
+
+T06: NO VESTING SCHEDULE DISCLOSED FOR FOUNDING TEAM
+SEVERITY: HIGH
+SIGNAL: The submission does not disclose vesting terms for the founding team — either because the deck has no cap table information and no mention of vesting, or because when prompted, the founders describe equity as fully vested or already issued without a time-based or milestone-based vesting schedule attached to founder shares.
+DISQUALIFYING WHEN: The company has 2 or more co-founders AND no vesting schedule is in place for any of them AND the company is seeking a Series A from institutional investors — because every institutional investor will require vesting to be established before closing, and if vesting must be retrofitted onto a fully-issued cap table, it requires each co-founder's consent and creates legal complexity that delays and sometimes destroys the round.
+PATTERN LESSON: When vesting terms are not disclosed in a multi-founder company, treat this as a CRITICAL structural question and require written confirmation of vesting schedules before any investment committee discussion — retrofit vesting after a co-founder departure is orders of magnitude harder than establishing it before.
+
+T07: ADVISOR EQUITY WITHOUT DELIVERABLES
+SEVERITY: MEDIUM
+SIGNAL: The submission lists an advisory board whose collective equity holdings represent 5% or more of the fully diluted cap table — and no specific deliverable, committed time, or milestone is attached to any individual advisor's role.
+DISQUALIFYING WHEN: Advisors collectively hold more than 8% of the fully diluted cap table AND the company is at Series A AND no advisor is described with a specific past deliverable or active current commitment AND the advisor equity is presented in the deck as evidence of the team's strength — the credentialing substitution problem is most serious when the underlying team has verifiable gaps.
+PATTERN LESSON: When advisors hold more than 5% collectively, request a contribution log for each advisor — if no specific contribution is identifiable, treat the equity as wasted dilution and reduce the team score accordingly.
+
+T08: FOUNDER PREVIOUSLY REMOVED BY BOARD — UNDISCLOSED
+SEVERITY: HIGH
+SIGNAL: Public record — press coverage, Companies House resignation date that does not align with stated tenure, LinkedIn date discrepancy, or investor community knowledge — indicates that a founder left a prior company earlier than their stated departure, under circumstances suggesting they were removed or asked to step down rather than voluntarily departing.
+DISQUALIFYING WHEN: Evidence of a prior board removal exists AND the founder has not disclosed it AND the reason for removal, when researched, relates to financial mismanagement, investor relations failures, or dishonesty — behaviours that are directly relevant to the trust required in a new investor-founder relationship.
+PATTERN LESSON: When a founder's Companies House resignation date does not align with their stated departure from a prior company, investigate the circumstances before forming a view on the team — the most important character signal is how the founder responds to the direct question, not the event itself.
+
+T09: KEY PERSON CONCENTRATION IN A NON-FOUNDER EMPLOYEE
+SEVERITY: HIGH
+SIGNAL: A non-founder employee — a head of sales, lead engineer, head of customer success, or technical architect — is responsible for a majority of commercial relationships, technical IP, or customer retention, with no succession plan or institutional backup.
+DISQUALIFYING WHEN: A single non-founder employee is responsible for more than 30% of active pipeline, more than 40% of customer relationships by ARR, or is the sole possessor of critical technical architecture knowledge AND the company does not have a documented succession or knowledge transfer plan AND the employee's equity stake is below standard market rate (creating an elevated attrition incentive).
+PATTERN LESSON: When a non-founder employee is described as critical to commercial relationships or technical architecture, assess their equity stake, vesting status, and tenure — low equity plus short remaining vesting is a key person departure signal that should be scored as HIGH risk regardless of the current relationship quality.
+
+T10: REFERENCE CUSTOMERS ALL FOUNDER-CONNECTED
+SEVERITY: HIGH
+SIGNAL: Every named reference customer in the submission has a direct prior relationship with the founding team — former employers, co-founders' business contacts, family businesses, or companies where a founder served as an advisor or board member — with no customer who came through an arm's-length commercial sales process.
+DISQUALIFYING WHEN: All 5 or more named customers are verifiably founder-connected AND the company is at Series A AND no arm's-length commercial win can be identified in the last 24 months AND the submission presents these customers as evidence of product-market fit.
+PATTERN LESSON: When all named customers are verifiable as founder-connected, treat commercial traction as undemonstrated and look for the earliest stage at which an arm's-length customer acquisition occurred — the absence of any arm's-length win by Series A is a PMF concern, not a team concern.
+
+T11: TEAM GROWTH OUTPACING REVENUE GROWTH
+SEVERITY: HIGH
+SIGNAL: Headcount has grown at a faster rate than revenue for 3 or more consecutive quarters — observable when the submission discloses both headcount history and ARR history, or when the founding story describes significant hiring rounds that preceded revenue milestones.
+DISQUALIFYING WHEN: Headcount has grown more than 40% in the last 12 months AND ARR has grown less than 20% in the same period AND burn multiple is above 3x AND the company is raising its next round based on a growth trajectory that requires the higher headcount to deliver — the capital efficiency assumption of the model is already broken.
+PATTERN LESSON: When headcount has grown faster than revenue for 3 or more consecutive quarters, calculate revenue per employee and burn multiple across the same period before accepting the company's explanation for the growth investment — the trend line is the most reliable predictor of the next quarterly result.
+
+T12: VP SALES HIRED BEFORE PRODUCT-MARKET FIT IS DEMONSTRATED
+SEVERITY: MEDIUM
+SIGNAL: A VP Sales or Head of Sales has been hired and assigned a revenue target before the company has demonstrated repeatable sales without the founder — defined as 3 or more arm's-length commercial wins closed by a non-founder salesperson.
+DISQUALIFYING WHEN: A VP Sales has been hired AND has been in role for more than 6 months AND has not yet closed a single arm's-length commercial deal without the founder AND the company is presenting the VP Sales as evidence of commercial maturity in the fundraising process.
+PATTERN LESSON: When a VP Sales is described as a key recent hire, ask for their quota attainment and the number of deals they have closed without the founder — time in role without a closed deal signals either wrong hire or pre-PMF stage, and both require the same follow-up.
+
+T13: GEOGRAPHIC TEAM SPLIT WITHOUT CLEAR RATIONALE
+SEVERITY: MEDIUM
+SIGNAL: The founding team is split across 2 or more countries or cities — detectable from LinkedIn profiles showing different locations for co-founders, or from submission language referencing "our team in London and New York" or "our UK and US offices" at a stage (seed or early Series A) where geographic separation has no clear commercial or operational justification.
+DISQUALIFYING WHEN: The founding team is split across more than 2 geographies AND the company has fewer than 10 employees AND no clear market or operational reason exists for the geographic distribution AND the submission describes the split as "we're a remote-first company" without addressing the coordination cost — at this stage, remote-first is not a strategy, it is an accommodation.
+PATTERN LESSON: When co-founders are in different countries without a stated market rationale, ask directly about the collaboration cadence and any plan to consolidate — the answer distinguishes between a deliberate two-market strategy and a co-founder relationship that is being managed across geographies by circumstance.
+
+T14: FOUNDER ACADEMIC TITLE WITHOUT COMMERCIAL TRACK RECORD
+SEVERITY: MEDIUM (context-dependent — LOW in deep tech, HIGH in consumer or GTM-led)
+SIGNAL: The founder leads with academic credentials — Professor, Reader, Principal Investigator, PhD, post-doctoral researcher — as their primary qualification for building the company, and the submission contains no evidence of prior commercial execution: no prior company built, no commercial role in industry, no revenue generated outside academia.
+DISQUALIFYING WHEN: The founder is an academic founding a consumer or SaaS business AND has no prior commercial role AND has not hired or partnered with a commercially experienced co-founder or COO AND is seeking a Series A with less than £500K ARR — the commercial execution gap is the critical path dependency and it is unaddressed.
+PATTERN LESSON: When the founder is primarily academic and the business is commercial rather than deep tech, assess whether a commercially experienced co-founder or operator is present before weighting the team score — academic excellence is the right foundation for the technology but not for the sales motion.
+
+T15: NO VERIFIABLE REFERENCE FROM NAMED PRIOR EMPLOYER
+SEVERITY: HIGH
+SIGNAL: A founder claims a senior role — VP, Director, Head of, or equivalent — at a named prior employer that is verifiable as a real organisation, but no public record (LinkedIn endorsements, press mentions, company publications, conference speaker bios, or professional directory listings) confirms the founder held that specific role at that seniority level at that organisation during the stated tenure period.
+DISQUALIFYING WHEN: The unverifiable senior role is cited as the primary justification for why the founder is uniquely qualified to build this specific company AND no alternative evidence of comparable capability exists (no prior company, no visible product, no industry recognition) AND the founder is evasive when asked to provide a reference from the named employer.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 3: MARKET RED FLAGS — 10 FLAGS (M01–M10)
+These signals are observable from the market analysis, TAM/SAM framing, and competitive landscape sections of the submission.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+M01: NO CREDIBLE WHY NOW
+SEVERITY: HIGH
+SIGNAL: The submission cannot articulate a specific enabling event — a regulatory change, a technology inflection, a cost threshold crossed, a behaviour shift — that occurred in the last 36 months and created this market opportunity now, where it did not exist or was not viable 5 years ago.
+DISQUALIFYING WHEN: The submission contains no Why Now rationale AND the market has existed in recognisable form for more than 7 years AND at least two well-funded companies have already attempted the same product category — the combination suggests not a timing inflection but a repeated entry into a market that has not been cracked, with no new structural advantage.
+PATTERN LESSON: When the Why Now is absent or described in general terms, ask the founder to name the specific event in the last 36 months that created the window — the specificity and confidence of the answer determines whether timing is a structural advantage or an assumption.
+
+M02: MARKET DEFINED TOO BROADLY
+SEVERITY: MEDIUM
+SIGNAL: The TAM figure in the submission is sourced from an industry report that measures the total size of a broad industry category rather than the specific segment this product addresses at this price point for this buyer profile.
+DISQUALIFYING WHEN: The stated TAM is more than 20x the implied SAM (calculated as: ACV × realistic buyer universe in the company's primary market) AND the company is seeking Series A capital at a valuation that implies a 10x return requiring £500M+ ARR — the return requirement cannot be achieved within the realistic addressable market.
+PATTERN LESSON: When the TAM figure comes from a broad industry report, calculate the implied SAM from buyer universe × ACV and test whether the investment thesis survives the smaller number before accepting the reported TAM as the addressable opportunity.
+
+M03: PRIOR FAILED ATTEMPTS UNADDRESSED
+SEVERITY: HIGH
+SIGNAL: Two or more companies have raised venture capital, built a product in this exact category, and subsequently failed (shut down, pivoted away entirely, or been acquired at distressed valuation) — and the submission does not acknowledge these prior attempts or explain what structural difference makes this attempt different.
+DISQUALIFYING WHEN: Three or more funded companies have failed in this exact category within the last 7 years AND the current submission does not acknowledge any of them AND the current company cannot articulate a structural difference from the prior attempts beyond "better execution" or "we have a better team" — because execution quality alone is not a structural market insight.
+PATTERN LESSON: When the product category has prior funded failures, present the specific companies and ask the founder to explain the structural difference — a founder who cannot name or explain the prior failures has not done the market research that underpins the investment thesis.
+
+M04: MARKET CONSOLIDATING AROUND INCUMBENTS
+SEVERITY: HIGH
+SIGNAL: The addressable market is in an active consolidation phase — 2 or more large players have made acquisitions of the category's earlier startups within the last 24 months, the number of independent funded competitors has declined, and press coverage of the category has shifted from "emerging market" to "dominated by X and Y." Detectable from Crunchbase M&A data, press coverage of the category, and the competitive landscape described in the submission.
+DISQUALIFYING WHEN: The category has seen 3 or more M&A transactions in the last 24 months AND the acquirers include at least 2 of the company's potential exit counterparties AND the company does not have a differentiation that is materially distinct from the acquired products — because the exit pathway has narrowed to a small number of buyers who have already made their strategic bets.
+PATTERN LESSON: When a category shows 2 or more M&A transactions among potential exit counterparties in the last 24 months, assess whether the consolidation is creating a closing window or a counter-cycle opportunity — the two scenarios require opposite investment decisions.
+
+M05: REGULATORY DEPENDENCY FOR MARKET EXISTENCE
+SEVERITY: CRITICAL
+SIGNAL: The entire commercial opportunity depends on a specific regulation, government mandate, or subsidy regime remaining in place — AND that regulation or mandate is currently under active review, facing political challenge, or subject to a consultation process that could result in its withdrawal or significant modification within the investment horizon.
+DISQUALIFYING WHEN: More than 60% of the company's current or projected ARR comes from a compliance obligation created by a single specific regulation AND that regulation is currently subject to an active government consultation, statutory review, or legal challenge that could result in its removal or significant modification within 36 months.
+PATTERN LESSON: When the entire market opportunity is attributed to a specific regulation, verify whether the regulation is under active review and whether the product delivers value independently of the compliance obligation — the answers determine whether the company is building a business or a regulatory arbitrage.
+
+M06: GEOGRAPHY TOO SMALL FOR VENTURE RETURNS
+SEVERITY: HIGH
+SIGNAL: The company's primary addressable market — applying the correct buyer universe and ACV — is insufficient to produce a venture-scale return (£100M+ ARR or £500M+ enterprise value) even at full market penetration within the company's stated geography, and the submission contains no credible path to market expansion beyond the primary geography.
+DISQUALIFYING WHEN: The realistic SAM (buyer universe × ACV) in the primary geography is below £30M AND the submission contains no evidence of a credible expansion plan beyond the primary geography AND the company is seeking venture capital at a valuation implying a £100M+ exit.
+PATTERN LESSON: When the stated geography is UK-only or a single country, calculate the realistic SAM from buyer universe × ACV before assessing growth rate — a company growing at 100% annually in a market that caps at £15M ARR is not a venture investment regardless of the growth trajectory.
+
+M07: MARKET TIMING PEAK ALREADY PASSED
+SEVERITY: HIGH
+SIGNAL: Industry-level data — VC investment into the category, media coverage volume, search trend data, or disclosed revenue growth rates of the category's public comparables — shows a clear peak 2–3 years ago followed by a sustained decline, while the company in the submission is entering the category for the first time or has only been operating for 12–18 months.
+DISQUALIFYING WHEN: Industry-level VC investment into the category has declined more than 50% from its 3-year peak AND the company is entering the category with less than £500K ARR AND has no structural differentiation from the companies that built the category during its growth phase — a late entrant with no differentiation in a declining category faces two headwinds simultaneously: weak market and strong competition.
+PATTERN LESSON: When VC investment into the category peaked more than 2 years ago and has since declined, assess whether the company has a structural advantage that compensates for adverse timing — late entry without differentiation in a declining category is one of the most common patterns in deals that fail to reach Series B.
+
+M08: TARGET CUSTOMER DOES NOT HAVE BUDGET FOR THIS CATEGORY
+SEVERITY: MEDIUM
+SIGNAL: The stated target customer type does not typically have an existing budget allocated to the product category — meaning every sale requires the customer to create a new budget line rather than redirecting spend from an existing category.
+DISQUALIFYING WHEN: The target customer is a company with fewer than 20 employees AND the ACV is above £10K AND the product category does not have an established budget precedent in companies of that size AND there is no evidence in the submission that customers have created new budget lines to pay for the product — the sales story is theoretical.
+PATTERN LESSON: When the target customer type does not have an established budget category for the product, verify whether existing customers are paying from a pre-existing budget line or from a new discretionary allocation — the difference determines the structural durability of the revenue and the length of the sales cycle.
+
+M09: MARKET REQUIRES SIMULTANEOUS BEHAVIOUR CHANGE AT SCALE
+SEVERITY: MEDIUM
+SIGNAL: The product's core value proposition only materialises when a critical mass of users, suppliers, or buyers adopts it simultaneously — before this critical mass is reached, the product delivers little or no value to individual early adopters, creating a cold start problem that the company has not yet solved.
+DISQUALIFYING WHEN: The product delivers zero standalone value to a single early adopter AND the company has not subsidised one side of the market AND critical mass has not been achieved in any defined geography or customer segment AND the company is at Series A or beyond — meaning the cold start problem has persisted through seed without resolution.
+PATTERN LESSON: When the core value proposition requires simultaneous adoption by multiple parties, verify whether the company has achieved critical mass in any segment and has a documented strategy for each subsequent segment — the absence of a specific critical mass milestone is a cold start problem that does not resolve through additional capital alone.
+
+M10: COMPETITIVE LANDSCAPE OMITS FUNDED COMPETITORS
+SEVERITY: HIGH
+SIGNAL: The submission's competitive analysis — whether a 2x2 matrix, a list, or a narrative description — omits one or more competitors that are (a) verifiably operating in the same product category, (b) have raised more than £2M in disclosed funding, and (c) are identifiable within 5 minutes of a basic Crunchbase or Google search for the product category.
+DISQUALIFYING WHEN: A funded competitor with more than £5M raised and materially similar product is omitted from the competitive analysis AND when the omission is identified, the founder either cannot explain the competitor's approach or provides an explanation that reveals they were unaware of a major competitive development (e.g.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 4: PRODUCT RED FLAGS — 10 FLAGS (P01–P10)
+These signals are observable from the product description, technical architecture, and integration claims in the submission.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+P01: NO WORKING PRODUCT DEMO AT SERIES A OR BEYOND
+SEVERITY: HIGH
+SIGNAL: A company at Series A or beyond — defined as £1M+ ARR or a disclosed Series A funding round — is unable to provide a live product demo on request, offering instead screenshots, mockups, pre-recorded video, or a staged environment that does not reflect the current production product.
+DISQUALIFYING WHEN: The company has stated ARR above £500K AND cannot provide any form of live product access or demo within 5 business days of request AND the submission contains feature descriptions that appear to be future-state rather than current-state — the ARR claim is not consistent with a product that cannot be demonstrated.
+PATTERN LESSON: When a company at Series A cannot provide a live product demo within a standard timeframe, verify that the ARR claim is consistent with the product's actual state before proceeding — the inability to demo a live product at this stage is a product completeness signal, not a scheduling issue.
+
+P02: CORE FEATURE BUILT ON A SINGLE THIRD-PARTY API
+SEVERITY: HIGH
+SIGNAL: The primary value-creating feature of the product — the capability that customers pay for — is entirely dependent on a single third-party API whose pricing, availability, or terms of service could change unilaterally.
+DISQUALIFYING WHEN: More than 70% of the core product's primary value-creating feature is dependent on a single third-party API AND that provider has launched or announced a competing product in the last 24 months AND the vendor has no documented roadmap for building a proprietary alternative or adding a second provider — the platform displacement risk is no longer theoretical.
+PATTERN LESSON: When the core product value is delivered through a single third-party API, model the gross margin impact of a 50% price increase from that provider and ask whether the provider has launched a competing product — the two questions together determine the severity of the dependency.
+
+P03: TECHNICAL DEBT — FULL REBUILD ACKNOWLEDGED
+SEVERITY: HIGH
+SIGNAL: The submission, CTO note, or technical architecture description explicitly acknowledges that the current product requires a complete rewrite or rebuild before it can scale to enterprise use or handle the next order of magnitude of usage — or the description of the technical architecture uses language that implies a rebuild requirement ("we're currently on a monolith that won't scale," "we're in the process of moving to a microservices architecture," "v2 of the product is being built from scratch").
+DISQUALIFYING WHEN: A complete rebuild is acknowledged as necessary AND the rebuild timeline is estimated at more than 12 months AND the company's current burn will be exhausted before the rebuild is complete AND the company is using this fundraise to fund the rebuild rather than to accelerate commercial growth — the capital deployment rationale is remediation, not expansion.
+PATTERN LESSON: When a technical rebuild is acknowledged, estimate the engineering capacity it will consume and the timeline before the new architecture is production-ready — if the rebuild will consume more than 50% of engineering capacity for more than 9 months, model it as a growth pause, not a growth investment.
+
+P04: NO PROPRIETARY DATA ACCUMULATION
+SEVERITY: MEDIUM
+SIGNAL: The product does not accumulate proprietary data through customer usage — every new customer starts from zero and gains no benefit from the prior usage of other customers or from their own historical data within the platform.
+DISQUALIFYING WHEN: The submission explicitly claims data moat, proprietary data advantage, or AI capability improvement through usage as a key competitive differentiator AND the product architecture reveals no data accumulation mechanism — the claimed moat does not exist.
+PATTERN LESSON: When the submission claims a data moat but the product architecture contains no data accumulation mechanism, test the moat claim against the actual product design — a moat claim that is inconsistent with the product architecture is more concerning than the absence of a data moat.
+
+P05: FEATURE PARITY WITH FREE ALTERNATIVES
+SEVERITY: MEDIUM
+SIGNAL: Core product features are materially equivalent to free capabilities provided by established platforms — Google Workspace, Microsoft 365, Notion, Slack, HubSpot free tier, Canva, GitHub Copilot, or similar — and the differentiation claim is based primarily on UX improvement, design quality, or marginal feature additions rather than a category-defining capability that free alternatives cannot provide.
+DISQUALIFYING WHEN: Core features are directly replicable using a free tier of a product the company's target customers already use AND the pricing is above £100/month per user AND the differentiation claim is entirely UX-based AND there is no evidence of integrations, data accumulation, or workflow lock-in that the free alternative cannot provide.
+PATTERN LESSON: When the competitive differentiation relies on UX superiority over a free alternative, verify whether the differential is quantifiably meaningful to the target buyer — a 10% UX improvement over a free product does not sustain a £10K/year price premium in a downturn budget review.
+
+P06: PRODUCT REQUIRES SIGNIFICANT WORKFLOW CHANGE FOR VALUE DELIVERY
+SEVERITY: MEDIUM (LOW for enterprise ACV above £200K | HIGH for SMB ACV below £10K)
+SIGNAL: The product's primary value proposition requires the customer to substantially change an existing workflow — replacing a process they have used for years with a new one — rather than slotting into an existing workflow as a direct replacement or augmentation.
+DISQUALIFYING WHEN: The product requires significant workflow change AND the ACV is below £15K AND the 90-day churn rate (or trial cancellation rate) is above 25% AND the submission attributes early churn to "customer education" or "adoption" rather than to a product problem — the product is asking SMB customers to bear a change management cost that is out of proportion to the value.
+PATTERN LESSON: When the product requires significant workflow change, check the ACV against the severity threshold — a £200K enterprise product with workflow change is LOW risk; a £5K SMB product with workflow change is HIGH risk — and verify the 90-day retention rate before accepting the adoption story.
+
+P07: AI CAPABILITY NOT DEFENSIBLE
+SEVERITY: HIGH
+SIGNAL: The product is described as AI-powered and the AI capability is presented as a core differentiator — but all described AI features could be replicated within 30 days by a developer with access to the same public foundation model APIs, with no proprietary training data, no fine-tuned model, no proprietary architecture, and no customer-specific data accumulation that improves the output.
+DISQUALIFYING WHEN: The submission describes AI as the primary competitive moat AND the AI capability is entirely via public API calls with no proprietary data, training, or architecture AND the API provider has already announced or released a feature that directly competes with the vendor's primary use case — the moat has already been eroded.
+PATTERN LESSON: When AI is described as the primary moat, test whether the moat is in the model (usually not defensible) or in the data, workflow, and architecture surrounding the model (potentially defensible) — a product whose AI can be replicated by a developer in 30 days has a distribution or workflow moat, not an AI moat.
+
+P08: IMPLEMENTATION TIME EXCEEDS 6 MONTHS BEFORE FIRST VALUE
+SEVERITY: HIGH
+SIGNAL: The submission states or implies that enterprise customers require more than 6 months of implementation before experiencing any measurable value from the product — detectable from stated implementation timelines, professional services descriptions that reference multi-phase implementations spanning multiple quarters, or customer case studies where the go-live date is described as 9–18 months after contract signing.
+DISQUALIFYING WHEN: Average implementation time before first value is more than 9 months AND the ACV is below £200K AND the company has a documented case of a customer churning or failing to renew after a long implementation — the implementation risk has already converted into a commercial outcome.
+PATTERN LESSON: When implementation time before first value exceeds 6 months, assess whether there are documented 90-day value milestones within the implementation — the presence or absence of early value milestones is the primary predictor of whether customers survive the long implementation without churning or de-prioritising the project.
+
+P09: NO PRODUCT USAGE DATA PROVIDED
+SEVERITY: HIGH
+SIGNAL: The submission contains ARR and customer count data but no product usage metrics — no daily or monthly active users, no feature adoption rates, no session frequency, no engagement depth indicators — despite the company being at a stage where product instrumentation should be standard.
+DISQUALIFYING WHEN: The company is at Series A with more than £1M ARR AND has no product usage tracking infrastructure in place AND the submission cannot provide any usage metric for any customer — the product intelligence gap means the company cannot optimise for retention or identify at-risk customers before they churn.
+PATTERN LESSON: When no product usage data is provided alongside ARR, ask for DAU/MAU and 30-day active rate for the last 3 months — if the answer is qualitative rather than numeric, treat the retention outlook as unverified and note this in the risk section.
+
+P10: PRODUCT ROADMAP DRIVEN ENTIRELY BY CUSTOMER REQUESTS
+SEVERITY: MEDIUM
+SIGNAL: The product roadmap described in the submission consists entirely of features requested by existing customers, with no evidence of proactive category development, founder-initiated product vision, or investment in capabilities that customers have not yet asked for.
+DISQUALIFYING WHEN: More than 80% of the last 12 months of shipped features were customer-requested AND DAU/MAU or core feature engagement has declined in the same period AND the founding team cannot describe a single proactive product bet they have made in the last 12 months — the product is in Feature Factory mode and the NRR impact is already beginning.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 5: TRACTION RED FLAGS — 15 FLAGS (TR01–TR15)
+These signals are observable from stated metrics, cohort data, and growth figures in the submission.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TR01: GROWTH RATE DECLINING — THREE OR MORE CONSECUTIVE QUARTERS
+SEVERITY: HIGH
+SIGNAL: MoM or YoY revenue growth rate has declined in each of the last 3 or more consecutive quarters — not a single-quarter dip explained by seasonality or a one-time event, but a sustained, consistent deceleration.
+DISQUALIFYING WHEN: Growth rate has declined in each of the last 4 or more consecutive quarters AND the most recent quarter's growth rate is below 5% MoM (for a pre-Series A company) or below 20% YoY (for a Series A company) AND the company's financial model projects re-acceleration without a specific identified driver — the model assumes a recovery that the data does not support.
+PATTERN LESSON: When net new ARR has declined for three or more consecutive quarters, calculate the implied ARR at the current deceleration rate 12 months forward and compare it to the financial model — if the model assumes re-acceleration without a specific identified driver, the forecast is not credible.
+
+TR02: COHORT QUALITY DECLINING
+SEVERITY: HIGH
+SIGNAL: More recent customer cohorts — customers acquired in the last 12 months — show measurably worse retention at the same age as older cohorts.
+DISQUALIFYING WHEN: Three or more consecutive cohorts show declining 12-month retention AND the most recent cohort's 12-month retention is more than 15 percentage points below the oldest cohort measured AND the company does not have a documented explanation for the deterioration or a remediation plan in execution.
+PATTERN LESSON: When NRR is reported as a blended figure across all cohorts, request cohort-level retention data for the last 6 acquisition cohorts — declining retention in recent cohorts predicts declining blended NRR with a 12–18 month lag that will not be visible in current headline metrics.
+
+TR03: NET REVENUE RETENTION BELOW 100%
+SEVERITY: HIGH (NRR 90–100%) | CRITICAL (NRR below 90%)
+SIGNAL: NRR — calculated on the same cohort of customers at the start and end of a 12-month period, excluding any customer acquired during the period — is below 100%.
+DISQUALIFYING WHEN: NRR is below 90% AND the customer base has more than 30 logos (so the figure is statistically meaningful, not distorted by 1–2 large churns) AND the trend in NRR is flat or declining AND the company is projecting NRR improvement without a specific structural change to the retention motion — the model assumes a recovery that the retention data does not support.
+PATTERN LESSON: When NRR is below 100%, decompose into gross renewal rate and net expansion rate separately — below-80% gross renewal signals product failure; 85%+ gross renewal with sub-100% NRR signals an expansion motion problem — each requires a different response and carries a different severity.
+
+TR04: LOGO CHURN ABOVE SECTOR BENCHMARK
+SEVERITY: HIGH
+SIGNAL: Annual logo churn — calculated as logos churned ÷ logos at the start of the period — exceeds the sector benchmark for the business model type and stage.
+DISQUALIFYING WHEN: Annual logo churn exceeds the FAIL threshold for the sector AND the company has more than 20 customers (so the figure is statistically meaningful) AND churn has been above the FAIL threshold for 2 or more consecutive measurement periods AND the company does not have a documented CS intervention programme targeting the at-risk customer segments.
+PATTERN LESSON: When logo churn is disclosed or calculable, verify the denominator is the starting customer count not the ending count, and then compare the result to the sector benchmark — denominator manipulation is the most common way logo churn is understated, and the corrected figure often exceeds the benchmark by 5–10 percentage points.
+
+TR05: ALL GROWTH FROM ONE UNOWNED CHANNEL
+SEVERITY: HIGH
+SIGNAL: 100% or near-100% of new customer acquisition comes from a single channel that the company does not own or control — a single referral partner, a single marketplace or app store, a single API integration partner, a single community or platform — such that if that channel changed its terms, reduced its distribution, or was acquired, new customer acquisition would halt.
+DISQUALIFYING WHEN: More than 85% of all new customer acquisition in the last 12 months came from a single unowned channel AND the channel has notified the company of a policy or commercial term change in the last 6 months AND the company has no documented plan to build a second acquisition channel with a specific investment and timeline.
+PATTERN LESSON: When all new customer acquisition is attributable to one channel, verify whether the company owns the end-customer relationship or whether the channel partner does — a company that loses the channel and loses the customer simultaneously has no business without the partner.
+
+TR06: GROWTH RATE SPIKE WITHOUT EXPLANATION
+SEVERITY: MEDIUM
+SIGNAL: Revenue or ARR in a specific quarter is materially higher than the growth trend — typically 2x or more of the average quarterly ARR addition — with no explanation offered in the submission for the spike.
+DISQUALIFYING WHEN: The growth spike represents more than 30% of total cumulative ARR AND is in the most recent quarter AND the company's forward projections assume the spike-level quarterly addition as the new run rate AND no explanation for the spike is provided — the growth story and the financial model are built on a number whose repeatability cannot be assessed.
+PATTERN LESSON: When a single quarter's ARR addition is more than 2x the trailing average, ask for the specific driver and assess whether it is repeatable before using that quarter's growth rate as the basis for forward projections.
+
+TR07: USAGE METRICS NOT PROVIDED AT SERIES A
+SEVERITY: HIGH
+SIGNAL: A company at Series A — defined as £1M+ ARR or a disclosed Series A raise — provides detailed ARR and growth metrics but cannot or will not provide any product usage data: no daily or monthly active users, no feature adoption rates, no session frequency, no engagement metrics.
+DISQUALIFYING WHEN: The company has more than £1M ARR AND more than 20 customers AND has been operating for more than 18 months AND cannot provide any usage metric for any customer AND does not have product analytics tooling in place (Mixpanel, Amplitude, Segment, or custom instrumentation) — at this stage, the absence of measurement is not a tooling gap, it is a product management philosophy that will compound into a retention problem.
+PATTERN LESSON: When usage metrics are absent alongside ARR data at Series A, ask for the specific tooling the company uses to track product engagement — the name of the tool and the date it was implemented tells Alex whether the omission is structural or transitional.
+
+TR08: CAC PAYBACK PERIOD EXTENDING
+SEVERITY: HIGH
+SIGNAL: CAC payback period — calculated as CAC ÷ (ACV × gross margin) expressed in months — has increased quarter-on-quarter for 2 or more consecutive quarters.
+DISQUALIFYING WHEN: Payback period has extended by more than 50% over 4 or more consecutive quarters AND the current payback period exceeds the sector threshold (24 months for SMB SaaS, 36 months for enterprise) AND the company cannot identify a specific driver and a specific remediation — the efficiency regression is unexplained and unchecked.
+PATTERN LESSON: When payback period is disclosed or calculable and has extended for 2 or more consecutive quarters, decompose the extension into its CAC, ACV, and gross margin components — the source of the extension determines whether it is a sales efficiency problem, a pricing problem, or a margin problem, and each requires a different response.
+
+TR09: EXPANSION REVENUE CONCENTRATED IN ONE OR TWO ACCOUNTS
+SEVERITY: HIGH
+SIGNAL: NRR is above 100% — which appears positive — but the expansion ARR driving it is concentrated in one or two large accounts.
+DISQUALIFYING WHEN: Excluding the top 2 expansion accounts, NRR falls below 95% AND the company has more than 15 customers (so the exclusion is statistically meaningful) AND the top 2 accounts represent more than 50% of total expansion ARR in the period — the headline NRR is not representative of the underlying customer base health.
+PATTERN LESSON: When NRR is above 110%, calculate what NRR would be excluding the top 2 expansion accounts — a high headline NRR concentrated in one or two accounts is a concentration risk, not an expansion motion, and the two require entirely different responses.
+
+TR10: PILOT-TO-PAID CONVERSION RATE BELOW 50%
+SEVERITY: HIGH
+SIGNAL: The company runs product pilots or proof-of-concept periods as part of its sales motion, and fewer than 50% of completed pilots convert to a paid contract.
+DISQUALIFYING WHEN: Pilot conversion rate is below 30% AND the company has completed more than 10 pilots (so the figure is statistically meaningful) AND no root cause analysis of failed conversions has been conducted or documented — more than 7 in 10 pilots are failing and the company does not know why.
+PATTERN LESSON: When pilots are part of the sales motion, request the pilot log with outcomes and stated conversion reasons before accepting the pilot pipeline as evidence of commercial traction — a pipeline full of active pilots with a historical conversion rate below 50% is not a commercial pipeline, it is a prospect list with an expensive evaluation model.
+
+TR11: SALES CYCLE EXTENDING QUARTER-ON-QUARTER
+SEVERITY: MEDIUM
+SIGNAL: Average time from first qualified contact to signed contract has increased in each of the last 2 or more consecutive quarters.
+DISQUALIFYING WHEN: Sales cycle has extended by more than 50% over 4 or more consecutive quarters AND the company has not identified the specific cause AND the financial model assumes a sales cycle that is 30% shorter than the current measured average — the model is built on a sales productivity assumption that the current sales data contradicts.
+PATTERN LESSON: When sales cycle length has extended across consecutive quarters, identify the specific stage in the pipeline where deals are stalling before accepting the extension as an unavoidable market condition — stage-level bottleneck analysis reveals a fixable process problem more often than a structural market problem.
+
+TR12: MAGIC NUMBER BELOW 0.5
+SEVERITY: HIGH
+SIGNAL: The Magic Number — calculated as Net New ARR in the quarter × 4, divided by sales and marketing spend in the prior quarter — is below 0.5.
+DISQUALIFYING WHEN: Magic Number has been below 0.5 for 3 or more consecutive quarters AND is not improving AND the company's financial model projects ARR growth that is only achievable by increasing S&M spend further — the model is projecting growth through an investment that has already demonstrated poor efficiency.
+PATTERN LESSON: When the Magic Number is below 0.5, identify whether the cause is rising S&M spend (efficiency problem) or declining net new ARR (product or market problem) — the two require opposite responses and conflating them leads to the wrong intervention.
+
+TR13: FREEMIUM PRODUCT — CONVERSION BELOW 2% AFTER 12 MONTHS
+SEVERITY: HIGH
+SIGNAL: A freemium product that has been live for 12 or more months has a free-to-paid conversion rate below 2% — meaning fewer than 1 in 50 free users become paying customers.
+DISQUALIFYING WHEN: Conversion rate has been below 2% for more than 12 months AND free user base is above 5,000 (so the rate is statistically meaningful) AND the company has not made a structural change to the free/paid tier boundary — the model has been given sufficient time to prove itself and has not.
+PATTERN LESSON: When a freemium product has a conversion rate below 2% after 12 months, test whether the free tier is providing full value at zero cost — if free users can accomplish the primary job-to-be-done without paying, the conversion problem is structural and requires a tier redesign, not a marketing improvement.
+
+TR14: REFERENCE CUSTOMERS DECLINING TO SPEAK PUBLICLY
+SEVERITY: HIGH
+SIGNAL: The company has 5 or more paying customers and cannot produce a single customer who will: (a) take a 20-minute reference call with an investor without a structured NDA; or (b) be named on the company's website or in a case study with their own name and company attached.
+DISQUALIFYING WHEN: The company has more than 10 paying customers AND none are willing to be named publicly AND the company does not operate in a sector where disclosure is structurally restricted AND the company is presenting customer satisfaction as strong (high NPS, positive anecdotes) — the disconnect between claimed satisfaction and absence of advocacy is a material credibility signal.
+PATTERN LESSON: When reference customers decline to speak publicly with more than 5 paying customers in the base, ask directly whether the reluctance is sector-structural or relationship-based — the distinction determines whether it is a constraint to be managed or a product satisfaction signal to be investigated.
+
+TR15: ARR GROWTH DRIVEN BY PRICE INCREASES NOT VOLUME
+SEVERITY: MEDIUM
+SIGNAL: ARR growth in the reported period is driven primarily by price increases applied to existing customers — not by new customer acquisition, not by genuine seat or usage expansion — and the underlying volume growth (new logos, new seats, new use cases) is flat or declining.
+DISQUALIFYING WHEN: More than 70% of net new ARR in the last 12 months came from price increases on existing customers AND new logo count has been flat or declining for 2 or more consecutive quarters AND the company's financial model projects continued ARR growth at the same rate — implying either continued price increases or new volume that the current data does not support.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 6: GOVERNANCE RED FLAGS — 10 FLAGS (G01–G10)
+These signals are observable from cap table disclosures, shareholder agreements, and Companies House filings.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+G01: NO VESTING CLIFF ON FOUNDER EQUITY
+SEVERITY: CRITICAL
+SIGNAL: The cap table or shareholder agreement shows founders hold fully vested equity — or the deal materials do not mention vesting schedules at all.
+DISQUALIFYING WHEN: The founders have been working together for three or more years, both remain fully committed and active in day-to-day operations, AND the shareholders' agreement contains detailed good-leaver / bad-leaver provisions that effectively replicate the economic outcome of vesting — i.e., a departing founder's equity is subject to compulsory transfer at a defined price.
+PATTERN LESSON: When founders hold fully vested or cliff-free equity with no disclosed vesting terms, request the shareholders' agreement before advancing to due diligence — a co-founder departure on these terms has ended multiple otherwise-fundable deals and is a structural flaw that cannot be remediated retroactively without co-founder agreement.
+
+G02: CAP TABLE COMPLEXITY AT EARLY STAGE
+SEVERITY: MEDIUM
+SIGNAL: A pre-Series A company's cap table shows more than 15 individual shareholders, more than 2 share classes, convertible notes from more than 3 separate investors on differing terms, or any shareholder holding more than 15% who is unidentified or described only as a "family office" or "strategic investor" with no further detail.
+DISQUALIFYING WHEN: There is a shareholder holding more than 10% of the company whose identity or ultimate beneficial ownership cannot be confirmed — this moves from a structural governance flag to a potential AML / KYC risk that requires immediate escalation before any further engagement.
+PATTERN LESSON: When a pre-Series A company has more than 15 shareholders or more than two share classes, request the full cap table and all convertible note terms before advancing — the cost to restructure a messy cap table rises exponentially with each subsequent funding round and is cheapest to fix before the current round closes.
+
+G03: MISSING IP ASSIGNMENT AGREEMENTS
+SEVERITY: CRITICAL
+SIGNAL: Any of the following are present or absent: (1) the company was founded by a team where one or more founders previously worked at a large technology company, a university, or a research institution — and the deal materials do not mention IP assignment or Freedom to Operate confirmation; (2) the deck or submission mentions that the technology was developed while a founder was at a previous employer without explicitly stating that IP rights have been legally confirmed as belonging to the company; (3) the company relies on open-source components but does not mention a licence audit or confirm that all OSS components are permissively licensed (MIT, Apache 2.0) rather than copyleft (GPL, LGPL, AGPL).
+DISQUALIFYING WHEN: The primary technology of the company was developed while a founder was at a previous employer, no IP assignment opinion has been obtained, and the previous employer is a technology company that operates in the same or adjacent space — in this scenario the IP risk is not theoretical and the deal cannot proceed without a clean IP opinion from external counsel.
+PATTERN LESSON: When a founder team includes anyone from a major technology company, university, or research institution and the submission does not explicitly confirm IP assignment, flag this as CRITICAL and request the IP opinion before advancing — IP ownership disputes are the most common cause of acquirer withdrawal at the exclusivity stage.
+
+G04: BOARD WITHOUT INDEPENDENT DIRECTOR
+SEVERITY: MEDIUM
+SIGNAL: A Series A or later-stage company whose board composition consists entirely of founders and investor representatives, with no independent director — or a company that has completed more than £5M in cumulative funding with no independent director on the board.
+DISQUALIFYING WHEN: The board has previously voted to remove a CEO or independent director without cause or due process and the deal materials do not explain the circumstances — this is not a missing-director flag but a governance conduct flag that is disqualifying on its own.
+PATTERN LESSON: When a post-Series A company has no independent director and no documented plan to appoint one, raise this in the Risk Assessment and include it as a condition of investment — governance structures installed at Series A cost almost nothing; the same structures installed during a crisis cost relationships, legal fees, and time.
+
+G05: OPTION POOL INSUFFICIENT FOR HIRING PLAN
+SEVERITY: MEDIUM
+SIGNAL: The company's hiring plan includes 3 or more senior roles (VP level or above) or a CTO / CPO / CFO hire, but the remaining unallocated option pool represents less than 10% of the fully diluted cap table.
+DISQUALIFYING WHEN: The option pool is less than 5% unallocated and the company's hiring plan requires 5 or more senior hires — at this level the option pool expansion required before hires can be made will cause meaningful dilution to current shareholders and the financial model does not reflect this cost.
+PATTERN LESSON: When a company presents a senior hiring plan alongside a cap table with less than 10% unallocated option pool, model the dilution from the required pool expansion before issuing a term sheet — option pool shortfalls discovered during closing add cost and delay that could have been addressed in term sheet negotiation.
+
+G06: RELATED PARTY LOANS TO FOUNDERS
+SEVERITY: HIGH
+SIGNAL: The company's balance sheet, financial statements, or notes to accounts show loans from the company to one or more founders, directors, or their connected parties — or the cap table or shareholder agreement reveals a shareholder loan structure where founders have extracted capital from the company as loans rather than salary or dividends.
+DISQUALIFYING WHEN: A loan from the company to a founder is outstanding at the time of investment, has no documented repayment terms, is at below-market interest rates, and exceeds £25,000 — this is a Companies Act breach risk, a governance red flag, and a signal of financial conduct that disqualifies the deal until the loan is fully repaid and the accounts are restated.
+PATTERN LESSON: When the balance sheet shows a debtor balance associated with a director or connected party, request the loan documentation and Companies House statutory accounts before advancing — founder loans from company funds discovered post-term-sheet create a retrading risk and are the most common governance issue requiring legal remediation before close.
+
+G07: MULTIPLE SHARE CLASSES WITH EXTREME PREFERENCE STACKS
+SEVERITY: HIGH
+SIGNAL: The cap table shows three or more distinct series of preferred shares (Series A, Series B, Series C or equivalent), with participating preferred provisions in two or more series, or a total liquidation preference stack that exceeds 1.5× the last round valuation — meaning investors would need to realise more than 1.5× the current round price before common shareholders (founders and employees) receive any proceeds.
+DISQUALIFYING WHEN: The liquidation preference stack exceeds 2× the current round valuation AND the participating preferred provisions mean that common holders receive less than 10% of a plausible exit scenario AND the company's most recent 409A or share valuation places the common share value at less than 20% of the preferred price — indicating that the market already prices the common as near-worthless.
+PATTERN LESSON: When a cap table shows three or more preferred series with participating provisions, model the waterfall at three exit scenarios before advancing — preference stacks that destroy employee incentives are the primary reason why technically strong companies fail to retain the team required to achieve the exit value the model assumes.
+
+G08: NO DATA ROOM OR INCOMPLETE DATA ROOM
+SEVERITY: MEDIUM
+SIGNAL: A company raising a Series A or later-stage round (or any round above £2M) has not provided — and does not appear to have prepared — a formal data room containing: (1) audited or management accounts for the last 2 years, (2) cap table on fully diluted basis, (3) all shareholder and investor agreements, (4) key customer contracts, (5) IP assignment and employment agreements, and (6) corporate structure documents.
+DISQUALIFYING WHEN: A company that has previously represented to investors that a data room is "ready" or "available on request" and then provides a folder of incomplete documents when due diligence begins — this is a misrepresentation that changes the nature of the deal and requires a direct conversation about what else may have been misrepresented.
+PATTERN LESSON: When a Series A company has no data room and no clear timeline to produce one, delay advancing to due diligence until the core documents are available — due diligence commenced without a data room routinely extends closing timelines by 4–8 weeks and increases the probability of a retrade on financial terms.
+
+G09: AUDITED ACCOUNTS NOT AVAILABLE
+SEVERITY: HIGH
+SIGNAL: A company raising Series A or later-stage funding (or any round above £3M) that has been trading for more than 18 months cannot produce audited accounts for its most recently completed financial year — and provides only management accounts, which have not been independently verified.
+DISQUALIFYING WHEN: The company has audited accounts from a prior period but has not filed them with Companies House on the required timeline, and the filing is more than 6 months overdue — this is a Companies Act compliance failure that can result in automatic strike-off of the company and personal liability for directors.
+PATTERN LESSON: When a Series A company has no audited accounts and has been trading for more than 18 months, request a Companies House filing check and the audit engagement letter before advancing — accounts that are overdue or qualify going concern are the most common financial disclosure issue discovered after term sheets are issued and are the primary cause of retrades on financial representations.
+
+G10: GDPR OR DATA COMPLIANCE NOT IMPLEMENTED
+SEVERITY: HIGH
+SIGNAL: A company that processes personal data of EU or UK individuals — which includes almost every B2C company, every B2B company with employee data, and every company using any analytics platform — cannot demonstrate: (1) a registered ICO data controller number (UK); (2) a documented lawful basis for processing for each data category; (3) a privacy notice on the product; (4) a data processing agreement with each third-party processor (including analytics, cloud, CRM providers); or (5) a documented process for handling data subject access requests (DSARs).
+DISQUALIFYING WHEN: The company has already received an ICO enforcement notice or is currently under active ICO investigation — this is a live regulatory enforcement action that creates a material liability on the balance sheet and must be fully disclosed.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 7: DEAL STRUCTURE RED FLAGS — 10 FLAGS (DS01–DS10)
+These signals are observable from term sheet history, cap table, investor rights agreements, and round structure disclosures.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DS01: VALUATION INCONSISTENT WITH METRICS
+SEVERITY: HIGH
+SIGNAL: The asking valuation — expressed as a pre-money valuation relative to the disclosed ARR — implies an ARR multiple that is materially above the sector benchmark for the growth rate and gross margin presented.
+DISQUALIFYING WHEN: The implied ARR multiple is more than 3× the current sector benchmark for the company's growth rate AND the company's ARR is below £2M — early-stage companies with small ARR bases have high valuation uncertainty and a 3× premium over sector benchmark at this size implies either an unsupported narrative premium or a founder expectation that is incompatible with institutional investment terms.
+PATTERN LESSON: When the implied ARR multiple is more than 1.5× the sector benchmark for the stated growth rate, model the return at entry valuation under three exit scenarios (1× sector average, 2× sector average, 3× sector average) — if the fund return threshold is not achievable under the 2× scenario, the valuation is the deal-breaker, not the business.
+
+DS02: LIQUIDATION PREFERENCE ABOVE 1×
+SEVERITY: HIGH
+SIGNAL: Prior round investor documentation, term sheet history, or shareholder agreement disclosures show any series holding a 2× or higher liquidation preference on their invested capital.
+DISQUALIFYING WHEN: The sum of all liquidation preferences across all series exceeds the pre-money valuation of the current round — meaning that in a sale at the current round's valuation, existing preference holders would take 100% of the proceeds before the current round investor receives anything.
+PATTERN LESSON: When any prior round holds a 2× or higher liquidation preference, model the waterfall at the expected exit range before advancing — preference stacks that consume the entire exit proceed in the realistic outcome range make the deal uninvestable for any new investor whose return depends on exit proceeds above the preference.
+
+DS03: FULL RATCHET ANTI-DILUTION
+SEVERITY: HIGH
+SIGNAL: The shareholder agreement, term sheet, or investor rights summary for any prior round contains a full ratchet anti-dilution provision — meaning that in the event of a down round, the prior series is re-priced to the new lower price on a share-for-share basis, without the weighted-average adjustment that is standard market practice.
+DISQUALIFYING WHEN: A prior round holds full ratchet anti-dilution provisions AND the company's current metrics suggest a down round is a plausible outcome within the next 12–18 months — i.e.
+PATTERN LESSON: When any prior round contains full ratchet anti-dilution provisions, request the full investor rights agreement and model the dilution impact of a 30% down round on all other shareholders before advancing — full ratchet provisions that have not been removed before a difficult fundraising environment are the primary reason otherwise-recoverable companies become uninvestable.
+
+DS04: ROUND NOT FULLY COMMITTED
+SEVERITY: MEDIUM
+SIGNAL: The current round has no confirmed lead investor — either the deck describes the round as "open" with no committed lead, or the founder confirms in the submission that they are raising without a lead and seeking commitments from multiple investors simultaneously.
+DISQUALIFYING WHEN: The company is raising a Series A or larger round (over £3M) and has been in market for more than 6 months with no lead investor confirmed.
+PATTERN LESSON: When a round is presented without a named lead investor or confirmed commitment, ask directly for the lead name and commitment evidence before investing time in deep diligence — rounds without committed leads fail to close at a materially higher rate than led rounds, and the diligence cost of a failed close is not recoverable.
+
+DS05: INSIDER-LED ROUND WITHOUT EXTERNAL VALIDATION
+SEVERITY: MEDIUM
+SIGNAL: The current round is entirely composed of existing investors — existing Series A investors leading a Series B, existing angels filling the entire seed extension — with no new external investor participating.
+DISQUALIFYING WHEN: The company has been running an external fundraising process for more than 4 months, has met with more than 20 institutional investors, and has received no external term sheet — and existing investors are bridging the gap.
+PATTERN LESSON: When the current round is entirely insider-led with no external participation, ask directly how many external investors were approached and what their feedback was — the answer distinguishes between a genuinely pre-emptive round (positive signal) and a round that external investors have already declined (negative signal requiring a full independent assessment of why).
+
+DS06: BRIDGE ROUND MASQUERADING AS SERIES ROUND
+SEVERITY: HIGH
+SIGNAL: The round is labelled "Series A" or "Series B" but the capital raised is insufficient to reach the next fundable milestone within the timeline implied by the financial model.
+DISQUALIFYING WHEN: The current round will provide less than 12 months of runway at the stated burn rate AND the company's most recent quarter showed increasing rather than decreasing burn — a company with less than 12 months of runway on an increasing burn trajectory is raising in survival mode, not growth mode, and the current round does not change the underlying trajectory.
+PATTERN LESSON: When post-round runway is under 18 months and the financial model implies the next meaningful milestone requires more time than that, model the company's capital needs through to the following round before committing — a bridge-as-Series-round is frequently the last institutional funding a company receives before a restructuring, because the investors who funded the bridge are the only ones with the relationship and the basis to fund the follow-on.
+
+DS07: DRAG-ALONG RIGHTS ABSENT OR WEAK
+SEVERITY: MEDIUM
+SIGNAL: The shareholder agreement either does not contain a drag-along provision, or contains a drag-along that requires the consent of minority shareholders representing more than 10% of the company to exercise — giving a small group of shareholders effective veto power over an exit that the board, the founders, and the majority of investors have approved.
+DISQUALIFYING WHEN: The company has a fragmented early shareholder base with more than 20 individual shareholders and no drag-along provision at all — in this structure, securing unanimous shareholder consent for an exit requires contacting and obtaining signatures from all shareholders, some of whom may be unreachable, deceased, or uncooperative.
+PATTERN LESSON: When the shareholder agreement contains no drag-along or a drag-along with a threshold above simple majority by value, include an updated drag-along provision as a condition of investment — the legal cost of installing adequate drag-along at investment is trivial compared to the cost of resolving a blocked exit under time pressure from an acquirer.
+
+DS08: INFORMATION RIGHTS INADEQUATE
+SEVERITY: MEDIUM
+SIGNAL: The shareholder agreement or investor rights agreement for prior rounds does not include standard information rights — specifically: (1) monthly or quarterly management accounts delivered within 30 days of period end; (2) annual audited accounts; (3) board observer rights for investors above a defined threshold (typically £250K+); (4) prompt notification of material events (a key customer loss, a regulatory action, a founder departure).
+DISQUALIFYING WHEN: A company at Series A or later with prior institutional investors who hold no information rights — if an institutional investor with a board seat did not require quarterly reporting as a condition of investment, either the investor was not acting professionally or the terms were renegotiated away, and both explanations are relevant to how the company has been run.
+PATTERN LESSON: When prior investor agreements contain no standard information rights and the company cannot produce a track record of voluntary reporting, include robust information rights as a non-negotiable condition of investment and request the last 6 months of management accounts during diligence — companies with no prior reporting obligations frequently have management account quality issues that surface only when a new investor requires them.
+
+DS09: PRO-RATA RIGHTS BLOCKING NEW INVESTOR OWNERSHIP
+SEVERITY: MEDIUM
+SIGNAL: Prior investors hold pro-rata rights — the right to maintain their percentage ownership in future rounds — that, if fully exercised, would fill the majority of the current round's allocation before any new investor can participate.
+DISQUALIFYING WHEN: Existing investors hold pro-rata rights on 80% or more of the current round's proposed allocation AND they have confirmed they intend to exercise those rights — leaving less than 20% of the round available for new investors.
+PATTERN LESSON: When existing pro-rata rights would consume more than 50% of the proposed round, request a written waiver or allocation carve-out from existing investors before advancing — a diligence process completed without confirming available allocation frequently results in a deal that cannot close because the new investor cannot achieve the ownership position their investment thesis requires.
+
+DS10: CONVERTIBLE NOTE OVERHANG NOT MODELLED
+SEVERITY: HIGH
+SIGNAL: The cap table presented to new investors does not include the dilutive effect of convertible notes that will convert at or before the current round — or the deck presents a pre-money valuation and implied ownership stakes that are calculated before accounting for the conversion of outstanding notes.
+DISQUALIFYING WHEN: The convertible notes outstanding represent more than 20% of the post-conversion fully diluted share count AND the founder presented a cap table that did not include the notes — this is a material misrepresentation of the new investor's actual ownership stake, and the deal cannot proceed on the disclosed terms.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY 8: FOUNDER BEHAVIOUR RED FLAGS — 15 FLAGS (FB01–FB15)
+These signals are observable from the submission, written Q&A responses, public social profiles, and public records.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FB01: INCONSISTENT NARRATIVE ACROSS MATERIALS
+SEVERITY: HIGH
+SIGNAL: The founding story, the problem statement, or the key metrics are described differently in different sections of the submission or across different public sources.
+DISQUALIFYING WHEN: A key financial metric — ARR, customer count, revenue, or funding raised — is stated at materially different levels in different sections of the same submission document, with no explanation for the discrepancy.
+PATTERN LESSON: When two or more material metrics are stated at different levels in different sections of the submission, document each inconsistency and request a reconciliation before advancing — decks with internal metric inconsistencies reliably produce data quality problems in diligence and indicate that the financial reporting is not reliable enough to base an investment decision on.
+
+FB02: METRICS PRESENTED WITHOUT STANDARD DEFINITIONS
+SEVERITY: HIGH
+SIGNAL: ARR, NRR, DAU, MAU, GMV, or other commonly-defined industry metrics are cited in the submission without stating the definition used — allowing for non-standard calculation that would inflate the headline number relative to the industry standard.
+DISQUALIFYING WHEN: The company has previously provided different definitions of the same metric to different investors — observable when two investor updates from different periods define ARR or NRR differently — indicating that the metric definition is being adjusted to produce the most favourable headline in each context.
+PATTERN LESSON: When a traction slide presents ARR, NRR, or GMV without definitions, request the metric definitions and then cross-check the defined figures against other disclosed metrics for internal consistency before accepting the headline numbers — non-standard metric definitions are the most common source of materially overstated traction in early-stage submissions.
+
+FB03: SELECTIVE DISCLOSURE OF TIME PERIODS
+SEVERITY: HIGH
+SIGNAL: Growth metrics in the submission cite a specific time period that is materially shorter or differently bounded than the standard reporting period — and the non-standard period has the effect of producing a more favourable growth rate than the standard period would show.
+DISQUALIFYING WHEN: The company cites a growth rate for a cherry-picked period AND refuses to provide trailing twelve month growth data when asked — the refusal to provide the standard metric after a specific request is a disqualifying behaviour signal, not merely a presentation issue.
+PATTERN LESSON: When growth metrics are cited for non-standard periods that produce a more favourable result than trailing twelve months would, calculate the implied trailing twelve month rate from the available data and note the divergence — selectively bounded growth claims are the most common technique for presenting a decelerating business as a growing one without making a technically false statement.
+
+FB04: COMPETITIVE LANDSCAPE SYSTEMATICALLY UNDERSTATED
+SEVERITY: MEDIUM
+SIGNAL: Every competitor mentioned in the deck or submission is described as significantly inferior across all dimensions — slower, more expensive, worse product, shrinking customer base — with no acknowledgment of any competitor strength.
+DISQUALIFYING WHEN: The submission claims there is no significant competition in a market where a 5-minute Google search identifies multiple funded competitors — this is not a nuanced competitive assessment but a factual inaccuracy that must be explained before any further engagement.
+PATTERN LESSON: When the competitive landscape slide credits no competitor with a single genuine strength, run an independent 5-minute search on each named competitor before accepting the framing — a company that has not correctly mapped competitive strengths will be unable to articulate a credible competitive response when asked in diligence, and the gap between the submitted narrative and external reality is itself a signal about market understanding.
+
+FB05: PRIOR INVESTOR RELATIONSHIPS NOT DISCLOSED
+SEVERITY: HIGH
+SIGNAL: Prior investors or angels are not listed on the cap table or mentioned in the deck despite being discoverable through public records.
+DISQUALIFYING WHEN: A prior investor is absent from the current cap table AND the company cannot provide a clear, documented explanation for the absence — an equity transfer agreement, a buyout confirmation, or a correction to the prior announcement.
+PATTERN LESSON: When a Companies House or Crunchbase search identifies prior investors not present on the submitted cap table, request a documented explanation before advancing — a cap table with missing shareholders has a provenance problem that must be resolved before legal due diligence can produce a clean title opinion.
+
+FB06: FUNDRAISING URGENCY MANUFACTURED
+SEVERITY: MEDIUM
+SIGNAL: The submission or accompanying communications create artificial closing urgency — "closing in 2 weeks," "term sheet from [named firm] expiring," "allocation filling fast" — without providing verifiable evidence.
+DISQUALIFYING WHEN: The founder claims a term sheet from a named investor as urgency leverage, the named investor is a real institutional firm, and when contacted (directly or through a network reference) the firm either denies the term sheet or indicates it is not on the terms described.
+PATTERN LESSON: When fundraising urgency is claimed without verifiable evidence, continue at normal diligence pace and request the supporting document — manufactured urgency that is called out and unsubstantiated typically disappears without affecting the deal, and the founder's response to the request for evidence is itself informative about how they handle pressure and factual challenges.
+
+FB07: FOUNDER PUBLICLY CRITICAL OF PRIOR INVESTORS OR EMPLOYERS
+SEVERITY: MEDIUM
+SIGNAL: Public statements by the founder — on LinkedIn, Twitter/X, in interviews, podcasts, or published articles — contain significant criticism of prior investors, former employers, co-founders, or team members by name or in a way that makes them identifiable.
+DISQUALIFYING WHEN: The founder has made public statements that are potentially defamatory, that have resulted in legal proceedings, or that name a specific investor by name in a way that constitutes a public allegation of misconduct without documented evidence.
+PATTERN LESSON: When a founder has published significant public criticism of prior investors or employers, note this in the Risk Assessment and reference check directly with one of the individuals or firms named — the subject of the criticism is often the most informative reference check available and their account of events is a direct test of whether the founder's public narrative is accurate.
+
+FB08: DECK LANGUAGE SHIFTS BETWEEN SECTIONS
+SEVERITY: MEDIUM
+SIGNAL: The language, vocabulary, and analytical sophistication vary significantly between different sections of the submission deck — the market sizing section uses institutional investment terminology and advanced financial modelling that is inconsistent with the writing style and conceptual level of the problem/solution section, or vice versa.
+DISQUALIFYING WHEN: The founder confirms in written Q&A that specific sections of the deck were produced by a third party (investment bank, consultant, pitch deck service) and cannot explain the assumptions underlying the financial model or the methodology behind the market sizing — these are the two sections of the deck that are most predictive of the founder's planning quality, and inability to defend them after submission is a fundamental credibility failure.
+PATTERN LESSON: When the deck shows significant language or sophistication inconsistency between sections, ask the founder to explain the financial model assumptions and market sizing methodology in writing before advancing — a founder who cannot defend the analytical content of their own deck in plain language has not produced the plan themselves, and the quality of execution will reflect the quality of thinking, not the quality of the consultants.
+
+FB09: FINANCIAL PROJECTIONS WITH NO ASSUMPTIONS STATED
+SEVERITY: MEDIUM
+SIGNAL: A detailed financial model — revenue projections, headcount plan, unit economics forecast — is provided in the submission but no assumptions are stated for any of the key growth drivers.
+DISQUALIFYING WHEN: The financial model shows a >5× revenue increase in year 2 with no stated assumptions for the growth drivers, and when asked, the founder cannot identify the specific operational activities that will produce the revenue step-up — the model is aspirational, not operational.
+PATTERN LESSON: When a financial model provides revenue projections without stated assumptions, request the working model in editable format before evaluating the financial plan — a model with hidden or absent assumptions cannot be stress-tested, and a founder who cannot explain the operational levers behind their revenue projection has not planned the business, only described a desired outcome.
+
+FB10: RESPONSE TO HARD QUESTIONS IS DEFLECTION
+SEVERITY: HIGH
+SIGNAL: In written Q&A, clarifying question responses, or email exchanges with the firm, the founder consistently redirects difficult questions rather than answering them directly.
+DISQUALIFYING WHEN: The founder deflects a direct question about a specific financial metric — customer churn rate, burn rate, runway, NRR — that is material to the investment decision and for which the founder demonstrably has the answer, as evidenced by the same data being referenced elsewhere in the materials.
+PATTERN LESSON: When two or more written responses to direct questions deflect rather than answer, note this pattern explicitly in the Risk Assessment and request the specific unanswered data points as a precondition for advancing — deflection in due diligence is reliably predictive of information withholding post-investment, and the questions that were deflected are usually the most important ones to have answered before capital is committed.
+
+FB11: PRIOR COMPANY LEGAL DISPUTES NOT DISCLOSED
+SEVERITY: HIGH
+SIGNAL: Publicly available records — Companies House filings, court records accessible through the Cause List or BAILII, news coverage, or creditors' voluntary liquidation notices — reveal legal disputes, CCJs (County Court Judgements), insolvency proceedings, or material regulatory actions at prior companies associated with the founder, that the founder has not proactively disclosed in the submission.
+DISQUALIFYING WHEN: A Companies House search reveals that a prior company associated with the founder was subject to a Compulsory Liquidation (as opposed to a voluntary liquidation) with documented creditor losses — and the founder has not disclosed this in the submission.
+PATTERN LESSON: When a Companies House search reveals prior directorships at dissolved companies without prior proactive disclosure from the founder, investigate the dissolution circumstances of each before advancing — non-disclosure of a publicly accessible legal or insolvency record is the clearest indicator that the founder has decided what information to share with investors, which is a fundamentally different relationship than one founded on full disclosure.
+
+FB12: CUSTOMER REFERENCE COACHING
+SEVERITY: HIGH
+SIGNAL: Written testimonials, reference customer quotes, or case studies provided by the company use identical or near-identical language, emphasis, or superlatives across multiple customers — suggesting that reference customers were briefed on what to say rather than speaking independently.
+DISQUALIFYING WHEN: The company provides multiple written testimonials that are structurally identical and use the same key phrases, AND when independently contacted, the reference customers confirm they were provided with talking points or a template before speaking to investors.
+PATTERN LESSON: When written testimonials from multiple customers use identical language or structure, conduct reference calls with open-ended questions before structured ones — the divergence between a customer's unprepared description and their coached testimonial is the most reliable signal of whether the reference is independent or managed.
+
+FB13: FOUNDER DESCRIBES COMPETITION AS "NO COMPETITION"
+SEVERITY: MEDIUM
+SIGNAL: The founder explicitly states or strongly implies that there is no meaningful competition in their market, in a market where: (1) a 5-minute Crunchbase search identifies funded competitors; (2) the product category described has established incumbents; or (3) the customer problem addressed is being solved — by any means, including manual processes or adjacent software — by a significant proportion of potential customers.
+DISQUALIFYING WHEN: The founder claims no competition in a market where a 5-minute search identifies a well-funded competitor (>£5M raised) with a directly overlapping product, and the founder cannot explain why that competitor does not compete with them.
+PATTERN LESSON: When a founder claims no meaningful competition, run an independent search before accepting the claim — a competitive landscape that looks empty from the submission but contains funded players discoverable in 5 minutes is the clearest available signal that the competitive analysis has not been conducted at a standard sufficient for the investment decision.
+
+FB14: SALARY ABOVE MARKET FOR STAGE
+SEVERITY: MEDIUM
+SIGNAL: The founder is paying themselves a salary that is materially above the market rate for the company's current stage and capital position.
+DISQUALIFYING WHEN: The founder is paying themselves a salary above the Series A benchmark (>£130K) on a pre-seed or seed raise, AND the use of proceeds shows that salary costs represent more than 30% of the total raise — the investor's capital is being deployed primarily to fund founder income, not to fund the business.
+PATTERN LESSON: When a founder salary is above the stage benchmark, compare it as a percentage of the total raise and include this in the financial analysis — above-market founder compensation at early stage is a capital efficiency flag, not a personal judgement, and it compounds: a founder who starts above market typically increases their salary faster than the business grows.
+
+FB15: TIMELINE INCONSISTENCIES IN COMPANY HISTORY
+SEVERITY: HIGH
+SIGNAL: The dates in the submission — founding date, first customer date, first revenue date, prior funding dates — do not form a coherent chronological narrative when cross-referenced against each other and against public records.
+DISQUALIFYING WHEN: The stated "first revenue" date precedes the company's Companies House incorporation date — a company cannot have revenue before it legally exists — and the founder cannot explain the discrepancy with documentation.
+PATTERN LESSON: UNKNOWN
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF COMPONENT 8 — RED FLAG LIBRARY
+100 flags total across 8 categories. (Not 95 — recount confirmed 100.)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
