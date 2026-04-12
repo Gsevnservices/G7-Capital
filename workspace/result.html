@@ -1161,8 +1161,13 @@ function splitIntoSections(text) {
     } else if (state === 'IN_CONTENT') {
       // Collect content lines
       currentContent.push(line);
+    } else if (state === 'HAVE_TITLE' && !isEmpty) {
+      // Non-divider content line seen while waiting for second divider.
+      // Alex sometimes omits the second divider after a section title —
+      // start collecting content immediately rather than waiting indefinitely.
+      state = 'IN_CONTENT';
+      currentContent.push(line);
     }
-    // HAVE_TITLE + non-divider lines: skip — waiting for second divider
   }
   // Catch any trailing section without a closing divider
   if (state === 'IN_CONTENT' && currentTitle && currentContent.join('').trim().length > 0) {
@@ -1439,7 +1444,26 @@ function parseAlexOutput(raw) {
   if (depSection) result.thesisDependency = parseDependencyChain(depSection.content);
 
   var noteSection  = findSection(sections, "ALEX'S NOTE") || findSection(sections, 'ALEX NOTE');
-  result.alexNote  = noteSection ? noteSection.content : null;
+  if (noteSection) {
+    result.alexNote = noteSection.content;
+  } else {
+    // Fallback: Alex's Note may have been absorbed into section 10's content
+    // if section 10 had no closing divider. Extract it directly from raw text.
+    var noteHeaderIdx = raw.search(/ALEX[''\u2019]?S?\s+NOTE[:\s]/i);
+    if (noteHeaderIdx !== -1) {
+      var afterHeader = raw.slice(noteHeaderIdx).split('\n').slice(1); // skip header line
+      var noteLines = [];
+      for (var ni = 0; ni < afterHeader.length; ni++) {
+        var nl = afterHeader[ni];
+        // Stop at a section divider that precedes a new section header
+        if (/^[━=─\-]{5,}/.test(nl.trim()) && noteLines.join('').trim().length > 0) break;
+        if (/^[━=─\-]{5,}/.test(nl.trim())) continue; // skip opening divider after header
+        noteLines.push(nl);
+      }
+      var noteText = noteLines.join('\n').trim();
+      if (noteText) result.alexNote = noteText;
+    }
+  }
 
   var gapsSection  = findSection(sections, 'INFORMATION GAPS') || findSection(sections, 'MISSING');
   if (gapsSection) result.informationGaps = parseInfoGaps(gapsSection.content);
