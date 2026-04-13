@@ -719,6 +719,104 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .cq-error.show{display:block}
 
 /* ─────────────────────────────────────────────
+   SUMMARY CARD
+───────────────────────────────────────────── */
+.summary-card{
+  max-width:860px;margin:0 auto 32px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  padding:32px 40px
+}
+@media(max-width:600px){.summary-card{padding:24px 20px}}
+
+.summary-header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:28px;padding-bottom:24px;
+  border-bottom:1px solid var(--border)
+}
+.summary-company{display:flex;flex-direction:column;gap:6px}
+.summary-company span:first-child{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:300;color:var(--white);letter-spacing:.02em
+}
+.summary-meta{
+  font-family:'Tenor Sans',sans-serif;font-size:10px;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--grey1)
+}
+.summary-verdict{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.summary-score{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;font-weight:300;color:var(--white);line-height:1
+}
+.summary-rec-badge{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;
+  padding:6px 14px;border:1px solid
+}
+.summary-rec-badge.pass{color:var(--grey1);border-color:var(--grey1)}
+.summary-rec-badge.watch{color:var(--gold);border-color:var(--gold)}
+.summary-rec-badge.priority{color:#4CAF50;border-color:#4CAF50}
+
+.summary-section{
+  margin-bottom:24px;padding-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,.04)
+}
+.summary-section:last-of-type{border-bottom:none;margin-bottom:0}
+
+.summary-label{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px
+}
+.summary-bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.summary-bullets li{
+  font-family:'Tenor Sans',sans-serif;font-size:13px;
+  color:rgba(250,250,248,.75);padding-left:16px;
+  position:relative;line-height:1.5
+}
+.summary-bullets li::before{content:'·';position:absolute;left:0;color:var(--gold)}
+
+.summary-flags{display:flex;flex-direction:column;gap:8px}
+.summary-flag-row{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Tenor Sans',sans-serif;font-size:12px;
+  color:rgba(250,250,248,.7)
+}
+.summary-flag-severity{
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  padding:3px 8px;border:1px solid;min-width:64px;text-align:center;flex-shrink:0
+}
+.summary-flag-severity.high{color:var(--red);border-color:var(--red)}
+.summary-flag-severity.medium{color:var(--amber);border-color:var(--amber)}
+.summary-flag-severity.low{color:var(--grey2);border-color:var(--grey2)}
+
+.summary-return{
+  font-family:'Tenor Sans',sans-serif;font-size:13px;
+  color:rgba(250,250,248,.75);line-height:1.6
+}
+.summary-return .return-verdict{
+  margin-top:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase
+}
+.summary-return .return-verdict.works{color:#4CAF50}
+.summary-return .return-verdict.marginal{color:var(--gold)}
+.summary-return .return-verdict.fail{color:var(--red)}
+
+.summary-expand-btn{
+  display:block;width:100%;margin-top:28px;padding:14px;
+  background:transparent;border:1px solid var(--border);
+  color:var(--gold);font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;text-align:center
+}
+.summary-expand-btn:hover{
+  border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.04)
+}
+
+/* Full analysis wrapper — collapsed by default */
+#fullAnalysisWrapper{display:none}
+#fullAnalysisWrapper.expanded{display:block}
+
+/* ─────────────────────────────────────────────
    CQ LOADING OVERLAY (same pattern as submit.html)
 ───────────────────────────────────────────── */
 .cq-loading-overlay{
@@ -925,23 +1023,68 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
     </div><!-- /score-section -->
 
-    <!-- Dynamic sections rendered by JS into this container -->
-    <div id="sectionsContainer"></div>
+    <!-- SUMMARY CARD — always visible, populated by buildSummaryCard() -->
+    <div id="summaryCard" class="summary-card" style="display:none">
 
-    <!-- 8. ALEX'S NOTE — injected separately for special styling -->
-    <div class="alex-note-card" id="alexNoteCard" style="display:none">
-      <div class="alex-note-label">Alex's Note</div>
-      <div class="alex-note-text" id="alexNoteText">—</div>
-    </div>
+      <!-- Row 1: Company + Score + Recommendation -->
+      <div class="summary-header">
+        <div class="summary-company">
+          <span id="summaryCompanyName"></span>
+          <span id="summaryMeta" class="summary-meta"></span>
+        </div>
+        <div class="summary-verdict">
+          <span id="summaryScore" class="summary-score"></span>
+          <span id="summaryRec" class="summary-rec-badge"></span>
+        </div>
+      </div>
 
-    <!-- SECONDARY ACTIONS -->
-    <div class="secondary-actions">
-      <a href="submit.html" class="action-link">← Screen Another Deal</a>
-      <span class="action-link-sep"></span>
-      <button class="action-link" id="btnExportPDF" onclick="handleExport()">↓ Download Screening Note</button>
-      <span class="action-link-sep"></span>
-      <a href="history.html" class="action-link">View Deal History →</a>
-    </div>
+      <!-- Row 2: Why this recommendation -->
+      <div class="summary-section">
+        <div class="summary-label">WHY THIS RECOMMENDATION</div>
+        <ul id="summaryReasons" class="summary-bullets"></ul>
+      </div>
+
+      <!-- Row 3: Top red flags -->
+      <div class="summary-section" id="summaryFlagsSection">
+        <div class="summary-label">TOP RED FLAGS</div>
+        <div id="summaryFlags" class="summary-flags"></div>
+      </div>
+
+      <!-- Row 4: Fund return verdict -->
+      <div class="summary-section" id="summaryReturnSection">
+        <div class="summary-label">FUND RETURN</div>
+        <div id="summaryReturn" class="summary-return"></div>
+      </div>
+
+      <!-- Expand button -->
+      <button class="summary-expand-btn" id="summaryExpandBtn" onclick="toggleFullAnalysis()">
+        VIEW FULL ANALYSIS ↓
+      </button>
+
+    </div><!-- /summaryCard -->
+
+    <!-- FULL ANALYSIS WRAPPER — collapsed by default, expanded on click -->
+    <div id="fullAnalysisWrapper">
+
+      <!-- Dynamic sections rendered by JS into this container -->
+      <div id="sectionsContainer"></div>
+
+      <!-- 8. ALEX'S NOTE — injected separately for special styling -->
+      <div class="alex-note-card" id="alexNoteCard" style="display:none">
+        <div class="alex-note-label">Alex's Note</div>
+        <div class="alex-note-text" id="alexNoteText">—</div>
+      </div>
+
+      <!-- SECONDARY ACTIONS -->
+      <div class="secondary-actions">
+        <a href="submit.html" class="action-link">← Screen Another Deal</a>
+        <span class="action-link-sep"></span>
+        <button class="action-link" id="btnExportPDF" onclick="handleExport()">↓ Download Screening Note</button>
+        <span class="action-link-sep"></span>
+        <a href="history.html" class="action-link">View Deal History →</a>
+      </div>
+
+    </div><!-- /fullAnalysisWrapper -->
 
   </div><!-- /page-wrap -->
 
@@ -2141,6 +2284,155 @@ async function submitClarifyingAnswers() {
 
 
 // ─────────────────────────────────────────────
+// SUMMARY CARD
+// ─────────────────────────────────────────────
+
+// Toggles the full analysis section open/closed.
+// Called by the "VIEW FULL ANALYSIS" button in the summary card.
+function toggleFullAnalysis() {
+  var wrapper = document.getElementById('fullAnalysisWrapper');
+  var btn     = document.getElementById('summaryExpandBtn');
+
+  if (wrapper.classList.contains('expanded')) {
+    wrapper.classList.remove('expanded');
+    btn.textContent = 'VIEW FULL ANALYSIS ↓';
+  } else {
+    wrapper.classList.add('expanded');
+    btn.textContent = 'COLLAPSE ANALYSIS ↑';
+    wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+
+// Populates and shows the summary card from the parsed Alex output.
+// Called in init() after all sections are rendered.
+// data — the parsedData object returned by parseAlexOutput()
+function buildSummaryCard(data) {
+
+  // ── Company name + date ──
+  var companyName = data.company || (currentDeal && currentDeal.companyName) || 'Deal Analysis';
+  document.getElementById('summaryCompanyName').textContent = companyName;
+
+  var dateStr = currentDeal ? formatDate(currentDeal.dateScreened) : '';
+  document.getElementById('summaryMeta').textContent = dateStr ? 'Screened ' + dateStr : '';
+
+  // ── Score ──
+  document.getElementById('summaryScore').textContent =
+    (data.score !== null && data.score !== undefined) ? data.score + '/100' : '—';
+
+  // ── Recommendation badge ──
+  var badge  = document.getElementById('summaryRec');
+  var status = (data.status || '').toUpperCase();
+  badge.className = 'summary-rec-badge';
+  if (status.indexOf('PRIORITY') !== -1) {
+    badge.textContent = 'Priority Review';
+    badge.classList.add('priority');
+  } else if (status.indexOf('WATCH') !== -1) {
+    badge.textContent = 'Watch';
+    badge.classList.add('watch');
+  } else {
+    badge.textContent = 'Pass';
+    badge.classList.add('pass');
+  }
+
+  // ── Why this recommendation — first 3 sentences of executive summary ──
+  if (data.executiveSummary) {
+    // Split on sentence-ending punctuation followed by a space
+    var rawSentences = data.executiveSummary.split(/\.\s+/);
+    var sentences = rawSentences.map(function(s, i) {
+      // Re-add the period (except for the last fragment)
+      return i < rawSentences.length - 1 ? s.trim() + '.' : s.trim();
+    }).filter(function(s) { return s.length > 20; }).slice(0, 3);
+
+    var ul = document.getElementById('summaryReasons');
+    ul.innerHTML = '';
+    sentences.forEach(function(sentence) {
+      var li = document.createElement('li');
+      li.textContent = sentence;
+      ul.appendChild(li);
+    });
+  }
+
+  // ── Top red flags — HIGH and MEDIUM only, max 3 ──
+  var flagsSection = document.getElementById('summaryFlagsSection');
+  if (data.redFlags && data.redFlags.length > 0) {
+    var topFlags = data.redFlags.filter(function(f) {
+      return f.severity === 'HIGH' || f.severity === 'MEDIUM';
+    }).slice(0, 3);
+
+    var flagsContainer = document.getElementById('summaryFlags');
+    flagsContainer.innerHTML = '';
+
+    if (topFlags.length > 0) {
+      topFlags.forEach(function(flag) {
+        var row = document.createElement('div');
+        row.className = 'summary-flag-row';
+
+        var sev = document.createElement('span');
+        sev.className = 'summary-flag-severity ' + flag.severity.toLowerCase();
+        sev.textContent = flag.severity;
+
+        var txt = document.createElement('span');
+        txt.textContent = flag.text.length > 100
+          ? flag.text.substring(0, 100) + '…'
+          : flag.text;
+
+        row.appendChild(sev);
+        row.appendChild(txt);
+        flagsContainer.appendChild(row);
+      });
+    } else {
+      flagsContainer.innerHTML =
+        '<span style="color:var(--grey1);font-size:12px;' +
+        'font-family:\'Tenor Sans\',sans-serif">' +
+        'No high-severity flags identified</span>';
+    }
+  } else {
+    // No flags at all — hide the section
+    flagsSection.style.display = 'none';
+  }
+
+  // ── Fund return — search raw text for FUND RETURN block ──
+  var returnSection    = document.getElementById('summaryReturn');
+  var returnSectionWrap = document.getElementById('summaryReturnSection');
+
+  // Matches: "FUND RETURN MODEL:" or "FUND RETURN MATHS:" followed by content
+  var fundMatch = data.raw.match(
+    /FUND RETURN(?:\s+(?:MODEL|MATHS|MATHEMATICS))?[:\s]+([\s\S]*?)(?=\n\n[A-Z\u2500\u2501\u254C\u2014]|\n[━=─]{5}|$)/i
+  );
+
+  if (fundMatch) {
+    var returnText = fundMatch[1].trim();
+    if (returnText.length > 300) returnText = returnText.substring(0, 300) + '…';
+    returnSection.innerHTML = escapeHtml(returnText).replace(/\n/g, '<br>');
+
+    // Add pass/fail verdict badge
+    var rawUpper = data.raw.toUpperCase();
+    var verdictDiv = document.createElement('div');
+    verdictDiv.className = 'return-verdict';
+    if (rawUpper.indexOf('DO NOT WORK') !== -1 || rawUpper.indexOf('DOES NOT WORK') !== -1) {
+      verdictDiv.classList.add('fail');
+      verdictDiv.textContent = '\u2715 Fund return maths do not work';
+    } else if (rawUpper.indexOf('MARGINAL') !== -1 && rawUpper.indexOf('RETURN') !== -1) {
+      verdictDiv.classList.add('marginal');
+      verdictDiv.textContent = '\u25D0 Fund return maths are marginal';
+    } else if (fundMatch[1].toLowerCase().indexOf('work') !== -1) {
+      verdictDiv.classList.add('works');
+      verdictDiv.textContent = '\u2713 Fund return maths work';
+    }
+    if (verdictDiv.classList.length > 1) {
+      returnSection.appendChild(verdictDiv);
+    }
+  } else {
+    returnSectionWrap.style.display = 'none';
+  }
+
+  // ── Show the card ──
+  document.getElementById('summaryCard').style.display = 'block';
+}
+
+
+// ─────────────────────────────────────────────
 // MAIN INIT — runs on page load
 // ─────────────────────────────────────────────
 (function init() {
@@ -2197,6 +2489,9 @@ async function submitClarifyingAnswers() {
   renderScore(parsedData);
   renderSections(parsedData);
   renderAlexNote(parsedData.alexNote);
+
+  // Build and show the summary card (sits above the collapsed full analysis)
+  buildSummaryCard(parsedData);
 
   // Init scroll reveal
   initReveal();

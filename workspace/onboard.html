@@ -427,6 +427,18 @@ nav{
 .btn-submit:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 12px 40px rgba(201,168,76,.2)}
 .btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 
+/* Demo data button — secondary ghost style */
+.btn-demo{
+  display:block;width:100%;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);background:transparent;
+  border:1px solid var(--border);
+  cursor:pointer;padding:14px 32px;
+  transition:all .3s;margin-top:20px;text-align:center
+}
+.btn-demo:hover{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.04)}
+
 /* ─────────────────────────────────────────────
    LOADING STATE
 ───────────────────────────────────────────── */
@@ -636,6 +648,10 @@ nav{
         </p>
       </div>
 
+      <button type="button" class="btn-demo" onclick="loadDemoData()">
+        Load Demo Data — G7 Capital →
+      </button>
+
       <div class="form-nav">
         <div></div><!-- spacer -->
         <button type="button" class="btn-next" onclick="nextStep(1)">
@@ -820,6 +836,76 @@ nav{
           >
         </div>
 
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label" for="targetOwnership">
+              Target Ownership % <span class="opt">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="targetOwnership"
+              name="targetOwnership"
+              placeholder="e.g. 10-20% at entry"
+              autocomplete="off"
+            >
+            <div class="field-hint">Your typical target ownership at the point of investment.</div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="dealsPerYear">
+              Deals Per Year <span class="opt">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="dealsPerYear"
+              name="dealsPerYear"
+              placeholder="e.g. 8-12"
+              autocomplete="off"
+            >
+            <div class="field-hint">How many new investments you make per year.</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="minRevenue">
+            Minimum Revenue Threshold <span class="opt">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="minRevenue"
+            name="minRevenue"
+            placeholder="e.g. £500K ARR, or Pre-revenue OK"
+            autocomplete="off"
+          >
+          <div class="field-hint">Minimum traction required before you will consider investing.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="valuationCeiling">
+            Valuation Ceiling <span class="opt">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="valuationCeiling"
+            name="valuationCeiling"
+            placeholder="e.g. £20M pre-money at Seed"
+            autocomplete="off"
+          >
+          <div class="field-hint">Maximum entry valuation you will invest at for your primary stage.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="exitPreference">
+            Preferred Exit Type <span class="opt">(optional)</span>
+          </label>
+          <select id="exitPreference" name="exitPreference">
+            <option value="" disabled selected>Select preferred exit type</option>
+            <option value="Trade sale (strategic acquisition)">Trade sale (strategic acquisition)</option>
+            <option value="IPO / public markets">IPO / public markets</option>
+            <option value="Secondary sale">Secondary sale</option>
+            <option value="Any / no preference">Any / no preference</option>
+          </select>
+        </div>
+
       </div>
 
       <div class="form-nav">
@@ -878,6 +964,22 @@ nav{
             Be exhaustive. These are applied as a first filter — they save Alex's time and yours.
           </div>
           <div class="field-error" id="hardPass-error">Please list your hard pass criteria.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="partnerPreferences">
+            Partner Preferences <span class="opt">(optional)</span>
+          </label>
+          <textarea
+            id="partnerPreferences"
+            name="partnerPreferences"
+            class="tall"
+            placeholder="Describe what the lead partner cares most about. e.g:&#10;'Our lead partner has a strong preference for technical founders with prior startup experience. We have consistently passed on solo non-technical founders regardless of traction. We prioritise UK-headquartered companies but will consider US companies with strong UK presence.'"
+            spellcheck="true"
+          ></textarea>
+          <div class="field-hint">
+            This helps Alex calibrate recommendations to your specific investment style. Write in your own words — include recurring patterns in what you back and what you avoid.
+          </div>
         </div>
 
       </div>
@@ -1153,8 +1255,8 @@ function prevStep(fromStep) {
 
 // ─────────────────────────────────────────────
 // ASSEMBLE FIRM KNOWLEDGE BASE TEXT BLOCK
-// Builds the exact format from CLAUDE.md Section 7
 // This text is injected into every Alex API call
+// as the final section of the system prompt.
 // ─────────────────────────────────────────────
 function buildFirmKnowledgeBase(data) {
   // Build ticket size string
@@ -1167,32 +1269,96 @@ function buildFirmKnowledgeBase(data) {
     ticketStr = 'Up to ' + data.ticketMax;
   }
 
+  // Build Fund Return Model line
+  var fundReturnModel = '';
+  if (data.fundSize || ticketStr !== 'Not specified' || data.returnTarget) {
+    fundReturnModel += 'Fund size: ' + (data.fundSize || 'Not specified') + '. ';
+    fundReturnModel += 'Standard ticket: ' + ticketStr + '. ';
+    fundReturnModel += 'Return target: ' + (data.returnTarget || 'Not specified') + '.\n';
+    fundReturnModel += 'Alex must run Framework 6 on every deal where valuation is known using these parameters.';
+  } else {
+    fundReturnModel = 'Parameters not fully specified. Run Framework 6 where possible using available data.';
+  }
+
   var kb = '';
   kb += '═══════════════════════════════════════════════════\n';
   kb += 'FIRM KNOWLEDGE BASE — ' + data.firmName + '\n';
-  kb += 'Injected into every Alex session\n';
+  kb += 'Injected into every Alex session.\n';
+  kb += 'Alex applies all firm-specific parameters to every deal screened.\n';
   kb += '═══════════════════════════════════════════════════\n\n';
-  kb += 'FIRM NAME:            ' + data.firmName + '\n';
-  kb += 'FIRM TYPE:            ' + data.firmType + '\n';
-  kb += 'FUND SIZE:            ' + (data.fundSize || 'Not specified') + '\n';
-  kb += 'STAGE FOCUS:          ' + data.stageFocus + '\n';
-  kb += 'SECTOR FOCUS:         ' + data.sectorFocus + '\n';
-  kb += 'GEOGRAPHY:            ' + data.geography + '\n';
-  kb += 'TICKET SIZE:          ' + ticketStr + '\n';
-  kb += 'RETURN TARGET:        ' + (data.returnTarget || 'Not specified') + '\n\n';
+  kb += 'FIRM NAME:              ' + data.firmName + '\n';
+  kb += 'FIRM TYPE:              ' + data.firmType + '\n';
+  kb += 'FUND SIZE:              ' + (data.fundSize || 'Not specified') + '\n';
+  kb += 'STAGE FOCUS:            ' + data.stageFocus + '\n';
+  kb += 'SECTOR FOCUS:           ' + data.sectorFocus + '\n';
+  kb += 'GEOGRAPHY:              ' + data.geography + '\n';
+  kb += 'TICKET SIZE:            ' + ticketStr + '\n';
+  kb += 'TARGET OWNERSHIP:       ' + (data.targetOwnership || 'Not specified') + '\n';
+  kb += 'RETURN TARGET:          ' + (data.returnTarget || 'Not specified') + '\n';
+  kb += 'INVESTMENT PACE:        ' + (data.dealsPerYear || 'Not specified') + ' new investments per year\n';
+  kb += 'MINIMUM REVENUE:        ' + (data.minRevenue || 'Not specified') + '\n';
+  kb += 'VALUATION CEILING:      ' + (data.valuationCeiling || 'Not specified') + '\n';
+  kb += 'EXIT PREFERENCE:        ' + (data.exitPreference || 'Not specified') + '\n\n';
+  kb += 'FUND RETURN MODEL:\n';
+  kb += fundReturnModel + '\n\n';
   kb += 'INVESTMENT THESIS:\n';
   kb += data.investmentThesis + '\n\n';
   kb += 'HARD PASS CRITERIA:\n';
   kb += data.hardPass + '\n\n';
+  kb += 'PARTNER PREFERENCES:\n';
+  kb += (data.partnerPreferences || 'No specific partner preferences recorded.') + '\n\n';
   kb += 'RECENT DEAL HISTORY:\n';
   kb += (data.dealHistory || 'No deal history provided yet. This will build up as Alex screens deals.') + '\n\n';
+  kb += 'ACTIVE PIPELINE:\n';
+  kb += (data.activePipeline || 'No active pipeline provided.') + '\n\n';
   kb += 'FIRM-SPECIFIC CALIBRATION NOTES:\n';
   kb += 'No calibration notes yet. These accumulate as partners agree or disagree with Alex\'s verdicts.\n\n';
-  kb += 'ACTIVE PIPELINE:\n';
-  kb += (data.activePipeline || 'No active pipeline provided.') + '\n';
   kb += '═══════════════════════════════════════════════════\n';
 
   return kb;
+}
+
+
+// ─────────────────────────────────────────────
+// LOAD DEMO DATA — pre-fills all fields with G7 Capital demo profile
+// Called by the "Load Demo Data" button on Step 1.
+// Does NOT fill the API key — the user must enter their own.
+// Advances directly to Step 2 after filling.
+// ─────────────────────────────────────────────
+function loadDemoData() {
+  // Step 2 — Firm Identity
+  document.getElementById('firmName').value  = 'G7 Capital';
+  document.getElementById('firmType').value  = 'Venture Capital (VC)';
+  document.getElementById('fundSize').value  = '£50M Fund I';
+
+  // Step 3 — Investment Parameters
+  document.getElementById('stageFocus').value       = 'Seed';
+  document.getElementById('sectorFocus').value      = 'B2B SaaS, Fintech, Enterprise Software, Deep Tech';
+  document.getElementById('geography').value        = 'UK, Western Europe, Israel';
+  document.getElementById('ticketMin').value        = '£500K';
+  document.getElementById('ticketMax').value        = '£2M';
+  document.getElementById('returnTarget').value     = '3x fund / 25% IRR';
+  document.getElementById('targetOwnership').value  = '10-20% at entry';
+  document.getElementById('dealsPerYear').value     = '8-12';
+  document.getElementById('minRevenue').value       = '£200K ARR minimum (exceptions for exceptional pre-revenue deep tech)';
+  document.getElementById('valuationCeiling').value = '£15M pre-money at Seed, £40M pre-money at Series A';
+  document.getElementById('exitPreference').value   = 'Trade sale (strategic acquisition)';
+
+  // Step 4 — Thesis & Strategy
+  document.getElementById('investmentThesis').value = 'G7 Capital backs exceptional founders building defensible B2B software businesses in the UK and Western Europe. We invest at Seed and Series A in companies with genuine product-market fit signals — not just revenue, but evidence that customers stay, expand, and refer. Our edge is analytical depth at the screening stage: we pass on more deals than our peers and invest with higher conviction in fewer companies. We are sector-agnostic within B2B technology but have particular depth in financial services infrastructure, enterprise workflow automation, and developer tools.';
+
+  document.getElementById('hardPass').value = 'Pre-revenue consumer apps.\nB2C businesses without clear B2B monetisation path.\nHardware-only companies with no software subscription.\nCompanies requiring regulatory licences not yet obtained.\nFounding teams with undisclosed prior failures.\nAny deal where the fund return maths do not work at base case exit.\nCompanies outside UK/Western Europe/Israel unless exceptional circumstances.';
+
+  document.getElementById('partnerPreferences').value = 'Strong preference for technical co-founders or domain expert founders with deep operator experience. We have consistently passed on solo non-technical founders at Seed stage regardless of traction metrics. Visionary founders without an operational co-founder or strong COO are a watch at best. We prioritise NRR above all other metrics at Series A — a company with 130% NRR and 40% growth is more interesting to us than 120% growth and 95% NRR. We have never invested in a company where the CAC payback period exceeded 24 months.';
+
+  // Step 5 — Deal History
+  document.getElementById('dealHistory').value = 'COMPANY: Paddle | VERDICT: Passed | REASON: Strong merchant of record moat, exceptional NRR — stage mismatch for our fund.\nCOMPANY: Synthesia | VERDICT: Passed | REASON: Stage mismatch, Series C outside mandate.\nCOMPANY: Causal | VERDICT: Passed | REASON: Weak moat, market consolidating around incumbents.';
+
+  document.getElementById('activePipeline').value = 'None currently active.';
+
+  // Navigate to Step 2 (skip API key validation — user must enter their own key)
+  currentStep = 2;
+  renderStep();
 }
 
 
@@ -1214,21 +1380,27 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
 
   // Collect all form values
   var data = {
-    apiKey:            document.getElementById('apiKey').value.trim(),
-    firmName:          document.getElementById('firmName').value.trim(),
-    firmType:          document.getElementById('firmType').value,
-    fundSize:          document.getElementById('fundSize').value.trim(),
-    stageFocus:        document.getElementById('stageFocus').value,
-    sectorFocus:       document.getElementById('sectorFocus').value.trim(),
-    geography:         document.getElementById('geography').value.trim(),
-    ticketMin:         document.getElementById('ticketMin').value.trim(),
-    ticketMax:         document.getElementById('ticketMax').value.trim(),
-    returnTarget:      document.getElementById('returnTarget').value.trim(),
-    investmentThesis:  document.getElementById('investmentThesis').value.trim(),
-    hardPass:          document.getElementById('hardPass').value.trim(),
-    dealHistory:       document.getElementById('dealHistory').value.trim(),
-    activePipeline:    document.getElementById('activePipeline').value.trim(),
-    onboardedAt:       new Date().toISOString()
+    apiKey:             document.getElementById('apiKey').value.trim(),
+    firmName:           document.getElementById('firmName').value.trim(),
+    firmType:           document.getElementById('firmType').value,
+    fundSize:           document.getElementById('fundSize').value.trim(),
+    stageFocus:         document.getElementById('stageFocus').value,
+    sectorFocus:        document.getElementById('sectorFocus').value.trim(),
+    geography:          document.getElementById('geography').value.trim(),
+    ticketMin:          document.getElementById('ticketMin').value.trim(),
+    ticketMax:          document.getElementById('ticketMax').value.trim(),
+    returnTarget:       document.getElementById('returnTarget').value.trim(),
+    targetOwnership:    document.getElementById('targetOwnership').value.trim(),
+    dealsPerYear:       document.getElementById('dealsPerYear').value.trim(),
+    minRevenue:         document.getElementById('minRevenue').value.trim(),
+    valuationCeiling:   document.getElementById('valuationCeiling').value.trim(),
+    exitPreference:     document.getElementById('exitPreference').value,
+    investmentThesis:   document.getElementById('investmentThesis').value.trim(),
+    hardPass:           document.getElementById('hardPass').value.trim(),
+    partnerPreferences: document.getElementById('partnerPreferences').value.trim(),
+    dealHistory:        document.getElementById('dealHistory').value.trim(),
+    activePipeline:     document.getElementById('activePipeline').value.trim(),
+    onboardedAt:        new Date().toISOString()
   };
 
   // Small delay so the loading bar is visible (feels intentional)
@@ -1239,16 +1411,21 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
 
     // 2. Save structured config as JSON (used by dashboard and other pages)
     var firmConfig = {
-      firmName:     data.firmName,
-      firmType:     data.firmType,
-      fundSize:     data.fundSize,
-      stageFocus:   data.stageFocus,
-      sectorFocus:  data.sectorFocus,
-      geography:    data.geography,
-      ticketMin:    data.ticketMin,
-      ticketMax:    data.ticketMax,
-      returnTarget: data.returnTarget,
-      onboardedAt:  data.onboardedAt
+      firmName:        data.firmName,
+      firmType:        data.firmType,
+      fundSize:        data.fundSize,
+      stageFocus:      data.stageFocus,
+      sectorFocus:     data.sectorFocus,
+      geography:       data.geography,
+      ticketMin:       data.ticketMin,
+      ticketMax:       data.ticketMax,
+      returnTarget:    data.returnTarget,
+      targetOwnership: data.targetOwnership,
+      dealsPerYear:    data.dealsPerYear,
+      minRevenue:      data.minRevenue,
+      valuationCeiling: data.valuationCeiling,
+      exitPreference:  data.exitPreference,
+      onboardedAt:     data.onboardedAt
     };
     localStorage.setItem('g7_firm_config', JSON.stringify(firmConfig));
 
@@ -1310,28 +1487,40 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
   if (localStorage.getItem('g7_api_key')) {
     document.getElementById('apiKey').value = localStorage.getItem('g7_api_key');
   }
-  if (config.firmName)    document.getElementById('firmName').value    = config.firmName;
-  if (config.firmType)    document.getElementById('firmType').value    = config.firmType;
-  if (config.fundSize)    document.getElementById('fundSize').value    = config.fundSize;
-  if (config.stageFocus)  document.getElementById('stageFocus').value  = config.stageFocus;
-  if (config.sectorFocus) document.getElementById('sectorFocus').value = config.sectorFocus;
-  if (config.geography)   document.getElementById('geography').value   = config.geography;
-  if (config.ticketMin)   document.getElementById('ticketMin').value   = config.ticketMin;
-  if (config.ticketMax)   document.getElementById('ticketMax').value   = config.ticketMax;
-  if (config.returnTarget)document.getElementById('returnTarget').value= config.returnTarget;
+  if (config.firmName)         document.getElementById('firmName').value         = config.firmName;
+  if (config.firmType)         document.getElementById('firmType').value         = config.firmType;
+  if (config.fundSize)         document.getElementById('fundSize').value         = config.fundSize;
+  if (config.stageFocus)       document.getElementById('stageFocus').value       = config.stageFocus;
+  if (config.sectorFocus)      document.getElementById('sectorFocus').value      = config.sectorFocus;
+  if (config.geography)        document.getElementById('geography').value        = config.geography;
+  if (config.ticketMin)        document.getElementById('ticketMin').value        = config.ticketMin;
+  if (config.ticketMax)        document.getElementById('ticketMax').value        = config.ticketMax;
+  if (config.returnTarget)     document.getElementById('returnTarget').value     = config.returnTarget;
+  if (config.targetOwnership)  document.getElementById('targetOwnership').value  = config.targetOwnership;
+  if (config.dealsPerYear)     document.getElementById('dealsPerYear').value     = config.dealsPerYear;
+  if (config.minRevenue)       document.getElementById('minRevenue').value       = config.minRevenue;
+  if (config.valuationCeiling) document.getElementById('valuationCeiling').value = config.valuationCeiling;
+  if (config.exitPreference)   document.getElementById('exitPreference').value   = config.exitPreference;
 
-  // Re-fill thesis and hard pass from the stored KB text (extract sections)
+  // Re-fill textarea fields from the stored KB text using section-boundary regex
+  // These are not stored in firmConfig — they live in the KB text block
   var kb = localStorage.getItem('g7_firm_knowledge_base') || '';
-  var thesisMatch  = kb.match(/INVESTMENT THESIS:\n([\s\S]*?)\n\nHARD PASS CRITERIA:/);
-  var hardPassMatch= kb.match(/HARD PASS CRITERIA:\n([\s\S]*?)\n\nRECENT DEAL HISTORY:/);
-  var historyMatch = kb.match(/RECENT DEAL HISTORY:\n([\s\S]*?)\n\nFIRM-SPECIFIC CALIBRATION/);
-  var pipelineMatch= kb.match(/ACTIVE PIPELINE:\n([\s\S]*?)\n═══/);
+  var thesisMatch    = kb.match(/INVESTMENT THESIS:\n([\s\S]*?)\n\nHARD PASS CRITERIA:/);
+  var hardPassMatch  = kb.match(/HARD PASS CRITERIA:\n([\s\S]*?)\n\nPARTNER PREFERENCES:/);
+  var partnerMatch   = kb.match(/PARTNER PREFERENCES:\n([\s\S]*?)\n\nRECENT DEAL HISTORY:/);
+  var historyMatch   = kb.match(/RECENT DEAL HISTORY:\n([\s\S]*?)\n\nACTIVE PIPELINE:/);
+  var pipelineMatch  = kb.match(/ACTIVE PIPELINE:\n([\s\S]*?)\n\nFIRM-SPECIFIC CALIBRATION NOTES:/);
 
-  if (thesisMatch   && thesisMatch[1])   document.getElementById('investmentThesis').value = thesisMatch[1].trim();
-  if (hardPassMatch && hardPassMatch[1]) document.getElementById('hardPass').value          = hardPassMatch[1].trim();
+  if (thesisMatch   && thesisMatch[1])   document.getElementById('investmentThesis').value   = thesisMatch[1].trim();
+  if (hardPassMatch && hardPassMatch[1]) document.getElementById('hardPass').value            = hardPassMatch[1].trim();
+  if (partnerMatch  && partnerMatch[1]) {
+    var partnerText = partnerMatch[1].trim();
+    if (!partnerText.startsWith('No specific partner preferences')) {
+      document.getElementById('partnerPreferences').value = partnerText;
+    }
+  }
   if (historyMatch  && historyMatch[1]) {
     var histText = historyMatch[1].trim();
-    // Don't pre-fill the "no history yet" default placeholder
     if (!histText.startsWith('No deal history provided yet')) {
       document.getElementById('dealHistory').value = histText;
     }

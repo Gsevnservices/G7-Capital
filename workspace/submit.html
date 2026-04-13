@@ -393,6 +393,54 @@ nav{
   100%{width:0%;margin-left:100%}
 }
 
+/* Second phase progress — rendering slides to images */
+.pdf-rendering{
+  display:none;margin-top:8px;
+  font-size:11px;color:var(--grey1);letter-spacing:.05em
+}
+.pdf-rendering.show{display:flex;align-items:center;gap:12px}
+
+/* Informational notice (auto-limit, not an error) */
+.pdf-notice{
+  display:none;margin-top:12px;
+  padding:14px 20px;border:1px solid var(--border);
+  font-size:12px;color:var(--grey1);line-height:1.7
+}
+.pdf-notice.show{display:block}
+
+/* Token guard warning — shown when deck may approach API limits */
+.pdf-token-warning{
+  display:none;margin-top:16px;
+  padding:20px 24px;border:1px solid var(--border);
+  background:rgba(201,168,76,.04)
+}
+.pdf-token-warning.show{display:block}
+.pdf-token-warning-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px
+}
+.pdf-token-warning-text{
+  font-size:13px;color:var(--white);line-height:1.7;
+  margin-bottom:16px;
+  font-family:'Cormorant Garamond',serif;font-weight:300
+}
+.pdf-token-warning-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-send-all{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey1);background:none;
+  border:1px solid var(--border2);
+  padding:10px 20px;cursor:pointer;transition:all .3s
+}
+.btn-send-all:hover{border-color:var(--grey2);color:var(--white)}
+.btn-send-15{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--black);background:var(--gold);
+  border:none;padding:10px 20px;cursor:pointer;transition:all .3s
+}
+.btn-send-15:hover{background:var(--gold2)}
+
 /* ─────────────────────────────────────────────
    SUBMIT BUTTON
 ───────────────────────────────────────────── */
@@ -611,7 +659,7 @@ nav{
       <div class="method-icon">⬡</div>
       <div class="method-title">Upload a Pitch Deck</div>
       <div class="method-desc">
-        Upload a PDF — we extract the text client-side and pass it directly to Alex. Nothing is sent to our servers.
+        Upload a PDF — we extract the text and render each slide as an image. Alex reads both. Nothing is sent to our servers.
       </div>
       <span class="method-tag">Selected</span>
     </div>
@@ -720,6 +768,12 @@ nav{
         <div class="extract-bar"><div class="extract-bar-inner"></div></div>
       </div>
 
+      <!-- Shown during slide rendering (second phase) -->
+      <div class="pdf-rendering" id="pdfRendering">
+        <span id="pdfRenderingText">Rendering slides for visual analysis...</span>
+        <div class="extract-bar"><div class="extract-bar-inner"></div></div>
+      </div>
+
       <!-- Shown once PDF is successfully loaded -->
       <div class="pdf-loaded" id="pdfLoaded">
         <div class="pdf-loaded-icon">⬡</div>
@@ -736,6 +790,21 @@ nav{
         <strong style="display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Extraction Failed</strong>
         <span id="pdfErrorMessage">Could not extract text from this PDF.</span>
         Please try a different file, or switch to the text input method and paste the content manually.
+      </div>
+
+      <!-- Auto-limit or informational notice (gold tint text, not an error) -->
+      <div class="pdf-notice" id="pdfNotice"></div>
+
+      <!-- Token guard warning — shown when deck may approach API limits -->
+      <div class="pdf-token-warning" id="pdfTokenWarning">
+        <div class="pdf-token-warning-label">Large Deck Detected</div>
+        <div class="pdf-token-warning-text" id="pdfTokenWarningText">
+          This deck has many slides. Sending all slides may approach API limits.
+        </div>
+        <div class="pdf-token-warning-actions">
+          <button type="button" class="btn-send-all" onclick="confirmSendAll()">Send All Slides</button>
+          <button type="button" class="btn-send-15" onclick="confirmLimit15()">Limit to 15 Slides</button>
+        </div>
       </div>
 
       <div class="field-error" id="pdfInput-error" style="margin-top:12px">Please upload a PDF before submitting.</div>
@@ -875,6 +944,12 @@ function checkSubmitReady() {
     hasContent = extractedPdfText.length > 0;
   }
 
+  // If the token warning is active, user must resolve it before submitting
+  if (pdfTokenWarningActive) {
+    document.getElementById('submitBtn').disabled = true;
+    return;
+  }
+
   document.getElementById('submitBtn').disabled = !(hasCompany && hasSource && hasContent);
 }
 
@@ -895,7 +970,9 @@ if (typeof pdfjsLib !== 'undefined') {
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 
-var extractedPdfText = ''; // holds the extracted text after PDF processing
+var extractedPdfText   = ''; // holds the cleaned extracted text after PDF processing
+var extractedPdfImages = []; // array of base64 JPEG strings, one per rendered slide
+var pdfTokenWarningActive = false; // true when user must resolve token warning before submitting
 
 // Handle file selected via browse button
 document.getElementById('pdfFileInput').addEventListener('change', function(e) {
@@ -963,21 +1040,32 @@ function processPdfFile(file) {
 }
 
 
-// Extract all text from all pages of the PDF using PDF.js
+// Extract all text and render all pages as images using PDF.js
+// Phase 1: text extraction + cleaning
+// Phase 2: canvas-based slide rendering (JPEG, 1.5x scale)
+// Phase 3: token guard check
 async function extractTextFromPdf(arrayBuffer, fileName) {
   try {
     // Load the PDF document
     var loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+
+    // Handle password-protected PDFs gracefully
+    loadingTask.onPassword = function(updatePassword, reason) {
+      document.getElementById('pdfExtracting').classList.remove('show');
+      showPdfError(
+        'This PDF is password-protected. ' +
+        'Please remove the password and try again, or switch to the text input method.'
+      );
+    };
+
     var pdf = await loadingTask.promise;
-
     var totalPages = pdf.numPages;
-    var allText    = [];
+    var allText = [];
 
-    // Extract text from every page in order
+    // ── PHASE 1: Extract text from every page ──
     for (var pageNum = 1; pageNum <= totalPages; pageNum++) {
       var page        = await pdf.getPage(pageNum);
       var textContent = await page.getTextContent();
-      // Join text items from this page with spaces
       var pageText = textContent.items.map(function(item) {
         return item.str;
       }).join(' ');
@@ -986,54 +1074,220 @@ async function extractTextFromPdf(arrayBuffer, fileName) {
       }
     }
 
-    var fullText = allText.join('\n\n');
+    var rawText     = allText.join('\n\n');
+    var cleanedText = cleanPdfText(rawText, totalPages);
 
-    // Check we actually got meaningful text
-    // (some PDFs are image-only scans — PDF.js can't extract from those)
-    if (fullText.trim().length < 50) {
-      document.getElementById('pdfExtracting').classList.remove('show');
-      showPdfError(
-        'This PDF appears to contain scanned images rather than selectable text. ' +
-        'PDF.js can only extract text from text-based PDFs. ' +
-        'Please switch to the text input method and paste the content manually.'
+    // Image-only PDF — text will be sparse, rely on visual analysis
+    if (cleanedText.trim().length < 50) {
+      cleanedText = '[Image-only PDF — visual analysis covers full deck]';
+    }
+    extractedPdfText = cleanedText;
+
+    // ── PHASE 2: Render slides to JPEG images ──
+    document.getElementById('pdfExtracting').classList.remove('show');
+    document.getElementById('pdfRendering').classList.add('show');
+    document.getElementById('pdfRenderingText').textContent =
+      'Rendering slides for visual analysis (0/' + totalPages + ')...';
+
+    var pagesToRender = Math.min(totalPages, 20); // hard cap at 20
+    extractedPdfImages = await renderPdfPagesToImages(pdf, pagesToRender, function(done, total) {
+      document.getElementById('pdfRenderingText').textContent =
+        'Rendering slides for visual analysis (' + done + '/' + total + ')...';
+    });
+
+    document.getElementById('pdfRendering').classList.remove('show');
+
+    // ── PHASE 3: Token guard ──
+    // Estimate: 160K system prompt + 1,500 per image + text chars÷4 + 4K overhead
+    var estimatedTokens = 160000 +
+      (extractedPdfImages.length * 1500) +
+      Math.round(cleanedText.length / 4) +
+      4000;
+
+    pdfTokenWarningActive = false;
+
+    if (estimatedTokens > 200000) {
+      // Auto-limit — silently cap to first 15 images, show notice
+      var originalCount = extractedPdfImages.length;
+      extractedPdfImages = extractedPdfImages.slice(0, 15);
+      showPdfNotice(
+        'This deck has ' + originalCount + ' slides. To stay within API limits, ' +
+        'Alex will analyse the first 15 slides visually plus the full extracted text.'
       );
-      return;
+    } else if (estimatedTokens > 190000) {
+      // User must choose before submitting
+      pdfTokenWarningActive = true;
+      document.getElementById('pdfTokenWarningText').textContent =
+        'This deck has ' + extractedPdfImages.length + ' slides (~' +
+        Math.round(estimatedTokens / 1000) + 'K estimated tokens). ' +
+        'Sending all slides may approach API limits. ' +
+        'You can send all slides or limit to the first 15.';
+      document.getElementById('pdfTokenWarning').classList.add('show');
     }
 
-    // Success — store the extracted text and show confirmation
-    extractedPdfText = fullText;
+    // ── Show file summary ──
+    var slideLabel  = totalPages + ' slide' + (totalPages === 1 ? '' : 's');
+    var visualLabel = extractedPdfImages.length + ' rendered for visual analysis';
+    var charLabel   = Math.round(cleanedText.length / 1000) + 'K characters extracted';
 
-    document.getElementById('pdfExtracting').classList.remove('show');
-
-    // Show file info and text preview
     document.getElementById('pdfFilename').textContent = fileName;
-    document.getElementById('pdfMeta').textContent =
-      totalPages + ' page' + (totalPages === 1 ? '' : 's') + ' · ' +
-      Math.round(fullText.length / 1000) + 'K characters extracted';
+    document.getElementById('pdfMeta').textContent = slideLabel + ' · ' + visualLabel + ' · ' + charLabel;
     document.getElementById('pdfPreview').textContent =
-      '"' + fullText.replace(/\s+/g, ' ').trim().slice(0, 200) + '…"';
+      cleanedText.length > 10
+        ? '"' + cleanedText.replace(/\s+/g, ' ').trim().slice(0, 200) + '…"'
+        : '[Visual analysis only — no extractable text found]';
     document.getElementById('pdfLoaded').classList.add('show');
 
-    // Enable submit if other fields are also filled
     checkSubmitReady();
 
   } catch (err) {
     document.getElementById('pdfExtracting').classList.remove('show');
-    showPdfError(
-      'Could not process this PDF. ' +
-      (err.message || 'Unknown error') + '. ' +
-      'Please try a different file or use the text input method.'
-    );
+    document.getElementById('pdfRendering').classList.remove('show');
+    // Distinguish password errors from other failures
+    if (err.name === 'PasswordException' ||
+        (err.message && err.message.toLowerCase().indexOf('password') !== -1)) {
+      showPdfError(
+        'This PDF is password-protected. ' +
+        'Please remove the password and try again, or switch to the text input method.'
+      );
+    } else {
+      showPdfError(
+        'Could not process this PDF. ' +
+        (err.message || 'Unknown error') + '. ' +
+        'Please try a different file or use the text input method.'
+      );
+    }
   }
+}
+
+
+// ─────────────────────────────────────────────
+// cleanPdfText(rawText, totalPages)
+// Cleans raw extracted PDF text:
+//   • Removes repeated header/footer lines (for 5+ page PDFs)
+//   • Collapses multiple whitespace
+//   • Removes lines shorter than 3 chars (OCR noise)
+//   • Truncates at 15,000 characters
+// ─────────────────────────────────────────────
+function cleanPdfText(rawText, totalPages) {
+  var lines = rawText.split('\n');
+
+  var cleanedLines = lines;
+  if (totalPages >= 5) {
+    // Count how many times each line appears (normalised)
+    var freq = {};
+    lines.forEach(function(line) {
+      var key = line.trim().toLowerCase();
+      if (key.length > 2) {
+        freq[key] = (freq[key] || 0) + 1;
+      }
+    });
+    // Remove lines that appear on more than 40% of pages — likely headers/footers
+    var threshold = Math.max(3, Math.floor(totalPages * 0.4));
+    cleanedLines = lines.filter(function(line) {
+      var key = line.trim().toLowerCase();
+      return !key || key.length <= 2 || (freq[key] || 0) < threshold;
+    });
+  }
+
+  // Collapse multiple spaces and tabs
+  var text = cleanedLines.join('\n');
+  text = text.replace(/[ \t]{2,}/g, ' ');
+  text = text.replace(/\n{3,}/g, '\n\n');
+
+  // Remove lines shorter than 3 meaningful chars
+  text = text.split('\n').filter(function(line) {
+    return line.trim().length === 0 || line.trim().length >= 3;
+  }).join('\n');
+
+  // Truncate at 15,000 chars to stay within token budget
+  if (text.length > 15000) {
+    text = text.slice(0, 15000) +
+      '\n\n[Text truncated at 15,000 characters — visual analysis covers the full deck]';
+  }
+
+  return text.trim();
+}
+
+
+// ─────────────────────────────────────────────
+// renderPdfPagesToImages(pdf, pagesToRender, onProgress)
+// Renders each PDF page to a canvas and returns an array
+// of base64-encoded JPEG strings (1.5x scale, 85% quality).
+// If a single page fails to render, it is skipped silently.
+// ─────────────────────────────────────────────
+async function renderPdfPagesToImages(pdf, pagesToRender, onProgress) {
+  var images = [];
+  for (var pageNum = 1; pageNum <= pagesToRender; pageNum++) {
+    try {
+      var page     = await pdf.getPage(pageNum);
+      var viewport = page.getViewport({ scale: 1.5 });
+
+      var canvas  = document.createElement('canvas');
+      canvas.width  = viewport.width;
+      canvas.height = viewport.height;
+      var ctx = canvas.getContext('2d');
+
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+      // Convert to base64 JPEG — strip the data URL prefix
+      var base64Full = canvas.toDataURL('image/jpeg', 0.85);
+      var base64Data = base64Full.split(',')[1];
+      images.push(base64Data);
+
+      if (onProgress) onProgress(pageNum, pagesToRender);
+    } catch (renderErr) {
+      // Skip pages that fail to render — don't abort the whole deck
+      console.warn('G7: Failed to render page ' + pageNum + ':', renderErr);
+    }
+  }
+  return images;
+}
+
+
+// ─────────────────────────────────────────────
+// Token warning resolution buttons
+// ─────────────────────────────────────────────
+function confirmSendAll() {
+  pdfTokenWarningActive = false;
+  document.getElementById('pdfTokenWarning').classList.remove('show');
+  showPdfNotice('Sending all ' + extractedPdfImages.length + ' slides to Alex.');
+  checkSubmitReady();
+}
+
+function confirmLimit15() {
+  extractedPdfImages    = extractedPdfImages.slice(0, 15);
+  pdfTokenWarningActive = false;
+  document.getElementById('pdfTokenWarning').classList.remove('show');
+  showPdfNotice('Visual analysis limited to the first 15 slides. Extracted text covers the full deck.');
+  checkSubmitReady();
+}
+
+
+// ─────────────────────────────────────────────
+// PDF notice helpers (informational, not an error)
+// ─────────────────────────────────────────────
+function showPdfNotice(msg) {
+  var el = document.getElementById('pdfNotice');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hidePdfNotice() {
+  document.getElementById('pdfNotice').classList.remove('show');
 }
 
 
 // Remove the uploaded PDF and reset to empty state
 function removePdf() {
-  extractedPdfText = '';
+  extractedPdfText      = '';
+  extractedPdfImages    = [];
+  pdfTokenWarningActive = false;
   document.getElementById('pdfFileInput').value = '';
   document.getElementById('pdfLoaded').classList.remove('show');
+  document.getElementById('pdfRendering').classList.remove('show');
+  document.getElementById('pdfTokenWarning').classList.remove('show');
   hidePdfError();
+  hidePdfNotice();
   checkSubmitReady();
 }
 
@@ -1172,8 +1426,11 @@ document.getElementById('submitForm').addEventListener('submit', async function(
   startLoadingMessages();
 
   try {
-    // Call Alex via workspace.js
-    var alexOutput = await callAlex(dealSubmission);
+    // Call Alex with web search enabled.
+    // callAlexWithSearch handles both text and PDF submissions:
+    //   text deal  → imageArray = []  → max 5 searches
+    //   PDF deck   → imageArray = extractedPdfImages → max 3 searches
+    var alexOutput = await callAlexWithSearch(dealSubmission, extractedPdfImages);
 
     // Save the deal to history
     var dealId = saveDeal(companyName, dealSource, dealContent, alexOutput);

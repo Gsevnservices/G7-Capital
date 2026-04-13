@@ -308,6 +308,343 @@ async function callAlexRaw(userMessage) {
 
 
 // ─────────────────────────────────────────────────────────────
+// 5d. callAlexWithImages(dealSubmission, imageArray)
+//
+// Vision-enabled API call for PDF pitch decks.
+// Sends the deal text AND base64 JPEG slide images to Alex.
+// Alex reads both the extracted text and the rendered slides.
+//
+// dealSubmission — same object as callAlex():
+//   companyName, source, partnerFocus, content
+// imageArray     — array of base64 JPEG strings, one per rendered slide
+//
+// Returns: Alex's full text response (string)
+// Throws:  Error with a user-readable message if something goes wrong
+// ─────────────────────────────────────────────────────────────
+async function callAlexWithImages(dealSubmission, imageArray) {
+
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  if (!firmKB || firmKB.trim() === '') {
+    throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+
+  var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
+
+  // Build the text part of the user message
+  var textPart = [
+    'Please screen the following deal and produce a complete',
+    'G7 Workspace Deal Screening Note in your standard format.',
+    '',
+    'COMPANY:        ' + dealSubmission.companyName,
+    'SOURCE:         ' + dealSubmission.source,
+    'SPECIFIC FOCUS: ' + (dealSubmission.partnerFocus || 'Standard full screening — no specific focus requested'),
+    '',
+    'DEAL MATERIALS:',
+    '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+    dealSubmission.content,
+    '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+    '',
+    'VISUAL MATERIALS:',
+    imageArray.length + ' pitch deck slide' + (imageArray.length === 1 ? '' : 's') +
+      ' are attached as images below.',
+    'Please read both the extracted text above and the visual slides.'
+  ].join('\n');
+
+  // Build multi-part content array:
+  // First the text block, then one image block per slide
+  var contentArray = [
+    { type: 'text', text: textPart }
+  ];
+
+  imageArray.forEach(function(base64Data) {
+    contentArray.push({
+      type: 'image',
+      source: {
+        type:       'base64',
+        media_type: 'image/jpeg',
+        data:       base64Data
+      }
+    });
+  });
+
+  var response;
+  try {
+    response = await fetch(G7_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model:      'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system:     systemPrompt,
+        messages:   [{ role: 'user', content: contentArray }]
+      })
+    });
+  } catch (networkError) {
+    throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
+  }
+
+  var data;
+  try {
+    data = await response.json();
+  } catch (parseError) {
+    throw new Error('Received an unexpected response from the API. Please try again.');
+  }
+
+  if (data.error) {
+    var msg = data.error.message || 'Unknown API error';
+    if (data.error.type === 'authentication_error') {
+      throw new Error('Invalid API key. Please check your Anthropic API key in Settings.');
+    }
+    if (data.error.type === 'rate_limit_error') {
+      throw new Error('Rate limit reached. Please wait a moment and try again.');
+    }
+    if (data.error.type === 'overloaded_error') {
+      throw new Error('Anthropic\'s servers are busy. Please try again in a moment.');
+    }
+    throw new Error('API error: ' + msg);
+  }
+
+  if (!data.content || !data.content[0] || !data.content[0].text) {
+    throw new Error('Alex returned an empty response. Please try again.');
+  }
+
+  return data.content[0].text;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER: buildContentArray(dealSubmission, imageArray)
+//
+// Builds the multi-part content array for the Anthropic messages API.
+// Always returns an array — single text block for text submissions,
+// text + image blocks for PDF submissions.
+//
+// Prepends the RESEARCH INSTRUCTION so Alex searches for founder
+// backgrounds and company information before completing the note.
+//
+// dealSubmission — object: companyName, source, partnerFocus, content
+// imageArray     — array of base64 JPEG strings, or [] for text-only
+// ─────────────────────────────────────────────────────────────
+function buildContentArray(dealSubmission, imageArray) {
+
+  var isPdf = imageArray && imageArray.length > 0;
+
+  // Research instruction prepended to every deal submission.
+  // Tells Alex to search for founders and company before writing.
+  var researchInstruction = [
+    'RESEARCH INSTRUCTION: Before completing this screening note, use web search to research the following:',
+    '',
+    '1. Search for each named founder: "[Founder name] [company name]" to find their LinkedIn profile, prior companies, and any public background information.',
+    '',
+    '2. Search for the company: "[Company name] startup funding" to find any Crunchbase data, press coverage, or public funding information not in the submission.',
+    '',
+    '3. If the submission mentions a prior company or prior exit, search for it to verify the claim.',
+    '',
+    'Use search results to enrich your analysis. Note when information from search confirms or contradicts the submission. Note when founder backgrounds cannot be verified from public sources. Do not fabricate information — only use what search returns.',
+    '',
+    '─────────────────────────────────────────────────────────────',
+    ''
+  ].join('\n');
+
+  // Main deal text block
+  var dealText = researchInstruction + [
+    'Please screen the following deal and produce a complete',
+    'G7 Workspace Deal Screening Note in your standard format.',
+    '',
+    'COMPANY:        ' + dealSubmission.companyName,
+    'SOURCE:         ' + dealSubmission.source,
+    'SPECIFIC FOCUS: ' + (dealSubmission.partnerFocus || 'Standard full screening — no specific focus requested'),
+    '',
+    'DEAL MATERIALS:',
+    '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+    dealSubmission.content,
+    '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500'
+  ].join('\n');
+
+  // For PDF submissions, add a note about the attached slides
+  if (isPdf) {
+    dealText += '\n\nVISUAL MATERIALS:\n' +
+      imageArray.length + ' pitch deck slide' + (imageArray.length === 1 ? '' : 's') +
+      ' are attached as images below.\n' +
+      'Please read both the extracted text above and the visual slides.';
+  }
+
+  // Start with the text block
+  var contentArray = [
+    { type: 'text', text: dealText }
+  ];
+
+  // Append one image block per slide (PDF path only)
+  if (isPdf) {
+    imageArray.forEach(function(base64Data) {
+      contentArray.push({
+        type: 'image',
+        source: {
+          type:       'base64',
+          media_type: 'image/jpeg',
+          data:       base64Data
+        }
+      });
+    });
+  }
+
+  return contentArray;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// 5e. callAlexWithSearch(dealSubmission, imageArray)
+//
+// Web search-enabled API call with multi-turn tool loop.
+// Replaces callAlex() and callAlexWithImages() for the primary
+// deal submission flow.
+//
+// Alex can run up to 5 web searches before completing the note
+// (capped at 3 for PDF submissions to protect the token budget).
+//
+// Loop pattern:
+//   1. Send request with web_search tool enabled
+//   2. If stop_reason === 'tool_use': acknowledge the tool call,
+//      append to history, continue loop
+//   3. If stop_reason === 'end_turn': extract final text, done
+//
+// Anthropic executes the search internally and injects results
+// into the next context — the tool_result only needs the id.
+//
+// dealSubmission — object: companyName, source, partnerFocus, content
+// imageArray     — array of base64 JPEG strings, or [] for text-only
+//
+// Returns: Alex's final text response (string)
+// Throws:  Error with a user-readable message if something goes wrong
+// ─────────────────────────────────────────────────────────────
+async function callAlexWithSearch(dealSubmission, imageArray) {
+
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  if (!firmKB || firmKB.trim() === '') {
+    throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+
+  var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
+
+  // PDF submissions get fewer search rounds — images already use token budget
+  var isPdf       = imageArray && imageArray.length > 0;
+  var maxSearches = isPdf ? 3 : 5;
+
+  // Build the initial user message
+  var contentArray = buildContentArray(dealSubmission, imageArray);
+
+  // Conversation history — grows with each tool turn
+  var messages = [{
+    role:    'user',
+    content: contentArray
+  }];
+
+  var finalText     = '';
+  var maxIterations = maxSearches + 2; // headroom for non-search turns
+  var iterations    = 0;
+
+  while (iterations < maxIterations) {
+    iterations++;
+
+    var response;
+    try {
+      response = await fetch(G7_PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model:      'claude-sonnet-4-20250514',
+          max_tokens: 4000,
+          system:     systemPrompt,
+          tools: [{
+            type:     'web_search_20250305',
+            name:     'web_search',
+            max_uses: maxSearches
+          }],
+          messages: messages
+        })
+      });
+    } catch (networkError) {
+      throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
+    }
+
+    var data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      throw new Error('Received an unexpected response from the API. Please try again.');
+    }
+
+    // Handle API-level errors
+    if (!response.ok || data.error) {
+      var msg = (data.error && data.error.message) || ('API error ' + response.status);
+      if (data.error && data.error.type === 'authentication_error') {
+        throw new Error('Invalid API key. Please check your Anthropic API key in Settings.');
+      }
+      if (data.error && data.error.type === 'rate_limit_error') {
+        throw new Error('Rate limit reached. Please wait a moment and try again.');
+      }
+      if (data.error && data.error.type === 'overloaded_error') {
+        throw new Error('Anthropic\'s servers are busy. Please try again in a moment.');
+      }
+      throw new Error('API error: ' + msg);
+    }
+
+    // ── end_turn: Alex has finished writing the note ──────────────
+    if (data.stop_reason === 'end_turn') {
+      finalText = data.content
+        .filter(function(block) { return block.type === 'text'; })
+        .map(function(block)    { return block.text; })
+        .join('\n');
+      break;
+    }
+
+    // ── tool_use: Alex wants to run one or more web searches ──────
+    if (data.stop_reason === 'tool_use') {
+
+      // Append Alex's turn (contains the tool_use blocks) to history
+      messages.push({
+        role:    'assistant',
+        content: data.content
+      });
+
+      // Build tool_result for each tool_use block.
+      // Anthropic processes the actual search internally and injects
+      // results into the next context — we only need to return the id.
+      var toolResults = data.content
+        .filter(function(block) { return block.type === 'tool_use'; })
+        .map(function(block) {
+          return {
+            type:        'tool_result',
+            tool_use_id: block.id,
+            content:     ''
+          };
+        });
+
+      messages.push({
+        role:    'user',
+        content: toolResults
+      });
+
+      continue;
+    }
+
+    // ── Unexpected stop_reason: extract whatever text is available ──
+    finalText = data.content
+      .filter(function(block) { return block.type === 'text'; })
+      .map(function(block)    { return block.text; })
+      .join('\n');
+    break;
+  }
+
+  if (!finalText) {
+    throw new Error('Alex did not produce a response after ' + iterations + ' iterations. Please try again.');
+  }
+
+  return finalText;
+}
+
+
+// ─────────────────────────────────────────────────────────────
 // 6. addCalibration(dealId, alexAssessment, partnerDecision,
 //                  reasonForDisagreement, learningRule)
 //
