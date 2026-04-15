@@ -1360,7 +1360,7 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
   };
 
   // Small delay so the loading bar is visible (feels intentional)
-  setTimeout(function() {
+  setTimeout(async function() {
 
     // 1. Save structured config as JSON (used by dashboard and other pages)
     var firmConfig = {
@@ -1427,12 +1427,18 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
 
 
 // ─────────────────────────────────────────────
-// ON PAGE LOAD — check if firm already onboarded
-// If yes, show the returning firm banner
+// ON PAGE LOAD — check if firm has existing config
+// If yes, show the returning firm banner and pre-fill the form.
+// Uses session token (from auth.js) to check for existing login.
+// Does NOT call requireAuth() — onboard.html is accessible to any
+// logged-in user regardless of onboarding state.
 // ─────────────────────────────────────────────
 (function() {
-  var isOnboarded = localStorage.getItem('g7_onboarded') === 'true';
-  if (!isOnboarded) return;
+  // Show returning banner if the user has a session token AND local config data
+  // No requireAuth() here — onboarding must be reachable to new firms
+  var hasSession = !!getToken();
+  var hasConfig  = !!localStorage.getItem('g7_firm_config');
+  if (!hasSession || !hasConfig) return;
 
   // Show banner with firm name
   var config = {};
