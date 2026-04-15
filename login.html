@@ -320,7 +320,11 @@ body::before{
     try {
       const valid = await g7ValidateSession();
       if (valid) {
-        window.location.href = '/G7-Capital/workspace/index.html';
+        // Already logged in — send to dashboard if onboarded, onboarding if not
+        const config = localStorage.getItem('g7_firm_config');
+        window.location.href = config
+          ? '/G7-Capital/workspace/index.html'
+          : '/G7-Capital/workspace/onboard.html';
         return;
       }
     } catch(e) {
@@ -365,8 +369,11 @@ async function handleLogin(event) {
       console.warn('KV sync failed on login:', e);
     }
 
-    // Success — go to workspace dashboard
-    window.location.href = '/G7-Capital/workspace/index.html';
+    // Success — go to dashboard if onboarded, onboarding if new firm
+    const config = localStorage.getItem('g7_firm_config');
+    window.location.href = config
+      ? '/G7-Capital/workspace/index.html'
+      : '/G7-Capital/workspace/onboard.html';
 
   } catch(err) {
     // Show error to user

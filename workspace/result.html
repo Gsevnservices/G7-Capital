@@ -81,6 +81,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
 .nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--grey1);padding:6px 14px;cursor:pointer;transition:all .3s}
 .nav-logout:hover{border-color:var(--gold);color:var(--gold)}
+/* Hidden until auth check passes — prevents content flash for unauthenticated users */
+body{visibility:hidden}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
 
 /* ─────────────────────────────────────────────
@@ -1210,9 +1212,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <script>
 
 // ─────────────────────────────────────────────
-// ONBOARDING GUARD
+// AUTH GUARD — awaited async check
+// Body hidden (via CSS) until KV session validates.
+// If invalid: requireAuth() redirects to login.html.
+// If valid: body revealed and page initialises normally.
 // ─────────────────────────────────────────────
-requireAuth(); // validates session token against Cloudflare Worker KV
+(async function() {
+  const authed = await requireAuth();
+  if (!authed) return;
+  document.body.style.visibility = 'visible';
+})();
 
 
 // ─────────────────────────────────────────────
