@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — G7 Capital Workspace</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+<script src="assets/auth.js"></script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+
+<style>
+
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{height:100%;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;
+  --grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08);
+  --red:#C45A5A
+}
+body{
+  font-family:'Tenor Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow-x:hidden;
+  cursor:none;
+  position:relative
+}
+
+/* ─────────────────────────────────────────────
+   GRAIN TEXTURE (same as every other G7 page)
+───────────────────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1000;opacity:.4
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ─────────────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────────────── */
+.login-wrap{
+  width:100%;
+  max-width:440px;
+  padding:0 24px;
+  position:relative;
+  z-index:1;
+  opacity:0;
+  animation:fadeUp .8s ease .1s both
+}
+
+/* ─────────────────────────────────────────────
+   WORDMARK / LOGO
+───────────────────────────────────────────── */
+.login-logo{
+  text-align:center;
+  margin-bottom:48px
+}
+.login-logo-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  font-weight:300;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--white);
+  text-decoration:none
+}
+.login-logo-text em{font-style:normal;color:var(--gold)}
+.login-logo-sub{
+  margin-top:10px;
+  font-size:9px;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--grey2)
+}
+
+/* ─────────────────────────────────────────────
+   CARD
+───────────────────────────────────────────── */
+.login-card{
+  background:var(--black2);
+  border:1px solid var(--border2);
+  padding:48px 40px 40px;
+}
+@media(max-width:480px){.login-card{padding:36px 24px 28px}}
+
+.login-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;
+  font-weight:300;
+  letter-spacing:.05em;
+  color:var(--white);
+  margin-bottom:8px
+}
+.login-sub{
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--grey1);
+  margin-bottom:36px;
+  line-height:1.7
+}
+
+/* ─────────────────────────────────────────────
+   FORM FIELDS
+───────────────────────────────────────────── */
+.field{margin-bottom:20px}
+.field label{
+  display:block;
+  font-size:9px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--grey1);
+  margin-bottom:8px
+}
+.field input{
+  width:100%;
+  background:var(--black3);
+  border:1px solid var(--border2);
+  color:var(--white);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:14px;
+  padding:14px 16px;
+  outline:none;
+  transition:border-color .25s;
+  letter-spacing:.03em
+}
+.field input::placeholder{color:var(--grey2)}
+.field input:focus{border-color:rgba(201,168,76,0.4)}
+/* Force uppercase display for firm code field */
+.field input.uppercase{text-transform:uppercase;letter-spacing:.12em}
+
+/* ─────────────────────────────────────────────
+   ERROR MESSAGE
+───────────────────────────────────────────── */
+.login-error{
+  display:none;
+  background:rgba(196,90,90,0.08);
+  border:1px solid rgba(196,90,90,0.25);
+  color:#e08080;
+  font-size:11px;
+  letter-spacing:.05em;
+  line-height:1.6;
+  padding:12px 14px;
+  margin-bottom:20px
+}
+.login-error.visible{display:block}
+
+/* ─────────────────────────────────────────────
+   SIGN IN BUTTON
+───────────────────────────────────────────── */
+.btn-signin{
+  width:100%;
+  background:var(--gold);
+  color:var(--black);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  border:none;
+  padding:16px 24px;
+  cursor:pointer;
+  transition:background .25s,transform .15s;
+  margin-top:8px;
+  position:relative
+}
+.btn-signin:hover:not(:disabled){background:var(--gold2)}
+.btn-signin:active:not(:disabled){transform:scale(.99)}
+.btn-signin:disabled{opacity:.6;cursor:wait}
+
+/* Loading spinner inside button */
+.btn-spinner{
+  display:none;
+  width:12px;height:12px;
+  border:1.5px solid rgba(8,8,8,0.3);
+  border-top-color:var(--black);
+  border-radius:50%;
+  animation:spin .6s linear infinite;
+  position:absolute;right:20px;top:50%;transform:translateY(-50%)
+}
+.btn-signin.loading .btn-spinner{display:block}
+.btn-signin.loading .btn-label{opacity:0.6}
+
+/* ─────────────────────────────────────────────
+   BELOW CARD — CONTACT LINE
+───────────────────────────────────────────── */
+.login-footer{
+  text-align:center;
+  margin-top:32px;
+  font-size:11px;
+  letter-spacing:.06em;
+  color:var(--grey2);
+  line-height:1.8
+}
+.login-footer a{color:var(--gold);text-decoration:none;transition:color .2s}
+.login-footer a:hover{color:var(--gold2)}
+
+/* ─────────────────────────────────────────────
+   DECORATIVE GOLD LINE
+───────────────────────────────────────────── */
+.gold-line{
+  width:40px;height:1px;
+  background:var(--gold);
+  opacity:.4;
+  margin:0 auto 32px
+}
+
+/* ─────────────────────────────────────────────
+   ANIMATION
+───────────────────────────────────────────── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Login wrapper -->
+<div class="login-wrap">
+
+  <!-- Wordmark -->
+  <div class="login-logo">
+    <a href="/G7-Capital/index.html" class="login-logo-text">
+      <em>G</em>7 Capital
+    </a>
+    <div class="login-logo-sub">Workspace</div>
+  </div>
+
+  <div class="gold-line"></div>
+
+  <!-- Card -->
+  <div class="login-card">
+    <h1 class="login-heading">Sign In</h1>
+    <p class="login-sub">Enter your firm credentials to access the workspace.</p>
+
+    <!-- Error message (hidden by default) -->
+    <div class="login-error" id="loginError"></div>
+
+    <!-- Form -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
+
+      <div class="field">
+        <label for="firmCode">Firm Code</label>
+        <input
+          type="text"
+          id="firmCode"
+          class="uppercase"
+          placeholder="e.g. ANDREESSEN"
+          autocomplete="username"
+          autocapitalize="characters"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="••••••••••••"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn-signin" id="signinBtn">
+        <span class="btn-label">Sign In →</span>
+        <span class="btn-spinner"></span>
+      </button>
+
+    </form>
+  </div>
+
+  <!-- Below card -->
+  <p class="login-footer">
+    New to G7 Workspace?<br>
+    Contact your administrator to set up your firm account.
+  </p>
+
+</div><!-- end login-wrap -->
+
+<script>
+
+// ─────────────────────────────────────────────────────────────
+// ON LOAD — check if already logged in
+// If a valid session exists, skip login and go straight to workspace
+// ─────────────────────────────────────────────────────────────
+(async function() {
+  // Only redirect if token exists AND is valid
+  const token = getToken();
+  if (token) {
+    try {
+      const valid = await g7ValidateSession();
+      if (valid) {
+        window.location.href = '/G7-Capital/workspace/index.html';
+        return;
+      }
+    } catch(e) {
+      // Validation failed — stay on login page
+    }
+    // Token exists but is expired/invalid — clear it
+    clearToken();
+  }
+})();
+
+
+// ─────────────────────────────────────────────────────────────
+// FORM SUBMIT HANDLER
+// ─────────────────────────────────────────────────────────────
+async function handleLogin(event) {
+  event.preventDefault();
+
+  const firmCode = document.getElementById('firmCode').value.trim().toUpperCase();
+  const password = document.getElementById('password').value;
+  const btn      = document.getElementById('signinBtn');
+  const errorEl  = document.getElementById('loginError');
+
+  // Clear previous error
+  errorEl.classList.remove('visible');
+  errorEl.textContent = '';
+
+  // Show loading state
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.querySelector('.btn-label').textContent = 'Signing In…';
+
+  try {
+    // Attempt login via Cloudflare Worker
+    await g7Login(firmCode, password);
+
+    // Pull firm data from KV into localStorage before entering workspace
+    // This ensures deal history, config, KB are all available immediately
+    try {
+      await syncFromKV();
+    } catch(e) {
+      // syncFromKV failure is non-fatal — workspace will still load
+      console.warn('KV sync failed on login:', e);
+    }
+
+    // Success — go to workspace dashboard
+    window.location.href = '/G7-Capital/workspace/index.html';
+
+  } catch(err) {
+    // Show error to user
+    errorEl.textContent = err.message || 'Sign in failed. Please check your credentials.';
+    errorEl.classList.add('visible');
+
+    // Reset button
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.querySelector('.btn-label').textContent = 'Sign In →';
+
+    // Shake the card briefly to signal error
+    const card = document.querySelector('.login-card');
+    card.style.animation = 'none';
+    card.offsetHeight; // trigger reflow
+    card.style.animation = '';
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// UPPERCASE INPUT — keep firm code field uppercase as user types
+// ─────────────────────────────────────────────────────────────
+document.getElementById('firmCode').addEventListener('input', function() {
+  const pos = this.selectionStart;
+  this.value = this.value.toUpperCase();
+  this.setSelectionRange(pos, pos);
+});
+
+
+// ─────────────────────────────────────────────────────────────
+// CUSTOM CURSOR
+// ─────────────────────────────────────────────────────────────
+(function() {
+  const cursor     = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  if (!cursor) return;
+
+  document.addEventListener('mousemove', function(e) {
+    cursor.style.left     = e.clientX + 'px';
+    cursor.style.top      = e.clientY + 'px';
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top  = e.clientY + 'px';
+  });
+
+  document.addEventListener('mousedown', function() {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1.8)';
+  });
+  document.addEventListener('mouseup', function() {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+})();
+
+</script>
+</body>
+</html>

@@ -532,6 +532,7 @@ nav{
 }
 
 </style>
+<script src="../assets/auth.js"></script>
 </head>
 <body>
 
@@ -582,7 +583,7 @@ nav{
   <div class="progress-bar" id="progressBar">
     <div class="progress-step active" id="step-tab-1" onclick="goToStep(1)">
       <div class="progress-step-num">01</div>
-      <div class="progress-step-label">API Key</div>
+      <div class="progress-step-label">Welcome</div>
     </div>
     <div class="progress-step" id="step-tab-2" onclick="goToStep(2)">
       <div class="progress-step-num">02</div>
@@ -606,45 +607,24 @@ nav{
   <form id="onboardForm" novalidate>
 
     <!-- ══════════════════════════════════════════
-         STEP 1 — API KEY
-         The Anthropic API key needed to run Alex
+         STEP 1 — WELCOME
+         Introduction to Alex and the workspace
     ══════════════════════════════════════════ -->
     <div class="form-section active" id="formStep1">
       <div class="section-heading">
-        <div class="section-no">01 — Access</div>
-        <h2 class="section-heading-title">Connect Your API Key</h2>
+        <div class="section-no">01 — Welcome</div>
+        <h2 class="section-heading-title">Meet Alex, Your AI Analyst.</h2>
         <p class="section-heading-desc">
-          Alex runs on the Anthropic Claude API. Enter your key once — it is stored securely and all requests are routed through our encrypted proxy — never exposed in your browser.
+          Alex screens investment deals to institutional standard. He applies your firm's thesis, respects your hard pass rules, and writes to your format — every time. This setup takes five minutes.
         </p>
       </div>
 
-      <div class="field-group">
-        <div class="field">
-          <label class="field-label" for="apiKey">
-            Anthropic API Key <span class="req">*</span>
-          </label>
-          <div class="api-key-wrap">
-            <!-- type="password" so key is hidden by default -->
-            <input
-              type="password"
-              id="apiKey"
-              name="apiKey"
-              placeholder="sk-ant-api03-..."
-              autocomplete="off"
-              spellcheck="false"
-            >
-            <button type="button" class="toggle-key" id="toggleKey">Show</button>
-          </div>
-          <div class="field-error" id="apiKey-error">Please enter your Anthropic API key.</div>
-        </div>
-      </div>
-
       <div class="security-note">
-        <strong>Security Note</strong>
+        <strong>How It Works</strong>
         <p>
-          Your API key is stored securely in Cloudflare's servers as an environment variable — it never appears in your browser or in any code.
-          All API calls are routed through our secure proxy.
-          Your browser session is private to your firm.
+          G7 Workspace is powered by Claude AI. Your deal submissions are processed
+          securely and never stored on external servers. All analysis runs through
+          our encrypted proxy — your deal flow stays private to your firm.
         </p>
       </div>
 
@@ -723,7 +703,7 @@ nav{
 
       <div class="form-nav">
         <button type="button" class="btn-prev" onclick="prevStep(2)">
-          <span>←</span> API Key
+          <span>←</span> Welcome
         </button>
         <button type="button" class="btn-next" onclick="nextStep(2)">
           Parameters <span>→</span>
@@ -1109,21 +1089,6 @@ nav{
 
 
 // ─────────────────────────────────────────────
-// TOGGLE API KEY VISIBILITY
-// ─────────────────────────────────────────────
-document.getElementById('toggleKey').addEventListener('click', function() {
-  var input = document.getElementById('apiKey');
-  if (input.type === 'password') {
-    input.type = 'text';
-    this.textContent = 'Hide';
-  } else {
-    input.type = 'password';
-    this.textContent = 'Show';
-  }
-});
-
-
-// ─────────────────────────────────────────────
 // STEP TRACKING
 // currentStep tracks which step (1-5) is visible
 // ─────────────────────────────────────────────
@@ -1183,14 +1148,7 @@ function validateStep(stepNum) {
     el.classList.remove('show');
   });
 
-  if (stepNum === 1) {
-    // API key — must be present and look like an Anthropic key
-    var apiKey = document.getElementById('apiKey').value.trim();
-    if (!apiKey || apiKey.length < 20) {
-      document.getElementById('apiKey-error').classList.add('show');
-      valid = false;
-    }
-  }
+  // Step 1 is the welcome screen — no validation required
 
   if (stepNum === 2) {
     // Firm name and type required
@@ -1322,7 +1280,6 @@ function buildFirmKnowledgeBase(data) {
 // ─────────────────────────────────────────────
 // LOAD DEMO DATA — pre-fills all fields with G7 Capital demo profile
 // Called by the "Load Demo Data" button on Step 1.
-// Does NOT fill the API key — the user must enter their own.
 // Advances directly to Step 2 after filling.
 // ─────────────────────────────────────────────
 function loadDemoData() {
@@ -1356,7 +1313,7 @@ function loadDemoData() {
 
   document.getElementById('activePipeline').value = 'None currently active.';
 
-  // Navigate to Step 2 (skip API key validation — user must enter their own key)
+  // Advance to Step 2
   currentStep = 2;
   renderStep();
 }
@@ -1380,7 +1337,6 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
 
   // Collect all form values
   var data = {
-    apiKey:             document.getElementById('apiKey').value.trim(),
     firmName:           document.getElementById('firmName').value.trim(),
     firmType:           document.getElementById('firmType').value,
     fundSize:           document.getElementById('fundSize').value.trim(),
@@ -1406,10 +1362,7 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
   // Small delay so the loading bar is visible (feels intentional)
   setTimeout(function() {
 
-    // 1. Save API key separately (used directly by workspace.js for API calls)
-    localStorage.setItem('g7_api_key', data.apiKey);
-
-    // 2. Save structured config as JSON (used by dashboard and other pages)
+    // 1. Save structured config as JSON (used by dashboard and other pages)
     var firmConfig = {
       firmName:        data.firmName,
       firmType:        data.firmType,
@@ -1443,6 +1396,14 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
     }
     if (!localStorage.getItem('g7_calibration_log')) {
       localStorage.setItem('g7_calibration_log', JSON.stringify([]));
+    }
+
+    // Sync all firm data to Cloudflare KV for cross-device persistence
+    // Non-fatal: if KV sync fails, localStorage data is still intact
+    try {
+      await syncToKV();
+    } catch(e) {
+      console.warn('KV sync failed after onboarding:', e);
     }
 
     // Hide loading bar, hide form, show success screen
@@ -1484,9 +1445,6 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
   banner.classList.add('show');
 
   // Pre-fill form with existing values for easy editing
-  if (localStorage.getItem('g7_api_key')) {
-    document.getElementById('apiKey').value = localStorage.getItem('g7_api_key');
-  }
   if (config.firmName)         document.getElementById('firmName').value         = config.firmName;
   if (config.firmType)         document.getElementById('firmType').value         = config.firmType;
   if (config.fundSize)         document.getElementById('fundSize').value         = config.fundSize;

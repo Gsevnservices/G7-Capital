@@ -14,6 +14,7 @@
 
 <!-- Alex's complete system prompt — must load before workspace.js -->
 <script src="../assets/alex-master-v1.js"></script>
+<script src="../assets/auth.js"></script>
 
 <!-- Workspace engine — callAlex, saveDeal, isOnboarded, etc. -->
 <script src="../assets/workspace.js"></script>
@@ -112,6 +113,8 @@ nav{
   font-size:9px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--gold);border:1px solid var(--border);padding:6px 16px
 }
+.nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--grey1);padding:6px 14px;cursor:pointer;transition:all .3s}
+.nav-logout:hover{border-color:var(--gold);color:var(--gold)}
 @media(max-width:768px){
   nav{padding:0 24px}
   .nav-link{display:none}
@@ -592,6 +595,7 @@ nav{
     <a href="submit.html" class="nav-link active">New Deal</a>
     <a href="history.html" class="nav-link">History</a>
     <span class="nav-badge" id="navFirmName">Workspace</span>
+    <button class="nav-logout" onclick="g7Logout()">Sign Out</button>
   </div>
 </nav>
 
@@ -830,7 +834,7 @@ nav{
 // ONBOARDING GUARD
 // Must be first. If not onboarded, stop here.
 // ─────────────────────────────────────────────
-try { requireOnboarding(); } catch(e) { /* redirecting */ }
+requireAuth(); // validates session token against Cloudflare Worker KV
 
 
 // ─────────────────────────────────────────────

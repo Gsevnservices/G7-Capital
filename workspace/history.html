@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 
 <script src="../assets/alex-master-v1.js"></script>
+<script src="../assets/auth.js"></script>
 <script src="../assets/workspace.js"></script>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
@@ -53,6 +54,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-link:hover{color:var(--white)}
 .nav-link.active{color:var(--gold)}
 .nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
+.nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--grey1);padding:6px 14px;cursor:pointer;transition:all .3s}
+.nav-logout:hover{border-color:var(--gold);color:var(--gold)}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
 
 /* ─────────────────────────────────────────────
@@ -429,6 +432,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <a href="submit.html" class="nav-link">New Deal</a>
     <a href="history.html" class="nav-link active">History</a>
     <span class="nav-badge" id="navFirmName">Workspace</span>
+    <button class="nav-logout" onclick="g7Logout()">Sign Out</button>
   </div>
 </nav>
 
@@ -579,7 +583,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 // ─────────────────────────────────────────────
 // ONBOARDING GUARD
 // ─────────────────────────────────────────────
-try { requireOnboarding(); } catch(e) { /* redirecting */ }
+requireAuth(); // validates session token against Cloudflare Worker KV
 
 
 // ─────────────────────────────────────────────

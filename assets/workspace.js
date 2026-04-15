@@ -47,16 +47,8 @@ var G7_PROXY_URL = 'https://g7-proxy.gsevnservices.workers.dev/api/message';
 // ─────────────────────────────────────────────────────────────
 async function callAlex(dealSubmission) {
 
-  // 1a. API key is stored in localStorage during onboarding but is NOT sent
-  //     from the browser. The Cloudflare Worker adds it server-side using
-  //     an environment variable. We still check it exists so onboarding
-  //     is enforced — the key validates that the firm completed setup.
-  var apiKey = localStorage.getItem('g7_api_key');
-  if (!apiKey || apiKey.trim() === '') {
-    throw new Error('No API key found. Please complete firm setup before screening a deal.');
-  }
-
-  // 1b. Get the firm knowledge base from localStorage
+  // The Cloudflare Worker adds the API key server-side — no key needed in the browser.
+  // Get the firm knowledge base from localStorage
   var firmKB = localStorage.getItem('g7_firm_knowledge_base');
   if (!firmKB || firmKB.trim() === '') {
     throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
@@ -90,7 +82,8 @@ async function callAlex(dealSubmission) {
     response = await fetch(G7_PROXY_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
@@ -273,7 +266,10 @@ async function callAlexRaw(userMessage) {
   try {
     response = await fetch(G7_PROXY_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
+      },
       body: JSON.stringify({
         model:      'claude-sonnet-4-20250514',
         max_tokens: 4000,
@@ -371,7 +367,10 @@ async function callAlexWithImages(dealSubmission, imageArray) {
   try {
     response = await fetch(G7_PROXY_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
+      },
       body: JSON.stringify({
         model:      'claude-sonnet-4-20250514',
         max_tokens: 4000,
@@ -550,7 +549,10 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
     try {
       response = await fetch(G7_PROXY_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
+        },
         body: JSON.stringify({
           model:      'claude-sonnet-4-20250514',
           max_tokens: 4000,

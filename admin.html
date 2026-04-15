@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G7 Admin Panel</title>
+
+<style>
+/* Simple, functional admin styles — not customer-facing */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e0;min-height:100vh;padding:40px 24px}
+
+.admin-header{
+  max-width:860px;margin:0 auto 40px;
+  border-bottom:1px solid #333;padding-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.admin-title{font-size:20px;font-weight:600;color:#fff}
+.admin-title span{color:#C9A84C}
+.admin-tag{font-size:11px;color:#555;letter-spacing:.12em;text-transform:uppercase}
+
+.admin-wrap{max-width:860px;margin:0 auto}
+
+/* Sections */
+.section{
+  background:#161616;border:1px solid #222;
+  padding:28px;margin-bottom:24px;
+  display:none /* hidden until authenticated */
+}
+.section.visible{display:block}
+.section-title{
+  font-size:13px;font-weight:600;
+  color:#C9A84C;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:20px;
+  padding-bottom:10px;border-bottom:1px solid #222
+}
+
+/* Auth gate */
+.auth-gate{
+  background:#161616;border:1px solid #333;
+  padding:32px;margin-bottom:24px;max-width:400px
+}
+.auth-gate-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:16px}
+
+/* Form fields */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;color:#888;margin-bottom:6px;letter-spacing:.06em}
+.field input{
+  width:100%;background:#0d0d0d;border:1px solid #333;
+  color:#e0e0e0;font-family:inherit;font-size:13px;
+  padding:10px 12px;outline:none;border-radius:2px;transition:border-color .2s
+}
+.field input:focus{border-color:#C9A84C}
+.field input.uppercase-input{text-transform:uppercase;letter-spacing:.08em}
+
+/* Buttons */
+.btn{
+  display:inline-block;font-family:inherit;font-size:12px;
+  font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:10px 20px;border:none;border-radius:2px;cursor:pointer;
+  transition:opacity .2s
+}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:hover:not(:disabled){opacity:.85}
+.btn-gold{background:#C9A84C;color:#080808}
+.btn-outline{background:transparent;border:1px solid #444;color:#888}
+.btn-outline:hover:not(:disabled){border-color:#C9A84C;color:#C9A84C}
+.btn-danger{background:#8b2a2a;color:#fff}
+
+/* Messages */
+.msg{
+  display:none;margin-top:12px;padding:10px 12px;font-size:12px;
+  border-radius:2px;line-height:1.5
+}
+.msg.visible{display:block}
+.msg.success{background:rgba(90,158,111,0.12);border:1px solid rgba(90,158,111,0.3);color:#7ecf9a}
+.msg.error{background:rgba(196,90,90,0.12);border:1px solid rgba(196,90,90,0.3);color:#e08080}
+
+/* Firms table */
+.firms-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
+.firms-table th{
+  text-align:left;padding:8px 12px;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:#555;border-bottom:1px solid #222;font-weight:600
+}
+.firms-table td{
+  padding:10px 12px;border-bottom:1px solid #1a1a1a;
+  color:#ccc;vertical-align:middle
+}
+.firms-table tr:last-child td{border-bottom:none}
+.firms-table tr:hover td{background:#1c1c1c}
+
+.firm-code-badge{
+  display:inline-block;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:#C9A84C;
+  background:rgba(201,168,76,0.1);
+  border:1px solid rgba(201,168,76,0.2);
+  padding:2px 8px
+}
+.tier-badge{
+  display:inline-block;font-size:9px;letter-spacing:.08em;
+  text-transform:uppercase;color:#888;
+  border:1px solid #333;padding:2px 6px
+}
+
+/* Loading state */
+.loading-text{color:#555;font-size:12px;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="admin-header">
+  <div>
+    <div class="admin-title"><span>G7</span> Capital — Admin Panel</div>
+    <div class="admin-tag">Internal use only — not visible to partners</div>
+  </div>
+</div>
+
+<div class="admin-wrap">
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 0 — ADMIN AUTHENTICATION GATE
+       Must authenticate before other sections show
+  ═══════════════════════════════════════════════ -->
+  <div class="auth-gate" id="authGate">
+    <div class="auth-gate-title">Admin Authentication</div>
+    <div class="field">
+      <label for="adminPwdInput">Admin Password</label>
+      <input type="password" id="adminPwdInput" placeholder="Enter admin password">
+    </div>
+    <button class="btn btn-gold" onclick="authenticate()">Authenticate</button>
+    <div class="msg error" id="authError">Incorrect admin password.</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 1 — CREATE FIRM ACCOUNT
+  ═══════════════════════════════════════════════ -->
+  <div class="section" id="sectionCreate">
+    <div class="section-title">Create Firm Account</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field">
+        <label for="newFirmCode">Firm Code</label>
+        <input type="text" id="newFirmCode" class="uppercase-input"
+          placeholder="e.g. CHRISTIAN" maxlength="20">
+      </div>
+      <div class="field">
+        <label for="newFirmName">Firm Name</label>
+        <input type="text" id="newFirmName"
+          placeholder="e.g. Christian's Merchant Bank">
+      </div>
+    </div>
+
+    <div class="field" style="max-width:360px">
+      <label for="newFirmPassword">Partner Password</label>
+      <input type="text" id="newFirmPassword"
+        placeholder="What the partner will use to sign in">
+    </div>
+
+    <button class="btn btn-gold" id="createBtn" onclick="createFirm()">
+      Create Account →
+    </button>
+
+    <div class="msg success" id="createSuccess"></div>
+    <div class="msg error" id="createError"></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2 — VIEW ALL FIRMS
+  ═══════════════════════════════════════════════ -->
+  <div class="section" id="sectionFirms">
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>All Firm Accounts</span>
+      <button class="btn btn-outline" onclick="loadFirms()" id="loadFirmsBtn">
+        Load Firms
+      </button>
+    </div>
+
+    <div id="firmsContainer">
+      <p class="loading-text">Click "Load Firms" to fetch all accounts.</p>
+    </div>
+
+    <div class="msg error" id="firmsError"></div>
+  </div>
+
+</div><!-- end admin-wrap -->
+
+<script>
+
+// ─────────────────────────────────────────────────────────────
+// WORKER URL
+// ─────────────────────────────────────────────────────────────
+const WORKER = 'https://g7-proxy.gsevnservices.workers.dev';
+
+// Admin password — remembered after authentication so it can
+// be sent with /admin/* calls without asking again
+let adminPassword = '';
+
+
+// ─────────────────────────────────────────────────────────────
+// STEP 0 — AUTHENTICATE
+// Validates the admin password locally (we can't make the worker
+// call without it) — the worker will reject invalid passwords anyway.
+// ─────────────────────────────────────────────────────────────
+function authenticate() {
+  const pwd = document.getElementById('adminPwdInput').value.trim();
+  if (!pwd) return;
+
+  // Store for use in subsequent calls
+  adminPassword = pwd;
+
+  // Hide the auth gate and show the work sections
+  document.getElementById('authGate').style.display = 'none';
+  document.getElementById('sectionCreate').classList.add('visible');
+  document.getElementById('sectionFirms').classList.add('visible');
+
+  // Auto-load firm list on authenticate
+  loadFirms();
+}
+
+// Allow pressing Enter in the password field to authenticate
+document.getElementById('adminPwdInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') authenticate();
+});
+
+
+// ─────────────────────────────────────────────────────────────
+// FIRM CODE — force uppercase as user types
+// ─────────────────────────────────────────────────────────────
+document.getElementById('newFirmCode').addEventListener('input', function() {
+  const pos = this.selectionStart;
+  this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  this.setSelectionRange(pos, pos);
+});
+
+
+// ─────────────────────────────────────────────────────────────
+// CREATE FIRM
+// Calls POST /admin/create-firm on the worker
+// ─────────────────────────────────────────────────────────────
+async function createFirm() {
+  const firmCode = document.getElementById('newFirmCode').value.trim().toUpperCase();
+  const firmName = document.getElementById('newFirmName').value.trim();
+  const password = document.getElementById('newFirmPassword').value.trim();
+
+  const successEl = document.getElementById('createSuccess');
+  const errorEl   = document.getElementById('createError');
+  const btn       = document.getElementById('createBtn');
+
+  // Clear previous messages
+  successEl.classList.remove('visible');
+  errorEl.classList.remove('visible');
+
+  // Validate
+  if (!firmCode || !firmName || !password) {
+    errorEl.textContent = 'All three fields are required.';
+    errorEl.classList.add('visible');
+    return;
+  }
+  if (firmCode.length < 2) {
+    errorEl.textContent = 'Firm code must be at least 2 characters.';
+    errorEl.classList.add('visible');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
+
+  try {
+    const response = await fetch(WORKER + '/admin/create-firm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword, firmCode, firmName, password })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Request failed (' + response.status + ')');
+    }
+
+    // Success
+    successEl.textContent =
+      'Account created: ' + data.firmCode + ' — "' + data.firmName + '". ' +
+      'The partner can now log in at /G7-Capital/login.html using firm code ' +
+      data.firmCode + ' and the password you set.';
+    successEl.classList.add('visible');
+
+    // Clear the form
+    document.getElementById('newFirmCode').value = '';
+    document.getElementById('newFirmName').value = '';
+    document.getElementById('newFirmPassword').value = '';
+
+    // Refresh the firms list
+    loadFirms();
+
+  } catch(err) {
+    errorEl.textContent = err.message;
+    errorEl.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// LOAD FIRMS
+// Calls GET /admin/list-firms on the worker and renders the table
+// ─────────────────────────────────────────────────────────────
+async function loadFirms() {
+  const container = document.getElementById('firmsContainer');
+  const errorEl   = document.getElementById('firmsError');
+  const btn       = document.getElementById('loadFirmsBtn');
+
+  errorEl.classList.remove('visible');
+  container.innerHTML = '<p class="loading-text">Loading…</p>';
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+
+  try {
+    const url = WORKER + '/admin/list-firms?adminPassword=' +
+      encodeURIComponent(adminPassword);
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Request failed (' + response.status + ')');
+    }
+
+    const firms = data.firms || [];
+
+    if (firms.length === 0) {
+      container.innerHTML = '<p class="loading-text">No firm accounts created yet.</p>';
+      return;
+    }
+
+    // Build the table
+    let html = '<table class="firms-table">';
+    html += '<thead><tr>';
+    html += '<th>Firm Code</th><th>Firm Name</th><th>Created</th><th>Tier</th>';
+    html += '</tr></thead><tbody>';
+
+    firms.forEach(function(firm) {
+      const createdDate = firm.createdAt
+        ? new Date(firm.createdAt).toLocaleDateString('en-GB', {
+            day: 'numeric', month: 'short', year: 'numeric'
+          })
+        : '—';
+
+      html += '<tr>';
+      html += '<td><span class="firm-code-badge">' + escapeHtml(firm.firmCode) + '</span></td>';
+      html += '<td>' + escapeHtml(firm.firmName || '—') + '</td>';
+      html += '<td>' + createdDate + '</td>';
+      html += '<td><span class="tier-badge">' + escapeHtml(firm.tier || 'beta') + '</span></td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    html += '<p style="margin-top:12px;font-size:11px;color:#444">' +
+      firms.length + ' firm account' + (firms.length === 1 ? '' : 's') + ' total</p>';
+
+    container.innerHTML = html;
+
+  } catch(err) {
+    container.innerHTML = '<p class="loading-text">Failed to load firms.</p>';
+    errorEl.textContent = err.message;
+    errorEl.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Refresh';
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// UTILITY — escape HTML to prevent XSS in table cells
+// ─────────────────────────────────────────────────────────────
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+</script>
+</body>
+</html>

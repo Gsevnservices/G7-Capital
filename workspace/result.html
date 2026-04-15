@@ -11,6 +11,7 @@
 
 <!-- Alex's system prompt (required by workspace.js) -->
 <script src="../assets/alex-master-v1.js"></script>
+<script src="../assets/auth.js"></script>
 
 <!-- Workspace engine: callAlex, saveDeal, parseAlexScore, etc. -->
 <script src="../assets/workspace.js"></script>
@@ -78,6 +79,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
 .nav-link:hover{color:var(--white)}
 .nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
+.nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--grey1);padding:6px 14px;cursor:pointer;transition:all .3s}
+.nav-logout:hover{border-color:var(--gold);color:var(--gold)}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
 
 /* ─────────────────────────────────────────────
@@ -888,6 +891,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <a href="submit.html" class="nav-link">New Deal</a>
     <a href="history.html" class="nav-link">History</a>
     <span class="nav-badge" id="navFirmName">Workspace</span>
+    <button class="nav-logout" onclick="g7Logout()">Sign Out</button>
   </div>
 </nav>
 
@@ -1208,7 +1212,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 // ─────────────────────────────────────────────
 // ONBOARDING GUARD
 // ─────────────────────────────────────────────
-try { requireOnboarding(); } catch(e) { /* redirecting */ }
+requireAuth(); // validates session token against Cloudflare Worker KV
 
 
 // ─────────────────────────────────────────────

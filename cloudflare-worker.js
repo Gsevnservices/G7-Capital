@@ -1,49 +1,96 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// G7 Capital — Cloudflare Worker Proxy
-// Routes requests from GitHub Pages to api.anthropic.com
+// G7 Capital — Cloudflare Worker
+// Multi-user auth + per-firm KV storage + Anthropic API proxy
 //
-// Deploy steps:
-//   1. Go to dash.cloudflare.com → Workers & Pages → Create Worker
-//   2. Paste this file
-//   3. Add environment variable: ANTHROPIC_API_KEY = your key
-//   4. Deploy and copy your worker URL
-//   5. Replace the placeholder URL in assets/workspace.js
+// KV namespace: G7_WORKSPACE → bound as G7_KV
 //
 // Environment variables required:
-//   ANTHROPIC_API_KEY — your Anthropic API key (set in Cloudflare dashboard,
-//                       never exposed to the browser)
+//   ANTHROPIC_API_KEY  — Anthropic API key (set in Cloudflare dashboard)
+//   ADMIN_PASSWORD     — Password for /admin/* routes (set in Cloudflare dashboard)
 //
-// Test the worker is alive:
-//   GET https://g7-proxy.gsevnservices.workers.dev/
-//   → {"status":"G7 Proxy is running"}
+// KV key schema:
+//   auth:users:{FIRMCODE}            → { firmName, passwordHash, createdAt, tier }
+//   auth:sessions:{token}            → { firmCode, firmName, createdAt, expiresAt }
+//   firms:{FIRMCODE}:config          → firm configuration object
+//   firms:{FIRMCODE}:kb              → firm knowledge base text
+//   firms:{FIRMCODE}:deals           → array of screened deals
+//   firms:{FIRMCODE}:calibrations    → array of partner corrections
 //
-// Send a deal screening request:
-//   POST https://g7-proxy.gsevnservices.workers.dev/api/message
-//   Body: standard Anthropic messages API JSON (without x-api-key)
+// Route map:
+//   POST /api/message            — Anthropic proxy (session-protected)
+//   POST /auth/login             — Login with firmCode + password
+//   POST /auth/logout            — Invalidate session token
+//   GET  /auth/validate          — Check if session token is still valid
+//   POST /data/save              — Save firm data to KV (session-protected)
+//   GET  /data/load              — Load firm data from KV (session-protected)
+//   POST /admin/create-firm      — Create a new firm account (admin-protected)
+//   GET  /admin/list-firms       — List all firm accounts (admin-protected)
+//
+// Health check:
+//   GET /                        → { status: 'G7 Proxy is running' }
 // ─────────────────────────────────────────────────────────────────────────────
-
-// Allowed origins for CORS — requests from any other origin are rejected
-const ALLOWED_ORIGINS = [
-  'https://gsevnservices.github.io',
-  'http://localhost:8080'
-];
 
 // The Anthropic endpoint this worker proxies to
 const ANTHROPIC_ENDPOINT = 'https://api.anthropic.com/v1/messages';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CORS HEADERS
-// Returns CORS headers scoped to the requesting origin.
-// Falls back to the first allowed origin if the requesting origin is unknown.
+// HELPER: CORS HEADERS
+// All responses must include these so GitHub Pages (a different origin)
+// can read the response. The wildcard '*' is safe here because every
+// sensitive route is protected by session token or admin password.
 // ─────────────────────────────────────────────────────────────────────────────
-function getCorsHeaders(requestOrigin) {
-  const origin = ALLOWED_ORIGINS.includes(requestOrigin) ? requestOrigin : ALLOWED_ORIGINS[0];
+function corsHeaders() {
   return {
-    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Max-Age': '86400'
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPER: JSON RESPONSE
+// Wraps a JSON body with status code and CORS headers.
+// ─────────────────────────────────────────────────────────────────────────────
+function jsonResponse(body, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders() }
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPER: HASH PASSWORD
+// SHA-256 hashes a plain-text password and returns a hex string.
+// Used during firm creation and login verification.
+// ─────────────────────────────────────────────────────────────────────────────
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPER: VALIDATE SESSION
+// Reads the Authorization: Bearer {token} header, looks up the session
+// in KV, checks expiry, and returns the session object if valid.
+// Returns null if the token is missing, invalid, or expired.
+// ─────────────────────────────────────────────────────────────────────────────
+async function validateSession(request, env) {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+  const token = authHeader.slice(7); // strip 'Bearer '
+  const session = await env.G7_KV.get('auth:sessions:' + token, 'json');
+  if (!session) return null;
+  if (session.expiresAt < Date.now()) {
+    // Token has expired — clean it up and reject
+    await env.G7_KV.delete('auth:sessions:' + token);
+    return null;
+  }
+  return session;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -51,50 +98,45 @@ function getCorsHeaders(requestOrigin) {
 // ─────────────────────────────────────────────────────────────────────────────
 export default {
   async fetch(request, env) {
-    const origin = request.headers.get('Origin') || '';
-    const corsHeaders = getCorsHeaders(origin);
 
-    // Normalise pathname — strip trailing slash so /api/message and
-    // /api/message/ both match
+    // Normalise pathname — strip trailing slash so /auth/login and
+    // /auth/login/ both match
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/$/, '') || '/';
 
     // ── CORS preflight ────────────────────────────────────────────────────────
-    // Browser sends OPTIONS before every cross-origin POST — must respond 204
+    // Browser sends OPTIONS before every cross-origin request.
+    // Must respond 204 with CORS headers or the real request will be blocked.
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders });
+      return new Response(null, { status: 204, headers: corsHeaders() });
     }
 
     // ── Health check ─────────────────────────────────────────────────────────
-    // GET to any path returns a simple alive signal.
-    // Useful for verifying the worker deployed and is reachable.
-    if (request.method === 'GET') {
-      return new Response(JSON.stringify({ status: 'G7 Proxy is running' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
+    // GET / returns a simple alive signal. Useful for verifying the worker
+    // is deployed and reachable without needing auth.
+    if (request.method === 'GET' && path === '/') {
+      return jsonResponse({ status: 'G7 Proxy is running' });
     }
 
-    // ── Route: POST /api/message ──────────────────────────────────────────────
+    // =========================================================================
+    // ROUTE 1 — POST /api/message
+    // Anthropic API proxy. Adds API key server-side so it is never
+    // exposed to the browser. Session token required.
+    // =========================================================================
     if (request.method === 'POST' && path === '/api/message') {
 
-      // Reject requests from disallowed origins
-      if (!ALLOWED_ORIGINS.includes(origin)) {
-        return new Response(JSON.stringify({ error: 'Origin not allowed' }), {
-          status: 403,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders }
-        });
+      // Validate session before proxying — reject unauthenticated requests
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ error: 'Unauthorized — valid session token required' }, 401);
       }
 
-      // Read and validate the request body
+      // Parse and validate the request body
       let body;
       try {
         body = await request.json();
       } catch {
-        return new Response(JSON.stringify({ error: 'Invalid JSON body' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders }
-        });
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
       // Forward to Anthropic — API key added here server-side,
@@ -112,24 +154,289 @@ export default {
           body: JSON.stringify(body)
         });
       } catch {
-        return new Response(JSON.stringify({ error: 'Failed to reach Anthropic API' }), {
-          status: 502,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders }
-        });
+        return jsonResponse({ error: 'Failed to reach Anthropic API' }, 502);
       }
 
-      // Return Anthropic's response to the browser, with CORS headers added
+      // Return Anthropic's response to the browser with CORS headers
       const responseBody = await anthropicResponse.text();
       return new Response(responseBody, {
         status: anthropicResponse.status,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        headers: { 'Content-Type': 'application/json', ...corsHeaders() }
       });
     }
 
+    // =========================================================================
+    // ROUTE 2 — POST /auth/login
+    // Validates firmCode + password, creates a 7-day session token in KV,
+    // returns the token to the client for use in subsequent requests.
+    // =========================================================================
+    if (request.method === 'POST' && path === '/auth/login') {
+
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const { firmCode, password } = body;
+      if (!firmCode || !password) {
+        return jsonResponse({ error: 'firmCode and password are required' }, 400);
+      }
+
+      // Normalize firmCode to uppercase so G7CAP and g7cap both work
+      const normalizedCode = firmCode.toUpperCase().trim();
+
+      // Look up the firm in KV
+      const user = await env.G7_KV.get('auth:users:' + normalizedCode, 'json');
+      if (!user) {
+        // Return same error message as wrong password — prevents user enumeration
+        return jsonResponse({ error: 'Invalid credentials' }, 401);
+      }
+
+      // Hash the submitted password and compare to stored hash
+      const submittedHash = await hashPassword(password);
+      if (submittedHash !== user.passwordHash) {
+        return jsonResponse({ error: 'Invalid credentials' }, 401);
+      }
+
+      // Generate a session token — two UUIDs joined for extra length
+      const token = crypto.randomUUID() + '-' + crypto.randomUUID();
+
+      // Store session in KV with 7-day TTL
+      // expiresAt is checked on each request; Cloudflare also auto-deletes
+      // the key after expirationTtl seconds as a backup cleanup mechanism
+      await env.G7_KV.put(
+        'auth:sessions:' + token,
+        JSON.stringify({
+          firmCode: normalizedCode,
+          firmName: user.firmName,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + (7 * 24 * 60 * 60 * 1000) // 7 days in ms
+        }),
+        { expirationTtl: 604800 } // 7 days in seconds — Cloudflare TTL
+      );
+
+      return jsonResponse({
+        token,
+        firmCode: normalizedCode,
+        firmName: user.firmName
+      });
+    }
+
+    // =========================================================================
+    // ROUTE 3 — POST /auth/logout
+    // Deletes the session token from KV, invalidating it immediately.
+    // =========================================================================
+    if (request.method === 'POST' && path === '/auth/logout') {
+
+      const authHeader = request.headers.get('Authorization');
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return jsonResponse({ error: 'No session token provided' }, 400);
+      }
+
+      const token = authHeader.slice(7);
+
+      // Delete the session — if it doesn't exist, that's fine (idempotent)
+      await env.G7_KV.delete('auth:sessions:' + token);
+
+      return jsonResponse({ success: true });
+    }
+
+    // =========================================================================
+    // ROUTE 4 — GET /auth/validate
+    // Checks whether a session token is still valid and returns firm identity.
+    // Used by the frontend on page load to restore session state.
+    // =========================================================================
+    if (request.method === 'GET' && path === '/auth/validate') {
+
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ valid: false }, 401);
+      }
+
+      return jsonResponse({
+        valid: true,
+        firmCode: session.firmCode,
+        firmName: session.firmName
+      });
+    }
+
+    // =========================================================================
+    // ROUTE 5 — POST /data/save
+    // Saves firm data to KV under the firm's own namespace.
+    // Session required — firms can only write to their own keys.
+    //
+    // Valid types and resulting KV keys:
+    //   'config'       → firms:{CODE}:config
+    //   'kb'           → firms:{CODE}:kb
+    //   'deals'        → firms:{CODE}:deals
+    //   'calibrations' → firms:{CODE}:calibrations
+    // =========================================================================
+    if (request.method === 'POST' && path === '/data/save') {
+
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ error: 'Unauthorized — valid session token required' }, 401);
+      }
+
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const { type, data } = body;
+
+      // Validate type — only these four are accepted
+      const validTypes = ['config', 'kb', 'deals', 'calibrations'];
+      if (!type || !validTypes.includes(type)) {
+        return jsonResponse({
+          error: 'Invalid type. Must be one of: config, kb, deals, calibrations'
+        }, 400);
+      }
+
+      // Construct the KV key scoped to this firm
+      const key = 'firms:' + session.firmCode + ':' + type;
+
+      // Save to KV — no TTL on firm data, it persists until explicitly deleted
+      await env.G7_KV.put(key, JSON.stringify(data));
+
+      return jsonResponse({ success: true });
+    }
+
+    // =========================================================================
+    // ROUTE 6 — GET /data/load
+    // Loads firm data from KV by type.
+    // Session required — firms can only read their own keys.
+    //
+    // Query parameter: ?type=config (or kb, deals, calibrations)
+    // Returns: { data: <value> } or { data: null } if not yet saved
+    // =========================================================================
+    if (request.method === 'GET' && path === '/data/load') {
+
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ error: 'Unauthorized — valid session token required' }, 401);
+      }
+
+      const type = url.searchParams.get('type');
+
+      // Validate type
+      const validTypes = ['config', 'kb', 'deals', 'calibrations'];
+      if (!type || !validTypes.includes(type)) {
+        return jsonResponse({
+          error: 'Invalid type. Must be one of: config, kb, deals, calibrations'
+        }, 400);
+      }
+
+      // Construct the KV key scoped to this firm
+      const key = 'firms:' + session.firmCode + ':' + type;
+
+      // Load from KV — returns null if the key does not exist yet
+      const raw = await env.G7_KV.get(key, 'json');
+
+      return jsonResponse({ data: raw || null });
+    }
+
+    // =========================================================================
+    // ROUTE 7 — POST /admin/create-firm
+    // Creates a new firm account in KV.
+    // Protected by ADMIN_PASSWORD environment variable — not a session token.
+    // =========================================================================
+    if (request.method === 'POST' && path === '/admin/create-firm') {
+
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const { adminPassword, firmCode, firmName, password } = body;
+
+      // Validate admin password against environment variable
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      // Validate required fields
+      if (!firmCode || !firmName || !password) {
+        return jsonResponse({ error: 'firmCode, firmName, and password are required' }, 400);
+      }
+
+      // Normalize firmCode to uppercase
+      const normalizedCode = firmCode.toUpperCase().trim();
+
+      // Hash the firm's login password for storage
+      const passwordHash = await hashPassword(password);
+
+      // Store the firm user record in KV
+      await env.G7_KV.put(
+        'auth:users:' + normalizedCode,
+        JSON.stringify({
+          firmName,
+          passwordHash,
+          createdAt: Date.now(),
+          tier: 'beta'
+        })
+      );
+
+      // Initialise empty firm data stores so /data/load always returns
+      // an array (never null) for these two high-frequency keys
+      await env.G7_KV.put(
+        'firms:' + normalizedCode + ':deals',
+        JSON.stringify([])
+      );
+      await env.G7_KV.put(
+        'firms:' + normalizedCode + ':calibrations',
+        JSON.stringify([])
+      );
+
+      return jsonResponse({
+        success: true,
+        firmCode: normalizedCode,
+        firmName
+      });
+    }
+
+    // =========================================================================
+    // ROUTE 8 — GET /admin/list-firms
+    // Returns a list of all firm accounts in KV.
+    // Protected by ?adminPassword=xxx query parameter.
+    // =========================================================================
+    if (request.method === 'GET' && path === '/admin/list-firms') {
+
+      const adminPassword = url.searchParams.get('adminPassword');
+
+      // Validate admin password
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      // List all keys with the 'auth:users:' prefix to find all firm accounts
+      const list = await env.G7_KV.list({ prefix: 'auth:users:' });
+
+      // Fetch each firm's data to return a useful summary
+      const firms = await Promise.all(
+        list.keys.map(async (key) => {
+          const user = await env.G7_KV.get(key.name, 'json');
+          // Extract firmCode from the key name by stripping 'auth:users:' prefix
+          const firmCode = key.name.replace('auth:users:', '');
+          return {
+            firmCode,
+            firmName: user ? user.firmName : 'Unknown',
+            createdAt: user ? user.createdAt : null,
+            tier: user ? user.tier : null
+          };
+        })
+      );
+
+      return jsonResponse({ firms });
+    }
+
     // ── Catch-all 404 ─────────────────────────────────────────────────────────
-    return new Response(JSON.stringify({ error: 'Not found' }), {
-      status: 404,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders }
-    });
+    return jsonResponse({ error: 'Not found' }, 404);
   }
 };
