@@ -116,7 +116,18 @@ async function g7Logout() {
     }
   }
 
+  // Clear session tokens
   clearToken();
+  // Clear ALL firm data so the next firm who logs in
+  // on this device starts completely fresh
+  localStorage.removeItem('g7_firm_config');
+  localStorage.removeItem('g7_firm_knowledge_base');
+  localStorage.removeItem('g7_deal_history');
+  localStorage.removeItem('g7_calibration_log');
+  localStorage.removeItem('g7_onboarded');
+  localStorage.removeItem('g7_pending_result');
+  localStorage.removeItem('g7_view_deal_id');
+  // Redirect to login
   window.location.href = '/G7-Capital/login.html';
 }
 
@@ -271,6 +282,18 @@ async function syncToKV() {
 // so existing workspace pages that check isOnboarded() work.
 // ─────────────────────────────────────────────────────────────
 async function syncFromKV() {
+  // FIRST: Clear all existing firm data from localStorage.
+  // This prevents data from a previously logged-in firm from
+  // leaking through if the new firm has no KV data yet.
+  localStorage.removeItem('g7_firm_config');
+  localStorage.removeItem('g7_firm_knowledge_base');
+  localStorage.removeItem('g7_deal_history');
+  localStorage.removeItem('g7_calibration_log');
+  localStorage.removeItem('g7_onboarded');
+  localStorage.removeItem('g7_pending_result');
+  localStorage.removeItem('g7_view_deal_id');
+
+  // THEN: Load this firm's data from KV
   const [config, kb, deals, cals] = await Promise.all([
     g7Load('config'),
     g7Load('kb'),
@@ -283,9 +306,9 @@ async function syncFromKV() {
   if (deals)  localStorage.setItem('g7_deal_history',        JSON.stringify(deals));
   if (cals)   localStorage.setItem('g7_calibration_log',     JSON.stringify(cals));
 
-  // Mark as onboarded so existing requireOnboarding() checks pass
-  // (belt-and-suspenders alongside the new requireAuth() check)
-  if (config || kb) {
+  // Only mark as onboarded if they actually have config data in KV.
+  // New firms will not have this — they must complete onboarding first.
+  if (config) {
     localStorage.setItem('g7_onboarded', 'true');
   }
 }
