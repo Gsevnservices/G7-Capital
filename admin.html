@@ -168,7 +168,35 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
 
 
   <!-- ═══════════════════════════════════════════════
-       SECTION 2 — VIEW ALL FIRMS
+       SECTION 2 — RESET FIRM PASSWORD
+  ═══════════════════════════════════════════════ -->
+  <div class="section" id="sectionReset">
+    <div class="section-title">Reset Firm Password</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:560px">
+      <div class="field">
+        <label for="resetFirmCode">Firm Code</label>
+        <input type="text" id="resetFirmCode" class="uppercase-input"
+          placeholder="e.g. CHRISTIAN" maxlength="20">
+      </div>
+      <div class="field">
+        <label for="resetPassword">New Password</label>
+        <input type="text" id="resetPassword"
+          placeholder="New password for the firm">
+      </div>
+    </div>
+
+    <button class="btn btn-gold" id="resetBtn" onclick="resetFirmPassword()">
+      Reset Password →
+    </button>
+
+    <div class="msg success" id="resetSuccess"></div>
+    <div class="msg error" id="resetError"></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 3 — VIEW ALL FIRMS
   ═══════════════════════════════════════════════ -->
   <div class="section" id="sectionFirms">
     <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">
@@ -214,6 +242,7 @@ function authenticate() {
   // Hide the auth gate and show the work sections
   document.getElementById('authGate').style.display = 'none';
   document.getElementById('sectionCreate').classList.add('visible');
+  document.getElementById('sectionReset').classList.add('visible');
   document.getElementById('sectionFirms').classList.add('visible');
 
   // Auto-load firm list on authenticate
@@ -230,6 +259,12 @@ document.getElementById('adminPwdInput').addEventListener('keydown', function(e)
 // FIRM CODE — force uppercase as user types
 // ─────────────────────────────────────────────────────────────
 document.getElementById('newFirmCode').addEventListener('input', function() {
+  const pos = this.selectionStart;
+  this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  this.setSelectionRange(pos, pos);
+});
+
+document.getElementById('resetFirmCode').addEventListener('input', function() {
   const pos = this.selectionStart;
   this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
   this.setSelectionRange(pos, pos);
@@ -307,8 +342,64 @@ async function createFirm() {
 
 
 // ─────────────────────────────────────────────────────────────
+// RESET FIRM PASSWORD
+// Calls POST /admin/reset-password on the worker
+// ─────────────────────────────────────────────────────────────
+async function resetFirmPassword() {
+  const firmCode    = document.getElementById('resetFirmCode').value.trim().toUpperCase();
+  const newPassword = document.getElementById('resetPassword').value.trim();
+
+  const successEl = document.getElementById('resetSuccess');
+  const errorEl   = document.getElementById('resetError');
+  const btn       = document.getElementById('resetBtn');
+
+  successEl.classList.remove('visible');
+  errorEl.classList.remove('visible');
+
+  if (!firmCode || !newPassword) {
+    errorEl.textContent = 'Both fields are required.';
+    errorEl.classList.add('visible');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Resetting…';
+
+  try {
+    const response = await fetch(WORKER + '/admin/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword, firmCode, newPassword })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Request failed (' + response.status + ')');
+    }
+
+    successEl.textContent =
+      'Password reset for ' + data.firmCode + '. ' +
+      'The partner can now log in with the new password.';
+    successEl.classList.add('visible');
+
+    // Clear the form
+    document.getElementById('resetFirmCode').value = '';
+    document.getElementById('resetPassword').value = '';
+
+  } catch(err) {
+    errorEl.textContent = err.message;
+    errorEl.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Reset Password →';
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
 // LOAD FIRMS
-// Calls GET /admin/list-firms on the worker and renders the table
+// Calls GET /admin/list-firms and fetches usage for each firm
 // ─────────────────────────────────────────────────────────────
 async function loadFirms() {
   const container = document.getElementById('firmsContainer');
@@ -321,10 +412,10 @@ async function loadFirms() {
   btn.textContent = 'Loading…';
 
   try {
-    const url = WORKER + '/admin/list-firms?adminPassword=' +
+    const listUrl = WORKER + '/admin/list-firms?adminPassword=' +
       encodeURIComponent(adminPassword);
 
-    const response = await fetch(url);
+    const response = await fetch(listUrl);
     const data = await response.json();
 
     if (!response.ok) {
@@ -338,24 +429,45 @@ async function loadFirms() {
       return;
     }
 
+    // Fetch usage counts for all firms in parallel
+    const usageResults = await Promise.all(
+      firms.map(function(firm) {
+        const usageUrl = WORKER + '/admin/firm-usage?firmCode=' +
+          encodeURIComponent(firm.firmCode) + '&adminPassword=' +
+          encodeURIComponent(adminPassword);
+        return fetch(usageUrl)
+          .then(function(r) { return r.json(); })
+          .catch(function()  { return { count: 0 }; }); // non-fatal
+      })
+    );
+
     // Build the table
     let html = '<table class="firms-table">';
     html += '<thead><tr>';
     html += '<th>Firm Code</th><th>Firm Name</th><th>Created</th><th>Tier</th>';
+    html += '<th>Deals Used</th><th>Action</th>';
     html += '</tr></thead><tbody>';
 
-    firms.forEach(function(firm) {
+    firms.forEach(function(firm, i) {
       const createdDate = firm.createdAt
         ? new Date(firm.createdAt).toLocaleDateString('en-GB', {
             day: 'numeric', month: 'short', year: 'numeric'
           })
         : '—';
 
+      const usage = usageResults[i] || {};
+      const count = usage.count || 0;
+      const limit = usage.limit || 50;
+      const usageColor = count >= limit ? '#e08080' : count >= limit * 0.8 ? '#C9A84C' : '#ccc';
+
       html += '<tr>';
       html += '<td><span class="firm-code-badge">' + escapeHtml(firm.firmCode) + '</span></td>';
       html += '<td>' + escapeHtml(firm.firmName || '—') + '</td>';
       html += '<td>' + createdDate + '</td>';
       html += '<td><span class="tier-badge">' + escapeHtml(firm.tier || 'beta') + '</span></td>';
+      html += '<td style="color:' + usageColor + ';font-weight:600">' + count + ' / ' + limit + '</td>';
+      html += '<td><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" ' +
+        'onclick="resetUsage(\'' + escapeHtml(firm.firmCode) + '\')">Reset Usage</button></td>';
       html += '</tr>';
     });
 
@@ -372,6 +484,35 @@ async function loadFirms() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Refresh';
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// RESET USAGE
+// Calls POST /admin/reset-usage to zero a firm's deal counter
+// ─────────────────────────────────────────────────────────────
+async function resetUsage(firmCode) {
+  if (!confirm('Reset deal usage for ' + firmCode + ' to 0?')) return;
+
+  try {
+    const response = await fetch(WORKER + '/admin/reset-usage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword, firmCode })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Reset failed (' + response.status + ')');
+    }
+
+    // Refresh the table to show updated counts
+    loadFirms();
+
+  } catch(err) {
+    alert('Error: ' + err.message);
   }
 }
 

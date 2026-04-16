@@ -311,4 +311,11 @@ async function syncFromKV() {
   if (config) {
     localStorage.setItem('g7_onboarded', 'true');
   }
+
+  // Keep the session firm name in sync with what the firm set during onboarding.
+  // The login session gets firmName from the auth record (set by the admin),
+  // but the firm's own config firmName is the authoritative display name.
+  if (config && config.firmName) {
+    localStorage.setItem('g7_session_name', config.firmName);
+  }
 }

@@ -25,6 +25,9 @@
 //   GET  /data/load              — Load firm data from KV (session-protected)
 //   POST /admin/create-firm      — Create a new firm account (admin-protected)
 //   GET  /admin/list-firms       — List all firm accounts (admin-protected)
+//   POST /admin/reset-password   — Reset a firm's password (admin-protected)
+//   GET  /admin/firm-usage       — Get deal usage count for a firm (admin-protected)
+//   POST /admin/reset-usage      — Reset deal usage counter for a firm (admin-protected)
 //
 // Health check:
 //   GET /                        → { status: 'G7 Proxy is running' }
@@ -139,6 +142,39 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
+      // ── Deal usage limit ──────────────────────────────────────────────────────
+      // Only check and increment on the FIRST call of a deal submission
+      // (messages.length === 1). Subsequent tool_use continuation calls
+      // have more messages and are part of the same deal — do not count them.
+      const DEAL_LIMIT = 50;
+      const isFirstCall = Array.isArray(body.messages) && body.messages.length === 1;
+
+      if (isFirstCall) {
+        const usageKey = 'usage:' + session.firmCode + ':deals';
+        const currentUsage = await env.G7_KV.get(usageKey, 'json') || { count: 0 };
+
+        if (currentUsage.count >= DEAL_LIMIT) {
+          return jsonResponse({
+            error:   'deal_limit_reached',
+            message: 'Your firm has reached the ' + DEAL_LIMIT + ' deal limit for the ' +
+                     'beta period. Contact your G7 Capital administrator to increase your limit.',
+            count:   currentUsage.count,
+            limit:   DEAL_LIMIT
+          }, 429);
+        }
+      }
+
+      // Enforce max_uses: 2 on any web_search tool — server-side cap
+      // that cannot be overridden by editing browser code.
+      if (body.tools && Array.isArray(body.tools)) {
+        body.tools = body.tools.map(tool => {
+          if (tool.type === 'web_search_20250305' || tool.name === 'web_search') {
+            return { ...tool, max_uses: 2 };
+          }
+          return tool;
+        });
+      }
+
       // Forward to Anthropic — API key added here server-side,
       // never visible to the browser
       let anthropicResponse;
@@ -157,8 +193,22 @@ export default {
         return jsonResponse({ error: 'Failed to reach Anthropic API' }, 502);
       }
 
-      // Return Anthropic's response to the browser with CORS headers
+      // Read Anthropic's response body once (streams can only be read once)
       const responseBody = await anthropicResponse.text();
+
+      // Increment deal counter only on a successful first call
+      // Fire-and-forget — do not let a KV write delay the response
+      if (isFirstCall && anthropicResponse.ok) {
+        const usageKey = 'usage:' + session.firmCode + ':deals';
+        const currentUsage = await env.G7_KV.get(usageKey, 'json') || { count: 0 };
+        env.G7_KV.put(usageKey, JSON.stringify({
+          count:    currentUsage.count + 1,
+          lastUsed: Date.now(),
+          firmCode: session.firmCode
+        })); // intentionally not awaited — best-effort, does not block response
+      }
+
+      // Return Anthropic's response to the browser with CORS headers
       return new Response(responseBody, {
         status: anthropicResponse.status,
         headers: { 'Content-Type': 'application/json', ...corsHeaders() }
@@ -434,6 +484,87 @@ export default {
       );
 
       return jsonResponse({ firms });
+    }
+
+    // ── ROUTE 9 — POST /admin/reset-password ──────────────────────────────────
+    if (request.method === 'POST' && path === '/admin/reset-password') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+
+      const { adminPassword, firmCode, newPassword } = body;
+
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      const normalizedCode = (firmCode || '').toUpperCase().trim();
+      if (!normalizedCode) {
+        return jsonResponse({ error: 'firmCode is required' }, 400);
+      }
+      if (!newPassword || newPassword.length < 6) {
+        return jsonResponse({ error: 'newPassword must be at least 6 characters' }, 400);
+      }
+
+      const user = await env.G7_KV.get('auth:users:' + normalizedCode, 'json');
+      if (!user) {
+        return jsonResponse({ error: 'Firm not found: ' + normalizedCode }, 404);
+      }
+
+      const newHash = await hashPassword(newPassword);
+      await env.G7_KV.put('auth:users:' + normalizedCode, JSON.stringify({
+        ...user,
+        passwordHash: newHash,
+        passwordResetAt: Date.now()
+      }));
+
+      return jsonResponse({ success: true, firmCode: normalizedCode });
+    }
+
+    // ── ROUTE 10 — GET /admin/firm-usage ──────────────────────────────────────
+    // Returns the deal usage count for a specific firm.
+    // Query params: firmCode, adminPassword
+    if (request.method === 'GET' && path === '/admin/firm-usage') {
+      const adminPassword = url.searchParams.get('adminPassword');
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      const firmCode = (url.searchParams.get('firmCode') || '').toUpperCase().trim();
+      if (!firmCode) {
+        return jsonResponse({ error: 'firmCode query parameter is required' }, 400);
+      }
+
+      const usageKey = 'usage:' + firmCode + ':deals';
+      const usage = await env.G7_KV.get(usageKey, 'json') || { count: 0 };
+
+      return jsonResponse({
+        firmCode,
+        count:    usage.count,
+        limit:    50,
+        lastUsed: usage.lastUsed || null
+      });
+    }
+
+    // ── ROUTE 11 — POST /admin/reset-usage ────────────────────────────────────
+    // Resets the deal usage counter for a specific firm to zero.
+    // Body: { adminPassword, firmCode }
+    if (request.method === 'POST' && path === '/admin/reset-usage') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+
+      const { adminPassword, firmCode } = body;
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      const normalizedCode = (firmCode || '').toUpperCase().trim();
+      if (!normalizedCode) {
+        return jsonResponse({ error: 'firmCode is required' }, 400);
+      }
+
+      await env.G7_KV.delete('usage:' + normalizedCode + ':deals');
+
+      return jsonResponse({ success: true, firmCode: normalizedCode });
     }
 
     // ── Catch-all 404 ─────────────────────────────────────────────────────────

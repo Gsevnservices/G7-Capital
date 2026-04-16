@@ -498,8 +498,7 @@ function buildContentArray(dealSubmission, imageArray) {
 // Replaces callAlex() and callAlexWithImages() for the primary
 // deal submission flow.
 //
-// Alex can run up to 5 web searches before completing the note
-// (capped at 3 for PDF submissions to protect the token budget).
+// Alex runs up to 2 web searches per deal (enforced server-side).
 //
 // Loop pattern:
 //   1. Send request with web_search tool enabled
@@ -525,9 +524,8 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
 
   var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
 
-  // PDF submissions get fewer search rounds — images already use token budget
-  var isPdf       = imageArray && imageArray.length > 0;
-  var maxSearches = isPdf ? 3 : 5;
+  // Maximum 2 web searches per deal — enforced server-side in the worker too
+  var maxSearches = 2;
 
   // Build the initial user message
   var contentArray = buildContentArray(dealSubmission, imageArray);
@@ -578,6 +576,10 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
 
     // Handle API-level errors
     if (!response.ok || data.error) {
+      // Deal limit reached — worker returns { error: 'deal_limit_reached', message: '...' }
+      if (data.error === 'deal_limit_reached') {
+        throw new Error('deal_limit_reached: ' + data.message);
+      }
       var msg = (data.error && data.error.message) || ('API error ' + response.status);
       if (data.error && data.error.type === 'authentication_error') {
         throw new Error('Invalid API key. Please check your Anthropic API key in Settings.');

@@ -544,6 +544,12 @@ body{visibility:hidden}
   font-size:11px;letter-spacing:.15em;text-transform:uppercase;
   color:var(--grey2)
 }
+.loading-time-counter{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.1em;
+  color:var(--grey2);text-align:center;
+  margin-top:4px;min-height:16px
+}
 
 /* ─────────────────────────────────────────────
    ERROR CARD
@@ -619,9 +625,10 @@ body{visibility:hidden}
 
   <!-- Cycling message — changes every 3 seconds -->
   <div class="loading-message" id="loadingMessage">
-    Alex is reviewing the deal materials...
+    Alex is reading your submission...
   </div>
   <div class="loading-submessage">This takes 30 – 60 seconds</div>
+  <div class="loading-time-counter" id="alexTimeCounter"></div>
 </div>
 
 <!-- ─────────────────────────────────────────────
@@ -1317,12 +1324,14 @@ function hidePdfError() {
 // Changes the loading message every 3 seconds
 // ─────────────────────────────────────────────
 var loadingMessages = [
-  'Alex is reviewing the deal materials...',
-  'Applying your firm\'s investment thesis...',
-  'Running the 6-stage screening framework...',
-  'Checking against your deal history...',
-  'Identifying risks and red flags...',
-  'Preparing your screening note...'
+  'Alex is reading your submission...',
+  'Alex is researching the founders...',
+  'Alex is verifying key claims...',
+  'Alex is analysing the market...',
+  'Alex is applying analytical frameworks...',
+  'Alex is calculating fund return maths...',
+  'Alex is identifying red flags...',
+  'Alex is preparing the screening note...'
 ];
 var messageIndex    = 0;
 var messageInterval = null;
@@ -1348,6 +1357,35 @@ function stopLoadingMessages() {
     clearInterval(messageInterval);
     messageInterval = null;
   }
+}
+
+
+// ─────────────────────────────────────────────
+// TIME ELAPSED COUNTER
+// Shows seconds elapsed so partners know the
+// system is working during long web searches
+// ─────────────────────────────────────────────
+var timeCounter = null;
+var startTime   = null;
+
+function startTimeCounter() {
+  startTime = Date.now();
+  var el = document.getElementById('alexTimeCounter');
+  if (!el) return;
+  el.textContent = '0s elapsed';
+  timeCounter = setInterval(function() {
+    var seconds = Math.floor((Date.now() - startTime) / 1000);
+    el.textContent = seconds + 's elapsed';
+  }, 1000);
+}
+
+function stopTimeCounter() {
+  if (timeCounter) {
+    clearInterval(timeCounter);
+    timeCounter = null;
+  }
+  var el = document.getElementById('alexTimeCounter');
+  if (el) el.textContent = '';
 }
 
 
@@ -1432,10 +1470,11 @@ document.getElementById('submitForm').addEventListener('submit', async function(
     content:      dealContent
   };
 
-  // Show loading overlay and start message cycle
+  // Show loading overlay and start message cycle + time counter
   document.getElementById('loadingOverlay').classList.add('show');
   document.getElementById('submitBtn').disabled = true;
   startLoadingMessages();
+  startTimeCounter();
 
   try {
     // Call Alex with web search enabled.
@@ -1465,11 +1504,21 @@ document.getElementById('submitForm').addEventListener('submit', async function(
   } catch (err) {
     // Something went wrong — hide overlay, keep form filled, show error
     stopLoadingMessages();
+    stopTimeCounter();
     document.getElementById('loadingOverlay').classList.remove('show');
     document.getElementById('submitBtn').disabled = false;
 
     // Re-check submit button state (fields are still filled)
     checkSubmitReady();
+
+    // Deal limit reached — show a clear, friendly message
+    if (err.message && err.message.includes('deal_limit_reached')) {
+      showError(
+        'Your firm has reached the 50-deal limit for the beta period. ' +
+        'Please contact your administrator to increase your limit.'
+      );
+      return;
+    }
 
     showError(err.message || 'An unexpected error occurred. Please try again.');
   }
