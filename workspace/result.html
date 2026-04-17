@@ -822,6 +822,149 @@ body{visibility:hidden}
 #fullAnalysisWrapper.expanded{display:block}
 
 /* ─────────────────────────────────────────────
+   RESULT TABS
+───────────────────────────────────────────── */
+.result-tabs{
+  max-width:860px;margin:0 auto 0;
+  display:none;/* hidden until buildDashboard() finds data */
+  border-bottom:1px solid var(--border)
+}
+.result-tab{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  background:transparent;border:none;
+  border-bottom:2px solid transparent;
+  color:var(--grey1);padding:16px 24px;
+  cursor:pointer;transition:all .3s;margin-bottom:-1px
+}
+.result-tab:hover{color:var(--white)}
+.result-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* ─────────────────────────────────────────────
+   GROWTH AND RETURN DASHBOARD
+───────────────────────────────────────────── */
+.dashboard-panel{
+  max-width:860px;margin:0 auto;padding:32px 0
+}
+.dash-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px;margin-bottom:16px
+}
+@media(max-width:600px){.dash-row{grid-template-columns:1fr}}
+.dash-card{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  padding:28px 32px
+}
+.dash-full-width{margin-bottom:16px}
+.dash-card-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px
+}
+.dash-big-number{
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px;font-weight:300;
+  color:var(--white);line-height:1;margin-bottom:12px
+}
+.dash-score-bar-wrap{
+  height:3px;background:rgba(255,255,255,.08);
+  margin-bottom:8px;border-radius:2px
+}
+.dash-score-bar{
+  height:100%;background:var(--gold);
+  border-radius:2px;transition:width 1s ease;width:0%
+}
+.dash-score-label{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey1)
+}
+.dash-score-breakdown{
+  margin-top:20px;display:flex;flex-direction:column;gap:8px
+}
+.dash-breakdown-row{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Tenor Sans',sans-serif;font-size:11px;
+  color:rgba(250,250,248,.6)
+}
+.dash-breakdown-score{font-size:12px;color:var(--white)}
+/* Matrix */
+.dash-matrix-wrap{overflow-x:auto}
+.dash-matrix-table{width:100%;border-collapse:collapse}
+.dash-matrix-table th{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey1);padding:8px 16px;text-align:center;
+  border-bottom:1px solid var(--border)
+}
+.dash-matrix-table th:first-child{text-align:left}
+.dash-matrix-table td{
+  font-family:'Tenor Sans',sans-serif;font-size:13px;
+  padding:12px 16px;text-align:center;
+  border-bottom:1px solid rgba(255,255,255,.03)
+}
+.dash-matrix-table td:first-child{
+  text-align:left;color:var(--grey1);
+  font-size:11px;letter-spacing:.1em
+}
+.cell-good{color:#4CAF50;font-weight:500}
+.cell-ok{color:var(--gold)}
+.cell-bad{color:#ff4444}
+.cell-na{color:rgba(255,255,255,.2)}
+.dash-matrix-legend{
+  display:flex;gap:24px;margin-top:16px;
+  padding-top:16px;border-top:1px solid var(--border);
+  flex-wrap:wrap
+}
+.legend-item{
+  font-family:'Tenor Sans',sans-serif;font-size:10px;
+  letter-spacing:.1em;display:flex;align-items:center;gap:8px
+}
+.legend-item::before{content:'●';font-size:8px}
+.legend-good::before{color:#4CAF50}
+.legend-ok::before{color:var(--gold)}
+.legend-bad::before{color:#ff4444}
+/* Breakeven */
+.breakeven-item{margin-bottom:20px}
+.breakeven-item:last-child{margin-bottom:0}
+.breakeven-label{
+  font-family:'Tenor Sans',sans-serif;font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--grey1);margin-bottom:6px
+}
+.breakeven-detail{
+  font-family:'Tenor Sans',sans-serif;font-size:11px;
+  color:rgba(250,250,248,.6);margin-top:4px;line-height:1.6
+}
+/* Sustainability */
+.sustain-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  font-family:'Tenor Sans',sans-serif
+}
+.sustain-item:last-child{border-bottom:none}
+.sustain-label{font-size:11px;color:rgba(250,250,248,.6);letter-spacing:.05em}
+.sustain-value{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.sustain-low{color:#4CAF50}
+.sustain-medium{color:var(--gold)}
+.sustain-high{color:#ff8c42}
+.sustain-critical{color:#ff4444}
+/* Misc */
+.dash-placeholder{
+  font-family:'Tenor Sans',sans-serif;font-size:11px;
+  color:rgba(255,255,255,.2);letter-spacing:.1em;
+  text-align:center;padding:32px 0
+}
+.dash-footnote{
+  font-family:'Tenor Sans',sans-serif;font-size:10px;
+  color:rgba(255,255,255,.2);letter-spacing:.08em;
+  text-align:center;padding-top:24px;
+  border-top:1px solid var(--border);margin-top:8px
+}
+
+/* ─────────────────────────────────────────────
    CQ LOADING OVERLAY (same pattern as submit.html)
 ───────────────────────────────────────────── */
 .cq-loading-overlay{
@@ -1069,6 +1212,18 @@ body{visibility:hidden}
 
     </div><!-- /summaryCard -->
 
+    <!-- RESULT TABS — shown by buildDashboard() when Growth data is found -->
+    <div class="result-tabs" id="resultTabs">
+      <button class="result-tab active" id="tabAnalysis"
+              onclick="switchTab('analysis')">
+        Screening Note
+      </button>
+      <button class="result-tab" id="tabDashboard"
+              onclick="switchTab('dashboard')">
+        Growth &amp; Return
+      </button>
+    </div>
+
     <!-- FULL ANALYSIS WRAPPER — collapsed by default, expanded on click -->
     <div id="fullAnalysisWrapper">
 
@@ -1091,6 +1246,85 @@ body{visibility:hidden}
       </div>
 
     </div><!-- /fullAnalysisWrapper -->
+
+    <!-- GROWTH AND RETURN DASHBOARD — shown when Growth & Return tab active -->
+    <div id="dashboardPanel" class="dashboard-panel" style="display:none">
+
+      <!-- Row 1: Growth Quality + Decomposition -->
+      <div class="dash-row">
+
+        <div class="dash-card" id="dashGrowthScore">
+          <div class="dash-card-label">Growth Quality</div>
+          <div class="dash-score-display">
+            <div class="dash-big-number" id="growthScoreNum">—</div>
+            <div class="dash-score-bar-wrap">
+              <div class="dash-score-bar" id="growthScoreBar"></div>
+            </div>
+            <div class="dash-score-label" id="growthScoreLabel"></div>
+          </div>
+          <div class="dash-score-breakdown" id="growthScoreBreakdown"></div>
+        </div>
+
+        <div class="dash-card" id="dashDecomp">
+          <div class="dash-card-label">Growth Decomposition</div>
+          <div class="dash-decomp-content" id="decompContent">
+            <div class="dash-placeholder">Awaiting analysis data</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 2: Return Scenario Matrix -->
+      <div class="dash-card dash-full-width" id="dashMatrix">
+        <div class="dash-card-label">Return Scenario Matrix</div>
+        <div class="dash-matrix-wrap">
+          <table class="dash-matrix-table" id="scenarioMatrix">
+            <thead>
+              <tr>
+                <th></th>
+                <th>4yr Exit</th>
+                <th>6yr Exit</th>
+                <th>8yr Exit</th>
+              </tr>
+            </thead>
+            <tbody id="matrixBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="dash-matrix-legend">
+          <span class="legend-item legend-good">≥3x target</span>
+          <span class="legend-item legend-ok">1–3x</span>
+          <span class="legend-item legend-bad">Below 1x</span>
+        </div>
+      </div>
+
+      <!-- Row 3: Breakeven + Sustainability -->
+      <div class="dash-row">
+
+        <div class="dash-card" id="dashBreakeven">
+          <div class="dash-card-label">Breakeven Analysis</div>
+          <div class="dash-breakeven-content" id="breakevenContent">
+            <div class="dash-placeholder">Awaiting analysis data</div>
+          </div>
+        </div>
+
+        <div class="dash-card" id="dashSustain">
+          <div class="dash-card-label">Growth Sustainability</div>
+          <div class="dash-sustain-content" id="sustainContent">
+            <div class="dash-placeholder">Awaiting analysis data</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 4: Data source note -->
+      <div class="dash-footnote">
+        Analysis generated by Alex from available pitch data.
+        Figures marked (i) are inferred — not directly stated.
+      </div>
+
+    </div><!-- /dashboardPanel -->
 
   </div><!-- /page-wrap -->
 
@@ -2098,6 +2332,238 @@ function submitCalibration() {
 
 
 // ─────────────────────────────────────────────
+// TAB SWITCHING
+// ─────────────────────────────────────────────
+function switchTab(tab) {
+  var analysisWrapper = document.getElementById('fullAnalysisWrapper');
+  var dashPanel       = document.getElementById('dashboardPanel');
+  var tabAnalysis     = document.getElementById('tabAnalysis');
+  var tabDashboard    = document.getElementById('tabDashboard');
+
+  if (tab === 'analysis') {
+    analysisWrapper.style.display = 'block';
+    dashPanel.style.display       = 'none';
+    tabAnalysis.classList.add('active');
+    tabDashboard.classList.remove('active');
+  } else {
+    analysisWrapper.style.display = 'none';
+    dashPanel.style.display       = 'block';
+    tabAnalysis.classList.remove('active');
+    tabDashboard.classList.add('active');
+    // Animate score bar on first view
+    setTimeout(function() { animateDashboard(); }, 100);
+  }
+}
+
+function animateDashboard() {
+  var bar = document.getElementById('growthScoreBar');
+  var num = document.getElementById('growthScoreNum');
+  if (bar && num && num.textContent !== '—') {
+    var score = parseFloat(num.textContent);
+    if (!isNaN(score)) {
+      bar.style.width = (score / 10 * 100) + '%';
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────
+// GROWTH AND RETURN DASHBOARD BUILDER
+// Parses the Growth and Return Intelligence section
+// from Alex's output and populates the dashboard.
+// ─────────────────────────────────────────────
+function buildDashboard(data) {
+  var rawText = data.raw || '';
+
+  // ── GROWTH QUALITY SCORE ──────────────────────────────────────
+  var growthScoreMatch = rawText.match(/GROWTH QUALITY SCORE:\s*(\d+(?:\.\d+)?)\/10/i);
+
+  if (growthScoreMatch) {
+    var score = parseFloat(growthScoreMatch[1]);
+    document.getElementById('growthScoreNum').textContent = score;
+
+    var labels = {
+      9: 'Exceptional', 8: 'Exceptional',
+      7: 'Strong',      6: 'Strong',
+      5: 'Adequate',    4: 'Adequate',
+      3: 'Concerning',  2: 'Concerning',
+      1: 'Critical',    0: 'Critical'
+    };
+    document.getElementById('growthScoreLabel').textContent =
+      labels[Math.floor(score)] || '';
+  }
+
+  // ── GROWTH DECOMPOSITION ──────────────────────────────────────
+  var decompMatch = rawText.match(
+    /GROWTH DECOMPOSITION:([\s\S]*?)(?=SUSTAINABILITY ASSESSMENT|RETURN SCENARIO|BREAKEVEN|━━━)/i
+  );
+
+  if (decompMatch) {
+    var decompEl = document.getElementById('decompContent');
+    var lines = decompMatch[1].trim().split('\n')
+      .filter(function(l) { return l.trim().length > 0; });
+
+    decompEl.innerHTML = '';
+    lines.forEach(function(line) {
+      var row = document.createElement('div');
+      row.style.cssText =
+        'font-family:\'Tenor Sans\',sans-serif;font-size:12px;' +
+        'color:rgba(250,250,248,0.7);padding:6px 0;' +
+        'border-bottom:1px solid rgba(255,255,255,0.04);';
+      row.textContent = line.trim().replace(/^[—\-·•]\s*/, '');
+      decompEl.appendChild(row);
+    });
+  }
+
+  // ── RETURN SCENARIO MATRIX ────────────────────────────────────
+  var matrixMatch = rawText.match(
+    /RETURN SCENARIO MATRIX:([\s\S]*?)(?=BREAKEVEN ANALYSIS|RETURN VERDICT|━━━)/i
+  );
+
+  if (matrixMatch) {
+    var matrixText = matrixMatch[1];
+    var tbody = document.getElementById('matrixBody');
+    tbody.innerHTML = '';
+
+    // Parse rows: "8x ARR:  2.1x  3.4x  5.2x" or "8x ARR: [X]x [X]x [X]x"
+    var rowMatches = matrixText.match(
+      /(\d+x\s+\w+):?\s+([\d.]+x|N\/A|\[X\]x)\s+([\d.]+x|N\/A|\[X\]x)\s+([\d.]+x|N\/A|\[X\]x)/gi
+    );
+
+    if (rowMatches) {
+      rowMatches.forEach(function(rowText) {
+        var parts = rowText.match(
+          /(.+?):\s*([\d.]+x|N\/A|\[X\]x)\s+([\d.]+x|N\/A|\[X\]x)\s+([\d.]+x|N\/A|\[X\]x)/i
+        );
+        if (!parts) return;
+
+        var tr = document.createElement('tr');
+        [parts[1], parts[2], parts[3], parts[4]].forEach(function(cell, i) {
+          var td = document.createElement('td');
+          td.textContent = cell.trim();
+          if (i > 0) {
+            var val = parseFloat(cell);
+            if (!isNaN(val)) {
+              td.className = val >= 3 ? 'cell-good' : val >= 1 ? 'cell-ok' : 'cell-bad';
+            } else {
+              td.className = 'cell-na';
+            }
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    // If no parseable rows, show placeholder
+    if (!rowMatches || rowMatches.length === 0) {
+      var placeholder = document.createElement('tr');
+      placeholder.innerHTML = '<td colspan="4" class="cell-na" style="text-align:center;padding:20px">Data not yet available</td>';
+      tbody.appendChild(placeholder);
+    }
+  }
+
+  // ── BREAKEVEN ANALYSIS ────────────────────────────────────────
+  var breakevenMatch = rawText.match(
+    /BREAKEVEN ANALYSIS:([\s\S]*?)(?=RETURN VERDICT|SUSTAINABILITY ASSESSMENT|━━━|$)/i
+  );
+
+  if (breakevenMatch) {
+    var breakevenEl = document.getElementById('breakevenContent');
+    var bLines = breakevenMatch[1].trim().split('\n')
+      .filter(function(l) { return l.trim().length > 0; })
+      .slice(0, 3);
+
+    if (bLines.length > 0) {
+      breakevenEl.innerHTML = '';
+      var targets = ['1x', '3x', '5x'];
+      bLines.forEach(function(line, idx) {
+        var item = document.createElement('div');
+        item.className = 'breakeven-item';
+
+        var label = document.createElement('div');
+        label.className = 'breakeven-label';
+        label.textContent = (targets[idx] || '') + ' Return Target';
+
+        var detail = document.createElement('div');
+        detail.className = 'breakeven-detail';
+        detail.textContent = line.trim()
+          .replace(/^\d+x\s+return\s+requires:/i, '')
+          .trim();
+
+        item.appendChild(label);
+        item.appendChild(detail);
+        breakevenEl.appendChild(item);
+      });
+    }
+  }
+
+  // ── SUSTAINABILITY ASSESSMENT ─────────────────────────────────
+  var sustainMatch = rawText.match(
+    /SUSTAINABILITY ASSESSMENT:([\s\S]*?)(?=RETURN SCENARIO|BREAKEVEN|━━━)/i
+  );
+
+  if (sustainMatch) {
+    var sustainEl = document.getElementById('sustainContent');
+    var sustainLines = [
+      { key: 'TAM Ceiling',            pattern: /TAM Ceiling:\s*(.+)/i },
+      { key: 'Capital Efficiency',     pattern: /Capital Efficiency:\s*(.+)/i },
+      { key: 'Competitive Durability', pattern: /Competitive Durability:\s*(.+)/i }
+    ];
+
+    var sustainRows = 0;
+    sustainEl.innerHTML = '';
+    sustainLines.forEach(function(item) {
+      var m = sustainMatch[1].match(item.pattern);
+      if (!m) return;
+
+      sustainRows++;
+      var value = m[1].trim().split('—')[0].trim();
+      var row = document.createElement('div');
+      row.className = 'sustain-item';
+
+      var lbl = document.createElement('span');
+      lbl.className = 'sustain-label';
+      lbl.textContent = item.key;
+
+      var val = document.createElement('span');
+      val.className = 'sustain-value';
+      var upper = value.toUpperCase();
+      if (upper.includes('LOW') || upper.includes('IMPROVING') || upper.includes('EXCEPTIONAL')) {
+        val.classList.add('sustain-low');
+      } else if (upper.includes('MEDIUM') || upper.includes('STABLE') || upper.includes('ADEQUATE')) {
+        val.classList.add('sustain-medium');
+      } else if (upper.includes('HIGH') || upper.includes('DECLINING') || upper.includes('CONCERNING')) {
+        val.classList.add('sustain-high');
+      } else if (upper.includes('CRITICAL')) {
+        val.classList.add('sustain-critical');
+      } else {
+        val.classList.add('sustain-medium');
+      }
+      val.textContent = value.replace(/risk/i, '').trim();
+
+      row.appendChild(lbl);
+      row.appendChild(val);
+      sustainEl.appendChild(row);
+    });
+
+    if (sustainRows === 0) {
+      sustainEl.innerHTML = '<div class="dash-placeholder">Data not yet available</div>';
+    }
+  }
+
+  // ── SHOW TAB BAR only if meaningful data was found ────────────
+  var hasGrowthData = growthScoreMatch || matrixMatch || breakevenMatch || sustainMatch;
+  if (hasGrowthData) {
+    document.getElementById('resultTabs').style.display = 'flex';
+    // Hide the redundant expand button now that tabs handle navigation
+    var expandBtn = document.getElementById('summaryExpandBtn');
+    if (expandBtn) expandBtn.style.display = 'none';
+  }
+}
+
+
+// ─────────────────────────────────────────────
 // EXPORT PDF
 // ─────────────────────────────────────────────
 function handleExport() {
@@ -2505,6 +2971,12 @@ function buildSummaryCard(data) {
 
   // Build and show the summary card (sits above the collapsed full analysis)
   buildSummaryCard(parsedData);
+
+  // Build Growth and Return dashboard (shows tab bar if data found)
+  buildDashboard(parsedData);
+
+  // Auto-show the full analysis via tab logic
+  switchTab('analysis');
 
   // Init scroll reveal
   initReveal();
