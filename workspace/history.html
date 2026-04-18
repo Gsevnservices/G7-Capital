@@ -927,6 +927,9 @@ function renderMobileCards(deals) {
     html += '<div class="deal-card-meta">';
     html += statusBadgeHtml(deal._status);
     html += decisionBadgeHtml(deal.partnerDecision);
+    if (deal.founderEmailSent) {
+      html += '<span style="font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:#4CAF50;border:1px solid #4CAF50;padding:2px 8px;">Emailed</span>';
+    }
     html += '</div>';
     html += '<span class="deal-card-date">' + formatDate(deal.dateScreened) + ' · ' + escHtml(deal.source || '—') + '</span>';
     html += '</div>';

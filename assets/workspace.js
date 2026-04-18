@@ -445,6 +445,13 @@ function buildContentArray(dealSubmission, imageArray) {
     ''
   ].join('\n');
 
+  // Founder email line — included whether provided or not
+  var emailLine = dealSubmission.founderEmail
+    ? 'FOUNDER CONTACT EMAIL: ' + dealSubmission.founderEmail
+    : 'FOUNDER CONTACT EMAIL: Not provided — extract from submission content if present. ' +
+      'Look for email addresses in the pitch text and include the best contact email in your ' +
+      'analysis under "FOUNDER EMAIL IDENTIFIED: [email]"';
+
   // Main deal text block
   var dealText = researchInstruction + [
     'Please screen the following deal and produce a complete',
@@ -453,6 +460,7 @@ function buildContentArray(dealSubmission, imageArray) {
     'COMPANY:        ' + dealSubmission.companyName,
     'SOURCE:         ' + dealSubmission.source,
     'SPECIFIC FOCUS: ' + (dealSubmission.partnerFocus || 'Standard full screening — no specific focus requested'),
+    emailLine,
     '',
     'DEAL MATERIALS:',
     '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',

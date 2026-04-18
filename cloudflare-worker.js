@@ -28,6 +28,7 @@
 //   POST /admin/reset-password   — Reset a firm's password (admin-protected)
 //   GET  /admin/firm-usage       — Get deal usage count for a firm (admin-protected)
 //   POST /admin/reset-usage      — Reset deal usage counter for a firm (admin-protected)
+//   POST /email/send-founder-questions — Send Alex questions to founder via email
 //
 // Health check:
 //   GET /                        → { status: 'G7 Proxy is running' }
@@ -565,6 +566,69 @@ export default {
       await env.G7_KV.delete('usage:' + normalizedCode + ':deals');
 
       return jsonResponse({ success: true, firmCode: normalizedCode });
+    }
+
+    // ── ROUTE 12 — POST /email/send-founder-questions ────────────────────────
+    // Sends Alex's founder outreach questions to the founder via Mailchannels.
+    // Session-protected — requires valid g7_session_token.
+    if (request.method === 'POST' && path === '/email/send-founder-questions') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+
+      // Validate session
+      const session = await validateSession(body.sessionToken, env);
+      if (!session) return jsonResponse({ error: 'Unauthorised — invalid or expired session' }, 401);
+
+      // Validate required fields
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!body.founderEmail || !emailRegex.test(body.founderEmail)) {
+        return jsonResponse({ error: 'founderEmail must be a valid email address' }, 400);
+      }
+      if (!body.emailBody || !body.emailBody.trim()) {
+        return jsonResponse({ error: 'emailBody cannot be empty' }, 400);
+      }
+      if (!body.companyName || !body.companyName.trim()) {
+        return jsonResponse({ error: 'companyName cannot be empty' }, 400);
+      }
+
+      const emailSubject = body.subject ||
+        ('Following up on ' + body.companyName +
+         ' — Questions from ' + (session.firmName || 'G7 Capital'));
+
+      const emailPayload = {
+        personalizations: [{
+          to: [{
+            email: body.founderEmail,
+            name:  body.founderName || body.companyName + ' Team'
+          }]
+        }],
+        from: {
+          email: 'alex@gsevnservices.com',
+          name:  'Alex — G7 Capital'
+        },
+        reply_to: {
+          email: 'hello@gsevnservices.com',
+          name:  session.firmName || 'G7 Capital'
+        },
+        subject: emailSubject,
+        content: [{
+          type:  'text/plain',
+          value: body.emailBody
+        }]
+      };
+
+      const sendResult = await fetch('https://api.mailchannels.net/tx/v1/send', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(emailPayload)
+      });
+
+      if (sendResult.status === 202 || sendResult.status === 200) {
+        return jsonResponse({ success: true, message: 'Email sent to ' + body.founderEmail });
+      } else {
+        const errText = await sendResult.text().catch(() => '');
+        return jsonResponse({ error: 'Email send failed', detail: sendResult.status, body: errText }, 500);
+      }
     }
 
     // ── Catch-all 404 ─────────────────────────────────────────────────────────

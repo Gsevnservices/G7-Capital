@@ -702,6 +702,23 @@ body{visibility:hidden}
         <div class="field-error" id="companyName-error">Please enter the company name.</div>
       </div>
 
+      <!-- Founder Email (optional) -->
+      <div class="field">
+        <label class="field-label" for="founderEmail">
+          Founder Email <span class="opt">(optional)</span>
+        </label>
+        <input
+          type="email"
+          id="founderEmail"
+          name="founderEmail"
+          placeholder="founder@company.com"
+          autocomplete="off"
+        >
+        <div class="field-hint">
+          If provided, Alex can draft questions directly to the founder after screening.
+        </div>
+      </div>
+
       <!-- Deal Source -->
       <div class="field">
         <label class="field-label" for="dealSource">
@@ -1467,7 +1484,8 @@ document.getElementById('submitForm').addEventListener('submit', async function(
     companyName:  companyName,
     source:       dealSource,
     partnerFocus: partnerFocus,
-    content:      dealContent
+    content:      dealContent,
+    founderEmail: document.getElementById('founderEmail').value.trim()
   };
 
   // Show loading overlay and start message cycle + time counter
@@ -1490,11 +1508,12 @@ document.getElementById('submitForm').addEventListener('submit', async function(
     // dealContent is included so the CQ flow can send original materials
     // back to Alex alongside the firm's answers to his questions.
     var pendingResult = {
-      dealId:      dealId,
-      companyName: companyName,
-      alexOutput:  alexOutput,
-      dealContent: dealContent,
-      timestamp:   new Date().toISOString()
+      dealId:       dealId,
+      companyName:  companyName,
+      alexOutput:   alexOutput,
+      dealContent:  dealContent,
+      founderEmail: dealSubmission.founderEmail,
+      timestamp:    new Date().toISOString()
     };
     localStorage.setItem('g7_pending_result', JSON.stringify(pendingResult));
 
