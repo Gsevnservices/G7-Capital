@@ -115,6 +115,17 @@ nav{
   color:var(--gold);border:1px solid var(--border);
   padding:6px 16px
 }
+.nav-firm-indicator{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px
+}
+.nav-logout{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;background:transparent;
+  border:1px solid rgba(201,168,76,0.4);color:var(--gold);
+  padding:6px 16px;cursor:pointer;transition:all .3s
+}
+.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
 .hamburger{
   display:none;flex-direction:column;gap:6px;
   cursor:pointer;background:none;border:none;padding:4px
@@ -548,6 +559,8 @@ nav{
   <div class="nav-right">
     <a href="../index.html" class="nav-back">← Main Site</a>
     <span class="nav-badge">Workspace Setup</span>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
+    <button class="nav-logout" onclick="g7Logout()">Sign Out</button>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -1434,6 +1447,12 @@ document.getElementById('onboardForm').addEventListener('submit', function(e) {
 // logged-in user regardless of onboarding state.
 // ─────────────────────────────────────────────
 (function() {
+  // Populate firm name indicator in nav if session exists
+  var _fn = localStorage.getItem('g7_session_name') ||
+    (JSON.parse(localStorage.getItem('g7_firm_config') || '{}').firmName) || '';
+  var _ind = document.getElementById('navFirmName');
+  if (_ind && _fn) _ind.textContent = _fn;
+
   // Show returning banner if the user has a session token AND local config data
   // No requireAuth() here — onboarding must be reachable to new firms
   var hasSession = !!getToken();

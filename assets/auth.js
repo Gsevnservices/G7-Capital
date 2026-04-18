@@ -103,6 +103,10 @@ async function g7Login(firmCode, password) {
 // Network errors are silently ignored — local session always clears.
 // ─────────────────────────────────────────────────────────────
 async function g7Logout() {
+  // Confirm before logging out — prevents accidental logouts
+  var sessionName = localStorage.getItem('g7_session_name') || 'your workspace';
+  if (!confirm('Sign out of ' + sessionName + '?')) return;
+
   const token = getToken();
 
   if (token) {
@@ -127,6 +131,8 @@ async function g7Logout() {
   localStorage.removeItem('g7_onboarded');
   localStorage.removeItem('g7_pending_result');
   localStorage.removeItem('g7_view_deal_id');
+  localStorage.removeItem('g7_demo_mode');
+  localStorage.removeItem('g7_session_name');
   // Redirect to login
   window.location.href = '/G7-Capital/login.html';
 }

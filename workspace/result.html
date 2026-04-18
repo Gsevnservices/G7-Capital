@@ -79,8 +79,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
 .nav-link:hover{color:var(--white)}
 .nav-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px}
-.nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--grey1);padding:6px 14px;cursor:pointer;transition:all .3s}
-.nav-logout:hover{border-color:var(--gold);color:var(--gold)}
+.nav-firm-indicator{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
+.nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s}
+.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
 /* Hidden until auth check passes — prevents content flash for unauthenticated users */
 body{visibility:hidden}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
@@ -1215,7 +1216,7 @@ body{visibility:hidden}
     <a href="index.html" class="nav-link">Dashboard</a>
     <a href="submit.html" class="nav-link">New Deal</a>
     <a href="history.html" class="nav-link">History</a>
-    <span class="nav-badge" id="navFirmName">Workspace</span>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
     <button class="nav-logout" onclick="g7Logout()">Sign Out</button>
   </div>
 </nav>
@@ -1768,15 +1769,11 @@ body{visibility:hidden}
   const authed = await requireAuth();
   if (!authed) return;
   document.body.style.visibility = 'visible';
-})();
-
-
-// ─────────────────────────────────────────────
-// FIRM NAME IN NAV
-// ─────────────────────────────────────────────
-(function() {
-  var cfg = loadFirmConfig();
-  if (cfg && cfg.firmName) document.getElementById('navFirmName').textContent = cfg.firmName;
+  // Populate firm name in nav (checks g7_session_name first, then firm config)
+  var _fn = localStorage.getItem('g7_session_name') ||
+    (JSON.parse(localStorage.getItem('g7_firm_config') || '{}').firmName) || '';
+  var _ind = document.getElementById('navFirmName');
+  if (_ind && _fn) _ind.textContent = _fn;
 })();
 
 
