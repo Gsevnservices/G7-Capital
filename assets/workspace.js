@@ -524,8 +524,8 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
 
   var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
 
-  // Maximum 2 web searches per deal — enforced server-side in the worker too
-  var maxSearches = 2;
+  // Maximum 3 web searches per deal — enforced server-side in the worker too
+  var maxSearches = 3;
 
   // Build the initial user message
   var contentArray = buildContentArray(dealSubmission, imageArray);

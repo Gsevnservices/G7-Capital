@@ -164,12 +164,12 @@ export default {
         }
       }
 
-      // Enforce max_uses: 2 on any web_search tool — server-side cap
+      // Enforce max_uses: 3 on any web_search tool — server-side cap
       // that cannot be overridden by editing browser code.
       if (body.tools && Array.isArray(body.tools)) {
         body.tools = body.tools.map(tool => {
           if (tool.type === 'web_search_20250305' || tool.name === 'web_search') {
-            return { ...tool, max_uses: 2 };
+            return { ...tool, max_uses: 3 };
           }
           return tool;
         });

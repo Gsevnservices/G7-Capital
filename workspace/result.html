@@ -965,6 +965,97 @@ body{visibility:hidden}
 }
 
 /* ─────────────────────────────────────────────
+   RISK INTELLIGENCE DASHBOARD
+───────────────────────────────────────────── */
+.risk-rating-display{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.risk-rating-badge{
+  display:inline-block;font-family:'Tenor Sans',sans-serif;
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  padding:8px 20px;border:1px solid;width:fit-content
+}
+.risk-badge-critical{color:#ff4444;border-color:#ff4444;background:rgba(255,68,68,.05)}
+.risk-badge-high{color:#ff8c42;border-color:#ff8c42;background:rgba(255,140,66,.05)}
+.risk-badge-significant{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,.05)}
+.risk-badge-manageable{color:#4CAF50;border-color:#4CAF50;background:rgba(76,175,80,.05)}
+.risk-rating-desc{
+  font-family:'Tenor Sans',sans-serif;font-size:11px;
+  color:rgba(250,250,248,.5);letter-spacing:.05em;line-height:1.6
+}
+.risk-raos{padding-top:16px;border-top:1px solid var(--border)}
+.risk-raos-label{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:6px
+}
+.risk-raos-value{
+  font-family:'Cormorant Garamond',serif;font-size:28px;
+  font-weight:300;color:var(--white)
+}
+.risk-summary-text{
+  font-family:'Tenor Sans',sans-serif;font-size:13px;
+  color:rgba(250,250,248,.75);line-height:1.7
+}
+/* Risk table */
+.risk-table{width:100%;border-collapse:collapse}
+.risk-table th{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--grey1);
+  padding:8px 12px;border-bottom:1px solid var(--border);text-align:center
+}
+.risk-table td{
+  font-family:'Tenor Sans',sans-serif;font-size:11px;
+  padding:14px 12px;border-bottom:1px solid rgba(255,255,255,.03);
+  text-align:center;vertical-align:top
+}
+.risk-table td:first-child{text-align:left;color:var(--white);font-size:12px}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-prob-critical{color:#ff4444}
+.risk-prob-high{color:#ff8c42}
+.risk-prob-medium{color:var(--gold)}
+.risk-prob-low{color:rgba(250,250,248,.4)}
+.risk-impact-fatal{color:#ff4444;font-weight:600}
+.risk-impact-severe{color:#ff8c42}
+.risk-impact-moderate{color:var(--gold)}
+.risk-impact-minor{color:rgba(250,250,248,.4)}
+.risk-score-badge{
+  display:inline-block;font-size:12px;font-weight:600;
+  width:28px;height:28px;line-height:28px;
+  text-align:center;border-radius:50%
+}
+.risk-score-9,.risk-score-10{background:rgba(255,68,68,.15);color:#ff4444}
+.risk-score-7,.risk-score-8{background:rgba(255,140,66,.15);color:#ff8c42}
+.risk-score-5,.risk-score-6{background:rgba(201,168,76,.15);color:var(--gold)}
+.risk-score-1,.risk-score-2,.risk-score-3,.risk-score-4{background:rgba(255,255,255,.05);color:rgba(250,250,248,.4)}
+.risk-warning-yes{color:#4CAF50;font-size:10px;letter-spacing:.1em}
+.risk-warning-no{color:rgba(255,255,255,.2);font-size:10px;letter-spacing:.1em}
+/* Risk interactions */
+.risk-interaction-item{
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  font-family:'Tenor Sans',sans-serif;font-size:12px;
+  color:rgba(250,250,248,.7);line-height:1.6
+}
+.risk-interaction-item:last-child{border-bottom:none}
+.risk-interaction-label{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:#ff8c42;margin-bottom:4px
+}
+/* Monitoring checklist */
+.monitor-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.monitor-item:last-child{border-bottom:none}
+.monitor-metric{
+  font-family:'Tenor Sans',sans-serif;font-size:12px;
+  color:var(--white);letter-spacing:.05em;margin-bottom:6px
+}
+.monitor-detail{
+  font-family:'Tenor Sans',sans-serif;font-size:11px;
+  color:rgba(250,250,248,.5);line-height:1.6
+}
+.monitor-freq{
+  display:inline-block;font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gold);
+  border:1px solid rgba(201,168,76,.3);padding:2px 8px;margin-right:8px
+}
+
+/* ─────────────────────────────────────────────
    CQ LOADING OVERLAY (same pattern as submit.html)
 ───────────────────────────────────────────── */
 .cq-loading-overlay{
@@ -1222,6 +1313,11 @@ body{visibility:hidden}
               onclick="switchTab('dashboard')">
         Growth &amp; Return
       </button>
+      <button class="result-tab" id="tabRisk"
+              style="display:none"
+              onclick="switchTab('risk')">
+        Risk Intelligence
+      </button>
     </div>
 
     <!-- FULL ANALYSIS WRAPPER — collapsed by default, expanded on click -->
@@ -1325,6 +1421,85 @@ body{visibility:hidden}
       </div>
 
     </div><!-- /dashboardPanel -->
+
+    <!-- RISK INTELLIGENCE DASHBOARD — shown when Risk Intelligence tab active -->
+    <div id="riskPanel" class="dashboard-panel" style="display:none">
+
+      <!-- Row 1: Overall Risk Rating + Risk Profile Summary -->
+      <div class="dash-row">
+
+        <!-- Overall Risk Rating -->
+        <div class="dash-card" id="riskRatingCard">
+          <div class="dash-card-label">Overall Risk Rating</div>
+          <div class="risk-rating-display">
+            <div class="risk-rating-badge" id="riskRatingBadge">—</div>
+            <div class="risk-rating-desc" id="riskRatingDesc"></div>
+          </div>
+          <div class="risk-raos" id="riskRAOS"></div>
+        </div>
+
+        <!-- Risk Profile Summary -->
+        <div class="dash-card" id="riskSummaryCard">
+          <div class="dash-card-label">Risk Profile Summary</div>
+          <div class="risk-summary-text" id="riskSummaryText">
+            <div class="dash-placeholder">Awaiting risk analysis</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 2: Top Risks Table -->
+      <div class="dash-card dash-full-width" id="topRisksCard">
+        <div class="dash-card-label">Top Risks</div>
+        <table class="risk-table" id="riskTable">
+          <thead>
+            <tr>
+              <th style="text-align:left">Risk</th>
+              <th>Type</th>
+              <th>Probability</th>
+              <th>Impact</th>
+              <th>Score</th>
+              <th>Early Warning</th>
+            </tr>
+          </thead>
+          <tbody id="riskTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Row 3: Risk Interactions + Web Search Findings -->
+      <div class="dash-row">
+
+        <div class="dash-card" id="riskInteractionsCard">
+          <div class="dash-card-label">Risk Interactions</div>
+          <div id="riskInteractions">
+            <div class="dash-placeholder">No interactions identified</div>
+          </div>
+        </div>
+
+        <div class="dash-card" id="riskSearchCard">
+          <div class="dash-card-label">Research Findings</div>
+          <div id="riskSearchFindings">
+            <div class="dash-placeholder">No web research available</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 4: Monitoring Checklist -->
+      <div class="dash-card dash-full-width" id="monitoringCard">
+        <div class="dash-card-label">Monitoring Checklist</div>
+        <div id="monitoringChecklist">
+          <div class="dash-placeholder">No monitoring items generated</div>
+        </div>
+      </div>
+
+      <!-- Footnote -->
+      <div class="dash-footnote">
+        Risk assessment generated from available pitch data and web research.
+        Probabilities are estimates based on observable signals — not guarantees.
+      </div>
+
+    </div><!-- /riskPanel -->
 
   </div><!-- /page-wrap -->
 
@@ -2337,21 +2512,33 @@ function submitCalibration() {
 function switchTab(tab) {
   var analysisWrapper = document.getElementById('fullAnalysisWrapper');
   var dashPanel       = document.getElementById('dashboardPanel');
+  var riskPanel       = document.getElementById('riskPanel');
   var tabAnalysis     = document.getElementById('tabAnalysis');
   var tabDashboard    = document.getElementById('tabDashboard');
+  var tabRisk         = document.getElementById('tabRisk');
 
+  // Hide all panels
+  if (analysisWrapper) analysisWrapper.style.display = 'none';
+  if (dashPanel)       dashPanel.style.display       = 'none';
+  if (riskPanel)       riskPanel.style.display       = 'none';
+
+  // Remove active from all tabs
+  [tabAnalysis, tabDashboard, tabRisk].forEach(function(t) {
+    if (t) t.classList.remove('active');
+  });
+
+  // Show selected panel + activate its tab
   if (tab === 'analysis') {
-    analysisWrapper.style.display = 'block';
-    dashPanel.style.display       = 'none';
-    tabAnalysis.classList.add('active');
-    tabDashboard.classList.remove('active');
-  } else {
-    analysisWrapper.style.display = 'none';
-    dashPanel.style.display       = 'block';
-    tabAnalysis.classList.remove('active');
-    tabDashboard.classList.add('active');
-    // Animate score bar on first view
-    setTimeout(function() { animateDashboard(); }, 100);
+    if (analysisWrapper) analysisWrapper.style.display = 'block';
+    if (tabAnalysis)     tabAnalysis.classList.add('active');
+  } else if (tab === 'dashboard') {
+    if (dashPanel)    dashPanel.style.display = 'block';
+    if (tabDashboard) tabDashboard.classList.add('active');
+    setTimeout(animateDashboard, 100);
+  } else if (tab === 'risk') {
+    if (riskPanel) riskPanel.style.display = 'block';
+    if (tabRisk)   tabRisk.classList.add('active');
+    setTimeout(animateRiskDashboard, 100);
   }
 }
 
@@ -2560,6 +2747,197 @@ function buildDashboard(data) {
     var expandBtn = document.getElementById('summaryExpandBtn');
     if (expandBtn) expandBtn.style.display = 'none';
   }
+}
+
+
+// ─────────────────────────────────────────────
+// RISK INTELLIGENCE DASHBOARD BUILDER
+// Parses the Risk Intelligence section from
+// Alex's output and populates the risk panel.
+// ─────────────────────────────────────────────
+function buildRiskDashboard(parsedData) {
+  var rawText = parsedData.raw || parsedData.rawOutput || parsedData.fullText || '';
+  if (!rawText) return;
+
+  // Isolate the Risk Intelligence block
+  var riskSectionMatch = rawText.match(
+    /RISK INTELLIGENCE[\s\S]*?━━━([\s\S]*?)(?=━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\s*$|$)/i
+  );
+  var riskText = riskSectionMatch ? riskSectionMatch[0] : rawText;
+
+  var foundData = false;
+
+  // ── OVERALL RISK RATING ───────────────────────────────────────
+  var ratingMatch = riskText.match(/OVERALL RISK RATING:\s*(\w+)/i);
+  if (ratingMatch) {
+    foundData = true;
+    var rating = ratingMatch[1].toUpperCase();
+    var badge  = document.getElementById('riskRatingBadge');
+    badge.textContent = rating;
+
+    var classMap = {
+      'CRITICAL':    'risk-badge-critical',
+      'HIGH':        'risk-badge-high',
+      'SIGNIFICANT': 'risk-badge-significant',
+      'MANAGEABLE':  'risk-badge-manageable'
+    };
+    badge.className = 'risk-rating-badge ' + (classMap[rating] || 'risk-badge-significant');
+
+    var descMap = {
+      'CRITICAL':    'Strong PASS signal. Requires specific mitigation.',
+      'HIGH':        'Score reduced 10 points. Mitigation conditions required.',
+      'SIGNIFICANT': 'Score reduced 5 points. Monitor closely post-investment.',
+      'MANAGEABLE':  'No recommendation impact. Standard monitoring applies.'
+    };
+    document.getElementById('riskRatingDesc').textContent = descMap[rating] || '';
+  }
+
+  // ── RAOS SCORE ────────────────────────────────────────────────
+  var raosMatch = riskText.match(/RAOS[:\s]+(\d+(?:\.\d+)?)/i) ||
+                  riskText.match(/risk.adjusted[^:]*:\s*(\d+(?:\.\d+)?)/i);
+  if (raosMatch) {
+    var raosEl = document.getElementById('riskRAOS');
+    raosEl.innerHTML =
+      '<div class="risk-raos-label">Risk-Adjusted Opportunity Score</div>' +
+      '<div class="risk-raos-value">' + raosMatch[1] + '/10</div>';
+  }
+
+  // ── RISK PROFILE SUMMARY ──────────────────────────────────────
+  var summaryMatch = riskText.match(
+    /RISK PROFILE SUMMARY:\s*([\s\S]*?)(?=TOP RISKS:|RISK 1:|━━━)/i
+  );
+  if (summaryMatch) {
+    document.getElementById('riskSummaryText').textContent = summaryMatch[1].trim();
+  }
+
+  // ── TOP RISKS TABLE ───────────────────────────────────────────
+  var tbody = document.getElementById('riskTableBody');
+  tbody.innerHTML = '';
+
+  var riskPattern =
+    /RISK \d+:\s*([^\n]+)\n[\s\S]*?Type:\s*(\w+)[\s\S]*?Probability:\s*(\w+)[\s\S]*?Impact:\s*(\w+)[\s\S]*?Risk Score:\s*(\d+)/gi;
+
+  var riskMatch;
+  var riskCount = 0;
+  while ((riskMatch = riskPattern.exec(riskText)) !== null && riskCount < 6) {
+    riskCount++;
+    foundData = true;
+
+    var name   = riskMatch[1].trim();
+    var type   = riskMatch[2].trim();
+    var prob   = riskMatch[3].trim().toUpperCase();
+    var impact = riskMatch[4].trim().toUpperCase();
+    var score  = parseInt(riskMatch[5], 10);
+
+    var probClass = {
+      'CRITICAL': 'risk-prob-critical',
+      'HIGH':     'risk-prob-high',
+      'MEDIUM':   'risk-prob-medium',
+      'LOW':      'risk-prob-low'
+    }[prob] || 'risk-prob-low';
+
+    var impactClass = {
+      'FATAL':    'risk-impact-fatal',
+      'SEVERE':   'risk-impact-severe',
+      'MODERATE': 'risk-impact-moderate',
+      'MINOR':    'risk-impact-minor'
+    }[impact] || 'risk-impact-moderate';
+
+    var scoreClass = 'risk-score-' + Math.min(10, Math.max(1, score));
+
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + escapeHtml(name) + '</td>' +
+      '<td style="color:rgba(250,250,248,0.5)">' + escapeHtml(type) + '</td>' +
+      '<td class="' + probClass + '">' + prob + '</td>' +
+      '<td class="' + impactClass + '">' + impact + '</td>' +
+      '<td><span class="risk-score-badge ' + scoreClass + '">' + score + '</span></td>' +
+      '<td class="risk-warning-yes">&#10003; Yes</td>';
+    tbody.appendChild(tr);
+  }
+
+  // ── RISK INTERACTIONS ─────────────────────────────────────────
+  var interactMatch = riskText.match(
+    /RISK INTERACTIONS:([\s\S]*?)(?=WEB SEARCH|MONITORING|━━━)/i
+  );
+  if (interactMatch) {
+    var interactEl = document.getElementById('riskInteractions');
+    var lines = interactMatch[1].trim().split('\n')
+      .filter(function(l) { return l.trim().length > 5; });
+
+    if (lines.length > 0) {
+      interactEl.innerHTML = '';
+      lines.forEach(function(line) {
+        var item = document.createElement('div');
+        item.className = 'risk-interaction-item';
+        item.textContent = line.trim().replace(/^[—\-·]\s*/, '');
+        interactEl.appendChild(item);
+      });
+    }
+  }
+
+  // ── WEB SEARCH FINDINGS ───────────────────────────────────────
+  var searchMatch = riskText.match(
+    /WEB SEARCH FINDINGS:([\s\S]*?)(?=RISK VS GROWTH|MONITORING|━━━)/i
+  );
+  if (searchMatch) {
+    var searchEl = document.getElementById('riskSearchFindings');
+    searchEl.innerHTML = '';
+    var searchDiv = document.createElement('div');
+    searchDiv.style.cssText =
+      'font-family:\'Tenor Sans\',sans-serif;font-size:12px;' +
+      'color:rgba(250,250,248,0.7);line-height:1.7;';
+    searchDiv.textContent = searchMatch[1].trim();
+    searchEl.appendChild(searchDiv);
+  }
+
+  // ── MONITORING CHECKLIST ──────────────────────────────────────
+  var monitorMatch = riskText.match(/MONITORING CHECKLIST:([\s\S]*?)(?=━━━|$)/i);
+  if (monitorMatch) {
+    var monitorEl = document.getElementById('monitoringChecklist');
+    var items = monitorMatch[1].split(/MONITOR:/i)
+      .filter(function(s) { return s.trim().length > 0; });
+
+    if (items.length > 0) {
+      monitorEl.innerHTML = '';
+      items.forEach(function(item) {
+        var lines = item.trim().split('\n').filter(function(l) { return l.trim(); });
+        if (lines.length === 0) return;
+
+        var div = document.createElement('div');
+        div.className = 'monitor-item';
+
+        var metric = document.createElement('div');
+        metric.className = 'monitor-metric';
+        metric.textContent = lines[0].trim();
+
+        var detail    = document.createElement('div');
+        detail.className = 'monitor-detail';
+        var freqMatch  = item.match(/FREQUENCY:\s*([^\n]+)/i);
+        var threshMatch = item.match(/THRESHOLD:\s*([^\n]+)/i);
+        var actionMatch = item.match(/ACTION[^:]*:\s*([^\n]+)/i);
+        var details = [];
+        if (freqMatch)  details.push('<span class="monitor-freq">' + escapeHtml(freqMatch[1].trim()) + '</span>');
+        if (threshMatch) details.push('Threshold: ' + escapeHtml(threshMatch[1].trim()));
+        if (actionMatch) details.push('Action: ' + escapeHtml(actionMatch[1].trim()));
+        detail.innerHTML = details.join(' &nbsp;&middot;&nbsp; ');
+
+        div.appendChild(metric);
+        div.appendChild(detail);
+        monitorEl.appendChild(div);
+      });
+    }
+  }
+
+  // ── SHOW RISK TAB if meaningful data found ────────────────────
+  if (foundData || ratingMatch) {
+    var tabRisk = document.getElementById('tabRisk');
+    if (tabRisk) tabRisk.style.display = 'inline-block';
+  }
+}
+
+function animateRiskDashboard() {
+  // Reserved for future risk score badge animations on first view
 }
 
 
@@ -2974,6 +3352,9 @@ function buildSummaryCard(data) {
 
   // Build Growth and Return dashboard (shows tab bar if data found)
   buildDashboard(parsedData);
+
+  // Build Risk Intelligence dashboard (shows risk tab if data found)
+  buildRiskDashboard(parsedData);
 
   // Auto-show the full analysis via tab logic
   switchTab('analysis');
