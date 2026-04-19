@@ -49,9 +49,13 @@ async function callAlex(dealSubmission) {
 
   // The Cloudflare Worker adds the API key server-side — no key needed in the browser.
   // Get the firm knowledge base from localStorage
-  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base') || '';
   if (!firmKB || firmKB.trim() === '') {
     throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+  // Cap KB at 6,000 chars to protect token budget (Sequoia-scale KBs can be very large)
+  if (firmKB.length > 6000) {
+    firmKB = firmKB.substring(0, 6000) + '\n[KB truncated to fit token budget]';
   }
 
   // 1c. Assemble the full system prompt:
@@ -255,9 +259,12 @@ function updateDealOutput(id, newAlexOutput, clarifyingQuestions, clarifyingAnsw
 // ─────────────────────────────────────────────────────────────
 async function callAlexRaw(userMessage) {
 
-  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base') || '';
   if (!firmKB || firmKB.trim() === '') {
     throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+  if (firmKB.length > 6000) {
+    firmKB = firmKB.substring(0, 6000) + '\n[KB truncated to fit token budget]';
   }
 
   var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
@@ -319,9 +326,12 @@ async function callAlexRaw(userMessage) {
 // ─────────────────────────────────────────────────────────────
 async function callAlexWithImages(dealSubmission, imageArray) {
 
-  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base') || '';
   if (!firmKB || firmKB.trim() === '') {
     throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+  if (firmKB.length > 6000) {
+    firmKB = firmKB.substring(0, 6000) + '\n[KB truncated to fit token budget]';
   }
 
   var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
@@ -418,28 +428,27 @@ async function callAlexWithImages(dealSubmission, imageArray) {
 // Always returns an array — single text block for text submissions,
 // text + image blocks for PDF submissions.
 //
-// Prepends the RESEARCH INSTRUCTION so Alex searches for founder
-// backgrounds and company information before completing the note.
-//
 // dealSubmission — object: companyName, source, partnerFocus, content
 // imageArray     — array of base64 JPEG strings, or [] for text-only
 // ─────────────────────────────────────────────────────────────
 function buildContentArray(dealSubmission, imageArray) {
 
+  // Hard cap on deal content — safety net in case caller did not trim
+  var MAX_DEAL_CHARS = 6000;
+  if (dealSubmission.content && dealSubmission.content.length > MAX_DEAL_CHARS) {
+    dealSubmission.content = dealSubmission.content.substring(0, MAX_DEAL_CHARS) +
+      '\n\n[Content trimmed to ' + MAX_DEAL_CHARS +
+      ' characters to stay within analysis limits. Key information above is complete.]';
+  }
+
   var isPdf = imageArray && imageArray.length > 0;
 
-  // Research instruction prepended to every deal submission.
-  // Tells Alex to search for founders and company before writing.
-  var researchInstruction = [
-    'RESEARCH INSTRUCTION: Before completing this screening note, use web search to research the following:',
-    '',
-    '1. Search for each named founder: "[Founder name] [company name]" to find their LinkedIn profile, prior companies, and any public background information.',
-    '',
-    '2. Search for the company: "[Company name] startup funding" to find any Crunchbase data, press coverage, or public funding information not in the submission.',
-    '',
-    '3. If the submission mentions a prior company or prior exit, search for it to verify the claim.',
-    '',
-    'Use search results to enrich your analysis. Note when information from search confirms or contradicts the submission. Note when founder backgrounds cannot be verified from public sources. Do not fabricate information — only use what search returns.',
+  // Analysis instruction prepended to every deal submission.
+  // Web search disabled — Alex uses submitted materials + training only.
+  var analysisInstruction = [
+    'NOTE: Analyse this deal using the submitted materials only. Apply all frameworks, sector intelligence,',
+    'and red flag libraries from your training. Where data is missing, apply Framework 1 inference rules',
+    'and state confidence level.',
     '',
     '─────────────────────────────────────────────────────────────',
     ''
@@ -453,7 +462,7 @@ function buildContentArray(dealSubmission, imageArray) {
       'analysis under "FOUNDER EMAIL IDENTIFIED: [email]"';
 
   // Main deal text block
-  var dealText = researchInstruction + [
+  var dealText = analysisInstruction + [
     'Please screen the following deal and produce a complete',
     'G7 Workspace Deal Screening Note in your standard format.',
     '',
@@ -500,11 +509,72 @@ function buildContentArray(dealSubmission, imageArray) {
 
 
 // ─────────────────────────────────────────────────────────────
-// 5e. callAlexWithSearch(dealSubmission, imageArray)
+// 5e. callAlexDirect(dealSubmission, imageArray)
+//
+// Direct API call — no web search tools.
+// Alex analyses the deal using submitted materials + training only.
+// This is the active function called by the submit handler.
+//
+// dealSubmission — object: companyName, source, partnerFocus, content
+// imageArray     — array of base64 JPEG strings, or [] for text-only
+// ─────────────────────────────────────────────────────────────
+async function callAlexDirect(dealSubmission, imageArray) {
+
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base') || '';
+  if (firmKB.length > 6000) {
+    firmKB = firmKB.substring(0, 6000) + '\n[KB truncated to fit token budget]';
+  }
+  var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
+
+  var contentArray = buildContentArray(dealSubmission, imageArray);
+
+  var response = await fetch(G7_PROXY_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4000,
+      system: systemPrompt,
+      messages: [{
+        role: 'user',
+        content: contentArray
+      }]
+    })
+  });
+
+  var data = await response.json();
+
+  if (!response.ok) {
+    var errMsg = (data && data.error && data.error.message)
+      ? data.error.message
+      : (data && data.error ? JSON.stringify(data.error) : 'API error ' + response.status);
+    throw new Error(errMsg);
+  }
+
+  var textBlock = data.content && data.content.find(function(b) {
+    return b.type === 'text';
+  });
+  if (!textBlock) {
+    throw new Error('No text in response');
+  }
+  return textBlock.text;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// WEB SEARCH — DISABLED
+// Infrastructure preserved for future re-enabling.
+// To re-enable: change callAlexDirect to callAlexWithSearch
+// in the submit handler in workspace/submit.html.
+// ─────────────────────────────────────────────────────────────
+
+// 5f. callAlexWithSearch(dealSubmission, imageArray)
 //
 // Web search-enabled API call with multi-turn tool loop.
-// Replaces callAlex() and callAlexWithImages() for the primary
-// deal submission flow.
+// NOT currently called — preserved for future use.
 //
 // Alex runs up to 2 web searches per deal (enforced server-side).
 //
@@ -525,18 +595,27 @@ function buildContentArray(dealSubmission, imageArray) {
 // ─────────────────────────────────────────────────────────────
 async function callAlexWithSearch(dealSubmission, imageArray) {
 
-  var firmKB = localStorage.getItem('g7_firm_knowledge_base');
+  var firmKB = localStorage.getItem('g7_firm_knowledge_base') || '';
   if (!firmKB || firmKB.trim() === '') {
     throw new Error('No firm configuration found. Please complete onboarding before screening a deal.');
+  }
+  if (firmKB.length > 6000) {
+    firmKB = firmKB.substring(0, 6000) + '\n[KB truncated to fit token budget]';
   }
 
   var systemPrompt = ALEX_MASTER_PROMPT + '\n\n' + firmKB;
 
-  // Maximum 3 web searches per deal — enforced server-side in the worker too
-  var maxSearches = 3;
-
   // Build the initial user message
   var contentArray = buildContentArray(dealSubmission, imageArray);
+
+  // Dynamic search limit based on estimated token usage.
+  // System prompt is ~163K tokens; each search adds ~3K tokens.
+  // Cap searches when content is already large to avoid 200K limit.
+  var contentLength    = JSON.stringify(contentArray).length;
+  var estimatedTokens  = 163000 + Math.ceil(contentLength / 4);
+  var maxSearches      = estimatedTokens > 170000 ? 1
+                       : estimatedTokens > 165000 ? 2
+                       : 3;
 
   // Conversation history — grows with each tool turn
   var messages = [{

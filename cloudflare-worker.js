@@ -165,12 +165,17 @@ export default {
         }
       }
 
-      // Enforce max_uses: 3 on any web_search tool — server-side cap
-      // that cannot be overridden by editing browser code.
+      // WEB SEARCH ENFORCEMENT
+      // Currently disabled on frontend — callAlexDirect() sends no tools array.
+      // This enforcement remains in place in case search is re-enabled in future.
+      // Max searches when re-enabled: 3
+      // To re-enable on frontend: change callAlexDirect to callAlexWithSearch
+      // in workspace/submit.html submit handler.
       if (body.tools && Array.isArray(body.tools)) {
         body.tools = body.tools.map(tool => {
           if (tool.type === 'web_search_20250305' || tool.name === 'web_search') {
-            return { ...tool, max_uses: 3 };
+            // Respect the frontend's dynamic max_uses (1–3), hard cap at 3
+            return { ...tool, max_uses: Math.min(tool.max_uses || 3, 3) };
           }
           return tool;
         });

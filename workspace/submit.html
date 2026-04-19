@@ -949,13 +949,26 @@ document.getElementById('methodPdf').addEventListener('keydown', function(e) {
 // ─────────────────────────────────────────────
 // CHARACTER COUNT — updates below the deal textarea
 // ─────────────────────────────────────────────
+var MAX_TEXT_CHARS = 6000;
+
 function updateCharCount(textarea) {
   var count   = textarea.value.length;
   var display = document.getElementById('charCount');
   var min     = 100;
-  display.textContent = count.toLocaleString() + ' character' + (count === 1 ? '' : 's') +
-    (count < min ? ' — minimum ' + min + ' required' : ' — ready');
-  display.classList.toggle('warn', count > 0 && count < min);
+  var max     = MAX_TEXT_CHARS;
+
+  if (count > max) {
+    display.textContent = count.toLocaleString() + ' / ' + max.toLocaleString() +
+      ' characters — submission will be trimmed to ' + max.toLocaleString();
+    display.style.color = 'var(--gold)';
+  } else if (count < min) {
+    display.textContent = count.toLocaleString() + ' / ' + max.toLocaleString() +
+      ' characters — minimum ' + min + ' required';
+    display.style.color = '';
+  } else {
+    display.textContent = count.toLocaleString() + ' / ' + max.toLocaleString() + ' characters';
+    display.style.color = '';
+  }
   checkSubmitReady();
 }
 
@@ -1231,10 +1244,10 @@ function cleanPdfText(rawText, totalPages) {
     return line.trim().length === 0 || line.trim().length >= 3;
   }).join('\n');
 
-  // Truncate at 15,000 chars to stay within token budget
-  if (text.length > 15000) {
-    text = text.slice(0, 15000) +
-      '\n\n[Text truncated at 15,000 characters — visual analysis covers the full deck]';
+  // Truncate at 8,000 chars to stay within token budget
+  if (text.length > 8000) {
+    text = text.slice(0, 8000) +
+      '\n\n[Text truncated at 8,000 characters — visual analysis covers the full deck]';
   }
 
   return text.trim();
@@ -1337,12 +1350,12 @@ function hidePdfError() {
 // ─────────────────────────────────────────────
 var loadingMessages = [
   'Alex is reading your submission...',
-  'Alex is researching the founders...',
-  'Alex is verifying key claims...',
+  'Alex is applying your firm thesis...',
   'Alex is analysing the market...',
-  'Alex is applying analytical frameworks...',
+  'Alex is running analytical frameworks...',
   'Alex is calculating fund return maths...',
   'Alex is identifying red flags...',
+  'Alex is assessing growth quality...',
   'Alex is preparing the screening note...'
 ];
 var messageIndex    = 0;
@@ -1470,8 +1483,14 @@ document.getElementById('submitForm').addEventListener('submit', async function(
   var companyName  = document.getElementById('companyName').value.trim();
   var dealSource   = document.getElementById('dealSource').value;
   var partnerFocus = document.getElementById('partnerFocus').value.trim();
+  var rawDealText  = document.getElementById('dealText').value.trim();
+  // Hard cap text submissions at 6,000 characters to stay within token budget
+  if (activeMethod === 'text' && rawDealText.length > MAX_TEXT_CHARS) {
+    rawDealText = rawDealText.substring(0, MAX_TEXT_CHARS) +
+      '\n\n[Submission trimmed to 6,000 characters to stay within analysis limits]';
+  }
   var dealContent  = activeMethod === 'text'
-    ? document.getElementById('dealText').value.trim()
+    ? rawDealText
     : extractedPdfText;
 
   // Build the dealSubmission object for callAlex()
@@ -1490,11 +1509,9 @@ document.getElementById('submitForm').addEventListener('submit', async function(
   startTimeCounter();
 
   try {
-    // Call Alex with web search enabled.
-    // callAlexWithSearch handles both text and PDF submissions:
-    //   text deal  → imageArray = []  → max 5 searches
-    //   PDF deck   → imageArray = extractedPdfImages → max 3 searches
-    var alexOutput = await callAlexWithSearch(dealSubmission, extractedPdfImages);
+    // Call Alex — direct mode, no web search.
+    // To re-enable web search: change callAlexDirect to callAlexWithSearch.
+    var alexOutput = await callAlexDirect(dealSubmission, extractedPdfImages);
 
     // Save the deal to history
     var dealId = saveDeal(companyName, dealSource, dealContent, alexOutput);
@@ -1530,6 +1547,20 @@ document.getElementById('submitForm').addEventListener('submit', async function(
       showError(
         'Your firm has reached the 50-deal limit for the beta period. ' +
         'Please contact your administrator to increase your limit.'
+      );
+      return;
+    }
+
+    // Submission too long — guide user to shorten or use PDF
+    if (err.message && (
+        err.message.includes('too long') ||
+        err.message.includes('token') ||
+        err.message.includes('201') ||
+        err.message.includes('200000'))) {
+      showError(
+        'The submission is too long for analysis. ' +
+        'Please shorten the deal description to under 6,000 characters and try again. ' +
+        'PDF uploads work best for detailed pitch decks.'
       );
       return;
     }
