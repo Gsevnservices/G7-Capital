@@ -92,7 +92,13 @@ async function callAlex(dealSubmission) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 4000,
-        system: systemPrompt,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
         messages: [
           { role: 'user', content: userMessage }
         ]
@@ -280,7 +286,13 @@ async function callAlexRaw(userMessage) {
       body: JSON.stringify({
         model:      'claude-sonnet-4-20250514',
         max_tokens: 4000,
-        system:     systemPrompt,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
         messages:   [{ role: 'user', content: userMessage }]
       })
     });
@@ -384,7 +396,13 @@ async function callAlexWithImages(dealSubmission, imageArray) {
       body: JSON.stringify({
         model:      'claude-sonnet-4-20250514',
         max_tokens: 4000,
-        system:     systemPrompt,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
         messages:   [{ role: 'user', content: contentArray }]
       })
     });
@@ -528,6 +546,12 @@ async function callAlexDirect(dealSubmission, imageArray) {
 
   var contentArray = buildContentArray(dealSubmission, imageArray);
 
+  // PROMPT CACHING ENABLED
+  // First call (cache write):  ~163K tokens × $3.75/1M = $0.61 input + $0.06 output = ~$0.67
+  // Cache hit (within 5 min):  ~163K tokens × $0.30/1M = $0.05 input + $0.06 output = ~$0.11
+  // Average across typical use: ~$0.15 per deal
+  // vs uncached: $0.56 per deal
+  // Saving: ~73% on average
   var response = await fetch(G7_PROXY_URL, {
     method: 'POST',
     headers: {
@@ -537,7 +561,13 @@ async function callAlexDirect(dealSubmission, imageArray) {
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4000,
-      system: systemPrompt,
+      system: [
+        {
+          type: 'text',
+          text: systemPrompt,
+          cache_control: { type: 'ephemeral' }
+        }
+      ],
       messages: [{
         role: 'user',
         content: contentArray
@@ -641,7 +671,13 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
         body: JSON.stringify({
           model:      'claude-sonnet-4-20250514',
           max_tokens: 4000,
-          system:     systemPrompt,
+          system: [
+            {
+              type: 'text',
+              text: systemPrompt,
+              cache_control: { type: 'ephemeral' }
+            }
+          ],
           tools: [{
             type:     'web_search_20250305',
             name:     'web_search',
