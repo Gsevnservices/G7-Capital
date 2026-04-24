@@ -2697,6 +2697,15 @@ function animateDashboard() {
 function buildDashboard(data) {
   var rawText = data.raw || '';
 
+  // DIAGNOSTICS — open browser console to see these on next screening
+  console.log('[G7] buildDashboard called');
+  console.log('[G7] rawText length:', rawText.length);
+  console.log('[G7] Has GROWTH QUALITY SCORE:', rawText.includes('GROWTH QUALITY SCORE'));
+  console.log('[G7] Has GROWTH DECOMPOSITION:', rawText.includes('GROWTH DECOMPOSITION'));
+  console.log('[G7] Has SUSTAINABILITY ASSESSMENT:', rawText.includes('SUSTAINABILITY ASSESSMENT'));
+  console.log('[G7] Has RETURN SCENARIO MATRIX:', rawText.includes('RETURN SCENARIO MATRIX'));
+  console.log('[G7] Has BREAKEVEN ANALYSIS:', rawText.includes('BREAKEVEN ANALYSIS'));
+
   // ── GROWTH QUALITY SCORE ──────────────────────────────────────
   var growthScoreMatch = rawText.match(/GROWTH QUALITY SCORE:\s*(\d+(?:\.\d+)?)\/10/i);
 
@@ -2892,6 +2901,14 @@ function buildDashboard(data) {
 // ─────────────────────────────────────────────
 function buildRiskDashboard(parsedData) {
   var rawText = parsedData.raw || parsedData.rawOutput || parsedData.fullText || '';
+
+  // DIAGNOSTICS — open browser console to see these on next screening
+  console.log('[G7] buildRiskDashboard called');
+  console.log('[G7] rawText length:', rawText.length);
+  console.log('[G7] Has RISK INTELLIGENCE:', rawText.includes('RISK INTELLIGENCE'));
+  console.log('[G7] Has OVERALL RISK RATING:', rawText.includes('OVERALL RISK RATING'));
+  console.log('[G7] Has RAOS:', rawText.includes('RAOS'));
+
   if (!rawText) return;
 
   // Isolate the Risk Intelligence block
@@ -3065,7 +3082,12 @@ function buildRiskDashboard(parsedData) {
   }
 
   // ── SHOW RISK TAB if meaningful data found ────────────────────
-  if (foundData || ratingMatch) {
+  // Also show if the RISK INTELLIGENCE section exists at all, even if
+  // specific patterns didn't match (broader fallback for output format variations)
+  var hasRiskSection = rawText.includes('RISK INTELLIGENCE') ||
+                       rawText.includes('OVERALL RISK RATING') ||
+                       rawText.includes('RAOS');
+  if (foundData || ratingMatch || hasRiskSection) {
     var tabRisk = document.getElementById('tabRisk');
     if (tabRisk) tabRisk.style.display = 'inline-block';
   }
@@ -3462,6 +3484,8 @@ function buildSummaryCard(data) {
 
   // Store raw output globally for email panel to access
   window._alexRawOutput = parsedData.raw || parsedData.rawOutput || '';
+  console.log('[G7] _alexRawOutput set, length:', window._alexRawOutput.length);
+  console.log('[G7] Has FOUNDER OUTREACH:', window._alexRawOutput.includes('FOUNDER OUTREACH'));
 
   // ── CLARIFYING QUESTIONS CHECK ──
   // If Alex is asking questions instead of producing a full note,
@@ -3518,8 +3542,12 @@ function buildSummaryCard(data) {
 function showEmailButtonIfReady() {
   var raw = window._alexRawOutput || '';
   var hasOutreach = /FOUNDER OUTREACH QUESTIONS/i.test(raw);
+  console.log('[G7] showEmailButtonIfReady — hasOutreach:', hasOutreach);
+
+  // Email button always visible — pre-populated with outreach questions
+  // if Alex produced them, or with a generic template if not
   var emailBtn = document.getElementById('emailFounderBtn');
-  if (hasOutreach && emailBtn) {
+  if (emailBtn) {
     emailBtn.style.display = 'inline-flex';
   }
 }
@@ -3595,7 +3623,15 @@ function buildEmailBody(companyName, partnerName, firmName, questions) {
       lines.push('');
     });
   } else {
-    lines.push('[Please add your specific questions here]');
+    lines.push('We have reviewed your materials and are keen to learn more about ' + companyName + '.');
+    lines.push('');
+    lines.push('A few questions that would help us assess the opportunity:');
+    lines.push('');
+    lines.push('1. What is your current NRR and how has it trended over the last three quarters?');
+    lines.push('');
+    lines.push('2. What does your CAC payback period look like across your key customer segments?');
+    lines.push('');
+    lines.push('3. Who do you most commonly compete against in deals and what is your win rate?');
     lines.push('');
   }
   lines.push('We would love to schedule a call to discuss further. Please feel free to respond to this email or suggest a time that works for you.');
