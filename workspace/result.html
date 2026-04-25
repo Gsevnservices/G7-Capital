@@ -3556,7 +3556,28 @@ function openEmailPanel() {
   var pending = {};
   try { pending = JSON.parse(localStorage.getItem('g7_pending_result') || '{}'); } catch(e) {}
 
-  var companyName = pending.companyName || '—';
+  // Company name: try multiple sources in priority order
+  var companyName = pending.companyName || '';
+  if (!companyName) {
+    // Try the page header element
+    var dealHeader = document.getElementById('dealCompany') ||
+                     document.querySelector('.deal-company') ||
+                     document.querySelector('[data-company]');
+    if (dealHeader) companyName = dealHeader.textContent.trim();
+  }
+  if (!companyName) {
+    // Try parsedData (global set during init)
+    companyName = (parsedData && parsedData.company) || '';
+  }
+  if (!companyName) {
+    // Try currentDeal (global set during init)
+    companyName = (currentDeal && currentDeal.companyName) || '';
+  }
+  if (!companyName || companyName === '—') companyName = 'the company';
+
+  console.log('[G7] Email panel company:', companyName);
+  console.log('[G7] Pending result:', JSON.stringify(pending).substring(0, 200));
+
   var founderEmail = pending.founderEmail || extractFounderEmailFromNote() || '';
   var firmConfig = {};
   try { firmConfig = JSON.parse(localStorage.getItem('g7_firm_config') || '{}'); } catch(e) {}
@@ -3609,15 +3630,13 @@ function extractFounderQuestions() {
 }
 
 function buildEmailBody(companyName, partnerName, firmName, questions) {
-  var lines = [
-    'Hi,',
-    '',
-    'Thank you for sharing information about ' + companyName + '. We have reviewed the materials and are genuinely interested in learning more.',
-    '',
-    'We have a few questions that would help us understand the opportunity better:',
-    ''
-  ];
+  var lines = ['Hi,', ''];
+
   if (questions.length > 0) {
+    lines.push('Thank you for sharing information about ' + companyName + '. We have reviewed the materials and are genuinely interested in learning more.');
+    lines.push('');
+    lines.push('We have a few questions that would help us understand the opportunity better:');
+    lines.push('');
     questions.forEach(function(q, i) {
       lines.push((i + 1) + '. ' + q.text);
       lines.push('');
@@ -3634,6 +3653,7 @@ function buildEmailBody(companyName, partnerName, firmName, questions) {
     lines.push('3. Who do you most commonly compete against in deals and what is your win rate?');
     lines.push('');
   }
+
   lines.push('We would love to schedule a call to discuss further. Please feel free to respond to this email or suggest a time that works for you.');
   lines.push('');
   lines.push('Best regards,');
@@ -3671,8 +3691,14 @@ async function sendFounderEmail() {
 
   try {
     var token = localStorage.getItem('g7_session_token') || '';
+    var workerUrl = 'https://g7-proxy.gsevnservices.workers.dev/email/send-founder-questions';
 
-    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/email/send-founder-questions', {
+    console.log('[G7] Sending email to:', toEmail);
+    console.log('[G7] Company:', companyName);
+    console.log('[G7] Worker URL:', workerUrl);
+    console.log('[G7] Token present:', !!token);
+
+    var response = await fetch(workerUrl, {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -3687,7 +3713,10 @@ async function sendFounderEmail() {
       })
     });
 
+    console.log('[G7] Email response status:', response.status);
+
     var data = await response.json();
+    console.log('[G7] Email response data:', JSON.stringify(data));
 
     if (response.ok && data.success) {
       statusEl.textContent = '\u2713 Email sent to ' + toEmail;
@@ -3696,9 +3725,10 @@ async function sendFounderEmail() {
       logEmailSent(toEmail, companyName);
       setTimeout(closeEmailPanel, 2000);
     } else {
-      throw new Error(data.error || 'Send failed');
+      throw new Error(data.error || 'Send failed — status ' + response.status);
     }
   } catch(err) {
+    console.error('[G7] Email send error:', err.message, err);
     statusEl.textContent = 'Failed to send: ' + err.message;
     statusEl.className   = 'email-status error';
     sendBtn.disabled    = false;
