@@ -2706,6 +2706,13 @@ function buildDashboard(data) {
   console.log('[G7] Has RETURN SCENARIO MATRIX:', rawText.includes('RETURN SCENARIO MATRIX'));
   console.log('[G7] Has BREAKEVEN ANALYSIS:', rawText.includes('BREAKEVEN ANALYSIS'));
 
+  // FIX 9 — Show exactly what Alex produced in the GROWTH AND RETURN section
+  var growthStart = rawText.indexOf('GROWTH AND RETURN INTELLIGENCE');
+  console.log('[G7] GROWTH section found at:', growthStart);
+  if (growthStart >= 0) {
+    console.log('[G7] GROWTH section preview:', rawText.substring(growthStart, growthStart + 300));
+  }
+
   // ── GROWTH QUALITY SCORE ──────────────────────────────────────
   var growthScoreMatch = rawText.match(/GROWTH QUALITY SCORE:\s*(\d+(?:\.\d+)?)\/10/i);
 
@@ -2911,106 +2918,164 @@ function buildRiskDashboard(parsedData) {
 
   if (!rawText) return;
 
-  // Isolate the Risk Intelligence block
-  var riskSectionMatch = rawText.match(
-    /RISK INTELLIGENCE[\s\S]*?━━━([\s\S]*?)(?=━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\s*$|$)/i
-  );
-  var riskText = riskSectionMatch ? riskSectionMatch[0] : rawText;
+  // FIX 1 — Isolate the Risk Intelligence block using simple string search.
+  // Previous regex matched ━━━ against the first 3 chars of the 47-char opening
+  // divider, cutting all content immediately. String indexOf is reliable.
+  var riskStart = rawText.indexOf('RISK INTELLIGENCE');
+  var riskText = riskStart >= 0 ? rawText.substring(riskStart) : rawText;
 
   var foundData = false;
 
-  // ── OVERALL RISK RATING ───────────────────────────────────────
-  var ratingMatch = riskText.match(/OVERALL RISK RATING:\s*(\w+)/i);
+  // FIX 2 — Overall Risk Rating
+  // Alex outputs: COMPOSITE RISK SCORE: [N] → RISK RATING [1-6]: [Label]
+  // There is no "OVERALL RISK RATING:" label — previous regex never matched.
+  var ratingMatch = riskText.match(/RISK RATING\s*\d*\s*:\s*([^\n\r]+)/i);
   if (ratingMatch) {
     foundData = true;
-    var rating = ratingMatch[1].toUpperCase();
-    var badge  = document.getElementById('riskRatingBadge');
-    badge.textContent = rating;
+    var ratingText = ratingMatch[1].trim();
+    var ratingUpper = ratingText.toUpperCase();
+    var badge = document.getElementById('riskRatingBadge');
 
-    var classMap = {
-      'CRITICAL':    'risk-badge-critical',
-      'HIGH':        'risk-badge-high',
-      'SIGNIFICANT': 'risk-badge-significant',
-      'MANAGEABLE':  'risk-badge-manageable'
-    };
-    badge.className = 'risk-rating-badge ' + (classMap[rating] || 'risk-badge-significant');
+    // Display just the label before the semicolon (e.g. "High Risk")
+    badge.textContent = ratingText.split(';')[0].trim();
 
-    var descMap = {
-      'CRITICAL':    'Strong PASS signal. Requires specific mitigation.',
-      'HIGH':        'Score reduced 10 points. Mitigation conditions required.',
-      'SIGNIFICANT': 'Score reduced 5 points. Monitor closely post-investment.',
-      'MANAGEABLE':  'No recommendation impact. Standard monitoring applies.'
-    };
-    document.getElementById('riskRatingDesc').textContent = descMap[rating] || '';
+    // Assign colour class by keyword match
+    var badgeClass =
+      ratingUpper.includes('CRITICAL') ? 'risk-badge-critical'
+      : ratingUpper.includes('HIGH')   ? 'risk-badge-high'
+      : ratingUpper.includes('MODERATE') || ratingUpper.includes('SIGNIFICANT') ? 'risk-badge-significant'
+      : 'risk-badge-manageable';
+    badge.className = 'risk-rating-badge ' + badgeClass;
+
+    // Desc shown below the badge — use rest of label after semicolon if present
+    var semicolonIdx = ratingText.indexOf(';');
+    document.getElementById('riskRatingDesc').textContent =
+      semicolonIdx >= 0 ? ratingText.substring(semicolonIdx + 1).trim() : '';
   }
 
-  // ── RAOS SCORE ────────────────────────────────────────────────
-  var raosMatch = riskText.match(/RAOS[:\s]+(\d+(?:\.\d+)?)/i) ||
-                  riskText.match(/risk.adjusted[^:]*:\s*(\d+(?:\.\d+)?)/i);
+  // FIX 3+4 — RAOS Score with label
+  // Alex outputs: RISK-ADJUSTED OPPORTUNITY SCORE (RAOS): 3.4/10 — CHALLENGED
+  // Previous primary regex failed because ) blocked the match after RAOS.
+  var raosMatch =
+    riskText.match(/RISK-ADJUSTED OPPORTUNITY SCORE[^:]*:\s*(\d+(?:\.\d+)?)/i) ||
+    riskText.match(/RAOS\)?[:\s]+(\d+(?:\.\d+)?)/i);
   if (raosMatch) {
     var raosEl = document.getElementById('riskRAOS');
+    // Also extract the label after the em-dash (e.g. "CHALLENGED", "STRONG")
+    var raosLabelMatch = riskText.match(
+      /RISK-ADJUSTED OPPORTUNITY SCORE[^:]*:\s*[\d.]+\/10\s*[—\-]+\s*([^\n\r]+)/i
+    );
+    var raosLabel = raosLabelMatch ? raosLabelMatch[1].trim() : '';
     raosEl.innerHTML =
       '<div class="risk-raos-label">Risk-Adjusted Opportunity Score</div>' +
-      '<div class="risk-raos-value">' + raosMatch[1] + '/10</div>';
+      '<div class="risk-raos-value">' + raosMatch[1] + '/10</div>' +
+      (raosLabel
+        ? '<div style="font-family:\'Tenor Sans\',sans-serif;font-size:11px;' +
+          'letter-spacing:0.1em;text-transform:uppercase;' +
+          'color:var(--grey);margin-top:4px;">' + escapeHtml(raosLabel) + '</div>'
+        : '');
   }
 
-  // ── RISK PROFILE SUMMARY ──────────────────────────────────────
-  var summaryMatch = riskText.match(
-    /RISK PROFILE SUMMARY:\s*([\s\S]*?)(?=TOP RISKS:|RISK 1:|━━━)/i
-  );
+  // FIX 5 — Risk Profile Summary
+  // Alex has no RISK PROFILE SUMMARY label. He has RISK VERDICT at the end.
+  // Fall back to the composite risk score description line if verdict not present.
+  var summaryMatch =
+    riskText.match(/RISK VERDICT:\s*([\s\S]*?)(?=━━━|FOUNDER OUTREACH|$)/i) ||
+    riskText.match(/COMPOSITE RISK SCORE:\s*([^\n\r]+)/i);
   if (summaryMatch) {
     document.getElementById('riskSummaryText').textContent = summaryMatch[1].trim();
   }
 
-  // ── TOP RISKS TABLE ───────────────────────────────────────────
+  // FIX 6 — Top Risks Table
+  // Alex's actual format (pipe-separated, under CRITICAL/SIGNIFICANT/MONITOR RISKS):
+  //   T2 | Technology Risk | H/F/UC | P1
+  //   One sentence description
+  //   Cluster: CASCADE
+  //   Monitor: Trigger → Checkpoint
+  // Previous regex looked for "RISK 1: ... Type: ... Probability: ..." — never matched.
   var tbody = document.getElementById('riskTableBody');
   tbody.innerHTML = '';
-
-  var riskPattern =
-    /RISK \d+:\s*([^\n]+)\n[\s\S]*?Type:\s*(\w+)[\s\S]*?Probability:\s*(\w+)[\s\S]*?Impact:\s*(\w+)[\s\S]*?Risk Score:\s*(\d+)/gi;
-
-  var riskMatch;
   var riskCount = 0;
-  while ((riskMatch = riskPattern.exec(riskText)) !== null && riskCount < 6) {
-    riskCount++;
-    foundData = true;
 
-    var name   = riskMatch[1].trim();
-    var type   = riskMatch[2].trim();
-    var prob   = riskMatch[3].trim().toUpperCase();
-    var impact = riskMatch[4].trim().toUpperCase();
-    var score  = parseInt(riskMatch[5], 10);
+  // Maps for P/I classification codes (first/second segment of e.g. "H/F/UC")
+  var probMap   = { 'C': 'CRITICAL', 'H': 'HIGH', 'M': 'MEDIUM', 'L': 'LOW' };
+  var impactMap = { 'F': 'FATAL', 'S': 'SEVERE', 'Mo': 'MODERATE', 'Mi': 'MINOR' };
 
-    var probClass = {
-      'CRITICAL': 'risk-prob-critical',
-      'HIGH':     'risk-prob-high',
-      'MEDIUM':   'risk-prob-medium',
-      'LOW':      'risk-prob-low'
-    }[prob] || 'risk-prob-low';
+  function parseRiskBlock(sectionText, severityClass) {
+    var lines = sectionText.split('\n')
+      .map(function(l) { return l.trim(); })
+      .filter(function(l) { return l.length > 0; });
 
-    var impactClass = {
-      'FATAL':    'risk-impact-fatal',
-      'SEVERE':   'risk-impact-severe',
-      'MODERATE': 'risk-impact-moderate',
-      'MINOR':    'risk-impact-minor'
-    }[impact] || 'risk-impact-moderate';
+    for (var i = 0; i < lines.length && riskCount < 6; i++) {
+      var line = lines[i];
+      // Risk code line: starts with alphanumeric code then pipe — e.g. "T2 |"
+      if (!line.match(/^\w+\d*\s*\|/)) continue;
 
-    var scoreClass = 'risk-score-' + Math.min(10, Math.max(1, score));
+      var parts = line.split('|').map(function(p) { return p.trim(); });
+      var code       = parts[0] || '';
+      var category   = parts[1] || '';
+      var classif    = parts[2] || '';  // e.g. "H/F/UC"
+      var priority   = parts[3] || '';  // e.g. "P1"
 
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td>' + escapeHtml(name) + '</td>' +
-      '<td style="color:rgba(250,250,248,0.5)">' + escapeHtml(type) + '</td>' +
-      '<td class="' + probClass + '">' + prob + '</td>' +
-      '<td class="' + impactClass + '">' + impact + '</td>' +
-      '<td><span class="risk-score-badge ' + scoreClass + '">' + score + '</span></td>' +
-      '<td class="risk-warning-yes">&#10003; Yes</td>';
-    tbody.appendChild(tr);
+      // Next non-pipe, non-Cluster/Monitor line is the description
+      var desc = '';
+      if (i + 1 < lines.length &&
+          !lines[i + 1].match(/^\w+\d*\s*\|/) &&
+          !lines[i + 1].match(/^(Cluster|Monitor):/i)) {
+        desc = lines[i + 1];
+      }
+
+      // Parse probability and impact from classification string (e.g. "H/F/UC")
+      var classParts = classif.split('/');
+      var probCode   = classParts[0] || '';
+      var impCode    = classParts[1] || '';
+      var prob   = probMap[probCode]   || probCode   || '—';
+      var impact = impactMap[impCode]  || impCode    || '—';
+
+      var probClass = {
+        'CRITICAL': 'risk-prob-critical',
+        'HIGH':     'risk-prob-high',
+        'MEDIUM':   'risk-prob-medium',
+        'LOW':      'risk-prob-low'
+      }[prob] || '';
+
+      var impactClass = {
+        'FATAL':    'risk-impact-fatal',
+        'SEVERE':   'risk-impact-severe',
+        'MODERATE': 'risk-impact-moderate',
+        'MINOR':    'risk-impact-minor'
+      }[impact] || '';
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + escapeHtml(desc || category) + '</td>' +
+        '<td style="color:rgba(250,250,248,0.5)">' + escapeHtml(category) + '</td>' +
+        '<td class="' + probClass + '">' + escapeHtml(prob) + '</td>' +
+        '<td class="' + impactClass + '">' + escapeHtml(impact) + '</td>' +
+        '<td><span class="risk-score-badge ' + severityClass + '">' +
+          escapeHtml(priority) + '</span></td>' +
+        '<td class="risk-warning-yes">&#10003;</td>';
+      tbody.appendChild(tr);
+      riskCount++;
+      foundData = true;
+    }
   }
 
-  // ── RISK INTERACTIONS ─────────────────────────────────────────
+  // Extract each risk severity block and parse it
+  var criticalSectionMatch  = riskText.match(
+    /CRITICAL RISKS:([\s\S]*?)(?=SIGNIFICANT RISKS:|MONITOR RISKS:|RISK CLUSTERS|RISK-ADJUSTED|RAOS|━━━)/i);
+  var significantSectionMatch = riskText.match(
+    /SIGNIFICANT RISKS:([\s\S]*?)(?=MONITOR RISKS:|CRITICAL RISKS:|RISK CLUSTERS|RISK-ADJUSTED|RAOS|━━━)/i);
+  var monitorSectionMatch   = riskText.match(
+    /MONITOR RISKS:([\s\S]*?)(?=CRITICAL RISKS:|SIGNIFICANT RISKS:|RISK CLUSTERS|RISK-ADJUSTED|RAOS|━━━)/i);
+
+  if (criticalSectionMatch)    parseRiskBlock(criticalSectionMatch[1],    'risk-score-9');
+  if (significantSectionMatch) parseRiskBlock(significantSectionMatch[1], 'risk-score-6');
+  if (monitorSectionMatch)     parseRiskBlock(monitorSectionMatch[1],     'risk-score-3');
+
+  // FIX 7 — Risk Clusters (Alex's label is RISK CLUSTERS IDENTIFIED, not RISK INTERACTIONS)
   var interactMatch = riskText.match(
-    /RISK INTERACTIONS:([\s\S]*?)(?=WEB SEARCH|MONITORING|━━━)/i
+    /RISK CLUSTERS IDENTIFIED:([\s\S]*?)(?=RISK-ADJUSTED|RAOS|RISK VERDICT|━━━)/i
   );
   if (interactMatch) {
     var interactEl = document.getElementById('riskInteractions');
@@ -3043,42 +3108,35 @@ function buildRiskDashboard(parsedData) {
     searchEl.appendChild(searchDiv);
   }
 
-  // ── MONITORING CHECKLIST ──────────────────────────────────────
-  var monitorMatch = riskText.match(/MONITORING CHECKLIST:([\s\S]*?)(?=━━━|$)/i);
-  if (monitorMatch) {
-    var monitorEl = document.getElementById('monitoringChecklist');
-    var items = monitorMatch[1].split(/MONITOR:/i)
-      .filter(function(s) { return s.trim().length > 0; });
+  // FIX 8 — Monitoring Checklist
+  // Alex embeds "Monitor: [Trigger] → [Checkpoint]" lines inside each risk block,
+  // not in a separate MONITORING CHECKLIST section. Extract all Monitor: lines.
+  var monitorEl = document.getElementById('monitoringChecklist');
+  var monitorLines = [];
+  var monitorLineRegex = /Monitor:\s*([^\n\r]+)/gi;
+  var monitorLineMatch;
+  while ((monitorLineMatch = monitorLineRegex.exec(riskText)) !== null) {
+    monitorLines.push(monitorLineMatch[1].trim());
+  }
+  if (monitorLines.length > 0) {
+    monitorEl.innerHTML = '';
+    monitorLines.forEach(function(line) {
+      var div = document.createElement('div');
+      div.className = 'monitor-item';
 
-    if (items.length > 0) {
-      monitorEl.innerHTML = '';
-      items.forEach(function(item) {
-        var lines = item.trim().split('\n').filter(function(l) { return l.trim(); });
-        if (lines.length === 0) return;
+      var parts = line.split('→');
+      var metric = document.createElement('div');
+      metric.className = 'monitor-metric';
+      metric.textContent = parts[0].trim();
 
-        var div = document.createElement('div');
-        div.className = 'monitor-item';
+      var detail = document.createElement('div');
+      detail.className = 'monitor-detail';
+      detail.textContent = parts[1] ? parts[1].trim() : '';
 
-        var metric = document.createElement('div');
-        metric.className = 'monitor-metric';
-        metric.textContent = lines[0].trim();
-
-        var detail    = document.createElement('div');
-        detail.className = 'monitor-detail';
-        var freqMatch  = item.match(/FREQUENCY:\s*([^\n]+)/i);
-        var threshMatch = item.match(/THRESHOLD:\s*([^\n]+)/i);
-        var actionMatch = item.match(/ACTION[^:]*:\s*([^\n]+)/i);
-        var details = [];
-        if (freqMatch)  details.push('<span class="monitor-freq">' + escapeHtml(freqMatch[1].trim()) + '</span>');
-        if (threshMatch) details.push('Threshold: ' + escapeHtml(threshMatch[1].trim()));
-        if (actionMatch) details.push('Action: ' + escapeHtml(actionMatch[1].trim()));
-        detail.innerHTML = details.join(' &nbsp;&middot;&nbsp; ');
-
-        div.appendChild(metric);
-        div.appendChild(detail);
-        monitorEl.appendChild(div);
-      });
-    }
+      div.appendChild(metric);
+      div.appendChild(detail);
+      monitorEl.appendChild(div);
+    });
   }
 
   // ── SHOW RISK TAB if meaningful data found ────────────────────
