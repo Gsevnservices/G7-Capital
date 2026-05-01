@@ -32,6 +32,11 @@
 //
 // Health check:
 //   GET /                        → { status: 'G7 Proxy is running' }
+//
+// REQUIRED DNS RECORDS (gsevnservices.com) — needed for Mailchannels email delivery:
+//   TXT @               : v=spf1 include:_spf.google.com include:relay.mailchannels.net ~all
+//   TXT _mailchannels   : v=mc1 cfid=gsevnservices.workers.dev
+// Without these records Mailchannels will reject sends (domain lockdown enforcement).
 // ─────────────────────────────────────────────────────────────────────────────
 
 // The Anthropic endpoint this worker proxies to
@@ -580,8 +585,9 @@ export default {
       let body;
       try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
 
-      // Validate session
-      const session = await validateSession(body.sessionToken, env);
+      // Validate session — must pass the request object (not the token string)
+      // so validateSession can read the Authorization: Bearer header correctly
+      const session = await validateSession(request, env);
       if (!session) return jsonResponse({ error: 'Unauthorised — invalid or expired session' }, 401);
 
       // Validate required fields
