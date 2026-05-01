@@ -180,6 +180,17 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
 .footer-copy{font-size:11px;color:var(--grey2);letter-spacing:.06em}
 .footer-disclaimer{font-size:10px;color:var(--grey2);max-width:480px;text-align:right;line-height:1.7;letter-spacing:.03em}
 
+/* CONTACT SECTION */
+.contact-section{padding:120px 0;border-bottom:1px solid var(--border2)}
+.contact-intro{margin-bottom:48px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:720px}
+.contact-card{border:1px solid var(--border);background:rgba(250,250,248,0.02);padding:36px 40px;transition:background .3s}
+.contact-card:hover{background:rgba(250,250,248,0.03)}
+.contact-label{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.contact-email{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--white);text-decoration:none;display:block;margin-bottom:12px;transition:color .3s}
+.contact-email:hover{color:var(--gold)}
+.contact-desc{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
+
 /* SCROLL TO TOP */
 .scroll-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border:1px solid var(--border);background:var(--black2);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:all .3s;z-index:200;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);text-decoration:none}
 .scroll-top.show{opacity:1}
@@ -243,11 +254,12 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#output">What Alex Produces</a></li>
     <li><a href="#vision">The Vision</a></li>
-    <li><a href="#partners">Design Partners</a></li>
+    <li><a href="#partners">Early Access</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
     <a href="login.html" class="nav-workspace-btn">Enter Workspace</a>
-    <a href="#partners" class="nav-cta-btn">Become a Design Partner</a>
+    <a href="#partners" class="nav-cta-btn">Request Early Access</a>
   </div>
   <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
@@ -260,7 +272,8 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
   <a href="#output" onclick="toggleMenu()">What Alex Produces</a>
   <a href="#vision" onclick="toggleMenu()">The Vision</a>
-  <a href="#partners" onclick="toggleMenu()">Design Partners</a>
+  <a href="#partners" onclick="toggleMenu()">Early Access</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
   <a href="login.html" onclick="toggleMenu()">Enter Workspace</a>
 </div>
 
@@ -269,23 +282,23 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <div class="hero-glow"></div>
   <div class="hero-eyebrow">
     <div class="eyebrow-line"></div>
-    <div class="eyebrow-text">Beta · Q2 2026 · 5–10 Design Partners</div>
+    <div class="eyebrow-text">Beta · Q2 2026 · 5–10 Early Access Firms</div>
     <div class="eyebrow-line"></div>
   </div>
-  <h1 class="hero-headline">An AI Deal Analyst</h1>
-  <h1 class="hero-headline-2">built on <em>100 real investments.</em></h1>
+  <h1 class="hero-headline">Your AI investment team.</h1>
+  <h1 class="hero-headline-2">Built on <em>100 real decisions.</em></h1>
   <p class="hero-sub">
-    Alex screens every inbound deal to institutional standard in 35 seconds.<br>
-    Calibrated to your firm's thesis.<br>
-    Not generic VC output.
+    G7 Capital gives investment teams an AI analyst that screens every deal<br>
+    to institutional standard — calibrated to your firm's thesis,<br>
+    not generic VC output.
   </p>
   <div class="hero-actions">
-    <a href="#partners" class="btn-gold">Become a Design Partner →</a>
+    <a href="#partners" class="btn-gold">Request Early Access →</a>
     <a href="login.html" class="btn-outline">Enter Workspace →</a>
   </div>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-num">35<span style="font-size:20px;color:var(--grey2)">sec</span></div>
+      <div class="hero-stat-num">~3<span style="font-size:20px;color:var(--grey2)">min</span></div>
       <div class="hero-stat-label">From upload to<br>screening note</div>
     </div>
     <div class="hero-stat">
@@ -293,8 +306,8 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
       <div class="hero-stat-label">Real investment decisions<br>trained on</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">$0.<span style="font-size:24px">15</span></div>
-      <div class="hero-stat-label">Average cost<br>per deal screened</div>
+      <div class="hero-stat-num">$5–10</div>
+      <div class="hero-stat-label">Per deal,<br>all-inclusive</div>
     </div>
   </div>
   <div class="hero-scroll">
@@ -311,7 +324,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
         <div class="section-no">01 — The Problem</div>
         <h2 class="section-title">The bottleneck<br>every fund <em>shares.</em></h2>
       </div>
-      <a href="#partners" class="section-link">Become a design partner →</a>
+      <a href="#partners" class="section-link">Request early access →</a>
     </div>
     <div class="problem-stats reveal">
       <div class="prob-stat">
@@ -360,7 +373,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
       <div class="step-card">
         <div class="step-num">03</div>
         <div class="step-title">Alex analyses</div>
-        <div class="step-desc">In 35 seconds Alex applies 6 analytical frameworks, 8 sector intelligence libraries, 100 red flags, growth decomposition, risk scoring, and fund return maths calibrated to your specific fund.</div>
+        <div class="step-desc">In minutes Alex applies 6 analytical frameworks, 8 sector intelligence libraries, 100 red flags, growth decomposition, risk scoring, and fund return maths calibrated to your specific fund.</div>
       </div>
       <div class="step-card">
         <div class="step-num">04</div>
@@ -379,7 +392,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
         <div class="section-no">03 — Output</div>
         <h2 class="section-title">What you get<br>on <em>every deal.</em></h2>
       </div>
-      <a href="#partners" class="section-link">Become a design partner →</a>
+      <a href="#partners" class="section-link">Request early access →</a>
     </div>
     <div class="output-tabs reveal">
       <div class="output-tab">
@@ -444,8 +457,8 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
         <div class="train-desc">Every time a partner disagrees with Alex's output, the correction is saved permanently. After 30 calibrations Alex understands your standards as well as a junior analyst who has been at your firm for a year.</div>
       </div>
       <div class="train-box">
-        <div class="train-num">35<span style="font-size:36px;color:var(--grey2)">sec</span></div>
-        <div class="tab-label" style="margin-bottom:12px">Institutional quality, instantly</div>
+        <div class="train-num">~3<span style="font-size:36px;color:var(--grey2)">min</span></div>
+        <div class="tab-label" style="margin-bottom:12px">Institutional quality, fast</div>
         <div class="train-desc">From upload to a complete screening note. Scored, structured, and ready before your next meeting. The 75 hours a month you currently spend on triage, compressed into background noise.</div>
       </div>
     </div>
@@ -465,8 +478,8 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
       <div class="phase-card">
         <div class="phase-badge"><div class="phase-live"></div>Phase 01 · Live</div>
         <div class="phase-title">Alex</div>
-        <div class="phase-role">Deal Analyst</div>
-        <div class="phase-desc">Screens every inbound deal to institutional standard in 35 seconds. G7 Score, growth decomposition, risk intelligence, return modelling, and direct founder communication — calibrated to your firm.</div>
+        <div class="phase-role">AI Analyst</div>
+        <div class="phase-desc">Screens every inbound deal to institutional standard in minutes. G7 Score, growth decomposition, risk intelligence, return modelling, and direct founder communication — calibrated to your firm.</div>
       </div>
       <div class="phase-arrow">→</div>
       <div class="phase-card">
@@ -493,18 +506,18 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   </div>
 </section>
 
-<!-- SECTION 7 — DESIGN PARTNERS -->
+<!-- SECTION 7 — EARLY ACCESS -->
 <section class="partners-section" id="partners">
   <div class="section-wrap">
     <div class="section-header reveal">
       <div>
-        <div class="section-no">06 — Design Partners</div>
-        <h2 class="section-title">Become a<br><em>design partner.</em></h2>
+        <div class="section-no">06 — Early Access</div>
+        <h2 class="section-title">Request<br><em>early access.</em></h2>
       </div>
     </div>
     <div class="partners-layout reveal">
       <div>
-        <p class="partners-left-desc">We are accepting 5–10 firms for Q2 2026. Design partners get free access, direct influence on what we build, and preferred pricing at launch.</p>
+        <p class="partners-left-desc">We are accepting 5–10 firms for Q2 2026. Early access firms get free access, direct influence on what we build, and preferred pricing at launch.</p>
         <div class="partners-points">
           <div class="partner-point">
             <div class="point-line"></div>
@@ -520,7 +533,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
           </div>
           <div class="partner-point">
             <div class="point-line"></div>
-            <div class="point-text">First access to Maya — our DD Associate — when she launches for design partners in Q3 2026.</div>
+            <div class="point-text">First access to Maya — our DD Associate — when she launches for early access firms in Q3 2026.</div>
           </div>
         </div>
         <div class="partners-ask">
@@ -531,7 +544,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
       <div>
         <div class="partners-form">
           <form id="partnerForm">
-            <input type="hidden" name="_subject" value="G7 Capital — Design Partner Application">
+            <input type="hidden" name="_subject" value="G7 Capital — Early Access Application">
             <div class="form-field">
               <label class="form-label" for="pFirm">Firm Name</label>
               <input type="text" class="form-input" name="firm" placeholder="Your firm" required id="pFirm">
@@ -560,7 +573,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
               <label class="form-label" for="pSource">How did you hear about us?</label>
               <input type="text" class="form-input" name="source" placeholder="LinkedIn, referral, cold email..." id="pSource">
             </div>
-            <button type="submit" class="waitlist-btn" id="partnerBtn">Apply for Access →</button>
+            <button type="submit" class="waitlist-btn" id="partnerBtn">Request Early Access →</button>
             <p class="waitlist-note">Applications reviewed within 48 hours. No credit card required.</p>
             <div class="form-error" id="partnerError">Something went wrong. Please try again or email us directly at alex@gsevnservices.com</div>
           </form>
@@ -568,6 +581,33 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
             <p>"Your application has been received.<br>We will be in touch within 48 hours.<br>Welcome to G7 Capital."</p>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8 — CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-no">07 — Contact</div>
+        <h2 class="section-title">Get in <em>touch.</em></h2>
+      </div>
+    </div>
+    <div class="contact-intro reveal">
+      <p style="font-size:14px;color:var(--grey1);line-height:2;max-width:560px">Questions about the platform, partnership enquiries, or anything else — we respond to every email.</p>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <div class="contact-label">General Enquiries</div>
+        <a href="mailto:gsevnservices@gmail.com" class="contact-email">gsevnservices@gmail.com</a>
+        <p class="contact-desc">For questions about G7 Capital, Alex, or the platform.</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">Platform Access</div>
+        <a href="mailto:gsevnservices@gmail.com" class="contact-email">gsevnservices@gmail.com</a>
+        <p class="contact-desc">To request access or discuss how Alex can work for your firm.</p>
       </div>
     </div>
   </div>
@@ -585,12 +625,13 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
       <a href="login.html">G7 Workspace</a>
       <a href="#how-it-works">How It Works</a>
       <a href="#output">What Alex Produces</a>
-      <a href="#partners">Become a Design Partner</a>
+      <a href="#partners">Request Early Access</a>
+      <a href="#contact">Contact</a>
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Company</div>
       <a href="#vision">The Vision</a>
-      <a href="mailto:alex@gsevnservices.com">alex@gsevnservices.com</a>
+      <a href="mailto:gsevnservices@gmail.com">gsevnservices@gmail.com</a>
       <a href="#">g7capital.ai</a>
     </div>
     <div class="footer-col">
@@ -650,7 +691,7 @@ const obs = new IntersectionObserver(function(entries) {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
 
-// DESIGN PARTNER FORM — Formspree
+// EARLY ACCESS FORM — Formspree
 document.getElementById('partnerForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('partnerBtn');
