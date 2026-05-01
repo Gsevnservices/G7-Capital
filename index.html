@@ -191,6 +191,52 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
 .contact-email:hover{color:var(--gold)}
 .contact-desc{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
 
+/* TICKER BAR */
+.ticker-bar{background:rgba(201,168,76,0.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 0;overflow:hidden;position:relative;z-index:490;margin-top:80px}
+.ticker-track{display:flex;width:max-content;animation:ticker 40s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{display:flex;align-items:center;gap:12px;padding:0 48px;white-space:nowrap;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1)}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* CHATGPT CALLOUT BAR */
+.chatgpt-bar{background:rgba(201,168,76,0.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 0}
+.chatgpt-bar-inner{max-width:1200px;margin:0 auto;padding:0 64px;display:flex;align-items:center;gap:64px}
+.chatgpt-bar-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);flex-shrink:0}
+.chatgpt-bar-divider{width:1px;height:40px;background:var(--border);flex-shrink:0}
+.chatgpt-bar-text{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2vw,24px);font-weight:300;color:var(--white);line-height:1.5}
+.chatgpt-bar-text em{font-style:italic;color:var(--gold)}
+
+/* TESTIMONIAL SECTION */
+.testimonial-section{padding:80px 0;border-bottom:1px solid var(--border2)}
+.testimonial-card{border:1px solid var(--border);background:rgba(201,168,76,0.02);padding:56px 64px;max-width:900px;margin:0 auto;text-align:center}
+.testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.2vw,28px);font-weight:300;font-style:italic;color:var(--white);line-height:1.7;margin-bottom:40px}
+.testimonial-attribution{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.testimonial-role{font-size:11px;color:var(--grey2);letter-spacing:.08em;margin-top:8px}
+
+/* DEMO SECTION */
+.demo-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
+.demo-placeholder{aspect-ratio:16/9;background:var(--black3);border:1px solid var(--border2);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;margin-bottom:48px;overflow:hidden}
+.demo-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,168,76,.04) 0%,transparent 70%)}
+.demo-play-icon{width:72px;height:72px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:border-color .3s}
+.demo-placeholder:hover .demo-play-icon{border-color:var(--gold)}
+.demo-play-icon::after{content:'▶';font-size:20px;color:var(--gold);margin-left:4px}
+.demo-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);position:relative;z-index:1}
+.demo-coming-soon{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--grey1);font-style:italic;position:relative;z-index:1}
+.demo-notify-form{display:flex;gap:0;max-width:480px;border:1px solid var(--border2)}
+.demo-notify-input{flex:1;background:transparent;border:none;padding:16px 20px;font-family:'Tenor Sans',sans-serif;font-size:12px;color:var(--white);outline:none;letter-spacing:.05em}
+.demo-notify-input::placeholder{color:rgba(250,250,248,.3)}
+.demo-notify-btn{background:var(--gold);border:none;padding:16px 28px;font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);cursor:pointer;transition:background .3s;white-space:nowrap;flex-shrink:0}
+.demo-notify-btn:hover{background:var(--gold2)}
+.demo-notify-success{display:none;font-size:12px;color:var(--gold);letter-spacing:.08em;margin-top:12px;font-style:italic;font-family:'Cormorant Garamond',serif}
+.demo-notify-success.show{display:block}
+
+/* WAITLIST COUNTER */
+.waitlist-counter{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);margin-bottom:48px}
+.wc-stat{background:var(--black2);padding:32px 24px;text-align:center}
+.wc-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px}
+.wc-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2)}
+
 /* SCROLL TO TOP */
 .scroll-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border:1px solid var(--border);background:var(--black2);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:all .3s;z-index:200;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);text-decoration:none}
 .scroll-top.show{opacity:1}
@@ -232,6 +278,12 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   body{cursor:auto}
   .cursor,.cursor-ring{display:none}
   .scroll-top{bottom:20px;right:20px}
+  .chatgpt-bar-inner{flex-direction:column;gap:24px;padding:0 24px}
+  .chatgpt-bar-divider{width:40px;height:1px}
+  .testimonial-card{padding:40px 24px}
+  .demo-notify-form{flex-direction:column}
+  .demo-notify-btn{padding:14px 20px}
+  .waitlist-counter{grid-template-columns:1fr}
 }
 @media(max-width:480px){
   .steps-grid{grid-template-columns:1fr}
@@ -253,6 +305,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <ul class="nav-links">
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#output">What Alex Produces</a></li>
+    <li><a href="#demo">Demo</a></li>
     <li><a href="#vision">The Vision</a></li>
     <li><a href="#partners">Early Access</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -271,10 +324,33 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <button class="mobile-close" onclick="toggleMenu()">Close ✕</button>
   <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
   <a href="#output" onclick="toggleMenu()">What Alex Produces</a>
+  <a href="#demo" onclick="toggleMenu()">Demo</a>
   <a href="#vision" onclick="toggleMenu()">The Vision</a>
   <a href="#partners" onclick="toggleMenu()">Early Access</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
   <a href="login.html" onclick="toggleMenu()">Enter Workspace</a>
+</div>
+
+<!-- TICKER BAR -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="ticker-dot"></span>100 real investment decisions</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>8 sector intelligence libraries</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>100 red flags across 8 categories</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>6 proprietary analytical frameworks</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Calibrated to your firm's thesis</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Risk-adjusted opportunity scoring</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Growth decomposition analysis</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Direct founder communication</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>100 real investment decisions</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>8 sector intelligence libraries</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>100 red flags across 8 categories</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>6 proprietary analytical frameworks</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Calibrated to your firm's thesis</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Risk-adjusted opportunity scoring</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Growth decomposition analysis</div>
+    <div class="ticker-item"><span class="ticker-dot"></span>Direct founder communication</div>
+  </div>
 </div>
 
 <!-- SECTION 1 — HERO -->
@@ -421,6 +497,26 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   </div>
 </section>
 
+<!-- CHATGPT CALLOUT BAR -->
+<div class="chatgpt-bar reveal">
+  <div class="chatgpt-bar-inner">
+    <div class="chatgpt-bar-label">Not ChatGPT</div>
+    <div class="chatgpt-bar-divider"></div>
+    <div class="chatgpt-bar-text">Alex is trained on <em>100 real investment decisions</em> — bets made, bets passed, and the ones that got away. Generic AI gives you a template. Alex gives you a verdict built on pattern recognition from a decade of deal flow.</div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial-section">
+  <div class="section-wrap reveal">
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"This is remarkable. I can integrate this with my inbound deals immediately. The level of structure and insight — the single point of failure framing especially — is something I would expect from a senior analyst, not a first-pass screen."</div>
+      <div class="testimonial-attribution">Senior Partner, Former CEO — Global Investment Banking Firm</div>
+      <div class="testimonial-role">Early access tester, April 2026</div>
+    </div>
+  </div>
+</section>
+
 <!-- SECTION 5 — TRAINING -->
 <section class="training-section" id="training">
   <div class="section-wrap">
@@ -465,12 +561,37 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   </div>
 </section>
 
+<!-- SECTION 5 — DEMO -->
+<section class="demo-section" id="demo">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-no">05 — Demo</div>
+        <h2 class="section-title">See <em>Alex in action.</em></h2>
+      </div>
+    </div>
+    <div class="demo-placeholder reveal">
+      <div class="demo-play-icon"></div>
+      <div class="demo-label">Demo · Coming Soon</div>
+      <div class="demo-coming-soon">A full deal screen — live, unedited, from upload to note.</div>
+    </div>
+    <div class="reveal" style="text-align:center">
+      <p style="font-size:13px;color:var(--grey1);margin-bottom:24px;letter-spacing:.05em">Be the first to see the demo when it drops.</p>
+      <form class="demo-notify-form" style="margin:0 auto" onsubmit="notifyDemo(event)">
+        <input type="email" class="demo-notify-input" placeholder="your@firm.com" id="demoEmail" required>
+        <button type="submit" class="demo-notify-btn">Notify Me →</button>
+      </form>
+      <div class="demo-notify-success" id="demoSuccess">You're on the list. We'll send you the demo the day it drops.</div>
+    </div>
+  </div>
+</section>
+
 <!-- SECTION 6 — THE VISION -->
 <section class="vision-section" id="vision">
   <div class="section-wrap">
     <div class="section-header reveal">
       <div>
-        <div class="section-no">05 — The Vision</div>
+        <div class="section-no">06 — The Vision</div>
         <h2 class="section-title">The <em>long arc.</em></h2>
       </div>
     </div>
@@ -511,8 +632,22 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <div class="section-wrap">
     <div class="section-header reveal">
       <div>
-        <div class="section-no">06 — Early Access</div>
+        <div class="section-no">07 — Early Access</div>
         <h2 class="section-title">Request<br><em>early access.</em></h2>
+      </div>
+    </div>
+    <div class="waitlist-counter reveal">
+      <div class="wc-stat">
+        <div class="wc-num">20<span style="font-family:'Tenor Sans',sans-serif;font-size:24px;color:var(--grey2)">+</span></div>
+        <div class="wc-label">Firms on<br>the waitlist</div>
+      </div>
+      <div class="wc-stat">
+        <div class="wc-num">50<span style="font-family:'Tenor Sans',sans-serif;font-size:24px;color:var(--grey2)">+</span></div>
+        <div class="wc-label">Individuals<br>following</div>
+      </div>
+      <div class="wc-stat">
+        <div class="wc-num">10</div>
+        <div class="wc-label">Spots<br>remaining</div>
       </div>
     </div>
     <div class="partners-layout reveal">
@@ -591,7 +726,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <div class="section-wrap">
     <div class="section-header reveal">
       <div>
-        <div class="section-no">07 — Contact</div>
+        <div class="section-no">08 — Contact</div>
         <h2 class="section-title">Get in <em>touch.</em></h2>
       </div>
     </div>
@@ -690,6 +825,24 @@ const obs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+// DEMO NOTIFY FORM
+async function notifyDemo(e) {
+  e.preventDefault();
+  const email = document.getElementById('demoEmail').value.trim();
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  try {
+    await fetch('https://formspree.io/f/xzdjwjqy', {
+      method: 'POST',
+      body: JSON.stringify({ email: email, _subject: 'G7 Capital — Demo Notification Signup' }),
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
+    });
+  } catch(err) { /* silent fail — still show success */ }
+  e.target.style.display = 'none';
+  document.getElementById('demoSuccess').classList.add('show');
+}
 
 // EARLY ACCESS FORM — Formspree
 document.getElementById('partnerForm').addEventListener('submit', async function(e) {
