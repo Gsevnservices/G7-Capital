@@ -22,11 +22,11 @@ body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--whi
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:72px;background:rgba(8,8,8,.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
 .nav-logo em{font-style:normal;color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:48px;list-style:none}
-.nav-links a{font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1);text-decoration:none;white-space:nowrap;transition:color .3s}
 .nav-links a:hover{color:var(--white)}
 .nav-right{display:flex;align-items:center}
 .nav-cta-btn{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:11px 28px;text-decoration:none;transition:all .3s}
@@ -43,7 +43,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 .mobile-close:hover{color:var(--gold)}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 40px 80px;position:relative;overflow:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:160px 40px 80px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:140px;left:64px;right:64px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
 .hero::after{content:'';position:absolute;bottom:80px;left:64px;right:64px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
 .hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(201,168,76,.04) 0%,transparent 70%);pointer-events:none}
@@ -192,7 +192,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
 .contact-desc{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
 
 /* SOCIAL PROOF TICKER */
-.social-proof-wrap{width:100%;background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.15);border-bottom:1px solid rgba(201,168,76,0.15);padding:14px 0;overflow:hidden;position:relative;margin-top:80px}
+.social-proof-wrap{width:100%;background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.15);border-bottom:1px solid rgba(201,168,76,0.15);padding:14px 0;overflow:hidden;position:relative;margin-top:72px}
 .social-proof-wrap::before{content:'';position:absolute;left:0;top:0;width:80px;height:100%;background:linear-gradient(to right,#080808 0%,transparent 100%);z-index:2;pointer-events:none}
 .social-proof-wrap::after{content:'';position:absolute;right:0;top:0;width:80px;height:100%;background:linear-gradient(to left,#080808 0%,transparent 100%);z-index:2;pointer-events:none}
 .social-proof-inner{width:100%;overflow:hidden}
@@ -312,7 +312,6 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <ul class="nav-links">
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#output">What Alex Produces</a></li>
-    <li><a href="#demo">Demo</a></li>
     <li><a href="#vision">The Vision</a></li>
     <li><a href="#partners">Early Access</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -331,7 +330,6 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <button class="mobile-close" onclick="toggleMenu()">Close ✕</button>
   <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
   <a href="#output" onclick="toggleMenu()">What Alex Produces</a>
-  <a href="#demo" onclick="toggleMenu()">Demo</a>
   <a href="#vision" onclick="toggleMenu()">The Vision</a>
   <a href="#partners" onclick="toggleMenu()">Early Access</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
