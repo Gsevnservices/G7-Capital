@@ -191,13 +191,19 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
 .contact-email:hover{color:var(--gold)}
 .contact-desc{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
 
-/* TICKER BAR */
-.ticker-bar{background:rgba(201,168,76,0.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 0;overflow:hidden;position:relative;z-index:490;margin-top:80px}
-.ticker-track{display:flex;width:max-content;animation:ticker 40s linear infinite}
-.ticker-track:hover{animation-play-state:paused}
-.ticker-item{display:flex;align-items:center;gap:12px;padding:0 48px;white-space:nowrap;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1)}
-.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* SOCIAL PROOF TICKER */
+.social-proof-wrap{width:100%;background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.15);border-bottom:1px solid rgba(201,168,76,0.15);padding:14px 0;overflow:hidden;position:relative;margin-top:80px}
+.social-proof-wrap::before{content:'';position:absolute;left:0;top:0;width:80px;height:100%;background:linear-gradient(to right,#080808 0%,transparent 100%);z-index:2;pointer-events:none}
+.social-proof-wrap::after{content:'';position:absolute;right:0;top:0;width:80px;height:100%;background:linear-gradient(to left,#080808 0%,transparent 100%);z-index:2;pointer-events:none}
+.social-proof-inner{width:100%;overflow:hidden}
+.proof-row{width:100%;overflow:hidden}
+.proof-track{display:inline-flex;align-items:center;white-space:nowrap;animation:proofScroll 35s linear infinite}
+.proof-track:hover{animation-play-state:paused}
+@keyframes proofScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.proof-item{display:inline-flex;align-items:center;gap:10px;font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,168,76,0.75);padding:0 8px;white-space:nowrap}
+.proof-sep{color:rgba(201,168,76,0.25);font-size:16px;padding:0 12px}
+.proof-pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:#C9A84C;opacity:.7;animation:proofPulse 2s ease-in-out infinite;flex-shrink:0}
+@keyframes proofPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 
 /* CHATGPT CALLOUT BAR */
 .chatgpt-bar{background:rgba(201,168,76,0.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 0}
@@ -232,10 +238,11 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
 .demo-notify-success.show{display:block}
 
 /* WAITLIST COUNTER */
-.waitlist-counter{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);margin-bottom:48px}
-.wc-stat{background:var(--black2);padding:32px 24px;text-align:center}
-.wc-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px}
-.wc-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2)}
+.wl-counter{display:flex;align-items:stretch;max-width:640px;margin:0 0 48px;border:1px solid rgba(201,168,76,0.2);background:rgba(201,168,76,0.03)}
+.wl-stat{flex:1;text-align:center;padding:32px 24px}
+.wl-number{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:#C9A84C;line-height:1;margin-bottom:10px}
+.wl-label{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(250,250,248,0.4)}
+.wl-divider{width:1px;background:rgba(201,168,76,0.15);flex-shrink:0;align-self:stretch}
 
 /* SCROLL TO TOP */
 .scroll-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border:1px solid var(--border);background:var(--black2);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:all .3s;z-index:200;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);text-decoration:none}
@@ -283,7 +290,7 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   .testimonial-card{padding:40px 24px}
   .demo-notify-form{flex-direction:column}
   .demo-notify-btn{padding:14px 20px}
-  .waitlist-counter{grid-template-columns:1fr}
+  .wl-counter{flex-direction:column}
 }
 @media(max-width:480px){
   .steps-grid{grid-template-columns:1fr}
@@ -331,25 +338,45 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
   <a href="login.html" onclick="toggleMenu()">Enter Workspace</a>
 </div>
 
-<!-- TICKER BAR -->
-<div class="ticker-bar">
-  <div class="ticker-track" id="tickerTrack">
-    <div class="ticker-item"><span class="ticker-dot"></span>100 real investment decisions</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>8 sector intelligence libraries</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>100 red flags across 8 categories</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>6 proprietary analytical frameworks</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Calibrated to your firm's thesis</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Risk-adjusted opportunity scoring</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Growth decomposition analysis</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Direct founder communication</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>100 real investment decisions</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>8 sector intelligence libraries</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>100 red flags across 8 categories</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>6 proprietary analytical frameworks</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Calibrated to your firm's thesis</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Risk-adjusted opportunity scoring</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Growth decomposition analysis</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Direct founder communication</div>
+<!-- SOCIAL PROOF TICKER -->
+<div class="social-proof-wrap">
+  <div class="social-proof-inner">
+    <div class="proof-row">
+      <div class="proof-track">
+        <span class="proof-item"><span class="proof-pulse"></span>Currently used by 5 top VC firms in India</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>3 global investment bank teams actively screening deals</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>20+ senior investment professionals in active use</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>10+ VC firms</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>5+ private equity firms</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>10+ investment banking teams</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>50+ individuals on the waitlist</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>20+ renowned firms and companies</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>Currently used by 5 top VC firms in India</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>3 global investment bank teams actively screening deals</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>20+ senior investment professionals in active use</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>10+ VC firms</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>5+ private equity firms</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>10+ investment banking teams</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>50+ individuals on the waitlist</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-item"><span class="proof-pulse"></span>20+ renowned firms and companies</span>
+        <span class="proof-sep">·</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -636,18 +663,20 @@ footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
         <h2 class="section-title">Request<br><em>early access.</em></h2>
       </div>
     </div>
-    <div class="waitlist-counter reveal">
-      <div class="wc-stat">
-        <div class="wc-num">20<span style="font-family:'Tenor Sans',sans-serif;font-size:24px;color:var(--grey2)">+</span></div>
-        <div class="wc-label">Firms on<br>the waitlist</div>
+    <div class="wl-counter">
+      <div class="wl-stat">
+        <div class="wl-number">50+</div>
+        <div class="wl-label">Senior individuals</div>
       </div>
-      <div class="wc-stat">
-        <div class="wc-num">50<span style="font-family:'Tenor Sans',sans-serif;font-size:24px;color:var(--grey2)">+</span></div>
-        <div class="wc-label">Individuals<br>following</div>
+      <div class="wl-divider"></div>
+      <div class="wl-stat">
+        <div class="wl-number">20+</div>
+        <div class="wl-label">Renowned firms</div>
       </div>
-      <div class="wc-stat">
-        <div class="wc-num">10</div>
-        <div class="wc-label">Spots<br>remaining</div>
+      <div class="wl-divider"></div>
+      <div class="wl-stat">
+        <div class="wl-number">10</div>
+        <div class="wl-label">Beta spots left</div>
       </div>
     </div>
     <div class="partners-layout reveal">
