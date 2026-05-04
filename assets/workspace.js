@@ -285,7 +285,7 @@ async function callAlexRaw(userMessage) {
       },
       body: JSON.stringify({
         model:      'claude-sonnet-4-20250514',
-        max_tokens: 6000,
+        max_tokens: 4000,
         system: [
           {
             type: 'text',
@@ -560,7 +560,7 @@ async function callAlexDirect(dealSubmission, imageArray) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 6000,
+      max_tokens: 4000,
       system: [
         {
           type: 'text',
