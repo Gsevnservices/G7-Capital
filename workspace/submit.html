@@ -1565,7 +1565,11 @@ document.getElementById('submitForm').addEventListener('submit', async function(
       return;
     }
 
-    showError(err.message || 'An unexpected error occurred. Please try again.');
+    var errMsg = err.message || 'An unexpected error occurred. Please try again.';
+    if (errMsg.includes('did not match the expected pattern')) {
+      errMsg = 'Session expired. Please log out and log in again to continue.';
+    }
+    showError(errMsg);
   }
 });
 
