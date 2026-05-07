@@ -204,11 +204,9 @@ export default {
         return jsonResponse({ error: 'Failed to reach Anthropic API' }, 502);
       }
 
-      // Read Anthropic's response body once (streams can only be read once)
-      const responseBody = await anthropicResponse.text();
-
-      // Increment deal counter only on a successful first call
-      // Fire-and-forget — do not let a KV write delay the response
+      // Increment deal counter before streaming — anthropicResponse.ok and
+      // anthropicResponse.status are available immediately without reading the body.
+      // KV write is fire-and-forget so it does not delay the response.
       if (isFirstCall && anthropicResponse.ok) {
         const usageKey = 'usage:' + session.firmCode + ':deals';
         const currentUsage = await env.G7_KV.get(usageKey, 'json') || { count: 0 };
@@ -219,8 +217,11 @@ export default {
         })); // intentionally not awaited — best-effort, does not block response
       }
 
-      // Return Anthropic's response to the browser with CORS headers
-      return new Response(responseBody, {
+      // Stream Anthropic's response body directly to the browser.
+      // Replaces the previous await anthropicResponse.text() buffering approach,
+      // which caused Cloudflare's 30-second wall-clock timeout at max_tokens=6000.
+      // Streaming forwards bytes as they arrive — no timeout risk regardless of output length.
+      return new Response(anthropicResponse.body, {
         status: anthropicResponse.status,
         headers: { 'Content-Type': 'application/json', ...corsHeaders() }
       });
