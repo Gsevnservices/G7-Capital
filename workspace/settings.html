@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firm Settings — G7 Workspace</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+<script src="../assets/auth.js"></script>
+<script src="../assets/workspace.js"></script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+
+<style>
+
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;
+  --black2:#0F0F0F;
+  --black3:#161616;
+  --black4:#1E1E1E;
+  --gold:#C9A84C;
+  --gold2:#E2C97E;
+  --gold3:#A8873A;
+  --white:#FAFAF8;
+  --white2:#F0EFE9;
+  --grey1:#8A8880;
+  --grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);
+  --border2:rgba(250,250,248,0.08)
+}
+body{
+  font-family:'Tenor Sans',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:none;
+  min-height:100vh
+}
+
+/* ─────────────────────────────────────────────
+   GRAIN TEXTURE OVERLAY
+───────────────────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1000;opacity:.4
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+.cursor{
+  position:fixed;width:8px;height:8px;
+  background:var(--gold);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transition:transform .15s ease;
+  transform:translate(-50%,-50%);
+  left:-100px;top:-100px
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(201,168,76,.5);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transition:all .12s ease;
+  transform:translate(-50%,-50%);
+  left:-100px;top:-100px
+}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ─────────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:999;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 64px;height:80px;
+  background:rgba(8,8,8,.92);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border2)
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--white);text-decoration:none
+}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);text-decoration:none;transition:color .3s
+}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--gold)}
+.nav-firm-indicator{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
+.nav-logout{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s}
+.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+/* Hidden until auth check passes — prevents content flash for unauthenticated users */
+body{visibility:hidden}
+@media(max-width:768px){
+  nav{padding:0 24px}
+  .nav-link{display:none}
+}
+
+/* ─────────────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────────────── */
+.page-wrap{
+  max-width:760px;
+  margin:0 auto;
+  padding:128px 24px 80px
+}
+
+/* ─────────────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────────────── */
+.page-header{margin-bottom:56px}
+.page-eyebrow{
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px
+}
+.page-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,5vw,40px);font-weight:300;
+  line-height:1.2;margin-bottom:16px
+}
+.page-subtitle{
+  font-size:13px;color:var(--grey1);line-height:1.9
+}
+
+/* ─────────────────────────────────────────────
+   SECTION GROUPS
+───────────────────────────────────────────── */
+.settings-section{
+  margin-bottom:48px;
+  padding-bottom:48px;
+  border-bottom:1px solid var(--border2)
+}
+.settings-section:last-of-type{
+  border-bottom:none
+}
+.section-title{
+  font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:24px
+}
+
+/* ─────────────────────────────────────────────
+   FORM FIELDS
+───────────────────────────────────────────── */
+.field{margin-bottom:24px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field-label{
+  display:block;
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey1);margin-bottom:10px
+}
+.opt{color:var(--grey2);font-size:8px}
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  background:var(--black2);
+  border:1px solid var(--border2);
+  color:var(--white);
+  font-family:'Tenor Sans',sans-serif;
+  font-size:13px;
+  padding:14px 16px;
+  outline:none;
+  transition:border-color .3s;
+  appearance:none;
+  -webkit-appearance:none
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{border-color:var(--gold)}
+.field textarea{
+  resize:vertical;
+  line-height:1.8;
+  min-height:100px
+}
+.field textarea.tall{min-height:160px}
+.field select{
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:calc(100% - 14px) center;
+  padding-right:40px
+}
+.field select option{background:var(--black2)}
+.field-hint{
+  font-size:11px;color:var(--grey2);margin-top:8px;line-height:1.7
+}
+
+/* ─────────────────────────────────────────────
+   SAVE BUTTON
+───────────────────────────────────────────── */
+.btn-save{
+  display:inline-block;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  background:var(--gold);color:#000;
+  padding:16px 48px;
+  border:none;cursor:pointer;
+  transition:background .3s, opacity .3s;
+  margin-top:8px
+}
+.btn-save:hover{background:var(--gold2)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+
+/* ─────────────────────────────────────────────
+   SUCCESS BANNER
+───────────────────────────────────────────── */
+.success-banner{
+  display:none;
+  background:rgba(201,168,76,0.08);
+  border:1px solid var(--border);
+  padding:20px 24px;
+  margin-top:32px
+}
+.success-banner.show{display:block}
+.success-banner-title{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px
+}
+.success-banner-text{
+  font-size:13px;color:var(--grey1);line-height:1.8
+}
+
+/* ─────────────────────────────────────────────
+   LOADING STATE (save button spinner)
+───────────────────────────────────────────── */
+.saving-bar{
+  height:2px;background:transparent;margin-top:12px;
+  overflow:hidden;display:none
+}
+.saving-bar.active{display:block;background:rgba(201,168,76,0.2)}
+.saving-bar-inner{
+  height:100%;width:40%;background:var(--gold);
+  animation:savingPulse 1s ease-in-out infinite
+}
+@keyframes savingPulse{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(350%)}
+}
+
+/* ─────────────────────────────────────────────
+   ERROR MESSAGE
+───────────────────────────────────────────── */
+.error-msg{
+  display:none;
+  font-size:12px;color:#e05c5c;
+  margin-top:12px;line-height:1.7
+}
+.error-msg.show{display:block}
+
+/* ─────────────────────────────────────────────
+   CALIBRATION NOTE
+───────────────────────────────────────────── */
+.calibration-note{
+  background:var(--black3);
+  border:1px solid var(--border);
+  padding:20px 24px;
+  margin-top:24px
+}
+.calibration-note-label{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px
+}
+.calibration-note-text{
+  font-size:12px;color:var(--grey1);line-height:1.8
+}
+
+@media(max-width:600px){
+  .field-row{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ─── NAVIGATION ──────────────────────────────── -->
+<nav>
+  <a href="../index.html" class="nav-logo">G<em>7</em> Capital</a>
+  <div class="nav-right">
+    <a href="index.html"   class="nav-link">Dashboard</a>
+    <a href="submit.html"  class="nav-link">New Deal</a>
+    <a href="history.html" class="nav-link">History</a>
+    <a href="settings.html" class="nav-link active">Settings</a>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
+    <button class="nav-logout" onclick="g7Logout()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- ─── PAGE CONTENT ─────────────────────────────── -->
+<div class="page-wrap">
+
+  <div class="page-header">
+    <div class="page-eyebrow">G7 Workspace — Firm Settings</div>
+    <h1 class="page-title">Update Your Firm Configuration</h1>
+    <p class="page-subtitle">
+      Changes saved here update Alex's knowledge base immediately. Every deal screened after saving will reflect the new configuration.
+    </p>
+  </div>
+
+  <form id="settingsForm" novalidate>
+
+    <!-- ─── SECTION 1: FIRM IDENTITY ─── -->
+    <div class="settings-section">
+      <div class="section-title">01 — Firm Identity</div>
+
+      <div class="field">
+        <label class="field-label" for="firmName">Firm Name</label>
+        <input type="text" id="firmName" name="firmName" placeholder="e.g. Acorn Ventures" autocomplete="off">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="firmType">Firm Type</label>
+          <select id="firmType" name="firmType">
+            <option value="" disabled>Select firm type</option>
+            <option value="Venture Capital (VC)">Venture Capital (VC)</option>
+            <option value="Private Equity (PE)">Private Equity (PE)</option>
+            <option value="Investment Bank (IB)">Investment Bank (IB)</option>
+            <option value="Merchant Bank">Merchant Bank</option>
+            <option value="Family Office">Family Office</option>
+            <option value="Corporate Venture">Corporate Venture</option>
+            <option value="Growth Equity">Growth Equity</option>
+            <option value="Hedge Fund">Hedge Fund</option>
+            <option value="Angel / Syndicate">Angel / Syndicate</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="fundSize">Fund Size <span class="opt">(optional)</span></label>
+          <input type="text" id="fundSize" name="fundSize" placeholder="e.g. $150M Fund II" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SECTION 2: INVESTMENT PARAMETERS ─── -->
+    <div class="settings-section">
+      <div class="section-title">02 — Investment Parameters</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="stageFocus">Stage Focus</label>
+          <input type="text" id="stageFocus" name="stageFocus" placeholder="e.g. Seed, Series A" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="geography">Geography</label>
+          <input type="text" id="geography" name="geography" placeholder="e.g. UK, Western Europe" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="sectorFocus">Sector Focus</label>
+        <input type="text" id="sectorFocus" name="sectorFocus" placeholder="e.g. B2B SaaS, Fintech, Enterprise Software" autocomplete="off">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="ticketMin">Ticket Minimum <span class="opt">(optional)</span></label>
+          <input type="text" id="ticketMin" name="ticketMin" placeholder="e.g. £500K" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="ticketMax">Ticket Maximum <span class="opt">(optional)</span></label>
+          <input type="text" id="ticketMax" name="ticketMax" placeholder="e.g. £2M" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="returnTarget">Return Target <span class="opt">(optional)</span></label>
+          <input type="text" id="returnTarget" name="returnTarget" placeholder="e.g. 3x fund / 25% IRR" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="targetOwnership">Target Ownership <span class="opt">(optional)</span></label>
+          <input type="text" id="targetOwnership" name="targetOwnership" placeholder="e.g. 10–20% at entry" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="dealsPerYear">Deals Per Year <span class="opt">(optional)</span></label>
+          <input type="text" id="dealsPerYear" name="dealsPerYear" placeholder="e.g. 8–12" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="minRevenue">Minimum Revenue <span class="opt">(optional)</span></label>
+          <input type="text" id="minRevenue" name="minRevenue" placeholder="e.g. £200K ARR" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="valuationCeiling">Valuation Ceiling <span class="opt">(optional)</span></label>
+          <input type="text" id="valuationCeiling" name="valuationCeiling" placeholder="e.g. £15M pre-money at Seed" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="exitPreference">Exit Preference <span class="opt">(optional)</span></label>
+          <input type="text" id="exitPreference" name="exitPreference" placeholder="e.g. Trade sale" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SECTION 3: THESIS & STRATEGY ─── -->
+    <div class="settings-section">
+      <div class="section-title">03 — Thesis &amp; Strategy</div>
+
+      <div class="field">
+        <label class="field-label" for="investmentThesis">Investment Thesis</label>
+        <textarea id="investmentThesis" name="investmentThesis" class="tall" placeholder="Describe your investment thesis in your own words. Alex applies this to every deal he screens."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="hardPass">Hard Pass Criteria</label>
+        <textarea id="hardPass" name="hardPass" placeholder="List the deal types, sectors, or characteristics you will never invest in — one per line." rows="6"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="partnerPreferences">Partner Preferences <span class="opt">(optional)</span></label>
+        <textarea id="partnerPreferences" name="partnerPreferences" placeholder="Any specific preferences or flags that matter to you personally — founder archetypes, deal structures, red lines." rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- ─── SECTION 4: DEAL CONTEXT ─── -->
+    <div class="settings-section">
+      <div class="section-title">04 — Deal Context</div>
+
+      <div class="field">
+        <label class="field-label" for="dealHistory">Recent Deal History <span class="opt">(optional)</span></label>
+        <textarea id="dealHistory" name="dealHistory" placeholder="COMPANY: [Name] | VERDICT: [Passed/Invested] | REASON: [Why]&#10;Add one deal per line." rows="5"></textarea>
+        <div class="field-hint">Alex references this when assessing comparables and fit with your track record.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="activePipeline">Active Pipeline <span class="opt">(optional)</span></label>
+        <textarea id="activePipeline" name="activePipeline" placeholder="Companies currently in your active pipeline — helps Alex avoid duplicating work." rows="3"></textarea>
+      </div>
+
+      <!-- Calibration notes are preserved automatically — shown here for reference only -->
+      <div class="calibration-note" id="calibrationNote" style="display:none">
+        <div class="calibration-note-label">Calibration Notes — Preserved Automatically</div>
+        <div class="calibration-note-text" id="calibrationNoteText"></div>
+      </div>
+    </div>
+
+    <!-- ─── SAVE BUTTON ─── -->
+    <button type="submit" class="btn-save" id="saveBtn">Save Configuration</button>
+    <div class="saving-bar" id="savingBar"><div class="saving-bar-inner"></div></div>
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="success-banner" id="successBanner">
+      <div class="success-banner-title">Configuration Saved</div>
+      <div class="success-banner-text" id="successText">
+        Your firm configuration has been updated. Alex will apply these settings to every deal screened going forward.
+      </div>
+    </div>
+
+  </form>
+
+</div><!-- /page-wrap -->
+
+<script>
+
+// ─────────────────────────────────────────────────────────
+// AUTH CHECK — requireAuth() redirects to login if no session
+// ─────────────────────────────────────────────────────────
+(async function() {
+  const authed = await requireAuth();
+  if (!authed) return; // requireAuth handled the redirect
+
+  // Show page now that we know the session is valid
+  document.body.style.visibility = 'visible';
+
+  // Set firm name indicator in nav
+  var _fn = localStorage.getItem('g7_session_name') ||
+    (JSON.parse(localStorage.getItem('g7_firm_config') || '{}').firmName) || '';
+  var _ind = document.getElementById('navFirmName');
+  if (_ind && _fn) _ind.textContent = _fn;
+
+  // Pre-fill form from localStorage
+  prefillForm();
+})();
+
+
+// ─────────────────────────────────────────────────────────
+// PREFILL — read current config + KB from localStorage
+// ─────────────────────────────────────────────────────────
+function prefillForm() {
+  var config = {};
+  try { config = JSON.parse(localStorage.getItem('g7_firm_config') || '{}'); } catch(e) {}
+
+  // Simple text/select fields from firmConfig
+  if (config.firmName)         document.getElementById('firmName').value         = config.firmName;
+  if (config.firmType)         document.getElementById('firmType').value         = config.firmType;
+  if (config.fundSize)         document.getElementById('fundSize').value         = config.fundSize;
+  if (config.stageFocus)       document.getElementById('stageFocus').value       = config.stageFocus;
+  if (config.sectorFocus)      document.getElementById('sectorFocus').value      = config.sectorFocus;
+  if (config.geography)        document.getElementById('geography').value        = config.geography;
+  if (config.ticketMin)        document.getElementById('ticketMin').value        = config.ticketMin;
+  if (config.ticketMax)        document.getElementById('ticketMax').value        = config.ticketMax;
+  if (config.returnTarget)     document.getElementById('returnTarget').value     = config.returnTarget;
+  if (config.targetOwnership)  document.getElementById('targetOwnership').value  = config.targetOwnership;
+  if (config.dealsPerYear)     document.getElementById('dealsPerYear').value     = config.dealsPerYear;
+  if (config.minRevenue)       document.getElementById('minRevenue').value       = config.minRevenue;
+  if (config.valuationCeiling) document.getElementById('valuationCeiling').value = config.valuationCeiling;
+  if (config.exitPreference)   document.getElementById('exitPreference').value   = config.exitPreference;
+
+  // Textarea fields — extract from KB text using section-boundary regex
+  // (same pattern used by onboard.html to re-fill on returning visit)
+  var kb = localStorage.getItem('g7_firm_knowledge_base') || '';
+
+  var thesisMatch   = kb.match(/INVESTMENT THESIS:\n([\s\S]*?)\n\nHARD PASS CRITERIA:/);
+  var hardPassMatch = kb.match(/HARD PASS CRITERIA:\n([\s\S]*?)\n\nPARTNER PREFERENCES:/);
+  var partnerMatch  = kb.match(/PARTNER PREFERENCES:\n([\s\S]*?)\n\nRECENT DEAL HISTORY:/);
+  var historyMatch  = kb.match(/RECENT DEAL HISTORY:\n([\s\S]*?)\n\nACTIVE PIPELINE:/);
+  var pipelineMatch = kb.match(/ACTIVE PIPELINE:\n([\s\S]*?)\n\nFIRM-SPECIFIC CALIBRATION NOTES:/);
+
+  if (thesisMatch   && thesisMatch[1])   document.getElementById('investmentThesis').value = thesisMatch[1].trim();
+  if (hardPassMatch && hardPassMatch[1]) document.getElementById('hardPass').value          = hardPassMatch[1].trim();
+  if (partnerMatch  && partnerMatch[1]) {
+    var pt = partnerMatch[1].trim();
+    if (!pt.startsWith('No specific partner preferences')) {
+      document.getElementById('partnerPreferences').value = pt;
+    }
+  }
+  if (historyMatch  && historyMatch[1]) {
+    var ht = historyMatch[1].trim();
+    if (!ht.startsWith('No deal history provided yet')) {
+      document.getElementById('dealHistory').value = ht;
+    }
+  }
+  if (pipelineMatch && pipelineMatch[1]) {
+    var pt2 = pipelineMatch[1].trim();
+    if (!pt2.startsWith('No active pipeline')) {
+      document.getElementById('activePipeline').value = pt2;
+    }
+  }
+
+  // Show calibration notes for reference (read-only display, not editable)
+  var calHeader = 'FIRM-SPECIFIC CALIBRATION NOTES:';
+  var calIdx = kb.indexOf(calHeader);
+  if (calIdx !== -1) {
+    var afterCal = kb.slice(calIdx + calHeader.length);
+    var endIdx   = afterCal.indexOf('═══');
+    var calText  = (endIdx !== -1 ? afterCal.slice(0, endIdx) : afterCal).trim();
+    if (calText && !calText.startsWith('No calibration notes')) {
+      document.getElementById('calibrationNoteText').textContent = calText;
+      document.getElementById('calibrationNote').style.display   = 'block';
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────
+// BUILD FIRM KB — same logic as onboard.html
+// Reconstructs the full KB text from form values.
+// ─────────────────────────────────────────────────────────
+function buildFirmKnowledgeBase(data) {
+  var ticketStr = 'Not specified';
+  if (data.ticketMin && data.ticketMax) {
+    ticketStr = data.ticketMin + ' — ' + data.ticketMax;
+  } else if (data.ticketMin) {
+    ticketStr = data.ticketMin + ' minimum';
+  } else if (data.ticketMax) {
+    ticketStr = 'Up to ' + data.ticketMax;
+  }
+
+  var fundReturnModel = '';
+  if (data.fundSize || ticketStr !== 'Not specified' || data.returnTarget) {
+    fundReturnModel += 'Fund size: ' + (data.fundSize || 'Not specified') + '. ';
+    fundReturnModel += 'Standard ticket: ' + ticketStr + '. ';
+    fundReturnModel += 'Return target: ' + (data.returnTarget || 'Not specified') + '.\n';
+    fundReturnModel += 'Alex must run Framework 6 on every deal where valuation is known using these parameters.';
+  } else {
+    fundReturnModel = 'Parameters not fully specified. Run Framework 6 where possible using available data.';
+  }
+
+  var kb = '';
+  kb += '═══════════════════════════════════════════════════\n';
+  kb += 'FIRM KNOWLEDGE BASE — ' + data.firmName + '\n';
+  kb += 'Injected into every Alex session.\n';
+  kb += 'Alex applies all firm-specific parameters to every deal screened.\n';
+  kb += '═══════════════════════════════════════════════════\n\n';
+  kb += 'FIRM NAME:              ' + data.firmName + '\n';
+  kb += 'FIRM TYPE:              ' + data.firmType + '\n';
+  kb += 'FUND SIZE:              ' + (data.fundSize || 'Not specified') + '\n';
+  kb += 'STAGE FOCUS:            ' + data.stageFocus + '\n';
+  kb += 'SECTOR FOCUS:           ' + data.sectorFocus + '\n';
+  kb += 'GEOGRAPHY:              ' + data.geography + '\n';
+  kb += 'TICKET SIZE:            ' + ticketStr + '\n';
+  kb += 'TARGET OWNERSHIP:       ' + (data.targetOwnership || 'Not specified') + '\n';
+  kb += 'RETURN TARGET:          ' + (data.returnTarget || 'Not specified') + '\n';
+  kb += 'INVESTMENT PACE:        ' + (data.dealsPerYear || 'Not specified') + ' new investments per year\n';
+  kb += 'MINIMUM REVENUE:        ' + (data.minRevenue || 'Not specified') + '\n';
+  kb += 'VALUATION CEILING:      ' + (data.valuationCeiling || 'Not specified') + '\n';
+  kb += 'EXIT PREFERENCE:        ' + (data.exitPreference || 'Not specified') + '\n\n';
+  kb += 'FUND RETURN MODEL:\n';
+  kb += fundReturnModel + '\n\n';
+  kb += 'INVESTMENT THESIS:\n';
+  kb += data.investmentThesis + '\n\n';
+  kb += 'HARD PASS CRITERIA:\n';
+  kb += data.hardPass + '\n\n';
+  kb += 'PARTNER PREFERENCES:\n';
+  kb += (data.partnerPreferences || 'No specific partner preferences recorded.') + '\n\n';
+  kb += 'RECENT DEAL HISTORY:\n';
+  kb += (data.dealHistory || 'No deal history provided yet. This will build up as Alex screens deals.') + '\n\n';
+  kb += 'ACTIVE PIPELINE:\n';
+  kb += (data.activePipeline || 'No active pipeline provided.') + '\n\n';
+  kb += 'FIRM-SPECIFIC CALIBRATION NOTES:\n';
+  kb += 'CALIBRATION_PLACEHOLDER\n\n';
+  kb += '═══════════════════════════════════════════════════\n';
+
+  return kb;
+}
+
+
+// ─────────────────────────────────────────────────────────
+// SAVE — form submit handler
+// Writes to localStorage + syncs to KV
+// ─────────────────────────────────────────────────────────
+document.getElementById('settingsForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  var saveBtn   = document.getElementById('saveBtn');
+  var savingBar = document.getElementById('savingBar');
+  var errorMsg  = document.getElementById('errorMsg');
+  var successBanner = document.getElementById('successBanner');
+
+  // Hide previous state
+  errorMsg.classList.remove('show');
+  successBanner.classList.remove('show');
+
+  // Basic validation — firmName and investmentThesis are required
+  var firmName = document.getElementById('firmName').value.trim();
+  var thesis   = document.getElementById('investmentThesis').value.trim();
+  var hardPass = document.getElementById('hardPass').value.trim();
+
+  if (!firmName) {
+    errorMsg.textContent = 'Firm name is required.';
+    errorMsg.classList.add('show');
+    document.getElementById('firmName').focus();
+    return;
+  }
+  if (!thesis) {
+    errorMsg.textContent = 'Investment thesis is required.';
+    errorMsg.classList.add('show');
+    document.getElementById('investmentThesis').focus();
+    return;
+  }
+  if (!hardPass) {
+    errorMsg.textContent = 'Hard pass criteria are required.';
+    errorMsg.classList.add('show');
+    document.getElementById('hardPass').focus();
+    return;
+  }
+
+  // Start loading state
+  saveBtn.disabled = true;
+  savingBar.classList.add('active');
+
+  try {
+    // Collect form data
+    var data = {
+      firmName:          document.getElementById('firmName').value.trim(),
+      firmType:          document.getElementById('firmType').value,
+      fundSize:          document.getElementById('fundSize').value.trim(),
+      stageFocus:        document.getElementById('stageFocus').value.trim(),
+      sectorFocus:       document.getElementById('sectorFocus').value.trim(),
+      geography:         document.getElementById('geography').value.trim(),
+      ticketMin:         document.getElementById('ticketMin').value.trim(),
+      ticketMax:         document.getElementById('ticketMax').value.trim(),
+      returnTarget:      document.getElementById('returnTarget').value.trim(),
+      targetOwnership:   document.getElementById('targetOwnership').value.trim(),
+      dealsPerYear:      document.getElementById('dealsPerYear').value.trim(),
+      minRevenue:        document.getElementById('minRevenue').value.trim(),
+      valuationCeiling:  document.getElementById('valuationCeiling').value.trim(),
+      exitPreference:    document.getElementById('exitPreference').value.trim(),
+      investmentThesis:  document.getElementById('investmentThesis').value.trim(),
+      hardPass:          document.getElementById('hardPass').value.trim(),
+      partnerPreferences:document.getElementById('partnerPreferences').value.trim(),
+      dealHistory:       document.getElementById('dealHistory').value.trim(),
+      activePipeline:    document.getElementById('activePipeline').value.trim()
+    };
+
+    // Build updated firmConfig object (matches the structure in onboard.html)
+    var firmConfig = {
+      firmName:        data.firmName,
+      firmType:        data.firmType,
+      fundSize:        data.fundSize,
+      stageFocus:      data.stageFocus,
+      sectorFocus:     data.sectorFocus,
+      geography:       data.geography,
+      ticketMin:       data.ticketMin,
+      ticketMax:       data.ticketMax,
+      returnTarget:    data.returnTarget,
+      targetOwnership: data.targetOwnership,
+      dealsPerYear:    data.dealsPerYear,
+      minRevenue:      data.minRevenue,
+      valuationCeiling:data.valuationCeiling,
+      exitPreference:  data.exitPreference,
+      onboardedAt:     (JSON.parse(localStorage.getItem('g7_firm_config') || '{}').onboardedAt) || new Date().toISOString()
+    };
+
+    // Build new KB, then re-inject existing calibration notes so they are not lost
+    var newKB = buildFirmKnowledgeBase(data);
+
+    var oldKB       = localStorage.getItem('g7_firm_knowledge_base') || '';
+    var calHeader   = 'FIRM-SPECIFIC CALIBRATION NOTES:';
+    var calIdx      = oldKB.indexOf(calHeader);
+    var existingCal = '';
+
+    if (calIdx !== -1) {
+      var afterCal = oldKB.slice(calIdx + calHeader.length);
+      var endIdx   = afterCal.indexOf('═══');
+      existingCal  = (endIdx !== -1 ? afterCal.slice(0, endIdx) : afterCal).trim();
+      // Only keep if there are real calibration entries (not the default placeholder)
+      if (existingCal.startsWith('No calibration notes')) existingCal = '';
+    }
+
+    if (existingCal) {
+      // Replace placeholder with the preserved calibration notes
+      newKB = newKB.replace('CALIBRATION_PLACEHOLDER', existingCal);
+    } else {
+      newKB = newKB.replace(
+        'CALIBRATION_PLACEHOLDER',
+        'No calibration notes yet. These accumulate as partners agree or disagree with Alex\'s verdicts.'
+      );
+    }
+
+    // Write to localStorage
+    localStorage.setItem('g7_firm_config',         JSON.stringify(firmConfig));
+    localStorage.setItem('g7_firm_knowledge_base', newKB);
+    localStorage.setItem('g7_onboarded',           'true');
+
+    // Update nav firm name indicator live
+    var _ind = document.getElementById('navFirmName');
+    if (_ind) _ind.textContent = data.firmName;
+
+    // Sync to KV — same call as onboard.html
+    try {
+      await syncToKV();
+    } catch(kvErr) {
+      console.warn('KV sync failed after settings save:', kvErr);
+      // Non-fatal: localStorage is updated; KV will sync on next login
+    }
+
+    // Show success
+    savingBar.classList.remove('active');
+    saveBtn.disabled = false;
+    successBanner.classList.add('show');
+
+    // Scroll success into view
+    successBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch(err) {
+    savingBar.classList.remove('active');
+    saveBtn.disabled = false;
+    errorMsg.textContent = 'Save failed: ' + (err.message || 'Unknown error. Please try again.');
+    errorMsg.classList.add('show');
+  }
+});
+
+
+// ─────────────────────────────────────────────
+// CURSOR
+// ─────────────────────────────────────────────
+(function() {
+  var dot  = document.getElementById('cursor');
+  var ring = document.getElementById('cursorRing');
+  if (!dot || !ring) return;
+  document.addEventListener('mousemove', function(e) {
+    dot.style.left  = e.clientX + 'px';
+    dot.style.top   = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  });
+})();
+
+</script>
+</body>
+</html>

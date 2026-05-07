@@ -170,6 +170,12 @@ function saveDeal(companyName, source, dealContent, alexOutput) {
   history.unshift(deal); // newest deal goes to the front of the array
   localStorage.setItem('g7_deal_history', JSON.stringify(history));
 
+  // Persist deals to KV immediately so they survive logout/login
+  // Fire-and-forget: a KV write failure must not break deal submission
+  if (typeof g7Save === 'function') {
+    g7Save('deals', history).catch(function() {});
+  }
+
   return dealId;
 }
 
