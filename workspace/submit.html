@@ -1567,8 +1567,9 @@ document.getElementById('submitForm').addEventListener('submit', async function(
     }
 
     var errMsg = err.message || 'An unexpected error occurred. Please try again.';
-    if (errMsg.includes('did not match the expected pattern')) {
-      errMsg = 'Session expired. Please log out and log in again to continue.';
+    if (errMsg.includes('did not match the expected pattern') ||
+        errMsg.includes('API error')) {
+      errMsg = 'Something went wrong. Please try again. If the problem persists, sign out and sign back in.';
     }
     showError(errMsg);
   }

@@ -111,7 +111,13 @@ async function callAlex(dealSubmission) {
     throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
   }
 
-  // 1f. Parse the response JSON
+  // 1f. Check response status before parsing — non-200 bodies may not be JSON
+  if (!response.ok) {
+    var errBody = await response.text();
+    throw new Error('API error ' + response.status + ': ' + errBody);
+  }
+
+  // 1g. Parse the response JSON
   var data;
   try {
     data = await response.json();
@@ -119,7 +125,7 @@ async function callAlex(dealSubmission) {
     throw new Error('Received an unexpected response from the API. Please try again.');
   }
 
-  // 1g. Handle API-level errors (wrong key, quota exceeded, etc.)
+  // 1h. Handle API-level errors (wrong key, quota exceeded, etc.)
   if (data.error) {
     var msg = data.error.message || 'Unknown API error';
     // Surface common errors in plain English
@@ -308,6 +314,11 @@ async function callAlexRaw(userMessage) {
     throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
   }
 
+  if (!response.ok) {
+    var errBody = await response.text();
+    throw new Error('API error ' + response.status + ': ' + errBody);
+  }
+
   var data;
   try {
     data = await response.json();
@@ -416,6 +427,11 @@ async function callAlexWithImages(dealSubmission, imageArray) {
     });
   } catch (networkError) {
     throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
+  }
+
+  if (!response.ok) {
+    var errBody = await response.text();
+    throw new Error('API error ' + response.status + ': ' + errBody);
   }
 
   var data;
@@ -585,14 +601,12 @@ async function callAlexDirect(dealSubmission, imageArray) {
     })
   });
 
-  var data = await response.json();
-
   if (!response.ok) {
-    var errMsg = (data && data.error && data.error.message)
-      ? data.error.message
-      : (data && data.error ? JSON.stringify(data.error) : 'API error ' + response.status);
-    throw new Error(errMsg);
+    var errBody = await response.text();
+    throw new Error('API error ' + response.status + ': ' + errBody);
   }
+
+  var data = await response.json();
 
   var textBlock = data.content && data.content.find(function(b) {
     return b.type === 'text';
@@ -700,6 +714,11 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
       throw new Error('Could not reach the G7 proxy. Please check your internet connection and try again.');
     }
 
+    if (!response.ok) {
+      var errBody = await response.text();
+      throw new Error('API error ' + response.status + ': ' + errBody);
+    }
+
     var data;
     try {
       data = await response.json();
@@ -708,7 +727,7 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
     }
 
     // Handle API-level errors
-    if (!response.ok || data.error) {
+    if (data.error) {
       // Deal limit reached — worker returns { error: 'deal_limit_reached', message: '...' }
       if (data.error === 'deal_limit_reached') {
         throw new Error('deal_limit_reached: ' + data.message);
