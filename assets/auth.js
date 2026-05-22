@@ -80,11 +80,12 @@ async function g7Login(firmCode, password) {
     body: JSON.stringify({ firmCode, password })
   });
 
-  const data = await response.json();
-
   if (!response.ok) {
-    throw new Error(data.error || 'Login failed');
+    const errBody = await response.text();
+    throw new Error(errBody || 'Login failed');
   }
+
+  const data = await response.json();
 
   // Store session identity in localStorage for UI display
   setToken(data.token);

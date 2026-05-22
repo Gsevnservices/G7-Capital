@@ -3774,10 +3774,15 @@ async function sendFounderEmail() {
 
     console.log('[G7] Email response status:', response.status);
 
+    if (!response.ok) {
+      const errBody = await response.text();
+      throw new Error('Send failed: ' + response.status + ' ' + errBody);
+    }
+
     var data = await response.json();
     console.log('[G7] Email response data:', JSON.stringify(data));
 
-    if (response.ok && data.success) {
+    if (data.success) {
       statusEl.textContent = '\u2713 Email sent to ' + toEmail;
       statusEl.className   = 'email-status success';
       sendBtn.textContent  = 'Sent \u2713';
