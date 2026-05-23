@@ -1566,6 +1566,9 @@ document.getElementById('submitForm').addEventListener('submit', async function(
       return;
     }
 
+    console.error('[G7 DEBUG] Full error object:', err);
+    console.error('[G7 DEBUG] Error message:', err.message);
+    console.error('[G7 DEBUG] Error stack:', err.stack);
     var errMsg = err.message || 'An unexpected error occurred. Please try again.';
     if (errMsg.includes('did not match the expected pattern') ||
         errMsg.includes('API error')) {

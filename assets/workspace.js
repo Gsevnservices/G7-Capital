@@ -564,6 +564,10 @@ function buildContentArray(dealSubmission, imageArray) {
 // ─────────────────────────────────────────────────────────────
 async function callAlexDirect(dealSubmission, imageArray) {
 
+  console.log('[G7 DEBUG] callAlexDirect called');
+  console.log('[G7 DEBUG] session token present:', !!localStorage.getItem('g7_session_token'));
+  console.log('[G7 DEBUG] firm KB length:', (localStorage.getItem('g7_firm_knowledge_base') || '').length);
+
   var firmKB = localStorage.getItem('g7_firm_knowledge_base') || '';
   if (firmKB.length > 6000) {
     firmKB = firmKB.substring(0, 6000) + '\n[KB truncated to fit token budget]';
@@ -603,6 +607,8 @@ async function callAlexDirect(dealSubmission, imageArray) {
 
   if (!response.ok) {
     var errBody = await response.text();
+    console.error('[G7 DEBUG] Worker response status:', response.status);
+    console.error('[G7 DEBUG] Worker response body:', errBody);
     throw new Error('API error ' + response.status + ': ' + errBody);
   }
 
