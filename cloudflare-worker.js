@@ -643,6 +643,106 @@ export default {
       }
     }
 
+    // =========================================================================
+    // ROUTE 13 — POST /scout/analyse
+    // Scout initial business analysis. Session-protected.
+    // Forwards to Anthropic with streaming response.
+    // Separate from /api/message — does NOT touch Alex's deal counter.
+    // =========================================================================
+    if (request.method === 'POST' && path === '/scout/analyse') {
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ error: 'Unauthorized' }, 401);
+      }
+
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-beta': 'prompt-caching-2024-07-31'
+        },
+        body: JSON.stringify({
+          model:    'claude-sonnet-4-20250514',
+          max_tokens: 8000,
+          stream:   true,
+          system:   body.system   || '',
+          messages: body.messages || []
+        })
+      });
+
+      if (!anthropicResponse.ok) {
+        const errText = await anthropicResponse.text();
+        return jsonResponse({ error: 'Anthropic error', detail: errText }, anthropicResponse.status);
+      }
+
+      return new Response(anthropicResponse.body, {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache'
+        }
+      });
+    }
+
+    // =========================================================================
+    // ROUTE 14 — POST /scout/checkin
+    // Scout weekly check-in. Session-protected.
+    // Multi-turn conversation — lower max_tokens than initial analysis.
+    // Separate from /api/message — does NOT touch Alex's deal counter.
+    // =========================================================================
+    if (request.method === 'POST' && path === '/scout/checkin') {
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ error: 'Unauthorized' }, 401);
+      }
+
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-beta': 'prompt-caching-2024-07-31'
+        },
+        body: JSON.stringify({
+          model:    'claude-sonnet-4-20250514',
+          max_tokens: 3000,
+          stream:   true,
+          system:   body.system   || '',
+          messages: body.messages || []
+        })
+      });
+
+      if (!anthropicResponse.ok) {
+        const errText = await anthropicResponse.text();
+        return jsonResponse({ error: 'Anthropic error', detail: errText }, anthropicResponse.status);
+      }
+
+      return new Response(anthropicResponse.body, {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache'
+        }
+      });
+    }
+
     // ── Catch-all 404 ─────────────────────────────────────────────────────────
     return jsonResponse({ error: 'Not found' }, 404);
   }
