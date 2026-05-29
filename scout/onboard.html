@@ -640,42 +640,60 @@ async function handleSubmit() {
   bar.style.animation = '';
 
   try {
+    /* Build the rich user message using onboard.html's own builder —
+       this uses the full 20+ field form data (landmarks, competitors,
+       channels, seasonal patterns etc). callScout() in scout.js uses a
+       simpler builder designed for a different field set, so we build the
+       message here and route through the correct fetch infrastructure. */
     var userMessage = buildScoutUserMessage(data);
-    var token = localStorage.getItem('g7_session_token');
+    var sessionToken = localStorage.getItem('g7_session_token') || '';
 
-    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout', {
+    /* Correct URL, system as array with cache_control, stream:true */
+    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout/analyse', {
       method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + sessionToken
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 4000,
-        system: SCOUT_SYSTEM_PROMPT,
-        messages: [{role:'user',content:userMessage}]
+        system: [
+          {
+            type: 'text',
+            text: SCOUT_SYSTEM_PROMPT,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
+        messages: [{ role: 'user', content: userMessage }]
       })
     });
 
     if (!response.ok) {
       var errBody = await response.text();
-      throw new Error('API error ' + response.status + ': ' + errBody);
+      throw new Error('Scout error ' + response.status + ': ' + errBody);
     }
 
-    var apiData = await response.json();
-    if (apiData.error) throw new Error(apiData.error.message || 'Unknown API error');
+    /* Read SSE stream using readSSEStream() from scout.js */
+    var scoutOutput = await readSSEStream(response);
+    if (!scoutOutput) throw new Error('Scout returned an empty response. Please try again.');
 
-    var scoutOutput = apiData.content[0].text;
+    /* Save result using saveScoutResult() from scout.js —
+       handles scout_pending_result, scout_history (max 12), scout_week_number */
+    saveScoutResult(scoutOutput, 1);
 
-    /* Save to localStorage for result.html */
-    localStorage.setItem('scout_pending_result', JSON.stringify({
-      scoutOutput:  scoutOutput,
-      businessData: data,
-      submittedAt:  data.submittedAt,
-      analysisId:   'scout_' + Date.now()
-    }));
+    /* Augment pending result with onboardContext (needed by checkin.html
+       to assemble the multi-turn conversation) and raw business data */
+    var pending = JSON.parse(localStorage.getItem('scout_pending_result') || '{}');
+    pending.onboardContext = userMessage;
+    pending.businessData   = data;
+    localStorage.setItem('scout_pending_result', JSON.stringify(pending));
 
     window.location.href = 'result.html';
 
   } catch (err) {
     overlay.classList.remove('active');
+    document.getElementById('submitBtn').disabled = false;
     alert('Scout encountered an error: ' + (err.message || 'Please try again.'));
   }
 }
