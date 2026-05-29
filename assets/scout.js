@@ -85,36 +85,12 @@ async function callScout(businessContext) {
     throw new Error('Scout API error ' + response.status + ': ' + errBody);
   }
 
-  var data;
-  try {
-    data = await response.json();
-  } catch (parseError) {
-    throw new Error('Received an unexpected response from Scout. Please try again.');
-  }
-
-  if (data.error) {
-    var msg = data.error.message || 'Unknown API error';
-    if (data.error.type === 'authentication_error') {
-      throw new Error('Session expired. Please sign in again.');
-    }
-    if (data.error.type === 'rate_limit_error') {
-      throw new Error('Too many requests. Please wait a moment and try again.');
-    }
-    if (data.error.type === 'overloaded_error') {
-      throw new Error('Scout is busy right now. Please try again in a moment.');
-    }
-    throw new Error('Scout error: ' + msg);
-  }
-
-  // Extract text block from response content array
-  var textBlock = data.content && data.content.find(function(b) {
-    return b.type === 'text';
-  });
-  if (!textBlock || !textBlock.text) {
+  // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
+  var result = await readSSEStream(response);
+  if (!result) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-
-  return textBlock.text;
+  return result;
 }
 
 
@@ -271,26 +247,86 @@ async function callScoutCheckin(checkinData) {
     throw new Error('Scout check-in error ' + response.status + ': ' + errBody);
   }
 
-  var data;
-  try {
-    data = await response.json();
-  } catch (parseError) {
-    throw new Error('Received an unexpected response from Scout. Please try again.');
-  }
-
-  if (data.error) {
-    var msg = data.error.message || 'Unknown API error';
-    throw new Error('Scout error: ' + msg);
-  }
-
-  var textBlock = data.content && data.content.find(function(b) {
-    return b.type === 'text';
-  });
-  if (!textBlock || !textBlock.text) {
+  // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
+  var result = await readSSEStream(response);
+  if (!result) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
+  return result;
+}
 
-  return textBlock.text;
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — readSSEStream(response)
+//
+// Reads an Anthropic SSE streaming response body and assembles
+// the full text output. Called by callScout() and callScoutCheckin().
+//
+// The Anthropic SSE format looks like:
+//   data: {"type":"message_start",...}
+//   data: {"type":"content_block_start",...}
+//   data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"Hello"}}
+//   data: {"type":"message_stop"}
+//
+// response — the fetch() Response object (must be ok before calling)
+// Returns:  full assembled text string
+// Throws:   Error if the stream cannot be read
+// ─────────────────────────────────────────────────────────────
+async function readSSEStream(response) {
+  var reader  = response.body.getReader();
+  var decoder = new TextDecoder('utf-8');
+  var fullText = '';
+  var done = false;
+
+  while (!done) {
+    var chunk = await reader.read();
+    done = chunk.done;
+
+    if (chunk.value) {
+      // Decode the raw bytes to a string
+      var raw = decoder.decode(chunk.value, { stream: true });
+
+      // Each chunk may contain multiple SSE lines — split and process each
+      var lines = raw.split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+
+        // SSE data lines start with "data: "
+        if (!line.startsWith('data: ')) continue;
+
+        var jsonStr = line.slice(6); // strip "data: "
+
+        // "[DONE]" signals end of stream (not used by Anthropic but guard anyway)
+        if (jsonStr === '[DONE]') { done = true; break; }
+
+        var event;
+        try {
+          event = JSON.parse(jsonStr);
+        } catch (e) {
+          // Malformed line — skip silently
+          continue;
+        }
+
+        // Append text delta tokens as they arrive
+        if (
+          event.type === 'content_block_delta' &&
+          event.delta &&
+          event.delta.type === 'text_delta' &&
+          event.delta.text
+        ) {
+          fullText += event.delta.text;
+        }
+
+        // message_stop signals the end of the response
+        if (event.type === 'message_stop') {
+          done = true;
+          break;
+        }
+      }
+    }
+  }
+
+  return fullText;
 }
 
 
