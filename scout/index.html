@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scout — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<script src="../assets/scout-master-v1.js"></script>
+<script src="../assets/auth.js"></script>
+<script src="../assets/scout.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08)
+}
+body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh;visibility:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+
+/* CURSOR */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--gold)}
+.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
+.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+
+/* PAGE STATES — only one is visible at a time */
+.state{display:none}
+.state.active{display:block;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════
+   WELCOME STATE
+══════════════════════════════════ */
+.welcome-wrap{
+  margin-top:80px;
+  min-height:calc(100vh - 80px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:64px 24px;text-align:center
+}
+.welcome-lettermark{
+  width:88px;height:88px;border-radius:50%;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 36px;
+  background:rgba(201,168,76,0.05)
+}
+.welcome-lettermark span{
+  font-family:'Cormorant Garamond',serif;
+  font-size:40px;font-weight:300;color:var(--gold)
+}
+.welcome-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,5vw,52px);font-weight:300;
+  color:var(--white);margin-bottom:16px;line-height:1.15
+}
+.welcome-sub{
+  font-size:14px;line-height:1.9;color:var(--grey1);
+  max-width:480px;margin:0 auto 48px
+}
+.welcome-features{
+  display:flex;flex-direction:column;gap:12px;
+  margin-bottom:48px;text-align:left;
+  max-width:360px;width:100%
+}
+.welcome-feature{
+  display:flex;align-items:flex-start;gap:14px;
+  font-size:12px;line-height:1.7;color:var(--grey1)
+}
+.welcome-feature-icon{
+  color:var(--gold);font-size:10px;
+  flex-shrink:0;margin-top:3px;letter-spacing:.05em
+}
+.btn-welcome{
+  display:block;width:100%;max-width:360px;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  background:var(--gold);color:var(--black);border:none;
+  padding:18px 40px;cursor:pointer;font-weight:600;
+  font-family:'Tenor Sans',sans-serif;transition:background .3s;
+  text-decoration:none;text-align:center
+}
+.btn-welcome:hover{background:var(--gold2)}
+
+/* ══════════════════════════════════
+   DASHBOARD STATE
+══════════════════════════════════ */
+.dashboard-wrap{
+  margin-top:80px;
+  padding:48px 64px 80px
+}
+@media(max-width:768px){.dashboard-wrap{padding:32px 24px 60px}}
+
+/* Greeting */
+.greeting{
+  margin-bottom:40px;
+  padding-bottom:32px;
+  border-bottom:1px solid var(--border2)
+}
+.greeting-hello{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,4vw,40px);font-weight:300;
+  color:var(--white);margin-bottom:6px
+}
+.greeting-week{
+  font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--grey2)
+}
+
+/* MOMENTUM CARD */
+.momentum-card{
+  background:var(--black2);border:1px solid var(--border);
+  padding:36px 40px;margin-bottom:24px
+}
+.momentum-card-top{
+  display:flex;align-items:flex-end;
+  justify-content:space-between;margin-bottom:16px;
+  flex-wrap:wrap;gap:12px
+}
+.momentum-label-block{}
+.momentum-eyebrow{
+  font-size:8px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px
+}
+.momentum-score-display{
+  display:flex;align-items:baseline;gap:6px
+}
+.momentum-big{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(48px,8vw,72px);font-weight:300;
+  color:var(--white);line-height:1
+}
+.momentum-denom{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:300;color:var(--grey2)
+}
+.momentum-trend{
+  font-size:10px;letter-spacing:.1em;color:var(--grey1);
+  align-self:flex-end;padding-bottom:4px
+}
+.momentum-trend.up{color:#5A9E6F}
+.momentum-trend.down{color:#C45A5A}
+.momentum-bar-wrap{height:2px;background:var(--border2);margin-bottom:12px;overflow:hidden}
+.momentum-bar-fill{height:100%;background:var(--gold);width:0%;transition:width 1.2s ease}
+.momentum-note{font-size:11px;color:var(--grey2);letter-spacing:.04em;line-height:1.6}
+@media(max-width:600px){.momentum-card{padding:24px}}
+
+/* METRIC CARDS */
+.metric-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:12px;margin-bottom:32px
+}
+@media(max-width:700px){.metric-row{grid-template-columns:1fr}}
+.metric-card{
+  background:var(--black3);border:1px solid var(--border2);
+  padding:22px 24px
+}
+.metric-card-label{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px
+}
+.metric-card-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(24px,3.5vw,34px);font-weight:300;
+  color:var(--white);line-height:1;margin-bottom:4px
+}
+.metric-card-sub{font-size:10px;color:var(--grey2);letter-spacing:.05em}
+
+/* QUICK ACTIONS */
+.actions-row{
+  display:flex;gap:12px;margin-bottom:48px;flex-wrap:wrap
+}
+.btn-action-primary{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:var(--black);border:none;
+  padding:14px 32px;cursor:pointer;font-weight:600;
+  font-family:'Tenor Sans',sans-serif;transition:background .3s;
+  text-decoration:none;display:inline-block;flex:1;text-align:center
+}
+.btn-action-primary:hover{background:var(--gold2)}
+.btn-action-outline{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  background:transparent;color:var(--grey1);
+  border:1px solid var(--border2);
+  padding:14px 32px;cursor:pointer;
+  font-family:'Tenor Sans',sans-serif;transition:all .3s;
+  text-decoration:none;display:inline-block;flex:1;text-align:center
+}
+.btn-action-outline:hover{border-color:var(--grey1);color:var(--white)}
+@media(max-width:500px){.btn-action-primary,.btn-action-outline{flex:100%}}
+
+/* RECENT HISTORY */
+.recent-section{border-top:1px solid var(--border2);padding-top:36px}
+.recent-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px
+}
+.recent-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;color:var(--white)
+}
+.recent-view-all{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;transition:color .25s
+}
+.recent-view-all:hover{color:var(--gold2)}
+
+/* History row */
+.history-row{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--border2);
+  margin-bottom:8px;transition:border-color .2s
+}
+.history-row:hover{border-color:rgba(201,168,76,0.3)}
+.hr-cell{
+  flex:1;padding:16px 18px;
+  border-right:1px solid var(--border2);
+  font-size:12px
+}
+.hr-cell:last-child{border-right:none;flex:0 0 auto}
+.hr-week{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:300;color:var(--gold)
+}
+.hr-week-sub{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey2);margin-top:2px}
+.hr-val{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--white);line-height:1;margin-bottom:2px}
+.hr-lbl{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey2)}
+.hr-momentum{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-weight:300;color:var(--white)
+}
+.hr-link{
+  font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;
+  padding:16px 20px;display:flex;align-items:center;
+  white-space:nowrap;transition:color .2s
+}
+.hr-link:hover{color:var(--gold2)}
+@media(max-width:600px){
+  .history-row{flex-wrap:wrap}
+  .hr-cell{min-width:50%;border-bottom:1px solid var(--border2)}
+  .hr-cell:nth-child(even){border-right:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">G<em>7</em> Scout</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link active">Dashboard</a>
+    <a href="onboard.html" class="nav-link">New Analysis</a>
+    <a href="history.html" class="nav-link">History</a>
+    <a href="checkin.html" class="nav-link">Check-In</a>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
+    <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     WELCOME STATE
+══════════════════════════════════════ -->
+<div class="state" id="stateWelcome">
+  <div class="welcome-wrap">
+    <div class="welcome-lettermark"><span>S</span></div>
+    <h1 class="welcome-heading">Welcome to Scout.</h1>
+    <p class="welcome-sub">Tell Scout about your business once. Get a complete customer acquisition system that learns and improves every week.</p>
+    <div class="welcome-features">
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">✦</span>
+        <span>Hyper-local ICP analysis — your exact area, your exact landmarks, your exact market</span>
+      </div>
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">✦</span>
+        <span>Ready-to-send outreach in your language — Hindi, Hinglish, English, or regional</span>
+      </div>
+      <div class="welcome-feature">
+        <span class="welcome-feature-icon">✦</span>
+        <span>Weekly playbook that adapts to your results — gets sharper every Friday</span>
+      </div>
+    </div>
+    <a href="onboard.html" class="btn-welcome">Build My Acquisition System →</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DASHBOARD STATE
+══════════════════════════════════════ -->
+<div class="state" id="stateDashboard">
+  <div class="dashboard-wrap">
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <div class="greeting-hello" id="greetingHello">Good morning.</div>
+      <div class="greeting-week" id="greetingWeek">Week 1 of 12</div>
+    </div>
+
+    <!-- MOMENTUM CARD -->
+    <div class="momentum-card">
+      <div class="momentum-card-top">
+        <div class="momentum-label-block">
+          <div class="momentum-eyebrow">Scout Momentum</div>
+          <div class="momentum-score-display">
+            <div class="momentum-big" id="dashMomentumScore">0</div>
+            <div class="momentum-denom">/100</div>
+          </div>
+        </div>
+        <div class="momentum-trend" id="dashMomentumTrend"></div>
+      </div>
+      <div class="momentum-bar-wrap">
+        <div class="momentum-bar-fill" id="dashMomentumBar"></div>
+      </div>
+      <div class="momentum-note" id="dashMomentumNote">
+        First week — baseline set. Complete your Friday check-in to see your score grow.
+      </div>
+    </div>
+
+    <!-- THREE METRIC CARDS -->
+    <div class="metric-row">
+      <div class="metric-card">
+        <div class="metric-card-label">Revenue Velocity</div>
+        <div class="metric-card-value" id="dashRevenue">—</div>
+        <div class="metric-card-sub">at current pace</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card-label">Acquisition Efficiency</div>
+        <div class="metric-card-value" id="dashAcq">—</div>
+        <div class="metric-card-sub">per new customer</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card-label">New Customers</div>
+        <div class="metric-card-value" id="dashCustomers">—</div>
+        <div class="metric-card-sub">this week</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="actions-row">
+      <a href="checkin.html" class="btn-action-primary">Weekly Check-In →</a>
+      <a href="result.html" class="btn-action-outline">View Full Playbook →</a>
+    </div>
+
+    <!-- RECENT HISTORY -->
+    <div class="recent-section" id="recentSection">
+      <div class="recent-header">
+        <div class="recent-title">Recent Weeks</div>
+        <a href="history.html" class="recent-view-all">View Full History →</a>
+      </div>
+      <div id="recentRows">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+/* ═══════════════════════════════════════════
+   PAGE INIT
+═══════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', function() {
+  /* Auth check — redirect if not logged in */
+  var token = localStorage.getItem('g7_session_token');
+  if (!token) {
+    window.location.href = '../workspace/login.html';
+    return;
+  }
+
+  document.body.style.visibility = 'visible';
+
+  /* Firm name in nav */
+  var firmName = localStorage.getItem('g7_session_name') || '';
+  if (firmName) document.getElementById('navFirmName').textContent = firmName;
+
+  /* Read state from localStorage */
+  var history = [];
+  try {
+    var raw = localStorage.getItem('scout_history');
+    if (raw) history = JSON.parse(raw);
+  } catch(e) {}
+
+  var weekNum = parseInt(localStorage.getItem('scout_week_number') || '0', 10);
+
+  /* Decide which state to show */
+  if (history.length === 0 || weekNum === 0) {
+    showWelcome();
+  } else {
+    showDashboard(history, weekNum, firmName);
+  }
+
+  initCursor();
+});
+
+/* ═══════════════════════════════════════════
+   SHOW WELCOME STATE
+═══════════════════════════════════════════ */
+function showWelcome() {
+  document.getElementById('stateWelcome').classList.add('active');
+}
+
+/* ═══════════════════════════════════════════
+   SHOW DASHBOARD STATE
+═══════════════════════════════════════════ */
+function showDashboard(history, weekNum, firmName) {
+  document.getElementById('stateDashboard').classList.add('active');
+
+  /* Greeting */
+  var hour = new Date().getHours();
+  var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  var name = firmName ? firmName : '';
+  document.getElementById('greetingHello').textContent = greeting + (name ? ', ' + name + '.' : '.');
+  document.getElementById('greetingWeek').textContent  = 'Week ' + weekNum + ' of 12';
+
+  /* Get last week's data */
+  var last = history[history.length - 1] || {};
+  var prev = history.length > 1 ? history[history.length - 2] : null;
+
+  /* Momentum */
+  var score     = parseInt(last.momentum || '0', 10);
+  var prevScore = prev ? parseInt(prev.momentum || '0', 10) : null;
+
+  document.getElementById('dashMomentumScore').textContent = score;
+
+  /* Animate bar after a short delay */
+  setTimeout(function() {
+    document.getElementById('dashMomentumBar').style.width = Math.min(score, 100) + '%';
+  }, 300);
+
+  /* Trend indicator */
+  if (prevScore !== null) {
+    var diff = score - prevScore;
+    var trendEl = document.getElementById('dashMomentumTrend');
+    if (diff > 0) {
+      trendEl.textContent = '↑ +' + diff + ' from last week';
+      trendEl.classList.add('up');
+    } else if (diff < 0) {
+      trendEl.textContent = '↓ ' + diff + ' from last week';
+      trendEl.classList.add('down');
+    } else {
+      trendEl.textContent = 'No change from last week';
+    }
+  }
+
+  /* Momentum note */
+  if (last.scoutOutput) {
+    /* Try to extract Scout's "What Scout Learned" line */
+    var learnedMatch = last.scoutOutput.match(/WHAT\s+SCOUT\s+LEARNED[\s\S]{0,20}?\n([^\n]+)/i);
+    if (learnedMatch) {
+      document.getElementById('dashMomentumNote').textContent = learnedMatch[1].trim();
+    }
+  }
+
+  /* Metric cards — pull from scout_pending_result if available */
+  var revenue  = '—';
+  var acq      = '—';
+  var custNew  = last.totalCustomers || '—';
+
+  var pendingRaw = localStorage.getItem('scout_pending_result');
+  if (pendingRaw) {
+    try {
+      var pending = JSON.parse(pendingRaw);
+      var output  = pending.scoutOutput || '';
+
+      /* Revenue velocity */
+      var rvMatch = output.match(/REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month))/i);
+      if (rvMatch) revenue = rvMatch[1].replace(/\s+/g,' ').trim();
+
+      /* Fallback */
+      if (revenue === '—') {
+        var rvFb = output.match(/₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month)/i);
+        if (rvFb) revenue = rvFb[0].replace(/\s+/g,' ').trim();
+      }
+
+      /* Acquisition efficiency */
+      var aeMatch = output.match(/(\d+)\s+contacts?\s+needed/i);
+      if (aeMatch) acq = aeMatch[1] + ' contacts';
+
+    } catch(e) {}
+  }
+
+  document.getElementById('dashRevenue').textContent   = revenue;
+  document.getElementById('dashAcq').textContent       = acq;
+  document.getElementById('dashCustomers').textContent = custNew;
+
+  /* Recent history rows — last 3 weeks, newest first */
+  renderRecentRows(history);
+}
+
+/* ═══════════════════════════════════════════
+   RENDER RECENT HISTORY ROWS (last 3 weeks)
+═══════════════════════════════════════════ */
+function renderRecentRows(history) {
+  var container = document.getElementById('recentRows');
+  if (!history || history.length === 0) {
+    document.getElementById('recentSection').style.display = 'none';
+    return;
+  }
+
+  /* Newest first, max 3 */
+  var recent = history.slice().reverse().slice(0, 3);
+  var html   = '';
+
+  recent.forEach(function(week, i) {
+    /* Original index in history array for viewWeek() */
+    var origIdx = history.length - 1 - i;
+    var date    = formatDate(week.date);
+    var custNew = week.totalCustomers || '0';
+    var revenue = week.revenueAdded   || '0';
+    var score   = week.momentum       || '0';
+
+    html += '<div class="history-row">';
+    html += '<div class="hr-cell">';
+    html += '<div class="hr-week">Week ' + week.week + '</div>';
+    html += '<div class="hr-week-sub">' + date + '</div>';
+    html += '</div>';
+    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(custNew) + '</div><div class="hr-lbl">Customers</div></div>';
+    html += '<div class="hr-cell"><div class="hr-val">₹' + escHtml(revenue) + '</div><div class="hr-lbl">Revenue</div></div>';
+    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(score) + '/100</div><div class="hr-lbl">Momentum</div></div>';
+    html += '<div class="hr-cell"><a href="#" class="hr-link" onclick="viewWeek(' + origIdx + ');return false;">View →</a></div>';
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   VIEW A PAST WEEK'S PLAYBOOK
+   Loads that week's scoutOutput into
+   scout_pending_result → navigates to result.html
+═══════════════════════════════════════════ */
+function viewWeek(idx) {
+  var history = [];
+  try { history = JSON.parse(localStorage.getItem('scout_history') || '[]'); } catch(e) {}
+  if (!history[idx]) return;
+
+  var week    = history[idx];
+  var pending = {};
+  try { pending = JSON.parse(localStorage.getItem('scout_pending_result') || '{}'); } catch(e) {}
+  if (week.scoutOutput) pending.scoutOutput = week.scoutOutput;
+  localStorage.setItem('scout_pending_result', JSON.stringify(pending));
+  window.location.href = 'result.html';
+}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+function formatDate(iso) {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+  } catch(e) { return iso.slice(0, 10); }
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ═══════════════════════════════════════════
+   LOGOUT
+═══════════════════════════════════════════ */
+function handleLogout() {
+  ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
+  window.location.href = '../workspace/login.html';
+}
+
+/* ═══════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════ */
+function initCursor() {
+  var c = document.getElementById('cursor'), r = document.getElementById('cursorRing');
+  if (!c || !r) return;
+  document.addEventListener('mousemove', function(e){
+    c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
+  });
+  document.addEventListener('mousedown', function(){
+    c.style.transform='translate(-50%,-50%) scale(0.7)';
+    r.style.transform='translate(-50%,-50%) scale(0.8)';
+  });
+  document.addEventListener('mouseup', function(){
+    c.style.transform='translate(-50%,-50%) scale(1)';
+    r.style.transform='translate(-50%,-50%) scale(1)';
+  });
+}
+</script>
+</body>
+</html>
