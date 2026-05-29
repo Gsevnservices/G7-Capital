@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Check-In — G7 Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<script src="../assets/scout-master-v1.js"></script>
+<script src="../assets/auth.js"></script>
+<script src="../assets/scout.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08)
+}
+body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh;visibility:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--gold)}
+.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
+.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+
+/* PAGE HEADER */
+.page-header{margin-top:80px;padding:56px 64px 40px;border-bottom:1px solid var(--border2)}
+.eyebrow{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.page-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,42px);font-weight:300;line-height:1.2;color:var(--white);margin-bottom:12px}
+.page-subheading{font-size:13px;line-height:1.9;color:var(--grey1);max-width:520px;margin-bottom:16px}
+.week-badge{display:inline-block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px;background:rgba(201,168,76,0.06)}
+@media(max-width:768px){.page-header{padding:40px 24px 32px}}
+
+/* LAST WEEK'S TARGETS */
+.targets-wrap{background:var(--black2);border-bottom:1px solid var(--border2);padding:28px 64px}
+.targets-label{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);margin-bottom:16px}
+.targets-row{display:flex;gap:16px;flex-wrap:wrap}
+.target-chip{background:var(--black3);border:1px solid var(--border2);padding:16px 20px;min-width:140px;flex:1}
+.target-chip-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--white);line-height:1;margin-bottom:4px}
+.target-chip-lbl{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey2)}
+@media(max-width:768px){.targets-wrap{padding:24px}.targets-row{gap:10px}.target-chip{min-width:90px}}
+
+/* FORM */
+.form-wrap{max-width:720px;margin:0 auto;padding:48px 64px 100px}
+@media(max-width:768px){.form-wrap{padding:32px 24px 100px}}
+
+.form-section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--white);margin-bottom:6px}
+.form-section-desc{font-size:12px;line-height:1.8;color:var(--grey1);margin-bottom:24px}
+.form-divider{width:36px;height:1px;background:var(--gold);opacity:.5;margin-bottom:28px}
+
+/* ICP BLOCK */
+.icp-block{background:var(--black3);border:1px solid var(--border2);padding:24px;margin-bottom:16px}
+.icp-block-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.icp-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:600px){.icp-inputs{grid-template-columns:1fr}}
+.icp-field label{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1);display:block;margin-bottom:6px}
+.icp-field input{width:100%;background:var(--black2);border:1px solid var(--border2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:20px;padding:12px 14px;outline:none;transition:border-color .3s;text-align:center}
+.icp-field input:focus{border-color:rgba(201,168,76,0.5)}
+.icp-field input::placeholder{color:var(--grey2);font-size:14px}
+
+.section-gap{height:36px;border-top:1px solid var(--border2);margin:36px 0}
+
+/* FIELD GROUPS */
+.field-group{margin-bottom:24px}
+.field-label{display:block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.field-label .optional{color:var(--grey2);font-size:8px;letter-spacing:.1em;margin-left:6px;text-transform:lowercase}
+.field-input,.field-textarea{width:100%;background:var(--black2);border:1px solid var(--border2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:13px;line-height:1.6;padding:14px 18px;transition:border-color .3s;outline:none}
+.field-input:focus,.field-textarea:focus{border-color:rgba(201,168,76,0.5)}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--grey2);font-size:12px}
+.field-textarea{resize:vertical;min-height:80px;line-height:1.8}
+
+/* REVENUE INPUT with ₹ prefix */
+.revenue-wrap{position:relative}
+.revenue-prefix{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--grey1);pointer-events:none}
+.revenue-input{padding-left:34px}
+
+/* TOTALS ROW */
+.totals-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+@media(max-width:600px){.totals-row{grid-template-columns:1fr}}
+
+/* SUBMIT */
+.btn-submit{font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:20px 40px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:all .3s;width:100%;margin-top:8px}
+.btn-submit:hover{background:var(--gold2)}
+
+/* LOADING OVERLAY */
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,8,8,.96);z-index:2000;flex-direction:column;align-items:center;justify-content:center;gap:32px;text-align:center}
+.loading-overlay.active{display:flex}
+.spinner-wrap{position:relative;width:80px;height:80px;display:flex;align-items:center;justify-content:center}
+.spinner-ring{position:absolute;inset:0;border:1px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1.2s linear infinite}
+.spinner-letter{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-bar{width:240px;height:1px;background:var(--border);overflow:hidden}
+.loading-bar-fill{height:100%;width:0%;background:var(--gold);animation:loadProg 25s ease-out forwards}
+@keyframes loadProg{0%{width:0%}55%{width:68%}82%{width:88%}100%{width:94%}}
+.loading-msg{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white)}
+.loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">G<em>7</em> Scout</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Dashboard</a>
+    <a href="onboard.html" class="nav-link">New Analysis</a>
+    <a href="history.html" class="nav-link">History</a>
+    <a href="checkin.html" class="nav-link active">Check-In</a>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
+    <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="eyebrow">Update Your Results</div>
+  <h1 class="page-heading">How Did This Week Go?</h1>
+  <p class="page-subheading">5 minutes. Scout will adjust next week's plan based on what you tell it.</p>
+  <div class="week-badge" id="weekBadge">Week 1 Check-In</div>
+</div>
+
+<!-- LAST WEEK'S TARGETS -->
+<div class="targets-wrap">
+  <div class="targets-label">Last Week's Targets</div>
+  <div class="targets-row">
+    <div class="target-chip">
+      <div class="target-chip-val" id="targetContacts">—</div>
+      <div class="target-chip-lbl">Contacts Target</div>
+    </div>
+    <div class="target-chip">
+      <div class="target-chip-val" id="targetResponses">—</div>
+      <div class="target-chip-lbl">Responses Target</div>
+    </div>
+    <div class="target-chip">
+      <div class="target-chip-val" id="targetCustomers">—</div>
+      <div class="target-chip-lbl">New Customers Target</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+
+  <!-- SECTION 1: WHAT YOU DID (ICP BREAKDOWNS) -->
+  <div style="margin-bottom:40px">
+    <h2 class="form-section-title">What You Did This Week</h2>
+    <p class="form-section-desc">Fill in your numbers for each customer group. Round numbers are fine.</p>
+    <div class="form-divider"></div>
+
+    <div class="icp-block">
+      <div class="icp-block-title" id="icp1Label">ICP 1</div>
+      <div class="icp-inputs">
+        <div class="icp-field"><label>Outreach Sent</label><input type="number" id="icp1_sent" placeholder="0" min="0"></div>
+        <div class="icp-field"><label>Replies Received</label><input type="number" id="icp1_replies" placeholder="0" min="0"></div>
+        <div class="icp-field"><label>New Customers</label><input type="number" id="icp1_conv" placeholder="0" min="0"></div>
+      </div>
+    </div>
+
+    <div class="icp-block">
+      <div class="icp-block-title" id="icp2Label">ICP 2</div>
+      <div class="icp-inputs">
+        <div class="icp-field"><label>Outreach Sent</label><input type="number" id="icp2_sent" placeholder="0" min="0"></div>
+        <div class="icp-field"><label>Replies Received</label><input type="number" id="icp2_replies" placeholder="0" min="0"></div>
+        <div class="icp-field"><label>New Customers</label><input type="number" id="icp2_conv" placeholder="0" min="0"></div>
+      </div>
+    </div>
+
+    <div class="icp-block">
+      <div class="icp-block-title" id="icp3Label">ICP 3</div>
+      <div class="icp-inputs">
+        <div class="icp-field"><label>Outreach Sent</label><input type="number" id="icp3_sent" placeholder="0" min="0"></div>
+        <div class="icp-field"><label>Replies Received</label><input type="number" id="icp3_replies" placeholder="0" min="0"></div>
+        <div class="icp-field"><label>New Customers</label><input type="number" id="icp3_conv" placeholder="0" min="0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: QUICK FEEDBACK -->
+  <div>
+    <h2 class="form-section-title">Quick Totals</h2>
+    <p class="form-section-desc">Totals and a quick note on what worked. Scout uses this to sharpen next week's plan.</p>
+    <div class="form-divider"></div>
+
+    <div class="totals-row">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="totalCustomers">Total New Customers This Week</label>
+        <input class="field-input" type="number" id="totalCustomers" placeholder="0" min="0">
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="revenueAdded">Revenue Added This Week</label>
+        <div class="revenue-wrap">
+          <span class="revenue-prefix">₹</span>
+          <input class="field-input revenue-input" type="number" id="revenueAdded" placeholder="0" min="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group" style="margin-top:24px">
+      <label class="field-label" for="whatWorked">What Worked Best This Week? <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="whatWorked" rows="2"
+        placeholder="e.g. LinkedIn outreach got 3 replies, referral activation worked well this week"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="whatFailed">What Did Not Work? <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="whatFailed" rows="2"
+        placeholder="e.g. WhatsApp group post was ignored, cold calls got zero response"></textarea>
+    </div>
+
+    <button class="btn-submit" onclick="handleSubmit()">Get Next Week's Plan →</button>
+  </div>
+
+</div><!-- /form-wrap -->
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner-wrap">
+    <div class="spinner-ring"></div>
+    <span class="spinner-letter">S</span>
+  </div>
+  <div>
+    <div class="loading-msg">Scout is analysing your results...</div>
+    <div class="loading-sub" style="margin-top:10px">Updating your playbook</div>
+  </div>
+  <div class="loading-bar">
+    <div class="loading-bar-fill" id="loadBar"></div>
+  </div>
+</div>
+
+<script>
+
+/* ═══════════════════════════════════════
+   PAGE INIT
+═══════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', function() {
+  var token = localStorage.getItem('g7_session_token');
+  if (!token) { window.location.href = '../workspace/login.html'; return; }
+
+  document.body.style.visibility = 'visible';
+
+  var firmName = localStorage.getItem('g7_session_name') || '';
+  if (firmName) document.getElementById('navFirmName').textContent = firmName;
+
+  /* Week number */
+  var weekNum = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  document.getElementById('weekBadge').textContent = 'Week ' + weekNum + ' Check-In';
+
+  /* Last week's targets */
+  var targetsRaw = localStorage.getItem('scout_last_targets');
+  if (targetsRaw) {
+    try {
+      var targets = JSON.parse(targetsRaw);
+      document.getElementById('targetContacts').textContent  = targets.contacts  || '—';
+      document.getElementById('targetResponses').textContent = targets.responses || '—';
+      document.getElementById('targetCustomers').textContent = targets.customers || '—';
+    } catch(e) {}
+  }
+
+  /* ICP names */
+  var icpNamesRaw = localStorage.getItem('scout_icp_names');
+  var icpNames = ['ICP 1', 'ICP 2', 'ICP 3'];
+  if (icpNamesRaw) {
+    try {
+      var parsed = JSON.parse(icpNamesRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        icpNames = [
+          parsed[0] || 'ICP 1',
+          parsed[1] || 'ICP 2',
+          parsed[2] || 'ICP 3'
+        ];
+      }
+    } catch(e) {}
+  }
+  document.getElementById('icp1Label').textContent = icpNames[0];
+  document.getElementById('icp2Label').textContent = icpNames[1];
+  document.getElementById('icp3Label').textContent = icpNames[2];
+
+  initCursor();
+});
+
+/* ═══════════════════════════════════════
+   COLLECT FORM DATA
+═══════════════════════════════════════ */
+function collectData() {
+  var icpNamesRaw = localStorage.getItem('scout_icp_names');
+  var icpNames = ['ICP 1', 'ICP 2', 'ICP 3'];
+  if (icpNamesRaw) {
+    try {
+      var parsed = JSON.parse(icpNamesRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        icpNames = [parsed[0] || 'ICP 1', parsed[1] || 'ICP 2', parsed[2] || 'ICP 3'];
+      }
+    } catch(e) {}
+  }
+
+  return {
+    weekNum:         parseInt(localStorage.getItem('scout_week_number') || '1', 10),
+    icpNames:        icpNames,
+    icp1_sent:       document.getElementById('icp1_sent').value    || '0',
+    icp1_replies:    document.getElementById('icp1_replies').value  || '0',
+    icp1_conv:       document.getElementById('icp1_conv').value     || '0',
+    icp2_sent:       document.getElementById('icp2_sent').value     || '0',
+    icp2_replies:    document.getElementById('icp2_replies').value  || '0',
+    icp2_conv:       document.getElementById('icp2_conv').value     || '0',
+    icp3_sent:       document.getElementById('icp3_sent').value     || '0',
+    icp3_replies:    document.getElementById('icp3_replies').value  || '0',
+    icp3_conv:       document.getElementById('icp3_conv').value     || '0',
+    totalCustomers:  document.getElementById('totalCustomers').value || '0',
+    revenueAdded:    document.getElementById('revenueAdded').value   || '0',
+    whatWorked:      document.getElementById('whatWorked').value.trim(),
+    whatFailed:      document.getElementById('whatFailed').value.trim(),
+    submittedAt:     new Date().toISOString()
+  };
+}
+
+/* ═══════════════════════════════════════
+   BUILD CHECK-IN USER MESSAGE
+═══════════════════════════════════════ */
+function buildCheckinMessage(d) {
+  var lines = [
+    'This is a weekly check-in. Produce a Type 2 Weekly Check-In Output following Component 7 format.',
+    '',
+    'WEEK: ' + d.weekNum,
+    '',
+    'THIS WEEK\'S RESULTS:',
+    '',
+    d.icpNames[0] + ':',
+    '  Outreach sent: '    + d.icp1_sent,
+    '  Replies received: ' + d.icp1_replies,
+    '  New customers: '    + d.icp1_conv,
+    '',
+    d.icpNames[1] + ':',
+    '  Outreach sent: '    + d.icp2_sent,
+    '  Replies received: ' + d.icp2_replies,
+    '  New customers: '    + d.icp2_conv,
+    '',
+    d.icpNames[2] + ':',
+    '  Outreach sent: '    + d.icp3_sent,
+    '  Replies received: ' + d.icp3_replies,
+    '  New customers: '    + d.icp3_conv,
+    '',
+    'TOTALS:',
+    '  Total new customers: ' + d.totalCustomers,
+    '  Revenue added: ₹'     + d.revenueAdded,
+    ''
+  ];
+  if (d.whatWorked) lines.push('WHAT WORKED: ' + d.whatWorked, '');
+  if (d.whatFailed) lines.push('WHAT DID NOT WORK: ' + d.whatFailed, '');
+  lines.push(
+    'REQUIRED OUTPUT:',
+    '  Update Momentum Score (show ↑ or ↓ from last week with reason)',
+    '  Revenue Velocity (updated)',
+    '  Acquisition Efficiency (updated)',
+    '  What Scout Learned This Week (2-3 sentences, specific)',
+    '  Next Week\'s Adjustments: DO MORE OF / DO LESS OF / NEW THIS WEEK',
+    '  Three Numbers for next week: Contacts / Responses / New Customers',
+    '',
+    'Maximum 400 words. No generic encouragement. Data-specific analysis only.'
+  );
+  return lines.join('\n');
+}
+
+/* ═══════════════════════════════════════
+   SUBMIT HANDLER
+═══════════════════════════════════════ */
+async function handleSubmit() {
+  var d = collectData();
+
+  /* Show loading */
+  var overlay = document.getElementById('loadingOverlay');
+  var bar = document.getElementById('loadBar');
+  overlay.classList.add('active');
+  bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = '';
+
+  try {
+    var token = localStorage.getItem('g7_session_token');
+
+    /* Build conversation: original onboarding context → Scout's previous output → check-in */
+    var prevResult = localStorage.getItem('scout_pending_result');
+    var prevOutput = '';
+    var onboardCtx = '';
+    if (prevResult) {
+      try {
+        var pr = JSON.parse(prevResult);
+        prevOutput = pr.scoutOutput || '';
+        var bd = pr.businessData || {};
+        onboardCtx = 'Business: ' + (bd.businessName || '') +
+          ' in ' + (bd.location || '') +
+          '. Revenue: ' + (bd.monthlyRevenue || '') +
+          '. Preferred language: ' + (bd.language || '') + '.';
+      } catch(e) {}
+    }
+
+    var messages = [];
+    if (onboardCtx) messages.push({role: 'user',      content: onboardCtx});
+    if (prevOutput) messages.push({role: 'assistant', content: prevOutput});
+    messages.push({role: 'user', content: buildCheckinMessage(d)});
+
+    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: SCOUT_SYSTEM_PROMPT,
+        messages: messages
+      })
+    });
+
+    if (!response.ok) {
+      var errBody = await response.text();
+      throw new Error('API error ' + response.status + ': ' + errBody);
+    }
+
+    var apiData = await response.json();
+    if (apiData.error) throw new Error(apiData.error.message || 'Unknown API error');
+
+    var checkinOutput = apiData.content[0].text;
+
+    /* Advance week number */
+    var nextWeek = d.weekNum + 1;
+    localStorage.setItem('scout_week_number', String(nextWeek));
+
+    /* Extract next week's targets from Scout's output for next check-in */
+    var nextContacts  = (checkinOutput.match(/CONTACTS\s+TARGET\s*:\s*(\d+)/i)  || [])[1] || '';
+    var nextResponses = (checkinOutput.match(/RESPONSES\s+TARGET\s*:\s*(\d+)/i) || [])[1] || '';
+    var nextCustomers = (checkinOutput.match(/NEW\s+CUSTOMERS\s+TARGET\s*:\s*(\d+)/i) || [])[1] || '';
+    localStorage.setItem('scout_last_targets', JSON.stringify({
+      contacts: nextContacts, responses: nextResponses, customers: nextCustomers
+    }));
+
+    /* Save to history */
+    var history = [];
+    try { history = JSON.parse(localStorage.getItem('scout_history') || '[]'); } catch(e) {}
+    history.push({
+      week:          d.weekNum,
+      date:          d.submittedAt,
+      icp1_sent:     d.icp1_sent,    icp1_replies: d.icp1_replies, icp1_conv: d.icp1_conv,
+      icp2_sent:     d.icp2_sent,    icp2_replies: d.icp2_replies, icp2_conv: d.icp2_conv,
+      icp3_sent:     d.icp3_sent,    icp3_replies: d.icp3_replies, icp3_conv: d.icp3_conv,
+      totalCustomers: d.totalCustomers,
+      revenueAdded:  d.revenueAdded,
+      momentum:      (checkinOutput.match(/MOMENTUM\s+SCORE\s*:\s*(\d+)/i) || [])[1] || '0',
+      scoutOutput:   checkinOutput
+    });
+    localStorage.setItem('scout_history', JSON.stringify(history));
+
+    /* Save pending result for result.html */
+    var existing = {};
+    try { existing = JSON.parse(prevResult || '{}'); } catch(e) {}
+    existing.scoutOutput = checkinOutput;
+    existing.submittedAt = d.submittedAt;
+    localStorage.setItem('scout_pending_result', JSON.stringify(existing));
+
+    window.location.href = 'result.html';
+
+  } catch(err) {
+    overlay.classList.remove('active');
+    alert('Scout encountered an error: ' + (err.message || 'Please try again.'));
+  }
+}
+
+/* ═══════════════════════════════════════
+   LOGOUT
+═══════════════════════════════════════ */
+function handleLogout() {
+  ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
+  window.location.href = '../workspace/login.html';
+}
+
+/* ═══════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════ */
+function initCursor() {
+  var c = document.getElementById('cursor'), r = document.getElementById('cursorRing');
+  if (!c || !r) return;
+  document.addEventListener('mousemove', function(e){ c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px'; });
+  document.addEventListener('mousedown', function(){ c.style.transform='translate(-50%,-50%) scale(0.7)';r.style.transform='translate(-50%,-50%) scale(0.8)'; });
+  document.addEventListener('mouseup',   function(){ c.style.transform='translate(-50%,-50%) scale(1)';r.style.transform='translate(-50%,-50%) scale(1)'; });
+}
+</script>
+</body>
+</html>
