@@ -1,0 +1,556 @@
+'use strict';
+
+// ─────────────────────────────────────────────────────────────
+// assets/scout.js
+// Scout API engine — G7 Capital
+//
+// This file powers all API calls for Scout, G7's business
+// development AI employee for Indian SMEs.
+//
+// It is completely separate from workspace.js and Alex.
+// Do not import or reference anything from workspace.js here.
+//
+// Functions:
+//   callScout(businessContext)           — initial analysis call
+//   callScoutCheckin(checkinData)        — weekly check-in call
+//   saveScoutResult(rawOutput, weekNum)  — persist result to localStorage
+//   getScoutHistory()                    — safe parse of history array
+//   getScoutContext()                    — read onboarding context from pending result
+//   extractScoutMetrics(text)            — pull 4 key metrics from Scout output
+// ─────────────────────────────────────────────────────────────
+
+// Cloudflare Worker base URL — Scout routes live here
+const SCOUT_WORKER = 'https://g7-proxy.gsevnservices.workers.dev';
+
+
+// ─────────────────────────────────────────────────────────────
+// FUNCTION 1 — callScout(businessContext)
+//
+// Sends the initial business onboarding data to Scout for analysis.
+// Calls the /scout/analyse endpoint.
+//
+// businessContext — object built from onboard.html form fields:
+//   businessName, city, state, businessType, productService,
+//   avgTicket, monthlyRevenue, teamSize, yearsActive, topChallenge,
+//   targetCustomer, currentChannels, weeklyContacts, conversionRate,
+//   competitors, uniqueAdvantage, languages, seasonalNotes, situation
+//
+// Returns: Scout's raw text output (string)
+// Throws:  Error with user-readable message
+// ─────────────────────────────────────────────────────────────
+async function callScout(businessContext) {
+
+  // Validate session token is present
+  var sessionToken = localStorage.getItem('g7_session_token') || '';
+
+  // Build the system prompt: Scout master prompt + no firm KB needed
+  // (Scout has its own full system prompt in SCOUT_SYSTEM_PROMPT)
+  var systemPrompt = SCOUT_SYSTEM_PROMPT;
+
+  // Build the user message from the business context object
+  var userMessage = buildScoutOnboardMessage(businessContext);
+
+  var response;
+  try {
+    response = await fetch(SCOUT_WORKER + '/scout/analyse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + sessionToken
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
+        messages: [
+          {
+            role: 'user',
+            content: userMessage
+          }
+        ]
+      })
+    });
+  } catch (networkError) {
+    throw new Error('Could not reach Scout. Please check your internet connection and try again.');
+  }
+
+  if (!response.ok) {
+    var errBody = await response.text();
+    throw new Error('Scout API error ' + response.status + ': ' + errBody);
+  }
+
+  // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
+  var result = await readSSEStream(response);
+  if (!result) {
+    throw new Error('Scout returned an empty response. Please try again.');
+  }
+  return result;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — buildScoutOnboardMessage(ctx)
+//
+// Formats the business context object into a structured prompt
+// that matches Scout's Component 7 output format specification.
+//
+// ctx — the businessContext object from onboard.html
+// Returns: formatted string (user message content)
+// ─────────────────────────────────────────────────────────────
+function buildScoutOnboardMessage(ctx) {
+  return [
+    'Please analyse this business and produce a complete Scout Analysis',
+    'in your standard 4-tab format.',
+    '',
+    '══════════════════════════════════════════════════',
+    'BUSINESS PROFILE',
+    '══════════════════════════════════════════════════',
+    '',
+    'BUSINESS NAME:     ' + (ctx.businessName || 'Not provided'),
+    'LOCATION:          ' + (ctx.city || '') + (ctx.state ? ', ' + ctx.state : ''),
+    'BUSINESS TYPE:     ' + (ctx.businessType || 'Not provided'),
+    'PRODUCT / SERVICE: ' + (ctx.productService || 'Not provided'),
+    'AVERAGE TICKET:    ₹' + (ctx.avgTicket || 'Not provided'),
+    'MONTHLY REVENUE:   ₹' + (ctx.monthlyRevenue || 'Not provided'),
+    'TEAM SIZE:         ' + (ctx.teamSize || 'Not provided') + ' people',
+    'YEARS ACTIVE:      ' + (ctx.yearsActive || 'Not provided'),
+    'TOP CHALLENGE:     ' + (ctx.topChallenge || 'Not provided'),
+    '',
+    '── TARGET CUSTOMER ────────────────────────────',
+    (ctx.targetCustomer || 'Not provided'),
+    '',
+    '── CURRENT SALES CHANNELS ─────────────────────',
+    (ctx.currentChannels || 'Not provided'),
+    '',
+    '── WEEKLY SALES ACTIVITY ──────────────────────',
+    'Contacts made per week: ' + (ctx.weeklyContacts || 'Not provided'),
+    'Current conversion rate: ' + (ctx.conversionRate || 'Not provided'),
+    '',
+    '── COMPETITION ────────────────────────────────',
+    (ctx.competitors || 'Not provided'),
+    '',
+    '── UNIQUE ADVANTAGE ───────────────────────────',
+    (ctx.uniqueAdvantage || 'Not provided'),
+    '',
+    '── LANGUAGE & COMMUNICATION ───────────────────',
+    'Languages used in sales: ' + (ctx.languages || 'Not provided'),
+    '',
+    '── SEASONAL PATTERNS ──────────────────────────',
+    (ctx.seasonalNotes || 'None noted'),
+    '',
+    '── CURRENT SITUATION ──────────────────────────',
+    (ctx.situation || 'Not provided'),
+    '',
+    '══════════════════════════════════════════════════',
+    'ANALYSIS DATE: ' + new Date().toLocaleDateString('en-IN', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    }),
+    '══════════════════════════════════════════════════',
+    '',
+    'REQUIRED OUTPUT:',
+    'Produce all 4 tabs in sequence:',
+    'TAB 1: WHO TO CALL — ICP profiles with contact lists',
+    'TAB 2: WHAT TO SAY — Scripts and messaging for each ICP',
+    'TAB 3: WHEN TO ACT — Weekly rhythm with day-by-day plan',
+    'TAB 4: PIPELINE — Tracking targets and first 30-day milestones'
+  ].join('\n');
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// FUNCTION 2 — callScoutCheckin(checkinData)
+//
+// Sends weekly check-in results to Scout for updated guidance.
+// Calls the /scout/checkin endpoint.
+// Uses a multi-turn conversation: onboarding context → prior output → new data.
+//
+// checkinData — object with:
+//   weekNumber     — current week number (integer)
+//   onboardContext — original onboarding user message (string)
+//   priorOutput    — Scout's output from previous week (string)
+//   contacts       — object: { icp1: n, icp2: n, icp3: n }
+//   responses      — object: { icp1: n, icp2: n, icp3: n }
+//   customers      — object: { icp1: n, icp2: n, icp3: n }
+//   revenue        — total new revenue this week (string, e.g. '45000')
+//   wins           — what worked (string)
+//   blocks         — what did not work (string)
+//   nextFocus      — what the owner wants to focus on next week (string)
+//
+// Returns: Scout's raw text output (string)
+// Throws:  Error with user-readable message
+// ─────────────────────────────────────────────────────────────
+async function callScoutCheckin(checkinData) {
+
+  var sessionToken = localStorage.getItem('g7_session_token') || '';
+  var systemPrompt = SCOUT_SYSTEM_PROMPT;
+
+  // Build multi-turn message array
+  // Turn 1: original onboarding context (as user) — so Scout remembers the business
+  // Turn 2: Scout's prior output (as assistant) — prior week's recommendations
+  // Turn 3: this week's actual results + request for updated plan (as user)
+  var messages = [];
+
+  if (checkinData.onboardContext) {
+    messages.push({
+      role: 'user',
+      content: checkinData.onboardContext
+    });
+  }
+
+  if (checkinData.priorOutput) {
+    messages.push({
+      role: 'assistant',
+      content: checkinData.priorOutput
+    });
+  }
+
+  // Build the check-in user message
+  var checkinMessage = buildCheckinMessage(checkinData);
+  messages.push({
+    role: 'user',
+    content: checkinMessage
+  });
+
+  var response;
+  try {
+    response = await fetch(SCOUT_WORKER + '/scout/checkin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + sessionToken
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
+        messages: messages
+      })
+    });
+  } catch (networkError) {
+    throw new Error('Could not reach Scout. Please check your internet connection and try again.');
+  }
+
+  if (!response.ok) {
+    var errBody = await response.text();
+    throw new Error('Scout check-in error ' + response.status + ': ' + errBody);
+  }
+
+  // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
+  var result = await readSSEStream(response);
+  if (!result) {
+    throw new Error('Scout returned an empty response. Please try again.');
+  }
+  return result;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — readSSEStream(response)
+//
+// Reads an Anthropic SSE streaming response body and assembles
+// the full text output. Called by callScout() and callScoutCheckin().
+//
+// The Anthropic SSE format looks like:
+//   data: {"type":"message_start",...}
+//   data: {"type":"content_block_start",...}
+//   data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"Hello"}}
+//   data: {"type":"message_stop"}
+//
+// response — the fetch() Response object (must be ok before calling)
+// Returns:  full assembled text string
+// Throws:   Error if the stream cannot be read
+// ─────────────────────────────────────────────────────────────
+async function readSSEStream(response) {
+  var reader  = response.body.getReader();
+  var decoder = new TextDecoder('utf-8');
+  var fullText = '';
+  var done = false;
+
+  while (!done) {
+    var chunk = await reader.read();
+    done = chunk.done;
+
+    if (chunk.value) {
+      // Decode the raw bytes to a string
+      var raw = decoder.decode(chunk.value, { stream: true });
+
+      // Each chunk may contain multiple SSE lines — split and process each
+      var lines = raw.split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+
+        // SSE data lines start with "data: "
+        if (!line.startsWith('data: ')) continue;
+
+        var jsonStr = line.slice(6); // strip "data: "
+
+        // "[DONE]" signals end of stream (not used by Anthropic but guard anyway)
+        if (jsonStr === '[DONE]') { done = true; break; }
+
+        var event;
+        try {
+          event = JSON.parse(jsonStr);
+        } catch (e) {
+          // Malformed line — skip silently
+          continue;
+        }
+
+        // Append text delta tokens as they arrive
+        if (
+          event.type === 'content_block_delta' &&
+          event.delta &&
+          event.delta.type === 'text_delta' &&
+          event.delta.text
+        ) {
+          fullText += event.delta.text;
+        }
+
+        // message_stop signals the end of the response
+        if (event.type === 'message_stop') {
+          done = true;
+          break;
+        }
+      }
+    }
+  }
+
+  return fullText;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — buildCheckinMessage(d)
+//
+// Formats the weekly check-in data into a structured prompt.
+// d — checkinData object from callScoutCheckin
+// Returns: formatted string (user message content)
+// ─────────────────────────────────────────────────────────────
+function buildCheckinMessage(d) {
+
+  // Sum contacts, responses, customers across all 3 ICPs
+  var totalContacts  = (parseInt(d.contacts.icp1)  || 0) + (parseInt(d.contacts.icp2)  || 0) + (parseInt(d.contacts.icp3)  || 0);
+  var totalResponses = (parseInt(d.responses.icp1) || 0) + (parseInt(d.responses.icp2) || 0) + (parseInt(d.responses.icp3) || 0);
+  var totalCustomers = (parseInt(d.customers.icp1) || 0) + (parseInt(d.customers.icp2) || 0) + (parseInt(d.customers.icp3) || 0);
+
+  return [
+    'WEEK ' + d.weekNumber + ' CHECK-IN REPORT',
+    '══════════════════════════════════════════════════',
+    '',
+    '── ACTIVITY THIS WEEK ─────────────────────────',
+    'Total contacts made: ' + totalContacts,
+    '  ICP 1: ' + (d.contacts.icp1 || 0) + ' contacts',
+    '  ICP 2: ' + (d.contacts.icp2 || 0) + ' contacts',
+    '  ICP 3: ' + (d.contacts.icp3 || 0) + ' contacts',
+    '',
+    'Total responses: ' + totalResponses,
+    '  ICP 1: ' + (d.responses.icp1 || 0) + ' responses',
+    '  ICP 2: ' + (d.responses.icp2 || 0) + ' responses',
+    '  ICP 3: ' + (d.responses.icp3 || 0) + ' responses',
+    '',
+    'New customers this week: ' + totalCustomers,
+    '  ICP 1: ' + (d.customers.icp1 || 0) + ' new customers',
+    '  ICP 2: ' + (d.customers.icp2 || 0) + ' new customers',
+    '  ICP 3: ' + (d.customers.icp3 || 0) + ' new customers',
+    '',
+    'Revenue from new customers: ₹' + (d.revenue || '0'),
+    '',
+    '── WHAT WORKED ────────────────────────────────',
+    (d.wins || 'Nothing noted as working particularly well.'),
+    '',
+    '── WHAT DID NOT WORK ──────────────────────────',
+    (d.blocks || 'No specific blockers noted.'),
+    '',
+    '── OWNER FOCUS FOR NEXT WEEK ──────────────────',
+    (d.nextFocus || 'Continue current approach.'),
+    '',
+    '══════════════════════════════════════════════════',
+    'Based on this week\'s results, please provide:',
+    '1. A brief performance assessment (what the numbers mean)',
+    '2. An updated 4-tab Scout Analysis for the coming week',
+    '   — adjust targets, messages, and timing based on what worked',
+    'Use the same TAB 1 / TAB 2 / TAB 3 / TAB 4 format as before.'
+  ].join('\n');
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// FUNCTION 3 — saveScoutResult(rawOutput, weekNumber)
+//
+// Persists a Scout result to localStorage.
+// Called after every successful callScout() or callScoutCheckin().
+//
+// rawOutput   — Scout's raw text response (string)
+// weekNumber  — the week this result belongs to (integer)
+//
+// Updates these localStorage keys:
+//   scout_pending_result  — the most recent result for result.html to display
+//   scout_history         — append to history array (max 12 entries)
+//   scout_week_number     — advance the week counter
+// ─────────────────────────────────────────────────────────────
+function saveScoutResult(rawOutput, weekNumber) {
+
+  var metrics = extractScoutMetrics(rawOutput);
+
+  // Build the result object
+  var resultObj = {
+    weekNumber:      weekNumber,
+    timestamp:       new Date().toISOString(),
+    scoutOutput:     rawOutput,
+    revenueVelocity: metrics.revenueVelocity,
+    acquisitionEff:  metrics.acquisitionEff,
+    momentumScore:   metrics.momentumScore,
+    momentumNote:    metrics.momentumNote,
+    totalContacts:   0,   // populated by checkin.html from user input
+    totalResponses:  0,
+    totalCustomers:  0
+  };
+
+  // Save as pending result (result.html reads this on load)
+  localStorage.setItem('scout_pending_result', JSON.stringify(resultObj));
+
+  // Append to history (max 12 entries — oldest dropped first)
+  var history = getScoutHistory();
+  history.push(resultObj);
+  if (history.length > 12) {
+    history = history.slice(history.length - 12);
+  }
+  localStorage.setItem('scout_history', JSON.stringify(history));
+
+  // Advance the week counter
+  localStorage.setItem('scout_week_number', String(weekNumber));
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// FUNCTION 4 — getScoutHistory()
+//
+// Returns the scout_history array from localStorage.
+// Safe — always returns an array even if storage is empty or corrupt.
+// ─────────────────────────────────────────────────────────────
+function getScoutHistory() {
+  var raw = localStorage.getItem('scout_history');
+  if (!raw) return [];
+  try {
+    var parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// FUNCTION 5 — getScoutContext()
+//
+// Reads the onboarding context from the pending result in localStorage.
+// Used by checkin.html to assemble the multi-turn conversation.
+//
+// Returns: object { onboardContext, priorOutput, weekNumber }
+//   onboardContext — the original user message sent to Scout (string or null)
+//   priorOutput    — Scout's last output text (string or null)
+//   weekNumber     — current week number (integer, defaults to 1)
+// ─────────────────────────────────────────────────────────────
+function getScoutContext() {
+  var raw = localStorage.getItem('scout_pending_result');
+  if (!raw) {
+    return { onboardContext: null, priorOutput: null, weekNumber: 1 };
+  }
+
+  var obj;
+  try {
+    obj = JSON.parse(raw);
+  } catch (e) {
+    return { onboardContext: null, priorOutput: null, weekNumber: 1 };
+  }
+
+  return {
+    onboardContext: obj.onboardContext || null,
+    priorOutput:    obj.scoutOutput    || null,
+    weekNumber:     parseInt(obj.weekNumber) || 1
+  };
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// FUNCTION 6 — extractScoutMetrics(text)
+//
+// Parses 4 key metrics from Scout's raw output text.
+// Used by result.html and history.html to display headline numbers.
+//
+// text — Scout's raw output string
+//
+// Returns: object with 4 fields:
+//   revenueVelocity  — string: "₹45,000/month" or null
+//   acquisitionEff   — string: "12 contacts" or null
+//   momentumScore    — integer: 1–10 or null
+//   momentumNote     — string: the momentum label/description or null
+// ─────────────────────────────────────────────────────────────
+function extractScoutMetrics(text) {
+  if (!text) {
+    return { revenueVelocity: null, acquisitionEff: null, momentumScore: null, momentumNote: null };
+  }
+
+  var revenueVelocity = null;
+  var acquisitionEff  = null;
+  var momentumScore   = null;
+  var momentumNote    = null;
+
+  // Revenue Velocity — matches: "Revenue Velocity: ₹45,000/month" or "REVENUE VELOCITY: ₹1.2L/month"
+  var rvMatch = text.match(/revenue\s+velocity[:\s]+([₹\d,\.LlKk\/a-zA-Z\s]+(?:month|week|year))/i);
+  if (rvMatch) {
+    revenueVelocity = rvMatch[1].trim();
+    // Ensure ₹ prefix
+    if (!revenueVelocity.startsWith('₹')) {
+      revenueVelocity = '₹' + revenueVelocity;
+    }
+  }
+
+  // Acquisition Efficiency — matches: "Acquisition Efficiency: 12 contacts needed" or "12 contacts per customer"
+  var aeMatch = text.match(/acquisition\s+efficiency[:\s]+(\d+)\s+contacts?/i);
+  if (aeMatch) {
+    acquisitionEff = aeMatch[1] + ' contacts';
+  }
+
+  // Momentum Score — matches: "SCOUT MOMENTUM: 7" or "Momentum Score: 7/10" or "Momentum: 7"
+  var msMatch = text.match(/(?:scout\s+)?momentum(?:\s+score)?[:\s]+(\d{1,2})(?:\/10)?/i);
+  if (msMatch) {
+    var score = parseInt(msMatch[1]);
+    if (score >= 1 && score <= 10) {
+      momentumScore = score;
+    }
+  }
+
+  // Momentum Note — the label after the score, e.g. "SCOUT MOMENTUM: 7 — Gaining traction"
+  var mnMatch = text.match(/(?:scout\s+)?momentum(?:\s+score)?[:\s]+\d{1,2}(?:\/10)?[:\s—\-]+([^\n]+)/i);
+  if (mnMatch) {
+    momentumNote = mnMatch[1].trim();
+  }
+
+  return {
+    revenueVelocity: revenueVelocity,
+    acquisitionEff:  acquisitionEff,
+    momentumScore:   momentumScore,
+    momentumNote:    momentumNote
+  };
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// MODULE EXPORT (Node.js validation only)
+// Not used in browser — Scout pages load this via <script> tag
+// ─────────────────────────────────────────────────────────────
+if (typeof module !== 'undefined') {
+  module.exports = { callScout, callScoutCheckin, saveScoutResult, getScoutHistory, getScoutContext, extractScoutMetrics };
+}

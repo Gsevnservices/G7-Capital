@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tell Scout About Your Business — G7 Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<script src="../assets/scout-master-v1.js"></script>
+<script src="../assets/auth.js"></script>
+<script src="../assets/scout.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08)
+}
+body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh;visibility:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--gold)}
+.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
+.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+.page-header{margin-top:80px;padding:56px 64px 40px;border-bottom:1px solid var(--border2)}
+.eyebrow{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.page-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,42px);font-weight:300;line-height:1.2;color:var(--white);margin-bottom:12px}
+.page-subheading{font-size:13px;line-height:1.9;color:var(--grey1);max-width:560px}
+@media(max-width:768px){.page-header{padding:40px 24px 32px}}
+.progress-wrap{padding:28px 64px 44px;border-bottom:1px solid var(--border2);background:var(--black2)}
+.progress-steps{display:flex;align-items:center;max-width:800px}
+.progress-step{display:flex;align-items:center;flex:1;position:relative}
+.step-dot{width:28px;height:28px;border-radius:50%;border:1px solid var(--grey2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--grey2);flex-shrink:0;transition:all .3s;background:var(--black2);position:relative;z-index:1}
+.progress-step.active .step-dot{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.1)}
+.progress-step.done .step-dot{border-color:var(--gold);background:var(--gold);color:var(--black)}
+.step-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey2);position:absolute;top:36px;left:50%;transform:translateX(-50%);white-space:nowrap;transition:color .3s}
+.progress-step.active .step-label{color:var(--gold)}
+.progress-step.done .step-label{color:var(--grey1)}
+.step-line{flex:1;height:1px;background:var(--grey2);margin:0 4px;transition:background .3s}
+.step-line.done{background:var(--gold)}
+@media(max-width:768px){.progress-wrap{padding:20px 24px 36px}.step-label{display:none}.step-dot{width:22px;height:22px;font-size:8px}}
+.form-wrap{max-width:720px;margin:0 auto;padding:48px 64px 100px}
+.form-section{display:none}
+.form-section.active{display:block;animation:fadeUp .4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);margin-bottom:8px}
+.section-desc{font-size:12px;line-height:1.8;color:var(--grey1);margin-bottom:28px}
+.section-divider{width:40px;height:1px;background:var(--gold);margin-bottom:32px;opacity:.5}
+.field-group{margin-bottom:28px}
+.field-label{display:block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.field-label .optional{color:var(--grey2);font-size:8px;letter-spacing:.1em;margin-left:6px;text-transform:lowercase}
+.field-input,.field-textarea,.field-select{width:100%;background:var(--black2);border:1px solid var(--border2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:13px;line-height:1.6;padding:14px 18px;transition:border-color .3s;outline:none;-webkit-appearance:none}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:rgba(201,168,76,0.5)}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--grey2);font-size:12px}
+.field-textarea{resize:vertical;min-height:96px;line-height:1.8}
+.field-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8880' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;padding-right:40px;cursor:pointer}
+.field-select option{background:var(--black2);color:var(--white)}
+.field-input.error,.field-textarea.error,.field-select.error{border-color:rgba(196,90,90,0.6)}
+.competitor-group{background:var(--black3);border:1px solid var(--border2);padding:20px;margin-bottom:16px}
+.competitor-group-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);margin-bottom:16px}
+.competitor-inner{display:grid;gap:12px}
+.checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.checkbox-grid{grid-template-columns:1fr}}
+.checkbox-item{display:flex;align-items:flex-start;gap:10px;background:var(--black3);border:1px solid var(--border2);padding:12px 14px;cursor:pointer;transition:border-color .2s}
+.checkbox-item:hover{border-color:rgba(201,168,76,0.3)}
+.checkbox-item input[type="checkbox"]{width:14px;height:14px;flex-shrink:0;accent-color:var(--gold);cursor:pointer;margin-top:2px}
+.checkbox-item label{font-size:11px;letter-spacing:.04em;color:var(--grey1);cursor:pointer;line-height:1.5}
+.checkbox-item:has(input:checked){border-color:rgba(201,168,76,0.5);background:rgba(201,168,76,0.05)}
+.checkbox-item:has(input:checked) label{color:var(--white)}
+.radio-grid{display:grid;gap:8px}
+.radio-item{display:flex;align-items:center;gap:12px;background:var(--black3);border:1px solid var(--border2);padding:14px 18px;cursor:pointer;transition:border-color .2s}
+.radio-item:hover{border-color:rgba(201,168,76,0.3)}
+.radio-item input[type="radio"]{width:14px;height:14px;flex-shrink:0;accent-color:var(--gold);cursor:pointer}
+.radio-item label{font-size:12px;color:var(--grey1);cursor:pointer;line-height:1.4}
+.radio-item:has(input:checked){border-color:rgba(201,168,76,0.5);background:rgba(201,168,76,0.05)}
+.radio-item:has(input:checked) label{color:var(--white)}
+.radio-inline-wrap{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap}
+.radio-inline-input{background:transparent;border:none;border-bottom:1px solid var(--grey2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:12px;padding:2px 6px;width:140px;outline:none;transition:border-color .3s}
+.radio-inline-input:focus{border-color:var(--gold)}
+.radio-inline-input::placeholder{color:var(--grey2);font-size:11px}
+.form-nav{display:flex;align-items:center;justify-content:space-between;margin-top:40px;gap:16px}
+.btn-back{font-size:10px;letter-spacing:.18em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--grey1);padding:14px 28px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.btn-back:hover{border-color:var(--grey1);color:var(--white)}
+.btn-next{font-size:10px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:14px 40px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:background .3s}
+.btn-next:hover{background:var(--gold2)}
+.btn-submit{font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:20px 40px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:all .3s;width:100%;margin-top:40px}
+.btn-submit:hover{background:var(--gold2)}
+@media(max-width:768px){.form-wrap{padding:32px 24px 100px}}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,8,8,.96);z-index:2000;flex-direction:column;align-items:center;justify-content:center;gap:32px;text-align:center}
+.loading-overlay.active{display:flex}
+.scout-spinner-wrap{position:relative;width:80px;height:80px;display:flex;align-items:center;justify-content:center}
+.scout-spinner-ring{position:absolute;inset:0;border:1px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1.2s linear infinite}
+.scout-spinner-letter{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-bar{width:240px;height:1px;background:var(--border);overflow:hidden}
+.loading-bar-fill{height:100%;width:0%;background:var(--gold);animation:loadProgress 28s ease-out forwards}
+@keyframes loadProgress{0%{width:0%}50%{width:65%}80%{width:86%}100%{width:94%}}
+.loading-message{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--white)}
+.loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">G<em>7</em> Scout</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Dashboard</a>
+    <a href="onboard.html" class="nav-link active">New Analysis</a>
+    <a href="history.html" class="nav-link">History</a>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
+    <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="eyebrow">01 — Business Profile</div>
+  <h1 class="page-heading">Let's Build Your Customer Acquisition System.</h1>
+  <p class="page-subheading">Scout needs 12 minutes of your time to build a system that runs for 12 months. Answer honestly — the more specific you are, the more precise Scout's targeting will be.</p>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-steps" id="progressSteps"></div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+
+  <!-- SECTION 1: BUSINESS BASICS -->
+  <div class="form-section active" id="section-1">
+    <h2 class="section-title">Your Business</h2>
+    <p class="section-desc">Tell Scout the fundamentals. Be specific — vague answers produce generic plans.</p>
+    <div class="section-divider"></div>
+    <div class="field-group">
+      <label class="field-label" for="businessName">Business Name</label>
+      <input class="field-input" type="text" id="businessName" placeholder="e.g. Sharma Supermart or FitZone Gym" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="whatYouSell">What You Sell</label>
+      <textarea class="field-textarea" id="whatYouSell" rows="3" placeholder="Be specific — 'premium gym memberships at ₹2,500/month' not just 'gym'" required></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="location">Location — Area and City</label>
+      <input class="field-input" type="text" id="location" placeholder="e.g. Civil Lines, Bareilly UP or Koramangala, Bengaluru" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="monthlyRevenue">Monthly Revenue</label>
+      <input class="field-input" type="text" id="monthlyRevenue" placeholder="e.g. ₹3,50,000/month" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="avgTransaction">Average Transaction Value</label>
+      <input class="field-input" type="text" id="avgTransaction" placeholder="e.g. ₹650 per visit or ₹2,500/month membership" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="currentCustomers">Current Customers</label>
+      <input class="field-input" type="text" id="currentCustomers" placeholder="e.g. 180 active members or 500 households" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="targetCustomers">Target Customers in 12 Months</label>
+      <input class="field-input" type="text" id="targetCustomers" placeholder="e.g. 350 active members or 800 households" required>
+    </div>
+    <div class="form-nav">
+      <div></div>
+      <button class="btn-next" onclick="goNext(1)">Next: Local Market →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 2: LOCAL MARKET -->
+  <div class="form-section" id="section-2">
+    <h2 class="section-title">Your Local Market</h2>
+    <p class="section-desc">Scout uses your landmarks and area type to find your best customers precisely.</p>
+    <div class="section-divider"></div>
+    <div class="field-group">
+      <label class="field-label" for="areaType">What Type of Area</label>
+      <select class="field-select" id="areaType" required>
+        <option value="" disabled selected>Select your area type</option>
+        <option value="Residential colony / housing society">Residential colony / housing society</option>
+        <option value="Market / commercial area">Market / commercial area</option>
+        <option value="Near offices / business district">Near offices / business district</option>
+        <option value="Near schools / colleges">Near schools / colleges</option>
+        <option value="Highway / main road">Highway / main road</option>
+        <option value="Mixed residential and commercial">Mixed residential and commercial</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="landmark1">Landmark 1</label>
+      <input class="field-input" type="text" id="landmark1" placeholder="e.g. Near DM office, opposite Central Bank branch" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="landmark2">Landmark 2 <span class="optional">optional</span></label>
+      <input class="field-input" type="text" id="landmark2" placeholder="e.g. 200m from Nexus Mall main gate">
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="landmark3">Landmark 3 <span class="optional">optional</span></label>
+      <input class="field-input" type="text" id="landmark3" placeholder="e.g. Same lane as Axis Bank ATM">
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="bestCustomers">Describe Your 3 Best Existing Customers</label>
+      <textarea class="field-textarea" id="bestCustomers" rows="4" placeholder="e.g. Government teacher, 45 years old, lives in Civil Lines colony, orders weekly, refers neighbours" required></textarea>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack(2)">← Back</button>
+      <button class="btn-next" onclick="goNext(2)">Next: Competition →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: COMPETITION -->
+  <div class="form-section" id="section-3">
+    <h2 class="section-title">Your Competition</h2>
+    <p class="section-desc">Knowing your competitors helps Scout write outreach that positions you correctly.</p>
+    <div class="section-divider"></div>
+    <div class="competitor-group">
+      <div class="competitor-group-title">Competitor 1 <span style="color:var(--grey2);font-size:8px">(optional)</span></div>
+      <div class="competitor-inner">
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="comp1name">Name</label>
+          <input class="field-input" type="text" id="comp1name" placeholder="e.g. Gold's Gym, Reliance Smart, Apollo Pharmacy">
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="comp1better">What They Do Better</label>
+          <input class="field-input" type="text" id="comp1better" placeholder="e.g. Bigger space, cheaper price, better parking">
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="comp1worse">What You Do Better</label>
+          <input class="field-input" type="text" id="comp1worse" placeholder="e.g. Personal attention, home delivery, longer hours">
+        </div>
+      </div>
+    </div>
+    <div class="competitor-group">
+      <div class="competitor-group-title">Competitor 2 <span style="color:var(--grey2);font-size:8px">(optional)</span></div>
+      <div class="competitor-inner">
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="comp2name">Name</label>
+          <input class="field-input" type="text" id="comp2name" placeholder="e.g. Local gym around the corner">
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="comp2better">What They Do Better</label>
+          <input class="field-input" type="text" id="comp2better" placeholder="e.g. Established reputation, loyal base">
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="comp2worse">What You Do Better</label>
+          <input class="field-input" type="text" id="comp2worse" placeholder="e.g. Newer equipment, qualified trainers">
+        </div>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="largeChains">Any Large Chains Nearby? <span class="optional">optional</span></label>
+      <input class="field-input" type="text" id="largeChains" placeholder="e.g. Reliance Smart 2km away, Apollo clinic 1km away">
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack(3)">← Back</button>
+      <button class="btn-next" onclick="goNext(3)">Next: Channels →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: CHANNELS -->
+  <div class="form-section" id="section-4">
+    <h2 class="section-title">Where Your Customers Are</h2>
+    <p class="section-desc">Select every channel that exists near your business. Scout will prioritise the best ones for your market type.</p>
+    <div class="section-divider"></div>
+    <div class="field-group">
+      <label class="field-label">Available Channels Near You</label>
+      <div class="checkbox-grid">
+        <div class="checkbox-item"><input type="checkbox" id="ch1" value="Active housing society/colony WhatsApp groups"><label for="ch1">Housing society / colony WhatsApp groups</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch2" value="Local Facebook group"><label for="ch2">Local Facebook group</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch3" value="Auto/e-rickshaw stand nearby"><label for="ch3">Auto / e-rickshaw stand nearby</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch4" value="Chai/tea stall with regular crowd"><label for="ch4">Chai / tea stall with regular crowd</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch5" value="Temple/mosque/church community"><label for="ch5">Temple / mosque / church community</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch6" value="Local newspaper/cable TV"><label for="ch6">Local newspaper / cable TV</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch7" value="School/college nearby"><label for="ch7">School / college nearby</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch8" value="Office buildings/government offices"><label for="ch8">Office buildings / government offices</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch9" value="LinkedIn (for B2B)"><label for="ch9">LinkedIn (for B2B)</label></div>
+        <div class="checkbox-item"><input type="checkbox" id="ch10" value="Instagram"><label for="ch10">Instagram</label></div>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="whatWorked">What Have You Tried That Worked? <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="whatWorked" rows="2" placeholder="e.g. Posting in colony WhatsApp group brought 12 new customers last month"></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="whatFailed">What Definitely Did Not Work? <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="whatFailed" rows="2" placeholder="e.g. Facebook ads — spent ₹5,000, got zero customers"></textarea>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack(4)">← Back</button>
+      <button class="btn-next" onclick="goNext(4)">Next: Language →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 5: LANGUAGE -->
+  <div class="form-section" id="section-5">
+    <h2 class="section-title">Communication Language</h2>
+    <p class="section-desc">Scout will write every customer message in exactly this language and register.</p>
+    <div class="section-divider"></div>
+    <div class="field-group">
+      <label class="field-label">Preferred Language for Customer Outreach</label>
+      <div class="radio-grid">
+        <div class="radio-item"><input type="radio" name="language" id="lang1" value="Hindi"><label for="lang1">Hindi — Devanagari script, warm and respectful</label></div>
+        <div class="radio-item"><input type="radio" name="language" id="lang2" value="English"><label for="lang2">English — Professional or warm/casual depending on ICP</label></div>
+        <div class="radio-item"><input type="radio" name="language" id="lang3" value="Hinglish"><label for="lang3">Hinglish — Hindi + English mixed, the way people actually speak</label></div>
+        <div class="radio-item">
+          <input type="radio" name="language" id="lang4" value="Regional">
+          <div class="radio-inline-wrap">
+            <label for="lang4">Regional language — specify:</label>
+            <input class="radio-inline-input" type="text" id="regionalLangName" placeholder="e.g. Tamil, Marathi, Gujarati" onfocus="document.getElementById('lang4').checked=true">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack(5)">← Back</button>
+      <button class="btn-next" onclick="goNext(5)">Next: Seasonal →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 6: SEASONAL -->
+  <div class="form-section" id="section-6">
+    <h2 class="section-title">Seasonal Patterns</h2>
+    <p class="section-desc">Scout times your outreach around the moments when your customers are most ready to buy.</p>
+    <div class="section-divider"></div>
+    <div class="field-group">
+      <label class="field-label" for="bestMonths">3 Best Months for Business</label>
+      <input class="field-input" type="text" id="bestMonths" placeholder="e.g. October, November, January" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="worstMonths">3 Worst Months for Business</label>
+      <input class="field-input" type="text" id="worstMonths" placeholder="e.g. June, July, December" required>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="seasonalEvents">Local Festivals or Events That Significantly Affect Business <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="seasonalEvents" rows="3" placeholder="e.g. Chhath Puja brings 40% more customers, summer vacations kill our business, Eid week is our best week"></textarea>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack(6)">← Back</button>
+      <button class="btn-next" onclick="goNext(6)">Next: Current Situation →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 7: CURRENT SITUATION -->
+  <div class="form-section" id="section-7">
+    <h2 class="section-title">Where You Are Now</h2>
+    <p class="section-desc">Scout starts from your current reality — not from scratch.</p>
+    <div class="section-divider"></div>
+    <div class="field-group">
+      <label class="field-label" for="triedSoFar">What Have You Tried for Customer Acquisition So Far? <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="triedSoFar" rows="3" placeholder="e.g. Distributed 500 flyers — got 3 calls. WhatsApp group posts — some response but inconsistent."></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="whatsappListSize">Current WhatsApp Number List Size</label>
+      <select class="field-select" id="whatsappListSize" required>
+        <option value="" disabled selected>Select your list size</option>
+        <option value="No list at all">No list at all</option>
+        <option value="Under 50 numbers">Under 50 numbers</option>
+        <option value="50-200 numbers">50–200 numbers</option>
+        <option value="200-500 numbers">200–500 numbers</option>
+        <option value="500+ numbers">500+ numbers</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="howFoundYou">How Do Most New Customers Find You?</label>
+      <select class="field-select" id="howFoundYou" required>
+        <option value="" disabled selected>Select primary discovery channel</option>
+        <option value="Walk-in / passing by">Walk-in / passing by</option>
+        <option value="Word of mouth / referral">Word of mouth / referral</option>
+        <option value="Google search">Google search</option>
+        <option value="Social media">Social media</option>
+        <option value="Someone told them specifically">Someone told them specifically</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="specificFocus">Specific Focus for Scout <span class="optional">optional</span></label>
+      <textarea class="field-textarea" id="specificFocus" rows="3" placeholder="e.g. Focus on corporate clients. Or: We have tried WhatsApp before and it didn't work — help us understand why."></textarea>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack(7)">← Back</button>
+    </div>
+    <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">Build My Customer Acquisition System →</button>
+  </div>
+
+</div><!-- /form-wrap -->
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="scout-spinner-wrap">
+    <div class="scout-spinner-ring"></div>
+    <span class="scout-spinner-letter">S</span>
+  </div>
+  <div>
+    <div class="loading-message">Scout is analysing your market...</div>
+    <div class="loading-sub" style="margin-top:10px">This takes 20–30 seconds</div>
+  </div>
+  <div class="loading-bar">
+    <div class="loading-bar-fill" id="loadBarFill"></div>
+  </div>
+</div>
+
+<script>
+/* ─── SECTION DEFINITIONS ─── */
+var SECTIONS = [
+  {id:1,label:'Business'},{id:2,label:'Market'},{id:3,label:'Competition'},
+  {id:4,label:'Channels'},{id:5,label:'Language'},{id:6,label:'Seasonal'},
+  {id:7,label:'Situation'}
+];
+var currentSection = 1;
+
+/* ─── PAGE INIT: AUTH CHECK + CURSOR + PROGRESS ─── */
+window.addEventListener('DOMContentLoaded', function() {
+  var token = localStorage.getItem('g7_session_token');
+  if (!token) { window.location.href = '../workspace/login.html'; return; }
+  document.body.style.visibility = 'visible';
+  var firmName = localStorage.getItem('g7_session_name') || '';
+  if (firmName) document.getElementById('navFirmName').textContent = firmName;
+  renderProgress(currentSection);
+  initCursor();
+});
+
+/* ─── LOGOUT ─── */
+function handleLogout() {
+  ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
+  window.location.href = '../workspace/login.html';
+}
+
+/* ─── PROGRESS BAR ─── */
+function renderProgress(active) {
+  var c = document.getElementById('progressSteps');
+  var html = '';
+  for (var i = 0; i < SECTIONS.length; i++) {
+    var s = SECTIONS[i];
+    var isDone = s.id < active;
+    var isActive = s.id === active;
+    var cls = 'progress-step' + (isDone ? ' done' : isActive ? ' active' : '');
+    var dot = isDone
+      ? '<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#080808" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : String(s.id);
+    html += '<div class="' + cls + '"><div class="step-dot">' + dot + '</div><div class="step-label">' + s.label + '</div></div>';
+    if (i < SECTIONS.length - 1) {
+      html += '<div class="step-line' + (isDone ? ' done' : '') + '"></div>';
+    }
+  }
+  c.innerHTML = html;
+}
+
+/* ─── SECTION NAV ─── */
+function goNext(from) { if (validateSection(from)) showSection(from + 1); }
+function goBack(from) { showSection(from - 1); }
+function showSection(n) {
+  document.getElementById('section-' + currentSection).classList.remove('active');
+  document.getElementById('section-' + n).classList.add('active');
+  currentSection = n;
+  renderProgress(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── VALIDATION ─── */
+function validateSection(n) {
+  var valid = true;
+  function check(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+    else el.classList.remove('error');
+  }
+  if (n === 1) ['businessName','whatYouSell','location','monthlyRevenue','avgTransaction','currentCustomers','targetCustomers'].forEach(check);
+  if (n === 2) ['areaType','landmark1','bestCustomers'].forEach(check);
+  if (n === 5) {
+    if (!document.querySelector('input[name="language"]:checked')) {
+      alert('Please select a language for customer outreach.'); valid = false;
+    }
+  }
+  if (n === 6) ['bestMonths','worstMonths'].forEach(check);
+  if (!valid && n !== 5) {
+    var first = document.querySelector('.field-input.error,.field-textarea.error,.field-select.error');
+    if (first) first.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  return valid;
+}
+
+/* ─── COLLECT FORM DATA ─── */
+function collectFormData() {
+  var channels = [];
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb){ channels.push(cb.value); });
+  var langEl = document.querySelector('input[name="language"]:checked');
+  var language = langEl ? langEl.value : '';
+  if (language === 'Regional') {
+    var rn = document.getElementById('regionalLangName').value.trim();
+    language = rn ? 'Regional — ' + rn : 'Regional language (unspecified)';
+  }
+  return {
+    businessName:document.getElementById('businessName').value.trim(),
+    whatYouSell:document.getElementById('whatYouSell').value.trim(),
+    location:document.getElementById('location').value.trim(),
+    monthlyRevenue:document.getElementById('monthlyRevenue').value.trim(),
+    avgTransaction:document.getElementById('avgTransaction').value.trim(),
+    currentCustomers:document.getElementById('currentCustomers').value.trim(),
+    targetCustomers:document.getElementById('targetCustomers').value.trim(),
+    areaType:document.getElementById('areaType').value,
+    landmark1:document.getElementById('landmark1').value.trim(),
+    landmark2:document.getElementById('landmark2').value.trim(),
+    landmark3:document.getElementById('landmark3').value.trim(),
+    bestCustomers:document.getElementById('bestCustomers').value.trim(),
+    comp1name:document.getElementById('comp1name').value.trim(),
+    comp1better:document.getElementById('comp1better').value.trim(),
+    comp1worse:document.getElementById('comp1worse').value.trim(),
+    comp2name:document.getElementById('comp2name').value.trim(),
+    comp2better:document.getElementById('comp2better').value.trim(),
+    comp2worse:document.getElementById('comp2worse').value.trim(),
+    largeChains:document.getElementById('largeChains').value.trim(),
+    channels:channels,
+    whatWorked:document.getElementById('whatWorked').value.trim(),
+    whatFailed:document.getElementById('whatFailed').value.trim(),
+    language:language,
+    bestMonths:document.getElementById('bestMonths').value.trim(),
+    worstMonths:document.getElementById('worstMonths').value.trim(),
+    seasonalEvents:document.getElementById('seasonalEvents').value.trim(),
+    triedSoFar:document.getElementById('triedSoFar').value.trim(),
+    whatsappListSize:document.getElementById('whatsappListSize').value,
+    howFoundYou:document.getElementById('howFoundYou').value,
+    specificFocus:document.getElementById('specificFocus').value.trim(),
+    submittedAt:new Date().toISOString()
+  };
+}
+
+/* ─── BUILD SCOUT USER MESSAGE ─── */
+function buildScoutUserMessage(d) {
+  var lm = ['  — ' + d.landmark1];
+  if (d.landmark2) lm.push('  — ' + d.landmark2);
+  if (d.landmark3) lm.push('  — ' + d.landmark3);
+  var comp = [];
+  if (d.comp1name) { comp.push('COMPETITOR 1: ' + d.comp1name); if (d.comp1better) comp.push('  They do better: ' + d.comp1better); if (d.comp1worse) comp.push('  We do better: ' + d.comp1worse); }
+  if (d.comp2name) { comp.push('COMPETITOR 2: ' + d.comp2name); if (d.comp2better) comp.push('  They do better: ' + d.comp2better); if (d.comp2worse) comp.push('  We do better: ' + d.comp2worse); }
+  if (d.largeChains) comp.push('LARGE CHAINS NEARBY: ' + d.largeChains);
+  return [
+    'Please produce a complete Scout Customer Acquisition System for this business.',
+    'Follow the exact 4-tab output format from Component 7 of your system prompt.',
+    'Apply the Anti-Generic Filter before delivering.',
+    '',
+    '═══════════════════════════════════════',
+    'BUSINESS PROFILE',
+    '═══════════════════════════════════════',
+    'BUSINESS NAME: ' + d.businessName,
+    'WHAT THEY SELL: ' + d.whatYouSell,
+    'LOCATION: ' + d.location,
+    'AREA TYPE: ' + d.areaType,
+    '',
+    'LANDMARKS:', lm.join('\n'),
+    '',
+    'FINANCIAL BASELINE:',
+    '  Monthly Revenue: ' + d.monthlyRevenue,
+    '  Average Transaction: ' + d.avgTransaction,
+    '  Current Customers: ' + d.currentCustomers,
+    '  Target (12 months): ' + d.targetCustomers,
+    '',
+    'BEST EXISTING CUSTOMERS:', d.bestCustomers,
+    '',
+    '═══════════════════════════════════════',
+    'COMPETITIVE LANDSCAPE',
+    '═══════════════════════════════════════',
+    comp.length > 0 ? comp.join('\n') : 'No specific competitors named.',
+    '',
+    '═══════════════════════════════════════',
+    'AVAILABLE CHANNELS',
+    '═══════════════════════════════════════',
+    d.channels.length > 0 ? d.channels.join(', ') : 'None specified',
+    d.whatWorked ? 'WHAT WORKED BEFORE: ' + d.whatWorked : '',
+    d.whatFailed ? 'WHAT FAILED: ' + d.whatFailed : '',
+    '',
+    '═══════════════════════════════════════',
+    'COMMUNICATION',
+    '═══════════════════════════════════════',
+    'PREFERRED LANGUAGE: ' + d.language,
+    '',
+    '═══════════════════════════════════════',
+    'SEASONAL INTELLIGENCE',
+    '═══════════════════════════════════════',
+    'BEST MONTHS: ' + d.bestMonths,
+    'WORST MONTHS: ' + d.worstMonths,
+    d.seasonalEvents ? 'LOCAL SEASONAL EVENTS: ' + d.seasonalEvents : '',
+    '',
+    '═══════════════════════════════════════',
+    'CURRENT SITUATION',
+    '═══════════════════════════════════════',
+    d.triedSoFar       ? 'TRIED SO FAR: '                 + d.triedSoFar       : 'Nothing tried yet.',
+    d.whatsappListSize ? 'WHATSAPP LIST SIZE: '            + d.whatsappListSize : '',
+    d.howFoundYou      ? 'HOW CUSTOMERS FIND THEM NOW: '   + d.howFoundYou      : '',
+    d.specificFocus    ? 'SPECIFIC FOCUS REQUEST: '        + d.specificFocus    : '',
+    '',
+    '═══════════════════════════════════════',
+    'REQUIRED OUTPUT',
+    '═══════════════════════════════════════',
+    'Produce the full onboarding output:',
+    '  HEADLINE BLOCK — Revenue Velocity, Acquisition Efficiency, Momentum Score 0/100',
+    '  TAB 1 — WHO TO TARGET — 3 named ICPs with triggers, locations, volume, conversion probability',
+    '  TAB 2 — WHAT TO SAY — primary messages + Day 3 + Day 7 follow-ups + 5 response handlers',
+    '  TAB 3 — WHAT TO DO THIS WEEK — Mon–Fri daily plan with time, action, target, message reference',
+    '  TAB 4 — PIPELINE TRACKER — Week 1 targets + 90-day revenue projection',
+    '',
+    'Every ICP, message, and action must be specific to this exact business in this exact location.',
+    'No generic phrases. Every message must pass the 5-point quality test from Component 6.'
+  ].filter(function(l){ return l !== undefined; }).join('\n');
+}
+
+/* ─── SUBMIT HANDLER ─── */
+async function handleSubmit() {
+  /* Validate section 7 required dropdowns */
+  var valid = true;
+  ['whatsappListSize','howFoundYou'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el.value) { el.classList.add('error'); valid = false; }
+    else el.classList.remove('error');
+  });
+  if (!valid) return;
+
+  var data = collectFormData();
+
+  /* Show loading overlay, restart progress bar animation */
+  var overlay = document.getElementById('loadingOverlay');
+  var bar = document.getElementById('loadBarFill');
+  overlay.classList.add('active');
+  bar.style.animation = 'none';
+  bar.offsetHeight;
+  bar.style.animation = '';
+
+  try {
+    var userMessage = buildScoutUserMessage(data);
+    var token = localStorage.getItem('g7_session_token');
+
+    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: SCOUT_SYSTEM_PROMPT,
+        messages: [{role:'user',content:userMessage}]
+      })
+    });
+
+    if (!response.ok) {
+      var errBody = await response.text();
+      throw new Error('API error ' + response.status + ': ' + errBody);
+    }
+
+    var apiData = await response.json();
+    if (apiData.error) throw new Error(apiData.error.message || 'Unknown API error');
+
+    var scoutOutput = apiData.content[0].text;
+
+    /* Save to localStorage for result.html */
+    localStorage.setItem('scout_pending_result', JSON.stringify({
+      scoutOutput:  scoutOutput,
+      businessData: data,
+      submittedAt:  data.submittedAt,
+      analysisId:   'scout_' + Date.now()
+    }));
+
+    window.location.href = 'result.html';
+
+  } catch (err) {
+    overlay.classList.remove('active');
+    alert('Scout encountered an error: ' + (err.message || 'Please try again.'));
+  }
+}
+
+/* ─── CURSOR ─── */
+function initCursor() {
+  var c = document.getElementById('cursor');
+  var r = document.getElementById('cursorRing');
+  if (!c || !r) return;
+  document.addEventListener('mousemove', function(e) {
+    c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
+    r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mousedown', function() {
+    c.style.transform = 'translate(-50%,-50%) scale(0.7)';
+    r.style.transform = 'translate(-50%,-50%) scale(0.8)';
+  });
+  document.addEventListener('mouseup', function() {
+    c.style.transform = 'translate(-50%,-50%) scale(1)';
+    r.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+}
+
+/* ─── CLEAR ERROR ON INPUT ─── */
+document.addEventListener('input',  function(e){ e.target.classList.remove('error'); });
+document.addEventListener('change', function(e){ e.target.classList.remove('error'); });
+</script>
+</body>
+</html>
