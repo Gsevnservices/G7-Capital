@@ -162,10 +162,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
 /* METRIC CARDS */
 .metric-row{
-  display:grid;grid-template-columns:1fr 1fr 1fr;
+  display:grid;grid-template-columns:repeat(4,1fr);
   gap:12px;margin-bottom:32px
 }
-@media(max-width:700px){.metric-row{grid-template-columns:1fr}}
+@media(max-width:900px){.metric-row{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.metric-row{grid-template-columns:1fr}}
 .metric-card{
   background:var(--black3);border:1px solid var(--border2);
   padding:22px 24px
@@ -176,10 +177,146 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .metric-card-value{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(24px,3.5vw,34px);font-weight:300;
+  font-size:clamp(20px,2.8vw,30px);font-weight:300;
   color:var(--white);line-height:1;margin-bottom:4px
 }
 .metric-card-sub{font-size:10px;color:var(--grey2);letter-spacing:.05em}
+
+/* ── MOMENTUM PROGRESSION SYSTEM ── */
+.momentum-level-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(20px,3vw,28px);font-weight:300;
+  color:var(--white);margin-bottom:4px;letter-spacing:.02em
+}
+.momentum-level-desc{
+  font-size:11px;color:var(--grey1);letter-spacing:.06em;
+  margin-top:8px;line-height:1.6
+}
+.momentum-next-level{
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--grey2);margin-top:6px
+}
+/* Gold glow for Mastery level */
+.momentum-card.mastery{
+  border-color:rgba(201,168,76,0.5);
+  box-shadow:0 0 24px rgba(201,168,76,0.12)
+}
+/* Level transition flash */
+@keyframes levelFlash{
+  0%{background:var(--black2)}
+  30%{background:rgba(201,168,76,0.18)}
+  100%{background:var(--black2)}
+}
+.momentum-card.level-up{animation:levelFlash .8s ease both}
+
+/* ── STREAK BADGE ── */
+.streak-badge{
+  display:none;
+  font-size:11px;letter-spacing:.06em;color:var(--gold);
+  margin-bottom:20px;padding:10px 16px;
+  border:1px solid rgba(201,168,76,0.2);
+  background:rgba(201,168,76,0.05);
+  line-height:1.6
+}
+.streak-badge.visible{display:block}
+.streak-badge.master{
+  font-size:12px;
+  border-color:rgba(201,168,76,0.4);
+  background:rgba(201,168,76,0.1);
+  text-shadow:0 0 12px rgba(201,168,76,0.4)
+}
+
+/* ── MONDAY BRIEFING CARD ── */
+.monday-card{
+  background:var(--black2);border:1px solid var(--border);
+  border-left:3px solid var(--gold);
+  padding:24px 28px;margin-bottom:24px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+  position:relative
+}
+.monday-card-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;color:var(--grey2);
+  font-size:16px;cursor:pointer;line-height:1;
+  font-family:'Tenor Sans',sans-serif;
+  transition:color .2s
+}
+.monday-card-close:hover{color:var(--white)}
+.monday-eyebrow{
+  font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px
+}
+.monday-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;color:var(--white);
+  margin-bottom:14px
+}
+.monday-row{
+  font-size:12px;color:var(--grey1);line-height:1.7;
+  margin-bottom:8px
+}
+.monday-row strong{color:var(--white)}
+.monday-action{
+  font-size:12px;color:var(--gold);line-height:1.7;
+  margin-top:12px;padding-top:12px;
+  border-top:1px solid var(--border2)
+}
+
+/* ── 12-WEEK TRANSFORMATION ARC ── */
+.arc-wrap{
+  margin-bottom:32px;
+  padding:24px 28px;
+  background:var(--black2);border:1px solid var(--border2)
+}
+.arc-header{
+  font-size:8px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--grey2);margin-bottom:16px
+}
+.arc-track{
+  display:flex;align-items:center;gap:0;
+  margin-bottom:14px;position:relative
+}
+.arc-line{flex:1;height:1px;background:var(--border2)}
+.arc-line.done{background:var(--gold3)}
+.arc-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--border2);background:var(--black2);
+  position:relative;z-index:1
+}
+.arc-dot.done{background:var(--gold3);border-color:var(--gold3)}
+.arc-dot.current{
+  background:var(--gold);border-color:var(--gold);
+  box-shadow:0 0 8px rgba(201,168,76,0.5)
+}
+.arc-labels{
+  display:flex;justify-content:space-between;
+  margin-bottom:12px
+}
+.arc-label{
+  font-size:7px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--grey2);text-align:center;flex:1
+}
+.arc-label.current{color:var(--gold)}
+.arc-phase-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:300;color:var(--gold);
+  margin-bottom:4px
+}
+.arc-phase-desc{font-size:11px;color:var(--grey2);letter-spacing:.05em}
+.arc-graduate{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0
+}
+.arc-graduate-badge{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--border);
+  padding:6px 16px;background:rgba(201,168,76,0.08)
+}
+.arc-graduate-text{font-size:12px;color:var(--grey1)}
+@media(max-width:600px){
+  .arc-wrap{padding:20px 16px}
+  .arc-label{font-size:6px}
+}
 
 /* QUICK ACTIONS */
 .actions-row{
@@ -314,11 +451,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="greeting-week" id="greetingWeek">Week 1 of 12</div>
     </div>
 
-    <!-- MOMENTUM CARD -->
-    <div class="momentum-card">
+    <!-- MONDAY BRIEFING CARD (shown only on Mondays with prior history) -->
+    <div class="monday-card" id="mondayCard" style="display:none">
+      <button class="monday-card-close" onclick="dismissMonday()" aria-label="Dismiss">✕</button>
+      <div class="monday-eyebrow">Monday Briefing</div>
+      <div class="monday-heading" id="mondayHeading">Week begins.</div>
+      <div class="monday-row" id="mondayLastWeek"></div>
+      <div class="monday-row" id="mondayTargets"></div>
+      <div class="monday-action" id="mondayAction"></div>
+    </div>
+
+    <!-- MOMENTUM CARD (Progression System) -->
+    <div class="momentum-card" id="momentumCard">
       <div class="momentum-card-top">
         <div class="momentum-label-block">
           <div class="momentum-eyebrow">Scout Momentum</div>
+          <div class="momentum-level-name" id="dashLevelName">SCOUT BASELINE</div>
           <div class="momentum-score-display">
             <div class="momentum-big" id="dashMomentumScore">0</div>
             <div class="momentum-denom">/100</div>
@@ -329,12 +477,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="momentum-bar-wrap">
         <div class="momentum-bar-fill" id="dashMomentumBar"></div>
       </div>
+      <div class="momentum-level-desc" id="dashLevelDesc">Learning your market</div>
+      <div class="momentum-next-level" id="dashNextLevel"></div>
       <div class="momentum-note" id="dashMomentumNote">
         First week — baseline set. Complete your Friday check-in to see your score grow.
       </div>
     </div>
 
-    <!-- THREE METRIC CARDS -->
+    <!-- STREAK BADGE -->
+    <div class="streak-badge" id="streakBadge"></div>
+
+    <!-- FOUR METRIC CARDS -->
     <div class="metric-row">
       <div class="metric-card">
         <div class="metric-card-label">Revenue Velocity</div>
@@ -351,6 +504,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
         <div class="metric-card-value" id="dashCustomers">—</div>
         <div class="metric-card-sub">this week</div>
       </div>
+      <div class="metric-card">
+        <div class="metric-card-label">Total Revenue Added</div>
+        <div class="metric-card-value" id="dashTotalRevenue">₹0</div>
+        <div class="metric-card-sub">since you started Scout</div>
+      </div>
+    </div>
+
+    <!-- 12-WEEK TRANSFORMATION ARC -->
+    <div class="arc-wrap" id="arcWrap" style="display:none">
+      <div class="arc-header">12-Week Transformation Arc</div>
+      <div class="arc-track" id="arcTrack"><!-- rendered by JS --></div>
+      <div class="arc-labels" id="arcLabels"><!-- rendered by JS --></div>
+      <div class="arc-phase-name" id="arcPhaseName"></div>
+      <div class="arc-phase-desc" id="arcPhaseDesc"></div>
     </div>
 
     <!-- QUICK ACTIONS -->
@@ -419,6 +586,24 @@ function showWelcome() {
 }
 
 /* ═══════════════════════════════════════════
+   MOMENTUM LEVEL SYSTEM
+   Returns level data for a given score 0-100.
+═══════════════════════════════════════════ */
+function getMomentumLevel(score) {
+  var levels = [
+    { min: 0,  max: 20,  name: 'SCOUT BASELINE',    desc: 'Learning your market',                   next: 21  },
+    { min: 21, max: 40,  name: 'FIRST SIGNALS',     desc: 'Your ICPs are responding',               next: 41  },
+    { min: 41, max: 60,  name: 'BUILDING MOMENTUM', desc: 'Your acquisition system is forming',     next: 61  },
+    { min: 61, max: 80,  name: 'SCOUT OPERATING',   desc: 'Customer acquisition machine active',    next: 81  },
+    { min: 81, max: 100, name: 'SCOUT MASTERY',     desc: 'You outperform your market',             next: null }
+  ];
+  for (var i = 0; i < levels.length; i++) {
+    if (score <= levels[i].max) return levels[i];
+  }
+  return levels[levels.length - 1];
+}
+
+/* ═══════════════════════════════════════════
    SHOW DASHBOARD STATE
 ═══════════════════════════════════════════ */
 function showDashboard(history, weekNum, firmName) {
@@ -431,17 +616,34 @@ function showDashboard(history, weekNum, firmName) {
   document.getElementById('greetingHello').textContent = greeting + (name ? ', ' + name + '.' : '.');
   document.getElementById('greetingWeek').textContent  = 'Week ' + weekNum + ' of 12';
 
-  /* Get last week's data */
+  /* ── Last week's data ── */
   var last = history[history.length - 1] || {};
   var prev = history.length > 1 ? history[history.length - 2] : null;
 
-  /* Momentum */
+  /* ── MOMENTUM PROGRESSION ── */
   var score     = parseInt(last.momentum || '0', 10);
   var prevScore = prev ? parseInt(prev.momentum || '0', 10) : null;
+  var level     = getMomentumLevel(score);
+  var prevLevel = prevScore !== null ? getMomentumLevel(prevScore) : null;
 
   document.getElementById('dashMomentumScore').textContent = score;
+  document.getElementById('dashLevelName').textContent     = level.name;
+  document.getElementById('dashLevelDesc').textContent     = level.desc;
+  document.getElementById('dashNextLevel').textContent     = level.next
+    ? 'Next level at ' + level.next + ' points'
+    : '';
 
-  /* Animate bar after a short delay */
+  /* Mastery glow */
+  var card = document.getElementById('momentumCard');
+  if (score >= 81) { card.classList.add('mastery'); }
+
+  /* Level-up celebration flash */
+  if (prevLevel && level.name !== prevLevel.name) {
+    card.classList.add('level-up');
+    setTimeout(function() { card.classList.remove('level-up'); }, 900);
+  }
+
+  /* Animate bar */
   setTimeout(function() {
     document.getElementById('dashMomentumBar').style.width = Math.min(score, 100) + '%';
   }, 300);
@@ -457,20 +659,32 @@ function showDashboard(history, weekNum, firmName) {
       trendEl.textContent = '↓ ' + diff + ' from last week';
       trendEl.classList.add('down');
     } else {
-      trendEl.textContent = 'No change from last week';
+      trendEl.textContent = '— no change';
     }
   }
 
   /* Momentum note */
   if (last.scoutOutput) {
-    /* Try to extract Scout's "What Scout Learned" line */
     var learnedMatch = last.scoutOutput.match(/WHAT\s+SCOUT\s+LEARNED[\s\S]{0,20}?\n([^\n]+)/i);
     if (learnedMatch) {
       document.getElementById('dashMomentumNote').textContent = learnedMatch[1].trim();
     }
   }
 
-  /* Metric cards — pull from scout_pending_result if available */
+  /* ── STREAK BADGE (Feature 3.3) ── */
+  var streak = parseInt(localStorage.getItem('scout_streak') || '0', 10);
+  if (streak >= 2) {
+    var sb = document.getElementById('streakBadge');
+    sb.classList.add('visible');
+    if (streak >= 8) {
+      sb.classList.add('master');
+      sb.textContent = '🔥 ' + streak + ' week streak — Scout Master';
+    } else {
+      sb.textContent = '🔥 Week ' + streak + ' streak — keep going';
+    }
+  }
+
+  /* ── METRIC CARDS ── */
   var revenue  = '—';
   var acq      = '—';
   var custNew  = last.totalCustomers || '—';
@@ -484,8 +698,6 @@ function showDashboard(history, weekNum, firmName) {
       /* Revenue velocity */
       var rvMatch = output.match(/REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month))/i);
       if (rvMatch) revenue = rvMatch[1].replace(/\s+/g,' ').trim();
-
-      /* Fallback */
       if (revenue === '—') {
         var rvFb = output.match(/₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month)/i);
         if (rvFb) revenue = rvFb[0].replace(/\s+/g,' ').trim();
@@ -502,8 +714,147 @@ function showDashboard(history, weekNum, firmName) {
   document.getElementById('dashAcq').textContent       = acq;
   document.getElementById('dashCustomers').textContent = custNew;
 
-  /* Recent history rows — last 3 weeks, newest first */
+  /* ── TOTAL REVENUE COUNTER (Feature 3.5) ── */
+  var totalRevenue = history.reduce(function(sum, entry) {
+    return sum + (parseFloat(entry.revenueAdded) || 0);
+  }, 0);
+  document.getElementById('dashTotalRevenue').textContent =
+    totalRevenue > 0 ? '₹' + totalRevenue.toLocaleString('en-IN') : '₹0';
+
+  /* ── MONDAY BRIEFING (Feature 3.1) ── */
+  var dayOfWeek = new Date().getDay(); /* 1 = Monday */
+  var dismissed = sessionStorage.getItem('scout_monday_dismissed') === 'true';
+  if (dayOfWeek === 1 && !dismissed && history.length > 0) {
+    renderMondayBriefing(last, weekNum);
+  }
+
+  /* ── 12-WEEK ARC (Feature 3.7) ── */
+  renderTransformationArc(weekNum);
+
+  /* ── RECENT HISTORY ROWS ── */
   renderRecentRows(history);
+}
+
+/* ═══════════════════════════════════════════
+   MONDAY BRIEFING (Feature 3.1)
+═══════════════════════════════════════════ */
+function renderMondayBriefing(last, weekNum) {
+  var card = document.getElementById('mondayCard');
+
+  /* Heading */
+  document.getElementById('mondayHeading').textContent =
+    'Monday Briefing — Week ' + weekNum;
+
+  /* Last week summary */
+  var contacts = (parseInt(last.icp1_sent, 10) || 0) +
+                 (parseInt(last.icp2_sent, 10) || 0) +
+                 (parseInt(last.icp3_sent, 10) || 0);
+  var replies  = (parseInt(last.icp1_replies, 10) || 0) +
+                 (parseInt(last.icp2_replies, 10) || 0) +
+                 (parseInt(last.icp3_replies, 10) || 0);
+  var custs    = parseInt(last.totalCustomers, 10) || 0;
+  var rev      = parseFloat(last.revenueAdded) || 0;
+
+  document.getElementById('mondayLastWeek').innerHTML =
+    'Last week: <strong>' + contacts + ' contacts</strong>, ' +
+    '<strong>' + replies + ' responses</strong>, ' +
+    '<strong>' + custs + ' new customers</strong>. ' +
+    '₹' + rev.toLocaleString('en-IN') + ' added.';
+
+  /* This week's targets */
+  var targets = {};
+  try { targets = JSON.parse(localStorage.getItem('scout_last_targets') || '{}'); } catch(e) {}
+  if (targets.contacts || targets.responses || targets.customers) {
+    document.getElementById('mondayTargets').innerHTML =
+      "This week's targets: <strong>" + (targets.contacts || '—') + ' contacts</strong> → ' +
+      '<strong>' + (targets.responses || '—') + ' responses</strong> → ' +
+      '<strong>' + (targets.customers || '—') + ' new customers</strong>.';
+  }
+
+  /* First Monday action — extract from last output */
+  var action = '';
+  if (last.scoutOutput) {
+    var mondayMatch = last.scoutOutput.match(/MONDAY[^:\n]*[:–—]\s*([^\n]+)/i);
+    if (mondayMatch) action = mondayMatch[1].replace(/━+/g,'').trim();
+    if (!action) {
+      var doMoreMatch = last.scoutOutput.match(/DO\s+MORE\s+OF\s*[:\n]\s*([^\n]+)/i);
+      if (doMoreMatch) action = doMoreMatch[1].trim();
+    }
+  }
+  if (action) {
+    document.getElementById('mondayAction').innerHTML =
+      'Start today: <strong>' + escHtml(action) + '</strong>';
+  } else {
+    document.getElementById('mondayAction').style.display = 'none';
+  }
+
+  card.style.display = 'block';
+}
+
+function dismissMonday() {
+  sessionStorage.setItem('scout_monday_dismissed', 'true');
+  document.getElementById('mondayCard').style.display = 'none';
+}
+
+/* ═══════════════════════════════════════════
+   12-WEEK TRANSFORMATION ARC (Feature 3.7)
+═══════════════════════════════════════════ */
+function renderTransformationArc(weekNum) {
+  var arcWrap = document.getElementById('arcWrap');
+
+  var phases = [
+    { weeks: '1–2',  name: 'DISCOVERY',    desc: 'Finding your real ICPs' },
+    { weeks: '3–4',  name: 'TESTING',      desc: 'Learning what messages work' },
+    { weeks: '5–6',  name: 'OPTIMISING',   desc: 'Doubling down on what converts' },
+    { weeks: '7–8',  name: 'SCALING',      desc: 'Expanding to new channels' },
+    { weeks: '9–10', name: 'SYSTEMISING',  desc: 'Building repeatable processes' },
+    { weeks: '11–12',name: 'GRADUATING',   desc: 'You now have an acquisition machine' }
+  ];
+
+  /* Which phase are we in? Phase index = Math.floor((weekNum-1)/2), capped at 5 */
+  var phaseIdx = Math.min(Math.floor((weekNum - 1) / 2), 5);
+  var graduated = weekNum > 12;
+
+  /* Build dot track + labels */
+  var trackHtml  = '';
+  var labelsHtml = '';
+
+  for (var i = 0; i < phases.length; i++) {
+    var isDone    = i < phaseIdx;
+    var isCurrent = i === phaseIdx && !graduated;
+
+    /* Line before dot (except first) */
+    if (i > 0) {
+      trackHtml += '<div class="arc-line' + (isDone ? ' done' : '') + '"></div>';
+    }
+
+    /* Dot */
+    var dotClass = 'arc-dot';
+    if (isDone)    dotClass += ' done';
+    if (isCurrent) dotClass += ' current';
+    trackHtml += '<div class="' + dotClass + '"></div>';
+
+    /* Label */
+    labelsHtml += '<div class="arc-label' + (isCurrent ? ' current' : '') + '">' +
+      phases[i].name + '</div>';
+  }
+
+  document.getElementById('arcTrack').innerHTML  = trackHtml;
+  document.getElementById('arcLabels').innerHTML = labelsHtml;
+
+  if (graduated) {
+    document.getElementById('arcPhaseName').innerHTML =
+      '<div class="arc-graduate">' +
+        '<span class="arc-graduate-badge">SCOUT GRADUATE 🎓</span>' +
+        '<span class="arc-graduate-text">You have built a customer acquisition machine.</span>' +
+      '</div>';
+    document.getElementById('arcPhaseDesc').textContent = '';
+  } else {
+    document.getElementById('arcPhaseName').textContent = phases[phaseIdx].name;
+    document.getElementById('arcPhaseDesc').textContent = phases[phaseIdx].desc;
+  }
+
+  arcWrap.style.display = 'block';
 }
 
 /* ═══════════════════════════════════════════
@@ -564,6 +915,11 @@ function viewWeek(idx) {
 /* ═══════════════════════════════════════════
    UTILITIES
 ═══════════════════════════════════════════ */
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 function formatDate(iso) {
   if (!iso) return '';
   try {

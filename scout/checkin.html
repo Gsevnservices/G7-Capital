@@ -107,6 +107,43 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 @keyframes loadProg{0%{width:0%}55%{width:68%}82%{width:88%}100%{width:94%}}
 .loading-msg{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white)}
 .loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
+
+/* ── FIRST CUSTOMER MILESTONE OVERLAY ── */
+.milestone-overlay{display:none;position:fixed;inset:0;background:rgba(8,8,8,.98);z-index:3000;
+  flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.milestone-overlay.active{display:flex}
+.milestone-icon{font-size:48px;margin-bottom:24px}
+.milestone-eyebrow{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.milestone-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,44px);font-weight:300;
+  color:var(--white);margin-bottom:8px;line-height:1.2}
+.milestone-sub{font-size:13px;color:var(--grey1);margin-bottom:32px;line-height:1.8;max-width:440px}
+.milestone-stats{
+  background:var(--black2);border:1px solid var(--border);
+  padding:24px 32px;margin-bottom:32px;text-align:left;
+  min-width:280px;max-width:400px;width:100%
+}
+.milestone-stat-row{display:flex;justify-content:space-between;align-items:baseline;
+  padding:8px 0;border-bottom:1px solid var(--border2);font-size:12px}
+.milestone-stat-row:last-child{border-bottom:none}
+.milestone-stat-label{color:var(--grey1);letter-spacing:.05em}
+.milestone-stat-value{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--gold)}
+.milestone-momentum{
+  font-size:11px;letter-spacing:.1em;color:var(--gold);
+  margin-bottom:32px;opacity:.8
+}
+.milestone-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-share{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  background:transparent;color:var(--gold);border:1px solid var(--border);
+  padding:14px 28px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .3s
+}
+.btn-share:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+.btn-continue{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:var(--black);border:none;
+  padding:14px 28px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:background .3s
+}
+.btn-continue:hover{background:#E2C97E}
 </style>
 </head>
 <body>
@@ -226,6 +263,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   </div>
 
 </div><!-- /form-wrap -->
+
+<!-- FIRST CUSTOMER MILESTONE OVERLAY -->
+<div class="milestone-overlay" id="milestoneOverlay">
+  <div class="milestone-icon">🎯</div>
+  <div class="milestone-eyebrow">First Scout Customer</div>
+  <h1 class="milestone-heading" id="milestoneHeading">Your first Scout win.</h1>
+  <p class="milestone-sub">You just acquired your first customer using Scout's system. The acquisition machine is working.</p>
+  <div class="milestone-stats" id="milestoneStats">
+    <!-- Rendered by JS -->
+  </div>
+  <div class="milestone-momentum">Scout Momentum: +15 points 🚀</div>
+  <div class="milestone-btns">
+    <button class="btn-share" onclick="shareMilestone()">Share this win →</button>
+    <button class="btn-continue" onclick="proceedAfterMilestone()">Continue to my playbook →</button>
+  </div>
+</div>
 
 <!-- LOADING OVERLAY -->
 <div class="loading-overlay" id="loadingOverlay">
@@ -459,12 +512,122 @@ async function handleSubmit() {
     existing.submittedAt = d.submittedAt;
     localStorage.setItem('scout_pending_result', JSON.stringify(existing));
 
+    /* ── STREAK: update via scout.js helper ── */
+    updateStreak(d.weekNum);
+
+    /* ── INSIGHT: extract from check-in output via scout.js helper ── */
+    extractAndSaveInsight(checkinOutput, d.weekNum);
+
+    /* ── FIRST CUSTOMER MILESTONE ── */
+    /* Conditions: Week 1 or 2, reported customers > 0,
+       no previous customers in history, never shown before */
+    var alreadyCelebrated = localStorage.getItem('scout_first_customer_celebrated') === 'true';
+    var newCustCount = parseInt(d.totalCustomers, 10) || 0;
+
+    if (!alreadyCelebrated && newCustCount > 0 && d.weekNum <= 2) {
+      /* Check all previous history entries for any prior customer reports */
+      var prevHistory = [];
+      try { prevHistory = JSON.parse(localStorage.getItem('scout_history') || '[]'); } catch(e) {}
+      /* The current week was already pushed above — check all except the last entry */
+      var prevEntries = prevHistory.slice(0, prevHistory.length - 1);
+      var priorCustomers = prevEntries.reduce(function(sum, entry) {
+        return sum + (parseInt(entry.totalCustomers, 10) || 0);
+      }, 0);
+
+      if (priorCustomers === 0) {
+        /* First customer ever — show milestone */
+        overlay.classList.remove('active');
+        showFirstCustomerMilestone(d, checkinOutput);
+        return; /* Don't navigate — milestone buttons handle navigation */
+      }
+    }
+
     window.location.href = 'result.html';
 
   } catch(err) {
     overlay.classList.remove('active');
     alert('Scout encountered an error: ' + (err.message || 'Please try again.'));
   }
+}
+
+/* ═══════════════════════════════════════
+   FIRST CUSTOMER MILESTONE
+═══════════════════════════════════════ */
+function showFirstCustomerMilestone(d, checkinOutput) {
+  localStorage.setItem('scout_first_customer_celebrated', 'true');
+
+  /* Business name from pending result */
+  var bizName = 'Your business';
+  try {
+    var pr = JSON.parse(localStorage.getItem('scout_pending_result') || '{}');
+    bizName = (pr.businessData && pr.businessData.businessName) ? pr.businessData.businessName : bizName;
+  } catch(e) {}
+
+  /* Revenue per customer — from revenueAdded / totalCustomers */
+  var totalRev  = parseFloat(d.revenueAdded) || 0;
+  var custCount = parseInt(d.totalCustomers, 10) || 1;
+  var revPerCust = Math.round(totalRev / custCount);
+  var annualVal  = revPerCust * 12;
+
+  /* Days for Scout to pay for itself (₹3,000 / monthly revenue × 30) */
+  var daysPayback = revPerCust > 0 ? Math.ceil((3000 / revPerCust) * 30) : '—';
+
+  document.getElementById('milestoneHeading').textContent = bizName + "'s first Scout win.";
+
+  document.getElementById('milestoneStats').innerHTML =
+    '<div class="milestone-stat-row">' +
+      '<span class="milestone-stat-label">Revenue from this customer</span>' +
+      '<span class="milestone-stat-value">₹' + formatNum(revPerCust) + '/month</span>' +
+    '</div>' +
+    '<div class="milestone-stat-row">' +
+      '<span class="milestone-stat-label">Annual value</span>' +
+      '<span class="milestone-stat-value">₹' + formatNum(annualVal) + '/year</span>' +
+    '</div>' +
+    '<div class="milestone-stat-row">' +
+      '<span class="milestone-stat-label">Scout paid for itself in</span>' +
+      '<span class="milestone-stat-value">' + daysPayback + ' days</span>' +
+    '</div>';
+
+  document.getElementById('milestoneOverlay').classList.add('active');
+}
+
+function proceedAfterMilestone() {
+  window.location.href = 'result.html';
+}
+
+function shareMilestone() {
+  var bizName = 'My business';
+  try {
+    var pr = JSON.parse(localStorage.getItem('scout_pending_result') || '{}');
+    bizName = (pr.businessData && pr.businessData.businessName) ? pr.businessData.businessName : bizName;
+  } catch(e) {}
+
+  var text = bizName + ' just acquired its first customer using G7 Scout\'s AI-powered acquisition system. ' +
+    'The system identified the right customers, built the right messages, and delivered the first result. ' +
+    '#G7Scout #BusinessGrowth';
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      alert('Copied to clipboard! Share this anywhere.');
+    }).catch(function() { selectAndCopy(text); });
+  } else {
+    selectAndCopy(text);
+  }
+}
+
+function selectAndCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.top = '-9999px';
+  document.body.appendChild(ta); ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  alert('Copied to clipboard! Share this anywhere.');
+}
+
+function formatNum(n) {
+  if (!n) return '0';
+  return Number(n).toLocaleString('en-IN');
 }
 
 /* ═══════════════════════════════════════

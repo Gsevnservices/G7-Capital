@@ -430,6 +430,67 @@ function saveScoutResult(rawOutput, weekNumber) {
 
   // Advance the week counter
   localStorage.setItem('scout_week_number', String(weekNumber));
+
+  // ── STREAK TRACKING ────────────────────────────────────────
+  // Streak = consecutive weeks with a check-in.
+  // Increments if last check-in was exactly one week before this one.
+  // Resets to 1 if a week was skipped (streak broken).
+  updateStreak(weekNumber);
+
+  // ── WEEKLY INSIGHT EXTRACTION ───────────────────────────────
+  // If Scout included a SCOUT INSIGHT section in the output,
+  // extract and save it for display on result.html.
+  extractAndSaveInsight(rawOutput, weekNumber);
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — updateStreak(weekNumber)
+//
+// Called after every saveScoutResult().
+// Compares this week's number against scout_last_checkin_week.
+// If consecutive: increments scout_streak.
+// If gap: resets scout_streak to 1.
+// Updates scout_last_checkin_week to weekNumber.
+// ─────────────────────────────────────────────────────────────
+function updateStreak(weekNumber) {
+  var lastCheckinWeek = parseInt(localStorage.getItem('scout_last_checkin_week') || '0', 10);
+  var currentStreak   = parseInt(localStorage.getItem('scout_streak') || '0', 10);
+
+  if (lastCheckinWeek > 0 && lastCheckinWeek === weekNumber - 1) {
+    // Consecutive week — increment streak
+    currentStreak = currentStreak + 1;
+  } else {
+    // First check-in, or missed a week — reset to 1
+    currentStreak = 1;
+  }
+
+  localStorage.setItem('scout_streak',            String(currentStreak));
+  localStorage.setItem('scout_last_checkin_week', String(weekNumber));
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — extractAndSaveInsight(rawOutput, weekNumber)
+//
+// Extracts the SCOUT INSIGHT section from a check-in output.
+// Saves to localStorage for result.html to display.
+//
+// Saves:
+//   scout_weekly_insight — the insight text (string)
+//   scout_insight_week   — the week this insight is for (string)
+// ─────────────────────────────────────────────────────────────
+function extractAndSaveInsight(rawOutput, weekNumber) {
+  if (!rawOutput) return;
+
+  var insightMatch = rawOutput.match(
+    /SCOUT\s+INSIGHT[^:\n]*:\s*([\s\S]+?)(?=\n={3,}|\n━{3,}|\n[A-Z]{3,}[\s\S]{0,20}:|$)/i
+  );
+
+  if (insightMatch && insightMatch[1] && insightMatch[1].trim().length > 20) {
+    localStorage.setItem('scout_weekly_insight', insightMatch[1].trim());
+    localStorage.setItem('scout_insight_week',   String(weekNumber));
+  }
 }
 
 

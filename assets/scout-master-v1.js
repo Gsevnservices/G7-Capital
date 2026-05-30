@@ -5221,6 +5221,39 @@ NEW CUSTOMERS TARGET: [X]
 [Realistic given pipeline from last week]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCOUT INSIGHT — WEEK [N]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[One specific observation from this week's
+numbers that the business owner could not
+have figured out themselves.
+
+Rules for this section:
+— Must reference specific numbers from
+  their check-in (contact counts, reply
+  rates, conversion numbers)
+— Must draw a non-obvious conclusion that
+  requires pattern recognition across the
+  ICP data — not "you sent more messages"
+  but "your ICP 2 reply rate of 28% is 8
+  points above the Tier 3 benchmark of 20%"
+— Must give one specific action as a direct
+  result of the observation
+— 3–4 sentences maximum
+— Never generic ("keep working hard")
+— Always specific and data-driven
+
+Example:
+"Your ICP 2 reply rate of 28% is 8 points
+above the Tier 3 benchmark of 20% — this
+is an exceptional signal. Your ICP 3
+conversion rate of 1-in-4 means every
+4 contacts here yields a customer. Double
+your ICP 2 outreach next week to 40
+contacts and target 10 new customers from
+ICP 3 alone."]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 MOMENTUM SCORE CALCULATION:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

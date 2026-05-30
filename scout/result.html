@@ -90,6 +90,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .metric-cards{grid-template-columns:1fr}
 }
 
+/* ── SCOUT INSIGHT CARD (shown above tab nav after check-in) ── */
+.insight-card{
+  background:var(--black2);
+  border-left:3px solid var(--gold);
+  border-bottom:1px solid var(--border2);
+  padding:20px 64px
+}
+.insight-eyebrow{
+  font-size:8px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px
+}
+.insight-body{
+  font-size:13px;line-height:1.9;color:var(--grey1);
+  max-width:720px
+}
+@media(max-width:768px){.insight-card{padding:16px 24px}}
+
 /* ── TAB NAV ── */
 .tab-nav{
   display:flex;border-bottom:1px solid var(--border2);
@@ -408,6 +425,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   </div>
 </div>
 
+<!-- SCOUT INSIGHT CARD (hidden by default; shown by JS after check-in) -->
+<div class="insight-card" id="insightCard" style="display:none">
+  <div class="insight-eyebrow" id="insightEyebrow">SCOUT INSIGHT</div>
+  <div class="insight-body" id="insightBody"></div>
+</div>
+
 <!-- TAB NAV -->
 <div class="tab-nav">
   <button class="tab-btn active" onclick="switchTab(0)" id="tabBtn0">Who to Target</button>
@@ -555,6 +578,19 @@ window.addEventListener('DOMContentLoaded', function() {
 
   /* Parse and render */
   parseAndRender(scoutRaw, businessData);
+
+  /* Show Scout Insight card if one exists from the most recent check-in.
+     insightWeek is the week number when the insight was generated.
+     We show it whenever it exists — it was written for the just-completed check-in. */
+  var insightText = localStorage.getItem('scout_weekly_insight') || '';
+  var insightWeek = localStorage.getItem('scout_insight_week')   || '';
+  if (insightText && insightWeek) {
+    var insightCard = document.getElementById('insightCard');
+    document.getElementById('insightEyebrow').textContent = 'SCOUT INSIGHT — WEEK ' + insightWeek;
+    document.getElementById('insightBody').textContent    = insightText;
+    insightCard.style.display = 'block';
+  }
+
   initCursor();
 });
 
