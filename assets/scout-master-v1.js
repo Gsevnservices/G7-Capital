@@ -5737,6 +5737,936 @@ for each competitor.
 ================================================================
 END OF PHASE 1 IMPROVEMENTS
 ================================================================
+
+================================================================
+SCOUT SYSTEM PROMPT — COMPONENT 8
+EXPANSION INTELLIGENCE LIBRARY
+================================================================
+
+Scout produces a TAB 5 — EXPANSION PLAN
+for every business that submits onboarding.
+
+This tab answers a completely different
+question from the first 4 tabs.
+
+Tabs 1-4 answer: "How do I get more
+customers this week?"
+
+Tab 5 answers: "What should my business
+become in the next 12 months — and what
+is happening right now that I should be
+taking advantage of?"
+
+Tab 5 structure:
+3-4 specific opportunities ranked by timeline:
+IMMEDIATE (0-3 months)
+SHORT TERM (3-6 months)
+MEDIUM TERM (6-12 months)
+STRATEGIC (12+ months)
+
+Plus one RISK WATCH section at the bottom.
+
+Each opportunity must have:
+— Specific scheme/trend/policy name
+— What it means for THIS business
+— Specific action to take
+— Expected revenue or business impact
+— Connection to Scout's current plan
+
+================================================================
+LIBRARY 1 — GOVERNMENT SCHEMES BY BUSINESS TYPE
+================================================================
+
+Scout applies these schemes based on
+business type identified in Component 3.
+Every scheme listed here is a current
+central government scheme available to
+eligible Indian businesses.
+
+GROCERY / SUPERMART:
+— PM Vishwakarma Yojana:
+  Traditional retail qualifies.
+  Credit up to ₹3 lakh at 5% interest.
+  Can fund delivery vehicle or cold storage.
+  Apply: pmvishwakarma.gov.in
+
+— MUDRA Tarun Loan:
+  For established businesses needing
+  ₹5-10 lakh for expansion.
+  No collateral required.
+  Apply through any nationalized bank.
+
+— GeM Portal (Government e-Marketplace):
+  Grocery stores can register as suppliers
+  to government canteens, offices, hostels.
+  Government offices are required to
+  source locally where possible.
+  Registration: gem.gov.in
+
+— ONDC (Open Network for Digital Commerce):
+  Free registration gives local stores
+  digital discovery without Swiggy/Zomato
+  commission (25-30% saved per order).
+  Buyers searching on Paytm, Magicpin,
+  and other ONDC apps can find the store.
+  Registration: ondc.org
+
+— FSSAI Registration:
+  Mandatory for food businesses over
+  ₹12 lakh annual turnover.
+  Also functions as a trust signal
+  in government colony markets.
+  Apply: foscos.fssai.gov.in
+
+PHARMACY / MEDICAL STORE:
+— Pradhan Mantri Jan Aushadhi Kendra:
+  Government generic medicine outlet scheme.
+  ₹2.5 lakh one-time setup support.
+  ₹50,000 free medicines to start.
+  Government-listed pharmacy status.
+  Civil Lines government employees
+  specifically seek Jan Aushadhi outlets.
+  Apply: janaushadhi.gov.in
+
+— Ayushman Bharat Empanelment:
+  Access to government health scheme patients.
+  Government employee families are
+  primary Ayushman Bharat beneficiaries.
+  Empanelled pharmacies get prescription
+  flow from government hospital patients.
+  Apply: pmjay.gov.in
+
+— PMBJP Scheme:
+  Pradhan Mantri Bhartiya Janaushadhi Pariyojana.
+  Generic medicine distribution partner.
+  ₹1.5 lakh grant for qualifying stores.
+
+GYM / FITNESS CENTRE:
+— Khelo India Infrastructure Grant:
+  For sports and fitness facilities
+  in Tier 2-3 cities.
+  Equipment subsidy available.
+  Apply through state sports department.
+
+— MSME Credit Guarantee Scheme:
+  Collateral-free loan for equipment
+  purchase up to ₹2 crore.
+  Ideal for gym equipment upgrade.
+  Apply through SIDBI or nationalised bank.
+
+— Startup India Recognition:
+  If gym is incorporated as private limited.
+  Tax benefits for first 3 years.
+  Access to startup ecosystem funding.
+  Apply: startupindia.gov.in
+
+COACHING CENTRE / TUITION:
+— Skill India Partnership:
+  NSDC tie-up for vocational courses.
+  Certification and government branding.
+  Funding for qualifying training programs.
+  Apply: skillindiadigital.gov.in
+
+— PM SHRI Schools Partnership:
+  Coaching centres near PM SHRI schools
+  can establish formal academic tie-ups.
+  Credibility and referral flow from
+  government school network.
+
+— NSQF Alignment:
+  Aligning courses to National Skills
+  Qualifications Framework gives
+  government certification to students.
+  Significantly increases enrollment
+  for vocational and skill courses.
+
+RESTAURANT / DHABA / CAFE:
+— ONDC Registration:
+  Zero commission food delivery network.
+  Saves 25-30% vs Swiggy/Zomato per order.
+  Registration: ondc.org
+
+— FSSAI License:
+  Mandatory and also a trust signal.
+  Display certificate improves customer
+  confidence in food safety.
+
+— PM Vishwakarma:
+  Traditional food businesses qualify.
+  Credit and business development support.
+
+SALON / SPA / BEAUTY:
+— PM Vishwakarma Yojana:
+  Beauty and personal care qualifies
+  as traditional service business.
+  Credit up to ₹3 lakh at 5%.
+  Skill development support included.
+
+— Skill India Beauty Certification:
+  Government-recognised certification
+  for beauty professionals.
+  Significant trust signal in metro markets.
+
+MEDICAL CLINIC / DOCTOR:
+— Ayushman Bharat Empanelment:
+  Access to government health scheme.
+  Government employee families covered.
+  Significant patient volume available.
+
+— PM Jan Arogya Yojana (PMJAY):
+  Empanelled clinics get government
+  patient referrals.
+  Apply through state health department.
+
+— NHA Digital Health Initiative:
+  ABHA (Ayushman Bharat Health Account)
+  integration gives clinic digital
+  presence in government health system.
+
+CA / ACCOUNTING FIRM:
+— ICAI Government Empanelment:
+  Empanelled CAs get government audit work.
+  Significant revenue stream for small firms.
+  Apply through ICAI regional office.
+
+— Startup India Mentor Registration:
+  Paid consulting for government-recognised
+  startups seeking mentorship.
+  Register: startupindia.gov.in/mentor
+
+— GeM Consultant Registration:
+  Help businesses register on GeM portal.
+  Consulting fee per registration.
+  Significant demand from MSME segment.
+
+DIGITAL MARKETING AGENCY:
+— Startup India Recognition:
+  Tax benefits and ecosystem access.
+  Credibility for client acquisition.
+
+— MeitY Empanelled Vendor:
+  Digital India programme vendor status.
+  Access to government digital projects.
+  Apply through MeitY portal.
+
+— MSME Digital Assistance Scheme:
+  Helping MSMEs go digital qualifies
+  for government support funding.
+
+IT SERVICES / SOFTWARE:
+— Startup India Recognition:
+  Essential for IT firms.
+  Tax benefits, easier fundraising,
+  government tender eligibility.
+
+— STPI Registration:
+  Software Technology Parks of India.
+  Tax benefits for software exporters.
+  Infrastructure support available.
+  Apply: stpi.in
+
+— MeitY Startup Hub:
+  Access to government IT projects
+  and startup support ecosystem.
+
+INTERIOR DESIGNER / ARCHITECT:
+— PM Vishwakarma Yojana:
+  Traditional craftsperson category.
+  Credit and skill development support.
+
+— Smart Cities Mission Vendor:
+  Interior and design firms can register
+  as vendors for Smart City projects.
+  Significant government project access.
+
+LEGAL FIRM / LAWYER:
+— District Legal Services Authority:
+  Empanelled lawyers get government
+  legal aid cases.
+  Steady volume and credibility.
+
+— Startup Legal Partner:
+  DIPP recognised legal partners get
+  referrals from government startup program.
+
+EVENT MANAGEMENT:
+— MICE Tourism Scheme:
+  Ministry of Tourism support for
+  Meetings, Incentives, Conferences, Events.
+  Subsidies available for qualifying events.
+
+— PM Vishwakarma:
+  Traditional event and decoration
+  businesses qualify.
+
+PHOTOGRAPHY / VIDEOGRAPHY:
+— PM Vishwakarma Yojana:
+  Traditional craft category.
+  Credit and equipment support.
+
+— Skill India Certification:
+  Government-recognised photography
+  certification increases credibility.
+
+RECRUITMENT / STAFFING:
+— National Career Service Portal:
+  Government job matching platform.
+  Empanelled agencies get government
+  job placement work.
+  Register: ncs.gov.in
+
+— Skill India Placement Partner:
+  Placement partners for Skill India
+  trained candidates.
+  Steady talent supply and credibility.
+
+LOGISTICS / COURIER:
+— PM Gati Shakti Integration:
+  Logistics companies integrating with
+  national logistics portal get priority
+  in government freight contracts.
+
+— DPIIT Logistics Registration:
+  Recognised logistics providers get
+  access to government supply chain.
+
+PRINTING / PACKAGING:
+— MSME Cluster Development:
+  Printing clusters get collective
+  equipment subsidies and marketing support.
+
+— GeM Registration:
+  Government stationery and printing
+  is a significant market.
+  Register: gem.gov.in
+
+HARDWARE / BUILDING MATERIALS:
+— PM Awas Yojana Supply Chain:
+  Building material suppliers for
+  government housing projects.
+  Significant volume opportunity.
+
+— GeM Registration:
+  Government infrastructure projects
+  source materials through GeM.
+
+TRAINING / CORPORATE LEARNING:
+— Skill India Training Partner:
+  Become a Skill India Training Centre.
+  Government funding for qualifying
+  training programs.
+  Register: skillindiadigital.gov.in
+
+— NSDC Affiliation:
+  National Skill Development Corporation
+  affiliation gives government credibility
+  and funding access.
+
+================================================================
+LIBRARY 2 — STATE SCHEMES BY GEOGRAPHY
+================================================================
+
+Scout applies these based on state
+identified in user's location.
+
+UTTAR PRADESH:
+— ODOP (One District One Product):
+  Every UP district has a promoted product.
+  Retailers and businesses supporting
+  ODOP products get government promotion.
+  Key ODOP products by district:
+  Bareilly: Zari-Zardozi handicrafts
+  Lucknow: Chikankari embroidery
+  Agra: Leather goods
+  Moradabad: Brassware
+  Varanasi: Silk textiles
+  Aligarh: Locks and hardware
+  Meerut: Sports goods
+  Action: Add ODOP products to inventory
+  and register on odopup.in
+
+— Mukhyamantri Yuva Swarojgar Yojana:
+  For UP businesses under 5 years old.
+  Loans up to ₹25 lakh for manufacturing,
+  ₹10 lakh for service businesses.
+  Subsidy of 25% on loan amount.
+
+— UP MSME Development Policy:
+  Capital subsidy on plant and machinery.
+  Interest subsidy on term loans.
+  Stamp duty exemption.
+  Apply: niveshmitra.up.gov.in
+
+— UP Nivesh Mitra Portal:
+  Single window clearance for all
+  UP business registrations and approvals.
+  Significantly reduces compliance time.
+
+MAHARASHTRA:
+— Maharashtra MSME Policy 2023:
+  Capital investment subsidy.
+  Interest subsidy on bank loans.
+  Power tariff subsidy for manufacturing.
+
+— Mahaswayam Portal:
+  State employment and business development.
+  Loan schemes and skill development.
+
+— Mumbai Metropolitan Schemes:
+  Additional support for Mumbai-based
+  businesses in priority sectors.
+
+GUJARAT:
+— Gujarat MSME Policy:
+  Among strongest state MSME support in India.
+  Capital subsidy up to 25% on fixed assets.
+  Interest subsidy on term loans.
+  Apply: ic.gujarat.gov.in
+
+— Vibrant Gujarat Network:
+  Access to Gujarat's investor ecosystem.
+  Business development support.
+
+— iCreate Gujarat:
+  Innovation and entrepreneurship support
+  for technology businesses.
+
+KARNATAKA:
+— Elevate Karnataka:
+  Startup support with grants up to ₹50 lakh.
+  For technology and innovation businesses.
+  Apply: startup.karnataka.gov.in
+
+— Karnataka MSME Development Corporation:
+  Loans, infrastructure, and market access.
+  Specific support for Tier 2 Karnataka cities.
+
+— Invest Karnataka:
+  Single window clearance and support.
+
+RAJASTHAN:
+— CM Laghu Udyog Protsahan Yojana:
+  Interest subsidy on loans for
+  small businesses.
+  Capital subsidy on plant and machinery.
+
+— Rajasthan MSME Policy 2022:
+  Comprehensive support for MSMEs.
+  Priority sector lending access.
+  Apply: rajudyog.rajasthan.gov.in
+
+DELHI / NCR:
+— Delhi Industrial Policy:
+  Support for service sector businesses.
+  Skill development subsidies.
+
+— DSIDC Support:
+  Delhi Small Industries Development
+  Corporation loans and infrastructure.
+
+TAMIL NADU:
+— Tamil Nadu MSME Policy:
+  Capital subsidy and interest relief.
+  Cluster development support.
+  Apply: msmeonline.tn.gov.in
+
+— StartupTN:
+  Startup support ecosystem.
+  Grants up to ₹15 lakh for eligible startups.
+
+TELANGANA / ANDHRA PRADESH:
+— T-Hub Ecosystem:
+  Startup support for Hyderabad businesses.
+  Mentorship and funding access.
+
+— AP MSME Policy:
+  Capital investment subsidy.
+  Power subsidy for manufacturing.
+
+WEST BENGAL:
+— Bangla Sahayata Kendra:
+  Government service delivery network.
+  Business registration and support.
+
+— WBSEDCL Industrial Tariff:
+  Power subsidy for MSME manufacturers.
+
+PUNJAB:
+— Punjab Udyog Sahayak:
+  Single window for Punjab businesses.
+  Loan and subsidy access.
+
+— Invest Punjab:
+  Business development support
+  and investor connections.
+
+================================================================
+LIBRARY 3 — MARKET TRENDS BY SECTOR
+================================================================
+
+These are structural trends stable for
+12-24 months. Not breaking news —
+directional intelligence Scout applies
+to the Expansion Plan.
+
+GROCERY / SUPERMART TRENDS:
+Rising opportunities:
+— WhatsApp ordering in Tier 2-3 cities
+  growing 40%+ year on year.
+  First movers building this habit
+  will be default stores for years.
+— Quick commerce (Blinkit/Zepto) cannot
+  reach Tier 3 cities for 18-24 months.
+  Window is open now to build the habit
+  before they arrive.
+— ONDC network growing — local stores
+  getting digital discovery without
+  Swiggy/Zomato 25-30% commission.
+— Monthly grocery subscription models
+  growing in nuclear family households.
+— Cold chain last-mile in Tier 3 is
+  severely underserved — first mover
+  advantage available with basic cold storage.
+
+Declining:
+— Traditional kirana loyalty among under-35.
+— Cash-only store preference declining.
+
+Threat window:
+— Reliance Smart and DMart expanding Tier 2.
+— Blinkit announcing Tier 2 expansion plans.
+
+Defence:
+— WhatsApp ordering relationship cannot
+  be replicated by chains.
+— Personal relationship is permanent moat
+  in Tier 3 markets.
+— Local delivery economics work better
+  for local stores than national chains
+  in Tier 3 geographies.
+
+GYM / FITNESS TRENDS:
+Rising:
+— Corporate wellness budgets post-COVID
+  increasing 30%+ annually.
+— Women-only fitness segment growing 3x.
+— Functional fitness over bodybuilding.
+— Pre-5AM and post-9PM demand for
+  IT professional segment.
+— Personal training inclusion in
+  base membership as differentiator.
+
+Declining:
+— Annual commitment memberships.
+— Bodybuilding-focused positioning
+  losing appeal in urban markets.
+— Equipment-heavy marketing effectiveness.
+
+Opportunity:
+— Corporate HR wellness partnerships
+  under-penetrated in most cities.
+— Group fitness classes adding revenue
+  per sqft without major investment.
+
+COACHING CENTRE TRENDS:
+Rising:
+— CUET (Common University Entrance Test)
+  creating new coaching demand beyond JEE/NEET.
+— CLAT, CA Foundation, IPMAT growing segments.
+— Class 6-7 early competitive prep
+  driven by parent anxiety.
+— Small batch premium positioning
+  commanding 40-60% higher fees.
+— Hybrid model (offline classes +
+  online test series) becoming standard.
+
+Declining:
+— Large batch factory model losing
+  parent trust.
+— Single exam focus coaching centres.
+— Pure offline without digital component.
+
+PHARMACY TRENDS:
+Rising:
+— Generic medicine push from government.
+  Jan Aushadhi outlets multiplying.
+— Digital prescription adoption
+  from government hospitals.
+— Home delivery for chronic patients
+  growing significantly.
+— Health supplement and wellness products
+  fastest growing pharmacy category.
+
+Declining:
+— Branded medicine margins under pressure
+  from generic alternatives.
+
+Threat:
+— 1mg and PharmEasy expanding to Tier 3.
+  Chronic medication delivery their strength.
+
+Defence:
+— Same-day availability and doctor
+  relationship they cannot replicate.
+— Emergency availability creates
+  lifelong loyalty.
+
+RESTAURANT / FOOD TRENDS:
+Rising:
+— ONDC providing zero-commission
+  alternative to Swiggy/Zomato.
+— Corporate catering demand
+  growing post-COVID return to office.
+— Cloud kitchen model for delivery-only
+  reducing fixed cost.
+
+Declining:
+— Swiggy/Zomato platform dependency
+  destroying margins at 25-30% commission.
+— Large format restaurants in
+  non-destination locations.
+
+DIGITAL MARKETING AGENCY TRENDS:
+Rising:
+— Performance marketing demand from
+  D2C brands post-funding.
+— AI-powered ad optimisation
+  becoming table stakes.
+— Vernacular content marketing
+  for Tier 2-3 brand expansion.
+
+Declining:
+— Vanity metrics reporting agencies.
+— Social media management only agencies
+  without performance component.
+
+IT SERVICES TRENDS:
+Rising:
+— India becoming global delivery hub.
+— Tier 2 city IT talent growing.
+— AI integration projects from
+  traditional businesses.
+— Government digital transformation
+  creating significant IT demand.
+
+Declining:
+— Pure body-shopping IT firms
+  without specialisation.
+
+SALON / SPA TRENDS:
+Rising:
+— Organised salon chains expanding
+  to Tier 2-3 cities creating
+  awareness but not fully serving
+  relationship-based demand.
+— Men's grooming fastest growing
+  salon segment.
+— Bridal packages premium segment
+  growing in Tier 2.
+
+Declining:
+— Cash-only, walk-in-only model
+  losing to appointment-based salons.
+
+INTERIOR DESIGN TRENDS:
+Rising:
+— Affordable housing boom creating
+  first-time interior design buyers.
+— Modular furniture adoption
+  reducing project timelines.
+— Virtual design consultation
+  reducing client acquisition cost.
+
+Declining:
+— High-end luxury segment without
+  proven track record.
+
+================================================================
+LIBRARY 4 — ECONOMIC AND GEOPOLITICAL SIGNALS
+================================================================
+
+Structural signals affecting Indian SMBs.
+Stable for 6-18 months.
+Scout applies these to relevant businesses.
+
+SIGNALS AFFECTING ALL BUSINESSES:
+
+UPI and Digital Payment Tailwind:
+UPI transaction volume growing 40%+ annually.
+Businesses accepting UPI gaining trust
+advantage over cash-only competitors.
+Scout application: Make UPI acceptance
+visible in all outreach messages.
+It is a trust signal in 2026.
+
+Inflation and Consumer Spending:
+Food inflation affecting grocery margins.
+Consumer trading down on price,
+trading up on convenience.
+Scout application: Position on
+convenience value (time saved)
+not price value.
+"₹650 delivered home vs ₹650 plus
+45 minutes and petrol to Reliance Smart"
+is the correct framing.
+
+Government Employment Stability:
+Central and state government employment
+stable — government employee households
+remain most reliable customer segment
+in Tier 2-3 Indian markets.
+Fixed salary, predictable spending patterns,
+community trust in government colonies.
+Scout application: Government employee ICP
+remains highest priority in Tier 3.
+
+China Supply Chain Shift:
+Manufacturing moving to India.
+Industrial cities getting new business
+activity and population inflow.
+Scout application: Businesses in
+industrial cities should expect
+new customer segments arriving
+from manufacturing workers
+over next 24 months.
+
+Credit Availability for MSMEs:
+RBI priority sector lending norms
+directing credit to MSMEs.
+MUDRA loan disbursements increasing.
+Scout application: Businesses needing
+₹5-50 lakh for expansion should
+explore MUDRA before any other option.
+Fastest and cheapest available credit.
+
+SECTOR-SPECIFIC SIGNALS:
+
+Pharmacy — Generic Medicine Push:
+Government actively promoting Jan Aushadhi.
+Generic medicine spending growing.
+Threat: Branded medicine margin pressure.
+Opportunity: Jan Aushadhi empanelment
+gives government-sponsored patient flow.
+Net signal: Positive for pharmacies
+that adapt quickly.
+
+Restaurant — ONDC Wave:
+ONDC removing 25-30% Swiggy/Zomato commission.
+Restaurants registering on ONDC keeping
+more revenue per order.
+Currently most restaurants unaware.
+First mover advantage available now.
+
+Grocery — Quick Commerce Gap:
+Blinkit, Zepto, Swiggy Instamart cannot
+profitably serve Tier 3 cities.
+Delivery economics require 500+ orders
+per day per dark store — not achievable
+in most Tier 3 cities yet.
+Window: 18-24 months before they arrive.
+Action: Build WhatsApp ordering habit now.
+
+IT / Software — Government Digital Push:
+IndiaStack, DigiLocker, ONDC, ABHA —
+government digital infrastructure
+creating massive IT services demand.
+Opportunity for IT firms: government
+digital transformation projects
+accessible through MeitY empanelment.
+
+Education — CUET Impact:
+Common University Entrance Test replacing
+state entrance tests for central universities.
+Creating new coaching demand across India.
+Coaching centres adding CUET preparation
+to JEE/NEET offering growing rapidly.
+
+================================================================
+LIBRARY 5 — INFRASTRUCTURE AND DEVELOPMENT
+================================================================
+
+National and state infrastructure patterns
+that affect local business opportunity.
+Directionally stable for 2-3 years.
+
+NATIONAL INFRASTRUCTURE PATTERNS:
+
+Smart Cities Mission:
+100 cities included across India.
+Civil Lines and main commercial areas
+of Tier 2-3 cities typically in scope.
+What it means for local businesses:
+— Improved footfall infrastructure
+— Digital payment terminals in public areas
+— Increased government office density
+— Property values and customer density
+  increasing over 24-36 months
+Scout application: Businesses in
+Smart City areas should establish
+brand recognition now before
+new competitors enter with
+improved infrastructure.
+
+PM Gati Shakti — National Infrastructure:
+₹100 lakh crore infrastructure master plan.
+Road, rail, logistics connectivity
+improving in Tier 2-3 cities.
+What it means:
+— Delivery logistics becoming cheaper
+— New residential areas opening
+  within delivery reach
+— Industrial activity increasing
+  in proximity cities
+— New customer segments arriving
+
+RERA and Housing Development:
+Residential real estate growing in
+Tier 2-3 cities.
+New housing projects creating
+new resident inflow monthly.
+What it means:
+— New resident ICP is largest
+  growing segment in Tier 2-3 cities
+— Businesses near new construction
+  have first-mover advantage
+— Society WhatsApp groups forming
+  in new colonies — entry opportunity
+
+Industrial Corridors:
+Delhi-Mumbai Industrial Corridor (DMIC),
+Chennai-Bengaluru Industrial Corridor,
+Amritsar-Kolkata Industrial Corridor.
+Cities in these corridors getting
+new industrial population inflow.
+What it means:
+— New working-class and middle-class
+  customer segments arriving
+— Local businesses should prepare
+  for volume increase
+— Languages and preferences of
+  incoming workers may differ
+  from existing customer base
+
+CITY-SPECIFIC PATTERNS:
+
+Tier 2 State Capitals (Lucknow, Patna,
+Bhopal, Jaipur, Chandigarh):
+— State government expansion creating
+  new government employee influx
+— Smart City funds improving
+  commercial infrastructure
+— IT sector beginning to establish
+  presence in Tier 2 capitals
+— New residential townships opening
+  monthly at city periphery
+
+Tier 3 District Towns (Bareilly,
+Muzaffarpur, Guntur, etc.):
+— District administration expansion
+  bringing new government employees
+— Highway connectivity improving
+  — delivery logistics getting better
+— New residential colonies forming
+  on city periphery — new resident ICP
+— Small industrial units establishing
+  near district towns
+
+Metro Suburbs (Whitefield, Navi Mumbai,
+Noida, Gurgaon, Hinjewadi):
+— IT campus expansion continuing
+  — new professional inflow consistent
+— New residential townships
+  handing over possession quarterly
+— New resident ICP is largest and
+  fastest growing segment
+— Infrastructure catching up with
+  population — last-mile delivery
+  economics improving
+
+================================================================
+COMPONENT 8 — OUTPUT FORMAT FOR TAB 5
+================================================================
+
+Tab 5 — EXPANSION PLAN appears after
+Tab 4 in the full onboarding output.
+
+It is produced for every business.
+It uses Libraries 1-5 above.
+
+FORMAT:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TAB 5 — EXPANSION PLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[One sentence framing what this tab does]
+"While Tabs 1-4 focus on getting you more
+customers this week, this tab shows you
+what your business should become in the
+next 12 months — and what is happening
+right now that you should take advantage of."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPPORTUNITY 1 — IMMEDIATE (0-3 months)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Scheme or trend name in bold]
+[What it is — 1 sentence]
+[What it means for THIS business — 2-3 sentences]
+[Specific action — what to do, where to go]
+[Expected impact — revenue or business benefit]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPPORTUNITY 2 — SHORT TERM (3-6 months)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Same format]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPPORTUNITY 3 — MEDIUM TERM (6-12 months)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Same format]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OPPORTUNITY 4 — STRATEGIC (12+ months)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Same format — longer term positioning]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RISK WATCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1-2 risks specific to this business type
+and market type right now]
+[One sentence defence for each risk]
+
+RULES FOR TAB 5:
+— Every opportunity must be specific to
+  this business type and this location
+  Not generic — if it could apply to any
+  business anywhere it is wrong
+— Scheme names must be real and current
+  Use Library 1 and 2 above
+— Actions must be specific:
+  website URLs, specific steps, timeline
+— Revenue impact must be estimated
+  in rupees not percentages where possible
+— Risk Watch must name specific
+  named competitors or threats
+  not generic "competition may increase"
+— Tab 5 never replaces Tabs 1-4
+  It is always additive — more opportunity
+  not different strategy
+
+WORD COUNT FOR TAB 5: 400-600 words
+Concise. Each opportunity 80-120 words.
+Risk Watch 60-80 words.
+
+================================================================
+END OF COMPONENT 8 — EXPANSION INTELLIGENCE
+================================================================
 `;
 
 if (typeof module !== 'undefined') {
