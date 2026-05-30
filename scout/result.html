@@ -1034,38 +1034,28 @@ async function submitCheckin() {
   var newCustomers = document.getElementById('newCustomers')  ? document.getElementById('newCustomers').value  : '0';
   var revenueAdded = document.getElementById('revenueAdded')  ? document.getElementById('revenueAdded').value  : '₹0';
 
-  /* Build check-in prompt */
-  var checkinMessage = buildCheckinMessage(icpData, newCustomers, revenueAdded);
-
   /* Show overlay */
   document.getElementById('checkinOverlay').classList.add('active');
 
   try {
-    var token = localStorage.getItem('g7_session_token');
-    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        system: SCOUT_SYSTEM_PROMPT,
-        messages: [
-          {role: 'user', content: buildScoutOnboardingContext()},
-          {role: 'assistant', content: scoutRaw},
-          {role: 'user', content: checkinMessage}
-        ]
-      })
-    });
+    var weekNum = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
 
-    if (!response.ok) {
-      var errBody = await response.text();
-      throw new Error('API error ' + response.status + ': ' + errBody);
-    }
+    /* Build checkinData object for callScoutCheckin() from scout.js.
+       callScoutCheckin() uses /scout/checkin URL and SSE streaming — no inline fetch needed. */
+    var checkinData = {
+      weekNumber:     weekNum,
+      onboardContext: buildScoutOnboardingContext(),
+      priorOutput:    scoutRaw,
+      contacts:  { icp1: icpData[0] ? icpData[0].sent    : '0', icp2: icpData[1] ? icpData[1].sent    : '0', icp3: icpData[2] ? icpData[2].sent    : '0' },
+      responses: { icp1: icpData[0] ? icpData[0].replies : '0', icp2: icpData[1] ? icpData[1].replies : '0', icp3: icpData[2] ? icpData[2].replies : '0' },
+      customers: { icp1: icpData[0] ? icpData[0].conv    : '0', icp2: icpData[1] ? icpData[1].conv    : '0', icp3: icpData[2] ? icpData[2].conv    : '0' },
+      revenue:   revenueAdded,
+      wins:      '',
+      blocks:    '',
+      nextFocus: ''
+    };
 
-    var apiData = await response.json();
-    if (apiData.error) throw new Error(apiData.error.message || 'Unknown API error');
-
-    var checkinOutput = apiData.content[0].text;
+    var checkinOutput = await callScoutCheckin(checkinData);
 
     /* Save updated result */
     var updated = JSON.parse(localStorage.getItem('scout_pending_result') || '{}');
@@ -1090,8 +1080,9 @@ function buildScoutOnboardingContext() {
     '. Monthly revenue: ' + (businessData.monthlyRevenue || '') + '.';
 }
 
-/* ─── Build check-in user message ─── */
-function buildCheckinMessage(icpData, newCustomers, revenueAdded) {
+/* ─── Build check-in user message (local helper — renamed to avoid overriding
+       scout.js global buildCheckinMessage. Not called after callScoutCheckin fix.) ─── */
+function _buildCheckinMessageLocal(icpData, newCustomers, revenueAdded) {
   var lines = [
     'Weekly check-in results for Scout to analyse.',
     'Please produce a Type 2 Weekly Check-In Output following Component 7 format.',

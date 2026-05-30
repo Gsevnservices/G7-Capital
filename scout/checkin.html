@@ -330,8 +330,11 @@ function collectData() {
 
 /* ═══════════════════════════════════════
    BUILD CHECK-IN USER MESSAGE
+   Renamed to avoid overriding scout.js global
+   buildCheckinMessage(). Not called after
+   callScoutCheckin() integration.
 ═══════════════════════════════════════ */
-function buildCheckinMessage(d) {
+function _buildCheckinMessageLocal(d) {
   var lines = [
     'This is a weekly check-in. Produce a Type 2 Weekly Check-In Output following Component 7 format.',
     '',
@@ -388,9 +391,7 @@ async function handleSubmit() {
   bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = '';
 
   try {
-    var token = localStorage.getItem('g7_session_token');
-
-    /* Build conversation: original onboarding context → Scout's previous output → check-in */
+    /* Read prior context from localStorage */
     var prevResult = localStorage.getItem('scout_pending_result');
     var prevOutput = '';
     var onboardCtx = '';
@@ -406,31 +407,22 @@ async function handleSubmit() {
       } catch(e) {}
     }
 
-    var messages = [];
-    if (onboardCtx) messages.push({role: 'user',      content: onboardCtx});
-    if (prevOutput) messages.push({role: 'assistant', content: prevOutput});
-    messages.push({role: 'user', content: buildCheckinMessage(d)});
+    /* Build checkinData object for callScoutCheckin() from scout.js.
+       callScoutCheckin() uses /scout/checkin URL and SSE streaming — no inline fetch needed. */
+    var checkinData = {
+      weekNumber:     d.weekNum,
+      onboardContext: onboardCtx,
+      priorOutput:    prevOutput,
+      contacts:  { icp1: d.icp1_sent,    icp2: d.icp2_sent,    icp3: d.icp3_sent    },
+      responses: { icp1: d.icp1_replies,  icp2: d.icp2_replies, icp3: d.icp3_replies },
+      customers: { icp1: d.icp1_conv,     icp2: d.icp2_conv,    icp3: d.icp3_conv    },
+      revenue:   d.revenueAdded,
+      wins:      d.whatWorked,
+      blocks:    d.whatFailed,
+      nextFocus: ''
+    };
 
-    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer ' + token},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        system: SCOUT_SYSTEM_PROMPT,
-        messages: messages
-      })
-    });
-
-    if (!response.ok) {
-      var errBody = await response.text();
-      throw new Error('API error ' + response.status + ': ' + errBody);
-    }
-
-    var apiData = await response.json();
-    if (apiData.error) throw new Error(apiData.error.message || 'Unknown API error');
-
-    var checkinOutput = apiData.content[0].text;
+    var checkinOutput = await callScoutCheckin(checkinData);
 
     /* Advance week number */
     var nextWeek = d.weekNum + 1;
