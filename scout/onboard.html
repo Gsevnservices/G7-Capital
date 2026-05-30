@@ -99,6 +99,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .btn-submit{font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:20px 40px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:all .3s;width:100%;margin-top:40px}
 .btn-submit:hover{background:var(--gold2)}
 @media(max-width:768px){.form-wrap{padding:32px 24px 100px}}
+/* ── QUALITY INDICATORS ── */
+.qi-wrap{display:none;align-items:center;gap:8px;margin-top:8px;opacity:0;transition:opacity .3s}
+.qi-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.qi-red{background:#C45A5A}
+.qi-amber{background:#C9923A}
+.qi-green{background:#5A9E6F}
+.qi-text{font-size:10px;letter-spacing:.04em;color:var(--grey1);line-height:1.5}
+/* ── QUALITY TIP BANNER ── */
+.quality-tip-banner{display:none;opacity:0;transition:opacity .4s;background:rgba(201,168,76,0.06);border:1px solid var(--border);border-left:2px solid var(--gold);padding:12px 20px;margin:0 64px 0;font-size:10px;letter-spacing:.08em;color:var(--gold)}
+@media(max-width:768px){.quality-tip-banner{margin:0 24px 0}}
+/* ── QUALITY GATE MODAL ── */
+.qg-modal{display:none;position:fixed;inset:0;background:rgba(8,8,8,.92);z-index:3000;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;padding:24px}
+.qg-box{background:var(--black2);border:1px solid var(--border);max-width:480px;width:100%;padding:40px}
+.qg-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);margin-bottom:16px}
+.qg-body{font-size:12px;line-height:1.9;color:var(--grey1);margin-bottom:20px}
+.qg-list{list-style:none;margin:12px 0 20px;padding:0}
+.qg-list li{font-size:11px;color:var(--gold);padding:4px 0;border-bottom:1px solid var(--border2)}
+.qg-list li::before{content:'— ';color:var(--grey2)}
+.qg-actions{display:flex;gap:12px;flex-wrap:wrap}
+.qg-btn-continue{font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--grey1);padding:12px 20px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .3s}
+.qg-btn-continue:hover{border-color:var(--grey1);color:var(--white)}
+.qg-btn-improve{font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:12px 24px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:background .3s}
+.qg-btn-improve:hover{background:var(--gold2)}
 .loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,8,8,.96);z-index:2000;flex-direction:column;align-items:center;justify-content:center;gap:32px;text-align:center}
 .loading-overlay.active{display:flex}
 .scout-spinner-wrap{position:relative;width:80px;height:80px;display:flex;align-items:center;justify-content:center}
@@ -139,6 +162,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <!-- PROGRESS BAR -->
 <div class="progress-wrap">
   <div class="progress-steps" id="progressSteps"></div>
+</div>
+
+<!-- QUALITY TIP BANNER — shown when score 5-7, hidden otherwise -->
+<div class="quality-tip-banner" id="qualityTipBanner">
+  Tip: More specific details = more hyper-local Scout output
 </div>
 
 <!-- FORM -->
@@ -398,6 +426,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
 </div><!-- /form-wrap -->
 
+<!-- QUALITY GATE MODAL — shown when overall score ≤ 4 -->
+<div class="qg-modal" id="qualityGateModal">
+  <div class="qg-box">
+    <div class="qg-title">Scout works best with specific details.</div>
+    <div class="qg-body">
+      Your inputs are quite general right now. The more specific you are,
+      the more hyper-local Scout's output will be.<br><br>
+      Improve these fields for better results:
+    </div>
+    <ul class="qg-list" id="qualityWeakList"></ul>
+    <div class="qg-actions">
+      <button class="qg-btn-improve" id="qgImprove">Improve my inputs →</button>
+      <button class="qg-btn-continue" id="qgContinue">Continue anyway</button>
+    </div>
+  </div>
+</div>
+
 <!-- LOADING OVERLAY -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="scout-spinner-wrap">
@@ -431,6 +476,7 @@ window.addEventListener('DOMContentLoaded', function() {
   if (firmName) document.getElementById('navFirmName').textContent = firmName;
   renderProgress(currentSection);
   initCursor();
+  initQualityScoring();
 });
 
 /* ─── LOGOUT ─── */
@@ -629,6 +675,12 @@ async function handleSubmit() {
   });
   if (!valid) return;
 
+  /* Quality gate — checks specificity before submission.
+     Landmark 1 empty = hard block. Score ≤ 4 = show modal.
+     Returns false if user should improve inputs first. */
+  var canProceed = await checkOverallQuality();
+  if (!canProceed) return;
+
   var data = collectFormData();
 
   /* Show loading overlay, restart progress bar animation */
@@ -715,6 +767,227 @@ function initCursor() {
     c.style.transform = 'translate(-50%,-50%) scale(1)';
     r.style.transform = 'translate(-50%,-50%) scale(1)';
   });
+}
+
+/* ─── QUALITY SCORING ─── */
+
+/* The 5 fields being scored and their display names */
+var QUALITY_FIELDS = {
+  whatYouSell:   'What You Sell',
+  location:      'Location',
+  bestCustomers: 'Best Existing Customers',
+  landmark1:     'Landmark 1',
+  comp1worse:    'What Makes You Different'
+};
+
+/* Section each scored field lives in — used by "Improve my inputs" to navigate */
+var QUALITY_FIELD_SECTION = {
+  whatYouSell: 1, location: 1,
+  bestCustomers: 2, landmark1: 2,
+  comp1worse: 3
+};
+
+/* Score a single field 0-2:
+   0 = too vague or empty
+   1 = acceptable but could be better
+   2 = specific and useful */
+function scoreFieldQuality(fieldId, value) {
+  var v = (value || '').trim();
+  var words = v.split(/\s+/).filter(function(w){ return w.length > 0; });
+
+  if (fieldId === 'whatYouSell') {
+    if (!v || words.length < 3) return 0;
+    var genericOnly = /^(grocery|gym|pharmacy|shop|store|food|clothes|medicine|consulting|services|i sell things?)$/i;
+    if (genericOnly.test(v)) return 0;
+    var hasPrice = /₹|rs\.?|rupee|\/month|per month|per visit|monthly|\d{3,}/.test(v);
+    if (words.length >= 8 && hasPrice) return 2;
+    if (words.length >= 5 || hasPrice) return 1;
+    return 0;
+  }
+
+  if (fieldId === 'location') {
+    if (!v) return 0;
+    if (words.length <= 1) return 0;
+    var hasContext = /near|opposite|,|sector|colony|road|nagar|vihar|layout|block|lane/.test(v.toLowerCase());
+    if (words.length >= 4 || hasContext) return 2;
+    return 1;
+  }
+
+  if (fieldId === 'bestCustomers') {
+    if (!v || words.length < 5) return 0;
+    var isGeneric = /^(regular customers?|local people|everyone|all kinds|general public|customers?|people)$/i.test(v);
+    if (isGeneric) return 0;
+    var hasDetail = /\d{2}\s*(year|yr)|teacher|officer|employee|engineer|doctor|housewife|student|business|owner|colony|sector|lane|years old|age|shop|retired/.test(v.toLowerCase());
+    if (words.length >= 20 && hasDetail) return 2;
+    if (words.length >= 10 || hasDetail) return 1;
+    return 0;
+  }
+
+  if (fieldId === 'landmark1') {
+    if (!v) return 0;
+    var vague = /^(near a mall|city cent(re|er)|main market|main road|market area|local area)$/i.test(v);
+    if (vague) return 0;
+    var isSpecific = /opposite|facing|\d+\s*m|meter|km|bank|office|hospital|school|college|mall|gate|temple|mosque|church|petrol|station/.test(v.toLowerCase());
+    if (isSpecific) return 2;
+    if (words.length >= 3) return 1;
+    return 0;
+  }
+
+  if (fieldId === 'comp1worse') {
+    if (!v) return 0;
+    var genericDiff = /^(good quality|best service|better service|quality|cheap|low price|good)$/i.test(v);
+    if (genericDiff) return 0;
+    var hasSpecific = /delivery|hours|personal|trainer|whatsapp|free|home|order|fresh|only|exclusive|fastest|cheapest|\d|same.day|24/.test(v.toLowerCase());
+    if (words.length >= 8 && hasSpecific) return 2;
+    if (words.length >= 4 || hasSpecific) return 1;
+    return 0;
+  }
+
+  return 0;
+}
+
+/* Inject indicator div after each scored field's .field-group,
+   then wire blur listeners. Called once on DOMContentLoaded. */
+function initQualityScoring() {
+  Object.keys(QUALITY_FIELDS).forEach(function(fieldId) {
+    var el = document.getElementById(fieldId);
+    if (!el) return;
+
+    /* Create the indicator div and insert it after the field's parent group */
+    var group = el.closest('.field-group') || el.parentNode;
+    var div = document.createElement('div');
+    div.className = 'qi-wrap';
+    div.id = 'qi-' + fieldId;
+    group.parentNode.insertBefore(div, group.nextSibling);
+
+    /* Score on blur — when user leaves the field */
+    el.addEventListener('blur', function() {
+      var score = scoreFieldQuality(fieldId, el.value);
+      renderQualityIndicator(fieldId, score);
+    });
+  });
+}
+
+/* Render the coloured dot + message for a given field */
+function renderQualityIndicator(fieldId, score) {
+  var el = document.getElementById('qi-' + fieldId);
+  if (!el) return;
+
+  var dotClass, text;
+  if (score === 0) {
+    dotClass = 'qi-dot qi-red';
+    text = 'Be more specific — Scout needs detail to give you hyper-local recommendations';
+  } else if (score === 1) {
+    dotClass = 'qi-dot qi-amber';
+    text = 'Good — add one more specific detail to improve Scout\'s output';
+  } else {
+    dotClass = 'qi-dot qi-green';
+    text = 'Perfect — Scout has what it needs';
+  }
+
+  el.innerHTML = '<span class="' + dotClass + '"></span><span class="qi-text">' + text + '</span>';
+  el.style.opacity = '0';
+  el.style.display = 'flex';
+  setTimeout(function(){ el.style.opacity = '1'; }, 10);
+}
+
+/* Calculate total quality score and list of weak field names */
+function calcTotalQuality() {
+  var total = 0;
+  var weakFields = [];
+  Object.keys(QUALITY_FIELDS).forEach(function(fieldId) {
+    var el = document.getElementById(fieldId);
+    var val = el ? el.value : '';
+    var score = scoreFieldQuality(fieldId, val);
+    total += score;
+    if (score <= 1) weakFields.push(QUALITY_FIELDS[fieldId]);
+  });
+  return { total: total, weakFields: weakFields };
+}
+
+/* Quality gate — called from handleSubmit before showing overlay.
+   Returns a Promise<boolean>: true = proceed, false = stop. */
+function checkOverallQuality() {
+  return new Promise(function(resolve) {
+
+    /* HARD BLOCK: Landmark 1 must not be empty */
+    var lm1 = document.getElementById('landmark1');
+    if (!lm1 || !lm1.value.trim()) {
+      if (lm1) { lm1.classList.add('error'); }
+      /* Navigate to section 2 if not already there */
+      if (currentSection !== 2) showSection(2);
+      setTimeout(function() {
+        if (lm1) lm1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var qi = document.getElementById('qi-landmark1');
+        if (qi) {
+          qi.innerHTML = '<span class="qi-dot qi-red"></span><span class="qi-text" style="color:#C45A5A">Landmark 1 is required. Scout uses your landmarks to write outreach messages that feel genuinely local. Add at least one specific nearby landmark.</span>';
+          qi.style.display = 'flex';
+          qi.style.opacity = '1';
+        }
+      }, 300);
+      resolve(false);
+      return;
+    }
+
+    var result = calcTotalQuality();
+    var total = result.total;
+    var weakFields = result.weakFields;
+
+    if (total <= 4) {
+      /* Low quality — show modal */
+      var modal = document.getElementById('qualityGateModal');
+      var listEl = document.getElementById('qualityWeakList');
+      listEl.innerHTML = weakFields.map(function(f){ return '<li>' + f + '</li>'; }).join('');
+      modal.style.display = 'flex';
+      setTimeout(function(){ modal.style.opacity = '1'; }, 10);
+
+      document.getElementById('qgContinue').onclick = function() {
+        hideQualityModal();
+        resolve(true);
+      };
+      document.getElementById('qgImprove').onclick = function() {
+        hideQualityModal();
+        /* Find first weak field and navigate to its section */
+        var firstWeak = null;
+        Object.keys(QUALITY_FIELDS).some(function(fieldId) {
+          var el = document.getElementById(fieldId);
+          if (scoreFieldQuality(fieldId, el ? el.value : '') <= 1) {
+            firstWeak = fieldId;
+            return true;
+          }
+          return false;
+        });
+        if (firstWeak) {
+          var targetSection = QUALITY_FIELD_SECTION[firstWeak];
+          if (targetSection && targetSection !== currentSection) showSection(targetSection);
+          setTimeout(function() {
+            var el = document.getElementById(firstWeak);
+            if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          }, 350);
+        }
+        resolve(false);
+      };
+      return;
+    }
+
+    if (total <= 7) {
+      /* Mid quality — show tip banner, proceed */
+      var banner = document.getElementById('qualityTipBanner');
+      if (banner) {
+        banner.style.display = 'block';
+        setTimeout(function(){ banner.style.opacity = '1'; }, 10);
+      }
+    }
+
+    /* Score 8-10 or mid: proceed */
+    resolve(true);
+  });
+}
+
+function hideQualityModal() {
+  var modal = document.getElementById('qualityGateModal');
+  modal.style.opacity = '0';
+  setTimeout(function(){ modal.style.display = 'none'; }, 300);
 }
 
 /* ─── CLEAR ERROR ON INPUT ─── */
