@@ -798,11 +798,17 @@ function renderTab2(content) {
     html += '<div class="section-block-title">Response Handlers</div>';
     html += '<div class="section-block-body">';
 
-    /* Split on THEY SAY / YOU SAY pairs */
+    /* Split on THEY SAY / YOU SAY pairs.
+       For each pair: capture everything between THEY SAY: and YOU SAY:
+       as the objection, and everything after YOU SAY: until the next
+       THEY SAY: (or end of string) as the response.
+       Use [\s\S] so the match spans multiple lines correctly. */
     var pairs = rhContent.split(/(?=THEY\s+SAY\s*:)/i).filter(function(p){ return p.trim(); });
     pairs.forEach(function(pair) {
-      var theyMatch = pair.match(/THEY\s+SAY\s*:\s*"?([^"\\n]+)"?/i);
-      var youMatch  = pair.match(/YOU\s+SAY\s*:\s*"?([^"\\n]+(?:\n[^Y\n][^\n]*)*)?"?/i);
+      /* THEY SAY: capture up to YOU SAY: or end — multi-line safe */
+      var theyMatch = pair.match(/THEY\s+SAY\s*:\s*"?([\s\S]*?)"?\s*(?=YOU\s+SAY\s*:|$)/i);
+      /* YOU SAY: capture everything after it (rest of this pair block) */
+      var youMatch  = pair.match(/YOU\s+SAY\s*:\s*"?([\s\S]+?)(?:"|$)/i);
       if (theyMatch || youMatch) {
         html += '<div style="background:var(--black3);border:1px solid var(--border2);padding:16px;margin-bottom:10px">';
         if (theyMatch) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(theyMatch[1].trim()) + '</span></div>';
