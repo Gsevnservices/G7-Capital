@@ -43,6 +43,42 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
 
+/* ── REASONING BAR + PANEL (Feature 4.1) ── */
+.reasoning-bar{
+  display:flex;justify-content:flex-end;align-items:center;
+  padding:10px 64px;border-bottom:1px solid var(--border2);
+  background:var(--black2)
+}
+.reasoning-toggle{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);background:none;border:none;
+  cursor:pointer;font-family:'Tenor Sans',sans-serif;
+  display:flex;align-items:center;gap:8px;
+  transition:color .25s;padding:0
+}
+.reasoning-toggle:hover{color:var(--gold2)}
+.reasoning-panel{
+  background:var(--black3);border-left:3px solid var(--gold);
+  border-bottom:1px solid var(--border2);
+  padding:28px 64px;animation:reasonExpand .25s ease both
+}
+@keyframes reasonExpand{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.reasoning-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:24px;max-width:900px
+}
+.reasoning-item{}
+.reasoning-label{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px
+}
+.reasoning-value{font-size:12px;line-height:1.7;color:var(--white2)}
+@media(max-width:768px){
+  .reasoning-bar{padding:8px 24px}
+  .reasoning-panel{padding:16px 24px}
+  .reasoning-grid{grid-template-columns:1fr 1fr}
+}
+
 /* ── HEADLINE BLOCK ── */
 .headline-block{
   margin-top:80px;
@@ -159,7 +195,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .icp-card-header{
   display:flex;align-items:center;gap:12px;
-  margin-bottom:20px
+  margin-bottom:20px;flex-wrap:wrap
 }
 .icp-badge{
   font-size:8px;letter-spacing:.2em;text-transform:uppercase;
@@ -178,6 +214,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .icp-meta{font-size:10px;letter-spacing:.1em;color:var(--grey1)}
 .icp-meta strong{color:var(--white);display:block;font-size:9px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:2px;font-weight:400;color:var(--gold)}
 .icp-body{font-size:12px;line-height:1.8;color:var(--grey1)}
+
+/* ── CONFIDENCE BADGES (Feature 4.2) ── */
+.conf-badge{
+  font-size:7px;letter-spacing:.16em;text-transform:uppercase;
+  padding:3px 10px;border:1px solid;margin-left:auto;flex-shrink:0
+}
+.conf-badge.high{color:var(--green);border-color:rgba(90,158,111,0.4);background:rgba(90,158,111,0.08)}
+.conf-badge.medium{color:var(--gold);border-color:rgba(201,168,76,0.4);background:rgba(201,168,76,0.08)}
+.conf-badge.low{color:var(--grey1);border-color:rgba(138,136,128,0.4);background:rgba(138,136,128,0.06)}
 
 /* ── MESSAGE CARDS (Tab 2) ── */
 .message-card{
@@ -204,6 +249,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   white-space:pre-wrap;word-break:break-word;
   border-left:2px solid var(--border);padding-left:16px
 }
+
+/* ── A/B TEST TOGGLE (Feature 4.4) ── */
+.ab-toggle-wrap{display:flex;gap:0;margin-bottom:14px}
+.ab-tab-btn{
+  font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  background:var(--black4);border:1px solid var(--border2);
+  color:var(--grey1);padding:6px 18px;cursor:pointer;
+  font-family:'Tenor Sans',sans-serif;transition:all .2s
+}
+.ab-tab-btn:first-child{border-right:none}
+.ab-tab-btn.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.4);color:var(--gold)}
+.ab-hint{font-size:10px;color:var(--grey2);margin-top:10px;line-height:1.65;font-style:italic}
 
 /* ── DAY CARDS (Tab 3) ── */
 .day-card{
@@ -240,6 +297,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .avoid-title{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
 .avoid-body{font-size:12px;line-height:1.8;color:var(--grey1)}
+
+/* ── COMPETITOR WATCH CARD (Feature 4.6) ── */
+.comp-watch-card{
+  background:var(--black3);border:1px solid rgba(201,168,76,0.25);
+  border-left:3px solid var(--gold);padding:20px 24px;margin-top:20px
+}
+.comp-watch-title{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px
+}
+.comp-watch-body{font-size:12px;line-height:1.8;color:var(--grey1)}
 
 /* ── PIPELINE FORM (Tab 4) ── */
 .pipeline-section-title{
@@ -375,6 +443,133 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   text-align:center;padding:48px 24px;
   font-size:12px;color:var(--grey2);line-height:1.9
 }
+
+/* ── FESTIVAL CAMPAIGN (Feature 4.5) ── */
+.festival-toggle-wrap{margin-top:28px}
+.festival-toggle-btn{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);background:none;border:none;cursor:pointer;
+  font-family:'Tenor Sans',sans-serif;display:flex;align-items:center;
+  gap:8px;padding:0;transition:color .25s
+}
+.festival-toggle-btn:hover{color:var(--gold2)}
+.festival-panel{display:none;margin-top:16px}
+.festival-week-card{
+  background:var(--black3);border:1px solid var(--border2);
+  border-left:2px solid rgba(201,168,76,0.5);
+  padding:16px 20px;margin-bottom:10px
+}
+.festival-week-label{
+  font-size:8px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.festival-msg{border-left:none;padding-left:0;margin-top:4px}
+
+/* ── PRINT STYLES (Feature 4.3) ── */
+.print-cover{display:none}
+.print-exec-summary{display:none}
+.print-section-header{display:none}
+
+@media print {
+  /* Hide all UI chrome */
+  nav,.tab-nav,.action-bar,.reasoning-bar,.reasoning-panel,
+  .checkin-overlay,.festival-toggle-btn,.ab-toggle-wrap,
+  .btn-checkin,.checkin-note,.pipeline-icp-block,.pipeline-totals,
+  .result-loading,.cursor,.cursor-ring,button.btn-new{
+    display:none!important
+  }
+
+  /* Page + body */
+  body{
+    background:white!important;color:black!important;
+    font-size:11pt;padding-bottom:0;cursor:auto;
+    visibility:visible!important
+  }
+  body::before{display:none}
+
+  /* Show all tab panels stacked */
+  .tab-panel{display:block!important}
+  .tab-panels{padding:20px 40px;max-width:100%}
+
+  /* Page breaks */
+  #panel0{page-break-before:auto}
+  #panel1,#panel2,#panel3,#panel4{page-break-before:always}
+
+  /* Headline block */
+  .headline-block{
+    margin-top:0!important;padding:20px 40px;
+    background:white!important;border-bottom:2px solid #C9A84C
+  }
+  .headline-business{color:black!important}
+  .headline-meta{color:#666!important}
+  .metric-card{border:1px solid #ccc!important;background:white!important;margin-bottom:8px}
+  .metric-label{color:#C9A84C!important}
+  .metric-value{color:black!important;font-size:22pt}
+  .metric-sub{color:#666!important}
+  .momentum-block{border:1px solid #ccc!important;background:white!important}
+  .momentum-label{color:#C9A84C!important}
+  .momentum-score,.momentum-denom{color:black!important}
+  .momentum-note{color:#666!important}
+  .momentum-bar-wrap{background:#eee!important}
+  .momentum-bar-fill{background:#C9A84C!important}
+  .insight-card{background:white!important;border-left:3px solid #C9A84C!important;border-bottom:1px solid #ccc!important}
+  .insight-eyebrow{color:#C9A84C!important}
+  .insight-body{color:#333!important}
+
+  /* Cards */
+  .icp-card,.message-card,.day-card,.exp-card,
+  .festival-week-card,.comp-watch-card{
+    border:1px solid #ccc!important;background:white!important;
+    page-break-inside:avoid
+  }
+  .icp-title,.day-content,.exp-card-body{color:black!important}
+  .icp-badge,.icp-meta strong,.message-card-label,
+  .exp-card-timeline,.comp-watch-title,.festival-week-label span{color:#C9A84C!important}
+  .icp-body,.message-text,.section-block-body,
+  .comp-watch-body,.festival-msg{color:#333!important}
+  .avoid-block{border:1px solid #C45A5A!important;background:white!important}
+  .avoid-title{color:#C45A5A!important}
+  .avoid-body{color:#333!important}
+  .three-numbers{display:grid;grid-template-columns:1fr 1fr 1fr}
+  .number-chip{border:1px solid #ccc!important;background:white!important}
+  .number-chip-val{color:black!important}
+  .number-chip-lbl{color:#C9A84C!important}
+  .section-block-title{color:#C9A84C!important;border-bottom-color:#ccc!important}
+  .targets-block{border:1px solid #ccc!important;background:white!important}
+  .targets-title{color:#C9A84C!important}
+  .target-key{color:#666!important}
+  .target-val{color:black!important}
+  .conf-badge.high{color:#5A9E6F!important;border-color:#5A9E6F!important}
+  .conf-badge.medium{color:#C9A84C!important;border-color:#C9A84C!important}
+  .conf-badge.low{color:#666!important;border-color:#666!important}
+
+  /* Festival panel — always expanded in print */
+  .festival-panel{display:block!important}
+  .festival-week-card{border:1px solid #ccc!important;background:white!important}
+
+  /* Print-only elements */
+  .print-cover{
+    display:flex!important;flex-direction:column;
+    align-items:center;justify-content:center;
+    min-height:100vh;text-align:center;
+    page-break-after:always;padding:60mm 20mm;
+    background:white
+  }
+  .print-exec-summary{
+    display:block!important;padding:20px 40px;
+    page-break-after:always;background:white
+  }
+  .print-section-header{
+    display:block!important;
+    font-family:'Tenor Sans',sans-serif;
+    font-size:9pt;letter-spacing:.2em;text-transform:uppercase;
+    color:#C9A84C;border-bottom:1px solid #C9A84C;
+    padding-bottom:8px;margin-bottom:20px
+  }
+  /* Copy buttons in print */
+  .copy-btn{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -393,6 +588,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
   </div>
 </nav>
+
+<!-- REASONING BAR + PANEL (Feature 4.1) — collapsed by default, shown by JS after parsing -->
+<div class="reasoning-bar" id="reasoningBar" style="display:none">
+  <button class="reasoning-toggle" id="reasoningToggle" onclick="toggleReasoning()">
+    <span id="reasoningArrow">▶</span> Scout's Analysis Reasoning
+  </button>
+</div>
+<div class="reasoning-panel" id="reasoningPanel" style="display:none">
+  <div class="reasoning-grid" id="reasoningGrid"></div>
+</div>
 
 <!-- HEADLINE BLOCK -->
 <div class="headline-block" id="headlineBlock">
@@ -445,6 +650,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   <!-- TAB 1: WHO TO TARGET -->
   <div class="tab-panel active" id="panel0">
+    <div class="print-section-header">SECTION 1: WHO TO TARGET</div>
     <div id="tab1Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -458,6 +664,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   <!-- TAB 2: WHAT TO SAY -->
   <div class="tab-panel" id="panel1">
+    <div class="print-section-header">SECTION 2: WHAT TO SAY</div>
     <div id="tab2Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -471,6 +678,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   <!-- TAB 3: THIS WEEK -->
   <div class="tab-panel" id="panel2">
+    <div class="print-section-header">SECTION 3: WHAT TO DO THIS WEEK</div>
     <div id="tab3Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -484,6 +692,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   <!-- TAB 4: PIPELINE -->
   <div class="tab-panel" id="panel3">
+    <div class="print-section-header">SECTION 4: PIPELINE TRACKER</div>
     <div id="tab4Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -497,6 +706,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   <!-- TAB 5: EXPANSION PLAN -->
   <div class="tab-panel" id="panel4">
+    <div class="print-section-header">SECTION 5: EXPANSION PLAN</div>
     <div id="tab5Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -510,10 +720,37 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
 </div><!-- /tab-panels -->
 
+<!-- PRINT COVER PAGE (Feature 4.3 — hidden on screen, visible when printing) -->
+<div class="print-cover" id="printCover">
+  <div style="margin-bottom:56px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:48pt;font-weight:300;color:#C9A84C;letter-spacing:.3em">SCOUT</div>
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:10pt;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-top:10px">AI Business Development</div>
+  </div>
+  <div style="border-top:1px solid #C9A84C;border-bottom:1px solid #C9A84C;padding:32px 0;margin-bottom:44px;width:300px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22pt;font-weight:300;color:black;margin-bottom:8px" id="printBizName">Business Analysis</div>
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.15em;color:#888;text-transform:uppercase">Customer Acquisition Analysis</div>
+  </div>
+  <div style="font-family:'Tenor Sans',sans-serif;font-size:10pt;color:#666;margin-bottom:6px" id="printLocation"></div>
+  <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;color:#999" id="printDate"></div>
+  <div style="margin-top:64px">
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:8pt;letter-spacing:.18em;color:#999;text-transform:uppercase">Prepared by Scout AI</div>
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.12em;color:#C9A84C;text-transform:uppercase;margin-top:5px">G7 Capital Intelligence Platform</div>
+  </div>
+  <div style="margin-top:44px;font-family:'Tenor Sans',sans-serif;font-size:8pt;letter-spacing:.25em;color:#aaa;text-transform:uppercase">CONFIDENTIAL</div>
+</div>
+
+<!-- PRINT EXECUTIVE SUMMARY (Feature 4.3 — hidden on screen) -->
+<div class="print-exec-summary" id="printExecSummary">
+  <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;border-bottom:1px solid #C9A84C;padding-bottom:8px;margin-bottom:24px">Executive Summary</div>
+  <table style="width:100%;border-collapse:collapse;font-family:'Tenor Sans',sans-serif;font-size:10pt">
+    <tbody id="printExecTable"></tbody>
+  </table>
+</div>
+
 <!-- FIXED BOTTOM ACTION BAR -->
 <div class="action-bar">
   <div class="action-bar-left" id="actionBarBiz">Scout Analysis</div>
-  <button class="btn-pdf" onclick="downloadPDF()">Download PDF</button>
+  <button class="btn-pdf" onclick="preparePrint()">Download PDF</button>
   <a class="btn-new" href="onboard.html">Start New Analysis</a>
 </div>
 
@@ -579,6 +816,27 @@ window.addEventListener('DOMContentLoaded', function() {
   /* Parse and render */
   parseAndRender(scoutRaw, businessData);
 
+  /* Populate reasoning panel (Feature 4.1) */
+  var rData = parseReasoningData(scoutRaw);
+  var rItems = [
+    { label: 'Market Type',                   value: rData.marketType },
+    { label: 'Business Type',                 value: rData.businessType },
+    { label: 'Primary Channel Recommended',   value: rData.primaryChannel },
+    { label: 'Unfair Advantage Identified',   value: rData.unfairAdvantage },
+    { label: 'Seasonal Context',              value: rData.seasonalContext }
+  ];
+  var rGrid = document.getElementById('reasoningGrid');
+  if (rGrid) {
+    rGrid.innerHTML = rItems.map(function(item) {
+      return '<div class="reasoning-item"><div class="reasoning-label">' +
+        escHtml(item.label) + '</div><div class="reasoning-value">' +
+        escHtml(item.value) + '</div></div>';
+    }).join('');
+  }
+  /* Show the reasoning bar (it's hidden until data is ready) */
+  var rb = document.getElementById('reasoningBar');
+  if (rb) rb.style.display = 'flex';
+
   /* Show Scout Insight card if one exists from the most recent check-in.
      insightWeek is the week number when the insight was generated.
      We show it whenever it exists — it was written for the just-completed check-in. */
@@ -595,7 +853,7 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 /* ═══════════════════════════════════════════
-   PARSE SCOUT OUTPUT INTO 4 TAB SECTIONS
+   PARSE SCOUT OUTPUT INTO 5 TAB SECTIONS
 ═══════════════════════════════════════════ */
 function parseScoutOutput(text) {
   /* Markers that delineate each tab */
@@ -697,7 +955,8 @@ function parseAndRender(text, biz) {
 
 /* ═══════════════════════════════════════════
    TAB 1 RENDERER — WHO TO TARGET
-   Splits on ICP headings, renders each as a card
+   Splits on ICP headings, renders each as a card.
+   Feature 4.2: adds confidence badges.
 ═══════════════════════════════════════════ */
 function renderTab1(content) {
   if (!content) {
@@ -705,7 +964,6 @@ function renderTab1(content) {
     return;
   }
 
-  /* Try to split on ICP sections */
   var html = '';
 
   /* Render unfair advantage block if present */
@@ -729,10 +987,20 @@ function renderTab1(content) {
       /* Track ICP names for pipeline form */
       if (icpNames.length < 3) icpNames.push(title);
 
+      /* Confidence badge (Feature 4.2) */
+      var confMatch = block.match(/CONFIDENCE\s*:\s*(HIGH|MEDIUM|LOW)/i);
+      var confidence = confMatch ? confMatch[1].toUpperCase() : null;
+
       html += '<div class="icp-card">';
       html += '<div class="icp-card-header">';
       html += '<div class="icp-badge' + (isPriority && idx === 0 ? ' priority' : '') + '">' + (isPriority && idx === 0 ? '⭐ Highest Priority' : 'ICP ' + (idx + 1)) + '</div>';
       html += '<div class="icp-title">' + escHtml(title) + '</div>';
+      /* Confidence badge — right-aligned in header */
+      if (confidence) {
+        var confClass = confidence === 'HIGH' ? 'high' : confidence === 'MEDIUM' ? 'medium' : 'low';
+        var confLabel = confidence === 'HIGH' ? 'HIGH CONFIDENCE' : confidence === 'MEDIUM' ? 'MEDIUM CONFIDENCE' : 'LOW CONFIDENCE — verify first';
+        html += '<div class="conf-badge ' + confClass + '">' + confLabel + '</div>';
+      }
       html += '</div>';
 
       /* Extract sub-sections inside each ICP */
@@ -744,7 +1012,7 @@ function renderTab1(content) {
 
       var subHtml = '';
       subSections.forEach(function(ss) {
-        var re = new RegExp(ss.key + '[:\\s]*([\\s\\S]+?)(?=' + subSections.map(function(x){ return x.key; }).join('|') + '|Volume estimate|Conversion|Revenue per|━|$)', 'i');
+        var re = new RegExp(ss.key + '[:\\s]*([\\s\\S]+?)(?=' + subSections.map(function(x){ return x.key; }).join('|') + '|Volume estimate|Conversion|Revenue per|CONFIDENCE|━|$)', 'i');
         var m = block.match(re);
         if (m) {
           subHtml += '<div style="margin-bottom:14px">';
@@ -803,7 +1071,8 @@ function renderTab1(content) {
 
 /* ═══════════════════════════════════════════
    TAB 2 RENDERER — WHAT TO SAY
-   Each message block gets a card with copy button
+   Each message block gets a card with copy button.
+   Feature 4.4: A/B testing toggle for ICP 1 primary.
 ═══════════════════════════════════════════ */
 function renderTab2(content) {
   if (!content) {
@@ -813,11 +1082,7 @@ function renderTab2(content) {
 
   var html = '';
 
-  /* Split on PRIMARY MESSAGE and FOLLOW-UP headings */
-  var msgBlocks = content.split(/(?=PRIMARY\s+MESSAGE|FOLLOW[- ]UP|RESPONSE\s+HANDLER)/i)
-    .filter(function(b){ return b.trim().length > 20; });
-
-  /* Response handlers section */
+  /* Response handlers section — find its boundary first */
   var rhIdx = content.indexOf('RESPONSE HANDLER');
   if (rhIdx === -1) rhIdx = content.indexOf('THEY SAY');
   var mainContent = rhIdx > -1 ? content.slice(0, rhIdx) : content;
@@ -856,6 +1121,36 @@ function renderTab2(content) {
 
     var cardId = 'msgcard_' + idx;
 
+    /* ── Feature 4.4: A/B test detection for first primary message (ICP 1) ── */
+    if (isPrimary && idx === 0 && /VERSION\s+[AB]/i.test(rawBody)) {
+      var verAMatch = rawBody.match(/VERSION\s+A[^:\n]*:?\n?([\s\S]+?)(?=VERSION\s+B|$)/i);
+      var verBMatch = rawBody.match(/VERSION\s+B[^:\n]*:?\n?([\s\S]+?)$/i);
+      var verA = verAMatch ? verAMatch[1].trim() : rawBody;
+      var verB = verBMatch ? verBMatch[1].trim() : '';
+
+      html += '<div class="message-card" id="' + cardId + '">';
+      html += '<div class="message-card-header"><div>';
+      html += '<div class="message-card-label">' + escHtml(label) + '</div>';
+      if (channel || lang) {
+        html += '<div class="message-card-channel">' + escHtml([channel, lang].filter(Boolean).join(' · ')) + '</div>';
+      }
+      html += '</div>';
+      html += '<button class="copy-btn" onclick="copyMessageAB(\'' + cardId + '\', this)">Copy</button>';
+      html += '</div>';
+      /* A/B tab toggle */
+      html += '<div class="ab-toggle-wrap">';
+      html += '<button class="ab-tab-btn active" onclick="switchAB(\'' + cardId + '\',\'a\',this)">Version A</button>';
+      html += '<button class="ab-tab-btn" onclick="switchAB(\'' + cardId + '\',\'b\',this)">Version B</button>';
+      html += '</div>';
+      /* Version panels */
+      html += '<div class="message-text ab-ver" id="' + cardId + '_a" data-text="' + escAttr(verA) + '">' + escHtml(verA) + '</div>';
+      html += '<div class="message-text ab-ver" id="' + cardId + '_b" data-text="' + escAttr(verB) + '" style="display:none">' + escHtml(verB) + '</div>';
+      html += '<div class="ab-hint">Test both this week. Report which performed better in your check-in.</div>';
+      html += '</div>';
+      return; /* skip normal card rendering for this block */
+    }
+
+    /* Normal message card */
     html += '<div class="message-card" id="' + cardId + '">';
     html += '<div class="message-card-header">';
     html += '<div>';
@@ -876,16 +1171,10 @@ function renderTab2(content) {
     html += '<div class="section-block-title">Response Handlers</div>';
     html += '<div class="section-block-body">';
 
-    /* Split on THEY SAY / YOU SAY pairs.
-       For each pair: capture everything between THEY SAY: and YOU SAY:
-       as the objection, and everything after YOU SAY: until the next
-       THEY SAY: (or end of string) as the response.
-       Use [\s\S] so the match spans multiple lines correctly. */
+    /* Split on THEY SAY / YOU SAY pairs. */
     var pairs = rhContent.split(/(?=THEY\s+SAY\s*:)/i).filter(function(p){ return p.trim(); });
     pairs.forEach(function(pair) {
-      /* THEY SAY: capture up to YOU SAY: or end — multi-line safe */
       var theyMatch = pair.match(/THEY\s+SAY\s*:\s*"?([\s\S]*?)"?\s*(?=YOU\s+SAY\s*:|$)/i);
-      /* YOU SAY: capture everything after it (rest of this pair block) */
       var youMatch  = pair.match(/YOU\s+SAY\s*:\s*"?([\s\S]+?)(?:"|$)/i);
       if (theyMatch || youMatch) {
         html += '<div style="background:var(--black3);border:1px solid var(--border2);padding:16px;margin-bottom:10px">';
@@ -911,7 +1200,8 @@ function renderTab2(content) {
 
 /* ═══════════════════════════════════════════
    TAB 3 RENDERER — THIS WEEK
-   Renders daily plan cards + 3 numbers
+   Renders daily plan cards + 3 numbers.
+   Feature 4.6: adds Competitor Watch card.
 ═══════════════════════════════════════════ */
 function renderTab3(content) {
   if (!content) {
@@ -957,7 +1247,7 @@ function renderTab3(content) {
   }
 
   /* Three numbers to hit */
-  var numbersMatch = content.match(/(?:THREE\s+NUMBERS|CONTACTS\s+THIS\s+WEEK)[:\s\S]+?(?=WHAT\s+NOT|$)/i);
+  var numbersMatch = content.match(/(?:THREE\s+NUMBERS|CONTACTS\s+THIS\s+WEEK)[:\s\S]+?(?=WHAT\s+NOT|COMPETITOR\s+WATCH|$)/i);
   if (numbersMatch) {
     var nBlock = numbersMatch[0];
     var contactsN  = extractNumber(nBlock, /CONTACTS\s+THIS\s+WEEK\s*:\s*(\d+)/i);
@@ -970,13 +1260,25 @@ function renderTab3(content) {
     html += '</div>';
   }
 
-  /* What not to do */
-  var avoidMatch = content.match(/WHAT\s+NOT\s+TO\s+DO[\s\S]+/i);
+  /* What not to do — stop before COMPETITOR WATCH */
+  var avoidMatch = content.match(/WHAT\s+NOT\s+TO\s+DO[\s\S]+?(?=COMPETITOR\s+WATCH|RULES\s+FOR|$)/i);
   if (avoidMatch) {
     html += '<div class="avoid-block">';
     html += '<div class="avoid-title">What Not to Do This Week</div>';
     html += '<div class="avoid-body">' + escHtml(avoidMatch[0].replace(/WHAT\s+NOT\s+TO\s+DO\s+THIS\s+WEEK\s*[:\-]?\s*/i,'').replace(/━+/g,'').trim()) + '</div>';
     html += '</div>';
+  }
+
+  /* ── Feature 4.6: Competitor Watch card ── */
+  var compWatch = content.match(/COMPETITOR\s+WATCH(?:\s+THIS\s+WEEK)?[:\s━]*([\s\S]+?)(?=RULES\s+FOR|$)/i);
+  if (compWatch) {
+    var compBody = compWatch[1].replace(/━+/g,'').trim();
+    if (compBody.length > 10) {
+      html += '<div class="comp-watch-card">';
+      html += '<div class="comp-watch-title">COMPETITOR WATCH</div>';
+      html += '<div class="comp-watch-body">' + escHtml(compBody) + '</div>';
+      html += '</div>';
+    }
   }
 
   document.getElementById('tab3Content').innerHTML = html;
@@ -1142,8 +1444,9 @@ function _buildCheckinMessageLocal(icpData, newCustomers, revenueAdded) {
 
 /* ═══════════════════════════════════════════
    TAB 5 RENDERER — EXPANSION PLAN
-   Parses opportunities and risk watch sections
-   from Scout's Tab 5 output.
+   Parses opportunities, risk watch, and
+   festival campaign sections from Scout's Tab 5.
+   Feature 4.5: adds Festival Campaign Planner.
 ═══════════════════════════════════════════ */
 function renderTab5(content) {
   var el = document.getElementById('tab5Content');
@@ -1159,7 +1462,7 @@ function renderTab5(content) {
 
   var html = '';
 
-  /* Section markers for the 4 opportunities + risk watch */
+  /* Section markers for the 4 opportunities + risk watch + festival campaign */
   var oppDefs = [
     { marker: 'OPPORTUNITY 1',  label: 'IMMEDIATE',    sub: '0–3 months' },
     { marker: 'OPPORTUNITY 2',  label: 'SHORT TERM',   sub: '3–6 months' },
@@ -1167,12 +1470,12 @@ function renderTab5(content) {
     { marker: 'OPPORTUNITY 4',  label: 'STRATEGIC',    sub: '12+ months' }
   ];
 
-  /* Find positions of all markers including RISK WATCH */
+  /* Build marker list including RISK WATCH and FESTIVAL CAMPAIGN PREVIEW */
   var allMarkers = oppDefs.map(function(o) { return o.marker; });
   allMarkers.push('RISK WATCH');
+  allMarkers.push('FESTIVAL CAMPAIGN PREVIEW');
 
   var positions = allMarkers.map(function(m) {
-    /* case-insensitive search */
     var lower = content.toLowerCase();
     var idx = lower.indexOf(m.toLowerCase());
     return idx;
@@ -1188,15 +1491,13 @@ function renderTab5(content) {
   /* Render each opportunity card */
   oppDefs.forEach(function(opp, i) {
     var startPos = positions[i];
-    var endPos   = positions[i + 1]; /* next marker — could be next opp or RISK WATCH */
+    var endPos   = positions[i + 1]; /* next marker — could be next opp, RISK WATCH, or FESTIVAL */
     var section  = sliceSection(startPos, endPos);
     if (!section) return;
 
-    /* Strip the header line (OPPORTUNITY N — ...) from body */
     var lines = section.split('\n');
     var bodyLines = lines.slice(1).join('\n').replace(/^━+\s*/gm, '').trim();
 
-    /* Convert remaining separator lines and blank lines to paragraphs */
     var bodyHtml = bodyLines
       .split(/\n{2,}/)
       .filter(function(p) { return p.trim().length > 0; })
@@ -1211,10 +1512,11 @@ function renderTab5(content) {
     html += '</div>';
   });
 
-  /* Render Risk Watch card */
-  var riskPos = positions[4]; /* RISK WATCH is 5th in allMarkers */
+  /* Render Risk Watch card — slice stops at FESTIVAL CAMPAIGN PREVIEW position */
+  var riskPos    = positions[4]; /* RISK WATCH */
+  var festPos    = positions[5]; /* FESTIVAL CAMPAIGN PREVIEW */
   if (riskPos !== -1) {
-    var riskSection = sliceSection(riskPos, -1);
+    var riskSection = sliceSection(riskPos, festPos !== -1 ? festPos : -1);
     var riskLines = riskSection.split('\n');
     var riskBody = riskLines.slice(1).join('\n').replace(/^━+\s*/gm, '').trim();
     var riskHtml = riskBody
@@ -1229,6 +1531,57 @@ function renderTab5(content) {
     html += '<div class="exp-card-timeline">RISK WATCH</div>';
     html += '<div class="exp-card-body">' + (riskHtml || '<p>' + escHtml(riskBody) + '</p>') + '</div>';
     html += '</div>';
+  }
+
+  /* ── Feature 4.5: Festival Campaign Planner ── */
+  if (festPos !== -1) {
+    var festContent = content.slice(festPos).replace(/^━+\s*/gm,'').trim();
+    /* Remove the FESTIVAL CAMPAIGN PREVIEW header line */
+    festContent = festContent.replace(/^FESTIVAL\s+CAMPAIGN\s+PREVIEW[^\n]*/i,'').trim();
+
+    /* Extract festival name */
+    var festNameMatch = festContent.match(/NEXT\s+MAJOR\s+FESTIVAL\s*:\s*([^\n]+)/i);
+    var festName = festNameMatch ? festNameMatch[1].trim() : 'Upcoming Festival';
+
+    html += '<div class="festival-toggle-wrap">';
+    html += '<button class="festival-toggle-btn" id="festToggleBtn" onclick="toggleFestival()">';
+    html += '<span id="festArrow">▶</span>&nbsp;Festival Campaign — ' + escHtml(festName);
+    html += '</button>';
+    html += '<div class="festival-panel" id="festivalPanel">';
+
+    /* Week-by-week entries */
+    var weekPatterns = [
+      { re: /4\s+weeks?\s+before[:\s]+([\s\S]+?)(?=3\s+weeks?|2\s+weeks?|1\s+week|festival\s+day|post|$)/i, label: '4 Weeks Before' },
+      { re: /3\s+weeks?\s+before[:\s]+([\s\S]+?)(?=2\s+weeks?|1\s+week|festival\s+day|post|$)/i, label: '3 Weeks Before' },
+      { re: /2\s+weeks?\s+before[:\s]+([\s\S]+?)(?=1\s+week|festival\s+day|post|$)/i, label: '2 Weeks Before' },
+      { re: /1\s+week\s+before[:\s]+([\s\S]+?)(?=festival\s+day|post|$)/i, label: '1 Week Before' },
+      { re: /festival\s+day[:\s]+([\s\S]+?)(?=post[- ]festival|3\s+days|$)/i, label: 'Festival Day' },
+      { re: /post[- ]festival[^:\n]*[:\s]+([\s\S]+?)$/i, label: 'Post-Festival (3 days after)' }
+    ];
+
+    var hasFestCards = false;
+    weekPatterns.forEach(function(wp, wpi) {
+      var wm = festContent.match(wp.re);
+      if (wm && wm[1] && wm[1].trim().length > 10) {
+        hasFestCards = true;
+        var msg = wm[1].replace(/━+/g,'').trim();
+        var wcId = 'festcard_' + wpi;
+        html += '<div class="festival-week-card">';
+        html += '<div class="festival-week-label">';
+        html += '<span>' + escHtml(wp.label) + '</span>';
+        html += '<button class="copy-btn" onclick="copyMessage(\'' + wcId + '\', this)">Copy</button>';
+        html += '</div>';
+        html += '<div class="festival-msg message-text" id="' + wcId + '" data-text="' + escAttr(msg) + '">' + escHtml(msg) + '</div>';
+        html += '</div>';
+      }
+    });
+
+    /* Fallback if no weekly patterns parsed */
+    if (!hasFestCards && festContent.trim().length > 30) {
+      html += '<div class="scout-prose" style="padding:16px 0">' + escHtml(festContent) + '</div>';
+    }
+
+    html += '</div></div>'; /* close festival-panel + festival-toggle-wrap */
   }
 
   /* Fallback if no structured content was found */
@@ -1262,8 +1615,7 @@ function switchTab(n) {
 function copyMessage(cardId, btn) {
   var card = document.getElementById(cardId);
   if (!card) return;
-  var textEl = card.querySelector('.message-text');
-  if (!textEl) return;
+  var textEl = card.querySelector('.message-text') || card;
   var text = textEl.getAttribute('data-text') || textEl.textContent;
   navigator.clipboard.writeText(text).then(function() {
     btn.textContent = 'Copied ✓';
@@ -1273,7 +1625,6 @@ function copyMessage(cardId, btn) {
       btn.classList.remove('copied');
     }, 2000);
   }).catch(function() {
-    /* Fallback for older browsers */
     var ta = document.createElement('textarea');
     ta.value = text;
     ta.style.position = 'fixed';
@@ -1289,9 +1640,173 @@ function copyMessage(cardId, btn) {
 }
 
 /* ═══════════════════════════════════════════
-   PDF DOWNLOAD
+   A/B TEST HELPERS (Feature 4.4)
 ═══════════════════════════════════════════ */
-function downloadPDF() {
+
+/* Switch between Version A and Version B */
+function switchAB(cardId, ver, btn) {
+  var elA = document.getElementById(cardId + '_a');
+  var elB = document.getElementById(cardId + '_b');
+  var wrap = btn.parentElement;
+  if (!wrap) return;
+  wrap.querySelectorAll('.ab-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  if (ver === 'a') {
+    if (elA) elA.style.display = 'block';
+    if (elB) elB.style.display = 'none';
+  } else {
+    if (elA) elA.style.display = 'none';
+    if (elB) elB.style.display = 'block';
+  }
+}
+
+/* Copy whichever version is currently showing */
+function copyMessageAB(cardId, btn) {
+  var elB = document.getElementById(cardId + '_b');
+  var activeId = (elB && elB.style.display !== 'none') ? cardId + '_b' : cardId + '_a';
+  var el = document.getElementById(activeId);
+  if (!el) return;
+  var text = el.getAttribute('data-text') || el.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'Copied ✓'; btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-9999px';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent = 'Copied ✓'; btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   REASONING PANEL (Feature 4.1)
+═══════════════════════════════════════════ */
+
+/* Parse Scout output to extract classification reasoning */
+function parseReasoningData(text) {
+  var data = {
+    marketType:      'Analysed from your inputs',
+    businessType:    'Analysed from your inputs',
+    primaryChannel:  'Analysed from your inputs',
+    unfairAdvantage: 'Analysed from your inputs',
+    seasonalContext: 'Analysed from your inputs'
+  };
+
+  /* Market Type — look for "Market Type [1-7]" or named type */
+  var mt1 = text.match(/Market\s+Type\s+([1-7])[:\s]+([^\n]+)/i);
+  if (mt1) {
+    data.marketType = 'Type ' + mt1[1] + ' — ' + mt1[2].trim();
+  } else {
+    var mt2 = text.match(/(?:METRO\s+CORE|TIER\s+\d[^\n]*|DISTRICT\s+TOWN[^\n]*)/i);
+    if (mt2) data.marketType = mt2[0].trim();
+    else {
+      var mt3 = text.match(/Market\s+Type\s*[:\-]\s*([^\n]+)/i);
+      if (mt3) data.marketType = mt3[1].trim();
+    }
+  }
+
+  /* Business Type */
+  var bt = text.match(/Business\s+Type\s*[:\-]\s*([^\n]+)/i);
+  if (bt) data.businessType = bt[1].trim();
+
+  /* Primary Channel — from Tab 2 first Channel: line */
+  var pc = text.match(/Primary\s+[Cc]hannel\s*[:\-]\s*([^\n]+)/i);
+  if (pc) {
+    data.primaryChannel = pc[1].trim();
+  } else {
+    var pc2 = text.match(/Channel\s*:\s*([^\n]+)/i);
+    if (pc2) data.primaryChannel = pc2[1].trim();
+  }
+
+  /* Unfair Advantage — first sentence of YOUR UNFAIR ADVANTAGE section */
+  var ua = text.match(/YOUR\s+UNFAIR\s+ADVANTAGE[:\s]*([\s\S]+?)(?=\n━|ICP\s+\d|$)/i);
+  if (ua && ua[1]) {
+    var uaText = ua[1].trim();
+    /* Take first sentence */
+    var sentEnd = uaText.search(/[.!?]/);
+    if (sentEnd > 10) {
+      data.unfairAdvantage = uaText.slice(0, sentEnd + 1).trim();
+    } else if (uaText.length > 10) {
+      data.unfairAdvantage = uaText.slice(0, 120).trim();
+    }
+  }
+
+  /* Seasonal Context — from THIS WEEK'S FOCUS line */
+  var sc = text.match(/THIS\s+WEEK'?S?\s+FOCUS\s*[:\n]\s*([^\n]+)/i);
+  if (sc) data.seasonalContext = sc[1].trim();
+
+  return data;
+}
+
+/* Toggle reasoning panel open/closed */
+function toggleReasoning() {
+  var panel = document.getElementById('reasoningPanel');
+  var arrow = document.getElementById('reasoningArrow');
+  if (!panel || !arrow) return;
+  if (panel.style.display === 'none' || panel.style.display === '') {
+    panel.style.display = 'block';
+    arrow.textContent = '▼';
+  } else {
+    panel.style.display = 'none';
+    arrow.textContent = '▶';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   FESTIVAL CAMPAIGN TOGGLE (Feature 4.5)
+═══════════════════════════════════════════ */
+function toggleFestival() {
+  var panel = document.getElementById('festivalPanel');
+  var arrow = document.getElementById('festArrow');
+  if (!panel || !arrow) return;
+  if (panel.style.display === 'none' || panel.style.display === '') {
+    panel.style.display = 'block';
+    arrow.textContent = '▼';
+  } else {
+    panel.style.display = 'none';
+    arrow.textContent = '▶';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   INSTITUTIONAL PDF (Feature 4.3)
+   Prepares cover page + exec summary then calls window.print()
+═══════════════════════════════════════════ */
+function preparePrint() {
+  var bizName  = businessData ? (businessData.businessName || 'Business Analysis') : 'Business Analysis';
+  var location = businessData ? (businessData.location || '') : '';
+  var date     = new Date().toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
+
+  /* Populate cover page */
+  var pbn  = document.getElementById('printBizName');
+  var ploc = document.getElementById('printLocation');
+  var pdt  = document.getElementById('printDate');
+  if (pbn)  pbn.textContent  = bizName;
+  if (ploc) ploc.textContent = location;
+  if (pdt)  pdt.textContent  = date;
+
+  /* Populate executive summary */
+  var metrics  = extractMetrics(scoutRaw);
+  var rData    = parseReasoningData(scoutRaw);
+  var rows = [
+    ['Business',               bizName + (location ? ' · ' + location : '')],
+    ['Analysis Date',          date],
+    ['Market Classification',  rData.marketType],
+    ['Primary ICP',            icpNames[0] || '—'],
+    ['Revenue Velocity Target', metrics.revenueVelocity],
+    ['Key Recommendation',     rData.seasonalContext]
+  ];
+  var tbody = document.getElementById('printExecTable');
+  if (tbody) {
+    tbody.innerHTML = rows.map(function(r) {
+      return '<tr>' +
+        '<td style="padding:8px 0;color:#666;width:40%;border-bottom:1px solid #eee;vertical-align:top">' + escHtml(r[0]) + '</td>' +
+        '<td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600">' + escHtml(r[1]) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
   window.print();
 }
 

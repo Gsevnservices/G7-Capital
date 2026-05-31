@@ -4900,6 +4900,35 @@ RULES FOR TAB 1:
   from user's stated average transaction value
   and realistic visit/purchase frequency
 
+CONFIDENCE RATING RULES:
+Every ICP must include a confidence rating.
+
+Add this line to each ICP output block:
+CONFIDENCE: HIGH / MEDIUM / LOW
+[One sentence explaining why — specific to this ICP]
+
+Rules:
+HIGH confidence when:
+— User described this exact customer type
+  in their onboarding form
+— This ICP matches 3+ market type signals
+  (location + business type + landmark alignment)
+— User has existing customers of this type
+
+MEDIUM confidence when:
+— ICP inferred from location and business type
+  but not explicitly named by user
+— 1-2 signals align, not all three
+— User described a similar but not exact type
+
+LOW confidence when:
+— ICP is a market opportunity Scout
+  identified that user did not mention
+— Based on sector pattern only —
+  not confirmed by user inputs
+— Verify with 5 customer conversations
+  before investing time and budget here
+
 ================================================================
 TAB 2 FORMAT — WHAT TO SAY
 ================================================================
@@ -4978,6 +5007,26 @@ RULES FOR TAB 2:
 — Messages must include at least one
   landmark reference per ICP
 
+MESSAGE A/B TESTING FORMAT:
+For ICP 1 primary message only,
+Scout provides TWO versions:
+
+VERSION A — [Current approach]
+[Primary message as written above]
+
+VERSION B — [Alternative approach]
+[Same goal, different angle:
+— Different opening hook
+— Different benefit emphasis
+— Different call to action]
+
+Label each version clearly.
+User tests both this week and reports
+which got better response in their check-in.
+Scout uses this in next check-in to
+determine the winning approach and double
+down on what worked.
+
 ================================================================
 TAB 3 FORMAT — WHAT TO DO THIS WEEK
 ================================================================
@@ -5041,6 +5090,34 @@ WHAT NOT TO DO THIS WEEK:
 with specific reason for each.
 Not generic advice —
 specific to this business's situation.]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPETITOR WATCH THIS WEEK:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Named competitor] is likely doing:
+[What they typically do this season
+based on their type and the current month —
+be specific about the tactic and timing]
+
+Your response this week:
+[One specific action to counter or
+pre-empt their likely activity —
+what to do, when, and with which ICP]
+
+Rules for Competitor Watch:
+— Base only on named competitors from
+  the user's onboarding form
+— Use seasonal patterns from Component 5
+  to infer what competitor is likely doing
+  right now — not generic competitive advice
+— Must be specific: "[Competitor] typically
+  runs Diwali offers 4 weeks before the
+  festival. That starts in 2 weeks. Get
+  your offer out this Friday."
+— One competitor per week only —
+  rotate if multiple were named
+— One counter-action only — not a strategy
 
 RULES FOR TAB 3:
 — Time required for each day must be realistic
@@ -6674,6 +6751,52 @@ RISK WATCH
 [1-2 risks specific to this business type
 and market type right now]
 [One sentence defence for each risk]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FESTIVAL CAMPAIGN PREVIEW:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEXT MAJOR FESTIVAL: [Festival name]
+[X] weeks away
+
+WEEK-BY-WEEK CAMPAIGN:
+
+4 weeks before:
+[Awareness message — copy paste ready,
+in correct language for this business]
+
+3 weeks before:
+[Offer announcement message]
+
+2 weeks before:
+[Urgency message — specific to this
+business's best-selling product or service]
+
+1 week before:
+[Final push message]
+
+Festival day:
+[Celebration/greeting message in correct
+language with landmark reference]
+
+Post-festival (3 days after):
+[Retention message — bring them back]
+
+Rules for Festival Campaign:
+— Only generate if a major festival falls
+  within 60-90 days of the current date
+  Use Component 5 seasonal calendar
+— If no major festival in next 90 days:
+  write "Next festival campaign will appear
+  here 90 days before [next festival name]"
+— Select the most relevant festival for
+  this business type and location
+  A Puja-heavy Kolkata business gets Durga
+  Puja. A Delhi merchant gets Diwali.
+— All messages must be copy-paste ready
+— Every message must reference the business
+  name and at least one local landmark
+— Messages in the correct language mode
+  from Component 6 for this market type
 
 RULES FOR TAB 5:
 — Every opportunity must be specific to
