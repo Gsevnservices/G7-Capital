@@ -466,6 +466,102 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .festival-msg{border-left:none;padding-left:0;margin-top:4px}
 
+/* ── REFERRAL CHAIN BUILDER (Feature 5.1) ── */
+.referral-section-heading{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:300;color:var(--white);margin-bottom:6px
+}
+.referral-section-sub{
+  font-size:12px;line-height:1.8;color:var(--grey1);margin-bottom:20px
+}
+.referral-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px
+}
+@media(max-width:600px){.referral-row{grid-template-columns:1fr}}
+.referral-input{
+  width:100%;background:var(--black2);border:1px solid var(--border2);
+  color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:12px;
+  padding:10px 14px;outline:none;transition:border-color .3s
+}
+.referral-input:focus{border-color:rgba(201,168,76,0.5)}
+.referral-input::placeholder{color:var(--grey2);font-size:11px}
+.referral-add-link{
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;display:inline-block;
+  margin:8px 0 16px;cursor:pointer;border:none;background:none;
+  font-family:'Tenor Sans',sans-serif;transition:color .2s
+}
+.referral-add-link:hover{color:var(--gold2)}
+.btn-build-referral{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:var(--black);border:none;
+  padding:14px 32px;cursor:pointer;font-weight:600;
+  font-family:'Tenor Sans',sans-serif;transition:background .3s;
+  width:100%;margin-top:4px
+}
+.btn-build-referral:hover{background:var(--gold2)}
+.btn-build-referral:disabled{opacity:.5;cursor:not-allowed}
+.referral-loading{
+  display:none;text-align:center;padding:24px;
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey1)
+}
+.referral-card{
+  background:var(--black3);border:1px solid var(--border2);
+  padding:20px 24px;margin-bottom:12px;margin-top:4px
+}
+.referral-card-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:12px;flex-wrap:wrap;gap:8px
+}
+.referral-card-name{
+  font-family:'Cormorant Garamond',serif;font-size:16px;
+  font-weight:300;color:var(--white)
+}
+.referral-potential-badge{
+  font-size:7px;letter-spacing:.2em;text-transform:uppercase;
+  padding:3px 10px;border:1px solid
+}
+.referral-potential-badge.high{
+  color:var(--green);border-color:rgba(90,158,111,0.4);
+  background:rgba(90,158,111,0.08)
+}
+.referral-potential-badge.medium{
+  color:var(--gold);border-color:rgba(201,168,76,0.4);
+  background:rgba(201,168,76,0.08)
+}
+.referral-potential-badge.low{
+  color:var(--grey1);border-color:rgba(138,136,128,0.4);
+  background:rgba(138,136,128,0.06)
+}
+.referral-estimate{
+  font-size:11px;color:var(--grey1);margin-bottom:6px;line-height:1.6
+}
+.referral-estimate strong{color:var(--gold)}
+.referral-reason{font-size:11px;color:var(--grey2);margin-bottom:12px;line-height:1.6}
+.referral-msg-label{
+  font-size:8px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px
+}
+.referral-msg-text{
+  font-size:12px;line-height:1.8;color:var(--white2);
+  white-space:pre-wrap;border-left:2px solid var(--border);
+  padding-left:12px;margin-bottom:8px
+}
+.referral-total-block{
+  background:rgba(201,168,76,0.06);border:1px solid var(--border);
+  padding:16px 20px;margin-top:16px
+}
+.referral-total-label{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px
+}
+.referral-total-val{
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  font-weight:300;color:var(--white);margin-bottom:4px
+}
+.referral-total-sub{font-size:11px;color:var(--grey1)}
+
 /* ── PRINT STYLES (Feature 4.3) ── */
 .print-cover{display:none}
 .print-exec-summary{display:none}
@@ -769,11 +865,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 /* ═══════════════════════════════════════════
    STATE
 ═══════════════════════════════════════════ */
-var scoutData      = null;   // full parsed result object
-var scoutRaw       = '';     // raw text output from Scout
-var businessData   = null;   // form data from onboarding
-var currentTab     = 0;
-var icpNames       = [];     // extracted ICP names for pipeline form
+var scoutData        = null;   // full parsed result object
+var scoutRaw         = '';     // raw text output from Scout
+var businessData     = null;   // form data from onboarding
+var currentTab       = 0;
+var icpNames         = [];     // extracted ICP names for pipeline form
+var referralRowCount = 3;      // tracks how many referral input rows are showing
 
 /* ═══════════════════════════════════════════
    PAGE INIT
@@ -1349,6 +1446,26 @@ function renderTab4(content, biz) {
   html += '<div class="checkin-note">Scout will adjust next week\'s targets based on which ICPs performed best.</div>';
   html += '</div>';
 
+  /* ── REFERRAL CHAIN BUILDER (Feature 5.1) ── */
+  html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:36px">';
+  html += '<div class="referral-section-heading">Activate Your Referral Network</div>';
+  html += '<div class="referral-section-sub">Enter your best existing customers. Scout will show you who to activate first and exactly what to say.</div>';
+  html += '<div id="referralRows">';
+  /* 3 initial rows */
+  for (var ri = 0; ri < 3; ri++) {
+    html += '<div class="referral-row" id="rrow_' + ri + '">';
+    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Sharma ji, government teacher">';
+    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Prerna Vihar colony">';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<button class="referral-add-link" onclick="addReferralRow()">+ Add another customer</button>';
+  html += '<br>';
+  html += '<button class="btn-build-referral" id="buildReferralBtn" onclick="buildReferralChain()">Build My Referral Chain →</button>';
+  html += '<div class="referral-loading" id="referralLoading">Scout is mapping your referral network...</div>';
+  html += '<div id="referralResults"></div>';
+  html += '</div>';
+
   document.getElementById('tab4Content').innerHTML = html;
 }
 
@@ -1894,6 +2011,200 @@ function formatDayContent(text) {
 /* Render raw prose as a preformatted block (fallback renderer) */
 function renderRawProse(text) {
   return '<div class="scout-prose">' + escHtml(cleanBlock(text)) + '</div>';
+}
+
+/* ═══════════════════════════════════════════
+   REFERRAL CHAIN BUILDER (Feature 5.1)
+═══════════════════════════════════════════ */
+
+/* Add a new customer input row (up to 10 total) */
+function addReferralRow() {
+  if (referralRowCount >= 10) return;
+  var wrap = document.getElementById('referralRows');
+  if (!wrap) return;
+  var idx = referralRowCount;
+  var div = document.createElement('div');
+  div.className = 'referral-row';
+  div.id = 'rrow_' + idx;
+  div.innerHTML =
+    '<input class="referral-input" id="rcust_' + idx + '" type="text" placeholder="e.g. Anita didi, school teacher">' +
+    '<input class="referral-input" id="rloc_' + idx + '" type="text" placeholder="e.g. Sector 12 B colony">';
+  wrap.appendChild(div);
+  referralRowCount++;
+  if (referralRowCount >= 10) {
+    var btn = document.querySelector('.referral-add-link');
+    if (btn) btn.style.display = 'none';
+  }
+}
+
+/* Collect customer data, call Scout, render results */
+async function buildReferralChain() {
+  /* Collect all filled customer entries */
+  var customers = [];
+  for (var i = 0; i < referralRowCount; i++) {
+    var custEl = document.getElementById('rcust_' + i);
+    var locEl  = document.getElementById('rloc_' + i);
+    if (!custEl) continue;
+    var cust = (custEl.value || '').trim();
+    var loc  = locEl ? (locEl.value || '').trim() : '';
+    if (cust) customers.push({ name: cust, location: loc });
+  }
+
+  if (customers.length === 0) {
+    alert('Please enter at least one customer name before building the chain.');
+    return;
+  }
+
+  /* Show loading, disable button */
+  var btn = document.getElementById('buildReferralBtn');
+  var loading = document.getElementById('referralLoading');
+  var results = document.getElementById('referralResults');
+  if (btn)     { btn.disabled = true; }
+  if (loading) { loading.style.display = 'block'; }
+  if (results) { results.innerHTML = ''; }
+
+  try {
+    /* Build business context from onboarding data */
+    var biz = businessData || {};
+    var bizCtx = 'Business: ' + (biz.businessName || 'Not provided') +
+      ' in ' + (biz.location || biz.city || 'Not provided') +
+      '. Type: ' + (biz.businessType || 'Not provided') +
+      '. Average ticket: ₹' + (biz.avgTicket || 'Not provided') +
+      '. Typical customer: ' + (biz.targetCustomer || 'Not provided') + '.';
+
+    /* Build referral analysis prompt */
+    var custList = customers.map(function(c, idx) {
+      return (idx + 1) + '. ' + c.name + (c.location ? ' (' + c.location + ')' : '');
+    }).join('\n');
+
+    var prompt = [
+      'REFERRAL CHAIN ANALYSIS REQUEST',
+      '════════════════════════════════════════',
+      '',
+      'Business context:',
+      bizCtx,
+      '',
+      'Analyse these existing customers for referral potential.',
+      'Use EXACTLY this format for each customer — no deviation:',
+      '',
+      'CUSTOMER: [exact name as provided]',
+      'LOCATION: [location as provided]',
+      'POTENTIAL: HIGH',
+      'REFERRALS ESTIMATE: [X-Y households/customers]',
+      'REASON: [one sentence — specific community role or network]',
+      'ACTIVATION MESSAGE:',
+      '[WhatsApp message — under 60 words, copy-paste ready, correct language for market type]',
+      '===',
+      '',
+      'Order results: HIGH potential first, MEDIUM second, LOW last.',
+      'After all customers add:',
+      'TOTAL ESTIMATE: [sum range] new customers in 30 days',
+      'REVENUE IMPACT: ₹[amount]/month if 50% convert at ₹' + (biz.avgTicket || 'average') + ' per customer',
+      '',
+      'Customers to analyse:',
+      custList
+    ].join('\n');
+
+    /* Call Scout API via callScoutRaw() from scout.js */
+    var rawOutput = await callScoutRaw(prompt);
+
+    /* Parse and display results */
+    displayReferralResults(rawOutput, customers);
+
+    /* Cache results */
+    try {
+      localStorage.setItem('scout_referral_chain', JSON.stringify({
+        customers: customers,
+        output: rawOutput,
+        date: new Date().toISOString()
+      }));
+    } catch(e) {}
+
+  } catch (err) {
+    if (results) {
+      results.innerHTML = '<div style="padding:20px;color:var(--red);font-size:12px">' +
+        escHtml('Error: ' + (err.message || 'Please try again.')) + '</div>';
+    }
+  } finally {
+    if (btn)     { btn.disabled = false; }
+    if (loading) { loading.style.display = 'none'; }
+  }
+}
+
+/* Parse Scout's referral chain output and render cards */
+function displayReferralResults(rawOutput, customers) {
+  var results = document.getElementById('referralResults');
+  if (!results) return;
+
+  /* Split on the === separator */
+  var blocks = rawOutput.split(/===+/).map(function(b) { return b.trim(); }).filter(function(b) {
+    return b.length > 20 && /CUSTOMER\s*:/i.test(b);
+  });
+
+  /* Sort: HIGH first, then MEDIUM, then LOW */
+  blocks.sort(function(a, b) {
+    var order = { 'HIGH': 0, 'MEDIUM': 1, 'LOW': 2 };
+    var ma = (a.match(/POTENTIAL\s*:\s*(HIGH|MEDIUM|LOW)/i) || [])[1] || 'LOW';
+    var mb = (b.match(/POTENTIAL\s*:\s*(HIGH|MEDIUM|LOW)/i) || [])[1] || 'LOW';
+    return (order[ma.toUpperCase()] || 2) - (order[mb.toUpperCase()] || 2);
+  });
+
+  var html = '';
+
+  blocks.forEach(function(block, idx) {
+    var nameMatch   = block.match(/CUSTOMER\s*:\s*([^\n]+)/i);
+    var locMatch    = block.match(/LOCATION\s*:\s*([^\n]+)/i);
+    var potMatch    = block.match(/POTENTIAL\s*:\s*(HIGH|MEDIUM|LOW)/i);
+    var estMatch    = block.match(/REFERRALS?\s+ESTIMATE\s*:\s*([^\n]+)/i);
+    var reasonMatch = block.match(/REASON\s*:\s*([^\n]+)/i);
+    var msgMatch    = block.match(/ACTIVATION\s+MESSAGE\s*:\s*([\s\S]+?)(?=CUSTOMER:|TOTAL\s+ESTIMATE:|$)/i);
+
+    var name   = nameMatch   ? nameMatch[1].trim()   : 'Customer ' + (idx + 1);
+    var loc    = locMatch    ? locMatch[1].trim()    : '';
+    var pot    = potMatch    ? potMatch[1].toUpperCase() : 'MEDIUM';
+    var est    = estMatch    ? estMatch[1].trim()    : '—';
+    var reason = reasonMatch ? reasonMatch[1].trim() : '';
+    var msg    = msgMatch    ? msgMatch[1].trim().replace(/^━+\s*/gm,'') : '';
+
+    var potClass = pot === 'HIGH' ? 'high' : pot === 'MEDIUM' ? 'medium' : 'low';
+    var cardId   = 'refcard_' + idx;
+
+    html += '<div class="referral-card">';
+    html += '<div class="referral-card-header">';
+    html += '<div class="referral-card-name">' + escHtml(name) + (loc ? ' <span style="font-size:11px;color:var(--grey2)">— ' + escHtml(loc) + '</span>' : '') + '</div>';
+    html += '<div class="referral-potential-badge ' + potClass + '">REFERRAL POTENTIAL: ' + pot + '</div>';
+    html += '</div>';
+    html += '<div class="referral-estimate"><strong>Estimated referrals:</strong> ' + escHtml(est) + '</div>';
+    if (reason) html += '<div class="referral-reason">' + escHtml(reason) + '</div>';
+    if (msg) {
+      html += '<div class="referral-msg-label">Activation Message</div>';
+      html += '<div class="referral-msg-text" id="' + cardId + '" data-text="' + escAttr(msg) + '">' + escHtml(msg) + '</div>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button>';
+    }
+    html += '</div>';
+  });
+
+  /* Total estimate + revenue impact — appears after all customer blocks */
+  var totalMatch   = rawOutput.match(/TOTAL\s+ESTIMATE\s*:\s*([^\n]+)/i);
+  var revenueMatch = rawOutput.match(/REVENUE\s+IMPACT\s*:\s*([^\n]+)/i);
+  if (totalMatch || revenueMatch) {
+    html += '<div class="referral-total-block">';
+    html += '<div class="referral-total-label">Network Total Estimate</div>';
+    if (totalMatch) {
+      html += '<div class="referral-total-val">' + escHtml(totalMatch[1].trim()) + '</div>';
+    }
+    if (revenueMatch) {
+      html += '<div class="referral-total-sub">' + escHtml(revenueMatch[1].trim()) + '</div>';
+    }
+    html += '</div>';
+  }
+
+  /* Fallback if parsing found nothing */
+  if (!html) {
+    html = '<div class="scout-prose" style="margin-top:16px">' + escHtml(rawOutput) + '</div>';
+  }
+
+  results.innerHTML = html;
 }
 
 /* Show error state in all tabs */

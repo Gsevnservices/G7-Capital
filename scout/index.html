@@ -318,6 +318,75 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .arc-label{font-size:6px}
 }
 
+/* ── BUSINESS HEALTH SCORE CARD (Feature 5.2) ── */
+.health-card{
+  background:var(--black2);border:1px solid var(--border2);
+  padding:28px 32px;margin-bottom:32px
+}
+.health-eyebrow{
+  font-size:8px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px
+}
+.health-score-row{
+  display:flex;align-items:baseline;gap:10px;
+  margin-bottom:20px;flex-wrap:wrap
+}
+.health-score-big{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,5vw,52px);font-weight:300;
+  color:var(--white);line-height:1
+}
+.health-score-denom{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;color:var(--grey2)
+}
+.health-label{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  padding:4px 12px;border:1px solid;margin-left:auto
+}
+.health-label.thriving{
+  color:var(--gold2);border-color:rgba(226,201,126,0.4);
+  background:rgba(226,201,126,0.08)
+}
+.health-label.healthy{
+  color:var(--gold);border-color:rgba(201,168,76,0.4);
+  background:rgba(201,168,76,0.08)
+}
+.health-label.developing{
+  color:#D4A04C;border-color:rgba(212,160,76,0.4);
+  background:rgba(212,160,76,0.06)
+}
+.health-label.attention{
+  color:var(--red);border-color:rgba(196,90,90,0.4);
+  background:rgba(196,90,90,0.06)
+}
+.health-bars{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.health-dim{}
+.health-dim-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:5px
+}
+.health-dim-label{font-size:10px;letter-spacing:.06em;color:var(--grey1)}
+.health-dim-score{
+  font-family:'Cormorant Garamond',serif;font-size:13px;
+  font-weight:300;color:var(--white)
+}
+.health-bar-wrap{
+  height:2px;background:var(--border2);overflow:hidden
+}
+.health-bar-fill{
+  height:100%;background:var(--gold);
+  transition:width 1s ease
+}
+.health-focus{
+  font-size:10px;letter-spacing:.06em;color:var(--grey2);
+  padding-top:12px;border-top:1px solid var(--border2);line-height:1.7
+}
+.health-focus strong{color:var(--white)}
+.health-empty{
+  font-size:11px;color:var(--grey2);letter-spacing:.05em;line-height:1.7
+}
+
 /* QUICK ACTIONS */
 .actions-row{
   display:flex;gap:12px;margin-bottom:48px;flex-wrap:wrap
@@ -518,6 +587,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="arc-labels" id="arcLabels"><!-- rendered by JS --></div>
       <div class="arc-phase-name" id="arcPhaseName"></div>
       <div class="arc-phase-desc" id="arcPhaseDesc"></div>
+    </div>
+
+    <!-- SCOUT BUSINESS HEALTH SCORE (Feature 5.2) -->
+    <div class="health-card" id="healthScoreCard">
+      <div class="health-empty">Health score appears after your first weekly check-in.</div>
     </div>
 
     <!-- QUICK ACTIONS -->
@@ -728,6 +802,9 @@ function showDashboard(history, weekNum, firmName) {
     renderMondayBriefing(last, weekNum);
   }
 
+  /* ── BUSINESS HEALTH SCORE (Feature 5.2) ── */
+  renderHealthScore();
+
   /* ── 12-WEEK ARC (Feature 3.7) ── */
   renderTransformationArc(weekNum);
 
@@ -855,6 +932,81 @@ function renderTransformationArc(weekNum) {
   }
 
   arcWrap.style.display = 'block';
+}
+
+/* ═══════════════════════════════════════════
+   BUSINESS HEALTH SCORE (Feature 5.2)
+   Reads scout_health_score and
+   scout_health_breakdown from localStorage
+   and renders the 5-dimension health card.
+═══════════════════════════════════════════ */
+function renderHealthScore() {
+  var el = document.getElementById('healthScoreCard');
+  if (!el) return;
+
+  var scoreRaw    = localStorage.getItem('scout_health_score');
+  var breakdownRaw = localStorage.getItem('scout_health_breakdown');
+
+  if (!scoreRaw || !breakdownRaw) {
+    /* No check-in data yet — show default message */
+    return;
+  }
+
+  var score = parseInt(scoreRaw, 10) || 0;
+  var breakdown;
+  try { breakdown = JSON.parse(breakdownRaw); } catch(e) { return; }
+
+  /* Overall health label */
+  var label, labelClass;
+  if (score >= 81)      { label = 'THRIVING';         labelClass = 'thriving'; }
+  else if (score >= 61) { label = 'HEALTHY';           labelClass = 'healthy'; }
+  else if (score >= 41) { label = 'DEVELOPING';        labelClass = 'developing'; }
+  else                  { label = 'NEEDS ATTENTION';   labelClass = 'attention'; }
+
+  /* Ordered dimension list */
+  var dimKeys = ['acquisition', 'revenue', 'retention', 'competitive', 'seasonal'];
+  var dims = dimKeys.map(function(k) { return breakdown[k]; }).filter(Boolean);
+
+  /* Find lowest-scoring dimension for focus area */
+  var lowest = dims.reduce(function(a, b) {
+    return (a && a.score <= b.score) ? a : b;
+  }, null);
+
+  var html = '';
+  html += '<div class="health-eyebrow">Scout Business Health</div>';
+  html += '<div class="health-score-row">';
+  html += '<span class="health-score-big">' + score + '</span>';
+  html += '<span class="health-score-denom">/100</span>';
+  html += '<span class="health-label ' + labelClass + '">' + label + '</span>';
+  html += '</div>';
+
+  /* Dimension bars */
+  html += '<div class="health-bars">';
+  dims.forEach(function(dim) {
+    var pct = Math.round((dim.score / 20) * 100);
+    html += '<div class="health-dim">';
+    html += '<div class="health-dim-row">';
+    html += '<span class="health-dim-label">' + escHtml(dim.label) + '</span>';
+    html += '<span class="health-dim-score">' + dim.score + '/20</span>';
+    html += '</div>';
+    html += '<div class="health-bar-wrap"><div class="health-bar-fill" style="width:0%" data-pct="' + pct + '"></div></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  /* Focus area */
+  if (lowest) {
+    html += '<div class="health-focus">Focus area this week: <strong>' + escHtml(lowest.label) + '</strong></div>';
+  }
+
+  el.innerHTML = html;
+
+  /* Animate bars after render */
+  setTimeout(function() {
+    el.querySelectorAll('.health-bar-fill').forEach(function(bar) {
+      bar.style.width = (bar.getAttribute('data-pct') || '0') + '%';
+    });
+  }, 300);
 }
 
 /* ═══════════════════════════════════════════

@@ -95,6 +95,62 @@ async function callScout(businessContext) {
 
 
 // ─────────────────────────────────────────────────────────────
+// FUNCTION 1B — callScoutRaw(userMessage)
+//
+// Sends a raw string message to the /scout/analyse endpoint.
+// Used by the Referral Chain Builder in result.html, which
+// builds its own prompt rather than using the onboarding form.
+//
+// userMessage — a pre-formatted string (user message content)
+// Returns: Scout's raw text output (string)
+// Throws:  Error with user-readable message
+// ─────────────────────────────────────────────────────────────
+async function callScoutRaw(userMessage) {
+
+  var sessionToken = localStorage.getItem('g7_session_token') || '';
+  var systemPrompt = SCOUT_SYSTEM_PROMPT;
+
+  var response;
+  try {
+    response = await fetch(SCOUT_WORKER + '/scout/analyse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + sessionToken
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 3000,
+        system: [
+          {
+            type: 'text',
+            text: systemPrompt,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
+        messages: [
+          { role: 'user', content: userMessage }
+        ]
+      })
+    });
+  } catch (networkError) {
+    throw new Error('Could not reach Scout. Please check your internet connection and try again.');
+  }
+
+  if (!response.ok) {
+    var errBody = await response.text();
+    throw new Error('Scout API error ' + response.status + ': ' + errBody);
+  }
+
+  var result = await readSSEStream(response);
+  if (!result) {
+    throw new Error('Scout returned an empty response. Please try again.');
+  }
+  return result;
+}
+
+
+// ─────────────────────────────────────────────────────────────
 // HELPER — buildScoutOnboardMessage(ctx)
 //
 // Formats the business context object into a structured prompt
@@ -441,6 +497,11 @@ function saveScoutResult(rawOutput, weekNumber) {
   // If Scout included a SCOUT INSIGHT section in the output,
   // extract and save it for display on result.html.
   extractAndSaveInsight(rawOutput, weekNumber);
+
+  // ── BUSINESS HEALTH SCORE ────────────────────────────────────
+  // Calculate and persist the 5-dimension health score
+  // so index.html can display it on the dashboard.
+  calculateHealthScore();
 }
 
 
@@ -609,9 +670,144 @@ function extractScoutMetrics(text) {
 
 
 // ─────────────────────────────────────────────────────────────
+// FUNCTION 7 — calculateHealthScore()
+//
+// Calculates a 5-dimension Business Health Score (0-100)
+// from the most recent check-in data in scout_history.
+// Called automatically at end of saveScoutResult().
+//
+// Saves:
+//   scout_health_score     — total score (0-100) as string
+//   scout_health_breakdown — object with per-dimension scores
+//
+// Dimensions (20 pts each):
+//   1. Customer Acquisition  — conversion rate vs benchmark
+//   2. Revenue Velocity      — revenue vs velocity target
+//   3. Customer Retention    — week-over-week customer trend
+//   4. Competitive Position  — momentum score band
+//   5. Seasonal Preparedness — festival/seasonal activity
+// ─────────────────────────────────────────────────────────────
+function calculateHealthScore() {
+  var history = getScoutHistory();
+  if (!history || history.length === 0) return;
+
+  var lastEntry = history[history.length - 1];
+  var prevEntry = history.length > 1 ? history[history.length - 2] : null;
+
+  var breakdown = {};
+  var total = 0;
+
+  // ── DIMENSION 1: Customer Acquisition (20 pts) ──────────────
+  var totalContacts = (parseInt(lastEntry.icp1_sent,    10) || 0) +
+                      (parseInt(lastEntry.icp2_sent,    10) || 0) +
+                      (parseInt(lastEntry.icp3_sent,    10) || 0);
+  var totalConv     = (parseInt(lastEntry.icp1_conv,    10) || 0) +
+                      (parseInt(lastEntry.icp2_conv,    10) || 0) +
+                      (parseInt(lastEntry.icp3_conv,    10) || 0);
+  var convRate      = totalContacts > 0 ? totalConv / totalContacts : 0;
+  var benchmark     = 0.15; // Tier 3 default; Metro is 0.20
+
+  var contactsTarget = 0;
+  try {
+    var tRaw = localStorage.getItem('scout_last_targets');
+    if (tRaw) contactsTarget = parseInt(JSON.parse(tRaw).contacts || 0, 10) || 0;
+  } catch (e) {}
+
+  var acqScore;
+  if (totalContacts === 0) {
+    acqScore = 0;
+  } else if (convRate > benchmark) {
+    acqScore = 20;
+  } else if (Math.abs(convRate - benchmark) < 0.02) {
+    acqScore = 15;
+  } else if (contactsTarget > 0 && totalContacts >= contactsTarget) {
+    acqScore = 10;
+  } else {
+    acqScore = 5;
+  }
+  breakdown.acquisition = { score: acqScore, label: 'Customer Acquisition' };
+  total += acqScore;
+
+  // ── DIMENSION 2: Revenue Velocity (20 pts) ──────────────────
+  var revenueAdded   = parseFloat(lastEntry.revenueAdded) || 0;
+  var velocityTarget = 0;
+  if (lastEntry.scoutOutput) {
+    var vtMatch = lastEntry.scoutOutput.match(/REVENUE\s+VELOCITY\s+TARGET\s*:\s*₹?([\d,]+)/i);
+    if (vtMatch) velocityTarget = parseFloat(vtMatch[1].replace(/,/g, '')) || 0;
+  }
+
+  var revScore;
+  if (revenueAdded === 0) {
+    revScore = 0;
+  } else if (velocityTarget <= 0 || revenueAdded >= velocityTarget) {
+    revScore = 20;
+  } else if (revenueAdded >= velocityTarget * 0.75) {
+    revScore = 15;
+  } else if (revenueAdded >= velocityTarget * 0.50) {
+    revScore = 10;
+  } else {
+    revScore = 5;
+  }
+  breakdown.revenue = { score: revScore, label: 'Revenue Velocity' };
+  total += revScore;
+
+  // ── DIMENSION 3: Customer Retention (20 pts) ─────────────────
+  var lastCust = parseInt(lastEntry.totalCustomers, 10) || 0;
+  var prevCust = prevEntry !== null ? (parseInt(prevEntry.totalCustomers, 10) || 0) : -1;
+
+  var retScore;
+  if (prevCust === -1) {
+    retScore = 15; // first check-in — no prior data, neutral
+  } else if (lastCust > prevCust) {
+    retScore = 20;
+  } else if (lastCust === prevCust) {
+    retScore = 15;
+  } else if (prevCust > 0 && lastCust >= prevCust * 0.8) {
+    retScore = 10;
+  } else {
+    retScore = 0;
+  }
+  breakdown.retention = { score: retScore, label: 'Customer Retention' };
+  total += retScore;
+
+  // ── DIMENSION 4: Competitive Position (20 pts) ───────────────
+  var momentum  = parseInt(lastEntry.momentum, 10) || 0;
+  var compScore;
+  if (momentum > 60) {
+    compScore = 20;
+  } else if (momentum >= 40) {
+    compScore = 15;
+  } else if (momentum >= 20) {
+    compScore = 10;
+  } else {
+    compScore = 5;
+  }
+  breakdown.competitive = { score: compScore, label: 'Competitive Position' };
+  total += compScore;
+
+  // ── DIMENSION 5: Seasonal Preparedness (20 pts) ──────────────
+  var seasonalScore = 10; // default: standard weekly activity
+  if (totalContacts === 0 && revenueAdded === 0) {
+    // No activity at all this week
+    seasonalScore = 0;
+  } else if (lastEntry.scoutOutput) {
+    var seasonalRe = /festival|diwali|holi|eid|navratri|puja|christmas|campaign|seasonal|offer|mela|rakhi|onam|lohri|baisakhi/i;
+    if (seasonalRe.test(lastEntry.scoutOutput)) {
+      seasonalScore = 20;
+    }
+  }
+  breakdown.seasonal = { score: seasonalScore, label: 'Seasonal Preparedness' };
+  total += seasonalScore;
+
+  localStorage.setItem('scout_health_score',     String(Math.min(total, 100)));
+  localStorage.setItem('scout_health_breakdown', JSON.stringify(breakdown));
+}
+
+
+// ─────────────────────────────────────────────────────────────
 // MODULE EXPORT (Node.js validation only)
 // Not used in browser — Scout pages load this via <script> tag
 // ─────────────────────────────────────────────────────────────
 if (typeof module !== 'undefined') {
-  module.exports = { callScout, callScoutCheckin, saveScoutResult, getScoutHistory, getScoutContext, extractScoutMetrics };
+  module.exports = { callScout, callScoutRaw, callScoutCheckin, saveScoutResult, getScoutHistory, getScoutContext, extractScoutMetrics, calculateHealthScore };
 }
