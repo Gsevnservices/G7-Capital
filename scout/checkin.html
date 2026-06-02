@@ -302,7 +302,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 ═══════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', function() {
   var token = localStorage.getItem('g7_session_token');
-  if (!token) { window.location.href = '../login.html'; return; }
+  if (!token) { window.location.href = '../login.html?product=scout'; return; }
 
   document.body.style.visibility = 'visible';
 
@@ -635,7 +635,7 @@ function formatNum(n) {
 ═══════════════════════════════════════ */
 function handleLogout() {
   ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
-  window.location.href = '../login.html';
+  window.location.href = '../login.html?product=scout';
 }
 
 /* ═══════════════════════════════════════

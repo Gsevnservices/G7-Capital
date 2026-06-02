@@ -320,6 +320,13 @@ body::before{
     try {
       const valid = await g7ValidateSession();
       if (valid) {
+        // Check if user came via Scout URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const product   = urlParams.get('product');
+        if (product === 'scout') {
+          window.location.href = '/G7-Capital/scout/index.html';
+          return;
+        }
         // Already logged in — send to dashboard if onboarded, onboarding if not
         const config = localStorage.getItem('g7_firm_config');
         window.location.href = config
@@ -367,6 +374,14 @@ async function handleLogin(event) {
     } catch(e) {
       // syncFromKV failure is non-fatal — workspace will still load
       console.warn('KV sync failed on login:', e);
+    }
+
+    // Check if user came via Scout URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const product   = urlParams.get('product');
+    if (product === 'scout') {
+      window.location.href = '/G7-Capital/scout/index.html';
+      return;
     }
 
     // Success — go to dashboard if onboarded, onboarding if new firm
