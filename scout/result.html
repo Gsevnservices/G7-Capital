@@ -953,37 +953,37 @@ window.addEventListener('DOMContentLoaded', function() {
    PARSE SCOUT OUTPUT INTO 5 TAB SECTIONS
 ═══════════════════════════════════════════ */
 function parseScoutOutput(text) {
-  /* Markers that delineate each tab */
-  var markers = [
-    'TAB 1',
-    'TAB 2',
-    'TAB 3',
-    'TAB 4',
-    'TAB 5'
-  ];
+  /* Flexible regex matching — Scout may output variations like:
+     "TAB 1 — WHO TO TARGET" / "TAB 1: WHO TO TARGET" /
+     "## TAB 1 — WHO TO TARGET" / "**TAB 1**" */
+  var tab1Pos = text.search(/TAB\s*1\s*[—\-:]\s*WHO\s*TO\s*TARGET/i);
+  var tab2Pos = text.search(/TAB\s*2\s*[—\-:]\s*WHAT\s*TO\s*SAY/i);
+  var tab3Pos = text.search(/TAB\s*3\s*[—\-:]\s*(?:WHAT\s*TO\s*DO|THIS\s*WEEK)/i);
+  var tab4Pos = text.search(/TAB\s*4\s*[—\-:]\s*PIPELINE/i);
+  var tab5Pos = text.search(/TAB\s*5\s*[—\-:]\s*EXPANSION/i);
 
-  /* Find the position of each marker */
-  var positions = markers.map(function(m) {
-    var idx = text.indexOf(m);
-    return idx;
-  });
+  /* Fallback: if specific regex failed, try plain "TAB N" */
+  if (tab1Pos === -1) tab1Pos = text.search(/TAB\s*1\b/i);
+  if (tab2Pos === -1) tab2Pos = text.search(/TAB\s*2\b/i);
+  if (tab3Pos === -1) tab3Pos = text.search(/TAB\s*3\b/i);
+  if (tab4Pos === -1) tab4Pos = text.search(/TAB\s*4\b/i);
+  if (tab5Pos === -1) tab5Pos = text.search(/TAB\s*5\b/i);
+
+  var positions = [tab1Pos, tab2Pos, tab3Pos, tab4Pos, tab5Pos];
 
   /* Extract each section by slicing between marker positions */
   function extractSection(startIdx, endIdx) {
     if (startIdx === -1) return '';
-    var end = endIdx !== -1 ? endIdx : text.length;
+    var end = (endIdx !== undefined && endIdx !== -1) ? endIdx : text.length;
     return text.slice(startIdx, end).trim();
   }
 
-  /* Tab 4 ends at TAB 5 if present, otherwise runs to end */
-  var tab4End = positions[4] !== -1 ? positions[4] : -1;
-
   return {
-    tab1: extractSection(positions[0], positions[1]),
-    tab2: extractSection(positions[1], positions[2]),
-    tab3: extractSection(positions[2], positions[3]),
-    tab4: extractSection(positions[3], tab4End),
-    tab5: extractSection(positions[4], -1)
+    tab1: extractSection(positions[0], positions[1] !== -1 ? positions[1] : undefined),
+    tab2: extractSection(positions[1], positions[2] !== -1 ? positions[2] : undefined),
+    tab3: extractSection(positions[2], positions[3] !== -1 ? positions[3] : undefined),
+    tab4: extractSection(positions[3], positions[4] !== -1 ? positions[4] : undefined),
+    tab5: extractSection(positions[4], undefined)
   };
 }
 
@@ -996,29 +996,45 @@ function extractMetrics(text) {
   var momentumScore   = 0;
   var momentumNote    = 'First week — baseline set. Come back Friday to see your score grow.';
 
-  /* Revenue Velocity — look for ₹ + digits + /month near "REVENUE VELOCITY" */
-  var rvMatch = text.match(/REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month))/i);
-  if (rvMatch) revenueVelocity = rvMatch[1].replace(/\s+/g,' ').trim();
-
-  /* Fallback: any ₹X/month near "velocity" */
-  if (revenueVelocity === '—') {
-    var rvMatch2 = text.match(/₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month)/i);
-    if (rvMatch2) revenueVelocity = rvMatch2[0].replace(/\s+/g,' ').trim();
+  /* Revenue Velocity — try multiple patterns in sequence */
+  var rvPatterns = [
+    /REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
+    /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?\s*added\/month/i,
+    /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month)/i,
+    /REVENUE\s+VELOCITY[\s\S]{0,50}₹([\d,\.]+)/i
+  ];
+  for (var ri = 0; ri < rvPatterns.length; ri++) {
+    var rvM = text.match(rvPatterns[ri]);
+    if (rvM) {
+      revenueVelocity = (rvM[1] || rvM[0]).replace(/\s+/g, ' ').trim();
+      if (revenueVelocity && revenueVelocity[0] !== '₹') revenueVelocity = '₹' + revenueVelocity;
+      break;
+    }
   }
 
-  /* Acquisition Efficiency — "X contacts needed" */
-  var aeMatch = text.match(/ACQUISITION\s+EFFICIENCY[\s\S]{0,300}?(\d+)\s+contacts?\s+needed/i);
-  if (aeMatch) acquisitionEff = aeMatch[1] + ' contacts';
-
-  /* Fallback */
-  if (acquisitionEff === '—') {
-    var aeMatch2 = text.match(/(\d+)\s+contacts?\s+needed/i);
-    if (aeMatch2) acquisitionEff = aeMatch2[1] + ' contacts';
+  /* Acquisition Efficiency — try multiple patterns in sequence */
+  var aePatterns = [
+    /ACQUISITION\s+EFFICIENCY[\s\S]{0,300}?(\d+)\s+contacts?\s+(?:needed|per)/i,
+    /(\d+)\s+contacts?\s+(?:needed|per)\s+(?:per\s*)?(?:new\s*)?customer/i,
+    /ACQUISITION\s+EFFICIENCY[\s\S]{0,100}(\d+)\s+contacts/i,
+    /(\d+)\s+contacts?\s+needed/i
+  ];
+  for (var ai = 0; ai < aePatterns.length; ai++) {
+    var aeM = text.match(aePatterns[ai]);
+    if (aeM) { acquisitionEff = aeM[1] + ' contacts'; break; }
   }
 
-  /* Momentum Score — "SCOUT MOMENTUM: X" or "MOMENTUM SCORE: X/100" */
-  var msMatch = text.match(/(?:SCOUT\s+MOMENTUM|MOMENTUM\s+SCORE)\s*[:\-]?\s*(\d+)/i);
-  if (msMatch) momentumScore = parseInt(msMatch[1], 10) || 0;
+  /* Momentum Score — try multiple patterns in sequence */
+  var msPatterns = [
+    /SCOUT\s+MOMENTUM\s*[:\-]\s*(\d+)/i,
+    /MOMENTUM\s*[:\-]\s*(\d+)\/100/i,
+    /(\d+)\/100\s*(?:momentum|score)/i,
+    /(?:SCOUT\s+MOMENTUM|MOMENTUM\s+SCORE)\s*[:\-]?\s*(\d+)/i
+  ];
+  for (var mi = 0; mi < msPatterns.length; mi++) {
+    var msM = text.match(msPatterns[mi]);
+    if (msM) { momentumScore = parseInt(msM[1], 10) || 0; break; }
+  }
 
   return { revenueVelocity: revenueVelocity, acquisitionEff: acquisitionEff,
            momentumScore: momentumScore, momentumNote: momentumNote };
@@ -1028,8 +1044,12 @@ function extractMetrics(text) {
    PARSE AND RENDER ALL TABS
 ═══════════════════════════════════════════ */
 function parseAndRender(text, biz) {
+  /* Strip markdown formatting before any parsing — Scout sometimes wraps
+     headings and text in ** or ## which breaks the section parsers */
+  var cleanText = stripMarkdown(text);
+
   /* Extract metrics */
-  var metrics = extractMetrics(text);
+  var metrics = extractMetrics(cleanText);
   document.getElementById('metricRevenue').textContent  = metrics.revenueVelocity;
   document.getElementById('metricAcq').textContent      = metrics.acquisitionEff;
   document.getElementById('momentumScore').textContent  = metrics.momentumScore;
@@ -1039,8 +1059,8 @@ function parseAndRender(text, biz) {
     document.getElementById('momentumBar').style.width = Math.min(metrics.momentumScore, 100) + '%';
   }, 300);
 
-  /* Parse sections */
-  var sections = parseScoutOutput(text);
+  /* Parse sections from clean (markdown-stripped) text */
+  var sections = parseScoutOutput(cleanText);
 
   /* Render each tab */
   renderTab1(sections.tab1);
@@ -1057,7 +1077,7 @@ function parseAndRender(text, biz) {
 ═══════════════════════════════════════════ */
 function renderTab1(content) {
   if (!content) {
-    document.getElementById('tab1Content').innerHTML = renderRawProse(scoutRaw.split('TAB 2')[0] || '(No ICP data found)');
+    document.getElementById('tab1Content').innerHTML = renderRawProse(stripMarkdown(scoutRaw).split('TAB 2')[0] || '(No ICP data found)');
     return;
   }
 
@@ -1072,13 +1092,14 @@ function renderTab1(content) {
     html += '</div>';
   }
 
-  /* Split on ICP blocks */
-  var icpBlocks = content.split(/(?=ICP\s+\d)/i).filter(function(b){ return /ICP\s+\d/i.test(b); });
+  /* Split on ICP blocks — handle **ICP 1**, ICP 1 —, ICP1: etc. */
+  var icpBlocks = content.split(/(?=(?:\*\*)?ICP\s*[123](?:\*\*)?(?:\s*[—\-:])?)/i)
+    .filter(function(b){ return /ICP\s*[123]/i.test(b); });
 
   if (icpBlocks.length > 0) {
     icpBlocks.forEach(function(block, idx) {
-      var titleMatch = block.match(/ICP\s+\d\s*[—–-]?\s*(.+)/i);
-      var title      = titleMatch ? titleMatch[1].replace(/[⭐★*]/g,'').trim() : 'ICP ' + (idx + 1);
+      var titleMatch = block.match(/ICP\s*[123]\s*(?:\*\*)?[—–\-]?\s*(.+)/i);
+      var title      = titleMatch ? titleMatch[1].replace(/[⭐★*]/g,'').replace(/\*\*/g,'').trim() : 'ICP ' + (idx + 1);
       var isPriority = /highest\s+priority|⭐|priority/i.test(block);
 
       /* Track ICP names for pipeline form */
@@ -1102,14 +1123,14 @@ function renderTab1(content) {
 
       /* Extract sub-sections inside each ICP */
       var subSections = [
-        { key: 'Who exactly', label: 'Who Exactly' },
-        { key: 'Why they buy NOW', label: 'Why They Buy Now' },
-        { key: 'Where to find them', label: 'Where to Find Them' }
+        { key: '(?:\\*\\*)?WHO\\s+EXACTLY(?:\\*\\*)?', label: 'Who Exactly' },
+        { key: '(?:\\*\\*)?WHY\\s+THEY\\s+BUY(?:\\s+NOW)?(?:\\*\\*)?', label: 'Why They Buy Now' },
+        { key: '(?:\\*\\*)?WHERE\\s+TO\\s+FIND(?:\\s+THEM)?(?:\\*\\*)?', label: 'Where to Find Them' }
       ];
 
       var subHtml = '';
       subSections.forEach(function(ss) {
-        var re = new RegExp(ss.key + '[:\\s]*([\\s\\S]+?)(?=' + subSections.map(function(x){ return x.key; }).join('|') + '|Volume estimate|Conversion|Revenue per|CONFIDENCE|━|$)', 'i');
+        var re = new RegExp(ss.key + '[:\\s]*([\\s\\S]+?)(?=' + subSections.map(function(x){ return x.key; }).join('|') + '|Volume\\s+estimate|Conversion|Revenue\\s+per|CONFIDENCE|━|$)', 'i');
         var m = block.match(re);
         if (m) {
           subHtml += '<div style="margin-bottom:14px">';
@@ -1180,13 +1201,13 @@ function renderTab2(content) {
   var html = '';
 
   /* Response handlers section — find its boundary first */
-  var rhIdx = content.indexOf('RESPONSE HANDLER');
-  if (rhIdx === -1) rhIdx = content.indexOf('THEY SAY');
+  var rhIdx = content.search(/(?:\*\*)?RESPONSE\s+HANDLER(?:\*\*)?/i);
+  if (rhIdx === -1) rhIdx = content.search(/(?:\*\*)?THEY\s+SAY(?:\*\*)?[:\s]/i);
   var mainContent = rhIdx > -1 ? content.slice(0, rhIdx) : content;
   var rhContent   = rhIdx > -1 ? content.slice(rhIdx) : '';
 
-  /* Split main content into message blocks */
-  var splitBlocks = mainContent.split(/(?=PRIMARY\s+MESSAGE|FOLLOW[- ]UP)/i)
+  /* Split main content into message blocks — handle **PRIMARY MESSAGE** variants */
+  var splitBlocks = mainContent.split(/(?=(?:\*\*)?PRIMARY\s+MESSAGE|(?:\*\*)?FOLLOW[- ]UP)/i)
     .filter(function(b){ return b.trim().length > 20; });
 
   splitBlocks.forEach(function(block, idx) {
@@ -1195,8 +1216,8 @@ function renderTab2(content) {
     var isFollowup = /FOLLOW[- ]UP/i.test(block);
 
     /* Extract label */
-    var labelMatch = block.match(/(?:PRIMARY\s+MESSAGE|FOLLOW[- ]UP)[^\n]*/i);
-    var label = labelMatch ? labelMatch[0].trim() : (isPrimary ? 'Primary Message' : 'Follow-up');
+    var labelMatch = block.match(/(?:\*\*)?(?:PRIMARY\s+MESSAGE|FOLLOW[- ]UP)[^\n]*(?:\*\*)?/i);
+    var label = labelMatch ? labelMatch[0].replace(/\*\*/g,'').trim() : (isPrimary ? 'Primary Message' : 'Follow-up');
 
     /* Extract channel */
     var channelMatch = block.match(/Channel\s*:\s*([^\n]+)/i);
@@ -1268,11 +1289,11 @@ function renderTab2(content) {
     html += '<div class="section-block-title">Response Handlers</div>';
     html += '<div class="section-block-body">';
 
-    /* Split on THEY SAY / YOU SAY pairs. */
-    var pairs = rhContent.split(/(?=THEY\s+SAY\s*:)/i).filter(function(p){ return p.trim(); });
+    /* Split on THEY SAY / YOU SAY pairs — handle **THEY SAY** variants */
+    var pairs = rhContent.split(/(?=(?:\*\*)?THEY\s+SAY(?:\*\*)?[:\s])/i).filter(function(p){ return p.trim(); });
     pairs.forEach(function(pair) {
-      var theyMatch = pair.match(/THEY\s+SAY\s*:\s*"?([\s\S]*?)"?\s*(?=YOU\s+SAY\s*:|$)/i);
-      var youMatch  = pair.match(/YOU\s+SAY\s*:\s*"?([\s\S]+?)(?:"|$)/i);
+      var theyMatch = pair.match(/(?:\*\*)?THEY\s+SAY(?:\*\*)?[:\s]*"?([\s\S]*?)"?\s*(?=(?:\*\*)?YOU\s+SAY(?:\*\*)?[:\s]|$)/i);
+      var youMatch  = pair.match(/(?:\*\*)?YOU\s+SAY(?:\*\*)?[:\s]*"?([\s\S]+?)(?:"|$)/i);
       if (theyMatch || youMatch) {
         html += '<div style="background:var(--black3);border:1px solid var(--border2);padding:16px;margin-bottom:10px">';
         if (theyMatch) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(theyMatch[1].trim()) + '</span></div>';
@@ -1282,7 +1303,7 @@ function renderTab2(content) {
     });
 
     /* If pair parsing failed — raw fallback */
-    if (pairs.every(function(p){ return !/THEY\s+SAY/i.test(p); })) {
+    if (pairs.every(function(p){ return !/(?:\*\*)?THEY\s+SAY(?:\*\*)?/i.test(p); })) {
       html += '<div class="scout-prose">' + escHtml(rhContent.trim()) + '</div>';
     }
 
@@ -1321,13 +1342,14 @@ function renderTab3(content) {
   var days = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'];
   var dayFound = false;
   days.forEach(function(day, i) {
-    var re = new RegExp(day + '\\s*[—–-]?\\s*(?:\\([^)]+\\))?([\\s\\S]+?)(?=' + (i < days.length - 1 ? days[i+1] : 'THREE\\s+NUMBERS|CONTACTS\\s+TARGET|WHAT\\s+NOT') + '|$)', 'i');
+    var nextMarker = i < days.length - 1 ? '(?:\\*\\*)?'+days[i+1]+'(?:\\*\\*)?' : 'THREE\\s+NUMBERS|CONTACTS\\s+TARGET|WHAT\\s+NOT';
+    var re = new RegExp('(?:\\*\\*)?'+day+'(?:\\*\\*)?\\s*[—–\\-]?\\s*(?:\\([^)]+\\))?([\\s\\S]+?)(?='+nextMarker+'|$)', 'i');
     var m = content.match(re);
     if (!m) return;
     dayFound = true;
     var dayContent = m[1].trim();
     /* Extract time from heading if present */
-    var timeMatch = content.match(new RegExp(day + '\\s*[—–-]\\s*([^\\n]+)', 'i'));
+    var timeMatch = content.match(new RegExp('(?:\\*\\*)?'+day+'(?:\\*\\*)?\\s*[—–\\-]\\s*([^\\n]+)', 'i'));
     var timeStr = timeMatch ? timeMatch[1].replace(/━+/g,'').trim() : '';
 
     html += '<div class="day-card">';
@@ -1977,6 +1999,20 @@ function escAttr(str) {
     .replace(/&/g,'&amp;')
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#39;');
+}
+
+/* Strip markdown formatting from Scout output
+   Scout sometimes wraps headings in ## or text in **bold** — remove before parsing */
+function stripMarkdown(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*\n]+)\*/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/_{2}([^_]+)_{2}/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .trim();
 }
 
 /* Extract a number from text using a regex */

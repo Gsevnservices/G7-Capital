@@ -629,33 +629,51 @@ function extractScoutMetrics(text) {
   var momentumScore   = null;
   var momentumNote    = null;
 
-  // Revenue Velocity — matches: "Revenue Velocity: ₹45,000/month" or "REVENUE VELOCITY: ₹1.2L/month"
-  var rvMatch = text.match(/revenue\s+velocity[:\s]+([₹\d,\.LlKk\/a-zA-Z\s]+(?:month|week|year))/i);
-  if (rvMatch) {
-    revenueVelocity = rvMatch[1].trim();
-    // Ensure ₹ prefix
-    if (!revenueVelocity.startsWith('₹')) {
-      revenueVelocity = '₹' + revenueVelocity;
+  // Revenue Velocity — try multiple patterns in sequence
+  var rvPatterns = [
+    /REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
+    /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?\s*added\/month/i,
+    /revenue\s+velocity[:\s]+([₹\d,\.LlKkCcRr\/a-zA-Z\s]+(?:month|week|year))/i,
+    /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month)/i
+  ];
+  for (var ri = 0; ri < rvPatterns.length; ri++) {
+    var rvM = text.match(rvPatterns[ri]);
+    if (rvM) {
+      revenueVelocity = (rvM[1] || rvM[0]).trim();
+      if (!revenueVelocity.startsWith('₹')) revenueVelocity = '₹' + revenueVelocity;
+      break;
     }
   }
 
-  // Acquisition Efficiency — matches: "Acquisition Efficiency: 12 contacts needed" or "12 contacts per customer"
-  var aeMatch = text.match(/acquisition\s+efficiency[:\s]+(\d+)\s+contacts?/i);
-  if (aeMatch) {
-    acquisitionEff = aeMatch[1] + ' contacts';
+  // Acquisition Efficiency — try multiple patterns in sequence
+  var aePatterns = [
+    /ACQUISITION\s+EFFICIENCY[\s\S]{0,300}?(\d+)\s+contacts?\s+(?:needed|per)/i,
+    /(\d+)\s+contacts?\s+(?:needed|per)\s+(?:per\s*)?(?:new\s*)?customer/i,
+    /acquisition\s+efficiency[:\s]+(\d+)\s+contacts?/i,
+    /(\d+)\s+contacts?\s+needed/i
+  ];
+  for (var ai = 0; ai < aePatterns.length; ai++) {
+    var aeM = text.match(aePatterns[ai]);
+    if (aeM) { acquisitionEff = aeM[1] + ' contacts'; break; }
   }
 
-  // Momentum Score — matches: "SCOUT MOMENTUM: 7" or "Momentum Score: 7/10" or "Momentum: 7"
-  var msMatch = text.match(/(?:scout\s+)?momentum(?:\s+score)?[:\s]+(\d{1,2})(?:\/10)?/i);
-  if (msMatch) {
-    var score = parseInt(msMatch[1]);
-    if (score >= 1 && score <= 10) {
-      momentumScore = score;
+  // Momentum Score — try multiple patterns in sequence (Scout outputs score/100)
+  var msPatterns = [
+    /SCOUT\s+MOMENTUM\s*[:\-]\s*(\d+)/i,
+    /MOMENTUM\s*[:\-]\s*(\d+)\/100/i,
+    /(\d+)\/100\s*(?:momentum|score)/i,
+    /(?:scout\s+)?momentum(?:\s+score)?[:\s]+(\d{1,3})(?:\/(?:10|100))?/i
+  ];
+  for (var mi = 0; mi < msPatterns.length; mi++) {
+    var msM = text.match(msPatterns[mi]);
+    if (msM) {
+      var score = parseInt(msM[1], 10);
+      if (score >= 0 && score <= 100) { momentumScore = score; break; }
     }
   }
 
-  // Momentum Note — the label after the score, e.g. "SCOUT MOMENTUM: 7 — Gaining traction"
-  var mnMatch = text.match(/(?:scout\s+)?momentum(?:\s+score)?[:\s]+\d{1,2}(?:\/10)?[:\s—\-]+([^\n]+)/i);
+  // Momentum Note — the label after the score, e.g. "SCOUT MOMENTUM: 72 — Gaining traction"
+  var mnMatch = text.match(/(?:scout\s+)?momentum(?:\s+score)?[:\s]+\d{1,3}(?:\/(?:10|100))?[:\s—\-]+([^\n]+)/i);
   if (mnMatch) {
     momentumNote = mnMatch[1].trim();
   }
