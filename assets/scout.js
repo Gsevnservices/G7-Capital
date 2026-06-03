@@ -629,15 +629,22 @@ function extractScoutMetrics(text) {
   var momentumScore   = null;
   var momentumNote    = null;
 
-  // Revenue Velocity — try multiple patterns in sequence
+  // Strip separator lines before parsing (Scout uses ===, ━━━ etc.)
+  var cleanText = text
+    .replace(/^[=\-━═]{3,}\s*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n');
+
+  // Revenue Velocity — Scout outputs heading then value on next line:
+  //   REVENUE VELOCITY
+  //   ₹45,000 added/month
   var rvPatterns = [
-    /REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
+    /REVENUE\s+VELOCITY\s*\n\s*(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:[\/\s]*(?:added\/month|month|per month))?)/i,
+    /REVENUE\s+VELOCITY[\s\S]{0,100}(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
     /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?\s*added\/month/i,
-    /revenue\s+velocity[:\s]+([₹\d,\.LlKkCcRr\/a-zA-Z\s]+(?:month|week|year))/i,
     /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month)/i
   ];
   for (var ri = 0; ri < rvPatterns.length; ri++) {
-    var rvM = text.match(rvPatterns[ri]);
+    var rvM = cleanText.match(rvPatterns[ri]);
     if (rvM) {
       revenueVelocity = (rvM[1] || rvM[0]).trim();
       if (!revenueVelocity.startsWith('₹')) revenueVelocity = '₹' + revenueVelocity;
@@ -645,19 +652,22 @@ function extractScoutMetrics(text) {
     }
   }
 
-  // Acquisition Efficiency — try multiple patterns in sequence
+  // Acquisition Efficiency — Scout outputs heading then value on next line:
+  //   ACQUISITION EFFICIENCY
+  //   12 contacts needed per new customer
   var aePatterns = [
-    /ACQUISITION\s+EFFICIENCY[\s\S]{0,300}?(\d+)\s+contacts?\s+(?:needed|per)/i,
+    /ACQUISITION\s+EFFICIENCY\s*\n\s*(\d+)\s+contacts?/i,
+    /ACQUISITION\s+EFFICIENCY[\s\S]{0,100}(\d+)\s+contacts?\s+(?:needed|per)/i,
     /(\d+)\s+contacts?\s+(?:needed|per)\s+(?:per\s*)?(?:new\s*)?customer/i,
-    /acquisition\s+efficiency[:\s]+(\d+)\s+contacts?/i,
+    /ACQUISITION\s+EFFICIENCY[\s\S]{0,100}(\d+)\s+contacts/i,
     /(\d+)\s+contacts?\s+needed/i
   ];
   for (var ai = 0; ai < aePatterns.length; ai++) {
-    var aeM = text.match(aePatterns[ai]);
+    var aeM = cleanText.match(aePatterns[ai]);
     if (aeM) { acquisitionEff = aeM[1] + ' contacts'; break; }
   }
 
-  // Momentum Score — try multiple patterns in sequence (Scout outputs score/100)
+  // Momentum Score — Scout outputs: SCOUT MOMENTUM: 45/100
   var msPatterns = [
     /SCOUT\s+MOMENTUM\s*[:\-]\s*(\d+)/i,
     /MOMENTUM\s*[:\-]\s*(\d+)\/100/i,
@@ -665,15 +675,15 @@ function extractScoutMetrics(text) {
     /(?:scout\s+)?momentum(?:\s+score)?[:\s]+(\d{1,3})(?:\/(?:10|100))?/i
   ];
   for (var mi = 0; mi < msPatterns.length; mi++) {
-    var msM = text.match(msPatterns[mi]);
+    var msM = cleanText.match(msPatterns[mi]);
     if (msM) {
       var score = parseInt(msM[1], 10);
       if (score >= 0 && score <= 100) { momentumScore = score; break; }
     }
   }
 
-  // Momentum Note — the label after the score, e.g. "SCOUT MOMENTUM: 72 — Gaining traction"
-  var mnMatch = text.match(/(?:scout\s+)?momentum(?:\s+score)?[:\s]+\d{1,3}(?:\/(?:10|100))?[:\s—\-]+([^\n]+)/i);
+  // Momentum Note — text after the score number
+  var mnMatch = cleanText.match(/SCOUT\s+MOMENTUM[:\s]+\d+(?:\/100)?[:\s—\-]+([^\n]+)/i);
   if (mnMatch) {
     momentumNote = mnMatch[1].trim();
   }

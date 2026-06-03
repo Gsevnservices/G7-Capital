@@ -996,12 +996,16 @@ function extractMetrics(text) {
   var momentumScore   = 0;
   var momentumNote    = 'First week — baseline set. Come back Friday to see your score grow.';
 
-  /* Revenue Velocity — try multiple patterns in sequence */
+  /* Revenue Velocity — Scout outputs:
+       REVENUE VELOCITY
+       ₹X added/month
+     Try heading+next-line pattern first, then inline, then bare ₹ */
   var rvPatterns = [
-    /REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
+    /REVENUE\s+VELOCITY\s*\n\s*(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:[\/\s]*(?:added\/month|month|per month))?)/i,
+    /REVENUE\s+VELOCITY[\s\S]{0,100}(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
     /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?\s*added\/month/i,
     /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month)/i,
-    /REVENUE\s+VELOCITY[\s\S]{0,50}₹([\d,\.]+)/i
+    /REVENUE\s+VELOCITY[\s\S]{0,80}₹([\d,\.]+\s*(?:lakh|crore|L|Cr)?)/i
   ];
   for (var ri = 0; ri < rvPatterns.length; ri++) {
     var rvM = text.match(rvPatterns[ri]);
@@ -1012,9 +1016,13 @@ function extractMetrics(text) {
     }
   }
 
-  /* Acquisition Efficiency — try multiple patterns in sequence */
+  /* Acquisition Efficiency — Scout outputs:
+       ACQUISITION EFFICIENCY
+       X contacts needed per new customer
+     Try heading+next-line first */
   var aePatterns = [
-    /ACQUISITION\s+EFFICIENCY[\s\S]{0,300}?(\d+)\s+contacts?\s+(?:needed|per)/i,
+    /ACQUISITION\s+EFFICIENCY\s*\n\s*(\d+)\s+contacts?/i,
+    /ACQUISITION\s+EFFICIENCY[\s\S]{0,100}(\d+)\s+contacts?\s+(?:needed|per)/i,
     /(\d+)\s+contacts?\s+(?:needed|per)\s+(?:per\s*)?(?:new\s*)?customer/i,
     /ACQUISITION\s+EFFICIENCY[\s\S]{0,100}(\d+)\s+contacts/i,
     /(\d+)\s+contacts?\s+needed/i
@@ -1024,7 +1032,10 @@ function extractMetrics(text) {
     if (aeM) { acquisitionEff = aeM[1] + ' contacts'; break; }
   }
 
-  /* Momentum Score — try multiple patterns in sequence */
+  /* Momentum Score — Scout outputs:
+       SCOUT MOMENTUM: 45/100
+     or
+       SCOUT MOMENTUM: 45 */
   var msPatterns = [
     /SCOUT\s+MOMENTUM\s*[:\-]\s*(\d+)/i,
     /MOMENTUM\s*[:\-]\s*(\d+)\/100/i,
@@ -1036,6 +1047,10 @@ function extractMetrics(text) {
     if (msM) { momentumScore = parseInt(msM[1], 10) || 0; break; }
   }
 
+  /* Momentum note — text after the score number */
+  var mnM = text.match(/SCOUT\s+MOMENTUM[:\s]+\d+(?:\/100)?[:\s—\-]+([^\n]+)/i);
+  if (mnM) momentumNote = mnM[1].trim();
+
   return { revenueVelocity: revenueVelocity, acquisitionEff: acquisitionEff,
            momentumScore: momentumScore, momentumNote: momentumNote };
 }
@@ -1044,12 +1059,22 @@ function extractMetrics(text) {
    PARSE AND RENDER ALL TABS
 ═══════════════════════════════════════════ */
 function parseAndRender(text, biz) {
-  /* Strip markdown formatting before any parsing — Scout sometimes wraps
-     headings and text in ** or ## which breaks the section parsers */
+  /* Strip markdown + separators before any parsing */
   var cleanText = stripMarkdown(text);
 
-  /* Extract metrics */
-  var metrics = extractMetrics(cleanText);
+  /* STEP 1 — Extract header block (everything before TAB 1).
+     Headline metrics live here — Revenue Velocity, Acquisition Efficiency,
+     Scout Momentum. Parsing from the header gives cleaner matches than
+     scanning the entire output. */
+  var tab1Boundary = cleanText.search(/TAB\s*1\s*[—\-:]/i);
+  if (tab1Boundary === -1) tab1Boundary = cleanText.search(/TAB\s*1\b/i);
+  var headerBlock = tab1Boundary > -1 ? cleanText.slice(0, tab1Boundary) : cleanText;
+
+  /* Extract metrics from header block first, fall back to full text */
+  var metrics = extractMetrics(headerBlock);
+  /* If header block didn't have them, try full text */
+  if (metrics.revenueVelocity === '—') metrics = extractMetrics(cleanText);
+
   document.getElementById('metricRevenue').textContent  = metrics.revenueVelocity;
   document.getElementById('metricAcq').textContent      = metrics.acquisitionEff;
   document.getElementById('momentumScore').textContent  = metrics.momentumScore;
@@ -1059,7 +1084,7 @@ function parseAndRender(text, biz) {
     document.getElementById('momentumBar').style.width = Math.min(metrics.momentumScore, 100) + '%';
   }, 300);
 
-  /* Parse sections from clean (markdown-stripped) text */
+  /* STEP 2 — Parse tab sections from the full cleaned text */
   var sections = parseScoutOutput(cleanText);
 
   /* Render each tab */
@@ -1601,71 +1626,84 @@ function renderTab5(content) {
 
   var html = '';
 
-  /* Section markers for the 4 opportunities + risk watch + festival campaign */
+  /* Opportunity definitions — flexible regex matching handles:
+     "OPPORTUNITY 1 — IMMEDIATE (0-3 months)"
+     "OPPORTUNITY 1: IMMEDIATE"
+     "OPPORTUNITY 1" (plain) */
   var oppDefs = [
-    { marker: 'OPPORTUNITY 1',  label: 'IMMEDIATE',    sub: '0–3 months' },
-    { marker: 'OPPORTUNITY 2',  label: 'SHORT TERM',   sub: '3–6 months' },
-    { marker: 'OPPORTUNITY 3',  label: 'MEDIUM TERM',  sub: '6–12 months' },
-    { marker: 'OPPORTUNITY 4',  label: 'STRATEGIC',    sub: '12+ months' }
+    { re: /OPPORTUNITY\s*1\s*[—\-:]?\s*(?:IMMEDIATE)?/i,   label: 'IMMEDIATE',   sub: '0–3 months' },
+    { re: /OPPORTUNITY\s*2\s*[—\-:]?\s*(?:SHORT\s*TERM)?/i, label: 'SHORT TERM',  sub: '3–6 months' },
+    { re: /OPPORTUNITY\s*3\s*[—\-:]?\s*(?:MEDIUM\s*TERM)?/i,label: 'MEDIUM TERM', sub: '6–12 months' },
+    { re: /OPPORTUNITY\s*4\s*[—\-:]?\s*(?:STRATEGIC)?/i,    label: 'STRATEGIC',   sub: '12+ months' }
   ];
 
-  /* Build marker list including RISK WATCH and FESTIVAL CAMPAIGN PREVIEW */
-  var allMarkers = oppDefs.map(function(o) { return o.marker; });
-  allMarkers.push('RISK WATCH');
-  allMarkers.push('FESTIVAL CAMPAIGN PREVIEW');
+  /* Find positions of all 4 opportunity markers + RISK WATCH + FESTIVAL */
+  var positions = oppDefs.map(function(o) {
+    var m = content.search(o.re);
+    return m;
+  });
+  var riskPos = content.search(/RISK\s*WATCH/i);
+  var festPos = content.search(/FESTIVAL\s*CAMPAIGN\s*PREVIEW/i);
 
-  var positions = allMarkers.map(function(m) {
-    var lower = content.toLowerCase();
-    var idx = lower.indexOf(m.toLowerCase());
-    return idx;
+  /* All boundary positions sorted for slicing */
+  var allBounds = positions.concat([riskPos, festPos]).map(function(p) {
+    return p === -1 ? Infinity : p;
   });
 
-  /* Extract text between two marker positions */
-  function sliceSection(start, end) {
-    if (start === -1) return '';
-    var e = (end !== undefined && end !== -1) ? end : content.length;
-    return content.slice(start, e).trim();
+  /* Helper: extract content between start and the next boundary */
+  function sliceToNext(startPos, boundIdx) {
+    if (startPos === -1 || startPos === Infinity) return '';
+    /* Find the next boundary after this one */
+    var next = Infinity;
+    for (var j = 0; j < allBounds.length; j++) {
+      if (allBounds[j] > startPos && allBounds[j] < next) next = allBounds[j];
+    }
+    var end = next === Infinity ? content.length : next;
+    return content.slice(startPos, end).trim();
+  }
+
+  /* Helper: clean a section body — strip the heading line, remove separators */
+  function cleanSectionBody(section) {
+    var lines = section.split('\n');
+    /* Skip the first line (the heading) and any separator lines */
+    var body = lines.slice(1).filter(function(l) {
+      return !/^[=\-━═]{3,}\s*$/.test(l.trim());
+    }).join('\n').trim();
+    return body;
+  }
+
+  /* Helper: render body text as paragraphs */
+  function bodyToHtml(body) {
+    if (!body) return '';
+    return body
+      .split(/\n{2,}/)
+      .filter(function(p) { return p.trim().length > 0; })
+      .map(function(p) {
+        return '<p>' + escHtml(p.replace(/\n/g, ' ').trim()) + '</p>';
+      })
+      .join('');
   }
 
   /* Render each opportunity card */
   oppDefs.forEach(function(opp, i) {
     var startPos = positions[i];
-    var endPos   = positions[i + 1]; /* next marker — could be next opp, RISK WATCH, or FESTIVAL */
-    var section  = sliceSection(startPos, endPos);
+    if (startPos === -1) return;
+    var section  = sliceToNext(startPos, i);
     if (!section) return;
-
-    var lines = section.split('\n');
-    var bodyLines = lines.slice(1).join('\n').replace(/^━+\s*/gm, '').trim();
-
-    var bodyHtml = bodyLines
-      .split(/\n{2,}/)
-      .filter(function(p) { return p.trim().length > 0; })
-      .map(function(p) {
-        return '<p>' + escHtml(p.replace(/\n/g, ' ').trim()) + '</p>';
-      })
-      .join('');
+    var body = cleanSectionBody(section);
+    var bodyHtml = bodyToHtml(body);
 
     html += '<div class="exp-card">';
     html += '<div class="exp-card-timeline">' + opp.label + ' — ' + opp.sub + '</div>';
-    html += '<div class="exp-card-body">' + (bodyHtml || '<p>' + escHtml(bodyLines) + '</p>') + '</div>';
+    html += '<div class="exp-card-body">' + (bodyHtml || '<p>' + escHtml(body) + '</p>') + '</div>';
     html += '</div>';
   });
 
-  /* Render Risk Watch card — slice stops at FESTIVAL CAMPAIGN PREVIEW position */
-  var riskPos    = positions[4]; /* RISK WATCH */
-  var festPos    = positions[5]; /* FESTIVAL CAMPAIGN PREVIEW */
+  /* Render Risk Watch card */
   if (riskPos !== -1) {
-    var riskSection = sliceSection(riskPos, festPos !== -1 ? festPos : -1);
-    var riskLines = riskSection.split('\n');
-    var riskBody = riskLines.slice(1).join('\n').replace(/^━+\s*/gm, '').trim();
-    var riskHtml = riskBody
-      .split(/\n{2,}/)
-      .filter(function(p) { return p.trim().length > 0; })
-      .map(function(p) {
-        return '<p>' + escHtml(p.replace(/\n/g, ' ').trim()) + '</p>';
-      })
-      .join('');
-
+    var riskSection = sliceToNext(riskPos, 4);
+    var riskBody    = cleanSectionBody(riskSection);
+    var riskHtml    = bodyToHtml(riskBody);
     html += '<div class="exp-card risk">';
     html += '<div class="exp-card-timeline">RISK WATCH</div>';
     html += '<div class="exp-card-body">' + (riskHtml || '<p>' + escHtml(riskBody) + '</p>') + '</div>';
@@ -1674,7 +1712,9 @@ function renderTab5(content) {
 
   /* ── Feature 4.5: Festival Campaign Planner ── */
   if (festPos !== -1) {
-    var festContent = content.slice(festPos).replace(/^━+\s*/gm,'').trim();
+    var festContent = content.slice(festPos)
+      .replace(/^[=\-━═]{3,}\s*$/gm, '')
+      .trim();
     /* Remove the FESTIVAL CAMPAIGN PREVIEW header line */
     festContent = festContent.replace(/^FESTIVAL\s+CAMPAIGN\s+PREVIEW[^\n]*/i,'').trim();
 
@@ -1703,7 +1743,7 @@ function renderTab5(content) {
       var wm = festContent.match(wp.re);
       if (wm && wm[1] && wm[1].trim().length > 10) {
         hasFestCards = true;
-        var msg = wm[1].replace(/━+/g,'').trim();
+        var msg = wm[1].replace(/^[=\-━═]{3,}\s*$/gm,'').trim();
         var wcId = 'festcard_' + wpi;
         html += '<div class="festival-week-card">';
         html += '<div class="festival-week-label">';
@@ -2012,6 +2052,12 @@ function stripMarkdown(text) {
     .replace(/_{2}([^_]+)_{2}/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/^\s*[-*+]\s+/gm, '')
+    /* Remove separator lines (====, ----, ════, ━━━━) */
+    .replace(/^[=\-━═]{3,}\s*$/gm, '')
+    /* Remove lines that are only whitespace */
+    .replace(/^\s+$/gm, '')
+    /* Collapse 3+ blank lines into one blank line */
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
