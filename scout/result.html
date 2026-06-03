@@ -1001,10 +1001,17 @@ function extractMetrics(text) {
        ₹X added/month
      Try heading+next-line pattern first, then inline, then bare ₹ */
   var rvPatterns = [
+    /* Pattern 1: heading, optional blank line, then ₹ value */
+    /REVENUE\s+VELOCITY\s*\n\s*\n?\s*(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:[\/\s]*(?:added\/month|\/month|per\s*month))?)/i,
+    /* Pattern 2: heading then value on next line (no blank line) */
     /REVENUE\s+VELOCITY\s*\n\s*(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:[\/\s]*(?:added\/month|month|per month))?)/i,
+    /* Pattern 3: heading within 100 chars of ₹ value with month suffix */
     /REVENUE\s+VELOCITY[\s\S]{0,100}(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month|\s*added\/month))/i,
+    /* Pattern 4: bare ₹ added/month anywhere */
     /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?\s*added\/month/i,
+    /* Pattern 5: bare ₹/month */
     /₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr))?(?:\s*\/\s*month|\s*per\s*month)/i,
+    /* Pattern 6: heading then any ₹ number within 80 chars */
     /REVENUE\s+VELOCITY[\s\S]{0,80}₹([\d,\.]+\s*(?:lakh|crore|L|Cr)?)/i
   ];
   for (var ri = 0; ri < rvPatterns.length; ri++) {
@@ -1021,6 +1028,9 @@ function extractMetrics(text) {
        X contacts needed per new customer
      Try heading+next-line first */
   var aePatterns = [
+    /* Pattern 1: heading, optional blank line, then X contacts on next line */
+    /ACQUISITION\s+EFFICIENCY\s*\n\s*\n?\s*(\d+)\s+contacts?/i,
+    /* Pattern 2: heading then value on same/next line (no blank line) */
     /ACQUISITION\s+EFFICIENCY\s*\n\s*(\d+)\s+contacts?/i,
     /ACQUISITION\s+EFFICIENCY[\s\S]{0,100}(\d+)\s+contacts?\s+(?:needed|per)/i,
     /(\d+)\s+contacts?\s+(?:needed|per)\s+(?:per\s*)?(?:new\s*)?customer/i,
@@ -1109,7 +1119,7 @@ function renderTab1(content) {
   var html = '';
 
   /* Render unfair advantage block if present */
-  var advMatch = content.match(/YOUR\s+UNFAIR\s+ADVANTAGE[:\s]*([\s\S]+?)(?=ICP\s+\d|━|$)/i);
+  var advMatch = content.match(/YOUR\s+UNFAIR\s+ADVANTAGE[:\s]*([\s\S]+?)(?=ICP\s+\d|━|SCOUT|$)/i);
   if (advMatch) {
     html += '<div class="section-block" style="background:var(--black3);border:1px solid var(--border);padding:24px;margin-bottom:28px">';
     html += '<div class="section-block-title">Your Unfair Advantage</div>';
@@ -1117,8 +1127,22 @@ function renderTab1(content) {
     html += '</div>';
   }
 
-  /* Split on ICP blocks — handle **ICP 1**, ICP 1 —, ICP1: etc. */
-  var icpBlocks = content.split(/(?=(?:\*\*)?ICP\s*[123](?:\*\*)?(?:\s*[—\-:])?)/i)
+  /* Render Scout's Honest Assessment if present */
+  var honestMatch = content.match(/SCOUT[''']?S?\s+HONEST\s+ASSESSMENT([\s\S]+?)(?=YOUR\s+UNFAIR\s+ADVANTAGE|ICP\s*[123]|$)/i);
+  if (honestMatch) {
+    html += '<div class="section-block" style="background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.25);padding:24px;margin-bottom:28px">';
+    html += '<div class="section-block-title" style="color:var(--gold)">Scout\'s Honest Assessment</div>';
+    html += '<div class="section-block-body">' + escHtml(honestMatch[1].trim()) + '</div>';
+    html += '</div>';
+  }
+
+  /* Scope ICP splitting to content BEFORE Priority Order / Hard Stops */
+  var fullIcpSection = content;
+  var priorityIdx = content.search(/PRIORITY\s+ORDER|HARD\s+STOP/i);
+  if (priorityIdx > -1) { fullIcpSection = content.slice(0, priorityIdx); }
+
+  /* Split on ICP blocks — handle **ICP 1**, ICP 1 —, ICP1:, ICP 1 + title etc. */
+  var icpBlocks = fullIcpSection.split(/(?=(?:\*\*)?ICP\s*[123](?:\*\*)?(?:\s*[—\-:]|\s+[A-Z]))/i)
     .filter(function(b){ return /ICP\s*[123]/i.test(b); });
 
   if (icpBlocks.length > 0) {
@@ -1662,14 +1686,13 @@ function renderTab5(content) {
     return content.slice(startPos, end).trim();
   }
 
-  /* Helper: clean a section body — strip the heading line, remove separators */
-  function cleanSectionBody(section) {
-    var lines = section.split('\n');
-    /* Skip the first line (the heading) and any separator lines */
-    var body = lines.slice(1).filter(function(l) {
-      return !/^[=\-━═]{3,}\s*$/.test(l.trim());
-    }).join('\n').trim();
-    return body;
+  /* Helper: clean a section body — strip the heading via regex, remove separators */
+  function cleanSectionBody(raw, headingRe) {
+    if (!raw) return '';
+    var cleaned = headingRe ? raw.replace(headingRe, '').trim() : raw.split('\n').slice(1).join('\n').trim();
+    cleaned = cleaned.replace(/^[=\-━═]{3,}\s*$/gm, '');
+    cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+    return cleaned.trim();
   }
 
   /* Helper: render body text as paragraphs */
@@ -1690,7 +1713,7 @@ function renderTab5(content) {
     if (startPos === -1) return;
     var section  = sliceToNext(startPos, i);
     if (!section) return;
-    var body = cleanSectionBody(section);
+    var body = cleanSectionBody(section, opp.re);
     var bodyHtml = bodyToHtml(body);
 
     html += '<div class="exp-card">';
@@ -1702,7 +1725,7 @@ function renderTab5(content) {
   /* Render Risk Watch card */
   if (riskPos !== -1) {
     var riskSection = sliceToNext(riskPos, 4);
-    var riskBody    = cleanSectionBody(riskSection);
+    var riskBody    = cleanSectionBody(riskSection, /RISK\s*WATCH[^\n]*/i);
     var riskHtml    = bodyToHtml(riskBody);
     html += '<div class="exp-card risk">';
     html += '<div class="exp-card-timeline">RISK WATCH</div>';
