@@ -1419,8 +1419,8 @@ function renderTab4JSON(tab4, biz) {
   html += '<div id="referralRows">';
   for (var ri = 0; ri < 3; ri++) {
     html += '<div class="referral-row" id="rrow_' + ri + '">';
-    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Sharma ji, government teacher">';
-    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Prerna Vihar colony">';
+    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Ramesh bhai, your best customer">';
+    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Where they live or work">';
     html += '</div>';
   }
   html += '</div>';
@@ -1957,8 +1957,8 @@ function renderTab4(content, biz) {
   /* 3 initial rows */
   for (var ri = 0; ri < 3; ri++) {
     html += '<div class="referral-row" id="rrow_' + ri + '">';
-    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Sharma ji, government teacher">';
-    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Prerna Vihar colony">';
+    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Ramesh bhai, your best customer">';
+    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Where they live or work">';
     html += '</div>';
   }
   html += '</div>';
@@ -2578,8 +2578,8 @@ function addReferralRow() {
   div.className = 'referral-row';
   div.id = 'rrow_' + idx;
   div.innerHTML =
-    '<input class="referral-input" id="rcust_' + idx + '" type="text" placeholder="e.g. Anita didi, school teacher">' +
-    '<input class="referral-input" id="rloc_' + idx + '" type="text" placeholder="e.g. Sector 12 B colony">';
+    '<input class="referral-input" id="rcust_' + idx + '" type="text" placeholder="e.g. Ramesh bhai, your best customer">' +
+    '<input class="referral-input" id="rloc_' + idx + '" type="text" placeholder="e.g. Where they live or work">';
   wrap.appendChild(div);
   referralRowCount++;
   if (referralRowCount >= 10) {
