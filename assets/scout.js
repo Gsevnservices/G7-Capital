@@ -459,6 +459,23 @@ function saveScoutResult(rawOutput, weekNumber) {
 
   var metrics = extractScoutMetrics(rawOutput);
 
+  // Override metrics with JSON headline values if Scout output is valid JSON
+  // (new architecture: TYPE 1 onboarding outputs pure JSON)
+  try {
+    var _cleaned = rawOutput
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/```\s*$/i, '').trim();
+    var _parsed = JSON.parse(_cleaned);
+    if (_parsed && _parsed.headline) {
+      var _hl = _parsed.headline;
+      if (_hl.revenueVelocity)      metrics.revenueVelocity = _hl.revenueVelocity;
+      if (_hl.acquisitionEfficiency) metrics.acquisitionEff  = _hl.acquisitionEfficiency;
+      if (typeof _hl.momentumScore === 'number') metrics.momentumScore = _hl.momentumScore;
+      if (_hl.momentumNote)          metrics.momentumNote    = _hl.momentumNote;
+    }
+  } catch(e) { /* not JSON — keep regex-extracted metrics */ }
+
   // Build the result object
   var resultObj = {
     weekNumber:      weekNumber,

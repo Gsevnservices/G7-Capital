@@ -4737,496 +4737,285 @@ Scout must never deviate from these formats.
 TYPE 1 — FULL ONBOARDING OUTPUT FORMAT
 ================================================================
 
-STRUCTURE OVERVIEW:
-━━━━━━━━━━━━━━━━━━
-HEADLINE BLOCK (always visible, above tabs)
-TAB 1 — WHO TO TARGET
-TAB 2 — WHAT TO SAY
-TAB 3 — WHAT TO DO THIS WEEK
-TAB 4 — PIPELINE TRACKER
+CRITICAL: Scout must output ONLY valid JSON.
+No text before the JSON. No text after.
+No markdown. No explanation.
+The ENTIRE response must be parseable
+by JSON.parse().
 
-Total output length: 1,800-2,500 words
-Never shorter than 1,800 words
-Never longer than 2,500 words
+Output this exact JSON structure:
 
-Every section must pass the
-Anti-Generic Filter before output is delivered.
-(Anti-Generic Filter defined at end of Component 7)
+{
+  "business": "[Business name]",
+  "location": "[Area, City, State]",
+  "date": "[Generated date]",
+  "headline": {
+    "revenueVelocity": "₹[X]/month",
+    "revenueVelocityNote": "[One line explanation]",
+    "acquisitionEfficiency": "[X] contacts",
+    "acquisitionEfficiencyNote": "[Benchmark comparison]",
+    "momentumScore": 0,
+    "momentumNote": "First week — baseline set. Come back Friday to see your score grow."
+  },
+  "tab1": {
+    "honestAssessment": "[One paragraph. 3-5 sentences. One specific problem with current approach. Ends connecting to Scout plan.]",
+    "unfairAdvantage": "[One paragraph. 3 sentences max. The single most powerful competitive advantage.]",
+    "icps": [
+      {
+        "name": "[Specific ICP name]",
+        "priority": "highest",
+        "whoExactly": "[2-3 sentences. Age, occupation, location, behaviour.]",
+        "whyNow": "[1-2 sentences. Specific trigger.]",
+        "whereToFind": "[3 specific locations referencing user landmarks]",
+        "volumeEstimate": "[Realistic number with calculation shown]",
+        "conversionProbability": "HIGH",
+        "revenuePerCustomer": "₹[X]/month",
+        "confidence": "HIGH",
+        "confidenceReason": "[One sentence why]",
+        "switchTrigger": "[Competitor name]'s customers leave when: [specific frustration]"
+      },
+      {
+        "name": "[ICP 2 name]",
+        "priority": "second",
+        "whoExactly": "[Conversational paragraph — different format from ICP 1]",
+        "whyNow": "[Trigger]",
+        "whereToFind": "[Locations]",
+        "volumeEstimate": "[Number with working]",
+        "conversionProbability": "MEDIUM",
+        "revenuePerCustomer": "₹[X]/month",
+        "confidence": "MEDIUM",
+        "confidenceReason": "[One sentence]",
+        "switchTrigger": "[Switch trigger sentence]"
+      },
+      {
+        "name": "[ICP 3 name]",
+        "priority": "third",
+        "summary": "[3 bullet points: who they are, why now, how to reach them]",
+        "revenuePerCustomer": "₹[X]/month",
+        "confidence": "LOW",
+        "confidenceReason": "[One sentence]"
+      }
+    ],
+    "priorityOrder": [
+      {"icp": "[ICP 1 name]", "reason": "[One specific sentence]"},
+      {"icp": "[ICP 2 name]", "reason": "[One specific sentence]"},
+      {"icp": "[ICP 3 name]", "reason": "[One specific sentence]"}
+    ],
+    "hardStops": [
+      "[Customer type 1 to avoid and why]",
+      "[Customer type 2 to avoid and why]",
+      "[Customer type 3 to avoid and why]"
+    ]
+  },
+  "tab2": {
+    "messages": [
+      {
+        "icp": "[ICP 1 name]",
+        "type": "primary",
+        "channel": "[WhatsApp/LinkedIn/Email/In-person]",
+        "language": "[Hindi/Hinglish/English]",
+        "versionA": "[Complete ready-to-send message Version A]",
+        "versionB": "[Complete ready-to-send message Version B — different angle]",
+        "followupDay3": "[Day 3 follow-up message]",
+        "followupDay7": "[Day 7 final message]"
+      },
+      {
+        "icp": "[ICP 2 name]",
+        "type": "primary",
+        "channel": "[Channel]",
+        "language": "[Language]",
+        "versionA": "[Complete message]",
+        "followupDay3": "[Follow-up]",
+        "followupDay7": "[Final]"
+      },
+      {
+        "icp": "[ICP 3 name]",
+        "type": "primary",
+        "channel": "[Channel]",
+        "language": "[Language]",
+        "versionA": "[Complete message]",
+        "followupDay3": "[Follow-up]",
+        "followupDay7": "[Final]"
+      }
+    ],
+    "responseHandlers": [
+      {"theySay": "[Objection 1]", "youSay": "[Response 1]"},
+      {"theySay": "[Objection 2]", "youSay": "[Response 2]"},
+      {"theySay": "[Objection 3]", "youSay": "[Response 3]"},
+      {"theySay": "[Objection 4]", "youSay": "[Response 4]"},
+      {"theySay": "[Objection 5]", "youSay": "[Response 5]"}
+    ]
+  },
+  "tab3": {
+    "weeklyFocus": "[One sentence — what matters most this week]",
+    "days": [
+      {
+        "day": "Monday",
+        "timeRequired": "[X] minutes",
+        "action": "[Specific action]",
+        "target": "[Specific number]",
+        "messageToUse": "[Reference to Tab 2 message]",
+        "ifAhead": "[What to do with extra time]",
+        "ifBehind": "[Minimum acceptable action]"
+      },
+      {
+        "day": "Tuesday",
+        "timeRequired": "[X] minutes",
+        "action": "[Action]",
+        "target": "[Target]",
+        "messageToUse": "[Message reference]",
+        "ifAhead": "[If ahead]",
+        "ifBehind": "[If behind]"
+      },
+      {
+        "day": "Wednesday",
+        "timeRequired": "[X] minutes",
+        "action": "[Action]",
+        "target": "[Target]",
+        "messageToUse": "[Message reference]",
+        "ifAhead": "[If ahead]",
+        "ifBehind": "[If behind]"
+      },
+      {
+        "day": "Thursday",
+        "timeRequired": "[X] minutes",
+        "action": "[Action]",
+        "target": "[Target]",
+        "messageToUse": "[Message reference]",
+        "ifAhead": "[If ahead]",
+        "ifBehind": "[If behind]"
+      },
+      {
+        "day": "Friday",
+        "timeRequired": "[X] minutes",
+        "action": "Follow-ups and pipeline update",
+        "target": "Update Tab 4 numbers",
+        "messageToUse": "Tab 2, Day 3 follow-ups",
+        "ifAhead": "[If ahead]",
+        "ifBehind": "[If behind]"
+      }
+    ],
+    "threeNumbers": {
+      "contacts": 0,
+      "responses": 0,
+      "newCustomers": 0
+    },
+    "whatNotToDo": [
+      "[Specific thing to avoid with reason]",
+      "[Specific thing to avoid with reason]"
+    ],
+    "competitorWatch": {
+      "competitor": "[Named competitor from onboarding]",
+      "likelyDoing": "[What they typically do this season]",
+      "yourResponse": "[One specific counter-action]"
+    }
+  },
+  "tab4": {
+    "icpTargets": [
+      {"icp": "[ICP 1 name]", "outreachTarget": 0, "responseTarget": 0, "conversionTarget": 0},
+      {"icp": "[ICP 2 name]", "outreachTarget": 0, "responseTarget": 0, "conversionTarget": 0},
+      {"icp": "[ICP 3 name]", "outreachTarget": 0, "responseTarget": 0, "conversionTarget": 0}
+    ],
+    "weekTargets": {
+      "contacts": 0,
+      "responses": 0,
+      "newCustomers": 0,
+      "revenueVelocityTarget": "₹[X]/month"
+    },
+    "velocityCalculation": {
+      "currentRevenue": "₹[X]/month",
+      "newCustomersTarget": 0,
+      "revenuePerCustomer": "₹[X]/month",
+      "revenueIfTargetsHit": "₹[X]/month",
+      "pipelineValue": "₹[X]"
+    },
+    "projection90Day": {
+      "month1": "₹[X]/month",
+      "month2": "₹[X]/month",
+      "month3": "₹[X]/month"
+    },
+    "acquisitionEfficiencyTarget": {
+      "contactsPerCustomer": 0,
+      "marketBenchmark": 0,
+      "goal": "Beat benchmark by Week 4"
+    },
+    "fridayReminder": "[Specific sentence about what Scout will adjust next week]"
+  },
+  "tab5": {
+    "opportunities": [
+      {
+        "timeline": "IMMEDIATE",
+        "timeframe": "0-3 months",
+        "title": "[Scheme or trend name]",
+        "whatItIs": "[One sentence]",
+        "whatItMeans": "[2-3 sentences for this specific business]",
+        "action": "[Specific action — website URL and steps]",
+        "impact": "₹[X] or [specific benefit]"
+      },
+      {
+        "timeline": "SHORT TERM",
+        "timeframe": "3-6 months",
+        "title": "[Title]",
+        "whatItIs": "[One sentence]",
+        "whatItMeans": "[2-3 sentences]",
+        "action": "[Action]",
+        "impact": "[Impact]"
+      },
+      {
+        "timeline": "MEDIUM TERM",
+        "timeframe": "6-12 months",
+        "title": "[Title]",
+        "whatItIs": "[One sentence]",
+        "whatItMeans": "[2-3 sentences]",
+        "action": "[Action]",
+        "impact": "[Impact]"
+      },
+      {
+        "timeline": "STRATEGIC",
+        "timeframe": "12+ months",
+        "title": "[Title]",
+        "whatItIs": "[One sentence]",
+        "whatItMeans": "[2-3 sentences]",
+        "action": "[Action]",
+        "impact": "[Impact]"
+      }
+    ],
+    "riskWatch": [
+      {"risk": "[Risk name]", "detail": "[One sentence]", "defence": "[One sentence]"},
+      {"risk": "[Risk name]", "detail": "[One sentence]", "defence": "[One sentence]"}
+    ],
+    "festivalCampaign": {
+      "festival": "[Festival name or null if none in 90 days]",
+      "weeksAway": 0,
+      "messages": {
+        "week4before": "[Message]",
+        "week3before": "[Message]",
+        "week2before": "[Message]",
+        "week1before": "[Message]",
+        "festivalDay": "[Message]",
+        "postFestival": "[Message]"
+      }
+    }
+  }
+}
 
-================================================================
-HEADLINE BLOCK FORMAT
-================================================================
-
-SCOUT — [BUSINESS NAME]
-[Location] | Generated: [Date]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-REVENUE VELOCITY
-₹[X] added/month projected at current pace
-[Brief one-line explanation of how calculated]
-
-ACQUISITION EFFICIENCY
-[X] contacts needed per new customer
-[Brief benchmark comparison]
-
-SCOUT MOMENTUM: 0/100
-First week — baseline set.
-Come back Friday to see your score grow.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-RULES FOR HEADLINE BLOCK:
-— Revenue Velocity must be calculated from
-  real numbers the user provided
-  (current customers × average revenue × 
-  projected new customer acquisition rate)
-— Never use placeholder or estimate language
-  ("approximately", "roughly") —
-  commit to a specific number
-— Acquisition Efficiency benchmark must
-  reference the correct market type
-  (Metro Core benchmark is different from
-  Tier 3 benchmark)
-— Momentum Score is always 0/100 on
-  first output — it builds from check-ins
-
-================================================================
-TAB 1 FORMAT — WHO TO TARGET
-================================================================
-
-WORD COUNT: 600-800 words
-PURPOSE: Deep ICP analysis — the only tab
-that goes analytically deep.
-Everything else is short and actionable.
-
-FORMAT:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TAB 1 — WHO TO TARGET
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-YOUR UNFAIR ADVANTAGE:
-[One paragraph. Maximum 3 sentences.
-Identify the single most powerful
-competitive advantage this business has.
-Make it central. Make it specific.
-If they have AIR 34 — say it here.
-If they are the only 5AM gym — say it here.
-If they have WhatsApp delivery no one else has — say it here.
-This is the first thing the user reads.
-It must make them feel that Scout
-understands their specific business.]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ICP 1 — [NAME THE ICP SPECIFICALLY]
-⭐ Highest Priority
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Who exactly:
-[2-3 sentences. Age, occupation, location,
-specific behavioural characteristic.
-Not "young professionals" —
-"IT professionals aged 25-32 who joined
-a Bengaluru company in the last 60 days
-and have not yet formed local habits."]
-
-Why they buy NOW (the trigger):
-[1-2 sentences. The specific event or
-moment that makes them ready to buy today.
-Not "they want fitness" —
-"they are in their first 90 days in a new city
-and actively forming lifestyle habits
-that will stick for years."]
-
-Where to find them RIGHT NOW:
-[3 specific locations or channels.
-Must reference user's landmarks,
-city, and community structures.
-Not "LinkedIn" —
-"LinkedIn search: Bengaluru, updated
-new role in last 60 days, IT industry,
-company within 2km of Koramangala."]
-
-Volume estimate: [realistic number per month]
-Conversion probability: HIGH / MEDIUM / LOW
-Revenue per customer: ₹[X]/month or ₹[X] per transaction
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ICP 2 — [NAME THE ICP SPECIFICALLY]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[Same format as ICP 1]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ICP 3 — [NAME THE ICP SPECIFICALLY]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[Same format as ICP 1]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PRIORITY ORDER:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-START WITH: [ICP name]
-Reason: [One specific sentence]
-
-THEN: [ICP name]
-Reason: [One specific sentence]
-
-THEN: [ICP name]
-Reason: [One specific sentence]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HARD STOPS — DO NOT TARGET:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[2-3 specific customer types to avoid
-and exactly why. These save the user
-from wasting time on wrong prospects.]
-
-RULES FOR TAB 1:
-— ICP names must be specific descriptors
-  not generic labels
-  RIGHT: "Morning IT Professional" /
-  "Government Colony Family" /
-  "Post-Funding Startup Founder"
-  WRONG: "Customer Type A" / "Target Segment 1"
-— Every ICP must have a specific trigger —
-  not a general desire
-— Where to find them must reference
-  at least one specific location from
-  the user's onboarding
-— Revenue per customer must be calculated
-  from user's stated average transaction value
-  and realistic visit/purchase frequency
-
-CONFIDENCE RATING RULES:
-Every ICP must include a confidence rating.
-
-Add this line to each ICP output block:
-CONFIDENCE: HIGH / MEDIUM / LOW
-[One sentence explaining why — specific to this ICP]
-
-Rules:
-HIGH confidence when:
-— User described this exact customer type
-  in their onboarding form
-— This ICP matches 3+ market type signals
-  (location + business type + landmark alignment)
-— User has existing customers of this type
-
-MEDIUM confidence when:
-— ICP inferred from location and business type
-  but not explicitly named by user
-— 1-2 signals align, not all three
-— User described a similar but not exact type
-
-LOW confidence when:
-— ICP is a market opportunity Scout
-  identified that user did not mention
-— Based on sector pattern only —
-  not confirmed by user inputs
-— Verify with 5 customer conversations
-  before investing time and budget here
-
-================================================================
-TAB 2 FORMAT — WHAT TO SAY
-================================================================
-
-WORD COUNT: 500-700 words
-PURPOSE: Ready-to-send messages.
-No analysis. No explanation.
-Every word is copy-paste ready.
-
-FORMAT:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TAB 2 — WHAT TO SAY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-PRIMARY MESSAGE — ICP 1
-Channel: [WhatsApp / LinkedIn / Email / In-person]
-Language: [Hindi / Hinglish / English]
-━━━━━━━━━━━━━━━━━━━━━━━━
-[Message in correct language mode.
-Passes all 5 message quality tests.
-References at least one landmark.
-One ask at the end.
-Correct length for channel.]
-
-FOLLOW-UP — ICP 1 (Day 3, no reply)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[Shorter than primary. Different angle.
-Same language mode. Softer tone.]
-
-FOLLOW-UP — ICP 1 (Day 7, final)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[Shortest. Honest. Leaves door open.
-Never desperate or pushy.]
-
-PRIMARY MESSAGE — ICP 2
-[Same format]
-
-PRIMARY MESSAGE — ICP 3
-[Same format]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RESPONSE HANDLERS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[5 most common responses Scout predicts
-for this specific business + exact reply]
-
-THEY SAY: "[Most common objection 1]"
-YOU SAY: "[Exact response — copy-paste ready]"
-
-THEY SAY: "[Most common objection 2]"
-YOU SAY: "[Exact response]"
-
-THEY SAY: "[Most common objection 3]"
-YOU SAY: "[Exact response]"
-
-THEY SAY: "[Most common objection 4]"
-YOU SAY: "[Exact response]"
-
-THEY SAY: "[Most common objection 5]"
-YOU SAY: "[Exact response]"
-
-RULES FOR TAB 2:
-— Every message must be in the correct
-  language mode from Component 6
-— Every message must pass the
-  5-point message quality test
-— Response handlers must use the
-  specific competitor names and
-  specific objections for this business type
-— No generic objection handlers —
-  "too expensive" response for a Koramangala gym
-  is different from "too expensive" response
-  for a Civil Lines pharmacy
-— Messages must include at least one
-  landmark reference per ICP
-
-MESSAGE A/B TESTING FORMAT:
-For ICP 1 primary message only,
-Scout provides TWO versions:
-
-VERSION A — [Current approach]
-[Primary message as written above]
-
-VERSION B — [Alternative approach]
-[Same goal, different angle:
-— Different opening hook
-— Different benefit emphasis
-— Different call to action]
-
-Label each version clearly.
-User tests both this week and reports
-which got better response in their check-in.
-Scout uses this in next check-in to
-determine the winning approach and double
-down on what worked.
+CRITICAL JSON RULES:
+— Every string value must be properly
+  escaped for JSON (no unescaped quotes,
+  no unescaped newlines)
+— Use \n for line breaks within message text
+— Numbers must be integers or floats,
+  not strings
+— Arrays must have proper commas
+— No trailing commas
+— No comments in JSON
+— Output ONLY the JSON object
+— Start with { and end with }
+— Nothing before { Nothing after }
 
 ================================================================
-TAB 3 FORMAT — WHAT TO DO THIS WEEK
+END OF TYPE 1 FORMAT
 ================================================================
-
-WORD COUNT: 400-500 words
-PURPOSE: Daily action plan.
-Short. Direct. No explanation.
-Just the actions.
-
-FORMAT:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TAB 3 — WHAT TO DO THIS WEEK
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-THIS WEEK'S FOCUS:
-[One sentence. What matters most this week
-based on where they are in their journey.
-Week 1 is different from Week 6.]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MONDAY — [Time required]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Action: [Specific action]
-Target: [Specific number]
-Message to use: Tab 2, [ICP name] primary message
-If ahead: [What to do with extra time]
-If behind: [Minimum acceptable action]
-
-TUESDAY — [Time required]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[Same format]
-
-WEDNESDAY — [Time required]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[Same format]
-
-THURSDAY — [Time required]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[Same format]
-
-FRIDAY — [Time required]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Action: Follow-ups + pipeline update
-Target: Update Tab 4 numbers
-Message to use: Tab 2, Day 3 follow-ups
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-THREE NUMBERS TO HIT THIS WEEK:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-CONTACTS THIS WEEK: [X]
-RESPONSES THIS WEEK: [X]
-NEW CUSTOMERS THIS WEEK: [X]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WHAT NOT TO DO THIS WEEK:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[2 specific things to avoid this week
-with specific reason for each.
-Not generic advice —
-specific to this business's situation.]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-COMPETITOR WATCH THIS WEEK:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[Named competitor] is likely doing:
-[What they typically do this season
-based on their type and the current month —
-be specific about the tactic and timing]
-
-Your response this week:
-[One specific action to counter or
-pre-empt their likely activity —
-what to do, when, and with which ICP]
-
-Rules for Competitor Watch:
-— Base only on named competitors from
-  the user's onboarding form
-— Use seasonal patterns from Component 5
-  to infer what competitor is likely doing
-  right now — not generic competitive advice
-— Must be specific: "[Competitor] typically
-  runs Diwali offers 4 weeks before the
-  festival. That starts in 2 weeks. Get
-  your offer out this Friday."
-— One competitor per week only —
-  rotate if multiple were named
-— One counter-action only — not a strategy
-
-RULES FOR TAB 3:
-— Time required for each day must be realistic
-  (20 minutes for WhatsApp outreach,
-  30 minutes for LinkedIn,
-  45-60 minutes for in-person)
-— Three numbers must be calculated from
-  realistic benchmarks for this market type
-  and business type — not aspirational
-— "What not to do" must be specific to
-  this business's current stage —
-  Week 1 "what not to do" is different
-  from Week 8 "what not to do"
-— Daily actions must reference specific
-  messages from Tab 2 — not create new copy
-
-================================================================
-TAB 4 FORMAT — PIPELINE TRACKER
-================================================================
-
-WORD COUNT: 300-400 words
-PURPOSE: Track progress and update weekly.
-Shows momentum. Drives habit of returning.
-
-FORMAT:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TAB 4 — PIPELINE TRACKER
-Week [N] of 12
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-UPDATE YOUR NUMBERS (takes 5 minutes every Friday):
-
-[ICP 1 name] outreach sent: ___
-[ICP 1 name] replies received: ___
-[ICP 1 name] conversions this week: ___
-
-[ICP 2 name] outreach sent: ___
-[ICP 2 name] replies received: ___
-[ICP 2 name] conversions this week: ___
-
-[ICP 3 name] outreach sent: ___
-[ICP 3 name] replies received: ___
-[ICP 3 name] conversions this week: ___
-
-New customers this week: ___
-Revenue added this week: ₹___
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WEEK 1 TARGETS (update when you report back):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-CONTACTS TARGET: [X]
-RESPONSES TARGET: [X]
-NEW CUSTOMERS TARGET: [X]
-REVENUE VELOCITY TARGET: ₹[X]/month
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REVENUE VELOCITY CALCULATION:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Current monthly revenue: ₹[user stated amount]
-Week 1 new customers target: [X]
-Revenue per customer: ₹[X]/month
-Revenue added if targets hit: ₹[X]/month
-
-Pipeline value (prospects in progress):
-[X] prospects × [X]% conversion ×
-₹[X] revenue = ₹[X] incoming
-
-WEEK 1 VELOCITY TARGET: ₹[X]/month new recurring
-
-90-DAY PROJECTION:
-At current weekly target pace:
-Month 1: +₹[X]/month recurring
-Month 2: +₹[X]/month recurring
-Month 3: +₹[X]/month recurring
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ACQUISITION EFFICIENCY TARGET:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Contacts needed per new customer: [X]
-Market benchmark for [business type]
-in [market type]: [X]
-Your target: beat benchmark by Week 4
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SCOUT WILL ADJUST NEXT WEEK'S PLAN
-WHEN YOU REPORT THESE NUMBERS.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[One sentence reminding user to come back
-Friday with numbers — not generic reminder
-but specific to what Scout will do with
-the data: "Your Week 2 playbook will shift
-based on which ICP responds best this week."]
-
-RULES FOR TAB 4:
-— All financial projections must use
-  the user's actual stated revenue figures
-— Benchmarks must be calibrated to
-  correct market type and business type
-— 90-day projection must be conservative —
-  based on hitting 70% of weekly targets,
-  not 100% (realistic expectation management)
-— The Friday reminder must name the specific
-  adjustment Scout will make — not generic
-  "come back to see your updated plan"
 
 ================================================================
 TYPE 2 — WEEKLY CHECK-IN OUTPUT FORMAT

@@ -910,29 +910,8 @@ window.addEventListener('DOMContentLoaded', function() {
     (businessData.location || '') + ' · Scout Customer Acquisition System';
   document.getElementById('actionBarBiz').textContent = bizName + ' — Scout Analysis';
 
-  /* Parse and render */
+  /* Parse and render — reasoning panel is now handled inside parseAndRender */
   parseAndRender(scoutRaw, businessData);
-
-  /* Populate reasoning panel (Feature 4.1) */
-  var rData = parseReasoningData(scoutRaw);
-  var rItems = [
-    { label: 'Market Type',                   value: rData.marketType },
-    { label: 'Business Type',                 value: rData.businessType },
-    { label: 'Primary Channel Recommended',   value: rData.primaryChannel },
-    { label: 'Unfair Advantage Identified',   value: rData.unfairAdvantage },
-    { label: 'Seasonal Context',              value: rData.seasonalContext }
-  ];
-  var rGrid = document.getElementById('reasoningGrid');
-  if (rGrid) {
-    rGrid.innerHTML = rItems.map(function(item) {
-      return '<div class="reasoning-item"><div class="reasoning-label">' +
-        escHtml(item.label) + '</div><div class="reasoning-value">' +
-        escHtml(item.value) + '</div></div>';
-    }).join('');
-  }
-  /* Show the reasoning bar (it's hidden until data is ready) */
-  var rb = document.getElementById('reasoningBar');
-  if (rb) rb.style.display = 'flex';
 
   /* Show Scout Insight card if one exists from the most recent check-in.
      insightWeek is the week number when the insight was generated.
@@ -1067,46 +1046,499 @@ function extractMetrics(text) {
 
 /* ═══════════════════════════════════════════
    PARSE AND RENDER ALL TABS
+   JSON path: Scout outputs structured JSON → render directly.
+   Text fallback: old check-in outputs / TYPE 2 → regex parsing.
 ═══════════════════════════════════════════ */
-function parseAndRender(text, biz) {
-  /* Strip markdown + separators before any parsing */
-  var cleanText = stripMarkdown(text);
+function parseAndRender(rawOutput, biz) {
 
-  /* STEP 1 — Extract header block (everything before TAB 1).
-     Headline metrics live here — Revenue Velocity, Acquisition Efficiency,
-     Scout Momentum. Parsing from the header gives cleaner matches than
-     scanning the entire output. */
+  /* ── Attempt JSON parse (new architecture, TYPE 1 onboarding) ── */
+  var data = null;
+  try {
+    var cleaned = rawOutput
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/```\s*$/i, '').trim();
+    var parsed = JSON.parse(cleaned);
+    if (parsed && (parsed.tab1 || parsed.headline)) { data = parsed; }
+  } catch(e) { data = null; }
+
+  if (data) {
+    /* JSON path — direct field access, no regex */
+    var h = data.headline || {};
+    document.getElementById('metricRevenue').textContent = h.revenueVelocity || '—';
+    document.getElementById('metricAcq').textContent     = h.acquisitionEfficiency || '—';
+    document.getElementById('momentumScore').textContent = h.momentumScore || 0;
+    document.getElementById('momentumNote').textContent  = h.momentumNote || '';
+    setTimeout(function() {
+      document.getElementById('momentumBar').style.width = Math.min(h.momentumScore || 0, 100) + '%';
+    }, 300);
+    scoutData = data;
+    renderTab1JSON(data.tab1);
+    renderTab2JSON(data.tab2);
+    renderTab3JSON(data.tab3);
+    renderTab4JSON(data.tab4, biz);
+    renderTab5JSON(data.tab5);
+    updateReasoningPanel(data);
+    return;
+  }
+
+  /* ── Text fallback (TYPE 2 check-in outputs, old format) ── */
+  var cleanText = stripMarkdown(rawOutput);
   var tab1Boundary = cleanText.search(/TAB\s*1\s*[—\-:]/i);
   if (tab1Boundary === -1) tab1Boundary = cleanText.search(/TAB\s*1\b/i);
   var headerBlock = tab1Boundary > -1 ? cleanText.slice(0, tab1Boundary) : cleanText;
 
-  /* Extract metrics from header block first, fall back to full text */
   var metrics = extractMetrics(headerBlock);
-  /* If header block didn't have them, try full text */
   if (metrics.revenueVelocity === '—') metrics = extractMetrics(cleanText);
 
-  document.getElementById('metricRevenue').textContent  = metrics.revenueVelocity;
-  document.getElementById('metricAcq').textContent      = metrics.acquisitionEff;
-  document.getElementById('momentumScore').textContent  = metrics.momentumScore;
-  document.getElementById('momentumNote').textContent   = metrics.momentumNote;
-  /* Animate momentum bar */
+  document.getElementById('metricRevenue').textContent = metrics.revenueVelocity;
+  document.getElementById('metricAcq').textContent     = metrics.acquisitionEff;
+  document.getElementById('momentumScore').textContent = metrics.momentumScore;
+  document.getElementById('momentumNote').textContent  = metrics.momentumNote;
   setTimeout(function() {
     document.getElementById('momentumBar').style.width = Math.min(metrics.momentumScore, 100) + '%';
   }, 300);
 
-  /* STEP 2 — Parse tab sections from the full cleaned text */
   var sections = parseScoutOutput(cleanText);
-
-  /* Render each tab */
   renderTab1(sections.tab1);
   renderTab2(sections.tab2);
   renderTab3(sections.tab3);
   renderTab4(sections.tab4, biz);
   renderTab5(sections.tab5);
+
+  /* Reasoning panel for text path */
+  var rData = parseReasoningData(cleanText);
+  var rItems = [
+    { label: 'Market Type',                   value: rData.marketType },
+    { label: 'Business Type',                 value: rData.businessType },
+    { label: 'Primary Channel Recommended',   value: rData.primaryChannel },
+    { label: 'Unfair Advantage Identified',   value: rData.unfairAdvantage },
+    { label: 'Seasonal Context',              value: rData.seasonalContext }
+  ];
+  var rGrid = document.getElementById('reasoningGrid');
+  if (rGrid) {
+    rGrid.innerHTML = rItems.map(function(item) {
+      return '<div class="reasoning-item"><div class="reasoning-label">' +
+        escHtml(item.label) + '</div><div class="reasoning-value">' +
+        escHtml(item.value) + '</div></div>';
+    }).join('');
+  }
+  var rb = document.getElementById('reasoningBar');
+  if (rb) rb.style.display = 'flex';
 }
 
 /* ═══════════════════════════════════════════
-   TAB 1 RENDERER — WHO TO TARGET
+   JSON RENDERERS (Tab 1–5)
+   Called when Scout output parses as valid JSON.
+   Each function receives its tab's data object directly.
+═══════════════════════════════════════════ */
+
+function renderTab1JSON(tab1) {
+  var el = document.getElementById('tab1Content');
+  if (!tab1) { el.innerHTML = '<div class="scout-prose">(No ICP data found)</div>'; return; }
+  var html = '';
+
+  /* Scout's Honest Assessment */
+  if (tab1.honestAssessment) {
+    html += '<div class="section-block" style="background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.25);padding:24px;margin-bottom:28px">';
+    html += '<div class="section-block-title" style="color:var(--gold)">Scout\'s Honest Assessment</div>';
+    html += '<div class="section-block-body">' + escHtml(tab1.honestAssessment) + '</div>';
+    html += '</div>';
+  }
+
+  /* Your Unfair Advantage */
+  if (tab1.unfairAdvantage) {
+    html += '<div class="section-block" style="background:var(--black3);border:1px solid var(--border);padding:24px;margin-bottom:28px">';
+    html += '<div class="section-block-title">Your Unfair Advantage</div>';
+    html += '<div class="section-block-body">' + escHtml(tab1.unfairAdvantage) + '</div>';
+    html += '</div>';
+  }
+
+  /* ICP Cards */
+  var icps = tab1.icps || [];
+  icps.forEach(function(icp, idx) {
+    if (icpNames.length < 3) icpNames.push(icp.name || ('ICP ' + (idx + 1)));
+    var isPriority = idx === 0 || /high/i.test(icp.priority || '');
+    var confidence = (icp.confidence || '').toUpperCase();
+    var confClass  = confidence === 'HIGH' ? 'high' : confidence === 'MEDIUM' ? 'medium' : confidence === 'LOW' ? 'low' : '';
+    var confLabel  = confidence === 'HIGH' ? 'HIGH CONFIDENCE' : confidence === 'MEDIUM' ? 'MEDIUM CONFIDENCE' : confidence === 'LOW' ? 'LOW CONFIDENCE — verify first' : '';
+
+    html += '<div class="icp-card">';
+    html += '<div class="icp-card-header">';
+    html += '<div class="icp-badge' + (isPriority ? ' priority' : '') + '">' + (isPriority ? '⭐ Highest Priority' : 'ICP ' + (idx + 1)) + '</div>';
+    html += '<div class="icp-title">' + escHtml(icp.name || 'ICP ' + (idx + 1)) + '</div>';
+    if (confClass) html += '<div class="conf-badge ' + confClass + '">' + confLabel + '</div>';
+    html += '</div>';
+
+    if (icp.whoExactly) {
+      html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Who Exactly</div>';
+      html += '<div class="icp-body">' + escHtml(icp.whoExactly) + '</div></div>';
+    }
+    if (icp.whyNow) {
+      html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Why They Buy Now</div>';
+      html += '<div class="icp-body">' + escHtml(icp.whyNow) + '</div></div>';
+    }
+    if (icp.whereToFind) {
+      html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Where to Find Them</div>';
+      html += '<div class="icp-body">' + escHtml(icp.whereToFind) + '</div></div>';
+    }
+
+    if (icp.volumeEstimate || icp.conversionProbability || icp.revenuePerCustomer) {
+      html += '<div class="icp-meta-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border2)">';
+      if (icp.volumeEstimate)        html += '<div class="icp-meta"><strong>Volume / Month</strong>'   + escHtml(icp.volumeEstimate) + '</div>';
+      if (icp.conversionProbability) html += '<div class="icp-meta"><strong>Conversion</strong>'       + escHtml(icp.conversionProbability) + '</div>';
+      if (icp.revenuePerCustomer)    html += '<div class="icp-meta"><strong>Revenue / Customer</strong>' + escHtml(icp.revenuePerCustomer) + '</div>';
+      html += '</div>';
+    }
+    if (icp.switchTrigger) {
+      html += '<div style="margin-top:12px;font-size:11px;color:var(--grey2);font-style:italic">Switch trigger: ' + escHtml(icp.switchTrigger) + '</div>';
+    }
+    html += '</div>'; /* /icp-card */
+  });
+
+  /* Priority Order */
+  var po = tab1.priorityOrder || [];
+  if (po.length > 0) {
+    html += '<div class="section-block" style="margin-top:28px"><div class="section-block-title">Priority Order</div><div class="section-block-body">';
+    po.forEach(function(p) {
+      html += '<div style="margin-bottom:8px">';
+      if (p.icp)    html += '<span style="color:var(--white)">' + escHtml(p.icp) + '</span>';
+      if (p.reason) html += ' — ' + escHtml(p.reason);
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  /* Hard Stops */
+  var hs = tab1.hardStops || [];
+  if (hs.length > 0) {
+    html += '<div class="avoid-block" style="margin-top:0"><div class="avoid-title">Hard Stops — Do Not Target</div><div class="avoid-body">';
+    hs.forEach(function(s) { html += '<div style="margin-bottom:4px">— ' + escHtml(s) + '</div>'; });
+    html += '</div></div>';
+  }
+
+  el.innerHTML = html || '<div class="scout-prose">(No ICP data found)</div>';
+}
+
+function renderTab2JSON(tab2) {
+  var el = document.getElementById('tab2Content');
+  if (!tab2) { el.innerHTML = '<div class="scout-prose">(No message data found)</div>'; return; }
+  var html = '';
+  var messages = tab2.messages || [];
+
+  messages.forEach(function(msg, idx) {
+    var cardId = 'msgcard_' + idx;
+    var label  = escHtml((msg.icp || '') + (msg.type ? ' — ' + msg.type : ''));
+    var meta   = [msg.channel, msg.language].filter(Boolean).join(' · ');
+
+    /* A/B toggle for first message when both versions are present */
+    if (idx === 0 && msg.versionA && msg.versionB) {
+      html += '<div class="message-card" id="' + cardId + '">';
+      html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
+      if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
+      html += '</div><button class="copy-btn" onclick="copyMessageAB(\'' + cardId + '\', this)">Copy</button></div>';
+      html += '<div class="ab-toggle-wrap">';
+      html += '<button class="ab-tab-btn active" onclick="switchAB(\'' + cardId + '\',\'a\',this)">Version A</button>';
+      html += '<button class="ab-tab-btn" onclick="switchAB(\'' + cardId + '\',\'b\',this)">Version B</button>';
+      html += '</div>';
+      html += '<div class="message-text ab-ver" id="' + cardId + '_a" data-text="' + escAttr(msg.versionA) + '">' + escHtml(msg.versionA) + '</div>';
+      html += '<div class="message-text ab-ver" id="' + cardId + '_b" data-text="' + escAttr(msg.versionB) + '" style="display:none">' + escHtml(msg.versionB) + '</div>';
+      html += '<div class="ab-hint">Test both this week. Report which performed better in your check-in.</div>';
+      html += '</div>';
+    } else {
+      var body = msg.versionA || msg.versionB || '';
+      if (!body) return;
+      html += '<div class="message-card" id="' + cardId + '">';
+      html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
+      if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
+      html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button></div>';
+      html += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
+      html += '</div>';
+    }
+
+    /* Follow-up Day 3 */
+    if (msg.followupDay3) {
+      var id3 = 'msgcard_fu3_' + idx;
+      html += '<div class="message-card" id="' + id3 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.3)">';
+      html += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 3 — ' + escHtml(msg.icp || '') + '</div></div>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + id3 + '\', this)">Copy</button></div>';
+      html += '<div class="message-text" data-text="' + escAttr(msg.followupDay3) + '">' + escHtml(msg.followupDay3) + '</div>';
+      html += '</div>';
+    }
+    /* Follow-up Day 7 */
+    if (msg.followupDay7) {
+      var id7 = 'msgcard_fu7_' + idx;
+      html += '<div class="message-card" id="' + id7 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.2)">';
+      html += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 7 — ' + escHtml(msg.icp || '') + '</div></div>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + id7 + '\', this)">Copy</button></div>';
+      html += '<div class="message-text" data-text="' + escAttr(msg.followupDay7) + '">' + escHtml(msg.followupDay7) + '</div>';
+      html += '</div>';
+    }
+  });
+
+  /* Response Handlers */
+  var rh = tab2.responseHandlers || [];
+  if (rh.length > 0) {
+    html += '<div class="section-block" style="margin-top:32px"><div class="section-block-title">Response Handlers</div><div class="section-block-body">';
+    rh.forEach(function(pair) {
+      html += '<div style="background:var(--black3);border:1px solid var(--border2);padding:16px;margin-bottom:10px">';
+      if (pair.theySay) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(pair.theySay) + '</span></div>';
+      if (pair.youSay)  html += '<div style="font-size:12px;line-height:1.7;color:var(--white2)">' + escHtml(pair.youSay) + '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  el.innerHTML = html || '<div class="scout-prose">(No message data found)</div>';
+}
+
+function renderTab3JSON(tab3) {
+  var el = document.getElementById('tab3Content');
+  if (!tab3) { el.innerHTML = '<div class="scout-prose">(No weekly plan found)</div>'; return; }
+  var html = '';
+
+  /* Weekly Focus */
+  if (tab3.weeklyFocus) {
+    html += '<div style="background:rgba(201,168,76,0.08);border:1px solid var(--border);padding:20px;margin-bottom:28px">';
+    html += '<div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">This Week\'s Focus</div>';
+    html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-weight:300;color:var(--white)">' + escHtml(tab3.weeklyFocus) + '</div>';
+    html += '</div>';
+  }
+
+  /* Day Cards */
+  (tab3.days || []).forEach(function(day) {
+    html += '<div class="day-card">';
+    html += '<div class="day-label">' + escHtml(day.day || '') +
+      (day.timeRequired ? '<br><span style="font-size:10px;color:var(--grey2)">' + escHtml(day.timeRequired) + '</span>' : '') + '</div>';
+    html += '<div class="day-content">';
+    if (day.action)       html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Action:</span> ' + escHtml(day.action) + '</div>';
+    if (day.target)       html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Target:</span> ' + escHtml(day.target) + '</div>';
+    if (day.messageToUse) html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Message to use:</span> ' + escHtml(day.messageToUse) + '</div>';
+    if (day.ifAhead)      html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">If ahead:</span> ' + escHtml(day.ifAhead) + '</div>';
+    if (day.ifBehind)     html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">If behind:</span> ' + escHtml(day.ifBehind) + '</div>';
+    html += '</div></div>';
+  });
+
+  /* Three Numbers */
+  var nums = tab3.threeNumbers || {};
+  if (nums.contacts || nums.responses || nums.newCustomers) {
+    html += '<div class="three-numbers">';
+    html += '<div class="number-chip"><div class="number-chip-val">' + escHtml(String(nums.contacts || '—'))     + '</div><div class="number-chip-lbl">Contacts</div></div>';
+    html += '<div class="number-chip"><div class="number-chip-val">' + escHtml(String(nums.responses || '—'))    + '</div><div class="number-chip-lbl">Responses</div></div>';
+    html += '<div class="number-chip"><div class="number-chip-val">' + escHtml(String(nums.newCustomers || '—')) + '</div><div class="number-chip-lbl">New Customers</div></div>';
+    html += '</div>';
+  }
+
+  /* What Not to Do */
+  var avoid = tab3.whatNotToDo || [];
+  if (avoid.length > 0) {
+    html += '<div class="avoid-block"><div class="avoid-title">What Not to Do This Week</div><div class="avoid-body">';
+    avoid.forEach(function(item) { html += '<div style="margin-bottom:4px">— ' + escHtml(item) + '</div>'; });
+    html += '</div></div>';
+  }
+
+  /* Competitor Watch */
+  var comp = tab3.competitorWatch || {};
+  if (comp.competitor) {
+    html += '<div class="comp-watch-card"><div class="comp-watch-title">COMPETITOR WATCH</div><div class="comp-watch-body">';
+    html += '<div style="margin-bottom:6px"><strong style="color:var(--white)">' + escHtml(comp.competitor) + '</strong></div>';
+    if (comp.likelyDoing)  html += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(comp.likelyDoing) + '</div>';
+    if (comp.yourResponse) html += '<div>Your response: ' + escHtml(comp.yourResponse) + '</div>';
+    html += '</div></div>';
+  }
+
+  el.innerHTML = html || '<div class="scout-prose">(No weekly plan found)</div>';
+}
+
+function renderTab4JSON(tab4, biz) {
+  var t4  = tab4 || {};
+  var wt  = t4.weekTargets || {};
+  var proj = t4.projection90Day || {};
+  var icpTargets = t4.icpTargets || [];
+
+  /* Use ICP names from JSON targets, or fall back to names extracted from tab1 */
+  var names = icpTargets.length > 0
+    ? icpTargets.map(function(t) { return t.icp || ''; })
+    : (icpNames.length > 0 ? icpNames : ['ICP 1', 'ICP 2', 'ICP 3']);
+
+  var html = '';
+
+  /* Week targets */
+  html += '<div class="targets-block"><div class="targets-title">Week 1 Targets</div>';
+  html += '<div class="target-row"><span class="target-key">Contacts</span><span class="target-val">'       + escHtml(String(wt.contacts || '—'))      + '</span></div>';
+  html += '<div class="target-row"><span class="target-key">Responses</span><span class="target-val">'      + escHtml(String(wt.responses || '—'))     + '</span></div>';
+  html += '<div class="target-row"><span class="target-key">New Customers</span><span class="target-val">'  + escHtml(String(wt.newCustomers || '—'))  + '</span></div>';
+  if (wt.revenueVelocityTarget) {
+    html += '<div class="target-row"><span class="target-key">Revenue Velocity Target</span><span class="target-val">' + escHtml(wt.revenueVelocityTarget) + '</span></div>';
+  }
+  html += '</div>';
+
+  /* 90-day projection */
+  if (proj.month1 || proj.month2 || proj.month3) {
+    html += '<div class="section-block" style="margin-bottom:28px"><div class="section-block-title">90-Day Projection</div><div class="section-block-body scout-prose">';
+    if (proj.month1) html += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 1: </span>' + escHtml(proj.month1) + '</div>';
+    if (proj.month2) html += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 2: </span>' + escHtml(proj.month2) + '</div>';
+    if (proj.month3) html += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 3: </span>' + escHtml(proj.month3) + '</div>';
+    html += '</div></div>';
+  }
+
+  /* Friday Reminder */
+  if (t4.fridayReminder) {
+    html += '<div style="background:rgba(201,168,76,0.06);border:1px solid var(--border);padding:16px 20px;margin-bottom:28px">';
+    html += '<div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Friday Reminder</div>';
+    html += '<div style="font-size:12px;color:var(--grey1);line-height:1.7">' + escHtml(t4.fridayReminder) + '</div>';
+    html += '</div>';
+  }
+
+  /* Weekly Check-In Form */
+  html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:12px">';
+  html += '<div class="pipeline-section-title">Weekly Check-In</div>';
+  html += '<div style="font-size:11px;color:var(--grey2);margin-bottom:6px;line-height:1.7">Takes 5 minutes every Friday. Scout updates your playbook based on what actually worked.</div>';
+  html += '<div class="pipeline-divider"></div>';
+  names.forEach(function(name, i) {
+    var safe = 'icp' + i;
+    html += '<div class="pipeline-icp-block"><div class="pipeline-icp-title">' + escHtml(name) + '</div>';
+    html += '<div class="pipeline-inputs">';
+    html += '<div class="pipeline-field"><label>Outreach Sent</label><input type="number" id="' + safe + '_sent" placeholder="0" min="0"></div>';
+    html += '<div class="pipeline-field"><label>Replies Received</label><input type="number" id="' + safe + '_replies" placeholder="0" min="0"></div>';
+    html += '<div class="pipeline-field"><label>Conversions</label><input type="number" id="' + safe + '_conv" placeholder="0" min="0"></div>';
+    html += '</div></div>';
+  });
+  html += '<div class="pipeline-totals">';
+  html += '<div class="pipeline-total-field"><label>New Customers This Week</label><input type="number" id="newCustomers" placeholder="0" min="0"></div>';
+  html += '<div class="pipeline-total-field"><label>Revenue Added This Week</label><input type="text" id="revenueAdded" placeholder="₹0"></div>';
+  html += '</div>';
+  html += '<button class="btn-checkin" onclick="submitCheckin()">Update Scout →</button>';
+  html += '<div class="checkin-note">Scout will adjust next week\'s targets based on which ICPs performed best.</div>';
+  html += '</div>';
+
+  /* Referral Chain Builder */
+  html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:36px">';
+  html += '<div class="referral-section-heading">Activate Your Referral Network</div>';
+  html += '<div class="referral-section-sub">Enter your best existing customers. Scout will show you who to activate first and exactly what to say.</div>';
+  html += '<div id="referralRows">';
+  for (var ri = 0; ri < 3; ri++) {
+    html += '<div class="referral-row" id="rrow_' + ri + '">';
+    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Sharma ji, government teacher">';
+    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Prerna Vihar colony">';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<button class="referral-add-link" onclick="addReferralRow()">+ Add another customer</button><br>';
+  html += '<button class="btn-build-referral" id="buildReferralBtn" onclick="buildReferralChain()">Build My Referral Chain →</button>';
+  html += '<div class="referral-loading" id="referralLoading">Scout is mapping your referral network...</div>';
+  html += '<div id="referralResults"></div>';
+  html += '</div>';
+
+  document.getElementById('tab4Content').innerHTML = html;
+}
+
+function renderTab5JSON(tab5) {
+  var el = document.getElementById('tab5Content');
+  if (!el) return;
+  if (!tab5) {
+    el.innerHTML = '<div class="exp-empty">Expansion Intelligence will appear here after your first full analysis.</div>';
+    return;
+  }
+
+  var html = '';
+  var oppLabels = [
+    { label: 'IMMEDIATE',   sub: '0–3 months' },
+    { label: 'SHORT TERM',  sub: '3–6 months' },
+    { label: 'MEDIUM TERM', sub: '6–12 months' },
+    { label: 'STRATEGIC',   sub: '12+ months' }
+  ];
+
+  /* Opportunities */
+  (tab5.opportunities || []).forEach(function(opp, i) {
+    var lbl = oppLabels[i] || { label: opp.timeline || 'OPPORTUNITY', sub: opp.timeframe || '' };
+    html += '<div class="exp-card">';
+    html += '<div class="exp-card-timeline">' + escHtml(lbl.label) + (lbl.sub ? ' — ' + escHtml(lbl.sub) : '') + '</div>';
+    if (opp.title) html += '<div class="exp-card-title">' + escHtml(opp.title) + '</div>';
+    html += '<div class="exp-card-body">';
+    if (opp.whatItIs)    html += '<p>' + escHtml(opp.whatItIs) + '</p>';
+    if (opp.whatItMeans) html += '<p>' + escHtml(opp.whatItMeans) + '</p>';
+    if (opp.action)      html += '<p><strong style="color:var(--gold)">Action:</strong> ' + escHtml(opp.action) + '</p>';
+    if (opp.impact)      html += '<p><strong style="color:var(--white)">Impact:</strong> ' + escHtml(opp.impact) + '</p>';
+    html += '</div></div>';
+  });
+
+  /* Risk Watch */
+  (tab5.riskWatch || []).forEach(function(risk) {
+    html += '<div class="exp-card risk">';
+    html += '<div class="exp-card-timeline">RISK WATCH</div>';
+    if (risk.risk) html += '<div class="exp-card-title">' + escHtml(risk.risk) + '</div>';
+    html += '<div class="exp-card-body">';
+    if (risk.detail)  html += '<p>' + escHtml(risk.detail) + '</p>';
+    if (risk.defence) html += '<p><strong style="color:var(--gold)">Defence:</strong> ' + escHtml(risk.defence) + '</p>';
+    html += '</div></div>';
+  });
+
+  /* Festival Campaign */
+  var fest = tab5.festivalCampaign;
+  if (fest && fest.festival) {
+    html += '<div class="festival-toggle-wrap">';
+    html += '<button class="festival-toggle-btn" id="festToggleBtn" onclick="toggleFestival()">';
+    html += '<span id="festArrow">▶</span>&nbsp;Festival Campaign — ' + escHtml(fest.festival);
+    if (fest.weeksAway) html += ' (' + escHtml(String(fest.weeksAway)) + ' weeks away)';
+    html += '</button>';
+    html += '<div class="festival-panel" id="festivalPanel">';
+
+    var msgs = fest.messages || {};
+    var weekDefs = [
+      { key: 'week4before', label: '4 Weeks Before' },
+      { key: 'week3before', label: '3 Weeks Before' },
+      { key: 'week2before', label: '2 Weeks Before' },
+      { key: 'week1before', label: '1 Week Before' },
+      { key: 'festivalDay', label: 'Festival Day' },
+      { key: 'postFestival', label: 'Post-Festival (3 days after)' }
+    ];
+    weekDefs.forEach(function(wd, wpi) {
+      var msg = msgs[wd.key];
+      if (!msg) return;
+      var wcId = 'festcard_' + wpi;
+      html += '<div class="festival-week-card">';
+      html += '<div class="festival-week-label"><span>' + escHtml(wd.label) + '</span>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + wcId + '\', this)">Copy</button></div>';
+      html += '<div class="festival-msg message-text" id="' + wcId + '" data-text="' + escAttr(msg) + '">' + escHtml(msg) + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div></div>'; /* /festival-panel + /festival-toggle-wrap */
+  }
+
+  if (!html) {
+    html = '<div class="exp-empty">Expansion Intelligence will appear here after your first full analysis.</div>';
+  }
+  el.innerHTML = html;
+}
+
+/* Populate reasoning panel from JSON data */
+function updateReasoningPanel(data) {
+  var rGrid = document.getElementById('reasoningGrid');
+  var rb    = document.getElementById('reasoningBar');
+  if (!rGrid) return;
+  var t1   = data.tab1 || {};
+  var t2   = data.tab2 || {};
+  var t3   = data.tab3 || {};
+  var msgs = t2.messages || [];
+  var items = [
+    { label: 'Market Type',                   value: data.marketType || 'Analysed from your inputs' },
+    { label: 'Business Type',                 value: data.businessType || 'Analysed from your inputs' },
+    { label: 'Primary Channel Recommended',   value: (msgs[0] && msgs[0].channel) || 'Analysed from your inputs' },
+    { label: 'Unfair Advantage Identified',   value: (t1.unfairAdvantage || '').slice(0, 120) || 'Analysed from your inputs' },
+    { label: 'Seasonal Context',              value: t3.weeklyFocus || 'Analysed from your inputs' }
+  ];
+  rGrid.innerHTML = items.map(function(item) {
+    return '<div class="reasoning-item"><div class="reasoning-label">' +
+      escHtml(item.label) + '</div><div class="reasoning-value">' +
+      escHtml(item.value) + '</div></div>';
+  }).join('');
+  if (rb) rb.style.display = 'flex';
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1 RENDERER — WHO TO TARGET (text fallback)
    Splits on ICP headings, renders each as a card.
    Feature 4.2: adds confidence badges.
 ═══════════════════════════════════════════ */
@@ -1988,16 +2420,30 @@ function preparePrint() {
   if (ploc) ploc.textContent = location;
   if (pdt)  pdt.textContent  = date;
 
-  /* Populate executive summary */
-  var metrics  = extractMetrics(scoutRaw);
-  var rData    = parseReasoningData(scoutRaw);
+  /* Populate executive summary — use scoutData (JSON) when available */
+  var rvDisplay, ptChannel, ptSeasonal;
+  if (scoutData) {
+    var _h  = scoutData.headline || {};
+    var _t2 = scoutData.tab2 || {};
+    var _t3 = scoutData.tab3 || {};
+    var _ms = _t2.messages || [];
+    rvDisplay = _h.revenueVelocity || '—';
+    ptChannel = (_ms[0] && _ms[0].channel) || '—';
+    ptSeasonal = _t3.weeklyFocus || '—';
+  } else {
+    var metrics = extractMetrics(scoutRaw);
+    var rData   = parseReasoningData(scoutRaw);
+    rvDisplay  = metrics.revenueVelocity;
+    ptChannel  = rData.primaryChannel;
+    ptSeasonal = rData.seasonalContext;
+  }
   var rows = [
     ['Business',               bizName + (location ? ' · ' + location : '')],
     ['Analysis Date',          date],
-    ['Market Classification',  rData.marketType],
     ['Primary ICP',            icpNames[0] || '—'],
-    ['Revenue Velocity Target', metrics.revenueVelocity],
-    ['Key Recommendation',     rData.seasonalContext]
+    ['Revenue Velocity Target', rvDisplay],
+    ['Primary Channel',        ptChannel],
+    ['Key Recommendation',     ptSeasonal]
   ];
   var tbody = document.getElementById('printExecTable');
   if (tbody) {
