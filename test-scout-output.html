@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scout Test — Sharma Marble Traders</title>
+<style>
+body { font-family: sans-serif; background: #080808; color: #C9A84C;
+       display: flex; align-items: center; justify-content: center;
+       height: 100vh; margin: 0; }
+.msg { text-align: center; }
+.msg h2 { font-size: 14px; letter-spacing: .2em; text-transform: uppercase; }
+.msg p  { font-size: 11px; color: #5A5855; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="msg">
+  <h2>Loading Scout test data...</h2>
+  <p>Sharma Marble Traders — Kishangarh, Rajasthan</p>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   SAMPLE SCOUT JSON OUTPUT
+   Business: Sharma Marble Traders, Kishangarh, Rajasthan
+   Marble wholesale — ₹18L/month revenue, 22 active accounts
+   Generated: June 2026 (hardcoded test — no API call)
+───────────────────────────────────────────────────────────── */
+var sampleJSON = {
+  "business": "Sharma Marble Traders",
+  "location": "Kishangarh, Ajmer, Rajasthan",
+  "date": "June 2026",
+  "headline": {
+    "revenueVelocity": "₹18,00,000/month",
+    "revenueVelocityNote": "Current baseline from 22 active dealer and contractor accounts",
+    "acquisitionEfficiency": "9 contacts",
+    "acquisitionEfficiencyNote": "Kishangarh marble wholesale benchmark is 12-15 contacts per new customer — you are already ahead of market average",
+    "momentumScore": 0,
+    "momentumNote": "First week — baseline set at Rs. 18L/month from 22 accounts. Implement this plan and come back Friday to see your score grow."
+  },
+  "tab1": {
+    "honestAssessment": "Sharma Marble Traders has a genuine structural advantage: Kishangarh mill-direct access means your landed cost is 15-20% below any contractor who buys through an intermediary. But right now, 22 accounts is a dangerously thin base — 3 accounts going quiet in one month would drop revenue by 13%. Your biggest problem is not pricing or product quality; it is that most potential buyers in Ajmer, Jaipur, and Jodhpur have never heard of you. The market does not come to you because there is no reason for it to. This plan fixes that by building a systematic outreach to contractors and designers in your region before your competitors lock in those relationships.",
+    "unfairAdvantage": "You are physically located inside the Kishangarh marble mandi — India's largest marble wholesale market — which means you can offer delivery in 48 hours to any site within 200 km, at mill rates no Delhi or Mumbai retailer can match. That combination of speed, price, and variety (Makrana White, Rajasthan Grey, Italian imports, all under one roof) is impossible to replicate from outside Kishangarh.",
+    "icps": [
+      {
+        "name": "Civil Contractors (Thekedar)",
+        "priority": "highest",
+        "whoExactly": "Male, 30-55 years, running 2-8 construction projects simultaneously in Rajasthan and western MP. They buy marble for floors, staircases, and bathrooms in residential colonies and commercial buildings. Orders are ₹60,000-₹2,00,000 per project and repeat every 2-3 months if quality and delivery hold. They decide on price first, quality second — they respond to direct WhatsApp from a supplier who knows their site address.",
+        "whyNow": "Post-monsoon construction season starts September — contractors are placing material orders in June-July to lock rates and avoid October price spikes. Right now they are actively comparing suppliers.",
+        "whereToFind": "1. Kishangarh thekedar union office, Station Road (weekly meetings Thursday afternoon). 2. Active construction sites on Ajmer-Jaipur highway, Pushkar Road, and Beawar bypass. 3. Hardware and iron supplier shops near Kishangarh railway station — contractors visit these weekly.",
+        "volumeEstimate": "Rajasthan has approx. 40,000 registered contractors. Within 150 km of Kishangarh, realistic reachable pool is 800-1,200 active contractors. At 5% conversion rate with targeted WhatsApp outreach, that is 40-60 new accounts in 6 months.",
+        "conversionProbability": "HIGH",
+        "revenuePerCustomer": "₹85,000/order, 2-3 orders per month",
+        "confidence": "HIGH",
+        "confidenceReason": "Your existing 22 accounts are mostly contractors — proven fit, proven payment, proven repeat purchase cycle.",
+        "switchTrigger": "Competitor marble suppliers lose contractor customers when delivery is delayed beyond 72 hours or when promised grade is substituted — both common complaints in Kishangarh mandi."
+      },
+      {
+        "name": "Interior Designers and Architects",
+        "priority": "second",
+        "whoExactly": "Architects and interior designers based in Jaipur, Ajmer, and Udaipur, typically running studios with 3-15 active residential or hospitality projects. They specify premium marble — Makrana White, Italian Carrara, Statuario — for high-value clients (₹1 crore+ homes). They are highly brand-conscious but will switch to a supplier who can show consistent slab quality, PDF catalogues, and fast sampling. Average ticket is higher than contractors but purchase frequency is lower — 1-2 projects per year per designer, each worth ₹1.5L-₹5L in marble.",
+        "whyNow": "Summer is design season — clients approve budgets in April-July for projects starting post-monsoon. Designers are finalising material lists now.",
+        "whereToFind": "1. Indian Institute of Architects (IIA) Rajasthan chapter events in Jaipur (next one August 2026). 2. Instagram — Rajasthan interior designers active on reels showing project work. 3. Architecture colleges in Jaipur and Ajmer — junior architects become clients within 2 years.",
+        "volumeEstimate": "Rajasthan has approx. 3,500 registered architects and 1,200 active interior design studios. Targeting Jaipur-Ajmer corridor gives 600 reachable studios. At 8% conversion over 6 months, that is 48 new design accounts.",
+        "conversionProbability": "MEDIUM",
+        "revenuePerCustomer": "₹1,80,000/project, 2 projects per year",
+        "confidence": "MEDIUM",
+        "confidenceReason": "You have no existing designer accounts to prove the model — outreach needs to include a physical showroom visit or sample delivery to convert effectively.",
+        "switchTrigger": "Designers switch suppliers when a single slab does not match the sample shade — strict shade matching is the entry requirement for this ICP."
+      },
+      {
+        "name": "Government PWD and Municipal Buyers",
+        "priority": "third",
+        "summary": "Government department buyers (PWD, municipal corporations, Jal Jeevan Mission) procuring marble for public buildings, government offices, and infrastructure projects via GeM portal and tender. Orders are very large (₹5L-₹50L) but slow — 60-90 day payment cycles and 3-6 month tender process. Reach them through GeM portal registration (gem.gov.in) and Rajasthan Government e-Procurement portal (eproc.rajasthan.gov.in).",
+        "revenuePerCustomer": "₹8,00,000/order (2 orders per year)",
+        "confidence": "LOW",
+        "confidenceReason": "Government procurement requires GeM portal registration and tender compliance infrastructure you likely do not have yet — build this in parallel, do not rely on it for revenue in Month 1-2."
+      }
+    ],
+    "priorityOrder": [
+      {
+        "icp": "Civil Contractors (Thekedar)",
+        "reason": "Fastest conversion (1-2 weeks), highest repeat rate, proven by your existing 22 accounts — this is where 80% of your outreach time goes in Week 1."
+      },
+      {
+        "icp": "Interior Designers and Architects",
+        "reason": "Higher revenue per account but slower conversion — start outreach this week, expect first conversions in Week 3-4 after showroom visits."
+      },
+      {
+        "icp": "Government PWD and Municipal Buyers",
+        "reason": "Highest order value but 3-6 month sales cycle — begin GeM registration this week as a background task, treat first order as a Month 4+ milestone."
+      }
+    ],
+    "hardStops": [
+      "Retail walk-in buyers wanting less than 50 sq.ft — your mill-rate pricing model does not work at retail quantity and it ties up your team for no sustainable revenue.",
+      "Buyers outside 300 km radius without their own transport arrangement — your delivery cost advantage disappears beyond Jaipur-Jodhpur-Kota triangle.",
+      "Any buyer asking for 90+ day credit without a signed supply agreement — marble wholesale has margin of 8-12%, one defaulter wipes out 8 months of profit from that account."
+    ]
+  },
+  "tab2": {
+    "messages": [
+      {
+        "icp": "Civil Contractors (Thekedar)",
+        "type": "primary",
+        "channel": "WhatsApp",
+        "language": "Hindi",
+        "versionA": "Namaste ji!\n\nMain Kishangarh Marble Mandi se Sharma Marble Traders se bol raha hoon.\n\nAapke construction projects ke liye direct mill rate pe marble available hai:\n- Makrana White: Rs. 45/sq.ft\n- Rajasthan Grey: Rs. 32/sq.ft\n- Italian Beige: Rs. 95/sq.ft\n\n48 ghante mein delivery. 22 contractors hamare regular saath kaam kar rahe hain.\n\nKisi bhi project ke liye ek baar rate compare karna ho to mujhe bata dena.\n\n- Rahul Sharma, Sharma Marble Traders\nAjmer Road, Kishangarh (Railway Station ke paas)\nMob: [your number]",
+        "versionB": "Namaste ji,\n\nAapka project kahan chal raha hai? Kishangarh se direct marble lene ka matlab hai middleman nahi, matlab 15-20% extra bachega aapka.\n\nHum Rajasthan ke 22 se zyada contractors ko supply karte hain. Makrana, Italian, local — sab available.\n\nEk site visit karenge? Sample lekar aata hoon aapke project pe.\n\n- Sharma Marble Traders, Kishangarh Mandi\n[your number]",
+        "followupDay3": "Namaste ji, 3 din pehle message kiya tha marble rates ke baare mein. Agar site pe koi project chal raha hai to abhi book karne pe pre-monsoon rate lock kar sakte hain. October mein rates 10-15% badhne wale hain. Batayein kya help kar sakta hoon?",
+        "followupDay7": "Ji, last message — agar aapko abhi zaroorat nahi hai to koi baat nahi. Jab bhi marble chahiye, Kishangarh mandi mein seedha Sharma Marble pe aa jaana. Mill se direct loge to fayda hi fayda. Number save rakh lena: [your number]"
+      },
+      {
+        "icp": "Interior Designers and Architects",
+        "type": "primary",
+        "channel": "WhatsApp",
+        "language": "Hinglish",
+        "versionA": "Hi! I am reaching out from Sharma Marble Traders, Kishangarh — we supply premium marble to architects and interior designers across Rajasthan.\n\nFor your high-end residential projects:\n- Makrana White (Grade A, consistent shading)\n- Italian Statuario and Carrara (direct import)\n- Full slab viewing at our Kishangarh showroom\n\nWe offer sample delivery to your Jaipur studio and can match any shade specification. 18+ architects already source through us.\n\nWould it make sense to share our catalogue? Takes 2 minutes — I'll WhatsApp the PDF right now if yes.",
+        "followupDay3": "Hi again — sending our latest Italian marble catalogue here. Page 4 has the Statuario and Calacatta slabs that sell best in Jaipur luxury projects. If any client is looking for bookmatched slabs, we have 3 pairs in stock right now. Worth a quick call?",
+        "followupDay7": "Last follow-up from Sharma Marble. If you are sourcing for an upcoming project, we would love to host you at our Kishangarh showroom — full slab inventory, direct mill pricing, and we can do shade matching for your specification on the spot. Happy to arrange transport from Jaipur if helpful."
+      },
+      {
+        "icp": "Government PWD and Municipal Buyers",
+        "type": "primary",
+        "channel": "Email",
+        "language": "Hindi",
+        "versionA": "Vishay: Marble Supply — GeM Portal Registered Vendor — Sharma Marble Traders, Kishangarh\n\nMahodaya,\n\nSharma Marble Traders, Kishangarh (Rajasthan ka sabse bada marble wholesale hub) aapke vibhag ke liye GeM portal pe marble supply karne mein saksham hai.\n\nHamari credentials:\n- Kishangarh mandi mein 15 saal se panjikrit vyapari\n- BIS certified marble grades available\n- PWD specification ke anusar quality certificate\n- Competitive rates with 30-day delivery guarantee\n\nGeM portal pe humare products: [GeM store URL after registration]\n\nKisi bhi enquiry ke liye please reply karein ya call karein.\n\nSadar Pranam,\nRahul Sharma\nSharma Marble Traders",
+        "followupDay3": "Mahodaya, pichle email ka follow-up kar raha hoon. Kya aapke vibhag mein koi marble procurement tender aane wala hai? Hum specification ke according sample bhejna chahte hain. GeM portal pe hum registered ho rahe hain — process 2 weeks mein complete hogi.",
+        "followupDay7": "Mahodaya, ek aakhri follow-up. Rajasthan MSME Policy 2022 ke tahat marble trading units ko government procurement mein 25% preference milti hai. Agar aage kisi project mein madad chahiye to humse sampark karein — pehle sample hamesha free milega."
+      }
+    ],
+    "responseHandlers": [
+      {
+        "theySay": "Aapka daam zyada lag raha hai",
+        "youSay": "Ji bilkul sahi keh rahe hain — compare karein to lagega zyada. Lekin yahan ek calculation hai: agar aap 1000 sq.ft le rahe hain to mill-direct rate pe aapko Rs. 15,000-20,000 bachenge versus mandi ke dealer se. Ek baar seedha comparison karte hain — kahan se le rahe hain abhi?"
+      },
+      {
+        "theySay": "Abhi zaroorat nahi hai / koi project nahi hai",
+        "youSay": "Perfect timing — pre-season mein contact kiya isliye. October se January construction season hai, aur marble rates September mein upar jaate hain. Abhi rate lock karne ka option hai — 10% advance pe full project ka marble book kar sakte hain aaj ke rate pe. Sochenge?"
+      },
+      {
+        "theySay": "Mera apna supplier hai Kishangarh mein",
+        "youSay": "Bahut achha hai — matlab aap quality aur delivery samajhte hain. Ek kaam karo — ek baar side-by-side comparison karo. Mujhe aapka last order ka grade aur rate batao, main seedha mill rate se compare karke dikhata hoon. Kuch bhi fark nahi hoga to koi problem nahi — lekin agar fark hua to aapka kaam hai decide karna."
+      },
+      {
+        "theySay": "Sample chahiye pehle",
+        "youSay": "Bilkul — sample bhejna hamare liye easy hai. Aapka delivery address aur project site WhatsApp pe bhejein, 48 ghante mein 3 grades ke sample pahunch jaayenge. Koi charge nahi, koi commitment nahi."
+      },
+      {
+        "theySay": "Payment terms kya hain?",
+        "youSay": "New accounts ke liye: 50% advance, 50% before delivery. Regular accounts (3+ orders) ke liye 30-day credit available hai. Pehla order aaya, delivery on time hui, quality match ki — tab credit automatically set ho jaata hai. Bahut saare contractors yehi process follow karte hain hamare saath."
+      }
+    ]
+  },
+  "tab3": {
+    "weeklyFocus": "Contact 35 Kishangarh-area contractors this week via WhatsApp — the pre-monsoon booking window closes in 3 weeks",
+    "days": [
+      {
+        "day": "Monday",
+        "timeRequired": "90 minutes",
+        "action": "Build your WhatsApp contact list — collect numbers from mandi neighbors, past inquiry records, and thekedar union directory",
+        "target": "50 new contractor WhatsApp numbers saved with name and area",
+        "messageToUse": "Tab 2, ICP 1 Version A — copy and personalise name/area before sending",
+        "ifAhead": "Add another 20 numbers from hardware shop contacts near station",
+        "ifBehind": "Minimum: 20 numbers collected and 10 messages sent"
+      },
+      {
+        "day": "Tuesday",
+        "timeRequired": "60 minutes",
+        "action": "Send Version A message to 20 contractors, Version B to 15 contractors — track which gets more replies",
+        "target": "35 messages sent, 5+ replies received",
+        "messageToUse": "Tab 2, ICP 1 — split 20 Version A, 15 Version B to test which performs better",
+        "ifAhead": "Start Instagram outreach to 5 Jaipur interior designers using ICP 2 message",
+        "ifBehind": "Minimum: 20 messages sent"
+      },
+      {
+        "day": "Wednesday",
+        "timeRequired": "60 minutes",
+        "action": "Follow up on all Tuesday replies + visit 2 active construction sites on Ajmer Road with physical samples",
+        "target": "3 site visits, 2 committed to seeing showroom",
+        "messageToUse": "Tab 2, ICP 1 Day 3 follow-up for non-replies from Tuesday",
+        "ifAhead": "Begin GeM portal registration — go to gem.gov.in, start the seller onboarding",
+        "ifBehind": "Minimum: Follow up all replies by phone same day"
+      },
+      {
+        "day": "Thursday",
+        "timeRequired": "45 minutes",
+        "action": "Send ICP 2 messages to 10 Jaipur architects — WhatsApp PDF catalogue to any who engaged earlier in the week",
+        "target": "10 architect messages sent, 2 catalogue shares",
+        "messageToUse": "Tab 2, ICP 2 Version A — Jaipur architect WhatsApp outreach",
+        "ifAhead": "Attend thekedar union meeting at Station Road office if open Thursday",
+        "ifBehind": "Minimum: 5 architect messages sent"
+      },
+      {
+        "day": "Friday",
+        "timeRequired": "30 minutes",
+        "action": "Follow-ups and pipeline update",
+        "target": "Update Tab 4 numbers — contacts sent, replies received, showroom visits booked",
+        "messageToUse": "Tab 2, Day 3 follow-ups to any Tuesday contacts who have not replied",
+        "ifAhead": "Send weekend summary message to warm leads: showroom open Saturday, come see stock",
+        "ifBehind": "Minimum: Count your numbers and submit check-in honestly — Scout adjusts next week"
+      }
+    ],
+    "threeNumbers": {
+      "contacts": 35,
+      "responses": 7,
+      "newCustomers": 2
+    },
+    "whatNotToDo": [
+      "Do not spend this week building a website or Instagram page — zero new contractor comes from a new page in Week 1. Direct WhatsApp outreach closes deals; a page does not.",
+      "Do not discount rates to close the first call — if someone says daam zyada hai, use the Tab 2 response handler. Dropping price in conversation one sets a precedent for all future negotiations with that account."
+    ],
+    "competitorWatch": {
+      "competitor": "Local Kishangarh mandi dealers",
+      "likelyDoing": "Running on relationships built over years — they are not doing active outreach because they are relying on repeat buyers coming to them",
+      "yourResponse": "The one thing mandi dealers cannot copy quickly: your systematic WhatsApp follow-up. Most stone dealers answer calls only, do not follow up. Be the one contractor who gets 3 touchpoints per week from you — that is the entire competitive advantage this week."
+    }
+  },
+  "tab4": {
+    "icpTargets": [
+      {
+        "icp": "Civil Contractors (Thekedar)",
+        "outreachTarget": 25,
+        "responseTarget": 5,
+        "conversionTarget": 1
+      },
+      {
+        "icp": "Interior Designers and Architects",
+        "outreachTarget": 8,
+        "responseTarget": 2,
+        "conversionTarget": 1
+      },
+      {
+        "icp": "Government PWD and Municipal Buyers",
+        "outreachTarget": 2,
+        "responseTarget": 1,
+        "conversionTarget": 0
+      }
+    ],
+    "weekTargets": {
+      "contacts": 35,
+      "responses": 7,
+      "newCustomers": 2,
+      "revenueVelocityTarget": "Rs. 19,70,000/month"
+    },
+    "velocityCalculation": {
+      "currentRevenue": "Rs. 18,00,000/month",
+      "newCustomersTarget": 2,
+      "revenuePerCustomer": "Rs. 85,000/month",
+      "revenueIfTargetsHit": "Rs. 19,70,000/month",
+      "pipelineValue": "Rs. 2,55,000 (3 warm leads x Rs. 85,000)"
+    },
+    "projection90Day": {
+      "month1": "Rs. 21,25,000/month (25 accounts, adding 3 per week)",
+      "month2": "Rs. 26,35,000/month (31 accounts, designer accounts starting to contribute)",
+      "month3": "Rs. 33,15,000/month (39 accounts, first GeM order possible)"
+    },
+    "acquisitionEfficiencyTarget": {
+      "contactsPerCustomer": 9,
+      "marketBenchmark": 13,
+      "goal": "Hold at 9 contacts per customer through Week 4 — if rising above 12, switch ICP 1 outreach to site visits instead of cold WhatsApp"
+    },
+    "fridayReminder": "Check how many of Tuesday's 35 contacts replied — if response rate is below 15% (5 replies), Scout will switch Version B as the primary message next week and add a new opening line specific to the contractor's area"
+  },
+  "tab5": {
+    "opportunities": [
+      {
+        "timeline": "IMMEDIATE",
+        "timeframe": "0-3 months",
+        "title": "GeM Portal Registration — Government Supply",
+        "whatItIs": "Government e-Marketplace (gem.gov.in) is a mandatory procurement platform for all central and state government departments — any registered seller can supply marble directly to PWD, CPWD, municipalities, and central government buildings without tenders.",
+        "whatItMeans": "Rajasthan state government alone spent Rs. 1,200 crore on construction materials in FY2025. Marble and stone categories have fewer than 400 registered sellers nationwide — extremely low competition for a market this size. A single PWD order is typically Rs. 5-25 lakh. Once registered, government buyers find you — you do not have to find them.",
+        "action": "Start registration at gem.gov.in/registration/seller — takes 45 minutes, need GSTIN, Aadhar, bank account, and cancelled cheque. Rajasthan MSME helpline: 0141-2227399 for guided setup. Complete this week.",
+        "impact": "First government order typically arrives within 6-8 weeks of registration — expected value Rs. 5-15 lakh per order"
+      },
+      {
+        "timeline": "SHORT TERM",
+        "timeframe": "3-6 months",
+        "title": "Rajasthan MSME Policy 2022 — Capital Subsidy and Market Development",
+        "whatItIs": "Rajasthan MSME Policy 2022 provides capital investment subsidy of up to 25% on new plant and machinery, plus market development assistance of Rs. 1-5 lakh for first-time exporters and e-commerce sellers.",
+        "whatItMeans": "If you invest in a sample display room, a slab cutting machine, or a delivery vehicle, 25% of that cost can be reclaimed as subsidy. The market development grant covers your first IndiaMART premium listing, a professional catalogue, and exhibition participation at Stona Expo (India's largest stone trade fair held in Bangalore, next edition early 2027). This is the government paying for your marketing.",
+        "action": "Apply at rajudyog.rajasthan.gov.in — download Form MSME-1 for capital subsidy. Udyam registration is prerequisite — register free at udyamregistration.gov.in. MSME helpdesk Kishangarh: contact Ajmer district MSME office (0145-2627123).",
+        "impact": "Up to Rs. 2,50,000 subsidy on Rs. 10L capital investment + Rs. 1-5 lakh market development grant"
+      },
+      {
+        "timeline": "MEDIUM TERM",
+        "timeframe": "6-12 months",
+        "title": "PM Vishwakarma Scheme — Artisan and Craftsman Network Activation",
+        "whatItIs": "PM Vishwakarma scheme (launched 2023) provides Rs. 1-2 lakh collateral-free loans and free skill training to traditional craftsmen — including stone cutters, marble karigars, and mosaic workers who are your potential sub-vendors and referral sources.",
+        "whatItMeans": "Kishangarh has several hundred registered marble karigars and stone artisans. If you help them register for PM Vishwakarma and become their preferred marble supplier, you gain a captive distribution channel: every karigar who gets a residential project will buy their marble from you. This turns your supplier relationships into a dealer network without any dealer margin cost.",
+        "action": "Check karigar eligibility at pmvishwakarma.gov.in. Host a free registration camp at your showroom — invite local karigars, help them register. You become their supplier by default. Partner with Kishangarh Karigar Sangh if active.",
+        "impact": "50+ karigar accounts in 12 months, each ordering Rs. 15,000-40,000 per project — additional Rs. 3-5 lakh/month revenue stream"
+      },
+      {
+        "timeline": "STRATEGIC",
+        "timeframe": "12+ months",
+        "title": "Marble Export to Middle East and Southeast Asia",
+        "whatItIs": "India exports Rs. 4,200 crore of marble annually, with Kishangarh as the primary export hub. UAE, Saudi Arabia, Oman, and Singapore are the top buyers of Rajasthan marble — particularly Makrana White and Pink Rajasthani granite.",
+        "whatItMeans": "Export pricing is 2.5-3x domestic wholesale price for the same grade marble. A single export container (20 feet) of Makrana White is approximately 18 tonnes and sells for USD 12,000-18,000 (Rs. 10-15 lakh) FOB Mundra port — compared to Rs. 4-5 lakh at domestic rates. One export order per quarter doubles your effective margin on that stock.",
+        "action": "Register with EPCH (Export Promotion Council for Handicrafts) or Rajasthan Chamber of Commerce export cell. Apply for IEC code at dgft.gov.in (free, 3 days processing). Connect with freight forwarders at Mundra port for FCL quotes. First export: aim for UAE market through IndiaMART Global and Alibaba.com listing.",
+        "impact": "First export order: Rs. 10-15 lakh revenue per container. At 4 containers/year: Rs. 40-60 lakh additional annual revenue at 2.5x domestic margin"
+      }
+    ],
+    "riskWatch": [
+      {
+        "risk": "Pre-monsoon marble transport disruption (July-August)",
+        "detail": "Heavy rains in Rajasthan cause road damage on Ajmer-Jaipur NH48 and Kishangarh bypass — construction sites halt, contractors cancel or defer delivery for 6-8 weeks, creating a predictable demand gap in your revenue curve.",
+        "defence": "Pre-sell July-August stock at a 5% discount in June — contractors who book now get guaranteed pre-monsoon rate locked in. Use monsoon weeks to build your GeM portal listing and expand your architect WhatsApp list for the September construction season surge."
+      },
+      {
+        "risk": "Single large account concentration",
+        "detail": "If any 1 account represents more than 15% of your monthly revenue (Rs. 2.7L+) and goes quiet, your revenue drops significantly in a single month — this is your current risk with 22 accounts where likely 4-5 are doing 60% of the volume.",
+        "defence": "This week: identify your top 5 accounts by last 3 months billing. For each, ask directly: any concerns with supply? Any new project they need support on? Proactive account management on your top 5 is more valuable than 35 cold outreach contacts."
+      }
+    ],
+    "festivalCampaign": {
+      "festival": "Diwali 2026",
+      "weeksAway": 18,
+      "messages": {
+        "week4before": "Diwali se pehle renovation wale customers ke liye special: Makrana White aur Italian Beige marble on priority delivery. 4 hafte mein tile floor + bathroom complete — guarantee. Abhi book karo, festival season ka rate lock karo. Call/WhatsApp: [your number]",
+        "week3before": "Diwali renovation rush shuru ho rahi hai. Hamare paas abhi bhi 3 premium Makrana White batches available hain — ek hafte mein delivery. Jo contractors ne pehle book kiya, unka kaam chal raha hai. Aapka kab shuru hoga?",
+        "week2before": "2 weeks Diwali tak — agar flooring ka kaam abhi nahi kiya to next year karo. Lekin jo kal order dega, kal delivery ki guarantee hai. Limited stock: Makrana White Grade A — 500 sq.ft remaining.",
+        "week1before": "Diwali ki hardik shubhkamnayein advance mein! Ek kaam: apne next project ke liye Diwali ke baad ka delivery slot book karo aaj. New Year season mein marble rates 10% upar jaate hain — aaj ki booking = aaj ka rate.",
+        "festivalDay": "Diwali Mubarak! Sharma Marble Traders ki taraf se aap sabko aur aapke parivaar ko Diwali ki bahut bahut shubhkamnayein. Showroom 3 din ke liye band — 29 October se khulega. Naye project ke liye ready hain hum!",
+        "postFestival": "Showroom open hai! Post-Diwali renovation season shuru — January tak construction sites ful ho jaate hain. Next 30 days ki delivery slots available hain abhi. First come first serve. WhatsApp karo: [your number]"
+      }
+    }
+  }
+};
+
+/* ─────────────────────────────────────────────────────────────
+   BUILD scout_pending_result AND LOAD INTO LOCALSTORAGE
+───────────────────────────────────────────────────────────── */
+var scoutOutputString = JSON.stringify(sampleJSON);
+
+var resultObj = {
+  weekNumber:     1,
+  timestamp:      new Date().toISOString(),
+  scoutOutput:    scoutOutputString,
+  revenueVelocity: null,
+  acquisitionEff:  null,
+  momentumScore:   0,
+  totalContacts:   0,
+  totalResponses:  0,
+  totalCustomers:  0,
+  onboardContext:  "Sharma Marble Traders, Kishangarh — marble wholesale, Rs. 18L/month, 22 accounts",
+  businessData: {
+    businessName:    "Sharma Marble Traders",
+    businessType:    "Marble Wholesale",
+    location:        "Kishangarh, Ajmer, Rajasthan",
+    city:            "Kishangarh",
+    monthlyRevenue:  "18,00,000",
+    avgTicket:       "85000",
+    targetCustomer:  "Construction contractors and interior designers"
+  }
+};
+
+localStorage.setItem('scout_pending_result', JSON.stringify(resultObj));
+localStorage.setItem('scout_week_number', '1');
+
+/* Fake session so result.html auth check passes */
+if (!localStorage.getItem('g7_session_token')) {
+  localStorage.setItem('g7_session_token', 'test-token-sharma-marble');
+  localStorage.setItem('g7_session_name', 'Sharma Marble Traders');
+}
+
+/* Redirect to result page */
+window.location.href = 'scout/result.html';
+</script>
+</body>
+</html>
