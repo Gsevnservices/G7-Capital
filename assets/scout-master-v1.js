@@ -4750,13 +4750,22 @@ Output this exact JSON structure:
   "location": "[Area, City, State]",
   "date": "[Generated date]",
   "headline": {
-    "revenueVelocity": "₹[X]/month",
-    "revenueVelocityNote": "[One line explanation]",
+    "revenueVelocity": "₹[X]/month added",
+    "revenueVelocityNote": "[How calculated: e.g. 3 new customers × ₹85,000/order × 2 orders/month = ₹5,10,000 added monthly]",
     "acquisitionEfficiency": "[X] contacts",
     "acquisitionEfficiencyNote": "[Benchmark comparison]",
     "momentumScore": 0,
     "momentumNote": "First week — baseline set. Come back Friday to see your score grow."
   },
+
+REVENUE VELOCITY RULES:
+— This is NOT current revenue
+— This is projected NEW revenue added from Scout's acquisition plan
+— Calculate as:
+  (new customers per month target) × (average revenue per customer) × (purchase frequency per month)
+— Show the calculation in the note field
+— Example for marble: "3 new contractors × ₹85,000 × 2 orders = ₹5,10,000 added"
+— Example for gym: "8 new members × ₹2,500/month = ₹20,000 added"
   "tab1": {
     "honestAssessment": "[One paragraph. 3-5 sentences. One specific problem with current approach. Ends connecting to Scout plan.]",
     "unfairAdvantage": "[One paragraph. 3 sentences max. The single most powerful competitive advantage.]",
