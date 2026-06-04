@@ -4823,8 +4823,8 @@ REVENUE VELOCITY RULES:
         "type": "primary",
         "channel": "[WhatsApp/LinkedIn/Email/In-person]",
         "language": "[Hindi/Hinglish/English]",
-        "versionA": "[Complete ready-to-send message Version A]",
-        "versionB": "[Complete ready-to-send message Version B — different angle]",
+        "versionA": "[Complete ready-to-send message — relationship/social proof angle. Opens with how many similar customers already use you. Soft close.]",
+        "versionB": "[Complete ready-to-send message — ROI/numbers angle. Opens with a specific financial calculation showing what they are losing. Direct close. MUST be as long and complete as Version A. NEVER empty or null.]",
         "followupDay3": "[Day 3 follow-up message]",
         "followupDay7": "[Day 7 final message]"
       },
@@ -4855,6 +4855,40 @@ REVENUE VELOCITY RULES:
       {"theySay": "[Objection 5]", "youSay": "[Response 5]"}
     ]
   },
+
+VERSION A AND VERSION B RULES (ICP 1 PRIMARY MESSAGE):
+Both versions are MANDATORY. versionB must NEVER be empty or null.
+
+VERSION A — Lead with relationship/trust:
+— Opens with social proof or local connection
+— "[X] contractors/clients already use us" OR references a local landmark/community
+— Soft close: "worth a quick call?" / "ek baar try karein?"
+— Tone: warm, community-based, low pressure
+
+VERSION B — Lead with ROI/numbers:
+— Opens with a specific financial calculation
+— "If you are buying [product] at [X] rate, you are paying [Y] more than [direct] price"
+— Direct close: "I can show you the difference in 5 minutes" / "5 minute mein compare karwa deta hoon"
+— Tone: analytical, direct, no small talk
+
+The two versions MUST be genuinely different:
+— Different opening hook (first sentence must be completely different)
+— Different benefit emphasis (relationship vs money)
+— Different call to action (soft vs direct)
+— Different length is acceptable but both must be complete, usable messages
+
+EXAMPLES OF CORRECT A/B PAIRS:
+
+Marble wholesale (Hindi, WhatsApp):
+VERSION A: "Namaste ji! 22 contractors Kishangarh mandi mein hamare saath kaam kar rahe hain.
+48 ghante delivery, mill-direct rate. Aapke project ke liye ek baar try karein?
+- Rahul Sharma, Sharma Marble, [number]"
+VERSION B: "Namaste ji! Agar 1000 sq.ft marble kisi dealer se le rahe hain to Rs. 15,000-20,000 extra pay kar rahe hain versus mill-direct rate.
+Ek comparison karwa deta hoon — 5 minute. WhatsApp karen: [number]"
+
+Digital agency (English, LinkedIn):
+VERSION A: "Hi — 14 funded startups in Bengaluru use us for performance marketing. Average CAC dropped 34% in first quarter. Worth a 20-minute call?"
+VERSION B: "Hi — most funded startups burn their first 90 days figuring out which channels work. We run that experiment for you in 2 weeks. Interested in seeing the data?"
   "tab3": {
     "weeklyFocus": "[One sentence — what matters most this week]",
     "days": [
