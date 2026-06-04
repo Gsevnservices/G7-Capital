@@ -501,8 +501,9 @@ function saveScoutResult(rawOutput, weekNumber) {
   }
   localStorage.setItem('scout_history', JSON.stringify(history));
 
-  // Advance the week counter
+  // Advance the week counter and clear the scorecard checklist for the new week
   localStorage.setItem('scout_week_number', String(weekNumber));
+  localStorage.removeItem('scout_week_checklist');
 
   // ── STREAK TRACKING ────────────────────────────────────────
   // Streak = consecutive weeks with a check-in.
