@@ -1164,35 +1164,62 @@ function renderTab1JSON(tab1) {
     var confLabel  = confidence === 'HIGH' ? 'HIGH CONFIDENCE' : confidence === 'MEDIUM' ? 'MEDIUM CONFIDENCE' : confidence === 'LOW' ? 'LOW CONFIDENCE — verify first' : '';
 
     html += '<div class="icp-card">';
+
+    /* Card header: badge + title + confidence badge */
     html += '<div class="icp-card-header">';
     html += '<div class="icp-badge' + (isPriority ? ' priority' : '') + '">' + (isPriority ? '⭐ Highest Priority' : 'ICP ' + (idx + 1)) + '</div>';
     html += '<div class="icp-title">' + escHtml(icp.name || 'ICP ' + (idx + 1)) + '</div>';
     if (confClass) html += '<div class="conf-badge ' + confClass + '">' + confLabel + '</div>';
     html += '</div>';
 
-    if (icp.whoExactly) {
-      html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Who Exactly</div>';
-      html += '<div class="icp-body">' + escHtml(icp.whoExactly) + '</div></div>';
-    }
-    if (icp.whyNow) {
-      html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Why They Buy Now</div>';
-      html += '<div class="icp-body">' + escHtml(icp.whyNow) + '</div></div>';
-    }
-    if (icp.whereToFind) {
-      html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Where to Find Them</div>';
-      html += '<div class="icp-body">' + escHtml(icp.whereToFind) + '</div></div>';
+    /* Confidence reason — shown below header in small muted text */
+    if (icp.confidenceReason) {
+      html += '<div style="font-size:10px;color:var(--grey2);letter-spacing:.04em;margin-bottom:16px;margin-top:-4px">' + escHtml(icp.confidenceReason) + '</div>';
     }
 
+    /* Body content — three possible formats:
+       Full ICPs  (1 & 2): whoExactly / whyNow / whereToFind sub-sections
+       Summary ICP (3):     summary field (may contain \n line breaks)
+       Fallback:            render whatever fields exist */
+    if (icp.whoExactly || icp.whyNow || icp.whereToFind) {
+      if (icp.whoExactly) {
+        html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Who Exactly</div>';
+        html += '<div class="icp-body">' + escHtml(icp.whoExactly) + '</div></div>';
+      }
+      if (icp.whyNow) {
+        html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Why They Buy Now</div>';
+        html += '<div class="icp-body">' + escHtml(icp.whyNow) + '</div></div>';
+      }
+      if (icp.whereToFind) {
+        html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Where to Find Them</div>';
+        html += '<div class="icp-body">' + escHtml(icp.whereToFind) + '</div></div>';
+      }
+    } else if (icp.summary) {
+      /* Summary field — convert \n to <br> so bullet points render correctly */
+      html += '<div class="icp-body" style="margin-bottom:14px">' + escHtml(icp.summary).replace(/\n/g, '<br>') + '</div>';
+    }
+
+    /* Meta row: volume / conversion / revenue */
     if (icp.volumeEstimate || icp.conversionProbability || icp.revenuePerCustomer) {
       html += '<div class="icp-meta-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border2)">';
-      if (icp.volumeEstimate)        html += '<div class="icp-meta"><strong>Volume / Month</strong>'   + escHtml(icp.volumeEstimate) + '</div>';
-      if (icp.conversionProbability) html += '<div class="icp-meta"><strong>Conversion</strong>'       + escHtml(icp.conversionProbability) + '</div>';
-      if (icp.revenuePerCustomer)    html += '<div class="icp-meta"><strong>Revenue / Customer</strong>' + escHtml(icp.revenuePerCustomer) + '</div>';
+      if (icp.volumeEstimate)        html += '<div class="icp-meta"><strong>Volume / Month</strong>'      + escHtml(icp.volumeEstimate) + '</div>';
+      if (icp.conversionProbability) html += '<div class="icp-meta"><strong>Conversion</strong>'          + escHtml(icp.conversionProbability) + '</div>';
+      if (icp.revenuePerCustomer)    html += '<div class="icp-meta"><strong>Revenue / Customer</strong>'  + escHtml(icp.revenuePerCustomer) + '</div>';
       html += '</div>';
     }
+
+    /* Switch trigger */
     if (icp.switchTrigger) {
       html += '<div style="margin-top:12px;font-size:11px;color:var(--grey2);font-style:italic">Switch trigger: ' + escHtml(icp.switchTrigger) + '</div>';
     }
+
+    /* LOW confidence explanation note */
+    if (confidence === 'LOW') {
+      html += '<div style="margin-top:16px;padding:10px 14px;background:rgba(138,136,128,0.06);border-left:2px solid rgba(138,136,128,0.3);font-size:11px;color:var(--grey2);line-height:1.65">';
+      html += 'LOW CONFIDENCE means Scout inferred this ICP from market patterns — not from your onboarding inputs. Verify with 5 customer conversations before investing time here.';
+      html += '</div>';
+    }
+
     html += '</div>'; /* /icp-card */
   });
 
