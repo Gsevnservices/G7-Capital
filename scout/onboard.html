@@ -133,6 +133,48 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 @keyframes loadProgress{0%{width:0%}50%{width:65%}80%{width:86%}100%{width:94%}}
 .loading-message{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--white)}
 .loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
+
+/* ── ONBOARD TWO-COLUMN LAYOUT ── */
+.onboard-layout{display:grid;grid-template-columns:1fr 320px;gap:32px;max-width:1100px;margin:0 auto;padding:0 24px;align-items:start}
+.onboard-score-col{position:sticky;top:104px}
+@media(max-width:900px){
+  .onboard-layout{grid-template-columns:1fr;padding:0}
+  .onboard-score-col{position:fixed;bottom:0;left:0;right:0;top:auto;z-index:100;padding:12px 16px;background:var(--black2);border-top:1px solid var(--border)}
+  .onboard-form-col{padding-bottom:72px}
+}
+
+/* ── QUALITY PANEL ── */
+.quality-panel{background:var(--black2);border:1px solid var(--border);border-radius:8px;padding:24px;font-family:'Tenor Sans',sans-serif}
+.qp-header{margin-bottom:20px}
+.qp-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.qp-subtitle{font-size:12px;opacity:.5;line-height:1.4;color:var(--white)}
+.qp-score-ring{display:flex;align-items:baseline;gap:4px;margin-bottom:8px}
+.qp-score-number{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--gold);line-height:1;transition:all .3s ease}
+.qp-score-max{font-size:16px;opacity:.4;color:var(--white)}
+.qp-label{font-size:12px;color:var(--white);opacity:.6;margin-bottom:12px;min-height:18px;transition:all .3s}
+.qp-bar-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:24px}
+.qp-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+.qp-dimensions{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.qp-dim{display:flex;align-items:flex-start;gap:10px}
+.qp-dim-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;transition:all .3s}
+.qp-dim-dot.empty{background:var(--border)}
+.qp-dim-dot.partial{background:#C9A84C;opacity:.5}
+.qp-dim-dot.full{background:var(--gold);box-shadow:0 0 6px rgba(201,168,76,0.4)}
+.qp-dim-text{flex:1;min-width:0}
+.qp-dim-label{font-size:11px;color:var(--white);opacity:.8;margin-bottom:2px}
+.qp-dim-hint{font-size:10px;color:var(--white);opacity:.4;line-height:1.4;transition:all .3s}
+.qp-dim-hint.improved{color:var(--gold);opacity:.7}
+.qp-dim-score{font-size:11px;color:var(--white);opacity:.5;flex-shrink:0}
+.qp-output-preview{font-size:11px;color:var(--white);opacity:.6;padding-top:16px;border-top:1px solid var(--border)}
+.qp-output-preview strong{color:var(--gold);opacity:1}
+@media(max-width:900px){
+  .quality-panel{border:none;border-radius:0;padding:8px 0;display:flex;align-items:center;gap:16px;background:transparent}
+  .qp-header,.qp-dimensions,.qp-output-preview{display:none}
+  .qp-score-ring{margin-bottom:0}
+  .qp-score-number{font-size:28px}
+  .qp-label{margin-bottom:0;font-size:11px}
+  .qp-bar-wrap{flex:1;margin-bottom:0;height:2px}
+}
 </style>
 </head>
 <body>
@@ -169,6 +211,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   Tip: More specific details = more hyper-local Scout output
 </div>
 
+<!-- ONBOARD LAYOUT: form column + quality panel -->
+<div class="onboard-layout">
+<div class="onboard-form-col">
 <!-- FORM -->
 <div class="form-wrap">
 
@@ -425,6 +470,85 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   </div>
 
 </div><!-- /form-wrap -->
+</div><!-- /onboard-form-col -->
+
+<!-- QUALITY SCORE PANEL -->
+<div class="onboard-score-col">
+  <div class="quality-panel" id="qualityPanel">
+
+    <div class="qp-header">
+      <div class="qp-title">Input Quality</div>
+      <div class="qp-subtitle">Better inputs = more specific output</div>
+    </div>
+
+    <div class="qp-score-ring">
+      <div class="qp-score-number" id="qpScoreNumber">0</div>
+      <div class="qp-score-max">/10</div>
+    </div>
+
+    <div class="qp-label" id="qpLabel">Start filling the form</div>
+
+    <div class="qp-bar-wrap">
+      <div class="qp-bar-fill" id="qpBarFill" style="width:0%"></div>
+    </div>
+
+    <div class="qp-dimensions" id="qpDimensions">
+
+      <div class="qp-dim" id="qdBusiness">
+        <div class="qp-dim-dot empty"></div>
+        <div class="qp-dim-text">
+          <div class="qp-dim-label">Business description</div>
+          <div class="qp-dim-hint" id="qhBusiness">What exactly do you sell?</div>
+        </div>
+        <div class="qp-dim-score" id="qsBusiness">0/2</div>
+      </div>
+
+      <div class="qp-dim" id="qdLocation">
+        <div class="qp-dim-dot empty"></div>
+        <div class="qp-dim-text">
+          <div class="qp-dim-label">Location + landmarks</div>
+          <div class="qp-dim-hint" id="qhLocation">Add specific landmarks</div>
+        </div>
+        <div class="qp-dim-score" id="qsLocation">0/2</div>
+      </div>
+
+      <div class="qp-dim" id="qdCustomer">
+        <div class="qp-dim-dot empty"></div>
+        <div class="qp-dim-text">
+          <div class="qp-dim-label">Customer detail</div>
+          <div class="qp-dim-hint" id="qhCustomer">Describe your best customers</div>
+        </div>
+        <div class="qp-dim-score" id="qsCustomer">0/2</div>
+      </div>
+
+      <div class="qp-dim" id="qdCompetitor">
+        <div class="qp-dim-dot empty"></div>
+        <div class="qp-dim-text">
+          <div class="qp-dim-label">Competitor insight</div>
+          <div class="qp-dim-hint" id="qhCompetitor">Name a competitor</div>
+        </div>
+        <div class="qp-dim-score" id="qsCompetitor">0/2</div>
+      </div>
+
+      <div class="qp-dim" id="qdContext">
+        <div class="qp-dim-dot empty"></div>
+        <div class="qp-dim-text">
+          <div class="qp-dim-label">Seasonal + channel context</div>
+          <div class="qp-dim-hint" id="qhContext">Add seasonal patterns</div>
+        </div>
+        <div class="qp-dim-score" id="qsContext">0/2</div>
+      </div>
+
+    </div><!-- /qp-dimensions -->
+
+    <div class="qp-output-preview" id="qpOutputPreview">
+      Scout output quality: <strong id="qpOutputLabel">Basic</strong>
+    </div>
+
+  </div><!-- /quality-panel -->
+</div><!-- /onboard-score-col -->
+
+</div><!-- /onboard-layout -->
 
 <!-- QUALITY GATE MODAL — shown when overall score ≤ 4 -->
 <div class="qg-modal" id="qualityGateModal">
@@ -477,6 +601,7 @@ window.addEventListener('DOMContentLoaded', function() {
   renderProgress(currentSection);
   initCursor();
   initQualityScoring();
+  initQualityPanel();
 });
 
 /* ─── LOGOUT ─── */
@@ -993,6 +1118,123 @@ function hideQualityModal() {
 /* ─── CLEAR ERROR ON INPUT ─── */
 document.addEventListener('input',  function(e){ e.target.classList.remove('error'); });
 document.addEventListener('change', function(e){ e.target.classList.remove('error'); });
+
+/* ─── QUALITY PANEL — LIVE SCORE ─── */
+
+function updateQualityPanel() {
+  var whatYouSell   = (document.getElementById('whatYouSell')   || {}).value || '';
+  var location      = (document.getElementById('location')      || {}).value || '';
+  var landmark1     = (document.getElementById('landmark1')     || {}).value || '';
+  var bestCustomers = (document.getElementById('bestCustomers') || {}).value || '';
+  var comp1name     = (document.getElementById('comp1name')     || {}).value || '';
+  var comp1worse    = (document.getElementById('comp1worse')    || {}).value || '';
+  var bestMonths    = (document.getElementById('bestMonths')    || {}).value || '';
+  var channelChecked = document.querySelectorAll('input[type=checkbox]:checked').length > 0;
+
+  /* D1 — Business description */
+  var dBusiness = whatYouSell.length === 0 ? 0 : whatYouSell.length < 80 ? 1 : 2;
+
+  /* D2 — Location + landmarks */
+  var dLocation = !location.trim() ? 0 : !landmark1.trim() ? 1 : 2;
+
+  /* D3 — Customer detail */
+  var custWords = /year|age|profession|officer|teacher|contractor|colony|near|works|lives|aged|runs/i;
+  var dCustomer = bestCustomers.length === 0 ? 0
+    : (bestCustomers.length < 60 && !custWords.test(bestCustomers)) ? 1 : 2;
+
+  /* D4 — Competitor insight */
+  var dCompetitor = !comp1name.trim() ? 0 : !comp1worse.trim() ? 1 : 2;
+
+  /* D5 — Seasonal + channel */
+  var hasBestMonths = !!bestMonths.trim();
+  var dContext = (!hasBestMonths && !channelChecked) ? 0
+    : (!hasBestMonths || !channelChecked) ? 1 : 2;
+
+  var total = dBusiness + dLocation + dCustomer + dCompetitor + dContext;
+
+  /* Update score number and bar */
+  var numEl  = document.getElementById('qpScoreNumber');
+  var fillEl = document.getElementById('qpBarFill');
+  if (numEl)  numEl.textContent        = total;
+  if (fillEl) fillEl.style.width       = (total * 10) + '%';
+
+  /* Update label */
+  var labels = [
+    'Start filling the form',      /* 0 */
+    'Start filling the form',      /* 1 */
+    'Start filling the form',      /* 2 */
+    'Basic — Scout will make assumptions',  /* 3 */
+    'Basic — Scout will make assumptions',  /* 4 */
+    'Developing — add more detail',         /* 5 */
+    'Developing — add more detail',         /* 6 */
+    'Good — Scout can target precisely',    /* 7 */
+    'Good — Scout can target precisely',    /* 8 */
+    'Excellent — hyper-local output ready', /* 9 */
+    'Excellent — hyper-local output ready'  /* 10 */
+  ];
+  var labelEl = document.getElementById('qpLabel');
+  if (labelEl) labelEl.textContent = labels[total] || '';
+
+  /* Update output quality label */
+  var outLabels = ['Basic','Basic','Basic','Basic','Basic','Good','Good','Targeted','Targeted','Hyper-local','Hyper-local'];
+  var outEl = document.getElementById('qpOutputLabel');
+  if (outEl) outEl.textContent = outLabels[total] || 'Basic';
+
+  /* Update each dimension row */
+  updateDim('Business', dBusiness, [
+    'Describe what exactly you sell — include product names and price range',
+    'Add your price range for revenue velocity calculation',
+    '✓ Good detail'
+  ]);
+  updateDim('Location', dLocation, [
+    'Enter your area and city',
+    'Add a nearby landmark — Scout uses this to find local ICPs',
+    '✓ Location anchored'
+  ]);
+  updateDim('Customer', dCustomer, [
+    'Describe who buys from you — age, job, where they live',
+    'Add where they live or work for more specific targeting',
+    '✓ Customer profile strong'
+  ]);
+  updateDim('Competitor', dCompetitor, [
+    'Name one competitor — even a general description works',
+    'Add what you do better for switch trigger messages',
+    '✓ Competitor mapped'
+  ]);
+  updateDim('Context', dContext, [
+    'Select channels and best months for seasonal intelligence',
+    'Add your best months for festival campaign planning',
+    '✓ Seasonal context added'
+  ]);
+}
+
+function updateDim(name, score, hints) {
+  var dotEl   = document.querySelector('#qd' + name + ' .qp-dim-dot');
+  var hintEl  = document.getElementById('qh' + name);
+  var scoreEl = document.getElementById('qs' + name);
+  if (dotEl)   dotEl.className  = 'qp-dim-dot ' + (score === 0 ? 'empty' : score === 1 ? 'partial' : 'full');
+  if (hintEl)  { hintEl.textContent = hints[score] || ''; hintEl.className = 'qp-dim-hint' + (score === 2 ? ' improved' : ''); }
+  if (scoreEl) scoreEl.textContent = score + '/2';
+}
+
+function initQualityPanel() {
+  /* Wire input/change events for all scored fields */
+  ['whatYouSell','location','landmark1','landmark2','bestCustomers',
+   'comp1name','comp1worse','bestMonths','seasonalEvents'
+  ].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input',  updateQualityPanel);
+      el.addEventListener('change', updateQualityPanel);
+    }
+  });
+  /* Wire channel checkboxes */
+  document.querySelectorAll('input[type=checkbox]').forEach(function(cb) {
+    cb.addEventListener('change', updateQualityPanel);
+  });
+  /* Initial render */
+  updateQualityPanel();
+}
 </script>
 </body>
 </html>
