@@ -7105,6 +7105,24 @@ If the output feels like it was generated
 by a tool that has never met this business
 — rewrite it until it doesn't.
 
+OUTPUT LENGTH RULES:
+The complete JSON output must be complete.
+Never truncate any field.
+Never use "..." or "[continued]" or "[truncated]" shortcuts.
+Never stop mid-object or mid-array.
+The closing structure }}} must always be present and valid.
+Every message field must be the full message — not a partial.
+If output is getting long, keep all fields but make each
+value more concise. Priority order if compression needed:
+1. Keep all structural fields — never omit a key
+2. Keep all message fields complete — never shorten a copy-paste message
+3. Shorten explanatory text fields (likelyReason, purpose, overview)
+4. Never shorten message, winBackOffer.offerMessage, or any
+   field the user will copy and send directly
+The output is used by a real business owner who copies these
+messages and sends them. An incomplete message cannot be sent.
+A missing field breaks the UI. Completeness is not optional.
+
 WHATSAPP CALENDAR RULES:
 — Every message under 100 words. Optimal 50-80 words.
 — Correct language for market type:
