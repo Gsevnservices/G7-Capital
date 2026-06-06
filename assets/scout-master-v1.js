@@ -6357,6 +6357,17 @@ No markdown. No explanation.
 The ENTIRE response must be parseable
 by JSON.parse().
 
+CRITICAL: The JSON must be complete and
+valid. Never stop mid-output. Always close
+every bracket and brace. The last character
+of your response must be }. If content
+is getting long, make each field more
+concise but never omit a field and never
+leave the JSON unclosed. A truncated JSON
+is completely unusable — a shorter complete
+JSON is always better than a longer
+truncated one.
+
 Output this exact JSON structure:
 
 {

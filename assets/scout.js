@@ -60,7 +60,7 @@ async function callScout(businessContext) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 8000,
+        max_tokens: 12000,
         system: [
           {
             type: 'text',
@@ -283,7 +283,7 @@ async function callScoutCheckin(checkinData) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 6000,
         system: [
           {
             type: 'text',
