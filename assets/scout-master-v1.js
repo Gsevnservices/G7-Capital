@@ -6565,6 +6565,112 @@ VERSION B: "Hi — most funded startups burn their first 90 days figuring out wh
       "competitor": "[Named competitor from onboarding]",
       "likelyDoing": "[What they typically do this season]",
       "yourResponse": "[One specific counter-action]"
+    },
+    "whatsappCalendar": {
+      "instructions": "[One sentence on how to use — copy each message at the suggested time, send to the list specified, test as written before editing]",
+      "lists": {
+        "list1": {
+          "name": "[Primary broadcast list name — e.g. Existing customer list or Colony WhatsApp groups]",
+          "size": "[Estimated size based on onboarding data — e.g. 12–25 contacts]",
+          "howToCreate": "[One line: how to build this list if they do not have it yet]"
+        },
+        "list2": {
+          "name": "[Second list type — e.g. Warm prospects or ICP-specific contacts not yet customers]",
+          "size": "[Estimated size — e.g. 50–150 contacts]",
+          "howToCreate": "[How to build it — e.g. LinkedIn connections you have exchanged numbers with]"
+        },
+        "list3": {
+          "name": "[Third list — e.g. Referral network, partners, connectors, or accelerator contacts]",
+          "size": "[Estimated size — e.g. 20–50 contacts]",
+          "howToCreate": "[How to build it — e.g. Add anyone who can refer clients but is not a client themselves]"
+        }
+      },
+      "week1": [
+        {
+          "day": "Monday",
+          "time": "[Best send time for this market type — e.g. 9:00 AM for B2B, 7:00 PM for consumer]",
+          "sendTo": "list1",
+          "listName": "[Human readable list name]",
+          "message": "[Complete copy-paste ready WhatsApp message. Correct language for market type. References actual business name and at least one local landmark or area name. Under 100 words. One clear ask at the end. Week 1 theme: awareness and value — establish why you exist and what you know.]",
+          "purpose": "[One line: what this message is designed to achieve]"
+        },
+        {
+          "day": "Wednesday",
+          "time": "[Time]",
+          "sendTo": "list2",
+          "listName": "[Name]",
+          "message": "[Message — different hook from Monday. Same week 1 theme: awareness and value. Different opening word or phrase. References something the ICP cares about specifically.]",
+          "purpose": "[Purpose]"
+        },
+        {
+          "day": "Friday",
+          "time": "[Time]",
+          "sendTo": "list1",
+          "listName": "[Name]",
+          "message": "[Week 1 closing message. Soft ask or useful resource. Never repeats Monday or Wednesday hook.]",
+          "purpose": "[Purpose]"
+        }
+      ],
+      "week2": [
+        {
+          "day": "Tuesday",
+          "time": "[Time]",
+          "sendTo": "list2",
+          "listName": "[Name]",
+          "message": "[Week 2 theme: social proof. Mention a specific result, a real number, or a customer outcome. Different hook from all week 1 messages. Never use customer names without permission — describe them by type instead.]",
+          "purpose": "[Purpose]"
+        },
+        {
+          "day": "Thursday",
+          "time": "[Time]",
+          "sendTo": "list1",
+          "listName": "[Name]",
+          "message": "[Social proof continued. Different specific proof point from Tuesday. Could be a volume number, a time saved, or a problem solved for someone similar to the recipient.]",
+          "purpose": "[Purpose]"
+        }
+      ],
+      "week3": [
+        {
+          "day": "Monday",
+          "time": "[Time]",
+          "sendTo": "list3",
+          "listName": "[Name]",
+          "message": "[Week 3 theme: seasonal or occasion. If a festival falls within the next 30 days use festival angle. Otherwise use seasonal business context — fiscal quarter, academic year, or market trend relevant to this business type. Never repeat previous hooks.]",
+          "purpose": "[Purpose]"
+        },
+        {
+          "day": "Friday",
+          "time": "[Time]",
+          "sendTo": "list2",
+          "listName": "[Name]",
+          "message": "[Seasonal message continued or end-of-week value message. Different angle from Monday. Could be an insight relevant to what is happening in the market this month.]",
+          "purpose": "[Purpose]"
+        }
+      ],
+      "week4": [
+        {
+          "day": "Wednesday",
+          "time": "[Time]",
+          "sendTo": "list1",
+          "listName": "[Name]",
+          "message": "[Week 4 theme: referral ask. Softer broadcast version of the referral activation message. Designed for a list of existing customers not a single person. Frame as sharing an opportunity not asking a favour.]",
+          "purpose": "[Purpose]"
+        },
+        {
+          "day": "Friday",
+          "time": "[Time]",
+          "sendTo": "list2",
+          "listName": "[Name]",
+          "message": "[Month 1 closing message. Share what has been achieved this month in one specific number or outcome. Seed what is coming next month. Creates anticipation and retention. Never sounds like a marketing email — sounds like a person wrapping up a month.]",
+          "purpose": "[Purpose]"
+        }
+      ],
+      "timingRules": {
+        "bestDays": "[Which days work best for this business type and market — e.g. Tuesday and Thursday for B2B, Monday and Friday for retail]",
+        "bestTimes": "[Best send windows for this customer type — e.g. 9–10 AM and 7–8 PM for consumer, 12–1 PM for office workers, 9–10 AM for startup founders]",
+        "avoidDays": "[Days to never send for this market — e.g. Sunday morning for traditional markets, Monday before 9 AM for anyone, Saturday afternoon for B2B]",
+        "festivalRule": "[How to adjust calendar if a major festival falls within the 4 weeks — front-load festival message to Wednesday before festival, remove that Friday message, do not add extra messages]"
+      }
     }
   },
   "tab4": {
@@ -6646,6 +6752,52 @@ VERSION B: "Hi — most funded startups burn their first 90 days figuring out wh
         "[Day 3 — Follow-up action if no response, or next batch of 3 customers to activate]",
         "[Day 7 — Review: who referred, who converted, who to escalate to Tier 2 outreach]"
       ]
+    },
+    "lostCustomerRecovery": {
+      "overview": "[One sentence: why recovering lost customers is higher ROI than acquiring new ones for this specific business type — reference the margin structure and zero acquisition cost]",
+      "segments": [
+        {
+          "segmentName": "Gone 30-60 days",
+          "likelyReason": "[Most likely reason based on business type and common churn triggers — specific not generic. e.g. Found a closer option, price objection never resolved, quality issue not followed up, founder got busy and deprioritised marketing spend]",
+          "recoveryApproach": "[One sentence: the emotional angle to take — not apologetic, not sales-y, just human and specific. Re-enter through their current problem not the old relationship]",
+          "message": "[Complete copy-paste ready WhatsApp recovery message. Correct language for market type. Under 80 words. Starts with [Name]. Never says we missed you or it has been a while. Frames as sharing news or a relevant insight. One specific reason to come back now — something that changed, improved, or is new.]",
+          "bestTimeToSend": "[Day and time — e.g. Tuesday 9:15 AM for B2B, Monday 7 PM for consumer]",
+          "expectedRecoveryRate": "25-30%"
+        },
+        {
+          "segmentName": "Gone 60-120 days",
+          "likelyReason": "[What likely happened — harder to recover, needs different angle. e.g. Moved to cheaper option, brought function in-house, had a negative experience not followed up, budget cut]",
+          "recoveryApproach": "[Different angle — reference what changed or improved since they left. Never reference how long ago they were a customer. Lead with a specific new outcome or product change.]",
+          "message": "[Recovery message — must reference one specific thing that changed or improved since last contact. Under 80 words. Starts with [Name]. No mention of the gap. Reads as a genuine update not a sales message.]",
+          "bestTimeToSend": "[Day and time]",
+          "expectedRecoveryRate": "12-18%"
+        },
+        {
+          "segmentName": "Gone 120+ days",
+          "likelyReason": "[What likely happened — probably switched permanently or had a negative experience. Treat as almost a new customer acquisition not a recovery.]",
+          "recoveryApproach": "[Re-introduction approach — value-led not relationship-led. Do not reference the past engagement at all. Offer something they cannot refuse. Lead with a specific outcome relevant to their current situation.]",
+          "message": "[Re-introduction message. Offer something concrete and time-bound. Under 80 words. Starts with [Name]. No reference to previous relationship. Reads as if reaching out for the first time with a specific reason.]",
+          "bestTimeToSend": "[Day and time]",
+          "expectedRecoveryRate": "7-10%"
+        }
+      ],
+      "howToIdentifyLostCustomers": {
+        "step1": "[How to find 30-60 day lapsed customers without a CRM — practical WhatsApp-based instruction. e.g. Open WhatsApp, scroll back 30-60 days in each client conversation, note anyone who was active then but silent now]",
+        "step2": "[How to find 60-120 day lapsed customers — e.g. Check invoicing or payment records from 2-4 months ago, cross-reference with WhatsApp to confirm silence]",
+        "step3": "[How to find 120+ day lapsed customers — e.g. Pull every client name from the past year, anyone not on active list who you have not spoken to in 4+ months]",
+        "weeklyHabit": "[Simple Friday habit to track lapsed customers going forward — e.g. Every Friday at 5 PM scroll back 45 days in WhatsApp client conversations, note anyone who was active then but silent now, add to Recovery This Month note]"
+      },
+      "revenueProjection": {
+        "estimatedLapsedCustomers": "[Estimate based on current customer count and typical churn for this business type — e.g. with 12 current clients a typical agency has 6-10 lapsed in past 12 months]",
+        "recoveryTarget": "[Realistic number to recover in first 30 days — focus on 30-60 day segment first, highest probability]",
+        "revenueImpact": "[Revenue if recovery target is hit — calculated from average transaction value or monthly retainer for this business type]",
+        "costOfCampaign": "Zero — time to send messages only"
+      },
+      "winBackOffer": {
+        "offerType": "[Specific tangible offer for lapsed customers — not vague. Must be a real deliverable: free audit, free session, free delivery, free inspection, not special offer or exclusive deal]",
+        "offerRationale": "[Why this specific offer works for this customer type and their likely reason for leaving — should directly address the most common churn trigger for this business type]",
+        "offerMessage": "[Most compelling win-back message including the specific offer. Under 80 words. Starts with [Name]. One ask. Time-bound using relative framing: this week, before end of month, if you come in on Tuesday — never open-ended.]"
+      }
     }
   },
   "tab5": {
@@ -6952,6 +7104,69 @@ by someone who:
 If the output feels like it was generated
 by a tool that has never met this business
 — rewrite it until it doesn't.
+
+WHATSAPP CALENDAR RULES:
+— Every message under 100 words. Optimal 50-80 words.
+— Correct language for market type:
+  Hindi for Tier 2/3 towns and traditional local services
+  Hinglish for Metro Suburb consumer and professional services
+  English for Metro Core B2B, funded startups, corporate ICP
+— References actual business name and at least one specific
+  landmark or area name from onboarding — never a generic city name
+— Exactly one ask per message — never two asks in one message
+— Never use: exciting offer, amazing deal, limited time, special
+  offer, exclusive, don't miss — these reduce open rates in
+  Indian WhatsApp markets
+— Sound like a person sent it not a broadcast
+  Use "I" not "we" unless it is genuinely a team business
+  Use "main" not "hum log" for Hindi messages
+— Week 1 messages: awareness and value — establish why you exist
+— Week 2 messages: social proof — specific outcomes and real numbers
+— Week 3 messages: seasonal or occasion — festival, fiscal quarter,
+  sector trend, or local market moment
+— Week 4 messages: referral and retention — referral ask on Wednesday,
+  month summary and anticipation on Friday
+— Never repeat the same hook or opening phrase twice across 4 weeks
+— Different lists receive different messages in the same week
+— list1 (existing customers) gets relationship messages
+— list2 (prospects) gets value and proof messages
+— list3 (referral network) gets ecosystem and opportunity messages
+— Festival rule: if a major festival falls within the 4-week window,
+  move that week's Wednesday or Thursday message to Tuesday before
+  the festival. Remove that week's Friday message. Do not add extra
+  messages — the festival message replaces, it does not add.
+
+LOST CUSTOMER RECOVERY RULES:
+— Never say "we missed you", "it has been a while", "we noticed
+  you haven't visited" or any variant that names the absence
+  These phrases feel accusatory or desperate in Indian relationship
+  contexts and reduce response rates significantly
+— Frame every recovery message as sharing news not chasing a person
+— Every recovery message must reference ONE specific thing that
+  changed, improved, or is new since the customer last engaged —
+  a new service, a result achieved for another client, a seasonal
+  moment, a market change relevant to their business
+  Never send a recovery message without this hook
+— Always start with [Name] — personalisation is non-negotiable
+— For Hindi messages: use ji suffix if relationship was formal,
+  bhai or didi if it was informal — match what was used before
+— 30-60 day message: can reference the existing relationship
+  ("aap hamare regular customer hain" is acceptable)
+— 60-120 day message: must lead with what changed or improved —
+  never reference how long ago they were a customer
+— 120+ day message: treat almost as a new customer
+  Do not reference the past relationship at all
+  Lead entirely with current value and a specific offer
+— Win-back offer must be specific not vague:
+  "free audit", "2 weeks free", "first session free" not "special offer"
+— Win-back offer must imply time sensitivity:
+  "is hafte aayenge toh", "before end of month", "if you come in on Tuesday"
+  Never open-ended
+— Expected recovery rates are calibrated for Indian SMB context:
+  30-60 days: 25-35% response, 15-20% re-engagement
+  60-120 days: 10-18% response, 8-12% re-engagement
+  120+ days: 5-10% response, 3-8% re-engagement
+  B2B and professional services recover at the lower end of each range
 
 ================================================================
 END OF COMPONENT 7

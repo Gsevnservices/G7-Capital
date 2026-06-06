@@ -704,6 +704,58 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .ref-action-text{font-size:12px;color:var(--white2);line-height:1.7}
 
+/* ── WHATSAPP BROADCAST CALENDAR (Tab 3) ── */
+.wac-section{margin-top:40px;padding-top:32px;border-top:1px solid var(--border2)}
+.wac-heading{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.wac-instructions{font-size:12px;color:var(--grey1);line-height:1.7;margin-bottom:24px}
+.wac-lists{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:700px){.wac-lists{grid-template-columns:1fr}}
+.wac-list-card{padding:14px 16px;border:1px solid var(--border2);background:var(--black3)}
+.wac-list-name{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.wac-list-size{font-size:11px;color:var(--grey2);margin-bottom:4px}
+.wac-list-how{font-size:10px;color:var(--grey2);line-height:1.6;display:none}
+.wac-week-block{margin-bottom:28px}
+.wac-week-label{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey2);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border2)}
+.wac-msg-card{margin-bottom:12px;border:1px solid var(--border2);background:var(--black3)}
+.wac-msg-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border2)}
+.wac-msg-meta{display:flex;flex-direction:column;gap:2px}
+.wac-msg-date{font-size:11px;color:var(--gold)}
+.wac-msg-list{font-size:10px;color:var(--grey2);letter-spacing:.03em}
+.wac-msg-body{padding:14px 16px}
+.wac-msg-text{font-size:13px;color:var(--white2);line-height:1.8;white-space:pre-wrap;margin-bottom:8px}
+.wac-msg-purpose{font-size:10px;color:var(--grey2);font-style:italic}
+.wac-timing-bar{padding:14px 16px;background:var(--black3);border:1px solid var(--border2);font-size:11px;color:var(--grey2);line-height:1.7;margin-top:4px}
+.wac-timing-bar strong{color:var(--grey1)}
+
+/* ── LOST CUSTOMER RECOVERY (Tab 4) ── */
+.lcr-section{margin-top:40px;padding-top:32px;border-top:1px solid var(--border2)}
+.lcr-heading{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.lcr-overview{font-size:13px;color:var(--grey1);line-height:1.7;margin-bottom:24px}
+.lcr-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:600px){.lcr-metrics{grid-template-columns:1fr}}
+.lcr-metric{padding:14px 16px;border:1px solid var(--border2);background:var(--black3)}
+.lcr-metric-label{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey2);margin-bottom:5px}
+.lcr-metric-val{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--gold);line-height:1.3}
+.lcr-segment{margin-bottom:14px;border:1px solid var(--border2);overflow:hidden}
+.lcr-seg-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--black3)}
+.lcr-seg-title{font-size:11px;letter-spacing:.05em;color:var(--white)}
+.lcr-seg-rate{font-size:10px;color:var(--grey2)}
+.lcr-seg-body{padding:16px}
+.lcr-seg-reason{font-size:10px;color:var(--grey2);margin-bottom:10px;line-height:1.6}
+.lcr-seg-text{font-size:13px;color:var(--white2);line-height:1.8;white-space:pre-wrap;margin-bottom:8px}
+.lcr-seg-time{font-size:10px;color:var(--grey2)}
+.lcr-winback{margin-top:20px;padding:20px;border:1px solid rgba(201,168,76,0.35);background:rgba(201,168,76,0.03)}
+.lcr-winback-label{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.lcr-winback-type{font-size:12px;color:var(--grey1);margin-bottom:12px;line-height:1.6}
+.lcr-winback-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.lcr-winback-sublabel{font-size:10px;color:var(--grey2)}
+.lcr-winback-text{font-size:13px;color:var(--white2);line-height:1.8;white-space:pre-wrap}
+.lcr-identify{margin-top:20px;padding:16px;background:var(--black3);border:1px solid var(--border2)}
+.lcr-identify-label{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey2);margin-bottom:12px}
+.lcr-identify-step{margin-bottom:8px;font-size:12px;color:var(--grey1);line-height:1.7}
+.lcr-identify-step strong{color:var(--white2)}
+.lcr-habit{margin-top:10px;padding-top:10px;border-top:1px solid var(--border2);font-size:11px;color:var(--gold);line-height:1.6}
+
 /* ── PRINT STYLES (Feature 4.3) ── */
 .print-cover{display:none}
 .print-exec-summary{display:none}
@@ -1533,6 +1585,9 @@ function renderTab3JSON(tab3) {
     html += '</div></div>';
   }
 
+  /* WhatsApp Calendar appended after existing content */
+  html += renderWhatsAppCalendar(tab3.whatsappCalendar);
+
   el.innerHTML = html || '<div class="scout-prose">(No weekly plan found)</div>';
 
   /* Restore saved checkbox state after DOM is written */
@@ -1585,6 +1640,213 @@ function updateWeekProgress() {
   var label = document.getElementById('weekProgressCount');
   if (fill)  fill.style.width  = (total > 0 ? Math.round((done / total) * 100) : 0) + '%';
   if (label) label.textContent = done + ' / ' + total + ' complete';
+}
+
+/* ── DATE CALCULATOR for WhatsApp Calendar ── */
+/* Returns "Monday 9 Jun" from week number (1-4) and day name */
+function getActualDate(weekNum, dayName) {
+  var dayMap = { Monday:1, Tuesday:2, Wednesday:3, Thursday:4, Friday:5, Saturday:6, Sunday:0 };
+  var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var today = new Date();
+  var currentDay = today.getDay(); /* 0=Sun, 1=Mon … */
+
+  /* Find the Monday that starts week 1 (this week's Monday, or today if today is Monday) */
+  var daysToMonday = (currentDay === 0) ? 1 : (currentDay === 1 ? 0 : 8 - currentDay);
+  var week1Monday = new Date(today);
+  week1Monday.setDate(today.getDate() + daysToMonday + (weekNum - 1) * 7);
+
+  /* Offset from Monday: Mon=0, Tue=1 … Sun=6 */
+  var targetDow = dayMap[dayName] !== undefined ? dayMap[dayName] : 1;
+  var offsetFromMonday = (targetDow === 0) ? 6 : targetDow - 1;
+
+  var targetDate = new Date(week1Monday);
+  targetDate.setDate(week1Monday.getDate() + offsetFromMonday);
+
+  return dayName + ' ' + targetDate.getDate() + ' ' + monthNames[targetDate.getMonth()];
+}
+
+/* ── WHATSAPP BROADCAST CALENDAR RENDERER ── */
+function renderWhatsAppCalendar(cal) {
+  if (!cal) return '';
+  var html = '';
+
+  html += '<div class="wac-section">';
+  html += '<div class="wac-heading">Your WhatsApp Calendar</div>';
+  if (cal.instructions) {
+    html += '<div class="wac-instructions">' + escHtml(cal.instructions) + '</div>';
+  }
+
+  /* Lists */
+  if (cal.lists) {
+    html += '<div class="wac-lists">';
+    var listEntries = [cal.lists.list1, cal.lists.list2, cal.lists.list3];
+    listEntries.forEach(function(list) {
+      if (!list || !list.name) return;
+      html += '<div class="wac-list-card">';
+      html += '<div class="wac-list-name">' + escHtml(list.name) + '</div>';
+      if (list.size) html += '<div class="wac-list-size">' + escHtml(list.size) + '</div>';
+      if (list.howToCreate) html += '<div class="wac-list-how">' + escHtml(list.howToCreate) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  /* 4 weeks */
+  var weeks = [
+    { key: 'week1', label: 'WEEK 1 — AWARENESS & VALUE',       num: 1 },
+    { key: 'week2', label: 'WEEK 2 — SOCIAL PROOF',             num: 2 },
+    { key: 'week3', label: 'WEEK 3 — SEASONAL & OCCASION',      num: 3 },
+    { key: 'week4', label: 'WEEK 4 — REFERRAL & RETENTION',     num: 4 }
+  ];
+
+  weeks.forEach(function(wk) {
+    var messages = cal[wk.key];
+    if (!messages || !messages.length) return;
+
+    html += '<div class="wac-week-block">';
+    html += '<div class="wac-week-label">' + escHtml(wk.label) + '</div>';
+
+    messages.forEach(function(msg, mi) {
+      if (!msg || !msg.message) return;
+      var calId = 'wac_' + wk.key + '_' + mi;
+      var dateLabel = getActualDate(wk.num, msg.day || 'Monday');
+
+      html += '<div class="wac-msg-card">';
+
+      /* Header */
+      html += '<div class="wac-msg-header">';
+      html += '<div class="wac-msg-meta">';
+      html += '<div class="wac-msg-date">' + escHtml(dateLabel) + (msg.time ? ' · ' + escHtml(msg.time) : '') + '</div>';
+      html += '<div class="wac-msg-list">Send to: ' + escHtml(msg.listName || msg.sendTo || '') + '</div>';
+      html += '</div>';
+      html += '<button class="ref-copy-btn" onclick="refCopy(\'' + calId + '\',this)">Copy</button>';
+      html += '</div>';
+
+      /* Body */
+      html += '<div class="wac-msg-body">';
+      html += '<div class="wac-msg-text" id="' + calId + '">' + escHtml(msg.message) + '</div>';
+      if (msg.purpose) {
+        html += '<div class="wac-msg-purpose">' + escHtml(msg.purpose) + '</div>';
+      }
+      html += '</div>';
+
+      html += '</div>';
+    });
+
+    html += '</div>';
+  });
+
+  /* Timing rules */
+  if (cal.timingRules) {
+    var tr = cal.timingRules;
+    html += '<div class="wac-timing-bar">';
+    if (tr.bestDays)  html += '<strong>Best days:</strong> ' + escHtml(tr.bestDays) + '<br>';
+    if (tr.bestTimes) html += '<strong>Best times:</strong> ' + escHtml(tr.bestTimes) + '<br>';
+    if (tr.avoidDays) html += '<strong>Avoid:</strong> ' + escHtml(tr.avoidDays);
+    html += '</div>';
+  }
+
+  html += '</div>'; /* end wac-section */
+  return html;
+}
+
+/* ── LOST CUSTOMER RECOVERY RENDERER ── */
+function renderLostCustomerRecovery(lcr) {
+  if (!lcr) return '';
+  var html = '';
+
+  html += '<div class="lcr-section">';
+  html += '<div class="lcr-heading">Lost Customer Recovery</div>';
+  if (lcr.overview) {
+    html += '<div class="lcr-overview">' + escHtml(lcr.overview) + '</div>';
+  }
+
+  /* Revenue projection metrics */
+  if (lcr.revenueProjection) {
+    var rp = lcr.revenueProjection;
+    var metrics = [
+      { label: 'Estimated lapsed customers', val: rp.estimatedLapsedCustomers },
+      { label: 'Recovery target (30 days)',   val: rp.recoveryTarget },
+      { label: 'Revenue if target hit',       val: rp.revenueImpact },
+      { label: 'Cost of campaign',            val: rp.costOfCampaign }
+    ];
+    html += '<div class="lcr-metrics">';
+    metrics.forEach(function(m) {
+      if (!m.val) return;
+      html += '<div class="lcr-metric">';
+      html += '<div class="lcr-metric-label">' + escHtml(m.label) + '</div>';
+      html += '<div class="lcr-metric-val">' + escHtml(m.val) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  /* 3 segments */
+  var segBorderColors = ['var(--gold)', 'rgba(201,168,76,0.55)', 'rgba(196,90,90,0.7)'];
+  (lcr.segments || []).forEach(function(seg, idx) {
+    if (!seg) return;
+    var segId = 'lcr_seg_' + idx;
+    html += '<div class="lcr-segment" style="border-left:3px solid ' + segBorderColors[idx] + '">';
+
+    /* Header */
+    html += '<div class="lcr-seg-header">';
+    html += '<div>';
+    html += '<div class="lcr-seg-title">' + escHtml(seg.segmentName || '') + '</div>';
+    if (seg.expectedRecoveryRate) {
+      html += '<div class="lcr-seg-rate">Recovery rate: ' + escHtml(seg.expectedRecoveryRate) + '</div>';
+    }
+    html += '</div>';
+    html += '<button class="ref-copy-btn" onclick="refCopy(\'' + segId + '\',this)">Copy</button>';
+    html += '</div>';
+
+    /* Body */
+    html += '<div class="lcr-seg-body">';
+    if (seg.likelyReason) {
+      html += '<div class="lcr-seg-reason">Why they left: ' + escHtml(seg.likelyReason) + '</div>';
+    }
+    html += '<div class="lcr-seg-text" id="' + segId + '">' + escHtml(seg.message || '') + '</div>';
+    if (seg.bestTimeToSend) {
+      html += '<div class="lcr-seg-time">Best time to send: ' + escHtml(seg.bestTimeToSend) + '</div>';
+    }
+    html += '</div>';
+
+    html += '</div>';
+  });
+
+  /* Win-back offer */
+  if (lcr.winBackOffer) {
+    var wb = lcr.winBackOffer;
+    var wbId = 'lcr_winback';
+    html += '<div class="lcr-winback">';
+    html += '<div class="lcr-winback-label">Win-Back Offer</div>';
+    if (wb.offerType) {
+      html += '<div class="lcr-winback-type">' + escHtml(wb.offerType) + '</div>';
+    }
+    html += '<div class="lcr-winback-row">';
+    html += '<div class="lcr-winback-sublabel">Offer message</div>';
+    html += '<button class="ref-copy-btn" onclick="refCopy(\'' + wbId + '\',this)">Copy</button>';
+    html += '</div>';
+    html += '<div class="lcr-winback-text" id="' + wbId + '">' + escHtml(wb.offerMessage || '') + '</div>';
+    html += '</div>';
+  }
+
+  /* How to identify */
+  if (lcr.howToIdentifyLostCustomers) {
+    var hti = lcr.howToIdentifyLostCustomers;
+    html += '<div class="lcr-identify">';
+    html += '<div class="lcr-identify-label">How to Find Your Lapsed Customers</div>';
+    ['step1', 'step2', 'step3'].forEach(function(step, i) {
+      if (!hti[step]) return;
+      html += '<div class="lcr-identify-step"><strong>Step ' + (i + 1) + ':</strong> ' + escHtml(hti[step]) + '</div>';
+    });
+    if (hti.weeklyHabit) {
+      html += '<div class="lcr-habit">Weekly habit: ' + escHtml(hti.weeklyHabit) + '</div>';
+    }
+    html += '</div>';
+  }
+
+  html += '</div>'; /* end lcr-section */
+  return html;
 }
 
 /* Copy referral message to clipboard */
@@ -1797,6 +2059,9 @@ function renderTab4JSON(tab4, biz) {
 
     html += '</div>'; /* end ref-engine-section */
   }
+
+  /* Lost Customer Recovery appended after referral engine */
+  html += renderLostCustomerRecovery(tab4.lostCustomerRecovery);
 
   document.getElementById('tab4Content').innerHTML = html;
 }
