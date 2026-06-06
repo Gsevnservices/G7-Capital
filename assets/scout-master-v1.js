@@ -4044,6 +4044,225 @@ calendar. A stationery shop that maps every school's academic calendar and sends
 a proactive WhatsApp to the purchase manager 3 weeks before each event will never
 lose an account — because no competitor is doing this.
 
+
+═══════════════════════════════════════════════════════
+COMPONENT 3 — REFERRAL PLAYBOOKS (ALL 30 BUSINESS TYPES)
+One playbook per business type. 5 rules each.
+These rules are injected into referralEngine generation.
+═══════════════════════════════════════════════════════
+
+REFERRAL PLAYBOOK — BT01 KIRANA / GENERAL STORE
+1. PROGRAM NAME: "Ghar Wali Dukaan" — position the store as the family's store, not just a vendor
+2. TRIGGER MOMENT: When a loyal customer makes their weekly bulk purchase — ask at payment, not arrival
+3. REWARD STRUCTURE: Referrer gets ₹50 credit on next purchase; referred customer gets ₹30 off first order above ₹300
+4. MESSAGE HOOK: "Aapke padosi bhi yahaan se khareedein toh aapko bhi faayda, unhe bhi" (if your neighbor shops here, both benefit)
+5. TIER 2 AMPLIFIER: Ask Tier 1 to add you to their neighborhood WhatsApp group and post one photo of a fresh stock arrival
+
+REFERRAL PLAYBOOK — BT02 RESTAURANT / DHABA / FOOD STALL
+1. PROGRAM NAME: "Khana Khilao, Khana Jeetao" — refer a friend, earn a free meal item
+2. TRIGGER MOMENT: After a customer finishes a satisfying meal and compliments the food — this is the highest-conversion moment
+3. REWARD STRUCTURE: Referrer gets one free chai or dessert per successful referral; referred customer gets 15% off first visit
+4. MESSAGE HOOK: "Aaj ka khana kaisa laga? Ek doston ko bhi laao — unka pehla khana thoda sasta hoga"
+5. TIER 2 AMPLIFIER: Create a small table card listing "Regulars who love us" by first name — social proof without cash
+
+REFERRAL PLAYBOOK — BT03 COACHING / TUITION CENTER
+1. PROGRAM NAME: "Padho Aur Padhao" — learn here and send your friends here
+2. TRIGGER MOMENT: After first test result improvement — parent is most receptive to referral ask at peak emotional moment
+3. REWARD STRUCTURE: Referrer (parent) gets one month fee discount ₹200–500; referred student gets first month at 20% reduced fee
+4. MESSAGE HOOK: "Aapke bacche ka result dekha? Agar aap chaahein toh apne padosi ke bacche ko bhi bhej sakte hain — unhe bhi ek mauka milega"
+5. TIER 2 AMPLIFIER: Share anonymized improvement stats ("3 students improved by 2 grades in 60 days") in parent WhatsApp group
+
+REFERRAL PLAYBOOK — BT04 SALON / BEAUTY PARLOUR
+1. PROGRAM NAME: "Sundar Laao, Sundar Pao" — bring a friend, get a free service
+2. TRIGGER MOMENT: Right after a fresh haircut or facial when the customer is looking in the mirror — confidence is highest
+3. REWARD STRUCTURE: Referrer gets one free hairwash or eyebrow threading; referred customer gets 20% off first service
+4. MESSAGE HOOK: "Kaisi lagi? Apni saheli ko bhi laana — pehli baar mein unhe discount milega, aur aapko bhi ek service free"
+5. TIER 2 AMPLIFIER: Small printed card to hand to customer: "Show this to your friend — she gets 20% off, you get a free service"
+
+REFERRAL PLAYBOOK — BT05 GYM / FITNESS CENTER
+1. PROGRAM NAME: "Fit Rahe, Saath Mein" — stay fit together
+2. TRIGGER MOMENT: At the 30-day mark when member has built a habit — before this, retention is unstable
+3. REWARD STRUCTURE: Referrer gets 15 days extension on membership; referred person gets first month at 30% off
+4. MESSAGE HOOK: "Aapko ek mahina ho gaya — ab apne kisi dost ko bhi saath laao. Aapka membership extend hoga, unka pehla mahina sasta"
+5. TIER 2 AMPLIFIER: "Batch buddies" — if two friends join same batch slot, both get the slot at group rate (natural Tier 2 pull)
+
+REFERRAL PLAYBOOK — BT06 PHARMACY / MEDICAL STORE
+1. PROGRAM NAME: "Sehat Ke Liye, Sahi Jagah" — trust-based referral, not incentive-based
+2. TRIGGER MOMENT: When a customer thanks you for correct advice or product — the trust moment, not transaction
+3. REWARD STRUCTURE: Referrer gets priority home delivery next order; referred customer gets free blood pressure or sugar check on first visit
+4. MESSAGE HOOK: "Aap yahan aate hain kyunki aapko bharosa hai. Agar aapke ghar mein koi aur bhi aaye toh unhe bhi wahi care milegi"
+5. TIER 2 AMPLIFIER: Offer a free monthly medicine reminder service — customers spread it because it solves a real problem
+
+REFERRAL PLAYBOOK — BT07 PLUMBER / ELECTRICIAN / REPAIR SERVICE
+1. PROGRAM NAME: "Ek Kaam Ho Gaya, Agle Ka Naam Do" — after one job, give next job referral
+2. TRIGGER MOMENT: Immediately after job completion when customer inspects the work and approves — ask before you leave
+3. REWARD STRUCTURE: Referrer gets ₹100–200 off next service call; referred customer gets free inspection call (no charge for first visit)
+4. MESSAGE HOOK: "Kaam theek laga? Agar aapke kisi padosi ko bhi zaroorat ho toh mera number de dijiye — unhe pehli visit free rahegi"
+5. TIER 2 AMPLIFIER: Leave a small visiting card with the customer's name written on back: "Referred by [Name]" — neighbor sees it and asks
+
+REFERRAL PLAYBOOK — BT08 GROCERY DELIVERY / HOME DELIVERY
+1. PROGRAM NAME: "Apno Ko Bhi Suvidha Do" — share the convenience with your people
+2. TRIGGER MOMENT: After the third successful delivery — customer has confirmed reliability; first-time referral ask is too early
+3. REWARD STRUCTURE: Referrer gets free delivery on next 3 orders; referred customer gets free delivery for first 2 orders
+4. MESSAGE HOOK: "Aap teen baar order kar chuke hain — aapko kaisi lagi suvidha? Agar apne kisi bhi ghar wale ko bhi chahiye toh unhe add kar lein"
+5. TIER 2 AMPLIFIER: Family account option — one referral code covers 3 family members in the same building/area
+
+REFERRAL PLAYBOOK — BT09 TAILORING / BOUTIQUE
+1. PROGRAM NAME: "Silai Achhi Lagi? Apni Saheli Ko Bhi Bejo" — word-of-mouth anchored to compliment moments
+2. TRIGGER MOMENT: When customer tries on completed garment and is visibly happy — the moment strangers comment is the ask window
+3. REWARD STRUCTURE: Referrer gets free blouse stitching with next saree order; referred customer gets 10% off first order
+4. MESSAGE HOOK: "Jab koi pooche kahaan silai karaate ho — toh mera naam lo. Unhe pehle kaam mein discount milega, aur aapko bhi ek free kaam"
+5. TIER 2 AMPLIFIER: WhatsApp status post showing finished garment (with customer permission) — attracts Tier 2 inquiries organically
+
+REFERRAL PLAYBOOK — BT10 SWEET SHOP / MITHAI
+1. PROGRAM NAME: "Meetha Baanto, Khushi Baanto" — positioned as sharing joy, not selling
+2. TRIGGER MOMENT: Before festivals — Diwali, Eid, weddings — when customers buy bulk and gift boxes
+3. REWARD STRUCTURE: Referrer gets ₹100 free mithai credit per referral; referred customer gets free 100g sample box on first order above ₹500
+4. MESSAGE HOOK: "Aap jo box dete hain doston ko — agar woh yahaan aayein aur aapka naam lein, toh aapko free mithai milegi"
+5. TIER 2 AMPLIFIER: Custom sticker on gift boxes: "Made at [Shop Name] — Ask for the family recipe box" — recipient becomes next customer
+
+REFERRAL PLAYBOOK — BT11 DRIVING SCHOOL
+1. PROGRAM NAME: "Drive Karo, Dost Ko Bhi Sikhao" — refer a learner, earn a reward
+2. TRIGGER MOMENT: On the day the student passes their driving test — peak happiness, maximum advocacy intent
+3. REWARD STRUCTURE: Referrer gets ₹300 cashback on course fee (post-completion); referred learner gets first 2 lessons free
+4. MESSAGE HOOK: "Licence mil gaya! Agar aapke kisi dost ya bhai ko bhi seekhna hai toh mere paas bhejiye — unke pehle do lessons free"
+5. TIER 2 AMPLIFIER: WhatsApp status: "Main bhi seekh gaya" (I learned too) — natural peer-to-peer pull among same age group
+
+REFERRAL PLAYBOOK — BT12 TRAVEL AGENCY
+1. PROGRAM NAME: "Saath Chalo, Saath Bachao" — travel together, save together
+2. TRIGGER MOMENT: When customer returns from trip and is posting photos or sharing stories — ask within 48 hours of return
+3. REWARD STRUCTURE: Referrer gets ₹500 credit toward next booking; referred customer gets free travel insurance on first booking
+4. MESSAGE HOOK: "Trip kaisi rahi? Agar aapke friends bhi plan kar rahe hain — unhe mera number do. Aapko ₹500 ki chhoot milegi agle trip mein"
+5. TIER 2 AMPLIFIER: Create a "Group Tour" option — if 4 people book together, all get 8% group discount (natural referral clustering)
+
+REFERRAL PLAYBOOK — BT13 MOBILE REPAIR SHOP
+1. PROGRAM NAME: "Phone Theek Kiya, Dost Ka Naam Do" — post-repair referral ask
+2. TRIGGER MOMENT: When repaired phone is handed back and customer turns it on and it works — the relief moment
+3. REWARD STRUCTURE: Referrer gets free screen cleaning + inspection next visit; referred customer gets ₹50 off first repair
+4. MESSAGE HOOK: "Phone theek ho gaya? Agar aapke kisi dost ka bhi kharaab ho toh mera number de dijiye — unhe ₹50 kam lagega"
+5. TIER 2 AMPLIFIER: Offer a free "phone health check" for any friend the customer brings in — low cost, high trust-builder
+
+REFERRAL PLAYBOOK — BT14 CATERING SERVICE
+1. PROGRAM NAME: "Khana Pasand Aaya? Agle Event Mein Hamein Yaad Karna" — event-to-event referral
+2. TRIGGER MOMENT: During the event when host receives compliments about food — guest is the natural Tier 1 referral source
+3. REWARD STRUCTURE: Referring host gets ₹500 off next event catering; referred customer gets free starter dish added to menu
+4. MESSAGE HOOK: "Jab koi pooche khana kisne banaya — toh apna number dijiye unhe. Aapko agle event mein ek dish free milegi"
+5. TIER 2 AMPLIFIER: Small elegant card on each table: "Catered by [Name] — Ask for our event menu" — every guest is a potential next client
+
+REFERRAL PLAYBOOK — BT15 SECURITY AGENCY
+1. PROGRAM NAME: "Suraksha Baato, Vishwas Baato" — share security, share trust
+2. TRIGGER MOMENT: After 3 months of incident-free service — reliability has been demonstrated, client is confident
+3. REWARD STRUCTURE: Referring client gets one free guard day per referral; referred client gets first month at 10% reduced rate
+4. MESSAGE HOOK: "Teen mahine ho gaye — aapke society mein koi problem nahi hui. Agar kisi aur building ko bhi zaroorat ho toh hamara naam le sakte hain"
+5. TIER 2 AMPLIFIER: Offer a free security audit presentation to any Residents' Welfare Association — one meeting can generate 10 referrals
+
+REFERRAL PLAYBOOK — BT16 AYURVEDIC CLINIC / NATURAL HEALTH
+1. PROGRAM NAME: "Sehat Ki Asli Dawa, Apno Ke Saath" — real health for your loved ones
+2. TRIGGER MOMENT: When a patient reports significant improvement — pain reduction, energy increase — ask them to share before momentum fades
+3. REWARD STRUCTURE: Referrer gets one free consultation; referred patient gets first consultation at 50% off
+4. MESSAGE HOOK: "Aapko fark dikh raha hai? Agar ghar mein koi aur bhi taklif mein ho toh unhe ek baar aane ko boliye — pehla session half price"
+5. TIER 2 AMPLIFIER: Patient testimonial board (with permission) with first name and condition — new visitors read and ask, Tier 2 converts naturally
+
+REFERRAL PLAYBOOK — BT17 AUTOMOBILE WORKSHOP
+1. PROGRAM NAME: "Gaadi Theek, Dost Bhi Theek" — your car is fixed, fix your friend's too
+2. TRIGGER MOMENT: After major repair when customer is relieved and grateful — oil change + small service is too routine to trigger advocacy
+3. REWARD STRUCTURE: Referrer gets free car wash on next service visit; referred customer gets free 20-point inspection on first visit
+4. MESSAGE HOOK: "Kaam theek laga? Agar kisi dost ki gaadi mein bhi problem ho toh bhejna — unki pehli visit mein hum free inspection karenge"
+5. TIER 2 AMPLIFIER: Put a magnetic visiting card on the customer's car (with permission) — every person who sees it in a parking lot is a potential Tier 2
+
+REFERRAL PLAYBOOK — BT18 STATIONERY SHOP
+1. PROGRAM NAME: "Padhai Ka Saathi, Sab Ka Saathi" — the study partner for everyone
+2. TRIGGER MOMENT: Beginning of academic year when parents are buying school supplies — community energy is high
+3. REWARD STRUCTURE: Referrer gets ₹50 store credit; referred customer gets 5% off first purchase above ₹200
+4. MESSAGE HOOK: "Agar aapke padosi ke bacche bhi iskool mein hain — unhe bhi yahan bhejiye. Aapko ₹50 store credit milega"
+5. TIER 2 AMPLIFIER: Bulk school kit deal — if 5 families from same school buy together, everyone gets extra 10% off (builds natural referral group)
+
+REFERRAL PLAYBOOK — BT19 CHARTERED ACCOUNTANT / TAX CONSULTANT
+1. PROGRAM NAME: "Tax Theek Hua? Apne Dost Ka Bhi Karo" — I fixed yours, let me fix your friend's
+2. TRIGGER MOMENT: Tax filing completion — client feels immediate relief; this is also the window when they talk about taxes with peers
+3. REWARD STRUCTURE: Referrer gets 15% discount on next year's filing; referred client gets first consultation free
+4. MESSAGE HOOK: "Filing ho gayi. Agar aapke kisi dost ya bhai ka bhi pending ho toh mera number de dijiye — unka pehla meeting free rahega"
+5. TIER 2 AMPLIFIER: Offer a free "Tax Checklist for Salaried Employees" PDF — shareable, positions expertise, drives inbound Tier 2
+
+REFERRAL PLAYBOOK — BT20 INTERIOR DESIGNER / DECORATOR
+1. PROGRAM NAME: "Ghar Sundar Hua, Agle Ko Bhi Dikhao" — your home is beautiful, show others where it came from
+2. TRIGGER MOMENT: On handover day when client sees the finished space for the first time — emotion and advocacy peak together
+3. REWARD STRUCTURE: Referrer gets a free design consultation for next room or renovation; referred client gets free mood board and 3D plan worth ₹5,000
+4. MESSAGE HOOK: "Jab log aapke ghar ki taareef karein — toh humara naam zaroor lena. Unhe free mood board milega, aur aapko agle room ki free planning"
+5. TIER 2 AMPLIFIER: Post 3 before/after photos on client's WhatsApp status (with permission, tagging area) — neighbors enquire within 24 hours
+
+REFERRAL PLAYBOOK — BT21 SWEET SHOP / MITHAI (DUPLICATE ENTRY — USES BT10 RULES)
+1. PROGRAM NAME: "Meetha Baanto, Khushi Baanto" — sharing sweetness is sharing relationships
+2. TRIGGER MOMENT: Festival and wedding season purchases — referral embedded in gift-giving culture
+3. REWARD STRUCTURE: ₹100 free mithai credit for referrer; free 100g sample box for new customer on first order above ₹500
+4. MESSAGE HOOK: "Jo meetha aap doston ko dete hain — agar woh yahaan aayein toh aapko free mithai milegi"
+5. TIER 2 AMPLIFIER: Custom name sticker on gift boxes with shop branding — every recipient sees the source
+
+REFERRAL PLAYBOOK — BT22 TAILORING / STITCHING SHOP
+1. PROGRAM NAME: "Silai Se Rishta" — the tailoring relationship (trust-based, long-term)
+2. TRIGGER MOMENT: Festival season — Diwali, Eid, wedding preparation — when emotional value of clothing is highest
+3. REWARD STRUCTURE: Referrer gets one free alteration per referral; referred customer gets first blouse stitching free with suit order
+4. MESSAGE HOOK: "Eid/Diwali ke liye kapde sil rahe hain? Apni saheli ko bhi bhejo — unka pehla kaam free hoga, aur aapko ek alteration free"
+5. TIER 2 AMPLIFIER: Display finished festival outfits in-store (with name tag: "Made for Sunita ji") — walk-in traffic asks about the tailor
+
+REFERRAL PLAYBOOK — BT23 DRIVING SCHOOL (DUPLICATE — USES BT11 RULES)
+1. PROGRAM NAME: "Seekho, Sikhao" — learn and teach others
+2. TRIGGER MOMENT: Licence pass day — the celebration moment triggers sharing on WhatsApp
+3. REWARD STRUCTURE: ₹300 fee reduction for referrer after course completion; 2 free lessons for referred learner
+4. MESSAGE HOOK: "Licence mile toh apna experience share karo — dost ko bhi bhejo. Unke pehle do lessons free"
+5. TIER 2 AMPLIFIER: "Batch mate brings friend" — same slot referral creates natural peer learning group
+
+REFERRAL PLAYBOOK — BT24 TRAVEL AGENCY (DUPLICATE — USES BT12 RULES)
+1. PROGRAM NAME: "Milke Chalo" — travel in a group, save together
+2. TRIGGER MOMENT: Post-trip return window — within 48 hours while photos are being shared
+3. REWARD STRUCTURE: ₹500 credit for referrer; free travel insurance for referred first booking
+4. MESSAGE HOOK: "Trip ke photos share kar rahe ho? Ek baar mera number bhi share karo — unhe insurance free milega"
+5. TIER 2 AMPLIFIER: Group package deal — 4 people together get 8% group rate, making referral a financial benefit
+
+REFERRAL PLAYBOOK — BT25 MOBILE REPAIR SHOP (DUPLICATE — USES BT13 RULES)
+1. PROGRAM NAME: "Phone Sahi, Dost Sahi" — your phone is fixed, help a friend
+2. TRIGGER MOMENT: When repaired phone switches on and functions — the "it works!" relief moment
+3. REWARD STRUCTURE: Free next visit screen cleaning for referrer; ₹50 off first repair for referred customer
+4. MESSAGE HOOK: "Theek ho gaya na? Dost ka bhi kharaab hua ho kabhi toh mera number de dijiye"
+5. TIER 2 AMPLIFIER: Free phone health check for any friend brought in — no-cost visit builds trust before repair need arises
+
+REFERRAL PLAYBOOK — BT26 CATERING SERVICE (DUPLICATE — USES BT14 RULES)
+1. PROGRAM NAME: "Ek Event Se Doosra Event" — every event creates the next referral
+2. TRIGGER MOMENT: During the event when guests compliment the food to the host
+3. REWARD STRUCTURE: ₹500 off next catering booking for referrer; free starter dish for referred client
+4. MESSAGE HOOK: "Mehman khane ki taareef kar rahe hain? Unhe bata dijiye — next event ke liye free starter milega"
+5. TIER 2 AMPLIFIER: Table card at each table: "Catered by [Name] — Ask the host for the contact number"
+
+REFERRAL PLAYBOOK — BT27 SECURITY AGENCY (DUPLICATE — USES BT15 RULES)
+1. PROGRAM NAME: "Ek Society Se Doosri Society" — spread security building by building
+2. TRIGGER MOMENT: After 90 days of incident-free service — proof of reliability
+3. REWARD STRUCTURE: One free guard day per referral for current client; 10% off first month for new client
+4. MESSAGE HOOK: "Teen mahine mein koi problem nahi hui. Kisi doosri building ko bhi zaroorat ho toh hamara naam de sakte hain"
+5. TIER 2 AMPLIFIER: Free security audit presentation to Residents' Welfare Associations in the area
+
+REFERRAL PLAYBOOK — BT28 AYURVEDIC CLINIC (DUPLICATE — USES BT16 RULES)
+1. PROGRAM NAME: "Prakriti Se Sehat, Sabke Liye" — natural health for all your family
+2. TRIGGER MOMENT: First noticeable improvement — pain gone, energy returned — before the patient takes the result for granted
+3. REWARD STRUCTURE: Free follow-up consultation for referrer; 50% off first consultation for referred patient
+4. MESSAGE HOOK: "Fark dikh raha hai na? Ghar mein koi aur bhi pareshan ho toh unhe ek baar bhejna — pehla session half price"
+5. TIER 2 AMPLIFIER: Patient testimonial display with first name and brief result — social proof without claim
+
+REFERRAL PLAYBOOK — BT29 AUTOMOBILE WORKSHOP (DUPLICATE — USES BT17 RULES)
+1. PROGRAM NAME: "Gaadi Theek, Network Theek" — fix your car, grow your network
+2. TRIGGER MOMENT: After a major repair — the relief and gratitude window
+3. REWARD STRUCTURE: Free car wash on next visit for referrer; free 20-point inspection for referred customer
+4. MESSAGE HOOK: "Kaam pasand aaya? Dost ki gaadi mein bhi koi problem ho toh bhejna — unhe free inspection milegi"
+5. TIER 2 AMPLIFIER: Magnetic visiting card on customer's car — visible in every parking lot
+
+REFERRAL PLAYBOOK — BT30 STATIONERY SHOP (DUPLICATE — USES BT18 RULES)
+1. PROGRAM NAME: "Padhai Ka Saathi" — the academic partner for every family
+2. TRIGGER MOMENT: School year start and exam season — annual rhythm creates referral windows
+3. REWARD STRUCTURE: ₹50 store credit for referrer; 5% off first purchase above ₹200 for referred customer
+4. MESSAGE HOOK: "Aapke padosi ke bacche bhi usi school mein hain? Unhe bhi yahan bhejna — ₹50 aapko milega"
+5. TIER 2 AMPLIFIER: School-batch bulk deal — 5 families same school get 10% group discount on annual kit
+
+END OF COMPONENT 3 — REFERRAL PLAYBOOKS
+
 END OF COMPONENT 3 — BATCH 2 (B2B AND PROFESSIONAL SERVICES)
 ================================================================
 ================================================================
@@ -6377,7 +6596,57 @@ VERSION B: "Hi — most funded startups burn their first 90 days figuring out wh
       "marketBenchmark": 0,
       "goal": "Beat benchmark by Week 4"
     },
-    "fridayReminder": "[Specific sentence about what Scout will adjust next week]"
+    "fridayReminder": "[Specific sentence about what Scout will adjust next week]",
+    "referralEngine": {
+      "programName": "[Business-specific referral program name — e.g. 'Vishwas Laao, Inam Pao' or 'Refer a Friend, Get a Free Month']",
+      "offer": {
+        "referrerGets": "[Non-cash reward — service discount, free item, or upgrade. 8–12% of average transaction value]",
+        "referredGets": "[Welcome offer for new customer — specific and time-limited, e.g. '10% off first order']",
+        "offerDuration": "[Time window — e.g. 'Reward valid for 30 days after referral converts']",
+        "estimatedCost": "₹[X] per referral (8–12% of average transaction value)"
+      },
+      "trackingSystem": {
+        "method": "Name-based referral codes",
+        "referralCode": "[Customer first name]-Sends",
+        "howToTrack": "[Simple tracking — notebook entry, WhatsApp screenshot, or verbal mention at point of service]"
+      },
+      "chain": {
+        "tier1": {
+          "who": "[Description of the 3–5 best existing customers to activate first — loyal, social, frequent buyers]",
+          "message_whatsapp": "[Complete ready-to-send WhatsApp message in Hindi/local language. Mentions the reward, addresses recipient by name placeholder, specific and personal. 2–3 sentences.]",
+          "message_inperson": "[What to say face-to-face — conversational, warm, not a sales pitch. 1–2 sentences.]",
+          "message_followup": "[Follow-up WhatsApp message to send if no referral within 7 days — friendly nudge, no pressure]"
+        },
+        "tier2": {
+          "who": "[Second-degree contacts — neighbors, colleagues, family members of Tier 1 customers]",
+          "message_whatsapp": "[WhatsApp message explicitly referencing Tier 1 person by name — 'Ramesh bhai ne bheja']",
+          "activationTrigger": "[The event that signals it's time to ask Tier 2 — e.g. after first successful Tier 1 referral converts]"
+        },
+        "tier3": {
+          "mechanism": "[How Tier 2 referrals naturally produce Tier 3 without direct asking — social proof, visible usage, community spread]",
+          "amplifier": "[One specific action that accelerates organic spread — e.g. display board with referrer names, WhatsApp group post, thank-you shoutout]"
+        }
+      },
+      "projection": {
+        "week4Referrals": 0,
+        "week12Referrals": 0,
+        "revenueWeek4": "₹[X]",
+        "revenueWeek12": "₹[X]",
+        "programCost": "₹[X] total (value of rewards given out)",
+        "roi": "[X]× return on referral investment"
+      },
+      "championTier": {
+        "threshold": 3,
+        "label": "[Title for top referrers — e.g. 'Brand Ambassador', 'Vishwas Doost', 'Gold Referrer']",
+        "reward": "[Special ongoing reward for customers who send 3+ referrals — meaningful but still non-cash]",
+        "recognition": "[How to publicly acknowledge champions — name on board, WhatsApp group mention, priority service]"
+      },
+      "weekOneActions": [
+        "[Day 1 — Name the 3 customers to message first and paste their exact message]",
+        "[Day 3 — Follow-up action if no response, or next batch of 3 customers to activate]",
+        "[Day 7 — Review: who referred, who converted, who to escalate to Tier 2 outreach]"
+      ]
+    }
   },
   "tab5": {
     "opportunities": [

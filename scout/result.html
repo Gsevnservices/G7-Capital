@@ -601,6 +601,109 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .referral-total-sub{font-size:11px;color:var(--grey1)}
 
+/* ── REFERRAL ENGINE (Tab 4 — JSON path) ── */
+.ref-engine-section{border-top:1px solid var(--border2);padding-top:36px;margin-top:36px}
+.ref-engine-heading{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:300;color:var(--white);margin-bottom:6px
+}
+.ref-engine-sub{font-size:12px;line-height:1.8;color:var(--grey1);margin-bottom:20px}
+.ref-program-card{
+  background:var(--black3);border:1px solid var(--border2);
+  padding:20px 24px;margin-bottom:24px
+}
+.ref-program-name{
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  font-weight:300;color:var(--gold);margin-bottom:14px
+}
+.ref-reward-pills{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:600px){.ref-reward-pills{grid-template-columns:1fr}}
+.ref-reward-pill{
+  background:rgba(201,168,76,0.06);border:1px solid var(--border);
+  padding:12px 16px
+}
+.ref-pill-label{
+  font-size:7px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:5px
+}
+.ref-pill-value{font-size:12px;color:var(--white2);line-height:1.6}
+.ref-champion-note{
+  font-size:10px;letter-spacing:.08em;color:var(--grey2);
+  padding-top:10px;border-top:1px solid var(--border2);line-height:1.7
+}
+.ref-chain-wrap{margin-bottom:24px}
+.ref-chain-heading{
+  font-size:8px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px
+}
+.ref-tier{
+  background:var(--black3);border:1px solid var(--border2);
+  border-left:2px solid rgba(201,168,76,0.5);
+  padding:16px 20px;margin-bottom:10px
+}
+.ref-tier-label{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px
+}
+.ref-tier-who{font-size:11px;color:var(--grey1);margin-bottom:12px;line-height:1.7}
+.ref-msg-block{margin-bottom:10px}
+.ref-msg-type{
+  font-size:7px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey2);margin-bottom:4px
+}
+.ref-msg-row{display:flex;align-items:flex-start;gap:10px}
+.ref-msg-text{
+  flex:1;font-size:12px;line-height:1.8;color:var(--white2);
+  white-space:pre-wrap;border-left:2px solid var(--border);
+  padding-left:12px
+}
+.ref-copy-btn{
+  flex-shrink:0;background:none;border:1px solid var(--border2);
+  color:var(--grey2);font-family:'Tenor Sans',sans-serif;
+  font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+  padding:6px 10px;cursor:pointer;transition:all .2s;white-space:nowrap
+}
+.ref-copy-btn:hover{border-color:var(--gold);color:var(--gold)}
+.ref-copy-btn.copied{border-color:rgba(90,158,111,0.6);color:#5a9e6f}
+.ref-tier3-note{
+  font-size:11px;color:var(--grey1);line-height:1.7;margin-bottom:6px
+}
+.ref-projection-card{
+  background:rgba(201,168,76,0.05);border:1px solid var(--border);
+  padding:20px 24px;margin-bottom:24px
+}
+.ref-projection-heading{
+  font-size:8px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px
+}
+.ref-projection-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px
+}
+@media(max-width:600px){.ref-projection-grid{grid-template-columns:repeat(2,1fr)}}
+.ref-metric{text-align:center;padding:10px 0}
+.ref-metric-val{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:300;color:var(--white);margin-bottom:3px
+}
+.ref-metric-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey2)}
+.ref-actions-wrap{margin-bottom:8px}
+.ref-actions-heading{
+  font-size:8px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px
+}
+.ref-action-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 0;border-bottom:1px solid var(--border2)
+}
+.ref-action-item:last-child{border-bottom:none}
+.ref-action-num{
+  flex-shrink:0;width:20px;height:20px;
+  background:rgba(201,168,76,0.12);border:1px solid var(--border);
+  font-size:9px;color:var(--gold);display:flex;
+  align-items:center;justify-content:center
+}
+.ref-action-text{font-size:12px;color:var(--white2);line-height:1.7}
+
 /* ── PRINT STYLES (Feature 4.3) ── */
 .print-cover{display:none}
 .print-exec-summary{display:none}
@@ -1484,6 +1587,35 @@ function updateWeekProgress() {
   if (label) label.textContent = done + ' / ' + total + ' complete';
 }
 
+/* Copy referral message to clipboard */
+function refCopy(elId, btn) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var text = el.textContent || el.innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function() {
+    /* Fallback for older browsers */
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
 function renderTab4JSON(tab4, biz) {
   var t4  = tab4 || {};
   var wt  = t4.weekTargets || {};
@@ -1546,23 +1678,125 @@ function renderTab4JSON(tab4, biz) {
   html += '<div class="checkin-note">Scout will adjust next week\'s targets based on which ICPs performed best.</div>';
   html += '</div>';
 
-  /* Referral Chain Builder */
-  html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:36px">';
-  html += '<div class="referral-section-heading">Activate Your Referral Network</div>';
-  html += '<div class="referral-section-sub">Enter your best existing customers. Scout will show you who to activate first and exactly what to say.</div>';
-  html += '<div id="referralRows">';
-  for (var ri = 0; ri < 3; ri++) {
-    html += '<div class="referral-row" id="rrow_' + ri + '">';
-    html += '<input class="referral-input" id="rcust_' + ri + '" type="text" placeholder="e.g. Ramesh bhai, your best customer">';
-    html += '<input class="referral-input" id="rloc_' + ri + '" type="text" placeholder="e.g. Where they live or work">';
+  /* ── Referral Engine (from JSON) ── */
+  var re = t4.referralEngine;
+  if (re) {
+    html += '<div class="ref-engine-section">';
+    html += '<div class="ref-engine-heading">Your Referral Engine</div>';
+    html += '<div class="ref-engine-sub">Scout has built a referral system calibrated for your business type. Copy the messages and activate it this week.</div>';
+
+    /* Program Overview */
+    html += '<div class="ref-program-card">';
+    if (re.programName) {
+      html += '<div class="ref-program-name">' + escHtml(re.programName) + '</div>';
+    }
+    var offer = re.offer || {};
+    html += '<div class="ref-reward-pills">';
+    html += '<div class="ref-reward-pill"><div class="ref-pill-label">You Get (Referrer)</div><div class="ref-pill-value">' + escHtml(offer.referrerGets || '—') + '</div></div>';
+    html += '<div class="ref-reward-pill"><div class="ref-pill-label">New Customer Gets</div><div class="ref-pill-value">' + escHtml(offer.referredGets || '—') + '</div></div>';
     html += '</div>';
+    if (offer.offerDuration) {
+      html += '<div class="ref-champion-note">Valid: ' + escHtml(offer.offerDuration) + '</div>';
+    }
+    var champ = re.championTier || {};
+    if (champ.label) {
+      html += '<div class="ref-champion-note" style="margin-top:6px">Send ' + (champ.threshold || 3) + '+ referrals → earn <strong style="color:var(--gold)">' + escHtml(champ.label) + '</strong> status: ' + escHtml(champ.reward || '') + '</div>';
+    }
+    html += '</div>';
+
+    /* The Chain */
+    var chain = re.chain || {};
+    var tier1 = chain.tier1 || {};
+    var tier2 = chain.tier2 || {};
+    var tier3 = chain.tier3 || {};
+    html += '<div class="ref-chain-wrap">';
+    html += '<div class="ref-chain-heading">The Referral Chain</div>';
+
+    /* Tier 1 */
+    html += '<div class="ref-tier">';
+    html += '<div class="ref-tier-label">Tier 1 — Activate First</div>';
+    if (tier1.who) html += '<div class="ref-tier-who">' + escHtml(tier1.who) + '</div>';
+    var msgs1 = [
+      { type: 'WhatsApp Message', text: tier1.message_whatsapp },
+      { type: 'In Person',        text: tier1.message_inperson },
+      { type: 'Follow-Up (Day 7)', text: tier1.message_followup }
+    ];
+    msgs1.forEach(function(m, mi) {
+      if (!m.text) return;
+      html += '<div class="ref-msg-block">';
+      html += '<div class="ref-msg-type">' + escHtml(m.type) + '</div>';
+      html += '<div class="ref-msg-row">';
+      html += '<div class="ref-msg-text" id="refMsg1_' + mi + '">' + escHtml(m.text) + '</div>';
+      html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg1_' + mi + '\',this)">Copy</button>';
+      html += '</div></div>';
+    });
+    html += '</div>';
+
+    /* Tier 2 */
+    if (tier2.who || tier2.message_whatsapp) {
+      html += '<div class="ref-tier">';
+      html += '<div class="ref-tier-label">Tier 2 — Second Wave</div>';
+      if (tier2.who) html += '<div class="ref-tier-who">' + escHtml(tier2.who) + '</div>';
+      if (tier2.activationTrigger) {
+        html += '<div class="ref-tier-who" style="color:var(--grey2)">Activate when: ' + escHtml(tier2.activationTrigger) + '</div>';
+      }
+      if (tier2.message_whatsapp) {
+        html += '<div class="ref-msg-block">';
+        html += '<div class="ref-msg-type">WhatsApp Message</div>';
+        html += '<div class="ref-msg-row">';
+        html += '<div class="ref-msg-text" id="refMsg2_0">' + escHtml(tier2.message_whatsapp) + '</div>';
+        html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg2_0\',this)">Copy</button>';
+        html += '</div></div>';
+      }
+      html += '</div>';
+    }
+
+    /* Tier 3 */
+    if (tier3.mechanism || tier3.amplifier) {
+      html += '<div class="ref-tier">';
+      html += '<div class="ref-tier-label">Tier 3 — Organic Spread</div>';
+      if (tier3.mechanism) html += '<div class="ref-tier3-note">' + escHtml(tier3.mechanism) + '</div>';
+      if (tier3.amplifier) {
+        html += '<div style="font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;margin-top:8px">Amplifier</div>';
+        html += '<div class="ref-tier3-note">' + escHtml(tier3.amplifier) + '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+
+    /* Projection */
+    var proj = re.projection || {};
+    if (proj.revenueWeek4 || proj.revenueWeek12) {
+      html += '<div class="ref-projection-card">';
+      html += '<div class="ref-projection-heading">Projected Impact</div>';
+      html += '<div class="ref-projection-grid">';
+      html += '<div class="ref-metric"><div class="ref-metric-val">' + escHtml(String(proj.week4Referrals || '—')) + '</div><div class="ref-metric-label">Referrals by Week 4</div></div>';
+      html += '<div class="ref-metric"><div class="ref-metric-val">' + escHtml(String(proj.week12Referrals || '—')) + '</div><div class="ref-metric-label">Referrals by Week 12</div></div>';
+      html += '<div class="ref-metric"><div class="ref-metric-val">' + escHtml(proj.revenueWeek4 || '—') + '</div><div class="ref-metric-label">Revenue Week 4</div></div>';
+      html += '<div class="ref-metric"><div class="ref-metric-val" style="color:var(--gold)">' + escHtml(proj.revenueWeek12 || '—') + '</div><div class="ref-metric-label">Revenue Week 12</div></div>';
+      html += '</div>';
+      if (proj.roi) {
+        html += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border2);font-size:10px;color:var(--grey2)">Program Cost: ' + escHtml(proj.programCost || '—') + ' &nbsp;·&nbsp; ROI: <strong style="color:var(--gold)">' + escHtml(proj.roi) + '</strong></div>';
+      }
+      html += '</div>';
+    }
+
+    /* Week 1 Actions */
+    var actions = re.weekOneActions || [];
+    if (actions.length > 0) {
+      html += '<div class="ref-actions-wrap">';
+      html += '<div class="ref-actions-heading">Week 1 Actions — Do These First</div>';
+      actions.forEach(function(action, ai) {
+        html += '<div class="ref-action-item">';
+        html += '<div class="ref-action-num">' + (ai + 1) + '</div>';
+        html += '<div class="ref-action-text">' + escHtml(action) + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div>'; /* end ref-engine-section */
   }
-  html += '</div>';
-  html += '<button class="referral-add-link" onclick="addReferralRow()">+ Add another customer</button><br>';
-  html += '<button class="btn-build-referral" id="buildReferralBtn" onclick="buildReferralChain()">Build My Referral Chain →</button>';
-  html += '<div class="referral-loading" id="referralLoading">Scout is mapping your referral network...</div>';
-  html += '<div id="referralResults"></div>';
-  html += '</div>';
 
   document.getElementById('tab4Content').innerHTML = html;
 }
