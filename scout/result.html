@@ -1248,38 +1248,90 @@ function parseAndRender(rawOutput, biz) {
   /* ── Attempt JSON parse (new architecture, TYPE 1 onboarding) ── */
   var data = null;
   try {
-    var cleaned = rawOutput
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/```\s*$/i, '').trim();
+    var cleaned = rawOutput;
 
+    /* Level 0: strip markdown code fences */
+    cleaned = cleaned
+      .replace(/^```json\s*/im, '')
+      .replace(/^```\s*/im, '')
+      .replace(/```\s*$/im, '')
+      .trim();
+
+    /* DEBUG: log raw and cleaned output to console */
     console.log('=== SCOUT DEBUG ===');
     console.log('Raw output length:', rawOutput ? rawOutput.length : 0);
     console.log('Raw output first 500 chars:', rawOutput ? rawOutput.slice(0, 500) : 'EMPTY');
     console.log('Raw output last 200 chars:', rawOutput ? rawOutput.slice(-200) : 'EMPTY');
     console.log('Cleaned first 200 chars:', cleaned ? cleaned.slice(0, 200) : 'EMPTY');
 
+    /* Level 1: strip any text before first { (e.g. "Here is the analysis:") */
+    var firstBrace = cleaned.indexOf('{');
+    if (firstBrace > 0) {
+      console.warn('Text before JSON stripped:', cleaned.slice(0, firstBrace));
+      cleaned = cleaned.slice(firstBrace);
+    }
+
+    /* Level 2: strip any text after last } */
+    var lastBrace = cleaned.lastIndexOf('}');
+    if (lastBrace > -1 && lastBrace < cleaned.length - 1) {
+      console.warn('Text after JSON stripped:', cleaned.slice(lastBrace + 1));
+      cleaned = cleaned.slice(0, lastBrace + 1);
+    }
+
+    /* Level 3: attempt normal parse */
     try {
       var testParse = JSON.parse(cleaned);
       console.log('JSON.parse: SUCCESS');
-      console.log('Has tab1:', !!testParse.tab1);
-      console.log('Has tab2:', !!testParse.tab2);
-      console.log('Has tab3:', !!testParse.tab3);
-      console.log('Has tab4:', !!testParse.tab4);
-      console.log('Has tab5:', !!testParse.tab5);
-    } catch(e) {
-      console.log('JSON.parse: FAILED');
-      console.log('Error:', e.message);
-      var errMatch = e.message.match(/position (\d+)/);
+      console.log('Has tab1:', !!testParse.tab1, '| tab2:', !!testParse.tab2, '| tab3:', !!testParse.tab3, '| tab4:', !!testParse.tab4, '| tab5:', !!testParse.tab5);
+      if (testParse && (testParse.tab1 || testParse.headline)) { data = testParse; }
+    } catch(e1) {
+      console.log('JSON.parse: FAILED —', e1.message);
+      var errMatch = e1.message.match(/position (\d+)/);
       if (errMatch) {
         var pos = parseInt(errMatch[1]);
-        console.log('Error at position:', pos);
-        console.log('Context around error:', cleaned.slice(Math.max(0, pos - 100), pos + 100));
+        console.log('Error at position:', pos, '— context:', cleaned.slice(Math.max(0, pos - 100), pos + 100));
+      }
+
+      /* Level 4: fix trailing comma issues then retry */
+      try {
+        var fixed = cleaned
+          .replace(/,\s*}/g, '}')
+          .replace(/,\s*]/g, ']');
+        var fixedParse = JSON.parse(fixed);
+        console.log('JSON.parse: SUCCESS after trailing comma fix');
+        if (fixedParse && (fixedParse.tab1 || fixedParse.headline)) { data = fixedParse; }
+      } catch(e2) {
+        console.log('Trailing comma fix also failed —', e2.message);
+
+        /* Level 5: partial extraction — pull tab1 at minimum from broken JSON */
+        try {
+          var partial = {};
+          var tab1Match = rawOutput.match(/"tab1"\s*:\s*(\{[\s\S]+?\})\s*,\s*"tab2"/);
+          if (tab1Match) { try { partial.tab1 = JSON.parse(tab1Match[1]); } catch(ex) {} }
+          if (Object.keys(partial).length > 0) {
+            data = partial;
+            console.log('Partial data extracted — tabs available:', Object.keys(partial).join(', '));
+          }
+        } catch(e3) { /* partial extraction also failed */ }
+
+        /* Level 6: show error with collapsible raw output */
+        if (!data) {
+          var tab1El = document.getElementById('tab1Content');
+          if (tab1El) {
+            tab1El.innerHTML =
+              '<div style="padding:24px;color:var(--gold)">' +
+              '<p style="margin-bottom:12px;font-size:13px">Scout output could not be parsed. Please run the analysis again.</p>' +
+              '<p style="font-size:11px;opacity:0.5;margin-bottom:8px">Error: ' + escHtml(e1.message) + '</p>' +
+              '<details style="margin-top:12px">' +
+              '<summary style="cursor:pointer;font-size:11px;opacity:0.4;user-select:none">Show raw output (for debugging)</summary>' +
+              '<pre style="font-size:9px;white-space:pre-wrap;opacity:0.4;margin-top:8px;max-height:400px;overflow-y:auto">' +
+              escHtml((rawOutput || '').slice(0, 4000)) + '</pre>' +
+              '</details></div>';
+          }
+          return;
+        }
       }
     }
-
-    var parsed = JSON.parse(cleaned);
-    if (parsed && (parsed.tab1 || parsed.headline)) { data = parsed; }
   } catch(e) { data = null; }
 
   if (data) {
