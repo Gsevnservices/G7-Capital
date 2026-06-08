@@ -1252,6 +1252,32 @@ function parseAndRender(rawOutput, biz) {
       .replace(/^```json\s*/i, '')
       .replace(/^```\s*/i, '')
       .replace(/```\s*$/i, '').trim();
+
+    console.log('=== SCOUT DEBUG ===');
+    console.log('Raw output length:', rawOutput ? rawOutput.length : 0);
+    console.log('Raw output first 500 chars:', rawOutput ? rawOutput.slice(0, 500) : 'EMPTY');
+    console.log('Raw output last 200 chars:', rawOutput ? rawOutput.slice(-200) : 'EMPTY');
+    console.log('Cleaned first 200 chars:', cleaned ? cleaned.slice(0, 200) : 'EMPTY');
+
+    try {
+      var testParse = JSON.parse(cleaned);
+      console.log('JSON.parse: SUCCESS');
+      console.log('Has tab1:', !!testParse.tab1);
+      console.log('Has tab2:', !!testParse.tab2);
+      console.log('Has tab3:', !!testParse.tab3);
+      console.log('Has tab4:', !!testParse.tab4);
+      console.log('Has tab5:', !!testParse.tab5);
+    } catch(e) {
+      console.log('JSON.parse: FAILED');
+      console.log('Error:', e.message);
+      var errMatch = e.message.match(/position (\d+)/);
+      if (errMatch) {
+        var pos = parseInt(errMatch[1]);
+        console.log('Error at position:', pos);
+        console.log('Context around error:', cleaned.slice(Math.max(0, pos - 100), pos + 100));
+      }
+    }
+
     var parsed = JSON.parse(cleaned);
     if (parsed && (parsed.tab1 || parsed.headline)) { data = parsed; }
   } catch(e) { data = null; }
