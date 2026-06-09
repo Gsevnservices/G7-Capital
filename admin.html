@@ -187,6 +187,41 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
     </div>
 
     <div class="msg error" id="scoutStatsError"></div>
+
+    <!-- PART D: Create Scout Account -->
+    <div style="margin-top:32px;padding-top:28px;border-top:1px solid #222">
+      <div style="font-size:13px;font-weight:600;color:#C9A84C;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Create Scout Account</div>
+      <p style="font-size:12px;color:#555;margin-bottom:20px;letter-spacing:.03em">For Indian SMBs accessing the Scout BD Employee</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="field">
+          <label for="scoutBizName">Business Name</label>
+          <input type="text" id="scoutBizName" placeholder="e.g. Sharma Marble Traders">
+        </div>
+        <div class="field">
+          <label for="scoutOwnerName">Owner Name</label>
+          <input type="text" id="scoutOwnerName" placeholder="e.g. Rahul Sharma">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="field">
+          <label for="scoutCity">City</label>
+          <input type="text" id="scoutCity" placeholder="e.g. Kishangarh, Rajasthan">
+        </div>
+        <div class="field">
+          <label for="scoutPassword">Password</label>
+          <input type="text" id="scoutPassword" placeholder="Password for this account">
+        </div>
+      </div>
+
+      <button class="btn btn-gold" id="createScoutBtn" onclick="createScoutAccount()">
+        Create Scout Account →
+      </button>
+
+      <div class="msg success" id="createScoutSuccess"></div>
+      <div class="msg error" id="createScoutError"></div>
+    </div>
   </div>
 
   <!-- Section separator between Scout and Alex management -->
@@ -195,10 +230,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
   </div>
 
   <!-- ═══════════════════════════════════════════════
-       SECTION 1 — CREATE FIRM ACCOUNT
+       SECTION 1 — CREATE ALEX ACCOUNT
   ═══════════════════════════════════════════════ -->
   <div class="section" id="sectionCreate">
-    <div class="section-title">Create Firm Account</div>
+    <div class="section-title">Create Alex Account</div>
+    <p style="font-size:12px;color:#555;margin-bottom:20px;letter-spacing:.03em">For PE/VC/IB firms accessing the Alex Deal Analyst workspace</p>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div class="field">
@@ -265,6 +301,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
       <button class="btn btn-outline" onclick="loadFirms()" id="loadFirmsBtn">
         Load Firms
       </button>
+    </div>
+
+    <!-- Filter buttons -->
+    <div id="firmsFilterBar" style="display:none;gap:8px;margin-bottom:16px">
+      <button class="btn btn-outline" id="filterAll"   onclick="filterFirms('all')"   style="font-size:10px;padding:6px 14px;border-color:#C9A84C;color:#C9A84C">All</button>
+      <button class="btn btn-outline" id="filterAlex"  onclick="filterFirms('alex')"  style="font-size:10px;padding:6px 14px">Alex</button>
+      <button class="btn btn-outline" id="filterScout" onclick="filterFirms('scout')" style="font-size:10px;padding:6px 14px">Scout</button>
     </div>
 
     <div id="firmsContainer">
@@ -463,8 +506,16 @@ async function resetFirmPassword() {
 
 // ─────────────────────────────────────────────────────────────
 // LOAD FIRMS
-// Calls GET /admin/list-firms and fetches usage for each firm
+// Calls GET /admin/list-firms and fetches usage for each firm.
+// Renders table with Product column. Supports filter buttons.
 // ─────────────────────────────────────────────────────────────
+
+// Cache of all loaded firms — used by filterFirms() without re-fetching
+let _allFirmsData = [];
+let _allUsageData = [];
+// Active filter: 'all' | 'alex' | 'scout'
+let _firmsFilter = 'all';
+
 async function loadFirms() {
   const container = document.getElementById('firmsContainer');
   const errorEl   = document.getElementById('firmsError');
@@ -505,41 +556,16 @@ async function loadFirms() {
       })
     );
 
-    // Build the table
-    let html = '<table class="firms-table">';
-    html += '<thead><tr>';
-    html += '<th>Firm Code</th><th>Firm Name</th><th>Created</th><th>Tier</th>';
-    html += '<th>Deals Used</th><th>Action</th>';
-    html += '</tr></thead><tbody>';
+    // Cache for filter re-use
+    _allFirmsData = firms;
+    _allUsageData = usageResults;
 
-    firms.forEach(function(firm, i) {
-      const createdDate = firm.createdAt
-        ? new Date(firm.createdAt).toLocaleDateString('en-GB', {
-            day: 'numeric', month: 'short', year: 'numeric'
-          })
-        : '—';
+    // Show filter buttons
+    var filterBar = document.getElementById('firmsFilterBar');
+    filterBar.style.display = 'flex';
 
-      const usage = usageResults[i] || {};
-      const count = usage.count || 0;
-      const limit = usage.limit || 50;
-      const usageColor = count >= limit ? '#e08080' : count >= limit * 0.8 ? '#C9A84C' : '#ccc';
-
-      html += '<tr>';
-      html += '<td><span class="firm-code-badge">' + escapeHtml(firm.firmCode) + '</span></td>';
-      html += '<td>' + escapeHtml(firm.firmName || '—') + '</td>';
-      html += '<td>' + createdDate + '</td>';
-      html += '<td><span class="tier-badge">' + escapeHtml(firm.tier || 'beta') + '</span></td>';
-      html += '<td style="color:' + usageColor + ';font-weight:600">' + count + ' / ' + limit + '</td>';
-      html += '<td><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" ' +
-        'onclick="resetUsage(\'' + escapeHtml(firm.firmCode) + '\')">Reset Usage</button></td>';
-      html += '</tr>';
-    });
-
-    html += '</tbody></table>';
-    html += '<p style="margin-top:12px;font-size:11px;color:#444">' +
-      firms.length + ' firm account' + (firms.length === 1 ? '' : 's') + ' total</p>';
-
-    container.innerHTML = html;
+    // Render with current filter
+    renderFirmsTable(_firmsFilter);
 
   } catch(err) {
     container.innerHTML = '<p class="loading-text">Failed to load firms.</p>';
@@ -548,6 +574,110 @@ async function loadFirms() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Refresh';
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// RENDER FIRMS TABLE
+// Renders _allFirmsData filtered by product type.
+// Called by loadFirms() and filterFirms().
+// ─────────────────────────────────────────────────────────────
+function renderFirmsTable(filter) {
+  const container = document.getElementById('firmsContainer');
+
+  // Determine product for each firm:
+  // Scout if firmName contains "— Scout" OR tier === 'scout'
+  function getProduct(firm) {
+    if (firm.tier === 'scout') return 'scout';
+    if (firm.firmName && firm.firmName.indexOf('— Scout') !== -1) return 'scout';
+    return 'alex';
+  }
+
+  // Apply filter
+  const filtered = _allFirmsData.filter(function(firm) {
+    if (filter === 'all') return true;
+    return getProduct(firm) === filter;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p class="loading-text">No ' + filter + ' accounts found.</p>';
+    return;
+  }
+
+  // Build the table — Product column added between Firm Name and Created
+  let html = '<table class="firms-table"><thead><tr>';
+  html += '<th>Firm Code</th><th>Firm Name</th><th>Product</th>';
+  html += '<th>Created</th><th>Tier</th><th>Deals Used</th><th>Action</th>';
+  html += '</tr></thead><tbody>';
+
+  filtered.forEach(function(firm) {
+    // Find original index to match usage data
+    const origIdx = _allFirmsData.indexOf(firm);
+    const usage = _allUsageData[origIdx] || {};
+    const count = usage.count || 0;
+    const limit = usage.limit || 50;
+    const usageColor = count >= limit ? '#e08080' : count >= limit * 0.8 ? '#C9A84C' : '#ccc';
+
+    const createdDate = firm.createdAt
+      ? new Date(firm.createdAt).toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        })
+      : '—';
+
+    const product = getProduct(firm);
+
+    // Product badge — gold for Scout, grey for Alex
+    const productBadge = product === 'scout'
+      ? '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#C9A84C;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);padding:2px 8px">Scout</span>'
+      : '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#888;background:rgba(250,250,248,0.04);border:1px solid #2a2a2a;padding:2px 8px">Alex</span>';
+
+    html += '<tr>';
+    html += '<td><span class="firm-code-badge">' + escapeHtml(firm.firmCode) + '</span></td>';
+    html += '<td>' + escapeHtml(firm.firmName || '—') + '</td>';
+    html += '<td>' + productBadge + '</td>';
+    html += '<td>' + createdDate + '</td>';
+    html += '<td><span class="tier-badge">' + escapeHtml(firm.tier || 'beta') + '</span></td>';
+    html += '<td style="color:' + usageColor + ';font-weight:600">' + count + ' / ' + limit + '</td>';
+    html += '<td><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" ' +
+      'onclick="resetUsage(\'' + escapeHtml(firm.firmCode) + '\')">Reset Usage</button></td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  html += '<p style="margin-top:12px;font-size:11px;color:#444">' +
+    filtered.length + ' of ' + _allFirmsData.length + ' account' +
+    (_allFirmsData.length === 1 ? '' : 's') + ' shown</p>';
+
+  container.innerHTML = html;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// FILTER FIRMS
+// Switches between ALL / ALEX / SCOUT filter and re-renders table.
+// Updates active button styling.
+// ─────────────────────────────────────────────────────────────
+function filterFirms(filter) {
+  _firmsFilter = filter;
+
+  // Update button active states
+  var filters = ['all','alex','scout'];
+  filters.forEach(function(f) {
+    var btn = document.getElementById('filter' + f.charAt(0).toUpperCase() + f.slice(1));
+    if (!btn) return;
+    if (f === filter) {
+      btn.style.borderColor = '#C9A84C';
+      btn.style.color       = '#C9A84C';
+    } else {
+      btn.style.borderColor = '#444';
+      btn.style.color       = '#888';
+    }
+  });
+
+  // Re-render the table with the new filter (uses cached data — no network call)
+  if (_allFirmsData.length > 0) {
+    renderFirmsTable(filter);
   }
 }
 
@@ -725,6 +855,96 @@ async function resetScoutStats() {
 
   } catch(err) {
     alert('Reset failed: ' + err.message);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// CREATE SCOUT ACCOUNT
+// Calls POST /admin/create-firm with Scout-specific metadata.
+// firmCode is auto-generated from business name (no manual entry).
+// firmName is set to "<business name> — Scout" for product detection.
+// tier is set to 'scout'.
+// ─────────────────────────────────────────────────────────────
+async function createScoutAccount() {
+  var bizName   = document.getElementById('scoutBizName').value.trim();
+  var ownerName = document.getElementById('scoutOwnerName').value.trim();
+  var city      = document.getElementById('scoutCity').value.trim();
+  var password  = document.getElementById('scoutPassword').value.trim();
+
+  var successEl = document.getElementById('createScoutSuccess');
+  var errorEl   = document.getElementById('createScoutError');
+  var btn       = document.getElementById('createScoutBtn');
+
+  successEl.classList.remove('visible');
+  errorEl.classList.remove('visible');
+
+  if (!bizName || !ownerName || !city || !password) {
+    errorEl.textContent = 'All four fields are required.';
+    errorEl.classList.add('visible');
+    return;
+  }
+
+  // Auto-generate firmCode from business name: uppercase, no spaces, max 12 chars
+  var firmCode = bizName.toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  if (firmCode.length < 2) {
+    errorEl.textContent = 'Business name must contain at least 2 letters.';
+    errorEl.classList.add('visible');
+    return;
+  }
+
+  // firmName includes "— Scout" suffix so the accounts table can detect product
+  var firmName = bizName + ' — Scout';
+
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
+
+  try {
+    var response = await fetch(WORKER + '/admin/create-firm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        adminPassword: adminPassword,
+        firmCode:      firmCode,
+        firmName:      firmName,
+        password:      password,
+        tier:          'scout',
+        metadata: {
+          ownerName:  ownerName,
+          city:       city,
+          product:    'scout',
+          createdAt:  new Date().toISOString()
+        }
+      })
+    });
+
+    var data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Request failed (' + response.status + ')');
+    }
+
+    successEl.innerHTML =
+      'Scout account created.<br>' +
+      '<strong>Firm Code:</strong> ' + escapeHtml(data.firmCode) + '<br>' +
+      '<strong>Login URL:</strong> gsevnservices.github.io/G7-Capital/login.html?product=scout';
+    successEl.classList.add('visible');
+
+    // Clear the form
+    document.getElementById('scoutBizName').value   = '';
+    document.getElementById('scoutOwnerName').value = '';
+    document.getElementById('scoutCity').value      = '';
+    document.getElementById('scoutPassword').value  = '';
+
+    // Refresh firms list to show the new Scout account
+    loadFirms();
+
+  } catch(err) {
+    errorEl.textContent = err.message;
+    errorEl.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create Scout Account →';
   }
 }
 
