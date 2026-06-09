@@ -520,6 +520,38 @@ function saveScoutResult(rawOutput, weekNumber) {
   // Calculate and persist the 5-dimension health score
   // so index.html can display it on the dashboard.
   calculateHealthScore();
+
+  // ── USAGE TRACKING ───────────────────────────────────────────
+  // Fire-and-forget: increment Scout usage counters in KV.
+  // Does not block — failure is silently swallowed.
+  try {
+    var _firmCode = localStorage.getItem('g7_session_firm') || 'unknown';
+    var _pending  = {};
+    try {
+      _pending = JSON.parse(
+        localStorage.getItem('scout_pending_result') || '{}'
+      );
+    } catch(e) {}
+    var _bizData = _pending.businessData || {};
+
+    fetch(SCOUT_WORKER + '/scout/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firmCode:     _firmCode,
+        businessType: _bizData.whatYouSell
+          ? String(_bizData.whatYouSell).slice(0, 50)
+          : (_bizData.businessType
+              ? String(_bizData.businessType).slice(0, 50)
+              : ''),
+        city: _bizData.location
+          ? String(_bizData.location).slice(0, 30)
+          : (_bizData.city
+              ? String(_bizData.city).slice(0, 30)
+              : '')
+      })
+    }).catch(function() {}); // intentionally no await — fire and forget
+  } catch(e) {}
 }
 
 

@@ -743,6 +743,143 @@ export default {
       });
     }
 
+    // =========================================================================
+    // ROUTE 15 — POST /scout/track
+    // Increments Scout usage counters in KV.
+    // Called after every successful Scout analysis (fire-and-forget from client).
+    // No session required — low-risk counter write only.
+    // KV keys written:
+    //   scout:usage:total          — lifetime total (string integer)
+    //   scout:usage:date:{YYYY-MM-DD} — per-day count (string integer)
+    //   scout:usage:bt:{type}      — per-business-type count (string integer)
+    //   scout:usage:city:{city}    — per-city count (string integer)
+    //   scout:usage:log            — JSON array of last 50 entries
+    // =========================================================================
+    if (request.method === 'POST' && path === '/scout/track') {
+      let trackBody;
+      try {
+        trackBody = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const firmCode     = (trackBody.firmCode     || 'unknown').slice(0, 30);
+      const businessType = (trackBody.businessType || '').slice(0, 50);
+      const city         = (trackBody.city         || '').slice(0, 30);
+      const today        = new Date().toISOString().split('T')[0];
+
+      try {
+        // Increment lifetime total
+        const totalRaw = await env.G7_KV.get('scout:usage:total');
+        const total    = totalRaw ? parseInt(totalRaw) + 1 : 1;
+        await env.G7_KV.put('scout:usage:total', String(total));
+
+        // Increment per-day counter
+        const dateKey  = 'scout:usage:date:' + today;
+        const dateRaw  = await env.G7_KV.get(dateKey);
+        const dateCount = dateRaw ? parseInt(dateRaw) + 1 : 1;
+        await env.G7_KV.put(dateKey, String(dateCount));
+
+        // Increment per-business-type counter (normalised key)
+        if (businessType) {
+          const btKey  = 'scout:usage:bt:' + businessType.replace(/\s+/g, '_').toLowerCase();
+          const btRaw  = await env.G7_KV.get(btKey);
+          const btCount = btRaw ? parseInt(btRaw) + 1 : 1;
+          await env.G7_KV.put(btKey, String(btCount));
+        }
+
+        // Increment per-city counter (normalised key)
+        if (city) {
+          const cityKey  = 'scout:usage:city:' + city.replace(/\s+/g, '_').toLowerCase();
+          const cityRaw  = await env.G7_KV.get(cityKey);
+          const cityCount = cityRaw ? parseInt(cityRaw) + 1 : 1;
+          await env.G7_KV.put(cityKey, String(cityCount));
+        }
+
+        // Prepend to log (keep last 50 entries)
+        const logRaw = await env.G7_KV.get('scout:usage:log');
+        let log = logRaw ? JSON.parse(logRaw) : [];
+        log.unshift({
+          date:         new Date().toISOString(),
+          firmCode:     firmCode,
+          businessType: businessType,
+          city:         city
+        });
+        if (log.length > 50) log = log.slice(0, 50);
+        await env.G7_KV.put('scout:usage:log', JSON.stringify(log));
+
+        return jsonResponse({ success: true, total });
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
+      }
+    }
+
+    // =========================================================================
+    // ROUTE 16 — GET /admin/scout-stats
+    // Returns Scout usage statistics for the admin dashboard.
+    // Query params: adminPassword (required)
+    // Returns: { totalAnalyses, last7Days, recentLog }
+    // =========================================================================
+    if (request.method === 'GET' && path === '/admin/scout-stats') {
+      const adminPwd = url.searchParams.get('adminPassword');
+      if (!adminPwd || adminPwd !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      try {
+        // Lifetime total
+        const totalRaw = await env.G7_KV.get('scout:usage:total');
+        const total    = totalRaw ? parseInt(totalRaw) : 0;
+
+        // Last 7 days — one KV read per day (7 reads, run in parallel)
+        const last7Days = await Promise.all(
+          Array.from({ length: 7 }, (_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            const dateStr = d.toISOString().split('T')[0];
+            return env.G7_KV.get('scout:usage:date:' + dateStr)
+              .then(v => ({ date: dateStr, count: v ? parseInt(v) : 0 }));
+          })
+        );
+
+        // Recent log (last 20 shown in admin UI)
+        const logRaw = await env.G7_KV.get('scout:usage:log');
+        const log    = logRaw ? JSON.parse(logRaw) : [];
+
+        return jsonResponse({
+          totalAnalyses: total,
+          last7Days,
+          recentLog: log.slice(0, 20)
+        });
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
+      }
+    }
+
+    // =========================================================================
+    // ROUTE 17 — POST /admin/scout-reset
+    // Resets Scout lifetime total and log to zero.
+    // Does NOT reset per-day or per-type counters (those decay naturally).
+    // Body: { adminPassword }
+    // =========================================================================
+    if (request.method === 'POST' && path === '/admin/scout-reset') {
+      let resetBody;
+      try {
+        resetBody = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      if (!resetBody.adminPassword || resetBody.adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+
+      await env.G7_KV.put('scout:usage:total', '0');
+      await env.G7_KV.put('scout:usage:log',   '[]');
+
+      return jsonResponse({ success: true });
+    }
+
     // ── Catch-all 404 ─────────────────────────────────────────────────────────
     return jsonResponse({ error: 'Not found' }, 404);
   }
