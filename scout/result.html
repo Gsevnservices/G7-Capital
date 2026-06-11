@@ -1295,6 +1295,7 @@ function parseAndRender(rawOutput, biz) {
       /* Level 4: fix trailing comma issues then retry */
       try {
         var fixed = cleaned
+          .replace(/,\s*,/g, ',')
           .replace(/,\s*}/g, '}')
           .replace(/,\s*]/g, ']');
         var fixedParse = JSON.parse(fixed);
@@ -2139,7 +2140,7 @@ function renderTab4JSON(tab4, biz) {
   }
 
   /* Lost Customer Recovery appended after referral engine */
-  html += renderLostCustomerRecovery(tab4.lostCustomerRecovery);
+  html += renderLostCustomerRecovery(t4.lostCustomerRecovery);
 
   document.getElementById('tab4Content').innerHTML = html;
 }
