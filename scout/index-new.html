@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scout — Your AI Business Development Employee · G7 Capital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080808'/%3E%3Ctext y='.9em' font-size='70' font-family='serif' fill='%23E0922F'%3EG%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;
+  --amber:#E0922F;--amber-d:#D17B2E;--amber-l:#F0B968;--gold:#C9A84C;
+  --white:#FAFAF8;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(224,146,47,0.18);--border2:rgba(250,250,248,0.08);--border3:rgba(250,250,248,0.04);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Tenor Sans',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--white);overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 74% 58% at 52% 32%, rgba(224,146,47,0.18) 0%, rgba(150,90,30,0.07) 30%, rgba(8,8,8,0) 64%),
+    #080808;
+  background-attachment:fixed;
+}
+::selection{background:rgba(224,146,47,.3);color:var(--white)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.24;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
+
+/* ============ NAV ============ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;
+  padding:24px 44px;transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+.topbar.scrolled{background:rgba(8,8,8,.72);backdrop-filter:blur(14px);border-bottom-color:var(--border3)}
+.brand{display:flex;align-items:baseline;gap:18px}
+.wordmark{font-family:var(--serif);font-size:19px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;color:var(--white);white-space:nowrap}
+.wordmark b{font-weight:400;color:var(--amber)}
+.brand-sep{width:1px;height:15px;background:var(--border);align-self:center}
+.brand-tag{font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+.btn-amber{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--black);background:var(--amber);
+  padding:14px 30px;text-decoration:none;border:none;cursor:pointer;transition:all .35s;display:inline-block;white-space:nowrap}
+.btn-amber:hover{background:var(--amber-l);transform:translateY(-2px);box-shadow:0 14px 44px rgba(224,146,47,.32)}
+.nav-cta{padding:12px 26px}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+#loop{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.hero-inner{position:relative;z-index:3;width:100%;max-width:1340px;margin:0 auto;padding:120px 64px 80px;pointer-events:none}
+.hero-copy{max-width:512px;pointer-events:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber);margin-bottom:30px;opacity:0;animation:rise 1s ease .2s both}
+.eyebrow::before{content:'';width:34px;height:1px;background:var(--amber)}
+.hero h1{font-family:var(--serif);font-weight:300;line-height:1.02;letter-spacing:-.01em;color:var(--white);margin-bottom:26px;opacity:0;animation:rise 1s ease .35s both}
+.hero h1 .nm{display:block;font-size:clamp(56px,8vw,104px);line-height:.95}
+.hero h1 .rl{display:block;font-style:italic;color:var(--amber);font-size:clamp(26px,3.3vw,42px);margin-top:10px;line-height:1.1}
+.hero p{font-size:16px;line-height:1.95;color:var(--grey1);max-width:486px;margin-bottom:38px;opacity:0;animation:rise 1s ease .5s both}
+.hero-actions{display:flex;gap:24px;align-items:center;flex-wrap:wrap;opacity:0;animation:rise 1s ease .65s both}
+.btn-cap{font-size:11px;letter-spacing:.04em;color:var(--grey2);font-family:var(--serif);font-style:italic}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:3;opacity:0;animation:rise 1s ease 1.2s both}
+.scrollcue .ln{width:1px;height:42px;background:linear-gradient(var(--amber),transparent);animation:cue 2.6s ease infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+.scrollcue span{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey2)}
+
+/* ============ SECTIONS ============ */
+.section{max-width:1180px;margin:0 auto;padding:128px 64px;border-top:1px solid var(--border3)}
+.sec-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:26px}
+.sec-h{font-family:var(--serif);font-weight:300;line-height:1.12;letter-spacing:-.01em;color:var(--white)}
+.sec-h .it{font-style:italic;color:var(--amber)}
+.sec-body{font-size:16px;line-height:2;color:var(--grey1);max-width:660px}
+.sec-body strong{color:var(--white);font-weight:400}
+.sec-body + .sec-body{margin-top:26px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* pain cards */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border3);border:1px solid var(--border3);margin-top:64px}
+.pain{background:#0c0b09;padding:40px 32px;position:relative}
+.pain::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--amber);transform:scaleY(0);transform-origin:top;transition:transform .6s ease}
+.pain:hover::before{transform:scaleY(1)}
+.pain-t{font-family:var(--serif);font-weight:300;font-size:30px;color:var(--amber);margin-bottom:16px;line-height:1}
+.pain-d{font-size:14px;line-height:1.8;color:var(--grey1)}
+
+/* solution flow (5 stages) */
+.flow4{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:6px;margin-top:72px}
+.fnode{background:#0c0b09;border:1px solid var(--border3);padding:30px 18px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.fnode .fn-no{font-size:9px;letter-spacing:.24em;color:var(--grey2);margin-bottom:14px}
+.fnode .fn-k{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--amber);margin-bottom:12px;line-height:1}
+.fnode .fn-d{font-size:12.5px;line-height:1.7;color:var(--grey1)}
+.farrow{display:flex;align-items:center;justify-content:center;color:var(--amber);font-size:15px;opacity:.65}
+
+/* what you get */
+.get-sub{font-size:16px;line-height:1.9;color:var(--grey1);max-width:620px;margin-top:24px}
+.get-group{display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin:60px 0 18px}
+.get-group::before{content:'';width:28px;height:1px;background:var(--amber)}
+.get-group.first{margin-top:56px}
+.gets{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border3);border:1px solid var(--border3)}
+.get{background:#0c0b09;padding:36px 32px;min-height:200px;display:flex;flex-direction:column;transition:background .4s;position:relative}
+.get::before{content:'';position:absolute;left:0;top:0;height:2px;width:100%;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .5s ease}
+.get:hover::before{transform:scaleX(1)}
+.get:hover{background:#110f0c}
+.get-n{font-family:var(--serif);font-size:15px;color:var(--amber);letter-spacing:.08em;margin-bottom:22px}
+.get-t{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--white);margin-bottom:16px;line-height:1.5}
+.get-d{font-size:13px;line-height:1.85;color:var(--grey1);margin-top:auto}
+
+/* tag cloud */
+.tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:60px;max-width:920px}
+.tag{font-size:12px;letter-spacing:.06em;color:var(--grey1);border:1px solid var(--border);padding:10px 18px;border-radius:999px;transition:all .35s;cursor:default}
+.tag:hover{color:var(--amber);border-color:var(--amber);background:rgba(224,146,47,.06)}
+.tag-note{margin-top:42px;font-family:var(--serif);font-style:italic;font-size:19px;color:var(--amber-l);max-width:680px;line-height:1.5}
+
+/* pricing */
+.price-wrap{display:flex;justify-content:center;margin-top:64px}
+.price{width:100%;max-width:460px;background:#0c0b09;border:1px solid var(--border);padding:46px 44px 40px;text-align:center;position:relative}
+.price::after{content:'';position:absolute;inset:0;border:1px solid transparent;background:linear-gradient(180deg,rgba(224,146,47,.5),transparent 60%) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.price-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:24px}
+.price-free{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:28px;padding:14px 28px;border:1px solid var(--border);border-radius:999px;background:rgba(224,146,47,.07)}
+.price-free b{font-family:var(--sans);font-weight:400;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+.price-free small{font-size:11px;letter-spacing:.06em;color:var(--grey1)}
+.price-amt{font-family:var(--serif);font-weight:300;font-size:54px;color:var(--white);line-height:1;opacity:.82}
+.price-amt .pre{font-size:15px;color:var(--grey1);font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:8px;opacity:.9}
+.price-amt span{font-size:15px;color:var(--grey1);font-family:var(--sans);letter-spacing:.04em}
+.price-feats{list-style:none;text-align:left;margin:36px 0 32px;display:flex;flex-direction:column;gap:14px}
+.price-feats li{display:flex;align-items:flex-start;gap:13px;font-size:13.5px;line-height:1.5;color:var(--grey1)}
+.price-feats li::before{content:'';flex:none;width:16px;height:16px;margin-top:1px;border-radius:50%;background:rgba(224,146,47,.14);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23E0922F' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+.price .btn-amber{display:block;width:100%;padding:17px;font-size:11px}
+.price-cap{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--grey2);margin-top:18px}
+
+/* final CTA */
+.cta{position:relative;text-align:center;padding:150px 32px;overflow:hidden;border-top:1px solid var(--border3)}
+.cta::before{content:'';position:absolute;left:50%;top:48%;width:780px;height:780px;max-width:120vw;max-height:120vw;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(224,146,47,.18) 0%, rgba(224,146,47,.06) 32%, rgba(8,8,8,0) 64%);pointer-events:none;z-index:0}
+.cta-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.cta h2{font-family:var(--serif);font-weight:300;font-size:clamp(38px,5.4vw,56px);line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
+.cta h2 .it{font-style:italic;color:var(--amber)}
+.cta .lead{font-size:16px;line-height:1.9;color:var(--grey1);max-width:440px;margin-bottom:42px}
+.cta .btn-amber{font-size:11px;padding:18px 48px}
+.cta-cap{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--grey2);margin-top:22px}
+.cta-links{margin-top:40px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.cta-links .row{font-size:11px;letter-spacing:.04em;color:var(--grey2)}
+.cta-links a{color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .35s,border-color .35s}
+.cta-links a:hover{color:var(--amber);border-color:var(--amber)}
+
+/* footer */
+footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey2)}
+.foot-l b{color:var(--amber);font-weight:400}
+.foot-c{font-size:11px;letter-spacing:.1em;color:var(--grey2)}
+.foot-r{display:flex;gap:26px}
+.foot-r a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .35s}
+.foot-r a:hover{color:var(--amber)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:980px){
+  .topbar{padding:20px 28px}
+  .brand{gap:12px}
+  .hero-inner{padding:128px 32px 380px;text-align:center;display:flex;justify-content:center}
+  .hero-copy{max-width:600px}
+  .eyebrow{justify-content:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .section{padding:96px 32px}
+  .scrollcue{display:none}
+  .pains,.gets{grid-template-columns:1fr}
+  .flow4{grid-template-columns:1fr;gap:6px}
+  .farrow{transform:rotate(90deg);padding:2px 0}
+}
+@media(max-width:560px){
+  .topbar{padding:16px 20px}
+  .brand-sep,.brand-tag{display:none}
+  .nav-cta{padding:11px 18px;font-size:9px;letter-spacing:.16em}
+  .section{padding:78px 22px}
+  .price{padding:38px 26px 32px}
+  footer{flex-direction:column;text-align:center;padding:38px 22px}
+  .cta{padding:110px 22px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .eyebrow,.hero h1,.hero p,.hero-actions,.scrollcue{animation:none;opacity:1;transform:none}
+  .scrollcue .ln{animation:none}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topbar" id="topbar">
+  <div class="brand">
+    <a href="../index.html" class="wordmark"><b>G7</b> Capital</a>
+    <span class="brand-sep"></span>
+    <span class="brand-tag">Scout</span>
+  </div>
+  <a href="login.html?product=scout" class="btn-amber nav-cta">Get Started →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="loop"></canvas>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">G7 Capital · AI Employees</div>
+      <h1>
+        <span class="nm">Scout</span>
+        <span class="rl">Your AI Business Development Employee</span>
+      </h1>
+      <p>Scout finds your best customers, helps you win them, keeps them coming back, and grows your revenue — all in a simple plan you can follow from day one.</p>
+      <div class="hero-actions">
+        <a href="login.html?product=scout" class="btn-amber">Get Started →</a>
+        <span class="btn-cap">First month free. No card required.</span>
+      </div>
+    </div>
+  </div>
+  <div class="scrollcue"><div class="ln"></div><span>Scroll</span></div>
+</section>
+
+<!-- 01 — PROBLEM -->
+<section class="section" id="problem">
+  <div class="reveal">
+    <div class="sec-label">01 · The Problem</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">You know your product.<br>But finding customers feels like <span class="it">guesswork.</span></h2>
+    <p class="sec-body">Most business owners rely on walk-ins and word of mouth. There is no plan, no system — just hoping the right customers find you. Meanwhile your competitor down the road is taking the customers who should have been yours.</p>
+  </div>
+  <div class="pains reveal">
+    <div class="pain"><div class="pain-t">No plan</div><div class="pain-d">Most small businesses have no system for finding new customers.</div></div>
+    <div class="pain"><div class="pain-t">No time</div><div class="pain-d">You are running the business — who has time to figure out marketing?</div></div>
+    <div class="pain"><div class="pain-t">No budget</div><div class="pain-d">Hiring a marketing person or an agency costs more than you can justify.</div></div>
+  </div>
+</section>
+
+<!-- 02 — SOLUTION -->
+<section class="section" id="solution">
+  <div class="reveal">
+    <div class="sec-label">02 · Meet Scout</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">Scout is the AI employee that<br><span class="it">grows your business.</span></h2>
+    <p class="sec-body">Tell Scout about your business in 5 minutes. Scout studies your local market and gives you a complete plan — who your best customers are, exactly what to say to them, and what to do each day to win and keep them. Then every week, Scout adjusts the plan based on what worked.</p>
+  </div>
+  <div class="flow4 reveal">
+    <div class="fnode"><div class="fn-no">STAGE 01</div><div class="fn-k">Find</div><div class="fn-d">Scout finds your best customers nearby.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 02</div><div class="fn-k">Convert</div><div class="fn-d">Win them with the right message.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 03</div><div class="fn-k">Retain</div><div class="fn-d">Keep them coming back.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 04</div><div class="fn-k">Grow</div><div class="fn-d">More customers. More revenue.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 05</div><div class="fn-k">Fund</div><div class="fn-d">Get matched to government of India schemes your business qualifies for.</div></div>
+  </div>
+</section>
+
+<!-- 03 — WHAT YOU GET -->
+<section class="section" id="get">
+  <div class="reveal">
+    <div class="sec-label">03 · What You Get</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">Not advice.<br><span class="it">A plan you can actually follow.</span></h2>
+    <p class="get-sub">Scout covers everything — from finding your first customer to growing your revenue month after month.</p>
+  </div>
+
+  <div class="get-group first reveal">Find &amp; Win Customers</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">01</div><div class="get-t">Your Best Customers</div><div class="get-d">3 specific customer types to target, with exactly where to find them near you.</div></div>
+    <div class="get"><div class="get-n">02</div><div class="get-t">Ready-To-Send Messages</div><div class="get-d">Copy-paste WhatsApp messages in Hindi, Hinglish, or English — two versions to test.</div></div>
+    <div class="get"><div class="get-n">03</div><div class="get-t">A 5-Day Action Plan</div><div class="get-d">What to do each day, with clear targets and the time it takes.</div></div>
+  </div>
+
+  <div class="get-group reveal">Keep &amp; Multiply Customers</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">04</div><div class="get-t">WhatsApp Calendar</div><div class="get-d">4 weeks of pre-written broadcast messages — just copy and send at the right time.</div></div>
+    <div class="get"><div class="get-n">05</div><div class="get-t">Win Back Lost Customers</div><div class="get-d">Find customers who stopped coming and bring them back with the right message.</div></div>
+    <div class="get"><div class="get-n">06</div><div class="get-t">Referral Engine</div><div class="get-d">A complete referral program — what to offer, who to ask, and exactly what to say. Turn happy customers into a sales force.</div></div>
+  </div>
+
+  <div class="get-group reveal">Grow Your Business</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">07</div><div class="get-t">Expansion Intelligence</div><div class="get-d">New customer segments, new areas, and new revenue opportunities to expand into.</div></div>
+    <div class="get"><div class="get-n">08</div><div class="get-t">Government Schemes</div><div class="get-d">Schemes your business qualifies for — with the actual links and phone numbers to apply. Free money most owners never claim.</div></div>
+    <div class="get"><div class="get-n">09</div><div class="get-t">Grow Every Week</div><div class="get-d">Check in each Friday. Scout updates your plan based on what actually worked — so every week gets sharper.</div></div>
+  </div>
+</section>
+
+<!-- 04 — WHO IT WORKS FOR -->
+<section class="section" id="who">
+  <div class="reveal">
+    <div class="sec-label">04 · Built For Your Business</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">30 business types.<br><span class="it">Every Indian market.</span></h2>
+  </div>
+  <div class="tags reveal" id="tags"></div>
+  <div class="tag-note reveal">From metro suburbs to Tier 2 towns to Tier 3 districts — Scout calibrates to your exact market.</div>
+</section>
+
+<!-- 05 — PRICING -->
+<section class="section" id="pricing">
+  <div class="reveal">
+    <div class="sec-label">05 · Pricing</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px)">Less than you spend on chai<br>for the shop. <span class="it">Every month.</span></h2>
+  </div>
+  <div class="price-wrap reveal">
+    <div class="price">
+      <div class="price-label">Scout</div>
+      <div class="price-free"><b>First Month Free</b><small>No card required</small></div>
+      <div class="price-amt"><span class="pre">Then</span>₹3,000<span> / month</span></div>
+      <ul class="price-feats">
+        <li>Complete customer acquisition plan</li>
+        <li>Weekly plan updates</li>
+        <li>WhatsApp broadcast calendar</li>
+        <li>Referral network builder</li>
+        <li>Lost customer recovery</li>
+        <li>Government scheme recommendations</li>
+        <li>Festival campaign messages</li>
+        <li>All 30 business types covered</li>
+      </ul>
+      <a href="login.html?product=scout" class="btn-amber">Get Started →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 06 — FINAL CTA -->
+<section class="cta" id="start">
+  <div class="cta-inner reveal">
+    <h2>Your competition is already using it —<br><span class="it">and getting ahead.</span></h2>
+    <p class="lead">Just one new customer covers your monthly cost. Everything after that is profit.</p>
+    <a href="login.html?product=scout" class="btn-amber">Get Started →</a>
+    <div class="cta-cap">First month free. No card required.</div>
+    <div class="cta-links">
+      <div class="row">Already have an account? <a href="login.html?product=scout">Sign in →</a></div>
+      <div class="row">Want to talk to us first? <a href="/cdn-cgi/l/email-protection#7c1b0f190a120f190e0a151f190f3c1b111d1510521f1311430f091e16191f08412f1f130908594e4c3d1f1f190f0f594e4c2e190d09190f08">Request access →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="foot-l"><b>Scout</b> · A G7 Capital AI Employee</div>
+  <div class="foot-c">© 2026 G7 Capital</div>
+  <div class="foot-r">
+    <a href="../index.html">All Employees →</a>
+    <a href="/cdn-cgi/l/email-protection#c2a5b1a7b4acb1a7b0b4aba1a7b182a5afa3abaeeca1adaf">Contact</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* nav scroll state */
+(function(){
+  const bar=document.getElementById('topbar');
+  const f=()=>bar.classList.toggle('scrolled',scrollY>24); f();
+  addEventListener('scroll',f,{passive:true});
+})();
+
+/* tag cloud */
+(function(){
+  const T=['Grocery','Pharmacy','Gym','Restaurant','Salon','Coaching Centre','Clothing','Hardware','Electronics','Jewellery','Furniture','Real Estate','CA Firm','Diagnostic Lab','Printing','Wholesale','D2C Brand','Cloud Kitchen','Event Management','Digital Agency','Sweet Shop','Tailoring','Driving School','Travel Agency','Mobile Repair','Catering','Security Agency','Ayurvedic Clinic','Automobile Workshop','Stationery'];
+  document.getElementById('tags').innerHTML=T.map(t=>'<span class="tag">'+t+'</span>').join('');
+})();
+
+/* scroll reveal */
+(function(){
+  if(REDUCE){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')); return; }
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* ============================================================
+   HERO — GROWTH LOOP
+   A warm business core at the centre. Four stations on a ring —
+   FIND (top), CONVERT (right), RETAIN (bottom), GROW (left) —
+   light in sequence. Customer pins appear, a few convert (lines
+   draw into the business), retained pins keep pulsing, and the
+   business glow grows — bigger and brighter each cycle. Loops.
+   ============================================================ */
+(function(){
+  const canvas=document.getElementById('loop'); if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const heroCopy=document.querySelector('.hero-copy');
+  const AMB=[224,146,47], AMB_L=[240,185,104], AMB_D=[201,118,44], GREY=[138,136,128];
+  const rgba=(c,a)=>'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';
+  const lerp=(a,b,k)=>a+(b-a)*k;
+  const TAU=Math.PI*2;
+
+  let W,H,DPR,narrow;
+  let cx,cy,R,baseCoreR,maxCoreR,coreR=0,coreTargetR=0,glow=0,glowT=0;
+  let stations=[], pins=[], dust=[], dustW=-1;
+  let level=0, stage=0, prevStage=-1;
+  let perf=0,last=0,raf=0,running=false;
+
+  const STAGE_DUR=2.7, MAXLEVEL=4;
+  const STA=[
+    {k:'FIND',    ang:-Math.PI/2, sub:'Scout finds your best customers nearby.'},
+    {k:'CONVERT', ang:0,          sub:'Win them with the right message.'},
+    {k:'RETAIN',  ang:Math.PI/2,  sub:'Keep them coming back.'},
+    {k:'GROW',    ang:Math.PI,    sub:'More customers. More revenue.'}
+  ];
+
+  function resize(){
+    DPR=Math.min(devicePixelRatio||1,2);
+    W=canvas.clientWidth; H=canvas.clientHeight;
+    canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    narrow=W<980;
+    const textRight = heroCopy? heroCopy.getBoundingClientRect().right : W*0.33;
+    cx = narrow ? W*0.5 : Math.min(W*0.66, W-150);
+    cy = narrow ? H*0.74 : H*0.5;
+    const rRight = W - cx - 70;
+    const rLeft  = narrow ? cx - 40 : cx - textRight - 90;
+    const rVert  = narrow ? Math.min(cy-70, H-cy-46) : Math.min(cy-78, H-cy-78);
+    R = Math.max(92, Math.min(narrow?W*0.40:W*0.235, rRight, rLeft, rVert));
+    baseCoreR = R*0.18; maxCoreR = R*0.42;
+    if(!coreTargetR){ coreR=baseCoreR; coreTargetR=baseCoreR; glow=0.5; glowT=0.5; }
+    stations = STA.map(s=>({k:s.k,sub:s.sub,ang:s.ang,x:cx+Math.cos(s.ang)*R,y:cy+Math.sin(s.ang)*R}));
+    if(dustW!==W){
+      dustW=W; dust=[]; const n=narrow?34:66;
+      for(let i=0;i<n;i++) dust.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()*1.2+0.4,b:Math.random()*0.3+0.08,ph:Math.random()*TAU,amber:Math.random()<0.42});
+    }
+  }
+
+  function newPin(){
+    const ang=Math.random()*TAU;
+    const rad=coreR*1.7 + Math.random()*(R*0.66 - coreR*1.7);
+    return {ang, rad, lit:0, won:false, conn:0, ph:Math.random()*TAU, dead:false, born:perf};
+  }
+
+  function onStage(s){
+    if(s===0){ // FIND — refresh & top up pins
+      if(level>=MAXLEVEL){ level=MAXLEVEL; } // plateau (stay big)
+      const target = 7 + level*3;
+      // retire some old un-won pins to keep things churning
+      const unwon=pins.filter(p=>!p.won && !p.dead);
+      if(unwon.length>3){ for(let i=0;i<Math.min(2,unwon.length-3);i++) unwon[i].dead=true; }
+      while(pins.filter(p=>!p.dead).length < target) pins.push(newPin());
+    } else if(s===1){ // CONVERT — win ~40% of lit un-won pins
+      const cand=pins.filter(p=>!p.won && !p.dead && p.lit>0.4);
+      const n=Math.max(1,Math.round(cand.length*0.4));
+      for(let i=0;i<n && i<cand.length;i++) cand[i].won=true;
+      // cap retained customers
+      const won=pins.filter(p=>p.won && !p.dead);
+      if(won.length>11){ for(let i=0;i<won.length-11;i++) won[i].dead=true; }
+    } else if(s===3){ // GROW — bigger, brighter
+      level=Math.min(level+1,MAXLEVEL);
+      coreTargetR = baseCoreR + (maxCoreR-baseCoreR)*(level/MAXLEVEL);
+      glowT = 0.5 + 0.5*(level/MAXLEVEL);
+    }
+  }
+
+  function update(dt){
+    const fc=STAGE_DUR*4, tt=perf%fc;
+    stage=Math.floor(tt/STAGE_DUR);
+    if(stage!==prevStage){ onStage(stage); prevStage=stage; }
+    coreR=lerp(coreR,coreTargetR,Math.min(1,dt*1.6));
+    glow=lerp(glow,glowT,Math.min(1,dt*1.6));
+    for(const p of pins){
+      const want = p.dead?0:1;
+      p.lit=lerp(p.lit,want,Math.min(1,dt*(p.dead?2.4:1.6)));
+      if(p.won) p.conn=lerp(p.conn,1,Math.min(1,dt*2.2));
+      // gently push outwards if core grew into them
+      const minR=coreR*1.55; if(p.rad<minR) p.rad=lerp(p.rad,minR,Math.min(1,dt*2));
+    }
+    pins=pins.filter(p=>!(p.dead && p.lit<0.03));
+  }
+
+  function pinXY(p){ return [cx+Math.cos(p.ang)*p.rad, cy+Math.sin(p.ang)*p.rad]; }
+
+  function drawDust(){
+    for(const d of dust){
+      const tw=REDUCE?1:(0.6+0.4*Math.sin(perf*1.1+d.ph));
+      ctx.fillStyle = d.amber?rgba(AMB,d.b*tw):'rgba(250,250,248,'+(d.b*tw).toFixed(3)+')';
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.s,0,TAU); ctx.fill();
+    }
+  }
+
+  function drawRing(){
+    ctx.strokeStyle=rgba(AMB,0.10); ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.stroke();
+    // travelling flow arc
+    if(!REDUCE){
+      const a0=perf*0.5%TAU, span=0.5;
+      const g=ctx.createLinearGradient(cx+Math.cos(a0)*R,cy+Math.sin(a0)*R,cx+Math.cos(a0+span)*R,cy+Math.sin(a0+span)*R);
+      g.addColorStop(0,rgba(AMB,0)); g.addColorStop(1,rgba(AMB_L,0.55));
+      ctx.strokeStyle=g; ctx.lineWidth=2; ctx.lineCap='round';
+      ctx.beginPath(); ctx.arc(cx,cy,R,a0,a0+span); ctx.stroke();
+    }
+  }
+
+  function drawConnections(){
+    for(const p of pins){
+      if(!p.won || p.conn<=0.02) continue;
+      const [px,py]=pinXY(p);
+      const dx=cx-px, dy=cy-py, d=Math.hypot(dx,dy)||1;
+      const ex=px+dx*p.conn, ey=py+dy*p.conn;
+      const pulse=REDUCE?0.7:(0.5+0.4*Math.sin(perf*2+p.ph));
+      ctx.strokeStyle=rgba(AMB_L,0.18*pulse*p.lit);
+      ctx.lineWidth=1.4; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(ex,ey); ctx.stroke();
+    }
+  }
+
+  function drawPins(){
+    for(const p of pins){
+      if(p.lit<=0.02) continue;
+      const [px,py]=pinXY(p);
+      const won=p.won;
+      const pulse=won?(REDUCE?1:(0.7+0.3*Math.sin(perf*2.2+p.ph))):0.55;
+      const rr= won?5.2:4;
+      const col= won?AMB_L:AMB;
+      // glow
+      if(won){ ctx.shadowColor=rgba(AMB_L,0.8*p.lit); ctx.shadowBlur=12*pulse; }
+      // map-pin: circle + point
+      ctx.fillStyle=rgba(col, (won?0.95:0.5)*p.lit*pulse);
+      ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr,Math.PI*0.15,Math.PI*0.85,true);
+      ctx.lineTo(px,py+rr*1.1); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr,0,TAU); ctx.fill();
+      ctx.shadowBlur=0;
+      // inner dot
+      ctx.fillStyle=rgba([20,14,6],0.8*p.lit);
+      ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr*0.42,0,TAU); ctx.fill();
+    }
+  }
+
+  function drawStations(){
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    stations.forEach((s,i)=>{
+      const active=(i===stage);
+      const pulse=REDUCE?1:(0.7+0.3*Math.sin(perf*2));
+      const r= active?9:6;
+      if(active){ ctx.shadowColor=rgba(AMB_L,0.85); ctx.shadowBlur=18*pulse; }
+      ctx.fillStyle= active?rgba(AMB_L,0.95):rgba(AMB,0.32);
+      ctx.beginPath(); ctx.arc(s.x,s.y,r,0,TAU); ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.fillStyle= active?rgba([20,14,6],0.9):'rgba(0,0,0,0)';
+      ctx.beginPath(); ctx.arc(s.x,s.y,r*0.4,0,TAU); ctx.fill();
+      // label outside the node
+      const lx=s.x+Math.cos(s.ang)*22, ly=s.y+Math.sin(s.ang)*22;
+      ctx.font='10px "Tenor Sans", sans-serif';
+      if('letterSpacing' in ctx) ctx.letterSpacing='2px';
+      ctx.textAlign = s.ang===0?'left':(Math.abs(s.ang)===Math.PI?'right':'center');
+      ctx.fillStyle= active?rgba(AMB_L,0.95):rgba(GREY,0.6);
+      ctx.fillText(s.k, lx, ly);
+      if('letterSpacing' in ctx) ctx.letterSpacing='0px';
+    });
+    ctx.textAlign='center';
+  }
+
+  function drawCore(){
+    const pulse=REDUCE?1:(0.92+Math.sin(perf*1.5)*0.08);
+    const r=coreR;
+    // bloom
+    const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,r*6.5);
+    bg.addColorStop(0,rgba(AMB_L,0.34*glow*pulse));
+    bg.addColorStop(0.16,rgba(AMB,0.18*glow*pulse));
+    bg.addColorStop(0.5,rgba(AMB,0.05*glow));
+    bg.addColorStop(1,rgba(AMB,0));
+    ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(cx,cy,r*6.5,0,TAU); ctx.fill();
+    // orb
+    const o=ctx.createRadialGradient(cx-r*0.3,cy-r*0.32,r*0.1,cx,cy,r);
+    o.addColorStop(0,'#fff1da'); o.addColorStop(0.4,'#F0B968'); o.addColorStop(0.74,'#E0922F'); o.addColorStop(1,'#8a531c');
+    ctx.save();
+    ctx.shadowColor=rgba(AMB_L,0.7); ctx.shadowBlur=30*pulse*glow;
+    ctx.fillStyle=o; ctx.beginPath(); ctx.arc(cx,cy,r*pulse,0,TAU); ctx.fill();
+    ctx.restore();
+    // simple storefront glyph (warm dark, scales with core)
+    const s=r*0.9;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.fillStyle='rgba(40,24,8,0.62)'; ctx.strokeStyle='rgba(40,24,8,0.62)';
+    // awning roof (trapezoid)
+    ctx.beginPath();
+    ctx.moveTo(-s*0.62,-s*0.16); ctx.lineTo(s*0.62,-s*0.16);
+    ctx.lineTo(s*0.5,-s*0.42); ctx.lineTo(-s*0.5,-s*0.42); ctx.closePath(); ctx.fill();
+    // body
+    ctx.fillRect(-s*0.5,-s*0.16,s*1.0,s*0.62);
+    // door (cut with lighter)
+    ctx.fillStyle='rgba(255,241,218,0.5)';
+    ctx.fillRect(-s*0.14,s*0.10,s*0.28,s*0.36);
+    ctx.restore();
+  }
+
+  function drawCaption(){
+    const cur=STA[stage];
+    const fc=STAGE_DUR*4, tt=perf%fc, sp=(tt-stage*STAGE_DUR)/STAGE_DUR;
+    const fade=REDUCE?1:Math.min(1, Math.min(sp,1-sp)*6+0.25);
+    const y=cy+R+(narrow?30:38);
+    ctx.textAlign='center';
+    ctx.font='10px "Tenor Sans", sans-serif';
+    if('letterSpacing' in ctx) ctx.letterSpacing='3px';
+    ctx.fillStyle=rgba(AMB,0.9*fade); ctx.fillText(cur.k, cx, y);
+    if('letterSpacing' in ctx) ctx.letterSpacing='0px';
+    ctx.font='300 17px "Cormorant Garamond", serif';
+    ctx.fillStyle='rgba(240,239,233,'+(0.86*fade).toFixed(3)+')';
+    ctx.fillText(cur.sub, cx, y+22);
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    drawDust();
+    drawRing();
+    drawConnections();
+    drawPins();
+    drawCore();
+    drawStations();
+    drawCaption();
+    // left scrim — keep the loop clear of the headline
+    if(!narrow){
+      const sx=Math.max(0, (heroCopy?heroCopy.getBoundingClientRect().right:W*0.3));
+      const sc=ctx.createLinearGradient(0,0,sx,0);
+      sc.addColorStop(0,'rgba(8,8,8,1)'); sc.addColorStop(0.7,'rgba(8,8,8,0.9)'); sc.addColorStop(1,'rgba(8,8,8,0)');
+      ctx.fillStyle=sc; ctx.fillRect(0,0,sx,H);
+    }
+  }
+
+  function tick(ts){
+    if(!last) last=ts; let dt=(ts-last)/1000; last=ts; if(dt>0.05)dt=0.05;
+    perf+=dt; update(dt); render();
+    raf=requestAnimationFrame(tick);
+  }
+
+  resize();
+  addEventListener('resize',resize);
+
+  if(REDUCE){
+    // static, fully-grown representative frame
+    level=MAXLEVEL; coreTargetR=maxCoreR*0.8; coreR=coreTargetR; glow=0.95; glowT=0.95;
+    for(let i=0;i<16;i++){ const p=newPin(); p.lit=1; if(i%2===0){p.won=true;p.conn=1;} pins.push(p); }
+    stage=2; prevStage=2;
+    render();
+  } else {
+    render(); running=true; last=0; raf=requestAnimationFrame(tick);
+    const io=new IntersectionObserver(es=>{es.forEach(en=>{
+      if(en.isIntersecting && !running){running=true;last=0;raf=requestAnimationFrame(tick);}
+      else if(!en.isIntersecting && running){running=false;cancelAnimationFrame(raf);}
+    });},{threshold:0.02});
+    io.observe(canvas);
+  }
+})();
+</script>
+</body>
+</html>
