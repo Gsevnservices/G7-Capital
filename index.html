@@ -3,908 +3,463 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G7 Capital — An AI Deal Analyst built on 100 real investments.</title>
+<title>G7 Capital — AI Employees for the roles every business depends on</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080808'/%3E%3Ctext y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'%3EG%3C/text%3E%3C/svg%3E">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
 :root{
-  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;
   --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
-  --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
-  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08)
+  --white:#FAFAF8;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Tenor Sans',sans-serif;
+  /* planet tints */
+  --t-alex:#C9A84C;   --t-alex-l:#E2C97E;
+  --t-scout:#C77B30;  --t-scout-l:#E0A45C;
+  --t-priya:#3E8C84;  --t-priya-l:#5FB3AA;
+  --t-maya:#4A6FA5;   --t-maya-l:#7191C2;
+  --t-aria:#5A9E6F;   --t-aria-l:#7FBF94;
+  --t-stella:#B0567E; --t-stella-l:#D17FA1;
 }
-body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none}
-.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--white);overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 70% 55% at 72% 46%, rgba(90,72,30,0.20) 0%, rgba(40,32,14,0.08) 26%, rgba(8,8,8,0) 60%),
+    #080808;
+  background-attachment:fixed;
+}
+/* film grain — brand signature, very subtle */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.28;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:72px;background:rgba(8,8,8,.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
-.nav-logo em{font-style:normal;color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-.nav-links a{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1);text-decoration:none;white-space:nowrap;transition:color .3s}
-.nav-links a:hover{color:var(--white)}
-.nav-right{display:flex;align-items:center}
-.nav-cta-btn{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:11px 28px;text-decoration:none;transition:all .3s}
-.nav-cta-btn:hover{background:var(--gold2);transform:translateY(-1px)}
-.nav-workspace-btn{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:10px 24px;text-decoration:none;transition:all .3s;margin-right:16px}
-.nav-workspace-btn:hover{background:rgba(201,168,76,.08);transform:translateY(-1px)}
-.hamburger{display:none;flex-direction:column;gap:6px;cursor:pointer;background:none;border:none;padding:4px}
-.hamburger span{display:block;width:28px;height:1px;background:var(--white);transition:all .3s}
-.mobile-menu{display:none;position:fixed;top:80px;left:0;right:0;bottom:0;background:var(--black);z-index:499;flex-direction:column;justify-content:center;align-items:center;gap:40px;border-top:1px solid var(--border)}
-.mobile-menu.open{display:flex}
-.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:.05em;transition:color .3s}
-.mobile-menu a:hover{color:var(--gold)}
-.mobile-close{position:absolute;top:24px;right:32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);cursor:pointer;background:none;border:none;transition:color .3s}
-.mobile-close:hover{color:var(--gold)}
+/* ============ NAV ============ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;
+  padding:26px 44px}
+.wordmark{font-family:var(--serif);font-size:19px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;color:var(--white)}
+.wordmark b{font-weight:400;color:var(--gold)}
+.nav{display:flex;gap:30px}
+.nav a{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .4s}
+.nav a:hover{color:var(--gold)}
 
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:160px 40px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:140px;left:64px;right:64px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
-.hero::after{content:'';position:absolute;bottom:80px;left:64px;right:64px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
-.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(201,168,76,.04) 0%,transparent 70%);pointer-events:none}
-.hero-eyebrow{display:flex;align-items:center;gap:16px;margin-bottom:48px;opacity:0;animation:appear 1s ease .3s both}
-.eyebrow-line{width:40px;height:1px;background:var(--gold)}
-.eyebrow-text{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
-.hero-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7.5vw,108px);font-weight:300;line-height:1.05;letter-spacing:-.01em;color:var(--white);margin-bottom:16px;opacity:0;animation:appear 1s ease .5s both}
-.hero-headline em{font-style:italic;color:var(--gold)}
-.hero-headline-2{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7.5vw,108px);font-weight:300;line-height:1.05;letter-spacing:-.01em;color:var(--white);margin-bottom:56px;opacity:0;animation:appear 1s ease .7s both}
-.hero-sub{font-size:14px;letter-spacing:.06em;color:var(--grey1);line-height:2;max-width:540px;margin:0 auto 64px;opacity:0;animation:appear 1s ease .9s both}
-.hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;opacity:0;animation:appear 1s ease 1.1s both;margin-bottom:72px}
-.btn-gold{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:16px 48px;text-decoration:none;transition:all .3s;display:inline-block}
-.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,.25)}
-.btn-outline{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--white);background:transparent;padding:15px 48px;border:1px solid rgba(250,250,248,.2);text-decoration:none;transition:all .3s;display:inline-block}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
-.hero-stats{display:flex;align-items:stretch;gap:0;border:1px solid var(--border2);opacity:0;animation:appear 1s ease 1.3s both}
-.hero-stat{padding:24px 48px;text-align:center;border-right:1px solid var(--border2)}
-.hero-stat:last-child{border-right:none}
-.hero-stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px}
-.hero-stat-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);line-height:1.5}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:appear 1s ease 1.6s both}
-.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 2s ease infinite}
-@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
-.scroll-text{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--grey2)}
-@keyframes appear{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;gap:40px;
+  padding:120px 64px 60px;max-width:1340px;margin:0 auto}
+.starfield{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:var(--c,#fff)}
+@keyframes twinkle{0%,100%{opacity:var(--o,.4)}50%{opacity:calc(var(--o,.4)*.25)}}
+.hero-copy{flex:1;min-width:0;max-width:560px;position:relative;z-index:3}
+.eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:30px;opacity:0;animation:rise 1s ease .2s both}
+.eyebrow::before{content:'';width:34px;height:1px;background:var(--gold)}
+.hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(40px,5.2vw,60px);line-height:1.08;letter-spacing:-.01em;color:var(--white);margin-bottom:28px;opacity:0;animation:rise 1s ease .35s both}
+.hero h1 .it{font-style:italic;color:var(--gold)}
+.hero p{font-size:15px;line-height:1.95;color:var(--grey1);max-width:520px;margin-bottom:40px;opacity:0;animation:rise 1s ease .5s both}
+.hero-actions{display:flex;gap:18px;align-items:center;flex-wrap:wrap;opacity:0;animation:rise 1s ease .65s both}
+.btn-gold{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:15px 36px;text-decoration:none;transition:all .35s}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 14px 44px rgba(201,168,76,.28)}
+.btn-ghost{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--grey2);padding-bottom:4px;transition:all .35s}
+.btn-ghost:hover{color:var(--gold);border-color:var(--gold)}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-/* SECTIONS */
-.section-wrap{max-width:1200px;margin:0 auto;padding:0 64px}
-.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;padding-bottom:32px;border-bottom:1px solid var(--border2)}
-.section-no{font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:20px}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,56px);font-weight:300;line-height:1.1;letter-spacing:-.01em}
-.section-title em{font-style:italic;color:var(--gold)}
-.section-link{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);text-decoration:none;white-space:nowrap;transition:color .3s;padding-bottom:4px;border-bottom:1px solid var(--grey2);margin-bottom:8px}
-.section-link:hover{color:var(--gold);border-color:var(--gold)}
+/* ============ SOLAR SYSTEM ============ */
+.solar-wrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;opacity:0;animation:rise 1.4s ease .5s both}
+.solar{--S:min(46vw,82vmin,680px);position:relative;width:var(--S);height:var(--S)}
 
-/* PROBLEM SECTION */
-.problem-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.problem-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);margin-bottom:56px}
-.prob-stat{background:var(--black2);padding:56px 40px}
-.prob-stat-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--white);line-height:1;margin-bottom:8px}
-.prob-stat-unit{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--gold)}
-.prob-stat-label{font-size:12px;color:var(--grey1);line-height:1.8;margin-top:16px;letter-spacing:.03em}
-.problem-insight{border-left:2px solid var(--gold);padding:24px 32px;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--grey1);line-height:1.7;max-width:800px}
+/* orbit rings (rotate; centered via negative margins so transform is free for the animation) */
+.orbit{position:absolute;top:50%;left:50%;border:1px solid rgba(201,168,76,0.06);border-radius:50%;pointer-events:none;
+  transform:rotate(var(--a));animation:spin var(--dur) linear infinite}
+@keyframes spin{from{transform:rotate(var(--a))}to{transform:rotate(calc(var(--a) + 360deg))}}
+.o1{--f:.30}.o2{--f:.46}.o3{--f:.60}.o4{--f:.73}.o5{--f:.86}.o6{--f:.975}
+.orbit{width:calc(var(--S)*var(--f));height:calc(var(--S)*var(--f));
+  margin-left:calc(var(--S)*var(--f)/-2);margin-top:calc(var(--S)*var(--f)/-2)}
 
-/* HOW IT WORKS */
-.how-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2)}
-.step-card{background:var(--black);padding:48px 36px;position:relative;transition:background .3s}
-.step-card:hover{background:var(--black2)}
-.step-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .4s ease}
-.step-card:hover::before{transform:scaleX(1)}
-.step-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:rgba(201,168,76,.1);line-height:1;margin-bottom:28px;transition:color .3s}
-.step-card:hover .step-num{color:rgba(201,168,76,.2)}
-.step-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--white);margin-bottom:16px}
-.step-desc{font-size:12px;color:var(--grey1);line-height:1.9}
+.pwrap{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.planet{position:relative;border-radius:50%;cursor:pointer;border:none;padding:0;pointer-events:auto;
+  background:radial-gradient(circle at 50% 78%, var(--pl) 0%, var(--pm) 42%, var(--pd) 100%);
+  box-shadow:inset 0 -3px 9px -3px var(--rim), inset 0 5px 10px rgba(0,0,0,.55), 0 0 var(--glow) var(--glowc);
+  transition:transform .5s cubic-bezier(.2,.7,.2,1), filter .5s, box-shadow .5s}
+.planet:hover{transform:scale(1.15);filter:brightness(1.34)}
+.planet:focus-visible{outline:1px solid var(--gold);outline-offset:6px}
+/* soft glow ring in the planet's own colour, revealed on hover (all planets) */
+.planet::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid var(--pl);
+  opacity:0;transform:scale(.78);transition:opacity .42s ease,transform .42s ease;pointer-events:none;
+  box-shadow:0 0 20px var(--glowc)}
+.planet:hover::before{opacity:.8;transform:scale(1)}
+/* live pulse ring */
+.planet.live::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--pl);pointer-events:none;
+  opacity:.5;animation:livepulse 3.6s ease-out infinite}
+@keyframes livepulse{0%{transform:scale(1);opacity:.6}80%,100%{transform:scale(2);opacity:0}}
+.planet.soon{opacity:.46}
 
-/* OUTPUT SECTION */
-.output-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.output-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);margin-bottom:2px}
-.output-tab{background:var(--black2);padding:48px 40px;position:relative;transition:background .3s;cursor:default}
-.output-tab::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .4s ease}
-.output-tab:hover{background:var(--black3)}
-.output-tab:hover::before{transform:scaleX(1)}
-.tab-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-.tab-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--white);margin-bottom:20px;line-height:1.2}
-.tab-desc{font-size:12px;color:var(--grey1);line-height:1.9}
-.output-banner{background:rgba(201,168,76,.04);border:1px solid var(--border);border-top:none;padding:28px 40px;display:flex;align-items:center;gap:24px}
-.banner-plus{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold);flex-shrink:0}
-.banner-text{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
-.banner-text strong{color:var(--white);font-weight:400;font-size:13px;letter-spacing:.05em;display:block;margin-bottom:4px;font-family:'Tenor Sans',sans-serif}
+/* per-planet sizing, tint, motion */
+.p-alex  {width:calc(var(--S)*.074);height:calc(var(--S)*.074);--pl:var(--t-alex-l);--pm:#7a6526;--pd:#221d10;--rim:var(--t-alex-l);--glow:36px;--glowc:rgba(201,168,76,.72)}
+.p-scout {width:calc(var(--S)*.061);height:calc(var(--S)*.061);--pl:var(--t-scout-l);--pm:#7d4d1d;--pd:#211609;--rim:var(--t-scout-l);--glow:32px;--glowc:rgba(199,123,48,.66)}
+.p-priya {width:calc(var(--S)*.041);height:calc(var(--S)*.041);--pl:var(--t-priya-l);--pm:#244e49;--pd:#0d1413;--rim:var(--t-priya-l);--glow:12px;--glowc:rgba(62,140,132,.3)}
+.p-maya  {width:calc(var(--S)*.041);height:calc(var(--S)*.041);--pl:var(--t-maya-l);--pm:#2b405e;--pd:#0d1018;--rim:var(--t-maya-l);--glow:12px;--glowc:rgba(74,111,165,.3)}
+.p-aria  {width:calc(var(--S)*.038);height:calc(var(--S)*.038);--pl:var(--t-aria-l);--pm:#2f5640;--pd:#0e1411;--rim:var(--t-aria-l);--glow:12px;--glowc:rgba(90,158,111,.3)}
+.p-stella{width:calc(var(--S)*.041);height:calc(var(--S)*.041);--pl:var(--t-stella-l);--pm:#5e2f44;--pd:#160d12;--rim:var(--t-stella-l);--glow:12px;--glowc:rgba(176,86,126,.3)}
+.o1{--a:0deg;--dur:40s}
+.o2{--a:180deg;--dur:52s}
+.o3{--a:60deg;--dur:64s}
+.o4{--a:240deg;--dur:58s}
+.o5{--a:120deg;--dur:70s}
+.o6{--a:300deg;--dur:76s}
 
-/* TRAINING SECTION */
-.training-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.training-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2)}
-.train-box{background:var(--black);padding:48px 40px;transition:background .3s}
-.train-box:hover{background:var(--black2)}
-.train-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:16px}
-.train-desc{font-size:12px;color:var(--grey1);line-height:1.9}
+/* SUN */
+.sun{position:absolute;top:50%;left:50%;width:calc(var(--S)*.165);height:calc(var(--S)*.165);
+  margin-left:calc(var(--S)*.165/-2);margin-top:calc(var(--S)*.165/-2);border-radius:50%;
+  background:radial-gradient(circle at 50% 45%, #fff6df 0%, var(--gold2) 26%, var(--gold) 52%, var(--gold3) 78%, #6b5320 100%);
+  box-shadow:0 0 18px rgba(226,201,126,.9), 0 0 60px 6px rgba(201,168,76,.55), 0 0 130px 30px rgba(201,168,76,.28), 0 0 230px 70px rgba(201,168,76,.12);
+  display:flex;align-items:center;justify-content:center;z-index:5;
+  animation:sunpulse 5s ease-in-out infinite}
+.sun::before{content:'';position:absolute;inset:-26%;border-radius:50%;
+  background:radial-gradient(circle, rgba(226,201,126,.22) 0%, rgba(201,168,76,0) 68%);
+  animation:corona 5s ease-in-out infinite}
+.sun b{font-family:var(--serif);font-size:calc(var(--S)*.052);font-weight:300;letter-spacing:.1em;
+  color:#080808;background:none;border:none;box-shadow:none;z-index:1}
+@keyframes sunpulse{0%,100%{box-shadow:0 0 18px rgba(226,201,126,.9),0 0 60px 6px rgba(201,168,76,.55),0 0 130px 30px rgba(201,168,76,.28),0 0 230px 70px rgba(201,168,76,.12)}
+  50%{box-shadow:0 0 22px rgba(226,201,126,1),0 0 78px 10px rgba(201,168,76,.62),0 0 160px 40px rgba(201,168,76,.34),0 0 280px 90px rgba(201,168,76,.15)}}
+@keyframes corona{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.12);opacity:1}}
 
-/* VISION SECTION */
-.vision-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.phases-row{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:0;align-items:start;margin-bottom:80px}
-.phase-arrow{display:flex;align-items:flex-start;padding-top:40px;justify-content:center;color:var(--gold);font-size:24px;opacity:.4}
-.phase-card{border:1px solid var(--border2);padding:40px;position:relative}
-.phase-badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px}
-.phase-live{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease infinite}
-.phase-next-dot{width:6px;height:6px;border-radius:50%;background:var(--grey2)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.phase-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--white);margin-bottom:8px}
-.phase-role{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);margin-bottom:16px}
-.phase-desc{font-size:12px;color:var(--grey1);line-height:1.9}
-.vision-closing{text-align:center;max-width:760px;margin:0 auto;padding:0 24px}
-.vision-closing-text{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.5vw,32px);font-weight:300;font-style:italic;color:var(--grey1);line-height:1.7}
-.vision-closing-text em{color:var(--white);font-style:normal}
+/* pause on hover */
+.solar.paused .orbit{animation-play-state:paused}
+.solar.paused .planet.live::after{animation-play-state:paused}
 
-/* PARTNERS SECTION */
-.partners-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.partners-layout{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:start}
-.partners-left-desc{font-size:14px;color:var(--grey1);line-height:2;margin-bottom:40px}
-.partners-points{display:flex;flex-direction:column;gap:20px;margin-bottom:48px}
-.partner-point{display:flex;align-items:flex-start;gap:16px}
-.point-line{width:20px;height:1px;background:var(--gold);margin-top:10px;flex-shrink:0}
-.point-text{font-size:13px;color:var(--grey1);line-height:1.7}
-.partners-ask{border-left:2px solid var(--gold);padding:20px 28px;font-size:13px;color:var(--grey1);line-height:1.9}
-.partners-ask strong{color:var(--white);font-weight:400;display:block;margin-bottom:6px;font-size:14px}
-.partners-form{background:var(--black2);border:1px solid var(--border2);padding:48px}
-.form-field{display:flex;flex-direction:column;border-bottom:1px solid var(--border2);position:relative;margin-bottom:0}
-.form-field:first-child{border-top:1px solid var(--border2)}
-.form-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);padding:16px 0 4px}
-.form-input{background:transparent;border:none;padding:4px 0 16px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--white);outline:none;width:100%}
-.form-input::placeholder{color:rgba(250,250,248,.2)}
-.form-select{background:transparent;border:none;border-bottom:1px solid var(--border2);padding:20px 0;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--white);outline:none;width:100%;appearance:none;cursor:pointer;margin-bottom:0}
-.form-select option{background:var(--black2);color:var(--white)}
-.waitlist-btn{margin-top:40px;padding:18px;background:var(--gold);color:var(--black);border:none;font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .3s;width:100%}
-.waitlist-btn:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,.2)}
-.waitlist-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.waitlist-note{font-size:11px;color:var(--grey2);margin-top:16px;letter-spacing:.05em;text-align:center}
-.success-card{display:none;margin-top:32px;padding:40px 32px;border:1px solid var(--border);text-align:center}
-.success-card.show{display:block;animation:appear .6s ease both}
-.success-card p{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--gold);font-style:italic;line-height:1.8}
-.form-error{display:none;font-size:11px;color:#e8a0a0;letter-spacing:.05em;margin-top:16px;font-style:italic}
-.form-error.show{display:block}
+/* floating tooltip */
+.tip{position:fixed;left:-9999px;top:-9999px;z-index:700;pointer-events:none;opacity:0;margin-top:9px;visibility:hidden;
+  transition:opacity .32s ease, margin-top .32s ease;background:rgba(15,15,15,.95);border:1px solid var(--border);
+  border-radius:6px;padding:15px 18px 14px;text-align:center;backdrop-filter:blur(10px);
+  width:max-content;max-width:240px;box-shadow:0 14px 44px rgba(0,0,0,.55)}
+.tip.show{opacity:1;margin-top:0;visibility:visible}
+.tip .tn{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--tipc,var(--gold));line-height:1}
+.tip .tr{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-top:8px}
+.tip .summ{font-size:11px;line-height:1.55;color:var(--grey1);margin-top:9px}
+.tip .ts{display:inline-block;margin-top:12px;padding:3px 10px;font-size:8px;letter-spacing:.2em;text-transform:uppercase;border-radius:3px}
+.tip .ts.live{background:var(--gold);color:var(--black)}
+.tip .ts.soon{border:1px solid var(--border);color:var(--grey1)}
 
-/* FOOTER */
-footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:64px;padding-bottom:64px;border-bottom:1px solid var(--border2);margin-bottom:32px}
-.footer-brand-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:.1em;color:var(--white);margin-bottom:12px}
-.footer-brand-name em{font-style:normal;color:var(--gold)}
-.footer-tagline{font-size:12px;color:var(--grey2);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:28px;line-height:1.6}
-.footer-col-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-.footer-col a{display:block;font-size:13px;color:var(--grey1);text-decoration:none;margin-bottom:12px;transition:color .3s;letter-spacing:.03em}
-.footer-col a:hover{color:var(--white)}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
-.footer-copy{font-size:11px;color:var(--grey2);letter-spacing:.06em}
-.footer-disclaimer{font-size:10px;color:var(--grey2);max-width:480px;text-align:right;line-height:1.7;letter-spacing:.03em}
+/* scroll cue */
+.scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:3;opacity:0;animation:rise 1s ease 1.1s both}
+.scrollcue .ln{width:1px;height:42px;background:linear-gradient(var(--gold),transparent);animation:cue 2.4s ease infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+.scrollcue span{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey2)}
 
-/* CONTACT SECTION */
-.contact-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.contact-intro{margin-bottom:48px}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:720px}
-.contact-card{border:1px solid var(--border);background:rgba(250,250,248,0.02);padding:36px 40px;transition:background .3s}
-.contact-card:hover{background:rgba(250,250,248,0.03)}
-.contact-label{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.contact-email{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--white);text-decoration:none;display:block;margin-bottom:12px;transition:color .3s}
-.contact-email:hover{color:var(--gold)}
-.contact-desc{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
-
-/* SOCIAL PROOF TICKER */
-.social-proof-wrap{width:100%;background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.15);border-bottom:1px solid rgba(201,168,76,0.15);padding:14px 0;overflow:hidden;position:relative;margin-top:72px}
-.social-proof-wrap::before{content:'';position:absolute;left:0;top:0;width:80px;height:100%;background:linear-gradient(to right,#080808 0%,transparent 100%);z-index:2;pointer-events:none}
-.social-proof-wrap::after{content:'';position:absolute;right:0;top:0;width:80px;height:100%;background:linear-gradient(to left,#080808 0%,transparent 100%);z-index:2;pointer-events:none}
-.social-proof-inner{width:100%;overflow:hidden}
-.proof-row{width:100%;overflow:hidden}
-.proof-track{display:inline-flex;align-items:center;white-space:nowrap;animation:proofScroll 35s linear infinite}
-.proof-track:hover{animation-play-state:paused}
-@keyframes proofScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.proof-item{display:inline-flex;align-items:center;gap:10px;font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,168,76,0.75);padding:0 8px;white-space:nowrap}
-.proof-sep{color:rgba(201,168,76,0.25);font-size:16px;padding:0 12px}
-.proof-pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:#C9A84C;opacity:.7;animation:proofPulse 2s ease-in-out infinite;flex-shrink:0}
-@keyframes proofPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
-
-/* CHATGPT CALLOUT BAR */
-.chatgpt-bar{background:rgba(201,168,76,0.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 0}
-.chatgpt-bar-inner{max-width:1200px;margin:0 auto;padding:0 64px;display:flex;align-items:center;gap:64px}
-.chatgpt-bar-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);flex-shrink:0}
-.chatgpt-bar-divider{width:1px;height:40px;background:var(--border);flex-shrink:0}
-.chatgpt-bar-text{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2vw,24px);font-weight:300;color:var(--white);line-height:1.5}
-.chatgpt-bar-text em{font-style:italic;color:var(--gold)}
-
-/* TESTIMONIAL SECTION */
-.testimonial-section{padding:80px 0;border-bottom:1px solid var(--border2)}
-.testimonial-card{border:1px solid var(--border);background:rgba(201,168,76,0.02);padding:56px 64px;max-width:900px;margin:0 auto;text-align:center}
-.testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.2vw,28px);font-weight:300;font-style:italic;color:var(--white);line-height:1.7;margin-bottom:40px}
-.testimonial-attribution{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-.testimonial-role{font-size:11px;color:var(--grey2);letter-spacing:.08em;margin-top:8px}
-
-/* DEMO SECTION */
-.demo-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.demo-placeholder{aspect-ratio:16/9;background:var(--black3);border:1px solid var(--border2);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;margin-bottom:48px;overflow:hidden}
-.demo-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,168,76,.04) 0%,transparent 70%)}
-.demo-play-icon{width:72px;height:72px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:border-color .3s}
-.demo-placeholder:hover .demo-play-icon{border-color:var(--gold)}
-.demo-play-icon::after{content:'▶';font-size:20px;color:var(--gold);margin-left:4px}
-.demo-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);position:relative;z-index:1}
-.demo-coming-soon{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--grey1);font-style:italic;position:relative;z-index:1}
-.demo-notify-form{display:flex;gap:0;max-width:480px;border:1px solid var(--border2)}
-.demo-notify-input{flex:1;background:transparent;border:none;padding:16px 20px;font-family:'Tenor Sans',sans-serif;font-size:12px;color:var(--white);outline:none;letter-spacing:.05em}
-.demo-notify-input::placeholder{color:rgba(250,250,248,.3)}
-.demo-notify-btn{background:var(--gold);border:none;padding:16px 28px;font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);cursor:pointer;transition:background .3s;white-space:nowrap;flex-shrink:0}
-.demo-notify-btn:hover{background:var(--gold2)}
-.demo-notify-success{display:none;font-size:12px;color:var(--gold);letter-spacing:.08em;margin-top:12px;font-style:italic;font-family:'Cormorant Garamond',serif}
-.demo-notify-success.show{display:block}
-
-/* WAITLIST COUNTER */
-.wl-counter{display:flex;align-items:stretch;max-width:640px;margin:0 0 48px;border:1px solid rgba(201,168,76,0.2);background:rgba(201,168,76,0.03)}
-.wl-stat{flex:1;text-align:center;padding:32px 24px}
-.wl-number{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:#C9A84C;line-height:1;margin-bottom:10px}
-.wl-label{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(250,250,248,0.4)}
-.wl-divider{width:1px;background:rgba(201,168,76,0.15);flex-shrink:0;align-self:stretch}
-
-/* SCROLL TO TOP */
-.scroll-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border:1px solid var(--border);background:var(--black2);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:all .3s;z-index:200;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);text-decoration:none}
-.scroll-top.show{opacity:1}
-.scroll-top:hover{background:var(--black3);border-color:var(--gold)}
-
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+/* ============ SECTIONS ============ */
+.section{max-width:1180px;margin:0 auto;padding:120px 64px;border-top:1px solid var(--border2)}
+.sec-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.sec-h{font-family:var(--serif);font-weight:300;font-size:clamp(32px,4vw,42px);line-height:1.12;letter-spacing:-.01em;margin-bottom:56px}
+.sec-h .it{font-style:italic;color:var(--gold)}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
 .reveal.in{opacity:1;transform:none}
 
-/* MOBILE */
-@media(max-width:1024px){
-  nav{padding:0 32px}
-  .nav-links{display:none}
-  .hamburger{display:flex}
-  .hero::before,.hero::after{left:32px;right:32px}
-  .section-wrap{padding:0 32px}
-  footer{padding:60px 32px 40px}
-  .footer-top{grid-template-columns:1fr 1fr;gap:40px}
-  .partners-layout{grid-template-columns:1fr;gap:56px}
-  .phases-row{grid-template-columns:1fr;gap:24px}
-  .phase-arrow{display:none}
+/* employees grid */
+.emp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2)}
+.emp{background:#0c0c0c;padding:34px 30px;position:relative;transition:background .4s;display:flex;flex-direction:column;min-height:230px}
+.emp::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--ec);transform:scaleY(0);transform-origin:top;transition:transform .5s ease}
+.emp:hover{background:#111}
+.emp:hover::before{transform:scaleY(1)}
+.emp-top{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.emp-dot{width:9px;height:9px;border-radius:50%;background:var(--ec);box-shadow:0 0 10px var(--ec)}
+.emp-name{font-family:var(--serif);font-size:25px;font-weight:400;color:var(--gold);line-height:1}
+.emp-role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--white);margin-bottom:14px}
+.emp-desc{font-size:13px;line-height:1.8;color:var(--grey1);margin-bottom:auto}
+.emp-foot{display:flex;align-items:center;justify-content:space-between;margin-top:24px;padding-top:18px;border-top:1px solid var(--border2)}
+.badge{font-size:9px;letter-spacing:.18em;text-transform:uppercase;padding:5px 12px}
+.badge.live{background:var(--gold);color:var(--black)}
+.badge.soon{background:transparent;color:var(--grey1);border:1px solid var(--border2)}
+.emp-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;cursor:pointer;background:none;border:none;font-family:var(--sans);transition:color .35s}
+.emp-link:hover{color:var(--gold)}
+
+/* why */
+.why-body{font-size:16px;line-height:2;color:var(--grey1);max-width:640px;margin-bottom:18px}
+.why-body strong{color:var(--white);font-weight:400}
+.why-kicker{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--gold);margin-bottom:64px}
+.why-points{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2)}
+.why-pt{background:#0c0c0c;padding:36px 30px}
+.why-pt-l{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.why-pt-d{font-size:13px;line-height:1.85;color:var(--grey1)}
+
+/* footer */
+footer{border-top:1px solid var(--border2);padding:40px 64px;max-width:1340px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey2)}
+.foot-l b{color:var(--gold);font-weight:400}
+.foot-c{font-size:11px;letter-spacing:.1em;color:var(--grey2)}
+.foot-r{display:flex;gap:24px}
+.foot-r a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .35s}
+.foot-r a:hover{color:var(--gold)}
+
+/* ============ MODAL ============ */
+.modal-bg{position:fixed;inset:0;z-index:1000;background:rgba(6,6,6,.86);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .4s}
+.modal-bg.show{opacity:1;pointer-events:auto}
+.modal{width:100%;max-width:460px;background:#0d0d0d;border:1px solid var(--border);padding:44px 44px 40px;position:relative;
+  transform:translateY(16px);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.modal-bg.show .modal{transform:none}
+.modal-close{position:absolute;top:20px;right:22px;background:none;border:none;color:var(--grey1);font-size:15px;cursor:pointer;transition:color .3s}
+.modal-close:hover{color:var(--white)}
+.modal-dot{width:11px;height:11px;border-radius:50%;background:var(--mc,var(--gold));box-shadow:0 0 14px var(--mc,var(--gold));margin-bottom:20px}
+.modal-eyebrow{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--mc,var(--gold));margin-bottom:12px}
+.modal h3{font-family:var(--serif);font-weight:300;font-size:32px;color:var(--white);line-height:1.1;margin-bottom:6px}
+.modal .role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey1);margin-bottom:22px}
+.modal p{font-size:14px;line-height:1.85;color:var(--grey1);margin-bottom:30px}
+.notify{display:flex;flex-direction:column;border-bottom:1px solid var(--border2);transition:border-color .3s;margin-bottom:24px}
+.notify:focus-within{border-bottom-color:rgba(201,168,76,.5)}
+.notify label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);padding:0 0 4px}
+.notify input{background:transparent;border:none;outline:none;font-family:var(--serif);font-size:18px;font-weight:300;color:var(--white);padding:2px 0 14px;width:100%}
+.notify input::placeholder{color:rgba(250,250,248,.2)}
+.notify-btn{width:100%;padding:15px;background:var(--gold);color:var(--black);border:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .35s}
+.notify-btn:hover{background:var(--gold2)}
+.notify-ok{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--gold);text-align:center;padding:6px 0}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:980px){
+  .hero{flex-direction:column;justify-content:center;text-align:center;padding:130px 32px 90px;gap:8px}
+  .hero-copy{max-width:600px}
+  .eyebrow{justify-content:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .solar{--S:min(86vw,72vh,560px);margin-top:36px}
+  .nav{display:none}
+  .section{padding:90px 32px}
+  .scrollcue{display:none}
 }
-@media(max-width:768px){
-  .hero{padding:120px 24px 80px}
-  .hero::before,.hero::after{display:none}
-  .hero-stats{flex-direction:column;width:100%}
-  .hero-stat{border-right:none;border-bottom:1px solid var(--border2)}
-  .hero-stat:last-child{border-bottom:none}
-  .section-header{flex-direction:column;align-items:flex-start;gap:24px}
-  .problem-stats{grid-template-columns:1fr}
-  .steps-grid{grid-template-columns:1fr 1fr}
-  .output-tabs{grid-template-columns:1fr}
-  .training-grid{grid-template-columns:1fr 1fr}
-  .partners-form{padding:32px 24px}
-  footer{padding:60px 24px 40px}
-  .footer-top{grid-template-columns:1fr}
-  .footer-disclaimer{text-align:left}
-  .footer-bottom{flex-direction:column;align-items:flex-start}
-  body{cursor:auto}
-  .cursor,.cursor-ring{display:none}
-  .scroll-top{bottom:20px;right:20px}
-  .chatgpt-bar-inner{flex-direction:column;gap:24px;padding:0 24px}
-  .chatgpt-bar-divider{width:40px;height:1px}
-  .testimonial-card{padding:40px 24px}
-  .demo-notify-form{flex-direction:column}
-  .demo-notify-btn{padding:14px 20px}
-  .wl-counter{flex-direction:column}
+@media(max-width:680px){
+  .emp-grid,.why-points{grid-template-columns:1fr}
+  .topbar{padding:22px 26px}
+  .section{padding:72px 26px}
+  footer{flex-direction:column;text-align:center;padding:36px 26px}
 }
-@media(max-width:480px){
-  .steps-grid{grid-template-columns:1fr}
-  .training-grid{grid-template-columns:1fr}
-  nav{padding:0 24px}
-  .section-wrap{padding:0 24px}
+@media(prefers-reduced-motion:reduce){
+  .orbit{animation:none}
+  .sun,.sun::before,.planet.live::after,.scrollcue .ln,.star{animation:none}
+  .eyebrow,.hero h1,.hero p,.hero-actions,.solar-wrap,.scrollcue{animation:none;opacity:1;transform:none}
 }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<a href="#" class="scroll-top" id="scrollTop">↑</a>
-
 <!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">G<em>7</em> Capital</a>
-  <ul class="nav-links">
-    <li><a href="#how-it-works">How It Works</a></li>
-    <li><a href="#output">What Alex Produces</a></li>
-    <li><a href="#vision">The Vision</a></li>
-    <li><a href="#partners">Early Access</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="login.html?product=scout" class="nav-workspace-btn" style="margin-right:8px">Scout</a>
-    <a href="login.html" class="nav-workspace-btn">Enter Workspace</a>
-    <a href="#partners" class="nav-cta-btn">Request Early Access</a>
-  </div>
-  <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" onclick="toggleMenu()">Close ✕</button>
-  <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
-  <a href="#output" onclick="toggleMenu()">What Alex Produces</a>
-  <a href="#vision" onclick="toggleMenu()">The Vision</a>
-  <a href="#partners" onclick="toggleMenu()">Early Access</a>
-  <a href="#contact" onclick="toggleMenu()">Contact</a>
-  <a href="login.html" onclick="toggleMenu()">Enter Workspace</a>
+<div class="topbar">
+  <a href="#top" class="wordmark"><b>G7</b> Capital</a>
+  <nav class="nav">
+    <a href="#employees">Employees</a>
+    <a href="#why">Vision</a>
+    <a href="#contact">Contact</a>
+  </nav>
 </div>
 
-<!-- SOCIAL PROOF TICKER -->
-<div class="social-proof-wrap">
-  <div class="social-proof-inner">
-    <div class="proof-row">
-      <div class="proof-track">
-        <span class="proof-item"><span class="proof-pulse"></span>Currently used by 5 top VC firms in India</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>3 global investment bank teams actively screening deals</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>20+ senior investment professionals in active use</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>10+ VC firms</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>5+ private equity firms</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>10+ investment banking teams</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>50+ individuals on the waitlist</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>20+ renowned firms and companies</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>Currently used by 5 top VC firms in India</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>3 global investment bank teams actively screening deals</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>20+ senior investment professionals in active use</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>10+ VC firms</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>5+ private equity firms</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>10+ investment banking teams</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>50+ individuals on the waitlist</span>
-        <span class="proof-sep">·</span>
-        <span class="proof-item"><span class="proof-pulse"></span>20+ renowned firms and companies</span>
-        <span class="proof-sep">·</span>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="starfield" id="starfield"></div>
 
-<!-- SECTION 1 — HERO -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-eyebrow">
-    <div class="eyebrow-line"></div>
-    <div class="eyebrow-text">Beta · Q2 2026 · 5–10 Early Access Firms</div>
-    <div class="eyebrow-line"></div>
-  </div>
-  <h1 class="hero-headline">Your AI investment team.</h1>
-  <h1 class="hero-headline-2">Built on <em>100 real decisions.</em></h1>
-  <p class="hero-sub">
-    G7 Capital gives investment teams an AI analyst that screens every deal<br>
-    to institutional standard — calibrated to your firm's thesis,<br>
-    not generic VC output.
-  </p>
-  <div class="hero-actions">
-    <a href="#partners" class="btn-gold">Request Early Access →</a>
-    <a href="login.html" class="btn-outline">Enter Workspace →</a>
-  </div>
-  <!-- Scout entry point -->
-  <div style="margin-top:-24px;margin-bottom:40px;opacity:0;animation:appear 1s ease 1s both">
-    <a href="scout/landing.html" style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--grey2);padding-bottom:3px;transition:all .3s" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--grey1)';this.style.borderColor='var(--grey2)'">
-      For Indian SMBs → Try G7 Scout
-    </a>
-  </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">~3<span style="font-size:20px;color:var(--grey2)">min</span></div>
-      <div class="hero-stat-label">From upload to<br>screening note</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">100</div>
-      <div class="hero-stat-label">Real investment decisions<br>trained on</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">$5–10</div>
-      <div class="hero-stat-label">Per deal,<br>all-inclusive</div>
+  <div class="hero-copy">
+    <div class="eyebrow">The AI Workforce</div>
+    <h1>Senior expertise,<br><span class="it">hired in seconds.</span></h1>
+    <p>G7 builds AI employees for the roles every business depends on — analysts, credit officers, auditors, marketers, and growth teams. Trained to the standard of a senior professional. Available instantly.</p>
+    <div class="hero-actions">
+      <a href="#employees" class="btn-gold">Meet the employees →</a>
+      <a href="#why" class="btn-ghost">Why G7</a>
     </div>
   </div>
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    <div class="scroll-text">Scroll</div>
+
+  <div class="solar-wrap">
+    <div class="solar" id="solar">
+      <!-- orbits (inner → outer): Alex, Scout, Priya, Maya, Aria, Stella -->
+      <div class="orbit o1"><div class="pwrap"><button class="planet p-alex live"   data-key="alex"></button></div></div>
+      <div class="orbit o2"><div class="pwrap"><button class="planet p-scout live"  data-key="scout"></button></div></div>
+      <div class="orbit o3"><div class="pwrap"><button class="planet p-priya soon"  data-key="priya"></button></div></div>
+      <div class="orbit o4"><div class="pwrap"><button class="planet p-maya soon"   data-key="maya"></button></div></div>
+      <div class="orbit o5"><div class="pwrap"><button class="planet p-aria soon"   data-key="aria"></button></div></div>
+      <div class="orbit o6"><div class="pwrap"><button class="planet p-stella soon" data-key="stella"></button></div></div>
+      <!-- sun -->
+      <div class="sun"><b>G7</b></div>
+    </div>
   </div>
+
+  <div class="scrollcue"><div class="ln"></div><span>Scroll</span></div>
 </section>
 
-<!-- SECTION 2 — THE PROBLEM -->
-<section class="problem-section" id="problem">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">01 — The Problem</div>
-        <h2 class="section-title">The bottleneck<br>every fund <em>shares.</em></h2>
-      </div>
-      <a href="#partners" class="section-link">Request early access →</a>
-    </div>
-    <div class="problem-stats reveal">
-      <div class="prob-stat">
-        <div class="prob-stat-num">300<span class="prob-stat-unit">+</span></div>
-        <div class="prob-stat-label">Decks reach a senior partner's inbox each month. Every one deserves a view. Almost none get one.</div>
-      </div>
-      <div class="prob-stat">
-        <div class="prob-stat-num">15<span class="prob-stat-unit">min</span></div>
-        <div class="prob-stat-label">Realistic triage time per deck, if you're being generous. Most get two minutes and a gut feel.</div>
-      </div>
-      <div class="prob-stat">
-        <div class="prob-stat-num">2–3<span class="prob-stat-unit" style="font-size:24px"> days</span></div>
-        <div class="prob-stat-label">For an associate memo. By then the founder has a term sheet from someone who moved faster.</div>
-      </div>
-    </div>
-    <div class="reveal">
-      <div class="problem-insight">
-        "300 decks × 15 minutes = 75 hours per month on triage alone.
-        Two full working weeks before a single investment decision is made."
-      </div>
-    </div>
+<!-- tooltip -->
+<div class="tip" id="tip"><div class="tn" id="tipName"></div><div class="tr" id="tipRole"></div><div class="summ" id="tipSum"></div><div class="ts" id="tipStatus"></div></div>
+
+<!-- EMPLOYEES -->
+<section class="section" id="employees">
+  <div class="reveal">
+    <div class="sec-label">01 · The Employees</div>
+    <h2 class="sec-h">Six specialists.<br><span class="it">One workforce.</span></h2>
   </div>
+  <div class="emp-grid reveal" id="empGrid"></div>
 </section>
 
-<!-- SECTION 3 — HOW IT WORKS -->
-<section class="how-section" id="how-it-works">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">02 — How It Works</div>
-        <h2 class="section-title">How <em>Alex</em> works.</h2>
-      </div>
-      <a href="#output" class="section-link">See what Alex produces →</a>
-    </div>
-    <div class="steps-grid reveal">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <div class="step-title">Configure</div>
-        <div class="step-desc">Complete a 5-step onboarding. Alex learns your thesis, hard-pass criteria, ticket size, return targets, and partner preferences. Every analysis is calibrated to your firm — not generic VC standards.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <div class="step-title">Submit</div>
-        <div class="step-desc">Upload a pitch deck as PDF or paste anything — an email, exec summary, LinkedIn profile, your own notes. Alex reads pitch decks visually, the same way you do. No reformatting required.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <div class="step-title">Alex analyses</div>
-        <div class="step-desc">In minutes Alex applies 6 analytical frameworks, 8 sector intelligence libraries, 100 red flags, growth decomposition, risk scoring, and fund return maths calibrated to your specific fund.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">04</div>
-        <div class="step-title">Review and act</div>
-        <div class="step-desc">Read the 30-second summary card. Open the full note if proceeding. Email the founder deal-specific questions in one click. Calibrate Alex when you disagree — he learns permanently.</div>
-      </div>
-    </div>
+<!-- WHY -->
+<section class="section" id="why">
+  <div class="reveal">
+    <div class="sec-label">02 · Why G7</div>
+    <h2 class="sec-h">Every business runs on expertise<br>it cannot always <span class="it">afford.</span></h2>
+    <p class="why-body">A senior analyst costs lakhs a year. A good credit officer is hard to find. A skilled auditor is booked months ahead. G7 builds these experts as AI employees — each trained to a senior professional's standard, each available the moment you need them, each at a fraction of the cost of hiring.</p>
+    <p class="why-kicker">You do not adopt software. You hire a specialist.</p>
   </div>
-</section>
-
-<!-- SECTION 4 — WHAT ALEX PRODUCES -->
-<section class="output-section" id="output">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">03 — Output</div>
-        <h2 class="section-title">What you get<br>on <em>every deal.</em></h2>
-      </div>
-      <a href="#partners" class="section-link">Request early access →</a>
-    </div>
-    <div class="output-tabs reveal">
-      <div class="output-tab">
-        <div class="tab-label">01 — Screening Note</div>
-        <div class="tab-title">Institutional-grade screening note</div>
-        <div class="tab-desc">G7 Score 0–100 with PASS / WATCH / PRIORITY REVIEW verdict. Executive summary, thesis fit assessment, market, team, traction, competitive position, single point of failure identification, and deal-specific founder questions — calibrated to your firm's criteria on every deal.</div>
-      </div>
-      <div class="output-tab">
-        <div class="tab-label">02 — Growth &amp; Return Dashboard</div>
-        <div class="tab-title">Growth quality and return modelling</div>
-        <div class="tab-desc">Growth Quality Score (0–10) with decomposition across new logo vs expansion and organic vs paid. A 3×3 return scenario matrix across 3 exit multiples and 3 timelines. Breakeven analysis showing the exact ARR needed for 1x, 3x, and 5x — and the annual growth rate required to get there.</div>
-      </div>
-      <div class="output-tab">
-        <div class="tab-label">03 — Risk Intelligence + RAOS</div>
-        <div class="tab-title">Risk scoring and opportunity calibration</div>
-        <div class="tab-desc">Probability × impact scoring across binary, degradation, and external risks. Risk interaction and cascade modelling. The Risk-Adjusted Opportunity Score (RAOS) — one number integrating growth quality and risk into a conviction threshold. Monitoring checklist with trigger actions.</div>
-      </div>
-    </div>
-    <div class="output-banner reveal">
-      <div class="banner-plus">+</div>
-      <div class="banner-text">
-        <strong>Direct Founder Communication</strong>
-        One click drafts a warm, deal-specific email to the founder tied to the exact gaps Alex identified in the screening note. Partner reviews in 30 seconds. The deal stays warm while every other firm is still reading the deck.
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CHATGPT CALLOUT BAR -->
-<div class="chatgpt-bar reveal">
-  <div class="chatgpt-bar-inner">
-    <div class="chatgpt-bar-label">Not ChatGPT</div>
-    <div class="chatgpt-bar-divider"></div>
-    <div class="chatgpt-bar-text">Alex is trained on <em>100 real investment decisions</em> — bets made, bets passed, and the ones that got away. Generic AI gives you a template. Alex gives you a verdict built on pattern recognition from a decade of deal flow.</div>
-  </div>
-</div>
-
-<!-- TESTIMONIAL -->
-<section class="testimonial-section">
-  <div class="section-wrap reveal">
-    <div class="testimonial-card">
-      <div class="testimonial-quote">"This is remarkable. I can integrate this with my inbound deals immediately. The level of structure and insight — the single point of failure framing especially — is something I would expect from a senior analyst, not a first-pass screen."</div>
-      <div class="testimonial-attribution">Senior Partner, Former CEO — Global Investment Banking Firm</div>
-      <div class="testimonial-role">Early access tester, April 2026</div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5 — TRAINING -->
-<section class="training-section" id="training">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">04 — Training</div>
-        <h2 class="section-title">Trained like a senior analyst.<br><em>Calibrated to your firm.</em></h2>
-      </div>
-    </div>
-    <div class="training-grid reveal">
-      <div class="train-box">
-        <div class="train-num">100</div>
-        <div class="tab-label" style="margin-bottom:12px">Real investment decisions</div>
-        <div class="train-desc">Both bets made and passed — with full reasoning, outcomes, and lessons. Alex knows what a missed Stripe looks like and what a funded zombie looks like. He has seen both.</div>
-      </div>
-      <div class="train-box">
-        <div class="train-num">6</div>
-        <div class="tab-label" style="margin-bottom:12px">Proprietary frameworks</div>
-        <div class="train-desc">Signal inference, market sizing, market timing, moat durability, founder archetype recognition, and probability-weighted return modelling — applied to every deal, every time.</div>
-      </div>
-      <div class="train-box">
-        <div class="train-num">8</div>
-        <div class="tab-label" style="margin-bottom:12px">Sector intelligence libraries</div>
-        <div class="train-desc">SaaS, fintech, marketplace, consumer, deep tech, healthtech, climate, and enterprise software. Sector-specific benchmarks, unit economics norms, and red flag patterns for each.</div>
-      </div>
-      <div class="train-box">
-        <div class="train-num">100</div>
-        <div class="tab-label" style="margin-bottom:12px">Red-flag library</div>
-        <div class="train-desc">Across 8 categories — financial engineering, team dynamics, market structure, product, traction manipulation, governance, deal structure, and founder psychology. 100 named, described, and weighted flags.</div>
-      </div>
-      <div class="train-box">
-        <div class="train-num">30</div>
-        <div class="tab-label" style="margin-bottom:12px">Calibration rules per firm</div>
-        <div class="train-desc">Every time a partner disagrees with Alex's output, the correction is saved permanently. After 30 calibrations Alex understands your standards as well as a junior analyst who has been at your firm for a year.</div>
-      </div>
-      <div class="train-box">
-        <div class="train-num">~3<span style="font-size:36px;color:var(--grey2)">min</span></div>
-        <div class="tab-label" style="margin-bottom:12px">Institutional quality, fast</div>
-        <div class="train-desc">From upload to a complete screening note. Scored, structured, and ready before your next meeting. The 75 hours a month you currently spend on triage, compressed into background noise.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5 — DEMO -->
-<section class="demo-section" id="demo">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">05 — Demo</div>
-        <h2 class="section-title">See <em>Alex in action.</em></h2>
-      </div>
-    </div>
-    <div class="reveal">
-      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:4px;">
-        <iframe
-          style="position:absolute;top:0;left:0;width:100%;height:100%;"
-          src="https://www.youtube.com/embed/6DMUI-WMDRM"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 6 — THE VISION -->
-<section class="vision-section" id="vision">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">06 — The Vision</div>
-        <h2 class="section-title">The <em>long arc.</em></h2>
-      </div>
-    </div>
-    <div class="phases-row reveal">
-      <div class="phase-card">
-        <div class="phase-badge"><div class="phase-live"></div>Phase 01 · Live</div>
-        <div class="phase-title">Alex</div>
-        <div class="phase-role">AI Analyst</div>
-        <div class="phase-desc">Screens every inbound deal to institutional standard in minutes. G7 Score, growth decomposition, risk intelligence, return modelling, and direct founder communication — calibrated to your firm.</div>
-      </div>
-      <div class="phase-arrow">→</div>
-      <div class="phase-card">
-        <div class="phase-badge"><div class="phase-next-dot"></div>Phase 02 · Next</div>
-        <div class="phase-title">Maya</div>
-        <div class="phase-role">DD Associate</div>
-        <div class="phase-desc">Full due diligence memo, financial model, reference call framework, and investment committee memo for every Priority Review deal. Every shortlisted company, fully interrogated before you spend a day on it.</div>
-      </div>
-      <div class="phase-arrow">→</div>
-      <div class="phase-card">
-        <div class="phase-badge"><div class="phase-next-dot"></div>Phase 03 · Vision</div>
-        <div class="phase-title">Portfolio Agent</div>
-        <div class="phase-role">Post-Investment Intelligence</div>
-        <div class="phase-desc">Tracks KPIs post-investment, flags covenant breaches, surfaces follow-on opportunities, and alerts on competitor moves — across every company in the portfolio, continuously.</div>
-      </div>
-    </div>
-    <div class="vision-closing reveal">
-      <div class="vision-closing-text">
-        "A £50M fund, run by two partners, with the analytical output of eight associates —
-        and an Alex that, after six months of your calibrations, is
-        <em>indistinguishable from a senior analyst who has worked at your firm for years.</em>"
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 7 — EARLY ACCESS -->
-<section class="partners-section" id="partners">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">07 — Early Access</div>
-        <h2 class="section-title">Request<br><em>early access.</em></h2>
-      </div>
-    </div>
-    <div class="wl-counter">
-      <div class="wl-stat">
-        <div class="wl-number">50+</div>
-        <div class="wl-label">Senior individuals</div>
-      </div>
-      <div class="wl-divider"></div>
-      <div class="wl-stat">
-        <div class="wl-number">20+</div>
-        <div class="wl-label">Renowned firms</div>
-      </div>
-      <div class="wl-divider"></div>
-      <div class="wl-stat">
-        <div class="wl-number">10</div>
-        <div class="wl-label">Beta spots left</div>
-      </div>
-    </div>
-    <div class="partners-layout reveal">
-      <div>
-        <p class="partners-left-desc">We are accepting 5–10 firms for Q2 2026. Early access firms get free access, direct influence on what we build, and preferred pricing at launch.</p>
-        <div class="partners-points">
-          <div class="partner-point">
-            <div class="point-line"></div>
-            <div class="point-text">Free access to the full platform — Alex, Growth &amp; Return dashboard, Risk Intelligence, and founder communication tools.</div>
-          </div>
-          <div class="partner-point">
-            <div class="point-line"></div>
-            <div class="point-text">Alex calibrated to your firm's thesis, sector focus, ticket size, and return targets before your first deal is submitted.</div>
-          </div>
-          <div class="partner-point">
-            <div class="point-line"></div>
-            <div class="point-text">Direct influence on the product roadmap. Your workflow shapes what we build next.</div>
-          </div>
-          <div class="partner-point">
-            <div class="point-line"></div>
-            <div class="point-text">First access to Maya — our DD Associate — when she launches for early access firms in Q3 2026.</div>
-          </div>
-        </div>
-        <div class="partners-ask">
-          <strong>The ask</strong>
-          Send us 5 recent decks from your inbox. We calibrate Alex to your thesis and send you the output before we get on a call. No meeting required upfront. No commitment. Just see what Alex actually produces on deals you already know.
-        </div>
-      </div>
-      <div>
-        <div class="partners-form">
-          <form id="partnerForm">
-            <input type="hidden" name="_subject" value="G7 Capital — Early Access Application">
-            <div class="form-field">
-              <label class="form-label" for="pFirm">Firm Name</label>
-              <input type="text" class="form-input" name="firm" placeholder="Your firm" required id="pFirm">
-            </div>
-            <div class="form-field">
-              <label class="form-label" for="pName">Your Name</label>
-              <input type="text" class="form-input" name="name" placeholder="Your name" required id="pName">
-            </div>
-            <div class="form-field">
-              <label class="form-label" for="pEmail">Email</label>
-              <input type="email" class="form-input" name="email" placeholder="your@firm.com" required id="pEmail">
-            </div>
-            <div class="form-field" style="border-bottom:none">
-              <label class="form-label" for="pType">Firm Type</label>
-            </div>
-            <select class="form-select" name="type" required id="pType">
-              <option value="" disabled selected>Select your firm type</option>
-              <option value="VC">VC</option>
-              <option value="PE">PE</option>
-              <option value="Family Office">Family Office</option>
-              <option value="Corporate VC">Corporate VC</option>
-              <option value="Merchant Bank">Merchant Bank</option>
-              <option value="Other">Other</option>
-            </select>
-            <div class="form-field">
-              <label class="form-label" for="pSource">How did you hear about us?</label>
-              <input type="text" class="form-input" name="source" placeholder="LinkedIn, referral, cold email..." id="pSource">
-            </div>
-            <button type="submit" class="waitlist-btn" id="partnerBtn">Request Early Access →</button>
-            <p class="waitlist-note">Applications reviewed within 48 hours. No credit card required.</p>
-            <div class="form-error" id="partnerError">Something went wrong. Please try again or email us directly at alex@gsevnservices.com</div>
-          </form>
-          <div class="success-card" id="partnerSuccess">
-            <p>"Your application has been received.<br>We will be in touch within 48 hours.<br>Welcome to G7 Capital."</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 8 — CONTACT -->
-<section class="contact-section" id="contact">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">08 — Contact</div>
-        <h2 class="section-title">Get in <em>touch.</em></h2>
-      </div>
-    </div>
-    <div class="contact-intro reveal">
-      <p style="font-size:14px;color:var(--grey1);line-height:2;max-width:560px">Questions about the platform, partnership enquiries, or anything else — we respond to every email.</p>
-    </div>
-    <div class="contact-grid reveal">
-      <div class="contact-card">
-        <div class="contact-label">General Enquiries</div>
-        <a href="mailto:gsevnservices@gmail.com" class="contact-email">gsevnservices@gmail.com</a>
-        <p class="contact-desc">For questions about G7 Capital, Alex, or the platform.</p>
-      </div>
-      <div class="contact-card">
-        <div class="contact-label">Platform Access</div>
-        <a href="mailto:gsevnservices@gmail.com" class="contact-email">gsevnservices@gmail.com</a>
-        <p class="contact-desc">To request access or discuss how Alex can work for your firm.</p>
-      </div>
-    </div>
+  <div class="why-points reveal">
+    <div class="why-pt"><div class="why-pt-l">Trained, not generic</div><div class="why-pt-d">Each employee is built on real professional judgment — calibrated to a discipline, not a generic chat model.</div></div>
+    <div class="why-pt"><div class="why-pt-l">Instant, not months</div><div class="why-pt-d">Available the moment you need them. No hiring, no onboarding, no notice period.</div></div>
+    <div class="why-pt"><div class="why-pt-l">A team, not a tool</div><div class="why-pt-d">Each works alone or together — covering the full cycle of how businesses grow, fund, and govern themselves.</div></div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand-name">G<em>7</em> Capital</div>
-      <div class="footer-tagline">Private Equity. Powered by Intelligence.</div>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Platform</div>
-      <a href="login.html">G7 Workspace</a>
-      <a href="scout/landing.html">G7 Scout (For SMBs)</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#output">What Alex Produces</a>
-      <a href="#partners">Request Early Access</a>
-      <a href="#contact">Contact</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Company</div>
-      <a href="#vision">The Vision</a>
-      <a href="mailto:gsevnservices@gmail.com">gsevnservices@gmail.com</a>
-      <a href="#">g7capital.ai</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Legal</div>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 G7 Capital. All rights reserved.</div>
-    <div class="footer-disclaimer">G7 Capital uses AI to assist investment analysis. This platform does not constitute financial advice. All investment decisions carry risk and should be made with appropriate professional guidance.</div>
-  </div>
+<footer id="contact">
+  <div class="foot-l"><b>G7</b> Capital · AI Employees</div>
+  <div class="foot-c">© 2026 G7 Capital</div>
+  <div class="foot-r"><a href="mailto:gsevnservices@gmail.com">Contact</a><a href="#why">Vision</a></div>
 </footer>
 
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <div class="modal-dot" id="mDot"></div>
+    <div class="modal-eyebrow" id="mEyebrow">Coming Soon</div>
+    <h3 id="mName"></h3>
+    <div class="role" id="mRole"></div>
+    <p id="mDesc"></p>
+    <form id="notifyForm">
+      <div class="notify">
+        <label id="mLabel">Notify me</label>
+        <input type="email" id="mEmail" placeholder="you@company.com" required>
+      </div>
+      <button type="submit" class="notify-btn" id="mBtn">Notify me</button>
+    </form>
+  </div>
+</div>
+
 <script>
-// CURSOR
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = -100, my = -100, rx = -100, ry = -100;
-document.addEventListener('mousemove', function(e) {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-});
-function animRing() {
-  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-  requestAnimationFrame(animRing);
-}
-animRing();
-document.querySelectorAll('a, button, .output-tab, .step-card, .train-box, .phase-card').forEach(function(el) {
-  el.addEventListener('mouseenter', function() {
-    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
-    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
-    ring.style.borderColor = 'rgba(201,168,76,0.8)';
-  });
-  el.addEventListener('mouseleave', function() {
-    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-    ring.style.transform = 'translate(-50%,-50%) scale(1)';
-    ring.style.borderColor = 'rgba(201,168,76,0.5)';
-  });
-});
+const EMP = {
+  alex:   { name:'Alex',   role:'AI Deal Analyst',      tint:'#C9A84C', live:true,  sum:'Screens investment deals with the rigor of a senior analyst.', desc:'Screens investment deals with the rigor of a senior analyst. Built for PE, VC, and investment banking firms.', href:'login.html' },
+  scout:  { name:'Scout',  role:'AI BD Employee',       tint:'#C77B30', live:true,  sum:'Finds your best customers and builds your acquisition plan.', desc:'Finds your best customers and builds your acquisition plan. Built for Indian SMBs.', href:'scout/landing.html' },
+  priya:  { name:'Priya',  role:'AI Credit Analyst',    tint:'#3E8C84', live:false, sum:'Assesses creditworthiness and structures lending decisions.', desc:'Assesses creditworthiness and structures lending decisions. Built for NBFCs and banks.' },
+  maya:   { name:'Maya',   role:'AI Portfolio Monitor', tint:'#4A6FA5', live:false, sum:'Tracks portfolio health and flags risks before they surface.', desc:'Tracks portfolio health and flags risks before they surface. Built for investors.' },
+  aria:   { name:'Aria',   role:'AI Audit Analyst',     tint:'#5A9E6F', live:false, sum:"Reviews books with a chartered accountant's eye.", desc:"Reviews books and surfaces audit findings with a chartered accountant's eye. Built for firms and auditors." },
+  stella: { name:'Stella', role:'AI Marketing Officer', tint:'#B0567E', live:false, sum:'Plans and runs growth campaigns end to end.', desc:'Plans and runs growth campaigns end to end. Built for marketing and growth teams.' },
+};
+const ORDER = ['alex','scout','priya','maya','aria','stella'];
 
-// MOBILE MENU
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
-
-// SCROLL TO TOP
-const scrollTopBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', function() {
-  scrollTopBtn.classList.toggle('show', window.scrollY > 600);
-});
-
-// REVEAL ON SCROLL
-const obs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
-
-// DEMO NOTIFY FORM
-async function notifyDemo(e) {
-  e.preventDefault();
-  const email = document.getElementById('demoEmail').value.trim();
-  const btn = e.target.querySelector('button');
-  btn.disabled = true;
-  btn.textContent = 'Saving...';
-  try {
-    await fetch('https://formspree.io/f/xzdjwjqy', {
-      method: 'POST',
-      body: JSON.stringify({ email: email, _subject: 'G7 Capital — Demo Notification Signup' }),
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-    });
-  } catch(err) { /* silent fail — still show success */ }
-  e.target.style.display = 'none';
-  document.getElementById('demoSuccess').classList.add('show');
-}
-
-// EARLY ACCESS FORM — Formspree
-document.getElementById('partnerForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('partnerBtn');
-  const errEl = document.getElementById('partnerError');
-  btn.disabled = true;
-  btn.textContent = 'Submitting...';
-  errEl.classList.remove('show');
-  try {
-    const res = await fetch('https://formspree.io/f/xzdjwjqy', {
-      method: 'POST',
-      body: new FormData(this),
-      headers: { Accept: 'application/json' }
-    });
-    if (res.ok) {
-      this.style.display = 'none';
-      document.getElementById('partnerSuccess').classList.add('show');
-    } else {
-      btn.disabled = false;
-      btn.textContent = 'Apply for Access →';
-      errEl.classList.add('show');
-    }
-  } catch(err) {
-    btn.disabled = false;
-    btn.textContent = 'Apply for Access →';
-    errEl.classList.add('show');
+/* ---------- Starfield ---------- */
+(function(){
+  const sf = document.getElementById('starfield');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const n = innerWidth < 700 ? 34 : 70;
+  let html = '';
+  for(let i=0;i<n;i++){
+    const size = Math.random()<0.85 ? (Math.random()*1.4+0.6) : (Math.random()*1.8+1.6);
+    const x = Math.random()*100, y = Math.random()*100;
+    const o = Math.random()*0.5+0.15;
+    const gold = Math.random()<0.32;
+    const c = gold ? 'rgba(201,168,76,'+o.toFixed(2)+')' : 'rgba(250,250,248,'+o.toFixed(2)+')';
+    const tw = (!reduce && Math.random()<0.5) ? `animation:twinkle ${(Math.random()*4+3).toFixed(1)}s ease-in-out ${(Math.random()*3).toFixed(1)}s infinite` : '';
+    html += `<span class="star" style="width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--o:${o.toFixed(2)};--c:${c};${tw}"></span>`;
   }
+  sf.innerHTML = html;
+})();
+
+/* ---------- Employee cards ---------- */
+(function(){
+  const grid = document.getElementById('empGrid');
+  grid.innerHTML = ORDER.map(k=>{
+    const e = EMP[k];
+    const badge = e.live ? '<span class="badge live">Live</span>' : '<span class="badge soon">Coming Soon</span>';
+    const link = e.live
+      ? `<a class="emp-link" href="${e.href}">Open →</a>`
+      : `<button class="emp-link" data-notify="${k}">Notify me →</button>`;
+    return `<div class="emp" style="--ec:${e.tint}">
+      <div class="emp-top"><span class="emp-dot"></span><span class="emp-name">${e.name}</span></div>
+      <div class="emp-role">${e.role}</div>
+      <div class="emp-desc">${e.desc}</div>
+      <div class="emp-foot">${badge}${link}</div>
+    </div>`;
+  }).join('');
+})();
+
+/* ---------- Solar interactions ---------- */
+const solar = document.getElementById('solar');
+const tip = document.getElementById('tip');
+const tipName = document.getElementById('tipName');
+const tipRole = document.getElementById('tipRole');
+const tipSum = document.getElementById('tipSum');
+const tipStatus = document.getElementById('tipStatus');
+
+function positionTip(planet){
+  const r = planet.getBoundingClientRect();
+  const w = tip.offsetWidth, h = tip.offsetHeight, m = 12;
+  let left = r.left + r.width/2 - w/2;
+  left = Math.max(m, Math.min(left, innerWidth - w - m));
+  let top = r.top - h - 16;            // sit above the planet
+  if(top < m) top = r.bottom + 16;     // flip below if no room above
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+document.querySelectorAll('.planet').forEach(pl=>{
+  const e = EMP[pl.dataset.key];
+  pl.addEventListener('mouseenter', ()=>{
+    solar.classList.add('paused');
+    tip.style.setProperty('--tipc', e.tint);
+    tipName.textContent = e.name;
+    tipRole.textContent = e.role;
+    tipSum.textContent = e.sum;
+    tipStatus.textContent = e.live ? 'Live' : 'Coming Soon';
+    tipStatus.className = 'ts ' + (e.live ? 'live' : 'soon');
+    positionTip(pl);            // measure with content in place
+    tip.classList.add('show');
+  });
+  pl.addEventListener('mousemove', ()=>positionTip(pl));
+  pl.addEventListener('mouseleave', ()=>{
+    solar.classList.remove('paused');
+    tip.classList.remove('show');
+  });
+  pl.addEventListener('click', ()=>{
+    if(e.live){ window.location.href = e.href; }
+    else { openModal(pl.dataset.key); }
+  });
 });
+
+/* ---------- Modal ---------- */
+const modalBg = document.getElementById('modalBg');
+function openModal(key){
+  const e = EMP[key];
+  document.getElementById('mDot').style.setProperty('--mc', e.tint);
+  document.getElementById('mEyebrow').style.setProperty('--mc', e.tint);
+  document.getElementById('mEyebrow').textContent = 'Coming Soon';
+  document.getElementById('mName').textContent = e.name;
+  document.getElementById('mRole').textContent = e.role;
+  document.getElementById('mDesc').textContent = e.desc;
+  document.getElementById('mLabel').textContent = 'Notify me when ' + e.name + ' launches';
+  document.getElementById('mBtn').textContent = 'Notify me when ' + e.name + ' launches';
+  const form = document.getElementById('notifyForm');
+  form.style.display = '';
+  form.reset();
+  modalBg.classList.add('show');
+}
+function closeModal(){ modalBg.classList.remove('show'); }
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalBg.addEventListener('click', e=>{ if(e.target===modalBg) closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('notifyForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const form = e.currentTarget;
+  form.innerHTML = '<div class="notify-ok">You\u2019re on the list. We\u2019ll be in touch.</div>';
+});
+document.querySelectorAll('[data-notify]').forEach(b=>{
+  b.addEventListener('click', ()=>openModal(b.dataset.notify));
+});
+
+/* ---------- Scroll reveal ---------- */
+const io = new IntersectionObserver(es=>{
+  es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+}, { threshold:0.12 });
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
