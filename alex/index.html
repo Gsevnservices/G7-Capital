@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alex — The AI Deal Analyst · G7 Capital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080808'/%3E%3Ctext y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'%3EG%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08);--border3:rgba(250,250,248,0.04);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Tenor Sans',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--white);overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 72% 56% at 50% 34%, rgba(90,72,30,0.22) 0%, rgba(40,32,14,0.08) 28%, rgba(8,8,8,0) 62%),
+    #080808;
+  background-attachment:fixed;
+}
+::selection{background:rgba(201,168,76,.28);color:var(--white)}
+/* film grain — brand signature */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.26;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
+
+/* ============ NAV ============ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;
+  padding:24px 44px;transition:background .5s ease,backdrop-filter .5s ease,border-color .5s ease;border-bottom:1px solid transparent}
+.topbar.scrolled{background:rgba(8,8,8,.72);backdrop-filter:blur(14px);border-bottom-color:var(--border3)}
+.brand{display:flex;align-items:baseline;gap:18px}
+.wordmark{font-family:var(--serif);font-size:19px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;color:var(--white);white-space:nowrap}
+.wordmark b{font-weight:400;color:var(--gold)}
+.brand-sep{width:1px;height:15px;background:var(--border);align-self:center}
+.brand-tag{font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
+.btn-gold{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--black);background:var(--gold);
+  padding:14px 30px;text-decoration:none;border:none;cursor:pointer;transition:all .35s;display:inline-block;white-space:nowrap}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 14px 44px rgba(201,168,76,.28)}
+.nav-cta{padding:12px 26px}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+#flow{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.hero-inner{position:relative;z-index:3;width:100%;max-width:1340px;margin:0 auto;padding:120px 64px 80px;pointer-events:none}
+.hero-copy{max-width:520px;pointer-events:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:30px;opacity:0;animation:rise 1s ease .2s both}
+.eyebrow::before{content:'';width:34px;height:1px;background:var(--gold)}
+.hero h1{font-family:var(--serif);font-weight:300;line-height:1.02;letter-spacing:-.01em;color:var(--white);margin-bottom:26px;opacity:0;animation:rise 1s ease .35s both}
+.hero h1 .nm{display:block;font-size:clamp(56px,8vw,104px);line-height:.95}
+.hero h1 .rl{display:block;font-style:italic;color:var(--gold);font-size:clamp(28px,3.6vw,46px);margin-top:8px}
+.hero p{font-size:16px;line-height:1.95;color:var(--grey1);max-width:480px;margin-bottom:38px;opacity:0;animation:rise 1s ease .5s both}
+.hero-actions{display:flex;gap:24px;align-items:center;flex-wrap:wrap;opacity:0;animation:rise 1s ease .65s both}
+.btn-cap{font-size:11px;letter-spacing:.04em;color:var(--grey2);font-family:var(--serif);font-style:italic}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:3;opacity:0;animation:rise 1s ease 1.2s both}
+.scrollcue .ln{width:1px;height:42px;background:linear-gradient(var(--gold),transparent);animation:cue 2.6s ease infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+.scrollcue span{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey2)}
+
+/* ============ SECTIONS ============ */
+.section{max-width:1180px;margin:0 auto;padding:130px 64px;border-top:1px solid var(--border3)}
+.sec-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:26px}
+.sec-h{font-family:var(--serif);font-weight:300;line-height:1.12;letter-spacing:-.01em;color:var(--white)}
+.sec-h .it{font-style:italic;color:var(--gold)}
+.sec-body{font-size:16px;line-height:2;color:var(--grey1);max-width:640px}
+.sec-body strong{color:var(--white);font-weight:400}
+.sec-body + .sec-body{margin-top:26px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* problem stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border3);border:1px solid var(--border3);margin-top:64px}
+.stat{background:#0c0c0c;padding:42px 34px;position:relative}
+.stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .6s ease}
+.stat:hover::before{transform:scaleY(1)}
+.stat-n{font-family:var(--serif);font-weight:300;font-size:46px;line-height:1;color:var(--gold);margin-bottom:16px}
+.stat-d{font-size:13px;line-height:1.7;color:var(--grey1)}
+
+/* solution flow */
+.flow3{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:8px;margin-top:72px}
+.flow-node{text-align:center;padding:30px 18px;border:1px solid var(--border3);background:#0c0c0c;position:relative}
+.flow-node.mid{border-color:var(--border)}
+.flow-step{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey2);margin-bottom:14px}
+.flow-ttl{font-family:var(--serif);font-size:21px;font-weight:300;color:var(--white);line-height:1.25}
+.flow-node.mid .flow-ttl{color:var(--gold)}
+.flow-arrow{color:var(--gold);font-size:14px;opacity:.7}
+
+/* capabilities */
+.caps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border3);border:1px solid var(--border3);margin-top:64px}
+.cap{background:#0c0c0c;padding:38px 32px;min-height:210px;display:flex;flex-direction:column;transition:background .4s}
+.cap:hover{background:#101010}
+.cap-n{font-family:var(--serif);font-size:15px;font-weight:400;color:var(--gold);letter-spacing:.08em;margin-bottom:22px}
+.cap-t{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:16px}
+.cap-d{font-size:13px;line-height:1.85;color:var(--grey1);margin-top:auto}
+
+/* contrast */
+.contrast-stage{margin:72px auto 0;max-width:860px}
+#cycle{display:block;width:100%;height:auto}
+.contrast-cap{font-size:16px;line-height:2;color:var(--grey1);max-width:560px;margin:56px auto 0;text-align:center}
+.contrast-cap strong{color:var(--white);font-weight:400}
+
+/* final CTA */
+.cta{position:relative;text-align:center;padding:150px 32px;overflow:hidden;border-top:1px solid var(--border3)}
+.cta::before{content:'';position:absolute;left:50%;top:48%;width:760px;height:760px;max-width:120vw;max-height:120vw;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(201,168,76,.16) 0%, rgba(201,168,76,.05) 32%, rgba(8,8,8,0) 64%);pointer-events:none;z-index:0}
+.cta-inner{position:relative;z-index:2;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.cta h2{font-family:var(--serif);font-weight:300;font-size:clamp(38px,5.4vw,58px);line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
+.cta h2 .it{font-style:italic;color:var(--gold)}
+.cta .lead{font-size:16px;line-height:1.9;color:var(--grey1);max-width:440px;margin-bottom:42px}
+.cta .btn-gold{font-size:11px;padding:18px 48px}
+.cta-cap{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--grey2);margin-top:22px}
+.cta-req{margin-top:40px;font-size:11px;letter-spacing:.04em;color:var(--grey2)}
+.cta-req a{color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .35s,border-color .35s;letter-spacing:.02em}
+.cta-req a:hover{color:var(--gold);border-color:var(--gold)}
+
+/* footer */
+footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey2)}
+.foot-l b{color:var(--gold);font-weight:400}
+.foot-c{font-size:11px;letter-spacing:.1em;color:var(--grey2)}
+.foot-r{display:flex;gap:26px}
+.foot-r a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .35s}
+.foot-r a:hover{color:var(--gold)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:980px){
+  .topbar{padding:20px 28px}
+  .brand{gap:12px}
+  .hero-inner{padding:140px 32px 90px;text-align:center;display:flex;justify-content:center}
+  .hero-copy{max-width:600px}
+  .eyebrow{justify-content:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .section{padding:96px 32px}
+  .scrollcue{display:none}
+  .stats,.caps{grid-template-columns:1fr}
+  .flow3{grid-template-columns:1fr;gap:8px}
+  .flow-arrow{transform:rotate(90deg);padding:2px 0}
+}
+@media(max-width:560px){
+  .topbar{padding:16px 20px}
+  .brand-sep,.brand-tag{display:none}
+  .nav-cta{padding:11px 18px;font-size:9px;letter-spacing:.16em}
+  .section{padding:78px 22px}
+  footer{flex-direction:column;text-align:center;padding:38px 22px}
+  .cta{padding:110px 22px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .eyebrow,.hero h1,.hero p,.hero-actions,.scrollcue{animation:none;opacity:1;transform:none}
+  .scrollcue .ln{animation:none}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topbar" id="topbar">
+  <div class="brand">
+    <a href="../index.html" class="wordmark"><b>G7</b> Capital</a>
+    <span class="brand-sep"></span>
+    <span class="brand-tag">Alex</span>
+  </div>
+  <a href="../ui_kits/workspace/index.html" class="btn-gold nav-cta">Enter Workspace →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="flow"></canvas>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">G7 Capital · AI Employees</div>
+      <h1>
+        <span class="nm">Alex</span>
+        <span class="rl">The AI Deal Analyst</span>
+      </h1>
+      <p>Alex screens every inbound deal against your firm's thesis — with the rigor of a senior analyst, around the clock.</p>
+      <div class="hero-actions">
+        <a href="../ui_kits/workspace/index.html" class="btn-gold">Enter Workspace →</a>
+        <span class="btn-cap">First month free. No card required.</span>
+      </div>
+    </div>
+  </div>
+  <div class="scrollcue"><div class="ln"></div><span>Scroll</span></div>
+</section>
+
+<!-- 01 — PROBLEM -->
+<section class="section" id="problem">
+  <div class="reveal">
+    <div class="sec-label">01 · The Problem</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">The scarcest resource in your firm<br>is <span class="it">partner attention.</span></h2>
+    <p class="sec-body">Every week, hundreds of decks arrive. Most were never going to make it — but someone has to read them to know that. The analysts you can afford are junior. The senior judgment you need does not scale. And the deal you missed is the one that mattered.</p>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><div class="stat-n">300+</div><div class="stat-d">decks arrive at an active fund every month.</div></div>
+    <div class="stat"><div class="stat-n">2–3 days</div><div class="stat-d">for a proper first analysis of a single deal.</div></div>
+    <div class="stat"><div class="stat-n">1 deal</div><div class="stat-d">missed can define a fund's entire vintage.</div></div>
+  </div>
+</section>
+
+<!-- 02 — SOLUTION -->
+<section class="section" id="solution">
+  <div class="reveal">
+    <div class="sec-label">02 · The Solution</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">Alex is the AI employee that screens<br>every deal — <span class="it">automatically.</span></h2>
+    <p class="sec-body">Alex reads every inbound deal against your firm's thesis. The deals that do not fit, Alex filters out. The deals that do, Alex analyses in full and passes to your partners with a complete assessment.</p>
+    <p class="sec-body"><strong>Your team wakes up to a sorted pipeline — not a full inbox.</strong></p>
+  </div>
+  <div class="flow3 reveal">
+    <div class="flow-node"><div class="flow-step">Step 01</div><div class="flow-ttl">Deck arrives</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node mid"><div class="flow-step">Step 02</div><div class="flow-ttl">Alex screens<br>vs thesis</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><div class="flow-step">Step 03</div><div class="flow-ttl">Partner reviews<br>qualified deals</div></div>
+  </div>
+</section>
+
+<!-- 03 — CAPABILITIES -->
+<section class="section" id="capabilities">
+  <div class="reveal">
+    <div class="sec-label">03 · What Alex Brings</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">Senior-analyst rigor.<br><span class="it">Without the limits of one.</span></h2>
+  </div>
+  <div class="caps reveal">
+    <div class="cap"><div class="cap-n">01</div><div class="cap-t">Always On</div><div class="cap-d">24/7 — never sleeps, never takes leave.</div></div>
+    <div class="cap"><div class="cap-n">02</div><div class="cap-t">Minutes, Not Days</div><div class="cap-d">Full analysis in 2 minutes, not 2–3 days.</div></div>
+    <div class="cap"><div class="cap-n">03</div><div class="cap-t">Best-In-Class Knowledge</div><div class="cap-d">Trained on 100 real investment decisions.</div></div>
+    <div class="cap"><div class="cap-n">04</div><div class="cap-t">Perfectly Consistent</div><div class="cap-d">The same rigor on deal #1 and deal #300 — no fatigue, no bias drift.</div></div>
+    <div class="cap"><div class="cap-n">05</div><div class="cap-t">Automatic Follow-Up</div><div class="cap-d">Sends the founding team the right diligence questions, on its own.</div></div>
+    <div class="cap"><div class="cap-n">06</div><div class="cap-t">Risk &amp; Growth Assessment</div><div class="cap-d">Every deal gets a structured Risk and Growth evaluation, not just a summary.</div></div>
+  </div>
+</section>
+
+<!-- 04 — CONTRAST -->
+<section class="section" id="contrast">
+  <div class="reveal">
+    <div class="sec-label">04 · The Difference</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);text-align:center">Your analysts go home.<br>Alex <span class="it">never does.</span></h2>
+  </div>
+  <div class="contrast-stage reveal">
+    <canvas id="cycle"></canvas>
+  </div>
+  <p class="contrast-cap reveal">Your partners bring judgment. Alex brings tireless rigor — so your team spends its time only on the deals worth their attention. <strong>Alex augments your team. It does not replace their judgment.</strong></p>
+</section>
+
+<!-- 05 — FINAL CTA -->
+<section class="cta" id="start">
+  <div class="cta-inner reveal">
+    <h2>Give your partners<br>their <span class="it">time back.</span></h2>
+    <p class="lead">Alex handles the tireless filtering. Your partners keep the judgment.</p>
+    <a href="../ui_kits/workspace/index.html" class="btn-gold">Enter Workspace →</a>
+    <div class="cta-cap">First month free. No card required.</div>
+    <div class="cta-req">Don't have access yet? <a href="/cdn-cgi/l/email-protection#791e0a1c0f170a1c0b0f101a1c0a391e14181015571a1614460a0c1b131c1a0d4438151c015c4b49381a1a1c0a0a5c4b492b1c080c1c0a0d">Request it →</a></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="foot-l"><b>Alex</b> · A G7 Capital AI Employee</div>
+  <div class="foot-c">© 2026 G7 Capital</div>
+  <div class="foot-r">
+    <a href="../index.html">All Employees →</a>
+    <a href="/cdn-cgi/l/email-protection#d1b6a2b4a7bfa2b4a3a7b8b2b4a291b6bcb0b8bdffb2bebc">Contact</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ---------- Nav scroll state ---------- */
+(function(){
+  const bar = document.getElementById('topbar');
+  const onScroll = ()=>{ bar.classList.toggle('scrolled', window.scrollY > 24); };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+})();
+
+/* ---------- Scroll reveal ---------- */
+(function(){
+  if(REDUCE){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')); return; }
+  const io = new IntersectionObserver(es=>{
+    es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold:0.14 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* ============================================================
+   HERO — DEAL CARD SORTING (literal product demo)
+   Inbound deal cards stream in from the left → Alex's gold core
+   scans each (sweeping gold scan-line) → verdict: most turn grey,
+   tumble and fall away (FILTERED OUT); a few flash gold, get a
+   ✓ QUALIFIED tag and glide right, stacking neatly (TO PARTNERS).
+   Loops forever.
+   ============================================================ */
+(function(){
+  const canvas = document.getElementById('flow');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const heroCopy = document.querySelector('.hero-copy');
+
+  const GOLD=[201,168,76], GOLD_L=[226,201,126], GREY=[138,136,128];
+  const rgba=(c,a)=>'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';
+  const lerp=(a,b,k)=>a+(b-a)*k;
+
+  let W=0,H=0,DPR=1;
+  let core={x:0,y:0,r:0};
+  let narrow=false, emergeX=0, scanX=0, stackX=0, stackBaseY=0, slotGap=0;
+  let bandTop=0, bandBot=0, playBot=0, cardW=46, cardH=58, maxStack=6;
+  let cards=[], stack=[], rings=[], stars=[], starW=-1;
+  let spawnTimer=0.4, ringTimer=1.4;
+
+  function resize(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=canvas.clientWidth; H=canvas.clientHeight;
+    canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    narrow = W<980;
+    cardW = narrow?34:46; cardH = narrow?44:58;
+    maxStack = narrow?5:6;
+    const playTop = narrow ? H*0.42 : H*0.07;
+    playBot = H*0.93;
+    const midY = (playTop+playBot)/2;
+    core.x = narrow ? W*0.46 : Math.min(W*0.63, W-200);
+    core.y = midY;
+    core.r = Math.max(32, Math.min(Math.min(W,H)*0.058, 78));
+    let textRight = 0;
+    if(heroCopy){ textRight = heroCopy.getBoundingClientRect().right; }
+    emergeX = narrow ? W*0.12 : Math.max(W*0.36, textRight+26);
+    scanX = core.x - core.r - 12 - cardW*0.5;
+    if(scanX < emergeX+20) scanX = emergeX+20;
+    stackX = narrow ? W*0.82 : Math.min(W*0.89, core.x + Math.max(W*0.20,150));
+    slotGap = cardH*0.40;
+    stackBaseY = narrow ? playTop+30 : midY - (maxStack-1)*slotGap*0.5;
+    bandTop = core.y - (narrow?H*0.14:H*0.20);
+    bandBot = core.y + (narrow?H*0.14:H*0.20);
+    if(starW!==W){
+      starW=W; stars=[];
+      const n = narrow?42:84;
+      for(let i=0;i<n;i++){
+        stars.push({x:Math.random()*W,y:Math.random()*H,
+          s:Math.random()<0.85?(Math.random()*1.1+0.4):(Math.random()*1.5+1.3),
+          b:Math.random()*0.38+0.1, gold:Math.random()<0.34, ph:Math.random()*6.28});
+      }
+    }
+  }
+
+  function spawnCard(){
+    cards.push({
+      x: emergeX - 30 - Math.random()*70,
+      y: bandTop + Math.random()*(bandBot-bandTop),
+      rot:0, spin:0, state:'approach',
+      vx:0, vy:0, scan:0, qualified:false,
+      glow:0, tag:0, alpha:0,
+      lines: 2 + (Math.random()<0.55?1:0)
+    });
+  }
+
+  function update(dt){
+    spawnTimer -= dt;
+    if(spawnTimer<=0){ if(cards.length<30) spawnCard(); spawnTimer=(narrow?0.95:0.6)+Math.random()*0.22; }
+    ringTimer -= dt;
+    if(ringTimer<=0){ rings.push({r:core.r*1.3, a:0.42}); ringTimer=2.6+Math.random()*1.4; }
+    for(const r of rings){ r.r += dt*(narrow?60:100); r.a -= dt*0.32; }
+    rings = rings.filter(r=>r.a>0.01);
+
+    // conveyor queue — order approaching cards into a feed line
+    const scanning = cards.some(c=>c.state==='scan');
+    const waiting = cards.filter(c=>c.state==='approach').sort((a,b)=>b.x-a.x);
+    waiting.forEach((c,i)=>{ c.qx = scanX - i*(cardW+7); c.front = (i===0); });
+
+    for(const c of cards){
+      if(c.state==='approach'){
+        c.alpha = Math.min(1, c.alpha + dt*2.6);
+        c.x = lerp(c.x, c.qx!==undefined?c.qx:scanX, Math.min(1,dt*3));
+        c.y = lerp(c.y, core.y, Math.min(1,dt*2.4));
+        if(c.front && !scanning && Math.abs(c.x-scanX)<2.2 && Math.abs(c.y-core.y)<3){
+          c.state='scan'; c.scan=0;
+        }
+      } else if(c.state==='scan'){
+        c.scan += dt/0.62;
+        if(c.scan>=1){
+          c.qualified = Math.random()<0.2;
+          if(c.qualified){ c.state='qualify'; stack.push(c); }
+          else { c.state='reject'; c.vx=(Math.random()*60-12); c.vy=14; c.spin=(Math.random()*2-1)*1.7; }
+        }
+      } else if(c.state==='qualify'){
+        c.glow=Math.min(1,c.glow+dt*2.4); c.tag=Math.min(1,c.tag+dt*2.6);
+        const idx=stack.indexOf(c); const ty=stackBaseY+idx*slotGap;
+        c.x=lerp(c.x,stackX,Math.min(1,dt*3)); c.y=lerp(c.y,ty,Math.min(1,dt*3.4));
+        c.rot=lerp(c.rot,0,Math.min(1,dt*5));
+        if(Math.abs(c.x-stackX)<1 && Math.abs(c.y-ty)<1) c.state='stacked';
+      } else if(c.state==='stacked'){
+        const idx=stack.indexOf(c); const ty=stackBaseY+idx*slotGap;
+        c.y=lerp(c.y,ty,Math.min(1,dt*6)); c.x=lerp(c.x,stackX,Math.min(1,dt*6));
+        c.glow=lerp(c.glow,0.5,Math.min(1,dt*2));
+      } else if(c.state==='reject'){
+        c.vy += dt*150; c.x += c.vx*dt; c.y += c.vy*dt; c.rot += c.spin*dt;
+        if(c.y > core.y+50) c.alpha -= dt*0.85;
+      } else if(c.state==='retire'){
+        c.y -= dt*70; c.alpha -= dt*1.5; c.glow=Math.max(0,c.glow-dt*1.5);
+      }
+    }
+    while(stack.length>maxStack){ stack.shift().state='retire'; }
+    cards = cards.filter(c=>{
+      if(c.state==='reject') return c.alpha>0.02 && c.y<H+cardH*1.6;
+      if(c.state==='retire') return c.alpha>0.02;
+      return true;
+    });
+  }
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  function drawCard(c){
+    const a=Math.max(0,Math.min(1,c.alpha));
+    if(a<=0) return;
+    ctx.save();
+    ctx.translate(c.x,c.y); ctx.rotate(c.rot); ctx.globalAlpha=a;
+    const w=cardW,h=cardH,x=-w/2,y=-h/2,r=3, gold=c.qualified, g=c.glow;
+    const dead = (c.state==='reject'||c.state==='retire');
+    if(gold && g>0.03){ ctx.shadowColor=rgba(GOLD_L,0.7*g); ctx.shadowBlur=24*g; }
+    if(gold){
+      const lg=ctx.createLinearGradient(x,y,x,y+h);
+      lg.addColorStop(0,rgba([58,48,23],0.95)); lg.addColorStop(1,rgba([32,26,13],0.95));
+      ctx.fillStyle=lg;
+    } else if(dead){ ctx.fillStyle=rgba([15,15,14],0.82); }
+    else { ctx.fillStyle=rgba([18,17,13],0.9); }
+    roundRect(x,y,w,h,r); ctx.fill(); ctx.shadowBlur=0;
+    ctx.lineWidth=1;
+    ctx.strokeStyle = gold ? rgba(GOLD_L,0.9*Math.max(0.45,g)) : dead ? rgba(GREY,0.34) : rgba(GOLD,0.26);
+    roundRect(x,y,w,h,r); ctx.stroke();
+    // content lines (deck-like)
+    const pad=7; let ly=y+pad+3;
+    ctx.lineCap='round';
+    ctx.strokeStyle = gold?rgba(GOLD_L,0.85):dead?rgba(GREY,0.36):rgba(GOLD,0.34);
+    ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(x+pad,ly); ctx.lineTo(x+w*0.56,ly); ctx.stroke();
+    ctx.lineWidth=1.1;
+    ctx.strokeStyle = gold?rgba(GOLD_L,0.6):dead?rgba(GREY,0.24):rgba(GOLD,0.22);
+    for(let i=0;i<c.lines;i++){
+      ly+=8.5; const ll=(i===c.lines-1)?(w-2*pad)*0.6:(w-2*pad);
+      ctx.beginPath(); ctx.moveTo(x+pad,ly); ctx.lineTo(x+pad+ll,ly); ctx.stroke();
+    }
+    // scan-line
+    if(c.state==='scan'){
+      ctx.save(); roundRect(x,y,w,h,r); ctx.clip();
+      const sy=y+c.scan*h;
+      const sg=ctx.createLinearGradient(0,sy-9,0,sy+9);
+      sg.addColorStop(0,rgba(GOLD_L,0)); sg.addColorStop(0.5,rgba(GOLD_L,0.85)); sg.addColorStop(1,rgba(GOLD_L,0));
+      ctx.fillStyle=sg; ctx.fillRect(x,sy-9,w,18);
+      ctx.strokeStyle=rgba(GOLD_L,0.95); ctx.lineWidth=1.3;
+      ctx.shadowColor=rgba(GOLD_L,0.9); ctx.shadowBlur=9;
+      ctx.beginPath(); ctx.moveTo(x,sy); ctx.lineTo(x+w,sy); ctx.stroke();
+      ctx.restore();
+    }
+    // ✓ QUALIFIED badge
+    if(gold && c.tag>0.05){
+      ctx.globalAlpha=a*c.tag;
+      const cx=x+w-1, cy=y+1;
+      ctx.fillStyle=rgba(GOLD_L,0.97);
+      ctx.beginPath(); ctx.arc(cx,cy,6.5,0,6.2832); ctx.fill();
+      ctx.strokeStyle='#16110a'; ctx.lineWidth=1.7; ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.beginPath(); ctx.moveTo(cx-3,cy+0.2); ctx.lineTo(cx-0.8,cy+2.6); ctx.lineTo(cx+3.2,cy-2.6); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawAura(){
+    const pulse = REDUCE?1:(0.9+Math.sin(perf*1.6)*0.1);
+    for(const ring of rings){
+      ctx.strokeStyle=rgba(GOLD,ring.a); ctx.lineWidth=1;
+      ctx.beginPath(); ctx.arc(core.x,core.y,ring.r,0,6.2832); ctx.stroke();
+    }
+    const r=core.r;
+    const bg=ctx.createRadialGradient(core.x,core.y,0,core.x,core.y,r*7.2);
+    bg.addColorStop(0,rgba(GOLD_L,0.32*pulse));
+    bg.addColorStop(0.15,rgba(GOLD,0.17*pulse));
+    bg.addColorStop(0.46,rgba(GOLD,0.05));
+    bg.addColorStop(1,rgba(GOLD,0));
+    ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(core.x,core.y,r*7.2,0,6.2832); ctx.fill();
+  }
+
+  function drawOrb(){
+    const pulse = REDUCE?1:(0.9+Math.sin(perf*1.6)*0.1);
+    const r=core.r;
+    ctx.strokeStyle=rgba(GOLD,0.34); ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(core.x,core.y,r*1.5,0,6.2832); ctx.stroke();
+    ctx.strokeStyle=rgba(GOLD,0.15);
+    ctx.beginPath(); ctx.arc(core.x,core.y,r*1.95,0,6.2832); ctx.stroke();
+    const o=ctx.createRadialGradient(core.x-r*0.32,core.y-r*0.32,r*0.1,core.x,core.y,r);
+    o.addColorStop(0,'#fff6df'); o.addColorStop(0.4,'#E2C97E'); o.addColorStop(0.75,'#C9A84C'); o.addColorStop(1,'#7d6427');
+    ctx.save();
+    ctx.shadowColor=rgba(GOLD_L,0.7); ctx.shadowBlur=32*pulse;
+    ctx.fillStyle=o; ctx.beginPath(); ctx.arc(core.x,core.y,r*pulse,0,6.2832); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawStars(){
+    for(const st of stars){
+      const tw = REDUCE?1:(0.6+0.4*Math.sin(perf*1.3+st.ph));
+      ctx.fillStyle = st.gold ? rgba(GOLD,st.b*tw) : 'rgba(250,250,248,'+(st.b*tw).toFixed(3)+')';
+      ctx.beginPath(); ctx.arc(st.x,st.y,st.s,0,6.2832); ctx.fill();
+    }
+  }
+
+  function label(txt,x,y,col,align){
+    ctx.font='10px "Tenor Sans", sans-serif';
+    ctx.textAlign=align||'left'; ctx.textBaseline='alphabetic';
+    if('letterSpacing' in ctx) ctx.letterSpacing='2px';
+    ctx.fillStyle=col; ctx.fillText(txt,x,y);
+    if('letterSpacing' in ctx) ctx.letterSpacing='0px';
+  }
+
+  function drawLabels(){
+    label('INBOUND DEALS', emergeX, bandTop-16, rgba(GREY,0.7), 'left');
+    label('FILTERED OUT', scanX+6, playBot+ (narrow?14:24), rgba(GREY,0.55), 'center');
+    label('TO PARTNERS', stackX, stackBaseY-22, rgba(GOLD,0.85), 'center');
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    drawStars();
+    drawAura();
+    // cards behind orb (so qualified glide through Alex)
+    for(const c of cards) if(c.state!=='stacked') drawCard(c);
+    drawOrb();
+    for(const c of cards) if(c.state==='stacked') drawCard(c);
+    drawLabels();
+    // left scrim — cards emerge from the dark beside the headline
+    const sc=ctx.createLinearGradient(0,0,emergeX,0);
+    sc.addColorStop(0,'rgba(8,8,8,1)'); sc.addColorStop(0.72,'rgba(8,8,8,0.92)'); sc.addColorStop(1,'rgba(8,8,8,0)');
+    ctx.fillStyle=sc; ctx.fillRect(0,0,emergeX,H);
+  }
+
+  let raf=0, perf=0, last=0, running=false;
+  function tick(ts){
+    if(!last) last=ts;
+    let dt=(ts-last)/1000; last=ts;
+    if(dt>0.05) dt=0.05;
+    perf+=dt;
+    update(dt); render();
+    raf=requestAnimationFrame(tick);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  if(REDUCE){
+    // static, fully-sorted representative frame
+    for(let i=0;i<3;i++) cards.push({x:scanX-i*(cardW+7),y:core.y,rot:0,state:'approach',alpha:1,scan:0,glow:0,tag:0,qualified:false,lines:3});
+    for(let i=0;i<maxStack;i++) cards.push({x:stackX,y:stackBaseY+i*slotGap,rot:0,state:'stacked',alpha:1,glow:0.5,tag:1,qualified:true,lines:3});
+    cards.push({x:scanX+18,y:core.y+90,rot:0.5,state:'reject',alpha:0.55,glow:0,tag:0,qualified:false,lines:2});
+    cards.push({x:scanX-22,y:core.y+150,rot:-0.7,state:'reject',alpha:0.3,glow:0,tag:0,qualified:false,lines:2});
+    stack=cards.filter(c=>c.state==='stacked');
+    render();
+  } else {
+    render();                 // paint first frame immediately
+    running=true; last=0; raf=requestAnimationFrame(tick);
+    const io=new IntersectionObserver(es=>{
+      es.forEach(en=>{
+        if(en.isIntersecting && !running){ running=true; last=0; raf=requestAnimationFrame(tick); }
+        else if(!en.isIntersecting && running){ running=false; cancelAnimationFrame(raf); }
+      });
+    },{threshold:0.02});
+    io.observe(canvas);
+  }
+})();
+
+/* ============================================================
+   CONTRAST — DAY / NIGHT CYCLE
+   A sun/moon arcs overhead. Human analyst nodes light by day and
+   fade to dark by night. Alex's gold core stays fully lit, steady,
+   through the whole cycle.
+   ============================================================ */
+(function(){
+  const canvas = document.getElementById('cycle');
+  const ctx = canvas.getContext('2d');
+  const VW = 860, VH = 360;       // logical design size
+  let DPR=1, scale=1;
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    const w = canvas.clientWidth || VW;
+    scale = w / VW;
+    canvas.width = Math.round(w*DPR);
+    canvas.height = Math.round(VH*scale*DPR);
+    canvas.style.height = (VH*scale)+'px';
+    ctx.setTransform(DPR*scale,0,0,DPR*scale,0,0);
+  }
+
+  // analyst cluster (left) — small silhouettes
+  const team = [];
+  const tx = VW*0.30, ty = VH*0.66;
+  const layout = [[-78,4],[-50,-12],[-24,6],[2,-8],[28,8],[54,-10],[80,4]];
+  for(const [ox,oy] of layout) team.push({x:tx+ox, y:ty+oy, ph:Math.random()*6.28});
+  // Alex core (right)
+  const ax = VW*0.74, ay = VH*0.60;
+
+  function drawPerson(x,y,lit){
+    // head + shoulders silhouette
+    const base = 0.10, on = 0.85;
+    const lum = base + (on-base)*lit;
+    const col = (r,g,b)=>'rgba('+r+','+g+','+b+','+lum.toFixed(3)+')';
+    ctx.fillStyle = col(138,136,128);
+    ctx.beginPath(); ctx.arc(x, y-13, 5.4, 0, 6.2832); ctx.fill();           // head
+    ctx.beginPath();
+    ctx.moveTo(x-9, y+9);
+    ctx.quadraticCurveTo(x-9, y-4, x, y-4);
+    ctx.quadraticCurveTo(x+9, y-4, x+9, y+9);
+    ctx.closePath(); ctx.fill();                                            // shoulders
+    if(lit>0.04){
+      ctx.fillStyle='rgba(201,168,76,'+(lit*0.5).toFixed(3)+')';
+      ctx.beginPath(); ctx.arc(x, y-13, 5.4, 0, 6.2832); ctx.fill();
+    }
+  }
+
+  function drawCore(x,y,t){
+    const pulse = REDUCE?1:(0.9+Math.sin(t*1.1)*0.1);
+    const r=15;
+    let g=ctx.createRadialGradient(x,y,0,x,y,r*4.6);
+    g.addColorStop(0,'rgba(226,201,126,'+(0.34*pulse).toFixed(3)+')');
+    g.addColorStop(0.3,'rgba(201,168,76,0.12)');
+    g.addColorStop(1,'rgba(201,168,76,0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r*4.6,0,6.2832); ctx.fill();
+    let o=ctx.createRadialGradient(x-r*0.3,y-r*0.3,r*0.1,x,y,r);
+    o.addColorStop(0,'#fff6df'); o.addColorStop(0.45,'#E2C97E'); o.addColorStop(0.78,'#C9A84C'); o.addColorStop(1,'#8a6f2c');
+    ctx.fillStyle=o; ctx.beginPath(); ctx.arc(x,y,r*pulse,0,6.2832); ctx.fill();
+  }
+
+  // day factor 0..1 from cycle phase (0 = deep night)
+  function dayFactor(ph){
+    const s = Math.sin(ph);           // -1..1
+    return Math.max(0, Math.min(1, (s+0.35)/1.0)); // bias toward fuller days/nights
+  }
+
+  function render(ph, t){
+    ctx.clearRect(0,0,VW,VH);
+    const day = dayFactor(ph);
+
+    // ground line
+    ctx.strokeStyle='rgba(250,250,248,0.06)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(VW*0.06, VH*0.78); ctx.lineTo(VW*0.94, VH*0.78); ctx.stroke();
+
+    // arc path for sun/moon
+    const arcCx=VW*0.5, arcCy=VH*0.82, arcRx=VW*0.40, arcRy=VH*0.56;
+    ctx.strokeStyle='rgba(201,168,76,0.08)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.ellipse(arcCx,arcCy,arcRx,arcRy,0,Math.PI,0); ctx.stroke();
+
+    // body travels along the arc with the phase
+    const a = Math.PI*(1 - ((ph/(Math.PI*2))%1 + 1)%1); // map phase to angle along top arc
+    const bx = arcCx + Math.cos(a)*arcRx;
+    const by = arcCy - Math.sin(a)*arcRy;
+    const isDay = day>0.5;
+    // glow
+    let bg=ctx.createRadialGradient(bx,by,0,bx,by,40);
+    if(isDay){ bg.addColorStop(0,'rgba(226,201,126,0.5)'); bg.addColorStop(1,'rgba(201,168,76,0)'); }
+    else { bg.addColorStop(0,'rgba(180,188,210,0.28)'); bg.addColorStop(1,'rgba(120,130,160,0)'); }
+    ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(bx,by,40,0,6.2832); ctx.fill();
+    // disc
+    ctx.fillStyle = isDay ? '#E2C97E' : '#aab2c4';
+    ctx.beginPath(); ctx.arc(bx,by,isDay?11:9,0,6.2832); ctx.fill();
+    if(!isDay){ // crescent bite
+      ctx.globalCompositeOperation='destination-out';
+      ctx.beginPath(); ctx.arc(bx+4,by-3,8,0,6.2832); ctx.fill();
+      ctx.globalCompositeOperation='source-over';
+    }
+
+    // labels
+    ctx.font='9px "Tenor Sans", sans-serif';
+    ctx.textAlign='center';
+    ctx.fillStyle='rgba(138,136,128,0.7)';
+    ctx.fillText('YOUR ANALYSTS', tx, VH*0.92);
+    ctx.fillStyle='rgba(201,168,76,0.85)';
+    ctx.fillText('ALEX', ax, VH*0.92);
+
+    // team — lit by day, dark by night, with slight per-node flicker
+    for(const p of team){
+      const flick = REDUCE?0:Math.sin(t*0.8+p.ph)*0.05;
+      drawPerson(p.x, p.y, Math.max(0, day - 0.05 + flick));
+    }
+    // status under team
+    ctx.font='8px "Tenor Sans", sans-serif';
+    ctx.fillStyle = isDay?'rgba(201,168,76,0.7)':'rgba(90,88,85,0.8)';
+    ctx.fillText(isDay?'· WORKING ·':'· OFFLINE ·', tx, VH*0.80);
+
+    // Alex — always lit
+    drawCore(ax, ay, t);
+    ctx.font='8px "Tenor Sans", sans-serif';
+    ctx.fillStyle='rgba(201,168,76,0.8)';
+    ctx.fillText('· ALWAYS ON ·', ax, VH*0.80);
+  }
+
+  let t=0, raf=0, running=false;
+  function loop(){ t+=0.016; render(t*0.5, t); raf=requestAnimationFrame(loop); }
+
+  resize();
+  window.addEventListener('resize', ()=>{ resize(); if(REDUCE) render(Math.PI*0.5, 0); });
+
+  if(REDUCE){ render(Math.PI*0.5, 0); }
+  else {
+    // only animate while in view
+    const io = new IntersectionObserver(es=>{
+      es.forEach(en=>{
+        if(en.isIntersecting && !running){ running=true; loop(); }
+        else if(!en.isIntersecting && running){ running=false; cancelAnimationFrame(raf); }
+      });
+    }, {threshold:0.15});
+    io.observe(canvas);
+  }
+})();
+</script>
+</body>
+</html>
