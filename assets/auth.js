@@ -134,8 +134,8 @@ async function g7Logout() {
   localStorage.removeItem('g7_view_deal_id');
   localStorage.removeItem('g7_demo_mode');
   localStorage.removeItem('g7_session_name');
-  // Redirect to login
-  window.location.href = '/G7-Capital/login.html';
+  // Redirect to Alex intro page
+  window.location.href = '/G7-Capital/alex/index.html';
 }
 
 

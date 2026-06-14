@@ -338,7 +338,7 @@ footer{border-top:1px solid var(--border2);padding:40px 64px;max-width:1340px;ma
 
 <script>
 const EMP = {
-  alex:   { name:'Alex',   role:'AI Deal Analyst',      tint:'#C9A84C', live:true,  sum:'Screens investment deals with the rigor of a senior analyst.', desc:'Screens investment deals with the rigor of a senior analyst. Built for PE, VC, and investment banking firms.', href:'login.html' },
+  alex:   { name:'Alex',   role:'AI Deal Analyst',      tint:'#C9A84C', live:true,  sum:'Screens investment deals with the rigor of a senior analyst.', desc:'Screens investment deals with the rigor of a senior analyst. Built for PE, VC, and investment banking firms.', href:'alex/index.html' },
   scout:  { name:'Scout',  role:'AI BD Employee',       tint:'#C77B30', live:true,  sum:'Finds your best customers and builds your acquisition plan.', desc:'Finds your best customers and builds your acquisition plan. Built for Indian SMBs.', href:'scout/landing.html' },
   priya:  { name:'Priya',  role:'AI Credit Analyst',    tint:'#3E8C84', live:false, sum:'Assesses creditworthiness and structures lending decisions.', desc:'Assesses creditworthiness and structures lending decisions. Built for NBFCs and banks.' },
   maya:   { name:'Maya',   role:'AI Portfolio Monitor', tint:'#4A6FA5', live:false, sum:'Tracks portfolio health and flags risks before they surface.', desc:'Tracks portfolio health and flags risks before they surface. Built for investors.' },
@@ -420,7 +420,7 @@ document.querySelectorAll('.planet').forEach(pl=>{
     tip.classList.remove('show');
   });
   pl.addEventListener('click', ()=>{
-    if(e.live){ window.location.href = e.href; }
+    if(e.live){ if(e.href.charAt(0)==='#'){ window.location.hash = e.href.slice(1); } else { window.location.href = e.href; } }
     else { openModal(pl.dataset.key); }
   });
 });

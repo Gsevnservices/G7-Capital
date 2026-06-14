@@ -395,7 +395,7 @@ function escHtml(str) {
 ═══════════════════════════════════════ */
 function handleLogout() {
   ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
-  window.location.href = '../login.html?product=scout';
+  window.location.href = 'landing.html';
 }
 
 /* ═══════════════════════════════════════

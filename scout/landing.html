@@ -3,940 +3,636 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G7 Scout — Your AI Business Development Employee</title>
-<meta name="description" content="Scout analyses your business, finds your best customers, and gives you a complete action plan — every month. Built for Indian SMBs. ₹3,000/month.">
+<title>Scout — Your AI Business Development Employee · G7 Capital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>S</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080808'/%3E%3Ctext y='.9em' font-size='70' font-family='serif' fill='%23E0922F'%3EG%3C/text%3E%3C/svg%3E">
 <style>
-/* =============================================
-   BASE RESET + CSS VARIABLES
-   ============================================= */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
 :root{
-  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
-  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
-  --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
-  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08)
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;
+  --amber:#E0922F;--amber-d:#D17B2E;--amber-l:#F0B968;--gold:#C9A84C;
+  --white:#FAFAF8;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(224,146,47,0.18);--border2:rgba(250,250,248,0.08);--border3:rgba(250,250,248,0.04);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Tenor Sans',sans-serif;
 }
-body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--white);overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 74% 58% at 52% 32%, rgba(224,146,47,0.18) 0%, rgba(150,90,30,0.07) 30%, rgba(8,8,8,0) 64%),
+    #080808;
+  background-attachment:fixed;
+}
+::selection{background:rgba(224,146,47,.3);color:var(--white)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.24;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
 
-/* GRAIN TEXTURE */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+/* ============ NAV ============ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;
+  padding:24px 44px;transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+.topbar.scrolled{background:rgba(8,8,8,.72);backdrop-filter:blur(14px);border-bottom-color:var(--border3)}
+.brand{display:flex;align-items:baseline;gap:18px}
+.wordmark{font-family:var(--serif);font-size:19px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;color:var(--white);white-space:nowrap}
+.wordmark b{font-weight:400;color:var(--amber)}
+.brand-sep{width:1px;height:15px;background:var(--border);align-self:center}
+.brand-tag{font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+.btn-amber{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--black);background:var(--amber);
+  padding:14px 30px;text-decoration:none;border:none;cursor:pointer;transition:all .35s;display:inline-block;white-space:nowrap}
+.btn-amber:hover{background:var(--amber-l);transform:translateY(-2px);box-shadow:0 14px 44px rgba(224,146,47,.32)}
+.nav-cta{padding:12px 26px}
 
-/* =============================================
-   CUSTOM CURSOR (desktop only)
-   ============================================= */
-.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
-@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+#loop{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.hero-inner{position:relative;z-index:3;width:100%;max-width:1340px;margin:0 auto;padding:120px 64px 80px;pointer-events:none}
+.hero-copy{max-width:512px;pointer-events:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber);margin-bottom:30px;opacity:0;animation:rise 1s ease .2s both}
+.eyebrow::before{content:'';width:34px;height:1px;background:var(--amber)}
+.hero h1{font-family:var(--serif);font-weight:300;line-height:1.02;letter-spacing:-.01em;color:var(--white);margin-bottom:26px;opacity:0;animation:rise 1s ease .35s both}
+.hero h1 .nm{display:block;font-size:clamp(56px,8vw,104px);line-height:.95}
+.hero h1 .rl{display:block;font-style:italic;color:var(--amber);font-size:clamp(26px,3.3vw,42px);margin-top:10px;line-height:1.1}
+.hero p{font-size:16px;line-height:1.95;color:var(--grey1);max-width:486px;margin-bottom:38px;opacity:0;animation:rise 1s ease .5s both}
+.hero-actions{display:flex;gap:24px;align-items:center;flex-wrap:wrap;opacity:0;animation:rise 1s ease .65s both}
+.btn-cap{font-size:11px;letter-spacing:.04em;color:var(--grey2);font-family:var(--serif);font-style:italic}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:3;opacity:0;animation:rise 1s ease 1.2s both}
+.scrollcue .ln{width:1px;height:42px;background:linear-gradient(var(--amber),transparent);animation:cue 2.6s ease infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+.scrollcue span{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey2)}
 
-/* =============================================
-   NAVIGATION
-   ============================================= */
-nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:12px}
-.nav-logo em{font-style:normal;color:var(--gold)}
-.nav-logo-badge{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:3px 8px;opacity:.8}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-.nav-links a{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s;white-space:nowrap}
-.nav-links a:hover{color:var(--white)}
-.nav-right{display:flex;align-items:center;gap:16px}
-.nav-signin{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
-.nav-signin:hover{color:var(--white)}
-.nav-cta{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:12px 28px;text-decoration:none;transition:all .3s}
-.nav-cta:hover{background:var(--gold2);transform:translateY(-1px)}
-/* Hamburger for mobile */
-.hamburger{display:none;flex-direction:column;gap:6px;cursor:pointer;background:none;border:none;padding:4px}
-.hamburger span{display:block;width:28px;height:1px;background:var(--white);transition:all .3s}
-.mobile-menu{display:none;position:fixed;top:80px;left:0;right:0;bottom:0;background:var(--black);z-index:998;flex-direction:column;justify-content:center;align-items:center;gap:40px;border-top:1px solid var(--border2)}
-.mobile-menu.open{display:flex}
-.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:.05em;transition:color .3s}
-.mobile-menu a:hover{color:var(--gold)}
-.mobile-close{position:absolute;top:24px;right:32px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);cursor:pointer;background:none;border:none;transition:color .3s;font-family:'Tenor Sans',sans-serif}
-.mobile-close:hover{color:var(--gold)}
-@media(max-width:1024px){nav{padding:0 32px}.nav-links{display:none}.hamburger{display:flex}}
-@media(max-width:768px){nav{padding:0 24px}}
-
-/* =============================================
-   SHARED LAYOUT + UTILITIES
-   ============================================= */
-.section-wrap{max-width:1200px;margin:0 auto;padding:0 64px}
-.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;padding-bottom:32px;border-bottom:1px solid var(--border2)}
-.section-no{font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:20px;text-transform:uppercase}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,56px);font-weight:300;line-height:1.1;letter-spacing:-.01em}
-.section-title em{font-style:italic;color:var(--gold)}
-.section-link{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);text-decoration:none;white-space:nowrap;transition:color .3s;padding-bottom:4px;border-bottom:1px solid var(--grey2);margin-bottom:8px}
-.section-link:hover{color:var(--gold);border-color:var(--gold)}
-.btn-gold{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:16px 48px;text-decoration:none;transition:all .3s;display:inline-block}
-.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,.25)}
-.btn-outline{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--white);background:transparent;padding:15px 48px;border:1px solid rgba(250,250,248,.2);text-decoration:none;transition:all .3s;display:inline-block}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
-/* Scroll-reveal animation */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+/* ============ SECTIONS ============ */
+.section{max-width:1180px;margin:0 auto;padding:128px 64px;border-top:1px solid var(--border3)}
+.sec-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:26px}
+.sec-h{font-family:var(--serif);font-weight:300;line-height:1.12;letter-spacing:-.01em;color:var(--white)}
+.sec-h .it{font-style:italic;color:var(--amber)}
+.sec-body{font-size:16px;line-height:2;color:var(--grey1);max-width:660px}
+.sec-body strong{color:var(--white);font-weight:400}
+.sec-body + .sec-body{margin-top:26px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
 .reveal.in{opacity:1;transform:none}
-/* Animations */
-@keyframes appear{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
 
-/* =============================================
-   SECTION 1 — HERO
-   ============================================= */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:160px 40px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:140px;left:64px;right:64px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
-.hero::after{content:'';position:absolute;bottom:80px;left:64px;right:64px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
-.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(ellipse,rgba(201,168,76,.05) 0%,transparent 70%);pointer-events:none}
-.hero-eyebrow{display:flex;align-items:center;gap:16px;margin-bottom:48px;opacity:0;animation:appear 1s ease .3s both}
-.eyebrow-line{width:40px;height:1px;background:var(--gold)}
-.eyebrow-text{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
-.hero-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,6.5vw,96px);font-weight:300;line-height:1.05;letter-spacing:-.01em;color:var(--white);margin-bottom:16px;opacity:0;animation:appear 1s ease .5s both}
-.hero-headline em{font-style:italic;color:var(--gold)}
-.hero-sub{font-size:14px;letter-spacing:.05em;color:var(--grey1);line-height:2;max-width:560px;margin:0 auto 56px;opacity:0;animation:appear 1s ease .7s both}
-.hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;opacity:0;animation:appear 1s ease .9s both;margin-bottom:72px}
-.hero-stats{display:flex;align-items:stretch;border:1px solid var(--border2);opacity:0;animation:appear 1s ease 1.1s both}
-.hero-stat{padding:24px 48px;text-align:center;border-right:1px solid var(--border2)}
-.hero-stat:last-child{border-right:none}
-.hero-stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px}
-.hero-stat-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey2);line-height:1.5}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:appear 1s ease 1.4s both}
-.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 2s ease infinite}
-.scroll-text{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--grey2)}
+/* pain cards */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border3);border:1px solid var(--border3);margin-top:64px}
+.pain{background:#0c0b09;padding:40px 32px;position:relative}
+.pain::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--amber);transform:scaleY(0);transform-origin:top;transition:transform .6s ease}
+.pain:hover::before{transform:scaleY(1)}
+.pain-t{font-family:var(--serif);font-weight:300;font-size:30px;color:var(--amber);margin-bottom:16px;line-height:1}
+.pain-d{font-size:14px;line-height:1.8;color:var(--grey1)}
 
-/* =============================================
-   SECTION 2 — PROBLEM
-   ============================================= */
-.problem-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.problem-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);margin-bottom:56px}
-.prob-stat{background:var(--black2);padding:56px 40px}
-.prob-stat-num{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;color:var(--white);line-height:1;margin-bottom:8px}
-.prob-stat-unit{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--gold)}
-.prob-stat-label{font-size:12px;color:var(--grey1);line-height:1.9;margin-top:16px;letter-spacing:.03em}
-.problem-insight{border-left:2px solid var(--gold);padding:24px 32px;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--grey1);line-height:1.7;max-width:800px}
+/* solution flow (5 stages) */
+.flow4{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:6px;margin-top:72px}
+.fnode{background:#0c0b09;border:1px solid var(--border3);padding:30px 18px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.fnode .fn-no{font-size:9px;letter-spacing:.24em;color:var(--grey2);margin-bottom:14px}
+.fnode .fn-k{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--amber);margin-bottom:12px;line-height:1}
+.fnode .fn-d{font-size:12.5px;line-height:1.7;color:var(--grey1)}
+.farrow{display:flex;align-items:center;justify-content:center;color:var(--amber);font-size:15px;opacity:.65}
 
-/* =============================================
-   SECTION 3 — HOW SCOUT WORKS
-   ============================================= */
-.how-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2)}
-.step-card{background:var(--black);padding:48px 36px;position:relative;transition:background .3s}
-.step-card:hover{background:var(--black2)}
-.step-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .4s ease}
-.step-card:hover::before{transform:scaleX(1)}
-.step-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:rgba(201,168,76,.1);line-height:1;margin-bottom:28px;transition:color .3s}
-.step-card:hover .step-num{color:rgba(201,168,76,.2)}
-.step-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--white);margin-bottom:16px}
-.step-desc{font-size:12px;color:var(--grey1);line-height:1.9}
+/* what you get */
+.get-sub{font-size:16px;line-height:1.9;color:var(--grey1);max-width:620px;margin-top:24px}
+.get-group{display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin:60px 0 18px}
+.get-group::before{content:'';width:28px;height:1px;background:var(--amber)}
+.get-group.first{margin-top:56px}
+.gets{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border3);border:1px solid var(--border3)}
+.get{background:#0c0b09;padding:36px 32px;min-height:200px;display:flex;flex-direction:column;transition:background .4s;position:relative}
+.get::before{content:'';position:absolute;left:0;top:0;height:2px;width:100%;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .5s ease}
+.get:hover::before{transform:scaleX(1)}
+.get:hover{background:#110f0c}
+.get-n{font-family:var(--serif);font-size:15px;color:var(--amber);letter-spacing:.08em;margin-bottom:22px}
+.get-t{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--white);margin-bottom:16px;line-height:1.5}
+.get-d{font-size:13px;line-height:1.85;color:var(--grey1);margin-top:auto}
 
-/* =============================================
-   SECTION 4 — WHAT SCOUT PRODUCES
-   ============================================= */
-.output-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);margin-bottom:2px}
-.output-card{background:var(--black2);padding:48px 40px;position:relative;transition:background .3s;cursor:default}
-.output-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .4s ease}
-.output-card:hover{background:var(--black3)}
-.output-card:hover::before{transform:scaleX(1)}
-.output-tab-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-.output-card-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--white);margin-bottom:16px;line-height:1.2}
-.output-card-desc{font-size:12px;color:var(--grey1);line-height:1.9}
-.output-card-items{margin-top:20px;display:flex;flex-direction:column;gap:8px}
-.output-item{display:flex;align-items:flex-start;gap:12px;font-size:11px;color:var(--grey1);line-height:1.6}
-.output-item-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0}
-.output-banner{background:rgba(201,168,76,.04);border:1px solid var(--border);border-top:none;padding:28px 40px;display:flex;align-items:center;gap:24px}
-.banner-plus{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold);flex-shrink:0}
-.banner-text{font-size:12px;color:var(--grey1);line-height:1.8;letter-spacing:.03em}
-.banner-text strong{color:var(--white);font-weight:400;font-size:13px;display:block;margin-bottom:4px;font-family:'Tenor Sans',sans-serif;letter-spacing:.05em}
+/* tag cloud */
+.tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:60px;max-width:920px}
+.tag{font-size:12px;letter-spacing:.06em;color:var(--grey1);border:1px solid var(--border);padding:10px 18px;border-radius:999px;transition:all .35s;cursor:default}
+.tag:hover{color:var(--amber);border-color:var(--amber);background:rgba(224,146,47,.06)}
+.tag-note{margin-top:42px;font-family:var(--serif);font-style:italic;font-size:19px;color:var(--amber-l);max-width:680px;line-height:1.5}
 
-/* =============================================
-   SECTION 5 — SCOUT'S HONEST ASSESSMENT
-   ============================================= */
-.honest-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.honest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2)}
-.honest-card{background:var(--black);padding:56px 40px;transition:background .3s}
-.honest-card:hover{background:var(--black2)}
-.honest-icon{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--gold);opacity:.5;margin-bottom:24px;line-height:1}
-.honest-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--white);margin-bottom:16px;line-height:1.2}
-.honest-desc{font-size:12px;color:var(--grey1);line-height:1.9}
-.honest-quote{border-left:2px solid var(--gold);padding:20px 28px;font-size:13px;color:var(--grey1);line-height:1.9;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;margin-top:24px}
+/* pricing */
+.price-wrap{display:flex;justify-content:center;margin-top:64px}
+.price{width:100%;max-width:460px;background:#0c0b09;border:1px solid var(--border);padding:46px 44px 40px;text-align:center;position:relative}
+.price::after{content:'';position:absolute;inset:0;border:1px solid transparent;background:linear-gradient(180deg,rgba(224,146,47,.5),transparent 60%) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.price-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:24px}
+.price-free{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:28px;padding:14px 28px;border:1px solid var(--border);border-radius:999px;background:rgba(224,146,47,.07)}
+.price-free b{font-family:var(--sans);font-weight:400;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+.price-free small{font-size:11px;letter-spacing:.06em;color:var(--grey1)}
+.price-amt{font-family:var(--serif);font-weight:300;font-size:54px;color:var(--white);line-height:1;opacity:.82}
+.price-amt .pre{font-size:15px;color:var(--grey1);font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:8px;opacity:.9}
+.price-amt span{font-size:15px;color:var(--grey1);font-family:var(--sans);letter-spacing:.04em}
+.price-feats{list-style:none;text-align:left;margin:36px 0 32px;display:flex;flex-direction:column;gap:14px}
+.price-feats li{display:flex;align-items:flex-start;gap:13px;font-size:13.5px;line-height:1.5;color:var(--grey1)}
+.price-feats li::before{content:'';flex:none;width:16px;height:16px;margin-top:1px;border-radius:50%;background:rgba(224,146,47,.14);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23E0922F' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+.price .btn-amber{display:block;width:100%;padding:17px;font-size:11px}
+.price-cap{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--grey2);margin-top:18px}
 
-/* =============================================
-   SECTION 6 — BUSINESS TYPES TAG CLOUD
-   ============================================= */
-.types-section{padding:120px 0;border-bottom:1px solid var(--border2);background:var(--black2)}
-.types-cloud{display:flex;flex-wrap:wrap;gap:12px;margin-top:48px}
-.type-tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey1);border:1px solid var(--border2);padding:10px 20px;transition:all .3s;cursor:default}
-.type-tag:hover{border-color:var(--gold);color:var(--white);background:rgba(201,168,76,.04)}
-.types-note{margin-top:40px;font-size:13px;color:var(--grey2);line-height:1.8;font-family:'Cormorant Garamond',serif;font-style:italic}
+/* final CTA */
+.cta{position:relative;text-align:center;padding:150px 32px;overflow:hidden;border-top:1px solid var(--border3)}
+.cta::before{content:'';position:absolute;left:50%;top:48%;width:780px;height:780px;max-width:120vw;max-height:120vw;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(224,146,47,.18) 0%, rgba(224,146,47,.06) 32%, rgba(8,8,8,0) 64%);pointer-events:none;z-index:0}
+.cta-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.cta h2{font-family:var(--serif);font-weight:300;font-size:clamp(38px,5.4vw,56px);line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
+.cta h2 .it{font-style:italic;color:var(--amber)}
+.cta .lead{font-size:16px;line-height:1.9;color:var(--grey1);max-width:440px;margin-bottom:42px}
+.cta .btn-amber{font-size:11px;padding:18px 48px}
+.cta-cap{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--grey2);margin-top:22px}
+.cta-links{margin-top:40px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.cta-links .row{font-size:11px;letter-spacing:.04em;color:var(--grey2)}
+.cta-links a{color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .35s,border-color .35s}
+.cta-links a:hover{color:var(--amber);border-color:var(--amber)}
 
-/* =============================================
-   SECTION 7 — PRICING
-   ============================================= */
-.pricing-section{padding:120px 0;border-bottom:1px solid var(--border2)}
-.pricing-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
-.pricing-left-desc{font-size:14px;color:var(--grey1);line-height:2;margin-bottom:40px}
-.pricing-comparison{display:flex;flex-direction:column;gap:16px}
-.price-compare-row{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--grey1);line-height:1.6}
-.price-compare-line{width:20px;height:1px;background:var(--gold);flex-shrink:0;margin-top:1px}
-.pricing-card{background:var(--black2);border:1px solid var(--border);padding:56px 48px;position:relative;overflow:hidden}
-.pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold)}
-.pricing-badge{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:32px}
-.pricing-amount{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--white);line-height:1;margin-bottom:8px}
-.pricing-amount span{font-size:28px;color:var(--grey1);font-weight:300}
-.pricing-period{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey2);margin-bottom:40px}
-.pricing-divider{width:100%;height:1px;background:var(--border2);margin-bottom:40px}
-.pricing-features{display:flex;flex-direction:column;gap:16px;margin-bottom:48px}
-.pricing-feature{display:flex;align-items:flex-start;gap:16px;font-size:12px;color:var(--grey1);line-height:1.7}
-.pricing-feature-check{color:var(--gold);font-size:14px;flex-shrink:0;margin-top:0}
-.pricing-cta{display:block;text-align:center;background:var(--gold);color:var(--black);font-size:10px;letter-spacing:.25em;text-transform:uppercase;padding:18px;text-decoration:none;transition:all .3s;margin-bottom:16px;font-family:'Tenor Sans',sans-serif}
-.pricing-cta:hover{background:var(--gold2);transform:translateY(-2px)}
-.pricing-note{font-size:11px;color:var(--grey2);text-align:center;letter-spacing:.05em}
+/* footer */
+footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey2)}
+.foot-l b{color:var(--amber);font-weight:400}
+.foot-c{font-size:11px;letter-spacing:.1em;color:var(--grey2)}
+.foot-r{display:flex;gap:26px}
+.foot-r a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .35s}
+.foot-r a:hover{color:var(--amber)}
 
-/* =============================================
-   SECTION 8 — FINAL CTA
-   ============================================= */
-.final-cta-section{padding:160px 0;border-bottom:1px solid var(--border2);background:var(--black2);text-align:center;position:relative;overflow:hidden}
-.final-cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(201,168,76,.05) 0%,transparent 70%);pointer-events:none}
-.final-cta-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:48px;opacity:0;animation:appear 1s ease both}
-.final-cta-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,5.5vw,80px);font-weight:300;line-height:1.1;color:var(--white);margin-bottom:24px}
-.final-cta-headline em{font-style:italic;color:var(--gold)}
-.final-cta-sub{font-size:14px;color:var(--grey1);line-height:2;max-width:480px;margin:0 auto 56px}
-.final-cta-actions{display:flex;align-items:center;gap:24px;justify-content:center;flex-wrap:wrap}
-.final-cta-promise{margin-top:48px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey2)}
-
-/* =============================================
-   FOOTER
-   ============================================= */
-footer{padding:80px 64px 48px;border-top:1px solid var(--border2)}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:64px;padding-bottom:64px;border-bottom:1px solid var(--border2);margin-bottom:32px}
-.footer-brand-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:.1em;color:var(--white);margin-bottom:12px}
-.footer-brand-name em{font-style:normal;color:var(--gold)}
-.footer-tagline{font-size:12px;color:var(--grey2);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:28px;line-height:1.6}
-.footer-col-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-.footer-col a{display:block;font-size:13px;color:var(--grey1);text-decoration:none;margin-bottom:12px;transition:color .3s;letter-spacing:.03em}
-.footer-col a:hover{color:var(--white)}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
-.footer-copy{font-size:11px;color:var(--grey2);letter-spacing:.06em}
-.footer-disclaimer{font-size:10px;color:var(--grey2);max-width:480px;text-align:right;line-height:1.7;letter-spacing:.03em}
-
-/* SCROLL TO TOP */
-.scroll-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border:1px solid var(--border);background:var(--black2);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:all .3s;z-index:200;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);text-decoration:none}
-.scroll-top.show{opacity:1}
-.scroll-top:hover{background:var(--black3);border-color:var(--gold)}
-
-/* =============================================
-   MOBILE RESPONSIVE
-   ============================================= */
-@media(max-width:1024px){
-  .section-wrap{padding:0 32px}
-  footer{padding:60px 32px 40px}
-  .footer-top{grid-template-columns:1fr 1fr;gap:40px}
-  .pricing-layout{grid-template-columns:1fr;gap:56px}
-  .hero::before,.hero::after{left:32px;right:32px}
+/* ============ RESPONSIVE ============ */
+@media(max-width:980px){
+  .topbar{padding:20px 28px}
+  .brand{gap:12px}
+  .hero-inner{padding:128px 32px 380px;text-align:center;display:flex;justify-content:center}
+  .hero-copy{max-width:600px}
+  .eyebrow{justify-content:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .section{padding:96px 32px}
+  .scrollcue{display:none}
+  .pains,.gets{grid-template-columns:1fr}
+  .flow4{grid-template-columns:1fr;gap:6px}
+  .farrow{transform:rotate(90deg);padding:2px 0}
 }
-@media(max-width:768px){
-  .hero{padding:120px 24px 80px}
-  .hero::before,.hero::after{display:none}
-  .hero-stats{flex-direction:column;width:100%}
-  .hero-stat{border-right:none;border-bottom:1px solid var(--border2)}
-  .hero-stat:last-child{border-bottom:none}
-  .section-header{flex-direction:column;align-items:flex-start;gap:24px}
-  .problem-stats{grid-template-columns:1fr}
-  .steps-grid{grid-template-columns:1fr 1fr}
-  .output-grid{grid-template-columns:1fr}
-  .honest-grid{grid-template-columns:1fr}
-  footer{padding:60px 24px 40px}
-  .footer-top{grid-template-columns:1fr}
-  .footer-disclaimer{text-align:left}
-  .footer-bottom{flex-direction:column;align-items:flex-start}
-  .section-wrap{padding:0 24px}
-  .scroll-top{bottom:20px;right:20px}
-  .pricing-card{padding:40px 28px}
-  .final-cta-section{padding:100px 0}
+@media(max-width:560px){
+  .topbar{padding:16px 20px}
+  .brand-sep,.brand-tag{display:none}
+  .nav-cta{padding:11px 18px;font-size:9px;letter-spacing:.16em}
+  .section{padding:78px 22px}
+  .price{padding:38px 26px 32px}
+  footer{flex-direction:column;text-align:center;padding:38px 22px}
+  .cta{padding:110px 22px}
 }
-@media(max-width:480px){
-  .steps-grid{grid-template-columns:1fr}
-  .hero-actions{flex-direction:column;width:100%;max-width:320px}
-  .btn-gold,.btn-outline{width:100%;text-align:center}
-  .final-cta-actions{flex-direction:column;width:100%;max-width:320px;margin:0 auto}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .eyebrow,.hero h1,.hero p,.hero-actions,.scrollcue{animation:none;opacity:1;transform:none}
+  .scrollcue .ln{animation:none}
+  .reveal{opacity:1;transform:none}
 }
 </style>
 </head>
 <body>
 
-<!-- CUSTOM CURSOR -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<a href="#" class="scroll-top" id="scrollTop">↑</a>
-
-<!-- =============================================
-     NAVIGATION
-     ============================================= -->
-<nav>
-  <a href="../index.html" class="nav-logo">
-    G<em>7</em> Capital
-    <span class="nav-logo-badge">Scout</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#how-it-works">How It Works</a></li>
-    <li><a href="#sample">What You Get</a></li>
-    <li><a href="#types">Business Types</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="../login.html?product=scout" class="nav-signin">Sign In</a>
-    <a href="../login.html?product=scout&mode=signup" class="nav-cta">Start Free →</a>
+<!-- NAV -->
+<div class="topbar" id="topbar">
+  <div class="brand">
+    <a href="../index.html" class="wordmark"><b>G7</b> Capital</a>
+    <span class="brand-sep"></span>
+    <span class="brand-tag">Scout</span>
   </div>
-  <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" onclick="toggleMenu()">Close ✕</button>
-  <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
-  <a href="#sample" onclick="toggleMenu()">What You Get</a>
-  <a href="#types" onclick="toggleMenu()">Business Types</a>
-  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
-  <a href="../login.html?product=scout" onclick="toggleMenu()">Sign In</a>
+  <a href="../login.html?product=scout" class="btn-amber nav-cta">Get Started →</a>
 </div>
 
-<!-- =============================================
-     SECTION 1 — HERO
-     ============================================= -->
-<section class="hero">
-  <div class="hero-glow"></div>
-
-  <!-- Eyebrow -->
-  <div class="hero-eyebrow">
-    <div class="eyebrow-line"></div>
-    <div class="eyebrow-text">G7 Scout · AI Business Development · Built for Indian SMBs</div>
-    <div class="eyebrow-line"></div>
-  </div>
-
-  <!-- Headline -->
-  <h1 class="hero-headline">Your AI Business<br>Development <em>Employee.</em></h1>
-
-  <!-- Subheading -->
-  <p class="hero-sub">
-    Scout analyses your business, finds your best customers,<br>
-    writes your WhatsApp campaigns, and builds you a complete<br>
-    growth plan — every single month.
-  </p>
-
-  <!-- CTAs -->
-  <div class="hero-actions">
-    <a href="../login.html?product=scout&mode=signup" class="btn-gold">Start Free →</a>
-    <a href="#sample" class="btn-outline">See What Scout Produces →</a>
-  </div>
-
-  <!-- Stats bar -->
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">30</div>
-      <div class="hero-stat-label">Business types<br>supported</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">7</div>
-      <div class="hero-stat-label">Market dimensions<br>analysed</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">₹3K</div>
-      <div class="hero-stat-label">Per month,<br>all-inclusive</div>
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="loop"></canvas>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">G7 Capital · AI Employees</div>
+      <h1>
+        <span class="nm">Scout</span>
+        <span class="rl">Your AI Business Development Employee</span>
+      </h1>
+      <p>Scout finds your best customers, helps you win them, keeps them coming back, and grows your revenue — all in a simple plan you can follow from day one.</p>
+      <div class="hero-actions">
+        <a href="../login.html?product=scout" class="btn-amber">Get Started →</a>
+        <span class="btn-cap">First month free. No card required.</span>
+      </div>
     </div>
   </div>
+  <div class="scrollcue"><div class="ln"></div><span>Scroll</span></div>
+</section>
 
-  <!-- Scroll indicator -->
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    <div class="scroll-text">Scroll</div>
+<!-- 01 — PROBLEM -->
+<section class="section" id="problem">
+  <div class="reveal">
+    <div class="sec-label">01 · The Problem</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">You know your product.<br>But finding customers feels like <span class="it">guesswork.</span></h2>
+    <p class="sec-body">Most business owners rely on walk-ins and word of mouth. There is no plan, no system — just hoping the right customers find you. Meanwhile your competitor down the road is taking the customers who should have been yours.</p>
+  </div>
+  <div class="pains reveal">
+    <div class="pain"><div class="pain-t">No plan</div><div class="pain-d">Most small businesses have no system for finding new customers.</div></div>
+    <div class="pain"><div class="pain-t">No time</div><div class="pain-d">You are running the business — who has time to figure out marketing?</div></div>
+    <div class="pain"><div class="pain-t">No budget</div><div class="pain-d">Hiring a marketing person or an agency costs more than you can justify.</div></div>
   </div>
 </section>
 
-<!-- =============================================
-     SECTION 2 — THE PROBLEM
-     ============================================= -->
-<section class="problem-section" id="problem">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">01 — The Reality</div>
-        <h2 class="section-title">Most small businesses<br>grow by <em>accident.</em></h2>
-      </div>
-      <a href="../login.html?product=scout&mode=signup" class="section-link">Start free →</a>
-    </div>
-
-    <div class="problem-stats reveal">
-      <div class="prob-stat">
-        <div class="prob-stat-num">67<span class="prob-stat-unit">%</span></div>
-        <div class="prob-stat-label">
-          Of Indian small businesses close within 3 years. Not because the product is bad —
-          because nobody had a plan to find new customers consistently.
-        </div>
-      </div>
-      <div class="prob-stat">
-        <div class="prob-stat-num">₹<span class="prob-stat-unit">0</span></div>
-        <div class="prob-stat-label">
-          Average spend on structured marketing strategy by SMBs under ₹1 crore revenue.
-          Most owners know they should be doing something. Nobody tells them exactly what.
-        </div>
-      </div>
-      <div class="prob-stat">
-        <div class="prob-stat-num">4.2<span class="prob-stat-unit" style="font-size:28px">yr</span></div>
-        <div class="prob-stat-label">
-          Average time to consistent profitability for Indian SMBs. It does not have to take
-          this long. The tools that reduce this exist. They were just built for large companies.
-        </div>
-      </div>
-    </div>
-
-    <div class="reveal">
-      <div class="problem-insight">
-        "Most owners know their product is good. They just don't know who to sell it to,
-        how to reach them, or what to say. That is not a product problem. That is a strategy problem."
-      </div>
-    </div>
+<!-- 02 — SOLUTION -->
+<section class="section" id="solution">
+  <div class="reveal">
+    <div class="sec-label">02 · Meet Scout</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">Scout is the AI employee that<br><span class="it">grows your business.</span></h2>
+    <p class="sec-body">Tell Scout about your business in 5 minutes. Scout studies your local market and gives you a complete plan — who your best customers are, exactly what to say to them, and what to do each day to win and keep them. Then every week, Scout adjusts the plan based on what worked.</p>
+  </div>
+  <div class="flow4 reveal">
+    <div class="fnode"><div class="fn-no">STAGE 01</div><div class="fn-k">Find</div><div class="fn-d">Scout finds your best customers nearby.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 02</div><div class="fn-k">Convert</div><div class="fn-d">Win them with the right message.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 03</div><div class="fn-k">Retain</div><div class="fn-d">Keep them coming back.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 04</div><div class="fn-k">Grow</div><div class="fn-d">More customers. More revenue.</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fn-no">STAGE 05</div><div class="fn-k">Fund</div><div class="fn-d">Get matched to government of India schemes your business qualifies for.</div></div>
   </div>
 </section>
 
-<!-- =============================================
-     SECTION 3 — HOW SCOUT WORKS
-     ============================================= -->
-<section class="how-section" id="how-it-works">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">02 — How Scout Works</div>
-        <h2 class="section-title">Four steps to your<br>complete <em>growth plan.</em></h2>
-      </div>
-    </div>
+<!-- 03 — WHAT YOU GET -->
+<section class="section" id="get">
+  <div class="reveal">
+    <div class="sec-label">03 · What You Get</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">Not advice.<br><span class="it">A plan you can actually follow.</span></h2>
+    <p class="get-sub">Scout covers everything — from finding your first customer to growing your revenue month after month.</p>
+  </div>
 
-    <div class="steps-grid reveal">
-      <!-- Step 1 -->
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <div class="step-title">Tell Scout about your business</div>
-        <p class="step-desc">
-          A 2-minute setup. Your business type, location, how many customers you have,
-          your best months, your slow seasons, and what makes you different. That is all Scout needs.
-        </p>
-      </div>
+  <div class="get-group first reveal">Find &amp; Win Customers</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">01</div><div class="get-t">Your Best Customers</div><div class="get-d">3 specific customer types to target, with exactly where to find them near you.</div></div>
+    <div class="get"><div class="get-n">02</div><div class="get-t">Ready-To-Send Messages</div><div class="get-d">Copy-paste WhatsApp messages in Hindi, Hinglish, or English — two versions to test.</div></div>
+    <div class="get"><div class="get-n">03</div><div class="get-t">A 5-Day Action Plan</div><div class="get-d">What to do each day, with clear targets and the time it takes.</div></div>
+  </div>
 
-      <!-- Step 2 -->
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <div class="step-title">Scout analyses your market</div>
-        <p class="step-desc">
-          Scout studies your specific business type, your local competition, your pricing,
-          seasonal patterns, customer behaviour, and the 7 growth levers relevant to your category.
-        </p>
-      </div>
+  <div class="get-group reveal">Keep &amp; Multiply Customers</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">04</div><div class="get-t">WhatsApp Calendar</div><div class="get-d">4 weeks of pre-written broadcast messages — just copy and send at the right time.</div></div>
+    <div class="get"><div class="get-n">05</div><div class="get-t">Win Back Lost Customers</div><div class="get-d">Find customers who stopped coming and bring them back with the right message.</div></div>
+    <div class="get"><div class="get-n">06</div><div class="get-t">Referral Engine</div><div class="get-d">A complete referral program — what to offer, who to ask, and exactly what to say. Turn happy customers into a sales force.</div></div>
+  </div>
 
-      <!-- Step 3 -->
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <div class="step-title">Get your complete plan</div>
-        <p class="step-desc">
-          In minutes, not days. A full 5-tab report: market assessment, weekly action plan,
-          WhatsApp campaign calendar, new customer strategy, and a referral engine setup.
-        </p>
-      </div>
+  <div class="get-group reveal">Grow Your Business</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">07</div><div class="get-t">Expansion Intelligence</div><div class="get-d">New customer segments, new areas, and new revenue opportunities to expand into.</div></div>
+    <div class="get"><div class="get-n">08</div><div class="get-t">Government Schemes</div><div class="get-d">Schemes your business qualifies for — with the actual links and phone numbers to apply. Free money most owners never claim.</div></div>
+    <div class="get"><div class="get-n">09</div><div class="get-t">Grow Every Week</div><div class="get-d">Check in each Friday. Scout updates your plan based on what actually worked — so every week gets sharper.</div></div>
+  </div>
+</section>
 
-      <!-- Step 4 -->
-      <div class="step-card">
-        <div class="step-num">04</div>
-        <div class="step-title">Execute week by week</div>
-        <p class="step-desc">
-          Scout checks in every week with updated actions, reminders, and progress nudges.
-          Every month, Scout refreshes your full plan based on what worked and what changed.
-        </p>
-      </div>
+<!-- 04 — WHO IT WORKS FOR -->
+<section class="section" id="who">
+  <div class="reveal">
+    <div class="sec-label">04 · Built For Your Business</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">30 business types.<br><span class="it">Every Indian market.</span></h2>
+  </div>
+  <div class="tags reveal" id="tags"></div>
+  <div class="tag-note reveal">From metro suburbs to Tier 2 towns to Tier 3 districts — Scout calibrates to your exact market.</div>
+</section>
+
+<!-- 05 — PRICING -->
+<section class="section" id="pricing">
+  <div class="reveal">
+    <div class="sec-label">05 · Pricing</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px)">Less than you spend on chai<br>for the shop. <span class="it">Every month.</span></h2>
+  </div>
+  <div class="price-wrap reveal">
+    <div class="price">
+      <div class="price-label">Scout</div>
+      <div class="price-free"><b>First Month Free</b><small>No card required</small></div>
+      <div class="price-amt"><span class="pre">Then</span>₹3,000<span> / month</span></div>
+      <ul class="price-feats">
+        <li>Complete customer acquisition plan</li>
+        <li>Weekly plan updates</li>
+        <li>WhatsApp broadcast calendar</li>
+        <li>Referral network builder</li>
+        <li>Lost customer recovery</li>
+        <li>Government scheme recommendations</li>
+        <li>Festival campaign messages</li>
+        <li>All 30 business types covered</li>
+      </ul>
+      <a href="../login.html?product=scout" class="btn-amber">Get Started →</a>
     </div>
   </div>
 </section>
 
-<!-- =============================================
-     SECTION 4 — WHAT SCOUT PRODUCES
-     ============================================= -->
-<section class="output-section" id="sample">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">03 — What Scout Produces</div>
-        <h2 class="section-title">Not advice. An actual<br><em>plan with actions.</em></h2>
-      </div>
-    </div>
-
-    <div class="output-grid reveal">
-      <!-- Tab 1 -->
-      <div class="output-card">
-        <div class="output-tab-label">Tab 1 · Market Assessment</div>
-        <div class="output-card-title">How much revenue is actually available to you</div>
-        <p class="output-card-desc">
-          Scout sizes your local market, assesses your competition, scores your current position,
-          and tells you exactly where the growth opportunity is — with numbers, not opinions.
-        </p>
-        <div class="output-card-items">
-          <div class="output-item"><div class="output-item-dot"></div>Revenue potential estimate for your area</div>
-          <div class="output-item"><div class="output-item-dot"></div>Competitive position score</div>
-          <div class="output-item"><div class="output-item-dot"></div>Your single biggest growth lever</div>
-        </div>
-      </div>
-
-      <!-- Tab 2 -->
-      <div class="output-card">
-        <div class="output-tab-label">Tab 2 · Weekly Action Plan</div>
-        <div class="output-card-title">Five things to do right now</div>
-        <p class="output-card-desc">
-          Not a long list. Not vague suggestions. Five specific, time-stamped actions for this week —
-          ranked by impact, explained in plain language, built for someone with no marketing background.
-        </p>
-        <div class="output-card-items">
-          <div class="output-item"><div class="output-item-dot"></div>5 priority actions with deadlines</div>
-          <div class="output-item"><div class="output-item-dot"></div>Daily quick-win checklist</div>
-          <div class="output-item"><div class="output-item-dot"></div>This week's revenue focus</div>
-        </div>
-      </div>
-
-      <!-- Tab 3 -->
-      <div class="output-card">
-        <div class="output-tab-label">Tab 3 · WhatsApp Campaign</div>
-        <div class="output-card-title">Four weeks of messages, pre-written</div>
-        <p class="output-card-desc">
-          16 ready-to-send WhatsApp messages across 3 customer lists — with the exact text,
-          the right timing, and the audience for each one. Copy, paste, send. Done.
-        </p>
-        <div class="output-card-items">
-          <div class="output-item"><div class="output-item-dot"></div>16 pre-written messages</div>
-          <div class="output-item"><div class="output-item-dot"></div>3 audience lists defined</div>
-          <div class="output-item"><div class="output-item-dot"></div>Exact send day and time for each</div>
-        </div>
-      </div>
-
-      <!-- Tab 4 -->
-      <div class="output-card">
-        <div class="output-tab-label">Tab 4 · New Customer Strategy</div>
-        <div class="output-card-title">Where to find your next 10 customers</div>
-        <p class="output-card-desc">
-          Scout identifies the three offline channels most likely to work for your business type,
-          your best referral channels, and a lost customer recovery plan for people who stopped coming.
-        </p>
-        <div class="output-card-items">
-          <div class="output-item"><div class="output-item-dot"></div>3 highest-ROI acquisition channels</div>
-          <div class="output-item"><div class="output-item-dot"></div>Lost customer recovery messages</div>
-          <div class="output-item"><div class="output-item-dot"></div>Win-back offer framework</div>
-        </div>
-      </div>
-
-      <!-- Tab 5 -->
-      <div class="output-card">
-        <div class="output-tab-label">Tab 5 · Referral Engine</div>
-        <div class="output-card-title">Turn your happy customers into your sales team</div>
-        <p class="output-card-desc">
-          The most reliable source of new customers for any SMB is a happy existing customer.
-          Scout builds you a complete referral system — the offer, the ask, and the follow-up.
-        </p>
-        <div class="output-card-items">
-          <div class="output-item"><div class="output-item-dot"></div>Referral offer designed for your type</div>
-          <div class="output-item"><div class="output-item-dot"></div>Script for asking customers to refer</div>
-          <div class="output-item"><div class="output-item-dot"></div>Tracking and follow-up system</div>
-        </div>
-      </div>
-
-      <!-- Tab check-in -->
-      <div class="output-card">
-        <div class="output-tab-label">Weekly · Scout Check-In</div>
-        <div class="output-card-title">Your business reviewed every week</div>
-        <p class="output-card-desc">
-          Every week, Scout checks what you did, what worked, what to adjust, and what the
-          next priority is. Like having a business advisor on call — without the retainer.
-        </p>
-        <div class="output-card-items">
-          <div class="output-item"><div class="output-item-dot"></div>Weekly progress review</div>
-          <div class="output-item"><div class="output-item-dot"></div>Updated priority for next 7 days</div>
-          <div class="output-item"><div class="output-item-dot"></div>Contextual business tips for your type</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Banner -->
-    <div class="output-banner reveal">
-      <div class="banner-plus">+</div>
-      <div class="banner-text">
-        <strong>Everything refreshes monthly</strong>
-        Scout updates your full plan every month — new actions, new campaigns, new priorities —
-        based on seasonal patterns, what worked last month, and changes in your market.
-      </div>
+<!-- 06 — FINAL CTA -->
+<section class="cta" id="start">
+  <div class="cta-inner reveal">
+    <h2>Your competition is already using it —<br><span class="it">and getting ahead.</span></h2>
+    <p class="lead">Just one new customer covers your monthly cost. Everything after that is profit.</p>
+    <a href="../login.html?product=scout" class="btn-amber">Get Started →</a>
+    <div class="cta-cap">First month free. No card required.</div>
+    <div class="cta-links">
+      <div class="row">Already have an account? <a href="../login.html?product=scout">Sign in →</a></div>
+      <div class="row">Want to talk to us first? <a href="mailto:gsevnservices@gmail.com?subject=Scout%20Access%20Request">Request access →</a></div>
     </div>
   </div>
 </section>
 
-<!-- =============================================
-     SECTION 5 — SCOUT'S HONEST ASSESSMENT
-     ============================================= -->
-<section class="honest-section" id="difference">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">04 — Why Scout Is Different</div>
-        <h2 class="section-title">Not ChatGPT.<br>Not <em>generic advice.</em></h2>
-      </div>
-    </div>
-
-    <div class="honest-grid reveal">
-      <!-- Card 1 -->
-      <div class="honest-card">
-        <div class="honest-icon">01</div>
-        <div class="honest-title">Knows your specific business type</div>
-        <p class="honest-desc">
-          Scout is not a general AI assistant. It knows that a kirana store's growth levers
-          are completely different from a coaching centre's. Every output is built specifically
-          for your category — your seasonality, your customers, your competition, your margins.
-        </p>
-        <div class="honest-quote">
-          "Generic advice is free. Specific advice is what you pay a consultant ₹50,000/month for.
-          Scout gives you specific advice for ₹3,000."
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="honest-card">
-        <div class="honest-icon">02</div>
-        <div class="honest-title">Tells you exactly what to do this week</div>
-        <p class="honest-desc">
-          Most business tools give you a dashboard. Scout gives you a to-do list.
-          Not "improve your marketing" — "send this WhatsApp message to your regulars on Thursday at 7pm."
-          The output is actions, not insights. You should never finish reading Scout's output without
-          knowing exactly what to do next.
-        </p>
-        <div class="honest-quote">
-          "Analysis without action is entertainment. Every Scout output ends with a specific next step."
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="honest-card">
-        <div class="honest-icon">03</div>
-        <div class="honest-title">Costs less than ignoring the problem</div>
-        <p class="honest-desc">
-          ₹3,000 a month. One lost customer per month costs more than that in lifetime revenue.
-          A decent marketing consultant in India starts at ₹25,000 a month and won't give you
-          pre-written WhatsApp messages. Scout is not a budget version of something better.
-          For the SMB category, it is the better option.
-        </p>
-        <div class="honest-quote">
-          "The cost of not having a customer acquisition system is not zero. It is slow decline."
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =============================================
-     SECTION 6 — BUSINESS TYPES TAG CLOUD
-     ============================================= -->
-<section class="types-section" id="types">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">05 — Business Types</div>
-        <h2 class="section-title">Built for <em>30 categories</em><br>of Indian business.</h2>
-      </div>
-    </div>
-
-    <p style="font-size:13px;color:var(--grey1);line-height:1.9;max-width:600px" class="reveal">
-      Scout is not a generic tool with a text box. It has deep knowledge of how each of these
-      business types actually works — their seasonal patterns, their customer behaviour,
-      their best growth channels, and their most common failure modes.
-    </p>
-
-    <div class="types-cloud reveal">
-      <span class="type-tag">Restaurant / Dhaba</span>
-      <span class="type-tag">Clothing & Textile Shop</span>
-      <span class="type-tag">Grocery Store / Kirana</span>
-      <span class="type-tag">Medical Store / Pharmacy</span>
-      <span class="type-tag">Auto Repair / Garage</span>
-      <span class="type-tag">Beauty Salon & Parlour</span>
-      <span class="type-tag">Mobile & Electronics Repair</span>
-      <span class="type-tag">Bakery & Sweets Shop</span>
-      <span class="type-tag">Hardware Store</span>
-      <span class="type-tag">Coaching Centre / Tuition</span>
-      <span class="type-tag">Photography Studio</span>
-      <span class="type-tag">Travel Agency</span>
-      <span class="type-tag">Gym & Fitness Centre</span>
-      <span class="type-tag">Plumbing & Electrical Service</span>
-      <span class="type-tag">Catering Service</span>
-      <span class="type-tag">Printing & Stationery Shop</span>
-      <span class="type-tag">Real Estate Broker</span>
-      <span class="type-tag">CA & Tax Consultant</span>
-      <span class="type-tag">Event Decorator</span>
-      <span class="type-tag">Laundry & Dry Cleaning</span>
-      <span class="type-tag">Tailoring & Boutique</span>
-      <span class="type-tag">Jewellery Shop</span>
-      <span class="type-tag">Interior Design</span>
-      <span class="type-tag">Ayurvedic & Wellness Clinic</span>
-      <span class="type-tag">Furniture & Home Furnishing</span>
-      <span class="type-tag">Pest Control Service</span>
-      <span class="type-tag">Security Agency</span>
-      <span class="type-tag">Digital Marketing Agency</span>
-      <span class="type-tag">Import / Export Trader</span>
-      <span class="type-tag">Logistics & Courier Service</span>
-    </div>
-
-    <p class="types-note reveal">
-      Don't see your business type? Contact us — we add new categories every month.
-    </p>
-  </div>
-</section>
-
-<!-- =============================================
-     SECTION 7 — PRICING
-     ============================================= -->
-<section class="pricing-section" id="pricing">
-  <div class="section-wrap">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-no">06 — Pricing</div>
-        <h2 class="section-title">One plan. No surprises.<br><em>Cancel anytime.</em></h2>
-      </div>
-    </div>
-
-    <div class="pricing-layout reveal">
-
-      <!-- Left: context -->
-      <div>
-        <p class="pricing-left-desc">
-          Scout costs ₹3,000 a month. That is ₹100 a day — roughly the cost of a cup of chai
-          and a samosa for a consultant meeting that goes nowhere.
-          <br><br>
-          For that, you get a complete business development plan every month,
-          pre-written marketing messages, a customer acquisition strategy, and weekly check-ins.
-          Everything a business development executive would charge ₹25,000–₹50,000 a month to do.
-        </p>
-
-        <div class="pricing-comparison">
-          <div class="price-compare-row">
-            <div class="price-compare-line"></div>
-            Typical BD consultant — ₹25,000–50,000/month
-          </div>
-          <div class="price-compare-row">
-            <div class="price-compare-line"></div>
-            Marketing agency retainer — ₹15,000–30,000/month
-          </div>
-          <div class="price-compare-row">
-            <div class="price-compare-line"></div>
-            Generic AI chatbot — no business-type knowledge
-          </div>
-          <div class="price-compare-row" style="color:var(--white)">
-            <div class="price-compare-line"></div>
-            <strong style="font-weight:400">G7 Scout — ₹3,000/month. Specific. Actionable. Yours.</strong>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: pricing card -->
-      <div class="pricing-card">
-        <div class="pricing-badge">Scout — Standard Plan</div>
-
-        <div class="pricing-amount">₹3,000<span>/mo</span></div>
-        <div class="pricing-period">Per business · Billed monthly</div>
-
-        <div class="pricing-divider"></div>
-
-        <div class="pricing-features">
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Complete 5-tab business development plan every month</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Market & revenue assessment for your specific area</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Weekly action plan — 5 specific things to do right now</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>WhatsApp campaign calendar — 16 pre-written messages</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Lost customer recovery campaign with win-back messages</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Full referral engine — offer, script, and tracking system</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Weekly Scout check-in with updated priorities</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Covers all 30 Indian SMB business types</div>
-          </div>
-          <div class="pricing-feature">
-            <div class="pricing-feature-check">✓</div>
-            <div>Cancel anytime — no lock-in, no contracts</div>
-          </div>
-        </div>
-
-        <a href="../login.html?product=scout&mode=signup" class="pricing-cta">Start Free →</a>
-        <div class="pricing-note">No credit card required to start</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =============================================
-     SECTION 8 — FINAL CTA
-     ============================================= -->
-<section class="final-cta-section" id="cta">
-  <div class="final-cta-glow"></div>
-  <div class="section-wrap" style="position:relative;z-index:1">
-    <div class="final-cta-eyebrow reveal">07 — Start Today</div>
-    <h2 class="final-cta-headline reveal">
-      Your competition is<br>not using this <em>yet.</em>
-    </h2>
-    <p class="final-cta-sub reveal">
-      Scout is new. Most businesses in your area have no system for finding customers.
-      That window does not stay open. The first business in any market to run a consistent
-      customer acquisition system wins the most loyal customers.
-    </p>
-    <div class="final-cta-actions reveal">
-      <a href="../login.html?product=scout&mode=signup" class="btn-gold">Start Free — No Card Needed →</a>
-      <a href="mailto:gsevnservices@gmail.com" class="btn-outline">Ask a Question →</a>
-    </div>
-    <div class="final-cta-promise reveal">
-      ₹3,000/month · Cancel anytime · Setup in 2 minutes
-    </div>
-  </div>
-</section>
-
-<!-- =============================================
-     FOOTER
-     ============================================= -->
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand-name">G<em>7</em> Scout</div>
-      <div class="footer-tagline">Business Development. Powered by Intelligence.</div>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Product</div>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#sample">What You Get</a>
-      <a href="#types">Business Types</a>
-      <a href="#pricing">Pricing</a>
-      <a href="../login.html?product=scout">Sign In</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">G7 Capital</div>
-      <a href="../index.html">G7 Workspace (For Investors)</a>
-      <a href="../index.html#contact">Contact</a>
-      <a href="mailto:gsevnservices@gmail.com">gsevnservices@gmail.com</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Legal</div>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 G7 Capital / Gsevn Services. All rights reserved.</div>
-    <div class="footer-disclaimer">
-      G7 Scout uses AI to assist business development planning. Recommendations are generated by AI
-      and should be adapted to your specific business context. Results will vary by business type, location, and execution.
-    </div>
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="foot-l"><b>Scout</b> · A G7 Capital AI Employee</div>
+  <div class="foot-c">© 2026 G7 Capital</div>
+  <div class="foot-r">
+    <a href="../index.html">All Employees →</a>
+    <a href="mailto:gsevnservices@gmail.com?subject=Scout%20Access%20Request">Contact</a>
   </div>
 </footer>
 
-<!-- =============================================
-     JAVASCRIPT
-     ============================================= -->
 <script>
-// CUSTOM CURSOR
-var cursor = document.getElementById('cursor');
-var ring = document.getElementById('cursorRing');
-var mx = -100, my = -100, rx = -100, ry = -100;
+const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-document.addEventListener('mousemove', function(e) {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
+/* nav scroll state */
+(function(){
+  const bar=document.getElementById('topbar');
+  const f=()=>bar.classList.toggle('scrolled',scrollY>24); f();
+  addEventListener('scroll',f,{passive:true});
+})();
 
-function animRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animRing);
-}
-animRing();
+/* tag cloud */
+(function(){
+  const T=['Grocery','Pharmacy','Gym','Restaurant','Salon','Coaching Centre','Clothing','Hardware','Electronics','Jewellery','Furniture','Real Estate','CA Firm','Diagnostic Lab','Printing','Wholesale','D2C Brand','Cloud Kitchen','Event Management','Digital Agency','Sweet Shop','Tailoring','Driving School','Travel Agency','Mobile Repair','Catering','Security Agency','Ayurvedic Clinic','Automobile Workshop','Stationery'];
+  document.getElementById('tags').innerHTML=T.map(t=>'<span class="tag">'+t+'</span>').join('');
+})();
 
-// Cursor hover effect on interactive elements
-document.querySelectorAll('a, button, .step-card, .output-card, .honest-card, .type-tag, .pricing-card').forEach(function(el) {
-  el.addEventListener('mouseenter', function() {
-    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
-    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
-    ring.style.borderColor = 'rgba(201,168,76,0.8)';
-  });
-  el.addEventListener('mouseleave', function() {
-    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-    ring.style.transform = 'translate(-50%,-50%) scale(1)';
-    ring.style.borderColor = 'rgba(201,168,76,0.5)';
-  });
-});
+/* scroll reveal */
+(function(){
+  if(REDUCE){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')); return; }
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
 
-// MOBILE MENU
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
-// Close mobile menu when nav links clicked
-document.querySelectorAll('.mobile-menu a').forEach(function(a) {
-  a.addEventListener('click', function() {
-    document.getElementById('mobileMenu').classList.remove('open');
-  });
-});
+/* ============================================================
+   HERO — GROWTH LOOP
+   A warm business core at the centre. Four stations on a ring —
+   FIND (top), CONVERT (right), RETAIN (bottom), GROW (left) —
+   light in sequence. Customer pins appear, a few convert (lines
+   draw into the business), retained pins keep pulsing, and the
+   business glow grows — bigger and brighter each cycle. Loops.
+   ============================================================ */
+(function(){
+  const canvas=document.getElementById('loop'); if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const heroCopy=document.querySelector('.hero-copy');
+  const AMB=[224,146,47], AMB_L=[240,185,104], AMB_D=[201,118,44], GREY=[138,136,128];
+  const rgba=(c,a)=>'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';
+  const lerp=(a,b,k)=>a+(b-a)*k;
+  const TAU=Math.PI*2;
 
-// SCROLL TO TOP BUTTON
-var scrollTopBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', function() {
-  scrollTopBtn.classList.toggle('show', window.scrollY > 600);
-});
+  let W,H,DPR,narrow;
+  let cx,cy,R,baseCoreR,maxCoreR,coreR=0,coreTargetR=0,glow=0,glowT=0;
+  let stations=[], pins=[], dust=[], dustW=-1;
+  let level=0, stage=0, prevStage=-1;
+  let perf=0,last=0,raf=0,running=false;
 
-// REVEAL ON SCROLL (IntersectionObserver)
-var revealEls = document.querySelectorAll('.reveal');
-var revealObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('in');
-      revealObs.unobserve(entry.target);
+  const STAGE_DUR=2.7, MAXLEVEL=4;
+  const STA=[
+    {k:'FIND',    ang:-Math.PI/2, sub:'Scout finds your best customers nearby.'},
+    {k:'CONVERT', ang:0,          sub:'Win them with the right message.'},
+    {k:'RETAIN',  ang:Math.PI/2,  sub:'Keep them coming back.'},
+    {k:'GROW',    ang:Math.PI,    sub:'More customers. More revenue.'}
+  ];
+
+  function resize(){
+    DPR=Math.min(devicePixelRatio||1,2);
+    W=canvas.clientWidth; H=canvas.clientHeight;
+    canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    narrow=W<980;
+    const textRight = heroCopy? heroCopy.getBoundingClientRect().right : W*0.33;
+    cx = narrow ? W*0.5 : Math.min(W*0.66, W-150);
+    cy = narrow ? H*0.74 : H*0.5;
+    const rRight = W - cx - 70;
+    const rLeft  = narrow ? cx - 40 : cx - textRight - 90;
+    const rVert  = narrow ? Math.min(cy-70, H-cy-46) : Math.min(cy-78, H-cy-78);
+    R = Math.max(92, Math.min(narrow?W*0.40:W*0.235, rRight, rLeft, rVert));
+    baseCoreR = R*0.18; maxCoreR = R*0.42;
+    if(!coreTargetR){ coreR=baseCoreR; coreTargetR=baseCoreR; glow=0.5; glowT=0.5; }
+    stations = STA.map(s=>({k:s.k,sub:s.sub,ang:s.ang,x:cx+Math.cos(s.ang)*R,y:cy+Math.sin(s.ang)*R}));
+    if(dustW!==W){
+      dustW=W; dust=[]; const n=narrow?34:66;
+      for(let i=0;i<n;i++) dust.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()*1.2+0.4,b:Math.random()*0.3+0.08,ph:Math.random()*TAU,amber:Math.random()<0.42});
     }
-  });
-}, { threshold: 0.12 });
-revealEls.forEach(function(el) { revealObs.observe(el); });
+  }
 
-// FINAL CTA REVEAL — trigger on scroll into view
-document.querySelectorAll('.final-cta-eyebrow, .final-cta-headline, .final-cta-sub, .final-cta-actions, .final-cta-promise').forEach(function(el) {
-  // These use CSS animation, trigger on scroll
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.style.animationPlayState = 'running';
-        obs.unobserve(e.target);
-      }
+  function newPin(){
+    const ang=Math.random()*TAU;
+    const rad=coreR*1.7 + Math.random()*(R*0.66 - coreR*1.7);
+    return {ang, rad, lit:0, won:false, conn:0, ph:Math.random()*TAU, dead:false, born:perf};
+  }
+
+  function onStage(s){
+    if(s===0){ // FIND — refresh & top up pins
+      if(level>=MAXLEVEL){ level=MAXLEVEL; } // plateau (stay big)
+      const target = 7 + level*3;
+      // retire some old un-won pins to keep things churning
+      const unwon=pins.filter(p=>!p.won && !p.dead);
+      if(unwon.length>3){ for(let i=0;i<Math.min(2,unwon.length-3);i++) unwon[i].dead=true; }
+      while(pins.filter(p=>!p.dead).length < target) pins.push(newPin());
+    } else if(s===1){ // CONVERT — win ~40% of lit un-won pins
+      const cand=pins.filter(p=>!p.won && !p.dead && p.lit>0.4);
+      const n=Math.max(1,Math.round(cand.length*0.4));
+      for(let i=0;i<n && i<cand.length;i++) cand[i].won=true;
+      // cap retained customers
+      const won=pins.filter(p=>p.won && !p.dead);
+      if(won.length>11){ for(let i=0;i<won.length-11;i++) won[i].dead=true; }
+    } else if(s===3){ // GROW — bigger, brighter
+      level=Math.min(level+1,MAXLEVEL);
+      coreTargetR = baseCoreR + (maxCoreR-baseCoreR)*(level/MAXLEVEL);
+      glowT = 0.5 + 0.5*(level/MAXLEVEL);
+    }
+  }
+
+  function update(dt){
+    const fc=STAGE_DUR*4, tt=perf%fc;
+    stage=Math.floor(tt/STAGE_DUR);
+    if(stage!==prevStage){ onStage(stage); prevStage=stage; }
+    coreR=lerp(coreR,coreTargetR,Math.min(1,dt*1.6));
+    glow=lerp(glow,glowT,Math.min(1,dt*1.6));
+    for(const p of pins){
+      const want = p.dead?0:1;
+      p.lit=lerp(p.lit,want,Math.min(1,dt*(p.dead?2.4:1.6)));
+      if(p.won) p.conn=lerp(p.conn,1,Math.min(1,dt*2.2));
+      // gently push outwards if core grew into them
+      const minR=coreR*1.55; if(p.rad<minR) p.rad=lerp(p.rad,minR,Math.min(1,dt*2));
+    }
+    pins=pins.filter(p=>!(p.dead && p.lit<0.03));
+  }
+
+  function pinXY(p){ return [cx+Math.cos(p.ang)*p.rad, cy+Math.sin(p.ang)*p.rad]; }
+
+  function drawDust(){
+    for(const d of dust){
+      const tw=REDUCE?1:(0.6+0.4*Math.sin(perf*1.1+d.ph));
+      ctx.fillStyle = d.amber?rgba(AMB,d.b*tw):'rgba(250,250,248,'+(d.b*tw).toFixed(3)+')';
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.s,0,TAU); ctx.fill();
+    }
+  }
+
+  function drawRing(){
+    ctx.strokeStyle=rgba(AMB,0.10); ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.stroke();
+    // travelling flow arc
+    if(!REDUCE){
+      const a0=perf*0.5%TAU, span=0.5;
+      const g=ctx.createLinearGradient(cx+Math.cos(a0)*R,cy+Math.sin(a0)*R,cx+Math.cos(a0+span)*R,cy+Math.sin(a0+span)*R);
+      g.addColorStop(0,rgba(AMB,0)); g.addColorStop(1,rgba(AMB_L,0.55));
+      ctx.strokeStyle=g; ctx.lineWidth=2; ctx.lineCap='round';
+      ctx.beginPath(); ctx.arc(cx,cy,R,a0,a0+span); ctx.stroke();
+    }
+  }
+
+  function drawConnections(){
+    for(const p of pins){
+      if(!p.won || p.conn<=0.02) continue;
+      const [px,py]=pinXY(p);
+      const dx=cx-px, dy=cy-py, d=Math.hypot(dx,dy)||1;
+      const ex=px+dx*p.conn, ey=py+dy*p.conn;
+      const pulse=REDUCE?0.7:(0.5+0.4*Math.sin(perf*2+p.ph));
+      ctx.strokeStyle=rgba(AMB_L,0.18*pulse*p.lit);
+      ctx.lineWidth=1.4; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(ex,ey); ctx.stroke();
+    }
+  }
+
+  function drawPins(){
+    for(const p of pins){
+      if(p.lit<=0.02) continue;
+      const [px,py]=pinXY(p);
+      const won=p.won;
+      const pulse=won?(REDUCE?1:(0.7+0.3*Math.sin(perf*2.2+p.ph))):0.55;
+      const rr= won?5.2:4;
+      const col= won?AMB_L:AMB;
+      // glow
+      if(won){ ctx.shadowColor=rgba(AMB_L,0.8*p.lit); ctx.shadowBlur=12*pulse; }
+      // map-pin: circle + point
+      ctx.fillStyle=rgba(col, (won?0.95:0.5)*p.lit*pulse);
+      ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr,Math.PI*0.15,Math.PI*0.85,true);
+      ctx.lineTo(px,py+rr*1.1); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr,0,TAU); ctx.fill();
+      ctx.shadowBlur=0;
+      // inner dot
+      ctx.fillStyle=rgba([20,14,6],0.8*p.lit);
+      ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr*0.42,0,TAU); ctx.fill();
+    }
+  }
+
+  function drawStations(){
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    stations.forEach((s,i)=>{
+      const active=(i===stage);
+      const pulse=REDUCE?1:(0.7+0.3*Math.sin(perf*2));
+      const r= active?9:6;
+      if(active){ ctx.shadowColor=rgba(AMB_L,0.85); ctx.shadowBlur=18*pulse; }
+      ctx.fillStyle= active?rgba(AMB_L,0.95):rgba(AMB,0.32);
+      ctx.beginPath(); ctx.arc(s.x,s.y,r,0,TAU); ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.fillStyle= active?rgba([20,14,6],0.9):'rgba(0,0,0,0)';
+      ctx.beginPath(); ctx.arc(s.x,s.y,r*0.4,0,TAU); ctx.fill();
+      // label outside the node
+      const lx=s.x+Math.cos(s.ang)*22, ly=s.y+Math.sin(s.ang)*22;
+      ctx.font='10px "Tenor Sans", sans-serif';
+      if('letterSpacing' in ctx) ctx.letterSpacing='2px';
+      ctx.textAlign = s.ang===0?'left':(Math.abs(s.ang)===Math.PI?'right':'center');
+      ctx.fillStyle= active?rgba(AMB_L,0.95):rgba(GREY,0.6);
+      ctx.fillText(s.k, lx, ly);
+      if('letterSpacing' in ctx) ctx.letterSpacing='0px';
     });
-  }, { threshold: 0.1 });
-  // Pause animation initially then play on scroll
-  el.style.animationPlayState = 'paused';
-  obs.observe(el);
-});
-</script>
+    ctx.textAlign='center';
+  }
 
+  function drawCore(){
+    const pulse=REDUCE?1:(0.92+Math.sin(perf*1.5)*0.08);
+    const r=coreR;
+    // bloom
+    const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,r*6.5);
+    bg.addColorStop(0,rgba(AMB_L,0.34*glow*pulse));
+    bg.addColorStop(0.16,rgba(AMB,0.18*glow*pulse));
+    bg.addColorStop(0.5,rgba(AMB,0.05*glow));
+    bg.addColorStop(1,rgba(AMB,0));
+    ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(cx,cy,r*6.5,0,TAU); ctx.fill();
+    // orb
+    const o=ctx.createRadialGradient(cx-r*0.3,cy-r*0.32,r*0.1,cx,cy,r);
+    o.addColorStop(0,'#fff1da'); o.addColorStop(0.4,'#F0B968'); o.addColorStop(0.74,'#E0922F'); o.addColorStop(1,'#8a531c');
+    ctx.save();
+    ctx.shadowColor=rgba(AMB_L,0.7); ctx.shadowBlur=30*pulse*glow;
+    ctx.fillStyle=o; ctx.beginPath(); ctx.arc(cx,cy,r*pulse,0,TAU); ctx.fill();
+    ctx.restore();
+    // simple storefront glyph (warm dark, scales with core)
+    const s=r*0.9;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.fillStyle='rgba(40,24,8,0.62)'; ctx.strokeStyle='rgba(40,24,8,0.62)';
+    // awning roof (trapezoid)
+    ctx.beginPath();
+    ctx.moveTo(-s*0.62,-s*0.16); ctx.lineTo(s*0.62,-s*0.16);
+    ctx.lineTo(s*0.5,-s*0.42); ctx.lineTo(-s*0.5,-s*0.42); ctx.closePath(); ctx.fill();
+    // body
+    ctx.fillRect(-s*0.5,-s*0.16,s*1.0,s*0.62);
+    // door (cut with lighter)
+    ctx.fillStyle='rgba(255,241,218,0.5)';
+    ctx.fillRect(-s*0.14,s*0.10,s*0.28,s*0.36);
+    ctx.restore();
+  }
+
+  function drawCaption(){
+    const cur=STA[stage];
+    const fc=STAGE_DUR*4, tt=perf%fc, sp=(tt-stage*STAGE_DUR)/STAGE_DUR;
+    const fade=REDUCE?1:Math.min(1, Math.min(sp,1-sp)*6+0.25);
+    const y=cy+R+(narrow?30:38);
+    ctx.textAlign='center';
+    ctx.font='10px "Tenor Sans", sans-serif';
+    if('letterSpacing' in ctx) ctx.letterSpacing='3px';
+    ctx.fillStyle=rgba(AMB,0.9*fade); ctx.fillText(cur.k, cx, y);
+    if('letterSpacing' in ctx) ctx.letterSpacing='0px';
+    ctx.font='300 17px "Cormorant Garamond", serif';
+    ctx.fillStyle='rgba(240,239,233,'+(0.86*fade).toFixed(3)+')';
+    ctx.fillText(cur.sub, cx, y+22);
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    drawDust();
+    drawRing();
+    drawConnections();
+    drawPins();
+    drawCore();
+    drawStations();
+    drawCaption();
+    // left scrim — keep the loop clear of the headline
+    if(!narrow){
+      const sx=Math.max(0, (heroCopy?heroCopy.getBoundingClientRect().right:W*0.3));
+      const sc=ctx.createLinearGradient(0,0,sx,0);
+      sc.addColorStop(0,'rgba(8,8,8,1)'); sc.addColorStop(0.7,'rgba(8,8,8,0.9)'); sc.addColorStop(1,'rgba(8,8,8,0)');
+      ctx.fillStyle=sc; ctx.fillRect(0,0,sx,H);
+    }
+  }
+
+  function tick(ts){
+    if(!last) last=ts; let dt=(ts-last)/1000; last=ts; if(dt>0.05)dt=0.05;
+    perf+=dt; update(dt); render();
+    raf=requestAnimationFrame(tick);
+  }
+
+  resize();
+  addEventListener('resize',resize);
+
+  if(REDUCE){
+    // static, fully-grown representative frame
+    level=MAXLEVEL; coreTargetR=maxCoreR*0.8; coreR=coreTargetR; glow=0.95; glowT=0.95;
+    for(let i=0;i<16;i++){ const p=newPin(); p.lit=1; if(i%2===0){p.won=true;p.conn=1;} pins.push(p); }
+    stage=2; prevStage=2;
+    render();
+  } else {
+    render(); running=true; last=0; raf=requestAnimationFrame(tick);
+    const io=new IntersectionObserver(es=>{es.forEach(en=>{
+      if(en.isIntersecting && !running){running=true;last=0;raf=requestAnimationFrame(tick);}
+      else if(!en.isIntersecting && running){running=false;cancelAnimationFrame(raf);}
+    });},{threshold:0.02});
+    io.observe(canvas);
+  }
+})();
+</script>
 </body>
 </html>
