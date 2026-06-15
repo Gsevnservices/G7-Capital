@@ -24,7 +24,7 @@ body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--whi
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
 
 /* CURSOR */
-.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor{position:fixed;width:8px;height:8px;background:var(--amber);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
 .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
 @media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
 
@@ -65,7 +65,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .welcome-lettermark span{
   font-family:'Cormorant Garamond',serif;
-  font-size:40px;font-weight:300;color:var(--gold)
+  font-size:40px;font-weight:300;color:var(--amber)
 }
 .welcome-heading{
   font-family:'Cormorant Garamond',serif;
@@ -86,18 +86,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-size:12px;line-height:1.7;color:var(--grey1)
 }
 .welcome-feature-icon{
-  color:var(--gold);font-size:10px;
+  color:var(--amber);font-size:10px;
   flex-shrink:0;margin-top:3px;letter-spacing:.05em
 }
 .btn-welcome{
   display:block;width:100%;max-width:360px;
   font-size:10px;letter-spacing:.22em;text-transform:uppercase;
-  background:var(--gold);color:var(--black);border:none;
+  background:var(--amber);color:var(--black);border:none;
   padding:18px 40px;cursor:pointer;font-weight:600;
   font-family:'Tenor Sans',sans-serif;transition:background .3s;
   text-decoration:none;text-align:center
 }
-.btn-welcome:hover{background:var(--gold2)}
+.btn-welcome:hover{background:var(--amber-l)}
 
 /* ══════════════════════════════════
    DASHBOARD STATE
@@ -213,18 +213,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 /* ── STREAK BADGE ── */
 .streak-badge{
   display:none;
-  font-size:11px;letter-spacing:.06em;color:var(--gold);
+  font-size:11px;letter-spacing:.06em;color:var(--amber);
   margin-bottom:20px;padding:10px 16px;
-  border:1px solid rgba(201,168,76,0.2);
-  background:rgba(201,168,76,0.05);
+  border:1px solid rgba(224,146,47,0.2);
+  background:rgba(224,146,47,0.05);
   line-height:1.6
 }
 .streak-badge.visible{display:block}
 .streak-badge.master{
   font-size:12px;
-  border-color:rgba(201,168,76,0.4);
-  background:rgba(201,168,76,0.1);
-  text-shadow:0 0 12px rgba(201,168,76,0.4)
+  border-color:rgba(224,146,47,0.4);
+  background:rgba(224,146,47,0.1);
+  text-shadow:0 0 12px rgba(224,146,47,0.4)
 }
 
 /* ── MONDAY BRIEFING CARD ── */
@@ -394,12 +394,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .btn-action-primary{
   font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  background:var(--gold);color:var(--black);border:none;
+  background:var(--amber);color:var(--black);border:none;
   padding:14px 32px;cursor:pointer;font-weight:600;
   font-family:'Tenor Sans',sans-serif;transition:background .3s;
   text-decoration:none;display:inline-block;flex:1;text-align:center
 }
-.btn-action-primary:hover{background:var(--gold2)}
+.btn-action-primary:hover{background:var(--amber-l)}
 .btn-action-outline{
   font-size:10px;letter-spacing:.2em;text-transform:uppercase;
   background:transparent;color:var(--grey1);
@@ -423,9 +423,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .recent-view-all{
   font-size:9px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--gold);text-decoration:none;transition:color .25s
+  color:var(--amber);text-decoration:none;transition:color .25s
 }
-.recent-view-all:hover{color:var(--gold2)}
+.recent-view-all:hover{color:var(--amber-l)}
 
 /* History row */
 .history-row{
@@ -433,7 +433,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   border:1px solid var(--border2);
   margin-bottom:8px;transition:border-color .2s
 }
-.history-row:hover{border-color:rgba(201,168,76,0.3)}
+.history-row:hover{border-color:rgba(224,146,47,0.3)}
 .hr-cell{
   flex:1;padding:16px 18px;
   border-right:1px solid var(--border2);
@@ -442,7 +442,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .hr-cell:last-child{border-right:none;flex:0 0 auto}
 .hr-week{
   font-family:'Cormorant Garamond',serif;
-  font-size:16px;font-weight:300;color:var(--gold)
+  font-size:16px;font-weight:300;color:var(--amber)
 }
 .hr-week-sub{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey2);margin-top:2px}
 .hr-val{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--white);line-height:1;margin-bottom:2px}
@@ -453,11 +453,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .hr-link{
   font-size:8px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--gold);text-decoration:none;
+  color:var(--amber);text-decoration:none;
   padding:16px 20px;display:flex;align-items:center;
   white-space:nowrap;transition:color .2s
 }
-.hr-link:hover{color:var(--gold2)}
+.hr-link:hover{color:var(--amber-l)}
 @media(max-width:600px){
   .history-row{flex-wrap:wrap}
   .hr-cell{min-width:50%;border-bottom:1px solid var(--border2)}
@@ -598,7 +598,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <!-- QUICK ACTIONS -->
     <div class="actions-row">
       <a href="checkin.html" class="btn-action-primary">Weekly Check-In →</a>
-      <a href="result.html" class="btn-action-outline">View Full Playbook →</a>
+      <a href="result.html" class="btn-action-outline">View My Full Plan →</a>
     </div>
 
     <!-- RECENT HISTORY -->
@@ -756,7 +756,7 @@ function showDashboard(history, weekNum, firmName) {
     sb.classList.add('visible');
     if (streak >= 8) {
       sb.classList.add('master');
-      sb.textContent = '🔥 ' + streak + ' week streak — Scout Master';
+      sb.textContent = '🔥 ' + streak + ' weeks in a row — you\'re on fire';
     } else {
       sb.textContent = '🔥 Week ' + streak + ' streak — keep going';
     }
@@ -1077,9 +1077,9 @@ function renderRecentRows(history) {
     html += '<div class="hr-week">Week ' + week.week + '</div>';
     html += '<div class="hr-week-sub">' + date + '</div>';
     html += '</div>';
-    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(custNew) + '</div><div class="hr-lbl">Customers</div></div>';
-    html += '<div class="hr-cell"><div class="hr-val">₹' + escHtml(revenue) + '</div><div class="hr-lbl">Revenue</div></div>';
-    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(score) + '/100</div><div class="hr-lbl">Momentum</div></div>';
+    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(custNew) + '</div><div class="hr-lbl">New Customers</div></div>';
+    html += '<div class="hr-cell"><div class="hr-val">₹' + escHtml(revenue) + '</div><div class="hr-lbl">New Business (₹)</div></div>';
+    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(score) + '/100</div><div class="hr-lbl">Progress</div></div>';
     html += '<div class="hr-cell"><a href="#" class="hr-link" onclick="viewWeek(' + origIdx + ');return false;">View →</a></div>';
     html += '</div>';
   });
