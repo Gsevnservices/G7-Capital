@@ -278,16 +278,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   margin-bottom:14px;position:relative
 }
 .arc-line{flex:1;height:1px;background:var(--border2)}
-.arc-line.done{background:var(--gold3)}
+.arc-line.done{background:var(--amber-d)}
 .arc-dot{
   width:10px;height:10px;border-radius:50%;flex-shrink:0;
   border:1px solid var(--border2);background:var(--black2);
   position:relative;z-index:1
 }
-.arc-dot.done{background:var(--gold3);border-color:var(--gold3)}
+.arc-dot.done{background:var(--amber-d);border-color:var(--amber-d)}
 .arc-dot.current{
-  background:var(--gold);border-color:var(--gold);
-  box-shadow:0 0 8px rgba(201,168,76,0.5)
+  background:var(--amber);border-color:var(--amber);
+  box-shadow:0 0 8px rgba(224,146,47,0.5)
 }
 .arc-labels{
   display:flex;justify-content:space-between;
@@ -297,10 +297,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-size:7px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--grey2);text-align:center;flex:1
 }
-.arc-label.current{color:var(--gold)}
+.arc-label.current{color:var(--amber)}
 .arc-phase-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:16px;font-weight:300;color:var(--gold);
+  font-size:16px;font-weight:300;color:var(--amber);
   margin-bottom:4px
 }
 .arc-phase-desc{font-size:11px;color:var(--grey2);letter-spacing:.05em}
@@ -310,8 +310,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .arc-graduate-badge{
   font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);border:1px solid var(--border);
-  padding:6px 16px;background:rgba(201,168,76,0.08)
+  color:var(--amber);border:1px solid var(--border);
+  padding:6px 16px;background:rgba(224,146,47,0.08)
 }
 .arc-graduate-text{font-size:12px;color:var(--grey1)}
 @media(max-width:600px){
@@ -583,7 +583,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
     <!-- 12-WEEK TRANSFORMATION ARC -->
     <div class="arc-wrap" id="arcWrap" style="display:none">
-      <div class="arc-header">12-Week Transformation Arc</div>
+      <div class="arc-header">Your 12-Week Journey</div>
       <div class="arc-track" id="arcTrack"><!-- rendered by JS --></div>
       <div class="arc-labels" id="arcLabels"><!-- rendered by JS --></div>
       <div class="arc-phase-name" id="arcPhaseName"></div>
@@ -908,12 +908,12 @@ function renderTransformationArc(weekNum) {
   var arcWrap = document.getElementById('arcWrap');
 
   var phases = [
-    { weeks: '1–2',  name: 'DISCOVERY',    desc: 'Finding your real ICPs' },
-    { weeks: '3–4',  name: 'TESTING',      desc: 'Learning what messages work' },
-    { weeks: '5–6',  name: 'OPTIMISING',   desc: 'Doubling down on what converts' },
-    { weeks: '7–8',  name: 'SCALING',      desc: 'Expanding to new channels' },
-    { weeks: '9–10', name: 'SYSTEMISING',  desc: 'Building repeatable processes' },
-    { weeks: '11–12',name: 'GRADUATING',   desc: 'You now have an acquisition machine' }
+    { weeks: '1–2',  name: 'DISCOVER',        desc: 'Finding the right customers for your business' },
+    { weeks: '3–4',  name: 'TEST',             desc: 'Learning which messages bring people in' },
+    { weeks: '5–6',  name: 'IMPROVE',          desc: 'Doing more of what\'s working' },
+    { weeks: '7–8',  name: 'GROW',             desc: 'Reaching customers in new ways' },
+    { weeks: '9–10', name: 'MAKE IT ROUTINE',  desc: 'Turning it into a simple weekly habit' },
+    { weeks: '11–12',name: 'MASTER',           desc: 'You now have a system that brings in customers on its own' }
   ];
 
   /* Which phase are we in? Phase index = Math.floor((weekNum-1)/2), capped at 5 */
@@ -950,8 +950,8 @@ function renderTransformationArc(weekNum) {
   if (graduated) {
     document.getElementById('arcPhaseName').innerHTML =
       '<div class="arc-graduate">' +
-        '<span class="arc-graduate-badge">SCOUT GRADUATE 🎓</span>' +
-        '<span class="arc-graduate-text">You have built a customer acquisition machine.</span>' +
+        '<span class="arc-graduate-badge">YOU DID IT 🎉</span>' +
+        '<span class="arc-graduate-text">You now have a proven system that brings in customers every week.</span>' +
       '</div>';
     document.getElementById('arcPhaseDesc').textContent = '';
   } else {
