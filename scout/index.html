@@ -326,7 +326,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .health-eyebrow{
   font-size:8px;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:14px
+  color:var(--amber);margin-bottom:14px
 }
 .health-score-row{
   display:flex;align-items:baseline;gap:10px;
@@ -346,20 +346,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   padding:4px 12px;border:1px solid;margin-left:auto
 }
 .health-label.thriving{
-  color:var(--gold2);border-color:rgba(226,201,126,0.4);
-  background:rgba(226,201,126,0.08)
+  color:var(--amber-l);border-color:rgba(240,185,104,0.4);
+  background:rgba(240,185,104,0.08)
 }
 .health-label.healthy{
-  color:var(--gold);border-color:rgba(201,168,76,0.4);
-  background:rgba(201,168,76,0.08)
+  color:var(--amber);border-color:rgba(224,146,47,0.4);
+  background:rgba(224,146,47,0.08)
 }
 .health-label.developing{
-  color:#D4A04C;border-color:rgba(212,160,76,0.4);
-  background:rgba(212,160,76,0.06)
+  color:var(--amber-d);border-color:rgba(209,123,46,0.4);
+  background:rgba(209,123,46,0.06)
 }
 .health-label.attention{
-  color:var(--red);border-color:rgba(196,90,90,0.4);
-  background:rgba(196,90,90,0.06)
+  color:var(--grey1);border-color:rgba(138,136,128,0.4);
+  background:rgba(138,136,128,0.06)
 }
 .health-bars{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
 .health-dim{}
@@ -376,7 +376,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   height:2px;background:var(--border2);overflow:hidden
 }
 .health-bar-fill{
-  height:100%;background:var(--gold);
+  height:100%;background:var(--amber);
   transition:width 1s ease
 }
 .health-focus{
@@ -592,7 +592,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
     <!-- SCOUT BUSINESS HEALTH SCORE (Feature 5.2) -->
     <div class="health-card" id="healthScoreCard">
-      <div class="health-empty">Health score appears after your first weekly check-in.</div>
+      <div class="health-empty">Your health score appears after your first Friday check-in — it shows how your business is doing across 5 areas.</div>
     </div>
 
     <!-- QUICK ACTIONS -->
@@ -986,14 +986,27 @@ function renderHealthScore() {
 
   /* Overall health label */
   var label, labelClass;
-  if (score >= 81)      { label = 'THRIVING';         labelClass = 'thriving'; }
-  else if (score >= 61) { label = 'HEALTHY';           labelClass = 'healthy'; }
-  else if (score >= 41) { label = 'DEVELOPING';        labelClass = 'developing'; }
-  else                  { label = 'NEEDS ATTENTION';   labelClass = 'attention'; }
+  if (score >= 81)      { label = 'Thriving';       labelClass = 'thriving'; }
+  else if (score >= 61) { label = 'Doing Well';      labelClass = 'healthy'; }
+  else if (score >= 41) { label = 'Growing';         labelClass = 'developing'; }
+  else                  { label = 'Room to Grow';    labelClass = 'attention'; }
 
-  /* Ordered dimension list */
+  /* Plain-language dimension names — override whatever label is stored */
+  var dimPlainNames = {
+    acquisition: 'Finding Customers',
+    revenue:     'Income',
+    retention:   'Keeping Customers',
+    competitive: 'Standing Out',
+    seasonal:    'Season Readiness'
+  };
+
+  /* Ordered dimension list with plain names applied */
   var dimKeys = ['acquisition', 'revenue', 'retention', 'competitive', 'seasonal'];
-  var dims = dimKeys.map(function(k) { return breakdown[k]; }).filter(Boolean);
+  var dims = dimKeys.map(function(k) {
+    var d = breakdown[k];
+    if (!d) return null;
+    return { key: k, score: d.score, label: dimPlainNames[k] || d.label };
+  }).filter(Boolean);
 
   /* Find lowest-scoring dimension for focus area */
   var lowest = dims.reduce(function(a, b) {
@@ -1001,7 +1014,7 @@ function renderHealthScore() {
   }, null);
 
   var html = '';
-  html += '<div class="health-eyebrow">Scout Business Health</div>';
+  html += '<div class="health-eyebrow">Your Business Health</div>';
   html += '<div class="health-score-row">';
   html += '<span class="health-score-big">' + score + '</span>';
   html += '<span class="health-score-denom">/100</span>';
@@ -1024,7 +1037,7 @@ function renderHealthScore() {
 
   /* Focus area */
   if (lowest) {
-    html += '<div class="health-focus">Focus area this week: <strong>' + escHtml(lowest.label) + '</strong></div>';
+    html += '<div class="health-focus">Where to focus this week: <strong>' + escHtml(lowest.label) + '</strong></div>';
   }
 
   el.innerHTML = html;
