@@ -136,7 +136,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .momentum-label-block{}
 .momentum-eyebrow{
   font-size:8px;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:8px
+  color:var(--amber);margin-bottom:8px
 }
 .momentum-score-display{
   display:flex;align-items:baseline;gap:6px
@@ -157,7 +157,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .momentum-trend.up{color:#5A9E6F}
 .momentum-trend.down{color:#C45A5A}
 .momentum-bar-wrap{height:2px;background:var(--border2);margin-bottom:12px;overflow:hidden}
-.momentum-bar-fill{height:100%;background:var(--gold);width:0%;transition:width 1.2s ease}
+.momentum-bar-fill{height:100%;background:var(--amber);width:0%;transition:width 1.2s ease}
 .momentum-note{font-size:11px;color:var(--grey2);letter-spacing:.04em;line-height:1.6}
 @media(max-width:600px){.momentum-card{padding:24px}}
 
@@ -197,15 +197,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-size:9px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--grey2);margin-top:6px
 }
-/* Gold glow for Mastery level */
+/* Amber glow for Market Leader level */
 .momentum-card.mastery{
-  border-color:rgba(201,168,76,0.5);
-  box-shadow:0 0 24px rgba(201,168,76,0.12)
+  border-color:rgba(224,146,47,0.5);
+  box-shadow:0 0 24px rgba(224,146,47,0.12)
 }
 /* Level transition flash */
 @keyframes levelFlash{
   0%{background:var(--black2)}
-  30%{background:rgba(201,168,76,0.18)}
+  30%{background:rgba(224,146,47,0.18)}
   100%{background:var(--black2)}
 }
 .momentum-card.level-up{animation:levelFlash .8s ease both}
@@ -535,8 +535,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <div class="momentum-card" id="momentumCard">
       <div class="momentum-card-top">
         <div class="momentum-label-block">
-          <div class="momentum-eyebrow">Scout Momentum</div>
-          <div class="momentum-level-name" id="dashLevelName">SCOUT BASELINE</div>
+          <div class="momentum-eyebrow">Your Progress</div>
+          <div class="momentum-level-name" id="dashLevelName">Getting Started</div>
           <div class="momentum-score-display">
             <div class="momentum-big" id="dashMomentumScore">0</div>
             <div class="momentum-denom">/100</div>
@@ -547,10 +547,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="momentum-bar-wrap">
         <div class="momentum-bar-fill" id="dashMomentumBar"></div>
       </div>
-      <div class="momentum-level-desc" id="dashLevelDesc">Learning your market</div>
+      <div class="momentum-level-desc" id="dashLevelDesc">Scout is learning your market and you're taking your first steps. Every message you send this week builds momentum.</div>
       <div class="momentum-next-level" id="dashNextLevel"></div>
       <div class="momentum-note" id="dashMomentumNote">
-        First week — baseline set. Complete your Friday check-in to see your score grow.
+        Your score starts at zero and grows every week you use Scout. This is week one — you're right on track.
       </div>
     </div>
 
@@ -666,11 +666,11 @@ function showWelcome() {
 ═══════════════════════════════════════════ */
 function getMomentumLevel(score) {
   var levels = [
-    { min: 0,  max: 20,  name: 'SCOUT BASELINE',    desc: 'Learning your market',                   next: 21  },
-    { min: 21, max: 40,  name: 'FIRST SIGNALS',     desc: 'Your ICPs are responding',               next: 41  },
-    { min: 41, max: 60,  name: 'BUILDING MOMENTUM', desc: 'Your acquisition system is forming',     next: 61  },
-    { min: 61, max: 80,  name: 'SCOUT OPERATING',   desc: 'Customer acquisition machine active',    next: 81  },
-    { min: 81, max: 100, name: 'SCOUT MASTERY',     desc: 'You outperform your market',             next: null }
+    { min: 0,  max: 20,  name: 'Getting Started',      desc: 'Scout is learning your market and you\'re taking your first steps. Every message you send this week builds momentum.',            next: 21  },
+    { min: 21, max: 40,  name: 'Finding Your Customers', desc: 'Your best customer types are starting to respond. You\'re learning what works.',                                                 next: 41  },
+    { min: 41, max: 60,  name: 'Gaining Ground',        desc: 'Your customer-finding system is taking shape. More replies, more visits, more sales.',                                            next: 61  },
+    { min: 61, max: 80,  name: 'Running Smoothly',      desc: 'You have a working system for bringing in customers, week after week.',                                                           next: 81  },
+    { min: 81, max: 100, name: 'Market Leader',         desc: 'You\'re outperforming other businesses in your area. Scout has become your growth engine.',                                       next: null }
   ];
   for (var i = 0; i < levels.length; i++) {
     if (score <= levels[i].max) return levels[i];
@@ -705,7 +705,7 @@ function showDashboard(history, weekNum, firmName) {
   document.getElementById('dashLevelName').textContent     = level.name;
   document.getElementById('dashLevelDesc').textContent     = level.desc;
   document.getElementById('dashNextLevel').textContent     = level.next
-    ? 'Next level at ' + level.next + ' points'
+    ? 'Next stage at ' + level.next + ' points — complete your Friday check-in to grow your score.'
     : '';
 
   /* Mastery glow */
@@ -728,18 +728,21 @@ function showDashboard(history, weekNum, firmName) {
     var diff = score - prevScore;
     var trendEl = document.getElementById('dashMomentumTrend');
     if (diff > 0) {
-      trendEl.textContent = '↑ +' + diff + ' from last week';
+      trendEl.textContent = '↑ up from last week';
       trendEl.classList.add('up');
     } else if (diff < 0) {
-      trendEl.textContent = '↓ ' + diff + ' from last week';
+      trendEl.textContent = '↓ down from last week';
       trendEl.classList.add('down');
     } else {
-      trendEl.textContent = '— no change';
+      trendEl.textContent = 'same as last week';
     }
   }
 
   /* Momentum note */
-  if (last.scoutOutput) {
+  if (score === 0) {
+    document.getElementById('dashMomentumNote').textContent =
+      'Your score starts at zero and grows every week you use Scout. This is week one — you\'re right on track.';
+  } else if (last.scoutOutput) {
     var learnedMatch = last.scoutOutput.match(/WHAT\s+SCOUT\s+LEARNED[\s\S]{0,20}?\n([^\n]+)/i);
     if (learnedMatch) {
       document.getElementById('dashMomentumNote').textContent = learnedMatch[1].trim();
