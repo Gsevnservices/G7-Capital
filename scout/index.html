@@ -230,7 +230,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 /* ── MONDAY BRIEFING CARD ── */
 .monday-card{
   background:var(--black2);border:1px solid var(--border);
-  border-left:3px solid var(--gold);
+  border-left:3px solid var(--amber);
   padding:24px 28px;margin-bottom:24px;
   box-shadow:0 4px 20px rgba(0,0,0,0.4);
   position:relative
@@ -245,7 +245,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .monday-card-close:hover{color:var(--white)}
 .monday-eyebrow{
   font-size:8px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:12px
+  color:var(--amber);margin-bottom:12px
 }
 .monday-heading{
   font-family:'Cormorant Garamond',serif;
@@ -258,7 +258,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .monday-row strong{color:var(--white)}
 .monday-action{
-  font-size:12px;color:var(--gold);line-height:1.7;
+  font-size:12px;color:var(--amber);line-height:1.7;
   margin-top:12px;padding-top:12px;
   border-top:1px solid var(--border2)
 }
@@ -833,20 +833,30 @@ function renderMondayBriefing(last, weekNum) {
   var custs    = parseInt(last.totalCustomers, 10) || 0;
   var rev      = parseFloat(last.revenueAdded) || 0;
 
-  document.getElementById('mondayLastWeek').innerHTML =
-    'Last week: <strong>' + contacts + ' contacts</strong>, ' +
-    '<strong>' + replies + ' responses</strong>, ' +
-    '<strong>' + custs + ' new customers</strong>. ' +
-    '₹' + rev.toLocaleString('en-IN') + ' added.';
+  if (contacts === 0 && custs === 0) {
+    /* Zero-state: brand-new user, first Monday — show encouragement, not zeros */
+    document.getElementById('mondayLastWeek').innerHTML =
+      'This is your starting line. Your plan is ready — this week is about taking the ' +
+      'first steps. Send your first messages and log what happens on Friday.';
+    document.getElementById('mondayTargets').innerHTML = '';
+  } else {
+    /* Returning user: show real numbers in plain language */
+    document.getElementById('mondayLastWeek').innerHTML =
+      'Last week you reached <strong>' + contacts + ' people</strong>, ' +
+      'heard back from <strong>' + replies + '</strong>, and gained ' +
+      '<strong>' + custs + ' new customer' + (custs !== 1 ? 's' : '') + '</strong> — ' +
+      '₹' + rev.toLocaleString('en-IN') + ' in new business.';
 
-  /* This week's targets */
-  var targets = {};
-  try { targets = JSON.parse(localStorage.getItem('scout_last_targets') || '{}'); } catch(e) {}
-  if (targets.contacts || targets.responses || targets.customers) {
-    document.getElementById('mondayTargets').innerHTML =
-      "This week's targets: <strong>" + (targets.contacts || '—') + ' contacts</strong> → ' +
-      '<strong>' + (targets.responses || '—') + ' responses</strong> → ' +
-      '<strong>' + (targets.customers || '—') + ' new customers</strong>.';
+    /* This week's targets */
+    var targets = {};
+    try { targets = JSON.parse(localStorage.getItem('scout_last_targets') || '{}'); } catch(e) {}
+    if (targets.contacts || targets.responses || targets.customers) {
+      document.getElementById('mondayTargets').innerHTML =
+        "This week: reach <strong>" + (targets.contacts || '—') + ' people</strong> → ' +
+        'get <strong>' + (targets.responses || '—') + ' replies</strong> → ' +
+        'win <strong>' + (targets.customers || '—') + ' new customer' +
+        ((parseInt(targets.customers, 10) !== 1) ? 's' : '') + '</strong>.';
+    }
   }
 
   /* First Monday action — extract from last output */
