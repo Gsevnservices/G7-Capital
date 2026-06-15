@@ -174,7 +174,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .metric-card-label{
   font-size:8px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:10px
+  color:var(--amber);margin-bottom:10px
 }
 .metric-card-value{
   font-family:'Cormorant Garamond',serif;
@@ -560,24 +560,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <!-- FOUR METRIC CARDS -->
     <div class="metric-row">
       <div class="metric-card">
-        <div class="metric-card-label">Revenue Velocity</div>
+        <div class="metric-card-label">Extra Income Coming</div>
         <div class="metric-card-value" id="dashRevenue">—</div>
-        <div class="metric-card-sub">at current pace</div>
+        <div class="metric-card-sub" id="dashRevenueSub">expected each month at this pace · after your first check-in</div>
       </div>
       <div class="metric-card">
-        <div class="metric-card-label">Acquisition Efficiency</div>
+        <div class="metric-card-label">Effort Per Customer</div>
         <div class="metric-card-value" id="dashAcq">—</div>
-        <div class="metric-card-sub">per new customer</div>
+        <div class="metric-card-sub" id="dashAcqSub">people to reach to win one customer · after your first check-in</div>
       </div>
       <div class="metric-card">
         <div class="metric-card-label">New Customers</div>
         <div class="metric-card-value" id="dashCustomers">—</div>
-        <div class="metric-card-sub">this week</div>
+        <div class="metric-card-sub" id="dashCustomersSub">won this week · after your first check-in</div>
       </div>
       <div class="metric-card">
-        <div class="metric-card-label">Total Revenue Added</div>
+        <div class="metric-card-label">Total New Business</div>
         <div class="metric-card-value" id="dashTotalRevenue">₹0</div>
-        <div class="metric-card-sub">since you started Scout</div>
+        <div class="metric-card-sub" id="dashTotalRevenueSub">earned since you started — your journey begins now</div>
       </div>
     </div>
 
@@ -792,12 +792,26 @@ function showDashboard(history, weekNum, firmName) {
   document.getElementById('dashAcq').textContent       = acq;
   document.getElementById('dashCustomers').textContent = custNew;
 
+  /* Update sub-labels once data is known */
+  if (revenue !== '—') {
+    document.getElementById('dashRevenueSub').textContent = 'expected each month at this pace';
+  }
+  if (acq !== '—') {
+    document.getElementById('dashAcqSub').textContent = 'people to reach to win one customer';
+  }
+  if (custNew !== '—') {
+    document.getElementById('dashCustomersSub').textContent = 'won this week';
+  }
+
   /* ── TOTAL REVENUE COUNTER (Feature 3.5) ── */
   var totalRevenue = history.reduce(function(sum, entry) {
     return sum + (parseFloat(entry.revenueAdded) || 0);
   }, 0);
   document.getElementById('dashTotalRevenue').textContent =
     totalRevenue > 0 ? '₹' + totalRevenue.toLocaleString('en-IN') : '₹0';
+  if (totalRevenue > 0) {
+    document.getElementById('dashTotalRevenueSub').textContent = 'earned since you started Scout';
+  }
 
   /* ── MONDAY BRIEFING (Feature 3.1) ── */
   var dayOfWeek = new Date().getDay(); /* 1 = Monday */
