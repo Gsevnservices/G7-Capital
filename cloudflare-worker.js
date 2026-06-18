@@ -416,7 +416,8 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      const { adminPassword, firmCode, firmName, password } = body;
+      const { adminPassword, firmCode, firmName, password, product: rawProduct } = body;
+      const product = (rawProduct === 'scout') ? 'scout' : 'alex';
 
       // Validate admin password against environment variable
       if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
@@ -441,7 +442,8 @@ export default {
           firmName,
           passwordHash,
           createdAt: Date.now(),
-          tier: 'beta'
+          product,
+          tier: product === 'scout' ? 'scout' : 'beta'
         })
       );
 

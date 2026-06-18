@@ -135,7 +135,7 @@ async function g7Logout() {
   localStorage.removeItem('g7_demo_mode');
   localStorage.removeItem('g7_session_name');
   // Redirect to Alex intro page
-  window.location.href = '/G7-Capital/alex/index.html';
+  window.location.href = '/alex/index.html';
 }
 
 
@@ -178,7 +178,7 @@ async function requireAuth() {
   const valid = await g7ValidateSession();
   if (!valid) {
     clearToken();
-    window.location.href = '/G7-Capital/login.html';
+    window.location.href = '/login.html';
     return false;
   }
   return true;

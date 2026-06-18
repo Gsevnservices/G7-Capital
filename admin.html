@@ -414,7 +414,7 @@ async function createFirm() {
     const response = await fetch(WORKER + '/admin/create-firm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminPassword, firmCode, firmName, password })
+      body: JSON.stringify({ adminPassword, firmCode, firmName, password, product: 'alex' })
     });
 
     const data = await response.json();
@@ -426,7 +426,7 @@ async function createFirm() {
     // Success
     successEl.textContent =
       'Account created: ' + data.firmCode + ' — "' + data.firmName + '". ' +
-      'The partner can now log in at /G7-Capital/login.html using firm code ' +
+      'The partner can now log in at /login.html using firm code ' +
       data.firmCode + ' and the password you set.';
     successEl.classList.add('visible');
 
@@ -587,8 +587,12 @@ function renderFirmsTable(filter) {
   const container = document.getElementById('firmsContainer');
 
   // Determine product for each firm:
-  // Scout if firmName contains "— Scout" OR tier === 'scout'
+  // Read firm.product first (set on all new records).
+  // Fall back to legacy heuristics for records created before this field existed.
   function getProduct(firm) {
+    if (firm.product === 'scout') return 'scout';
+    if (firm.product === 'alex')  return 'alex';
+    // Legacy fallback: tier flag or name suffix
     if (firm.tier === 'scout') return 'scout';
     if (firm.firmName && firm.firmName.indexOf('— Scout') !== -1) return 'scout';
     return 'alex';
@@ -908,6 +912,7 @@ async function createScoutAccount() {
         firmCode:      firmCode,
         firmName:      firmName,
         password:      password,
+        product:       'scout',
         tier:          'scout',
         metadata: {
           ownerName:  ownerName,
@@ -927,7 +932,7 @@ async function createScoutAccount() {
     successEl.innerHTML =
       'Scout account created.<br>' +
       '<strong>Firm Code:</strong> ' + escapeHtml(data.firmCode) + '<br>' +
-      '<strong>Login URL:</strong> gsevnservices.github.io/G7-Capital/login.html?product=scout';
+      '<strong>Login URL:</strong> gsevnservices.in/login.html?product=scout';
     successEl.classList.add('visible');
 
     // Clear the form
