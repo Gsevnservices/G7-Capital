@@ -1069,12 +1069,14 @@ var referralRowCount = 3;      // tracks how many referral input rows are showin
 /* ═══════════════════════════════════════════
    PAGE INIT
 ═══════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', async function() {
   /* Auth check */
   var token = localStorage.getItem('g7_session_token');
   if (!token) { window.location.href = '../login.html?product=scout'; return; }
 
   document.body.style.visibility = 'visible';
+
+  await loadScoutStateFromServer();
 
   /* Firm name in nav */
   var firmName = localStorage.getItem('g7_session_name') || '';

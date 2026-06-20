@@ -875,6 +875,7 @@ async function handleSubmit() {
     pending.businessData   = data;
     localStorage.setItem('scout_pending_result', JSON.stringify(pending));
 
+    await saveScoutStateToServer();
     window.location.href = 'result.html';
 
   } catch (err) {

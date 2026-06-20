@@ -620,7 +620,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 /* ═══════════════════════════════════════════
    PAGE INIT
 ═══════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', async function() {
   /* Auth check — redirect if not logged in */
   var token = localStorage.getItem('g7_session_token');
   if (!token) {
@@ -629,6 +629,8 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 
   document.body.style.visibility = 'visible';
+
+  await loadScoutStateFromServer();
 
   /* Firm name in nav */
   var firmName = localStorage.getItem('g7_session_name') || '';

@@ -352,7 +352,7 @@ export default {
       const { type, data } = body;
 
       // Validate type — only these four are accepted
-      const validTypes = ['config', 'kb', 'deals', 'calibrations'];
+      const validTypes = ['config', 'kb', 'deals', 'calibrations', 'scout_state'];
       if (!type || !validTypes.includes(type)) {
         return jsonResponse({
           error: 'Invalid type. Must be one of: config, kb, deals, calibrations'
@@ -386,7 +386,7 @@ export default {
       const type = url.searchParams.get('type');
 
       // Validate type
-      const validTypes = ['config', 'kb', 'deals', 'calibrations'];
+      const validTypes = ['config', 'kb', 'deals', 'calibrations', 'scout_state'];
       if (!type || !validTypes.includes(type)) {
         return jsonResponse({
           error: 'Invalid type. Must be one of: config, kb, deals, calibrations'

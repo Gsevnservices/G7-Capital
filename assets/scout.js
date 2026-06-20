@@ -23,6 +23,84 @@
 const SCOUT_WORKER = 'https://g7-proxy.gsevnservices.workers.dev';
 
 
+// ============================================================
+// SERVER STATE SYNC — mirrors Scout's localStorage state to KV
+// so a customer's data survives across devices / browser clears.
+// One JSON blob saved under firms:{CODE}:scout_state via /data/save.
+// ============================================================
+
+// The complete set of Scout state keys to sync (session keys excluded —
+// those are set by login, not part of Scout's per-account data).
+var SCOUT_STATE_KEYS = [
+  'scout_pending_result',
+  'scout_history',
+  'scout_week_number',
+  'scout_streak',
+  'scout_last_checkin_week',
+  'scout_health_score',
+  'scout_health_breakdown',
+  'scout_weekly_insight',
+  'scout_insight_week',
+  'scout_last_targets',
+  'scout_icp_names',
+  'scout_first_customer_celebrated',
+  'scout_week_checklist',
+  'scout_referral_chain'
+];
+
+// Bundle all Scout state keys from localStorage into one object and
+// POST to the server. Fire-and-forget: logs on failure, never throws.
+async function saveScoutStateToServer() {
+  try {
+    var token = localStorage.getItem('g7_session_token') || '';
+    if (!token) return;
+    var blob = {};
+    for (var i = 0; i < SCOUT_STATE_KEYS.length; i++) {
+      var k = SCOUT_STATE_KEYS[i];
+      var v = localStorage.getItem(k);
+      if (v !== null) blob[k] = v;
+    }
+    await fetch(SCOUT_WORKER + '/data/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ type: 'scout_state', data: blob })
+    });
+  } catch (e) {
+    console.warn('Scout state save failed (non-blocking):', e);
+  }
+}
+
+// Load Scout state blob from the server and write each key into
+// localStorage, seeding this device. Returns true if data was loaded,
+// false if none / on error. Never throws.
+async function loadScoutStateFromServer() {
+  try {
+    var token = localStorage.getItem('g7_session_token') || '';
+    if (!token) return false;
+    var res = await fetch(SCOUT_WORKER + '/data/load?type=scout_state', {
+      method: 'GET',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return false;
+    var json = await res.json();
+    var blob = json && json.data ? json.data : null;
+    if (!blob) return false;
+    for (var key in blob) {
+      if (blob.hasOwnProperty(key) && blob[key] !== null && blob[key] !== undefined) {
+        localStorage.setItem(key, blob[key]);
+      }
+    }
+    return true;
+  } catch (e) {
+    console.warn('Scout state load failed (non-blocking):', e);
+    return false;
+  }
+}
+
+
 // ─────────────────────────────────────────────────────────────
 // FUNCTION 1 — callScout(businessContext)
 //
