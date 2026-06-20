@@ -666,12 +666,22 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      // ---- Free-tier limit gate (1 analysis for free accounts) ----
+      // ---- Limit gate: free = 1 lifetime, paid = 30 per calendar month ----
       const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
       const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
+      const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
       let analysisCount = 0;
-      if (plan !== 'paid') {
-        const cntRaw = await env.G7_KV.get('scout:limit:' + session.firmCode + ':analyses');
+      let analysisCounterKey;
+      if (plan === 'paid') {
+        analysisCounterKey = 'scout:limit:' + session.firmCode + ':analyses:' + monthKey;
+        const cntRaw = await env.G7_KV.get(analysisCounterKey);
+        analysisCount = cntRaw ? parseInt(cntRaw, 10) : 0;
+        if (analysisCount >= 30) {
+          return jsonResponse({ error: 'limit_reached', limit: 'analysis' }, 403);
+        }
+      } else {
+        analysisCounterKey = 'scout:limit:' + session.firmCode + ':analyses';
+        const cntRaw = await env.G7_KV.get(analysisCounterKey);
         analysisCount = cntRaw ? parseInt(cntRaw, 10) : 0;
         if (analysisCount >= 1) {
           return jsonResponse({ error: 'limit_reached', limit: 'analysis' }, 403);
@@ -701,10 +711,8 @@ export default {
         return jsonResponse({ error: 'Anthropic error', detail: errText }, anthropicResponse.status);
       }
 
-      // Increment per-account analysis counter only on success, free accounts only
-      if (plan !== 'paid') {
-        await env.G7_KV.put('scout:limit:' + session.firmCode + ':analyses', String(analysisCount + 1));
-      }
+      // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
+      await env.G7_KV.put(analysisCounterKey, String(analysisCount + 1));
 
       return new Response(anthropicResponse.body, {
         headers: {
@@ -734,12 +742,22 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      // ---- Free-tier limit gate (4 check-ins for free accounts) ----
+      // ---- Limit gate: free = 4 lifetime, paid = 30 per calendar month ----
       const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
       const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
+      const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
       let checkinCount = 0;
-      if (plan !== 'paid') {
-        const cntRaw = await env.G7_KV.get('scout:limit:' + session.firmCode + ':checkins');
+      let checkinCounterKey;
+      if (plan === 'paid') {
+        checkinCounterKey = 'scout:limit:' + session.firmCode + ':checkins:' + monthKey;
+        const cntRaw = await env.G7_KV.get(checkinCounterKey);
+        checkinCount = cntRaw ? parseInt(cntRaw, 10) : 0;
+        if (checkinCount >= 30) {
+          return jsonResponse({ error: 'limit_reached', limit: 'checkin' }, 403);
+        }
+      } else {
+        checkinCounterKey = 'scout:limit:' + session.firmCode + ':checkins';
+        const cntRaw = await env.G7_KV.get(checkinCounterKey);
         checkinCount = cntRaw ? parseInt(cntRaw, 10) : 0;
         if (checkinCount >= 4) {
           return jsonResponse({ error: 'limit_reached', limit: 'checkin' }, 403);
@@ -769,10 +787,8 @@ export default {
         return jsonResponse({ error: 'Anthropic error', detail: errText }, anthropicResponse.status);
       }
 
-      // Increment per-account check-in counter only on success, free accounts only
-      if (plan !== 'paid') {
-        await env.G7_KV.put('scout:limit:' + session.firmCode + ':checkins', String(checkinCount + 1));
-      }
+      // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
+      await env.G7_KV.put(checkinCounterKey, String(checkinCount + 1));
 
       return new Response(anthropicResponse.body, {
         headers: {
