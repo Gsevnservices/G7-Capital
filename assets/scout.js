@@ -137,7 +137,7 @@ async function callScout(businessContext) {
         'Authorization': 'Bearer ' + sessionToken
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 12000,
         system: [
           {
@@ -207,7 +207,7 @@ async function callScoutRaw(userMessage) {
         'Authorization': 'Bearer ' + sessionToken
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 3000,
         system: [
           {
@@ -370,7 +370,7 @@ async function callScoutCheckin(checkinData) {
         'Authorization': 'Bearer ' + sessionToken
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 6000,
         system: [
           {

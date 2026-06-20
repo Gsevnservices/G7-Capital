@@ -698,7 +698,7 @@ export default {
           'anthropic-beta': 'prompt-caching-2024-07-31'
         },
         body: JSON.stringify({
-          model:    'claude-sonnet-4-20250514',
+          model:    'claude-sonnet-4-6',
           max_tokens: 8000,
           stream:   true,
           system:   body.system   || '',
@@ -774,7 +774,7 @@ export default {
           'anthropic-beta': 'prompt-caching-2024-07-31'
         },
         body: JSON.stringify({
-          model:    'claude-sonnet-4-20250514',
+          model:    'claude-sonnet-4-6',
           max_tokens: 3000,
           stream:   true,
           system:   body.system   || '',

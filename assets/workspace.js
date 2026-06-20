@@ -92,7 +92,7 @@ async function callAlex(dealSubmission) {
         'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 4000,
         system: [
           {
@@ -298,7 +298,7 @@ async function callAlexRaw(userMessage) {
         'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
       },
       body: JSON.stringify({
-        model:      'claude-sonnet-4-20250514',
+        model:      'claude-sonnet-4-6',
         max_tokens: 6000,
         system: [
           {
@@ -413,7 +413,7 @@ async function callAlexWithImages(dealSubmission, imageArray) {
         'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
       },
       body: JSON.stringify({
-        model:      'claude-sonnet-4-20250514',
+        model:      'claude-sonnet-4-6',
         max_tokens: 4000,
         system: [
           {
@@ -589,7 +589,7 @@ async function callAlexDirect(dealSubmission, imageArray) {
       'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: 6000,
       system: [
         {
@@ -699,7 +699,7 @@ async function callAlexWithSearch(dealSubmission, imageArray) {
           'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '')
         },
         body: JSON.stringify({
-          model:      'claude-sonnet-4-20250514',
+          model:      'claude-sonnet-4-6',
           max_tokens: 4000,
           system: [
             {
