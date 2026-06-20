@@ -215,6 +215,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
         </div>
       </div>
 
+      <div class="field" style="max-width:360px">
+        <label for="scoutPlan">Plan</label>
+        <select id="scoutPlan" style="width:100%;padding:10px;background:#0e0e0e;border:1px solid #2a2a2a;color:#eee">
+          <option value="free">Free (trial)</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+
       <button class="btn btn-gold" id="createScoutBtn" onclick="createScoutAccount()">
         Create Scout Account →
       </button>
@@ -253,6 +261,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
       <label for="newFirmPassword">Partner Password</label>
       <input type="text" id="newFirmPassword"
         placeholder="What the partner will use to sign in">
+    </div>
+
+    <div class="field" style="max-width:360px">
+      <label for="newFirmPlan">Plan</label>
+      <select id="newFirmPlan" style="width:100%;padding:10px;background:#0e0e0e;border:1px solid #2a2a2a;color:#eee">
+        <option value="free">Free (trial)</option>
+        <option value="paid">Paid</option>
+      </select>
     </div>
 
     <button class="btn btn-gold" id="createBtn" onclick="createFirm()">
@@ -386,6 +402,7 @@ async function createFirm() {
   const firmCode = document.getElementById('newFirmCode').value.trim().toUpperCase();
   const firmName = document.getElementById('newFirmName').value.trim();
   const password = document.getElementById('newFirmPassword').value.trim();
+  const plan     = document.getElementById('newFirmPlan').value;
 
   const successEl = document.getElementById('createSuccess');
   const errorEl   = document.getElementById('createError');
@@ -414,7 +431,7 @@ async function createFirm() {
     const response = await fetch(WORKER + '/admin/create-firm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminPassword, firmCode, firmName, password, product: 'alex' })
+      body: JSON.stringify({ adminPassword, firmCode, firmName, password, product: 'alex', plan })
     });
 
     const data = await response.json();
@@ -612,7 +629,7 @@ function renderFirmsTable(filter) {
   // Build the table — Product column added between Firm Name and Created
   let html = '<table class="firms-table"><thead><tr>';
   html += '<th>Firm Code</th><th>Firm Name</th><th>Product</th>';
-  html += '<th>Created</th><th>Tier</th><th>Deals Used</th><th>Action</th>';
+  html += '<th>Created</th><th>Tier</th><th>Plan</th><th>Deals Used</th><th>Action</th>';
   html += '</tr></thead><tbody>';
 
   filtered.forEach(function(firm) {
@@ -642,8 +659,19 @@ function renderFirmsTable(filter) {
     html += '<td>' + productBadge + '</td>';
     html += '<td>' + createdDate + '</td>';
     html += '<td><span class="tier-badge">' + escapeHtml(firm.tier || 'beta') + '</span></td>';
+
+    var planVal = firm.plan === 'paid' ? 'paid' : 'free';
+    var planBadge = planVal === 'paid'
+      ? '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7BC47B;background:rgba(123,196,123,0.12);border:1px solid rgba(123,196,123,0.3);padding:2px 8px">Paid</span>'
+      : '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#888;background:rgba(250,250,248,0.04);border:1px solid #2a2a2a;padding:2px 8px">Free</span>';
+    html += '<td>' + planBadge + '</td>';
+
     html += '<td style="color:' + usageColor + ';font-weight:600">' + count + ' / ' + limit + '</td>';
-    html += '<td><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" ' +
+
+    var planBtn = planVal === 'paid'
+      ? '<button class="btn" style="font-size:10px;padding:5px 10px;margin-right:6px;background:#2a2a2a;color:#ccc" onclick="setPlan(\'' + escapeHtml(firm.firmCode) + '\',\'free\')">Downgrade</button>'
+      : '<button class="btn" style="font-size:10px;padding:5px 10px;margin-right:6px;background:#7BC47B;color:#0a0a0a" onclick="setPlan(\'' + escapeHtml(firm.firmCode) + '\',\'paid\')">Upgrade to Paid</button>';
+    html += '<td>' + planBtn + '<button class="btn btn-danger" style="font-size:10px;padding:5px 10px" ' +
       'onclick="resetUsage(\'' + escapeHtml(firm.firmCode) + '\')">Reset Usage</button></td>';
     html += '</tr>';
   });
@@ -709,6 +737,27 @@ async function resetUsage(firmCode) {
     // Refresh the table to show updated counts
     loadFirms();
 
+  } catch(err) {
+    alert('Error: ' + err.message);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// SET PLAN
+// Calls POST /admin/set-plan to upgrade or downgrade a firm's plan.
+// ─────────────────────────────────────────────────────────────
+async function setPlan(firmCode, plan) {
+  if (!confirm('Set ' + firmCode + ' to ' + plan.toUpperCase() + '?')) return;
+  try {
+    const response = await fetch(WORKER + '/admin/set-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword, firmCode, plan })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Failed');
+    loadFirms();
   } catch(err) {
     alert('Error: ' + err.message);
   }
@@ -875,6 +924,7 @@ async function createScoutAccount() {
   var ownerName = document.getElementById('scoutOwnerName').value.trim();
   var city      = document.getElementById('scoutCity').value.trim();
   var password  = document.getElementById('scoutPassword').value.trim();
+  var plan      = document.getElementById('scoutPlan').value;
 
   var successEl = document.getElementById('createScoutSuccess');
   var errorEl   = document.getElementById('createScoutError');
@@ -913,6 +963,7 @@ async function createScoutAccount() {
         firmName:      firmName,
         password:      password,
         product:       'scout',
+        plan:          plan,
         tier:          'scout',
         metadata: {
           ownerName:  ownerName,

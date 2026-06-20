@@ -82,6 +82,16 @@ async function callScout(businessContext) {
 
   if (!response.ok) {
     var errBody = await response.text();
+    if (response.status === 403) {
+      var parsed = null;
+      try { parsed = JSON.parse(errBody); } catch (e) {}
+      if (parsed && parsed.error === 'limit_reached') {
+        var limitErr = new Error('limit_reached');
+        limitErr.code = 'limit_reached';
+        limitErr.limit = parsed.limit || 'analysis';
+        throw limitErr;
+      }
+    }
     throw new Error('Scout API error ' + response.status + ': ' + errBody);
   }
 
@@ -300,6 +310,16 @@ async function callScoutCheckin(checkinData) {
 
   if (!response.ok) {
     var errBody = await response.text();
+    if (response.status === 403) {
+      var parsed = null;
+      try { parsed = JSON.parse(errBody); } catch (e) {}
+      if (parsed && parsed.error === 'limit_reached') {
+        var limitErr = new Error('limit_reached');
+        limitErr.code = 'limit_reached';
+        limitErr.limit = parsed.limit || 'checkin';
+        throw limitErr;
+      }
+    }
     throw new Error('Scout check-in error ' + response.status + ': ' + errBody);
   }
 

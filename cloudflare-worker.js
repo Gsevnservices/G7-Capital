@@ -416,8 +416,9 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      const { adminPassword, firmCode, firmName, password, product: rawProduct } = body;
+      const { adminPassword, firmCode, firmName, password, product: rawProduct, plan: rawPlan } = body;
       const product = (rawProduct === 'scout') ? 'scout' : 'alex';
+      const plan = (rawPlan === 'paid') ? 'paid' : 'free';
 
       // Validate admin password against environment variable
       if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
@@ -443,6 +444,7 @@ export default {
           passwordHash,
           createdAt: Date.now(),
           product,
+          plan,
           tier: product === 'scout' ? 'scout' : 'beta'
         })
       );
@@ -664,6 +666,19 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
+      // ---- Free-tier limit gate (1 analysis for free accounts) ----
+      const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
+      const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
+      let analysisCount = 0;
+      if (plan !== 'paid') {
+        const cntRaw = await env.G7_KV.get('scout:limit:' + session.firmCode + ':analyses');
+        analysisCount = cntRaw ? parseInt(cntRaw, 10) : 0;
+        if (analysisCount >= 1) {
+          return jsonResponse({ error: 'limit_reached', limit: 'analysis' }, 403);
+        }
+      }
+      // ---- end limit gate ----
+
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -684,6 +699,11 @@ export default {
       if (!anthropicResponse.ok) {
         const errText = await anthropicResponse.text();
         return jsonResponse({ error: 'Anthropic error', detail: errText }, anthropicResponse.status);
+      }
+
+      // Increment per-account analysis counter only on success, free accounts only
+      if (plan !== 'paid') {
+        await env.G7_KV.put('scout:limit:' + session.firmCode + ':analyses', String(analysisCount + 1));
       }
 
       return new Response(anthropicResponse.body, {
@@ -714,6 +734,19 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
+      // ---- Free-tier limit gate (4 check-ins for free accounts) ----
+      const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
+      const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
+      let checkinCount = 0;
+      if (plan !== 'paid') {
+        const cntRaw = await env.G7_KV.get('scout:limit:' + session.firmCode + ':checkins');
+        checkinCount = cntRaw ? parseInt(cntRaw, 10) : 0;
+        if (checkinCount >= 4) {
+          return jsonResponse({ error: 'limit_reached', limit: 'checkin' }, 403);
+        }
+      }
+      // ---- end limit gate ----
+
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -734,6 +767,11 @@ export default {
       if (!anthropicResponse.ok) {
         const errText = await anthropicResponse.text();
         return jsonResponse({ error: 'Anthropic error', detail: errText }, anthropicResponse.status);
+      }
+
+      // Increment per-account check-in counter only on success, free accounts only
+      if (plan !== 'paid') {
+        await env.G7_KV.put('scout:limit:' + session.firmCode + ':checkins', String(checkinCount + 1));
       }
 
       return new Response(anthropicResponse.body, {
@@ -880,6 +918,43 @@ export default {
       await env.G7_KV.put('scout:usage:log',   '[]');
 
       return jsonResponse({ success: true });
+    }
+
+    // =========================================================================
+    // ROUTE — POST /admin/set-plan
+    // Updates the `plan` field on an existing account to 'paid' or 'free'.
+    // All other fields (passwordHash, product, tier, createdAt, firmName) are preserved.
+    // Protected by ADMIN_PASSWORD.
+    // =========================================================================
+    if (request.method === 'POST' && path === '/admin/set-plan') {
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: 'Invalid JSON body' }, 400);
+      }
+
+      const { adminPassword, firmCode, plan: rawPlan } = body;
+
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+      if (!firmCode) {
+        return jsonResponse({ error: 'firmCode is required' }, 400);
+      }
+
+      const normalizedCode = firmCode.toUpperCase().trim();
+      const key = 'auth:users:' + normalizedCode;
+      const record = await env.G7_KV.get(key, 'json');
+      if (!record) {
+        return jsonResponse({ error: 'Firm not found' }, 404);
+      }
+
+      const newPlan = (rawPlan === 'paid') ? 'paid' : 'free';
+      record.plan = newPlan;
+      await env.G7_KV.put(key, JSON.stringify(record));
+
+      return jsonResponse({ success: true, firmCode: normalizedCode, plan: newPlan });
     }
 
     // ── Catch-all 404 ─────────────────────────────────────────────────────────

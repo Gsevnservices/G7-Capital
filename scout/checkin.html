@@ -546,7 +546,11 @@ async function handleSubmit() {
 
   } catch(err) {
     overlay.classList.remove('active');
-    alert('Scout encountered an error: ' + (err.message || 'Please try again.'));
+    if (err.code === 'limit_reached') {
+      showUpgradeModal();
+    } else {
+      alert('Scout encountered an error: ' + (err.message || 'Please try again.'));
+    }
   }
 }
 
@@ -649,5 +653,21 @@ function initCursor() {
   document.addEventListener('mouseup',   function(){ c.style.transform='translate(-50%,-50%) scale(1)';r.style.transform='translate(-50%,-50%) scale(1)'; });
 }
 </script>
+
+  <div id="upgradeModal" style="display:none;position:fixed;inset:0;background:rgba(8,8,8,0.88);z-index:9999;align-items:center;justify-content:center;padding:24px">
+    <div style="max-width:440px;width:100%;background:#0e0e0e;border:1px solid #E0922F;border-radius:4px;padding:36px 32px;text-align:center;font-family:'Tenor Sans',sans-serif">
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:30px;color:#F0B968;margin-bottom:18px;line-height:1.2">You've used all 4 free weekly check-ins</div>
+      <p style="font-size:15px;color:#d8d2c8;line-height:1.6;margin-bottom:28px">To keep getting your weekly growth plan, upgrade to Scout — ₹3,000/month. Message us to continue.</p>
+      <a href="mailto:gsevnservices@gmail.com?subject=Upgrade%20my%20Scout%20account&body=Hi%2C%20I'd%20like%20to%20upgrade%20my%20Scout%20account%20to%20the%20paid%20plan." style="display:inline-block;background:#E0922F;color:#080808;text-decoration:none;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;padding:14px 32px;margin-bottom:14px">Upgrade →</a>
+      <div><button onclick="document.getElementById('upgradeModal').style.display='none'" style="background:none;border:none;color:#888;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:6px">Maybe later</button></div>
+    </div>
+  </div>
+
+  <script>
+  function showUpgradeModal() {
+    document.getElementById('upgradeModal').style.display = 'flex';
+  }
+  </script>
+
 </body>
 </html>
