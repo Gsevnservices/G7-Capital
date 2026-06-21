@@ -533,6 +533,15 @@ let _allUsageData = [];
 // Active filter: 'all' | 'alex' | 'scout'
 let _firmsFilter = 'all';
 
+// Determine a firm's product: read firm.product first; fall back to legacy heuristics.
+function getProduct(firm) {
+  if (firm.product === 'scout') return 'scout';
+  if (firm.product === 'alex')  return 'alex';
+  if (firm.tier === 'scout') return 'scout';
+  if (firm.firmName && firm.firmName.indexOf('— Scout') !== -1) return 'scout';
+  return 'alex';
+}
+
 async function loadFirms() {
   const container = document.getElementById('firmsContainer');
   const errorEl   = document.getElementById('firmsError');
@@ -621,18 +630,6 @@ async function loadFirms() {
 // ─────────────────────────────────────────────────────────────
 function renderFirmsTable(filter) {
   const container = document.getElementById('firmsContainer');
-
-  // Determine product for each firm:
-  // Read firm.product first (set on all new records).
-  // Fall back to legacy heuristics for records created before this field existed.
-  function getProduct(firm) {
-    if (firm.product === 'scout') return 'scout';
-    if (firm.product === 'alex')  return 'alex';
-    // Legacy fallback: tier flag or name suffix
-    if (firm.tier === 'scout') return 'scout';
-    if (firm.firmName && firm.firmName.indexOf('— Scout') !== -1) return 'scout';
-    return 'alex';
-  }
 
   // Apply filter
   const filtered = _allFirmsData.filter(function(firm) {
