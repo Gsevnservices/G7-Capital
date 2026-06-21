@@ -973,6 +973,61 @@ export default {
       return jsonResponse({ success: true, firmCode: normalizedCode, plan: newPlan });
     }
 
+    // ── ROUTE — POST /admin/reset-scout-usage ─────────────────────────────────
+    // Resets all Scout limit counters for a firm (free lifetime + current month paid).
+    if (request.method === 'POST' && path === '/admin/reset-scout-usage') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+
+      const { adminPassword, firmCode } = body;
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+      const normalizedCode = (firmCode || '').toUpperCase().trim();
+      if (!normalizedCode) {
+        return jsonResponse({ error: 'firmCode is required' }, 400);
+      }
+
+      const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+
+      // Delete all Scout counter keys: free (lifetime) and paid (current month)
+      await env.G7_KV.delete('scout:limit:' + normalizedCode + ':analyses');
+      await env.G7_KV.delete('scout:limit:' + normalizedCode + ':checkins');
+      await env.G7_KV.delete('scout:limit:' + normalizedCode + ':analyses:' + monthKey);
+      await env.G7_KV.delete('scout:limit:' + normalizedCode + ':checkins:' + monthKey);
+
+      return jsonResponse({ success: true, firmCode: normalizedCode });
+    }
+
+    // ── ROUTE — GET /admin/scout-usage ────────────────────────────────────────
+    // Returns a Scout firm's current limit counters (free lifetime + paid monthly).
+    if (request.method === 'GET' && path === '/admin/scout-usage') {
+      const adminPassword = url.searchParams.get('adminPassword');
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+      const firmCode = (url.searchParams.get('firmCode') || '').toUpperCase().trim();
+      if (!firmCode) {
+        return jsonResponse({ error: 'firmCode query parameter is required' }, 400);
+      }
+
+      const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+
+      const freeAnalysesRaw = await env.G7_KV.get('scout:limit:' + firmCode + ':analyses');
+      const freeCheckinsRaw = await env.G7_KV.get('scout:limit:' + firmCode + ':checkins');
+      const paidAnalysesRaw = await env.G7_KV.get('scout:limit:' + firmCode + ':analyses:' + monthKey);
+      const paidCheckinsRaw = await env.G7_KV.get('scout:limit:' + firmCode + ':checkins:' + monthKey);
+
+      return jsonResponse({
+        firmCode,
+        freeAnalyses: freeAnalysesRaw ? parseInt(freeAnalysesRaw, 10) : 0,
+        freeCheckins: freeCheckinsRaw ? parseInt(freeCheckinsRaw, 10) : 0,
+        paidAnalyses: paidAnalysesRaw ? parseInt(paidAnalysesRaw, 10) : 0,
+        paidCheckins: paidCheckinsRaw ? parseInt(paidCheckinsRaw, 10) : 0,
+        month: monthKey
+      });
+    }
+
     // ── Catch-all 404 ─────────────────────────────────────────────────────────
     return jsonResponse({ error: 'Not found' }, 404);
   }
