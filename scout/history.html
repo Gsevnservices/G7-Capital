@@ -396,9 +396,14 @@ function escHtml(str) {
    LOGOUT
 ═══════════════════════════════════════ */
 function handleLogout() {
-  ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
-  window.location.href = 'landing.html';
-}
+    ['g7_session_token','g7_session_firm','g7_session_name',
+     'scout_pending_result','scout_history','scout_week_number','scout_streak',
+     'scout_last_checkin_week','scout_health_score','scout_health_breakdown',
+     'scout_weekly_insight','scout_insight_week','scout_last_targets','scout_icp_names',
+     'scout_first_customer_celebrated','scout_week_checklist','scout_referral_chain'
+    ].forEach(function(k){ localStorage.removeItem(k); });
+    window.location.href = 'landing.html';
+  }
 
 /* ═══════════════════════════════════════
    CURSOR

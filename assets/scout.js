@@ -77,6 +77,11 @@ async function saveScoutStateToServer() {
 // localStorage, seeding this device. Returns true if data was loaded,
 // false if none / on error. Never throws.
 async function loadScoutStateFromServer() {
+  // Always clear this browser's Scout state first, so an account can never
+  // see another account's residual localStorage data. Server is source of truth.
+  for (var c = 0; c < SCOUT_STATE_KEYS.length; c++) {
+    localStorage.removeItem(SCOUT_STATE_KEYS[c]);
+  }
   try {
     var token = localStorage.getItem('g7_session_token') || '';
     if (!token) return false;
@@ -430,6 +435,7 @@ async function readSSEStream(response) {
   var reader  = response.body.getReader();
   var decoder = new TextDecoder('utf-8');
   var fullText = '';
+  var buffer = '';
   var done = false;
 
   while (!done) {
@@ -437,31 +443,28 @@ async function readSSEStream(response) {
     done = chunk.done;
 
     if (chunk.value) {
-      // Decode the raw bytes to a string
-      var raw = decoder.decode(chunk.value, { stream: true });
+      // Append decoded bytes to the buffer (do NOT split per-chunk)
+      buffer += decoder.decode(chunk.value, { stream: true });
 
-      // Each chunk may contain multiple SSE lines — split and process each
-      var lines = raw.split('\n');
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i].trim();
+      // Process only COMPLETE lines; keep the trailing partial line in the buffer
+      var newlineIdx;
+      while ((newlineIdx = buffer.indexOf('\n')) !== -1) {
+        var line = buffer.slice(0, newlineIdx).trim();
+        buffer = buffer.slice(newlineIdx + 1);
 
-        // SSE data lines start with "data: "
         if (!line.startsWith('data: ')) continue;
 
-        var jsonStr = line.slice(6); // strip "data: "
-
-        // "[DONE]" signals end of stream (not used by Anthropic but guard anyway)
+        var jsonStr = line.slice(6);
         if (jsonStr === '[DONE]') { done = true; break; }
 
         var event;
         try {
           event = JSON.parse(jsonStr);
         } catch (e) {
-          // Malformed line — skip silently
+          // A genuinely malformed complete line — skip
           continue;
         }
 
-        // Append text delta tokens as they arrive
         if (
           event.type === 'content_block_delta' &&
           event.delta &&
@@ -471,13 +474,29 @@ async function readSSEStream(response) {
           fullText += event.delta.text;
         }
 
-        // message_stop signals the end of the response
         if (event.type === 'message_stop') {
           done = true;
           break;
         }
       }
     }
+  }
+
+  // Flush any final complete data line left in the buffer (no trailing newline)
+  var tail = buffer.trim();
+  if (tail.startsWith('data: ')) {
+    var tailJson = tail.slice(6);
+    try {
+      var tailEvent = JSON.parse(tailJson);
+      if (
+        tailEvent.type === 'content_block_delta' &&
+        tailEvent.delta &&
+        tailEvent.delta.type === 'text_delta' &&
+        tailEvent.delta.text
+      ) {
+        fullText += tailEvent.delta.text;
+      }
+    } catch (e) { /* ignore incomplete tail */ }
   }
 
   return fullText;
