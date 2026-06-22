@@ -699,7 +699,7 @@ export default {
         },
         body: JSON.stringify({
           model:    'claude-sonnet-4-6',
-          max_tokens: Math.min(body.max_tokens || 16000, 16000),
+          max_tokens: Math.min(body.max_tokens || 24000, 32000),
           stream:   true,
           system:   body.system   || '',
           messages: body.messages || []

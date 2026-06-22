@@ -1533,30 +1533,14 @@ function renderTab2JSON(tab2) {
     var label  = escHtml((msg.icp || '') + (msg.type ? ' — ' + msg.type : ''));
     var meta   = [msg.channel, msg.language].filter(Boolean).join(' · ');
 
-    /* A/B toggle for first message when both versions are present */
-    if (idx === 0 && msg.versionA && msg.versionB) {
-      html += '<div class="message-card" id="' + cardId + '">';
-      html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
-      if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
-      html += '</div><button class="copy-btn" onclick="copyMessageAB(\'' + cardId + '\', this)">Copy</button></div>';
-      html += '<div class="ab-toggle-wrap">';
-      html += '<button class="ab-tab-btn active" onclick="switchAB(\'' + cardId + '\',\'a\',this)">Version A</button>';
-      html += '<button class="ab-tab-btn" onclick="switchAB(\'' + cardId + '\',\'b\',this)">Version B</button>';
-      html += '</div>';
-      html += '<div class="message-text ab-ver" id="' + cardId + '_a" data-text="' + escAttr(msg.versionA) + '">' + escHtml(msg.versionA) + '</div>';
-      html += '<div class="message-text ab-ver" id="' + cardId + '_b" data-text="' + escAttr(msg.versionB) + '" style="display:none">' + escHtml(msg.versionB) + '</div>';
-      html += '<div class="ab-hint">Test both this week. Report which performed better in your check-in.</div>';
-      html += '</div>';
-    } else {
-      var body = msg.versionA || msg.versionB || '';
-      if (!body) return;
-      html += '<div class="message-card" id="' + cardId + '">';
-      html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
-      if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
-      html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button></div>';
-      html += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
-      html += '</div>';
-    }
+    var body = msg.versionA || '';
+    if (!body) return;
+    html += '<div class="message-card" id="' + cardId + '">';
+    html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
+    if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
+    html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button></div>';
+    html += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
+    html += '</div>';
 
     /* Follow-up Day 3 */
     if (msg.followupDay3) {

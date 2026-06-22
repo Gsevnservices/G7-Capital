@@ -6108,8 +6108,7 @@ REVENUE VELOCITY RULES:
         "type": "primary",
         "channel": "[WhatsApp/LinkedIn/Email/In-person]",
         "language": "[Hindi/Hinglish/English]",
-        "versionA": "[Complete ready-to-send message — relationship/social proof angle. Opens with how many similar customers already use you. Soft close.]",
-        "versionB": "[Complete ready-to-send message — ROI/numbers angle. Opens with a specific financial calculation showing what they are losing. Direct close. MUST be as long and complete as Version A. NEVER empty or null.]",
+        "versionA": "[Complete ready-to-send message — Scout's single strongest version. Lead with the most compelling angle for this ICP (social proof OR a specific financial calculation, whichever lands harder). Complete and ready to send. NEVER empty or null.]",
         "followupDay3": "[Day 3 follow-up message]",
         "followupDay7": "[Day 7 final message]"
       },
@@ -6141,39 +6140,6 @@ REVENUE VELOCITY RULES:
     ]
   },
 
-VERSION A AND VERSION B RULES (ICP 1 PRIMARY MESSAGE):
-Both versions are MANDATORY. versionB must NEVER be empty or null.
-
-VERSION A — Lead with relationship/trust:
-— Opens with social proof or local connection
-— "[X] contractors/clients already use us" OR references a local landmark/community
-— Soft close: "worth a quick call?" / "ek baar try karein?"
-— Tone: warm, community-based, low pressure
-
-VERSION B — Lead with ROI/numbers:
-— Opens with a specific financial calculation
-— "If you are buying [product] at [X] rate, you are paying [Y] more than [direct] price"
-— Direct close: "I can show you the difference in 5 minutes" / "5 minute mein compare karwa deta hoon"
-— Tone: analytical, direct, no small talk
-
-The two versions MUST be genuinely different:
-— Different opening hook (first sentence must be completely different)
-— Different benefit emphasis (relationship vs money)
-— Different call to action (soft vs direct)
-— Different length is acceptable but both must be complete, usable messages
-
-EXAMPLES OF CORRECT A/B PAIRS:
-
-Marble wholesale (Hindi, WhatsApp):
-VERSION A: "Namaste ji! 22 contractors Kishangarh mandi mein hamare saath kaam kar rahe hain.
-48 ghante delivery, mill-direct rate. Aapke project ke liye ek baar try karein?
-- Rahul Sharma, Sharma Marble, [number]"
-VERSION B: "Namaste ji! Agar 1000 sq.ft marble kisi dealer se le rahe hain to Rs. 15,000-20,000 extra pay kar rahe hain versus mill-direct rate.
-Ek comparison karwa deta hoon — 5 minute. WhatsApp karen: [number]"
-
-Digital agency (English, LinkedIn):
-VERSION A: "Hi — 14 funded startups in Bengaluru use us for performance marketing. Average CAC dropped 34% in first quarter. Worth a 20-minute call?"
-VERSION B: "Hi — most funded startups burn their first 90 days figuring out which channels work. We run that experiment for you in 2 weeks. Interested in seeing the data?"
   "tab3": {
     "weeklyFocus": "[One sentence — what matters most this week]",
     "days": [
@@ -6442,14 +6408,6 @@ VERSION B: "Hi — most funded startups burn their first 90 days figuring out wh
           "message": "[Recovery message — must reference one specific thing that changed or improved since last contact. Under 80 words. Starts with [Name]. No mention of the gap. Reads as a genuine update not a sales message.]",
           "bestTimeToSend": "[Day and time]",
           "expectedRecoveryRate": "12-18%"
-        },
-        {
-          "segmentName": "Gone 120+ days",
-          "likelyReason": "[What likely happened — probably switched permanently or had a negative experience. Treat as almost a new customer acquisition not a recovery.]",
-          "recoveryApproach": "[Re-introduction approach — value-led not relationship-led. Do not reference the past engagement at all. Offer something they cannot refuse. Lead with a specific outcome relevant to their current situation.]",
-          "message": "[Re-introduction message. Offer something concrete and time-bound. Under 80 words. Starts with [Name]. No reference to previous relationship. Reads as if reaching out for the first time with a specific reason.]",
-          "bestTimeToSend": "[Day and time]",
-          "expectedRecoveryRate": "7-10%"
         }
       ],
       "howToIdentifyLostCustomers": {
@@ -6515,10 +6473,10 @@ VERSION B: "Hi — most funded startups burn their first 90 days figuring out wh
       {"risk": "[Risk name]", "detail": "[One sentence]", "defence": "[One sentence]"}
     ],
     "festivalCampaign": {
-      "festival": "[Festival name or null if none in 90 days]",
-      "weeksAway": 0,
+      "festival": "[Festival name ONLY if within 42 days, otherwise null]",
+      "weeksAway": "[Integer — weeks until the nearest major festival, even if null above]",
       "messages": {
-        "week4before": "[Message]",
+        "week4before": "[Message — ONLY if festival within 42 days, else omit messages entirely / set to null]",
         "week3before": "[Message]",
         "week2before": "[Message]",
         "week1before": "[Message]",
@@ -6823,9 +6781,6 @@ LOST CUSTOMER RECOVERY RULES:
   ("aap hamare regular customer hain" is acceptable)
 — 60-120 day message: must lead with what changed or improved —
   never reference how long ago they were a customer
-— 120+ day message: treat almost as a new customer
-  Do not reference the past relationship at all
-  Lead entirely with current value and a specific offer
 — Win-back offer must be specific not vague:
   "free audit", "2 weeks free", "first session free" not "special offer"
 — Win-back offer must imply time sensitivity:
@@ -6834,7 +6789,6 @@ LOST CUSTOMER RECOVERY RULES:
 — Expected recovery rates are calibrated for Indian SMB context:
   30-60 days: 25-35% response, 15-20% re-engagement
   60-120 days: 10-18% response, 8-12% re-engagement
-  120+ days: 5-10% response, 3-8% re-engagement
   B2B and professional services recover at the lower end of each range
 
 END OF COMPONENT 7
@@ -6912,16 +6866,6 @@ RULES:
 
 EXAMPLES OF CORRECT HONEST ASSESSMENT:
 
-For a business that said flyers didn't work:
-"You said flyers didn't work. The real issue
-is not the channel — it is the approach.
-Flyers without a trusted introduction get
-ignored in relationship markets like Civil Lines.
-Physical outreach with a known face and a
-specific reason converts at 3x the rate.
-Scout's plan this week fixes the approach,
-not the channel."
-
 For a gym trying to target everyone:
 "Your current marketing is trying to reach
 everyone in Koramangala. That is why nothing
@@ -6930,14 +6874,6 @@ for IT professionals is your actual product —
 not a general gym membership. Scout's entire
 plan is built around owning that specific
 position before Cult.fit does."
-
-For a business relying only on referrals:
-"Referrals are your current source and they
-are working. But referral-only growth has a
-ceiling — it grows linearly, not exponentially.
-Scout's plan adds two outbound channels that
-compound your referral base rather than
-replace it."
 
 For a business that tried WhatsApp groups
 and got removed:
@@ -8112,12 +8048,22 @@ Post-festival (3 days after):
 [Retention message — bring them back]
 
 Rules for Festival Campaign:
-— Only generate if a major festival falls
-  within 60-90 days of the current date
-  Use Component 5 seasonal calendar
-— If no major festival in next 90 days:
-  write "Next festival campaign will appear
-  here 90 days before [next festival name]"
+— ONLY generate the full 6-message campaign
+  if a major festival falls within 42 days
+  (6 weeks) of the current date.
+  Use Component 5 seasonal calendar.
+— If the nearest major festival is MORE than
+  42 days away: set "festival" to null,
+  "weeksAway" to the actual number of weeks
+  until that festival, and set "messages" to
+  null. Do NOT generate any of the 6 messages.
+  The campaign is only useful when it can be
+  acted on soon; generating messages months
+  early wastes the user's attention and is
+  shown later via check-in.
+— When emitting null, the system will surface
+  the campaign automatically when the festival
+  approaches.
 — Select the most relevant festival for
   this business type and location
   A Puja-heavy Kolkata business gets Durga
