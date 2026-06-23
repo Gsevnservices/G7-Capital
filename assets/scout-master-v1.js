@@ -6413,7 +6413,7 @@ REVENUE VELOCITY RULES:
       "howToIdentifyLostCustomers": {
         "step1": "[How to find 30-60 day lapsed customers without a CRM — practical WhatsApp-based instruction. e.g. Open WhatsApp, scroll back 30-60 days in each client conversation, note anyone who was active then but silent now]",
         "step2": "[How to find 60-120 day lapsed customers — e.g. Check invoicing or payment records from 2-4 months ago, cross-reference with WhatsApp to confirm silence]",
-        "step3": "[How to find 120+ day lapsed customers — e.g. Pull every client name from the past year, anyone not on active list who you have not spoken to in 4+ months]",
+        "step3": "[A deeper cross-check to catch lapsed customers the first two steps missed — e.g. cross-reference your full invoice/sales register against your active WhatsApp list; any customer who appears in past records but not in recent activity, regardless of how long ago, belongs on a recovery list. Focus recovery effort on the 30-120 day window where re-engagement rates are highest.]",
         "weeklyHabit": "[Simple Friday habit to track lapsed customers going forward — e.g. Every Friday at 5 PM scroll back 45 days in WhatsApp client conversations, note anyone who was active then but silent now, add to Recovery This Month note]"
       },
       "revenueProjection": {
