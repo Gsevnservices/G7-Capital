@@ -6562,6 +6562,16 @@ RESPONSES TARGET: [X]
 NEW CUSTOMERS TARGET: [X]
 [Realistic given pipeline from last week]
 
+===
+
+\`\`\`json
+{
+  "verdict": "on_track | mixed | off_track",
+  "changed": [ ... ],
+  "summary": "[One line: what changed in their plan this week and why]"
+}
+\`\`\`
+
 SCOUT INSIGHT — WEEK [N]
 
 [One specific observation from this week's
@@ -6632,6 +6642,25 @@ RULES FOR CHECK-IN OUTPUT:
   "your reply rate of 28% beat benchmark
   by 8 points — that is what drove
   the momentum increase" is meaningful
+— The 400-word limit applies to the prose sections ONLY. The === separator and the JSON plan-update block do NOT count toward it. Never truncate or omit the JSON block to save words.
+— The JSON block is REQUIRED in every check-in. Emit it after THIS WEEK'S THREE NUMBERS and before SCOUT INSIGHT.
+— SCOUT INSIGHT must always be the LAST section of your output. Never emit anything after it.
+— Allowed objects in "changed" — ONLY these five types:
+  {"type":"message_retire","target_icp":"<exact ICP name>","target_index":<number>,"reason":"<cite real numbers>"}
+  {"type":"message_add","for_icp":"<exact ICP name>","content":"<full ready-to-send message>","followupDay3":"<optional>","followupDay7":"<optional>","channel":"WhatsApp","language":"<same as their plan>","reason":"<why this angle now>"}
+  {"type":"icp_promote","target":"<exact ICP name>","reason":"<cite real numbers>"}
+  {"type":"icp_demote","target":"<exact ICP name>","reason":"<cite real numbers>"}
+  {"type":"action_update","content":["action 1","action 2","action 3"]}
+— "changed" must NEVER be empty. If the week was flat, still sharpen at least one message (retire + add) or re-rank one ICP. Every check-in must produce a visible change.
+— NEVER emit message_retire without also emitting at least one message_add in the same block. The plan must never shrink.
+— Retire a message only after 5+ sends with 0 replies. Demote an ICP only after 10+ contacts with 0 replies.
+— Every "reason" must cite actual numbers the user reported. No vague reasons.
+— ICP names must match EXACTLY the ICP names in their existing plan. Never invent or rename ICPs.
+— If evidence contradicts an earlier recommendation, say so plainly in "summary".
+— If the user skipped a week or reported nothing, say you don't know what happened rather than assuming progress.
+— Emit valid JSON only inside the fence. No comments, no trailing commas.
+— If there is not yet enough data to retire a message or demote an ICP (nothing has hit 5+ sends with 0 replies, or 10+ contacts with 0 replies), do NOT force a cut. Instead ADD: emit a message_add that opens a NEW channel or tactic they are not yet using — a different place to find customers, not a reworded version of an existing message. Set "channel" to that new channel and explain the new angle in "reason".
+— Every new channel or tactic you suggest must be specific to their business type and location, and must be something they could act on this week. No generic advice like "use social media".
 
 THE ANTI-GENERIC FILTER
 

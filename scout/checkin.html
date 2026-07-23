@@ -15,9 +15,9 @@
 html{scroll-behavior:smooth;font-size:16px}
 :root{
   --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
-  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --gold:#E0922F;--gold2:#F0B968;--gold3:#D17B2E;
   --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
-  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08)
+  --border:rgba(224,146,47,0.18);--border2:rgba(250,250,248,0.08)
 }
 body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh;visibility:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
@@ -71,6 +71,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .icp-field input:focus{border-color:rgba(201,168,76,0.5)}
 .icp-field input::placeholder{color:var(--grey2);font-size:14px}
 
+/* TAP SELECTORS */
+.tap-label{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1);display:block;margin-bottom:6px}
+.tap-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tap-opt{background:var(--black2);border:1px solid var(--border2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:14px;padding:10px 16px;cursor:pointer;transition:all .2s;min-width:52px;text-align:center}
+.tap-opt:hover{border-color:rgba(224,146,47,0.4);background:var(--black4)}
+.tap-opt.selected{border-color:var(--gold);background:rgba(224,146,47,0.12);color:var(--gold)}
+
 .section-gap{height:36px;border-top:1px solid var(--border2);margin:36px 0}
 
 /* FIELD GROUPS */
@@ -88,8 +95,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .revenue-input{padding-left:34px}
 
 /* TOTALS ROW */
-.totals-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.totals-row{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px}
 @media(max-width:600px){.totals-row{grid-template-columns:1fr}}
+
+/* STEP FLOW */
+.step-pane{display:none}
+.step-pane.active{display:block}
+.step-dots{display:flex;gap:8px;justify-content:center;margin-bottom:28px}
+.step-dot{width:28px;height:3px;background:var(--border2);transition:background .3s}
+.step-dot.active{background:var(--gold)}
+.step-nav{display:flex;gap:12px;margin-top:28px}
+.btn-back{
+  background:transparent;border:1px solid var(--border2);color:var(--grey1);
+  padding:14px 28px;cursor:pointer;font-family:'Tenor Sans',sans-serif;flex:0 0 auto;transition:all .2s
+}
+.btn-back:hover{border-color:var(--gold);color:var(--white)}
+.btn-next{
+  background:var(--gold);color:var(--black);border:none;
+  padding:14px 28px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;flex:1;transition:background .3s
+}
+.btn-next:hover{background:var(--gold2)}
 
 /* SUBMIT */
 .btn-submit{font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:20px 40px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:all .3s;width:100%;margin-top:8px}
@@ -143,7 +168,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   background:var(--gold);color:var(--black);border:none;
   padding:14px 28px;cursor:pointer;font-weight:600;font-family:'Tenor Sans',sans-serif;transition:background .3s
 }
-.btn-continue:hover{background:#E2C97E}
+.btn-continue:hover{background:#F0B968}
 </style>
 </head>
 <body>
@@ -193,59 +218,76 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <!-- FORM -->
 <div class="form-wrap">
 
-  <!-- SECTION 1: WHAT YOU DID (ICP BREAKDOWNS) -->
-  <div style="margin-bottom:40px">
+  <!-- STEP PROGRESS DOTS -->
+  <div class="step-dots">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+
+  <!-- PANE 1: OUTREACH NUMBERS -->
+  <div class="step-pane active" id="pane1">
     <h2 class="form-section-title">What You Did This Week</h2>
     <p class="form-section-desc">Fill in your numbers for each customer group. Round numbers are fine.</p>
     <div class="form-divider"></div>
 
     <div class="icp-block">
       <div class="icp-block-title" id="icp1Label">ICP 1</div>
-      <div class="icp-inputs">
-        <div class="icp-field"><label>Outreach Sent</label><input type="number" id="icp1_sent" placeholder="0" min="0"></div>
-        <div class="icp-field"><label>Replies Received</label><input type="number" id="icp1_replies" placeholder="0" min="0"></div>
-        <div class="icp-field"><label>New Customers</label><input type="number" id="icp1_conv" placeholder="0" min="0"></div>
-      </div>
+      <input type="hidden" id="icp1_sent" value="">
+      <input type="hidden" id="icp1_replies" value="">
+      <input type="hidden" id="icp1_conv" value="">
+      <div id="icp1_tap_area"></div>
     </div>
 
     <div class="icp-block">
       <div class="icp-block-title" id="icp2Label">ICP 2</div>
-      <div class="icp-inputs">
-        <div class="icp-field"><label>Outreach Sent</label><input type="number" id="icp2_sent" placeholder="0" min="0"></div>
-        <div class="icp-field"><label>Replies Received</label><input type="number" id="icp2_replies" placeholder="0" min="0"></div>
-        <div class="icp-field"><label>New Customers</label><input type="number" id="icp2_conv" placeholder="0" min="0"></div>
-      </div>
+      <input type="hidden" id="icp2_sent" value="">
+      <input type="hidden" id="icp2_replies" value="">
+      <input type="hidden" id="icp2_conv" value="">
+      <div id="icp2_tap_area"></div>
     </div>
 
     <div class="icp-block">
       <div class="icp-block-title" id="icp3Label">ICP 3</div>
-      <div class="icp-inputs">
-        <div class="icp-field"><label>Outreach Sent</label><input type="number" id="icp3_sent" placeholder="0" min="0"></div>
-        <div class="icp-field"><label>Replies Received</label><input type="number" id="icp3_replies" placeholder="0" min="0"></div>
-        <div class="icp-field"><label>New Customers</label><input type="number" id="icp3_conv" placeholder="0" min="0"></div>
-      </div>
+      <input type="hidden" id="icp3_sent" value="">
+      <input type="hidden" id="icp3_replies" value="">
+      <input type="hidden" id="icp3_conv" value="">
+      <div id="icp3_tap_area"></div>
+    </div>
+
+    <div class="step-nav">
+      <button type="button" class="btn-next" onclick="goStep(2)">Next</button>
     </div>
   </div>
 
-  <!-- SECTION 2: QUICK FEEDBACK -->
-  <div>
+  <!-- PANE 2: TOTALS -->
+  <div class="step-pane" id="pane2">
     <h2 class="form-section-title">Quick Totals</h2>
-    <p class="form-section-desc">Totals and a quick note on what worked. Scout uses this to sharpen next week's plan.</p>
+    <p class="form-section-desc">How did this week add up overall?</p>
     <div class="form-divider"></div>
 
     <div class="totals-row">
       <div class="field-group" style="margin-bottom:0">
-        <label class="field-label" for="totalCustomers">Total New Customers This Week</label>
-        <input class="field-input" type="number" id="totalCustomers" placeholder="0" min="0">
+        <input type="hidden" id="totalCustomers" value="">
+        <div id="totalCust_tap_area"></div>
       </div>
       <div class="field-group" style="margin-bottom:0">
-        <label class="field-label" for="revenueAdded">Revenue Added This Week</label>
-        <div class="revenue-wrap">
-          <span class="revenue-prefix">₹</span>
-          <input class="field-input revenue-input" type="number" id="revenueAdded" placeholder="0" min="0">
-        </div>
+        <input type="hidden" id="revenueAdded" value="">
+        <div id="revenue_tap_area"></div>
       </div>
     </div>
+
+    <div class="step-nav">
+      <button type="button" class="btn-back" onclick="goStep(1)">Back</button>
+      <button type="button" class="btn-next" onclick="goStep(3)">Next</button>
+    </div>
+  </div>
+
+  <!-- PANE 3: FEEDBACK + SUBMIT -->
+  <div class="step-pane" id="pane3">
+    <h2 class="form-section-title">Quick Reflection</h2>
+    <p class="form-section-desc">Two questions — optional but helpful. Scout uses this to sharpen next week's plan.</p>
+    <div class="form-divider"></div>
 
     <div class="field-group" style="margin-top:24px">
       <label class="field-label" for="whatWorked">What Worked Best This Week? <span class="optional">optional</span></label>
@@ -259,7 +301,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
         placeholder="e.g. WhatsApp group post was ignored, cold calls got zero response"></textarea>
     </div>
 
-    <button class="btn-submit" onclick="handleSubmit()">Get Next Week's Plan →</button>
+    <div class="step-nav">
+      <button type="button" class="btn-back" onclick="goStep(2)">Back</button>
+      <button class="btn-submit" onclick="handleSubmit()">Get Next Week's Plan →</button>
+    </div>
   </div>
 
 </div><!-- /form-wrap -->
@@ -345,8 +390,66 @@ window.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('icp2Label').textContent = icpNames[1];
   document.getElementById('icp3Label').textContent = icpNames[2];
 
+  /* Inject tap rows for totalCustomers and revenueAdded */
+  document.getElementById('totalCust_tap_area').innerHTML =
+    buildTapRow('totalCustomers', [
+      {label:'0', val:0}, {label:'1', val:1}, {label:'2', val:2},
+      {label:'3', val:3}, {label:'4', val:4}, {label:'5-10', val:7},
+      {label:'10+', val:12}], 'Total new customers this week');
+
+  document.getElementById('revenue_tap_area').innerHTML =
+    buildTapRow('revenueAdded', [
+      {label:'None', val:0}, {label:'Under ₹5,000', val:2500},
+      {label:'₹5,000-₹20,000', val:12000}, {label:'₹20,000-₹50,000', val:35000},
+      {label:'₹50,000+', val:75000}], 'Revenue added this week');
+
+  /* Inject tap rows for each ICP block */
+  ['icp1','icp2','icp3'].forEach(function(p) {
+    var area = document.getElementById(p + '_tap_area');
+    area.innerHTML =
+      buildTapRow(p + '_sent', [
+        {label:'None', val:0}, {label:'1-5', val:3}, {label:'6-15', val:10},
+        {label:'16-30', val:22}, {label:'30+', val:35}], 'How many did you send?') +
+      buildTapRow(p + '_replies', [
+        {label:'0', val:0}, {label:'1', val:1}, {label:'2', val:2},
+        {label:'3', val:3}, {label:'4', val:4}, {label:'5+', val:6}], 'How many replied?') +
+      buildTapRow(p + '_conv', [
+        {label:'0', val:0}, {label:'1', val:1}, {label:'2', val:2},
+        {label:'3', val:3}, {label:'4', val:4}, {label:'5+', val:6}], 'How many became customers?');
+  });
+
   initCursor();
 });
+
+/* ═══════════════════════════════════════
+   STEP NAVIGATION
+═══════════════════════════════════════ */
+function goStep(n) {
+  [1,2,3].forEach(function(i) {
+    var p = document.getElementById('pane' + i);
+    var d = document.getElementById('dot' + i);
+    if (p) p.classList.toggle('active', i === n);
+    if (d) d.classList.toggle('active', i <= n);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ═══════════════════════════════════════
+   TAP SELECTOR HELPERS
+═══════════════════════════════════════ */
+function buildTapRow(hiddenId, options, label) {
+  var opts = options.map(function(o) {
+    return '<button type="button" class="tap-opt" onclick="selectTap(this,\'' + hiddenId + '\',' + o.val + ')">' + o.label + '</button>';
+  }).join('');
+  return '<div><span class="tap-label">' + label + '</span><div class="tap-row">' + opts + '</div></div>';
+}
+
+function selectTap(btn, hiddenId, val) {
+  var row = btn.closest('.tap-row');
+  row.querySelectorAll('.tap-opt').forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  document.getElementById(hiddenId).value = val;
+}
 
 /* ═══════════════════════════════════════
    COLLECT FORM DATA
@@ -510,7 +613,12 @@ async function handleSubmit() {
     /* Save pending result for result.html */
     var existing = {};
     try { existing = JSON.parse(prevResult || '{}'); } catch(e) {}
-    existing.scoutOutput = checkinOutput;
+    existing.checkinOutput = checkinOutput;
+    /* Task 3: apply structured patch to the stored plan, if the check-in returned one */
+    var _patch = parseCheckinPatch(checkinOutput);
+    if (_patch) {
+      existing.scoutOutput = applyPatchToStoredPlan(existing.scoutOutput, _patch, d.weekNum);
+    }
     existing.submittedAt = d.submittedAt;
     localStorage.setItem('scout_pending_result', JSON.stringify(existing));
 
@@ -538,12 +646,16 @@ async function handleSubmit() {
 
       if (priorCustomers === 0) {
         /* First customer ever — show milestone */
+        /* Bug C fix: sync state on milestone path before handing off to milestone buttons */
+        calculateHealthScore();
+        try { await saveScoutStateToServer(); } catch(e) { console.error('Milestone sync failed:', e); }
         overlay.classList.remove('active');
         showFirstCustomerMilestone(d, checkinOutput);
         return; /* Don't navigate — milestone buttons handle navigation */
       }
     }
 
+    calculateHealthScore();
     await saveScoutStateToServer();
     window.location.href = 'result.html';
 
@@ -570,10 +682,19 @@ function showFirstCustomerMilestone(d, checkinOutput) {
     bizName = (pr.businessData && pr.businessData.businessName) ? pr.businessData.businessName : bizName;
   } catch(e) {}
 
-  /* Revenue per customer — from revenueAdded / totalCustomers */
-  var totalRev  = parseFloat(d.revenueAdded) || 0;
-  var custCount = parseInt(d.totalCustomers, 10) || 1;
-  var revPerCust = Math.round(totalRev / custCount);
+  /* Revenue per customer — use this week's reported revenue when present,
+     otherwise fall back to the onboarding average so the number is never ₹0 */
+  var totalRev   = parseFloat(d.revenueAdded) || 0;
+  var custCount  = parseInt(d.totalCustomers, 10) || 1;
+  var revPerCust = totalRev > 0 ? Math.round(totalRev / custCount) : 0;
+  if (revPerCust <= 0) {
+    try {
+      var avgRaw = (pr && pr.businessData) ? pr.businessData.avgTransaction : 0;
+      /* strip ₹, commas, spaces, and any non-numeric/non-dot chars before parsing */
+      var avgVal = parseFloat(String(avgRaw).replace(/[^0-9.]/g, '')) || 0;
+      revPerCust = Math.round(avgVal);
+    } catch(e) {}
+  }
   var annualVal  = revPerCust * 12;
 
   /* Days for Scout to pay for itself (₹3,000 / monthly revenue × 30) */

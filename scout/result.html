@@ -860,6 +860,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   /* Copy buttons in print */
   .copy-btn{display:none!important}
 }
+/* Check-in link button styles */
+.form-section-title{
+  font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;
+  color:var(--white);margin:0
+}
+.form-section-desc{
+  font-size:12px;color:var(--grey2);line-height:1.7;margin:0
+}
+.btn-submit{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:var(--black);border:none;
+  padding:20px 40px;cursor:pointer;font-weight:600;
+  font-family:'Tenor Sans',sans-serif;transition:all .3s
+}
+.btn-submit:hover{background:var(--gold2)}
 </style>
 </head>
 <body>
@@ -1538,7 +1553,7 @@ function renderTab2JSON(tab2) {
     html += '<div class="message-card" id="' + cardId + '">';
     html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
     if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
-    html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button></div>';
+    html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + cardId + '\', this)">Send on WhatsApp</button></div>';
     html += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
     html += '</div>';
 
@@ -1547,7 +1562,7 @@ function renderTab2JSON(tab2) {
       var id3 = 'msgcard_fu3_' + idx;
       html += '<div class="message-card" id="' + id3 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.3)">';
       html += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 3 — ' + escHtml(msg.icp || '') + '</div></div>';
-      html += '<button class="copy-btn" onclick="copyMessage(\'' + id3 + '\', this)">Copy</button></div>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + id3 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id3 + '\', this)">Send on WhatsApp</button></div>';
       html += '<div class="message-text" data-text="' + escAttr(msg.followupDay3) + '">' + escHtml(msg.followupDay3) + '</div>';
       html += '</div>';
     }
@@ -1556,7 +1571,7 @@ function renderTab2JSON(tab2) {
       var id7 = 'msgcard_fu7_' + idx;
       html += '<div class="message-card" id="' + id7 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.2)">';
       html += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 7 — ' + escHtml(msg.icp || '') + '</div></div>';
-      html += '<button class="copy-btn" onclick="copyMessage(\'' + id7 + '\', this)">Copy</button></div>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + id7 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id7 + '\', this)">Send on WhatsApp</button></div>';
       html += '<div class="message-text" data-text="' + escAttr(msg.followupDay7) + '">' + escHtml(msg.followupDay7) + '</div>';
       html += '</div>';
     }
@@ -1784,7 +1799,7 @@ function renderWhatsAppCalendar(cal) {
       html += '<div class="wac-msg-date">' + escHtml(dateLabel) + (msg.time ? ' · ' + escHtml(msg.time) : '') + '</div>';
       html += '<div class="wac-msg-list">Send to: ' + escHtml(msg.listName || msg.sendTo || '') + '</div>';
       html += '</div>';
-      html += '<button class="ref-copy-btn" onclick="refCopy(\'' + calId + '\',this)">Copy</button>';
+      html += '<button class="ref-copy-btn" onclick="refCopy(\'' + calId + '\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'' + calId + '\',this)">Send on WhatsApp</button>';
       html += '</div>';
 
       /* Body */
@@ -1861,7 +1876,7 @@ function renderLostCustomerRecovery(lcr) {
       html += '<div class="lcr-seg-rate">Recovery rate: ' + escHtml(seg.expectedRecoveryRate) + '</div>';
     }
     html += '</div>';
-    html += '<button class="ref-copy-btn" onclick="refCopy(\'' + segId + '\',this)">Copy</button>';
+    html += '<button class="ref-copy-btn" onclick="refCopy(\'' + segId + '\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'' + segId + '\',this)">Send on WhatsApp</button>';
     html += '</div>';
 
     /* Body */
@@ -1889,7 +1904,7 @@ function renderLostCustomerRecovery(lcr) {
     }
     html += '<div class="lcr-winback-row">';
     html += '<div class="lcr-winback-sublabel">Offer message</div>';
-    html += '<button class="ref-copy-btn" onclick="refCopy(\'' + wbId + '\',this)">Copy</button>';
+    html += '<button class="ref-copy-btn" onclick="refCopy(\'' + wbId + '\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'' + wbId + '\',this)">Send on WhatsApp</button>';
     html += '</div>';
     html += '<div class="lcr-winback-text" id="' + wbId + '">' + escHtml(wb.offerMessage || '') + '</div>';
     html += '</div>';
@@ -1983,26 +1998,13 @@ function renderTab4JSON(tab4, biz) {
     html += '</div>';
   }
 
-  /* Weekly Check-In Form */
+  /* Weekly Check-In — link to dedicated page */
   html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:12px">';
-  html += '<div class="pipeline-section-title">Weekly Check-In</div>';
-  html += '<div style="font-size:11px;color:var(--grey2);margin-bottom:6px;line-height:1.7">Takes 5 minutes every Friday. Scout updates your playbook based on what actually worked.</div>';
-  html += '<div class="pipeline-divider"></div>';
-  names.forEach(function(name, i) {
-    var safe = 'icp' + i;
-    html += '<div class="pipeline-icp-block"><div class="pipeline-icp-title">' + escHtml(name) + '</div>';
-    html += '<div class="pipeline-inputs">';
-    html += '<div class="pipeline-field"><label>Outreach Sent</label><input type="number" id="' + safe + '_sent" placeholder="0" min="0"></div>';
-    html += '<div class="pipeline-field"><label>Replies Received</label><input type="number" id="' + safe + '_replies" placeholder="0" min="0"></div>';
-    html += '<div class="pipeline-field"><label>Conversions</label><input type="number" id="' + safe + '_conv" placeholder="0" min="0"></div>';
-    html += '</div></div>';
-  });
-  html += '<div class="pipeline-totals">';
-  html += '<div class="pipeline-total-field"><label>New Customers This Week</label><input type="number" id="newCustomers" placeholder="0" min="0"></div>';
-  html += '<div class="pipeline-total-field"><label>Revenue Added This Week</label><input type="text" id="revenueAdded" placeholder="₹0"></div>';
+  html += '<div style="text-align:center;padding:48px 24px">';
+  html += '<h2 class="form-section-title" style="margin-bottom:12px">Weekly Check-In</h2>';
+  html += '<p class="form-section-desc" style="margin-bottom:28px">Takes 5 minutes. Scout updates your playbook based on what actually worked.</p>';
+  html += '<a href="checkin.html" class="btn-submit" style="display:inline-block;text-decoration:none;width:auto;padding:20px 48px">START CHECK-IN →</a>';
   html += '</div>';
-  html += '<button class="btn-checkin" onclick="submitCheckin()">Update Scout →</button>';
-  html += '<div class="checkin-note">Scout will adjust next week\'s targets based on which ICPs performed best.</div>';
   html += '</div>';
 
   /* ── Referral Engine (from JSON) ── */
@@ -2054,7 +2056,7 @@ function renderTab4JSON(tab4, biz) {
       html += '<div class="ref-msg-type">' + escHtml(m.type) + '</div>';
       html += '<div class="ref-msg-row">';
       html += '<div class="ref-msg-text" id="refMsg1_' + mi + '">' + escHtml(m.text) + '</div>';
-      html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg1_' + mi + '\',this)">Copy</button>';
+      html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg1_' + mi + '\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'refMsg1_' + mi + '\',this)">Send on WhatsApp</button>';
       html += '</div></div>';
     });
     html += '</div>';
@@ -2072,7 +2074,7 @@ function renderTab4JSON(tab4, biz) {
         html += '<div class="ref-msg-type">WhatsApp Message</div>';
         html += '<div class="ref-msg-row">';
         html += '<div class="ref-msg-text" id="refMsg2_0">' + escHtml(tier2.message_whatsapp) + '</div>';
-        html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg2_0\',this)">Copy</button>';
+        html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg2_0\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'refMsg2_0\',this)">Send on WhatsApp</button>';
         html += '</div></div>';
       }
       html += '</div>';
@@ -2197,7 +2199,7 @@ function renderTab5JSON(tab5) {
       var wcId = 'festcard_' + wpi;
       html += '<div class="festival-week-card">';
       html += '<div class="festival-week-label"><span>' + escHtml(wd.label) + '</span>';
-      html += '<button class="copy-btn" onclick="copyMessage(\'' + wcId + '\', this)">Copy</button></div>';
+      html += '<button class="copy-btn" onclick="copyMessage(\'' + wcId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + wcId + '\', this)">Send on WhatsApp</button></div>';
       html += '<div class="festival-msg message-text" id="' + wcId + '" data-text="' + escAttr(msg) + '">' + escHtml(msg) + '</div>';
       html += '</div>';
     });
@@ -2456,7 +2458,7 @@ function renderTab2(content) {
       html += '<div class="message-card-channel">' + escHtml([channel, lang].filter(Boolean).join(' · ')) + '</div>';
     }
     html += '</div>';
-    html += '<button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button>';
+    html += '<button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + cardId + '\', this)">Send on WhatsApp</button>';
     html += '</div>';
     html += '<div class="message-text" data-text="' + escAttr(rawBody) + '">' + escHtml(rawBody) + '</div>';
     html += '</div>';
@@ -2619,32 +2621,13 @@ function renderTab4(content, biz) {
     html += '</div>';
   }
 
-  /* ── WEEKLY CHECK-IN FORM ── */
+  /* ── WEEKLY CHECK-IN — link to dedicated page ── */
   html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:12px">';
-  html += '<div class="pipeline-section-title">Weekly Check-In</div>';
-  html += '<div style="font-size:11px;color:var(--grey2);margin-bottom:6px;line-height:1.7">Takes 5 minutes every Friday. Scout updates your playbook based on what actually worked.</div>';
-  html += '<div class="pipeline-divider"></div>';
-
-  /* ICP input blocks */
-  names.forEach(function(name, i) {
-    var safe = 'icp' + i;
-    html += '<div class="pipeline-icp-block">';
-    html += '<div class="pipeline-icp-title">' + escHtml(name) + '</div>';
-    html += '<div class="pipeline-inputs">';
-    html += '<div class="pipeline-field"><label>Outreach Sent</label><input type="number" id="' + safe + '_sent" placeholder="0" min="0"></div>';
-    html += '<div class="pipeline-field"><label>Replies Received</label><input type="number" id="' + safe + '_replies" placeholder="0" min="0"></div>';
-    html += '<div class="pipeline-field"><label>Conversions</label><input type="number" id="' + safe + '_conv" placeholder="0" min="0"></div>';
-    html += '</div></div>';
-  });
-
-  /* Totals */
-  html += '<div class="pipeline-totals">';
-  html += '<div class="pipeline-total-field"><label>New Customers This Week</label><input type="number" id="newCustomers" placeholder="0" min="0"></div>';
-  html += '<div class="pipeline-total-field"><label>Revenue Added This Week</label><input type="text" id="revenueAdded" placeholder="₹0"></div>';
+  html += '<div style="text-align:center;padding:48px 24px">';
+  html += '<h2 class="form-section-title" style="margin-bottom:12px">Weekly Check-In</h2>';
+  html += '<p class="form-section-desc" style="margin-bottom:28px">Takes 5 minutes. Scout updates your playbook based on what actually worked.</p>';
+  html += '<a href="checkin.html" class="btn-submit" style="display:inline-block;text-decoration:none;width:auto;padding:20px 48px">START CHECK-IN →</a>';
   html += '</div>';
-
-  html += '<button class="btn-checkin" onclick="submitCheckin()">Update Scout →</button>';
-  html += '<div class="checkin-note">Scout will adjust next week\'s targets based on which ICPs performed best.</div>';
   html += '</div>';
 
   /* ── REFERRAL CHAIN BUILDER (Feature 5.1) ── */
@@ -2715,11 +2698,19 @@ async function submitCheckin() {
 
     /* Save updated result */
     var updated = JSON.parse(localStorage.getItem('scout_pending_result') || '{}');
-    updated.scoutOutput  = checkinOutput;
-    updated.submittedAt  = new Date().toISOString();
+    updated.checkinOutput = checkinOutput;
+    /* Task 3: apply structured patch to the stored plan, if the check-in returned one */
+    var _patch = parseCheckinPatch(checkinOutput);
+    if (_patch) {
+      updated.scoutOutput = applyPatchToStoredPlan(updated.scoutOutput, _patch, weekNum);
+    }
+    updated.submittedAt   = new Date().toISOString();
+    extractAndSaveInsight(checkinOutput, weekNum);
+    calculateHealthScore();
     localStorage.setItem('scout_pending_result', JSON.stringify(updated));
 
-    /* Reload page to show updated output */
+    /* Sync state to server then reload */
+    try { await saveScoutStateToServer(); } catch(e) { console.error('Check-in sync failed:', e); }
     window.location.reload();
 
   } catch (err) {
@@ -2901,7 +2892,7 @@ function renderTab5(content) {
         html += '<div class="festival-week-card">';
         html += '<div class="festival-week-label">';
         html += '<span>' + escHtml(wp.label) + '</span>';
-        html += '<button class="copy-btn" onclick="copyMessage(\'' + wcId + '\', this)">Copy</button>';
+        html += '<button class="copy-btn" onclick="copyMessage(\'' + wcId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + wcId + '\', this)">Send on WhatsApp</button>';
         html += '</div>';
         html += '<div class="festival-msg message-text" id="' + wcId + '" data-text="' + escAttr(msg) + '">' + escHtml(msg) + '</div>';
         html += '</div>';
@@ -2969,6 +2960,40 @@ function copyMessage(cardId, btn) {
     btn.classList.add('copied');
     setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
   });
+}
+
+/* Task 4: open WhatsApp with the message pre-filled.
+   Mirrors copyMessage() — reads the same unescaped text source. */
+function waSendFromCard(cardId, btn) {
+  try {
+    var card = document.getElementById(cardId);
+    if (!card) return;
+    var textEl = card.querySelector('.message-text') || card;
+    var text = textEl.getAttribute('data-text') || textEl.textContent || '';
+    if (!text.trim()) return;
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    if (btn) {
+      var orig = btn.textContent;
+      btn.textContent = 'Opening…';
+      setTimeout(function(){ btn.textContent = orig; }, 1500);
+    }
+  } catch (e) { console.error('waSendFromCard failed:', e); }
+}
+
+/* Task 4: same, for elements that hold the text directly (refCopy pattern) */
+function waSendFromEl(elId, btn) {
+  try {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    var text = el.textContent || el.innerText || '';
+    if (!text.trim()) return;
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    if (btn) {
+      var orig = btn.textContent;
+      btn.textContent = 'Opening…';
+      setTimeout(function(){ btn.textContent = orig; }, 1500);
+    }
+  } catch (e) { console.error('waSendFromEl failed:', e); }
 }
 
 /* ═══════════════════════════════════════════

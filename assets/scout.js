@@ -716,11 +716,158 @@ function extractAndSaveInsight(rawOutput, weekNumber) {
   );
 
   if (insightMatch && insightMatch[1] && insightMatch[1].trim().length > 20) {
-    localStorage.setItem('scout_weekly_insight', insightMatch[1].trim());
-    localStorage.setItem('scout_insight_week',   String(weekNumber));
+    /* Defensive: strip any fenced code block (e.g. an appended JSON patch)
+       so raw JSON can never render in the Scout Insight card */
+    var cleanInsight = insightMatch[1]
+      .replace(/```[\s\S]*?```/g, '')   /* closed fences */
+      .replace(/```[\s\S]*$/, '')       /* unclosed fence to end of string */
+      .trim();
+    if (cleanInsight.length > 20) {
+      localStorage.setItem('scout_weekly_insight', cleanInsight);
+      localStorage.setItem('scout_insight_week',   String(weekNumber));
+    }
   }
 }
 
+
+/* ---------- Check-in patch: parse + apply (Task 3) ---------- */
+
+/* Extracts a fenced JSON patch block from TYPE-2 output.
+   Returns the parsed object, or null if absent/malformed.
+   Never throws — a non-compliant generation must degrade silently. */
+function parseCheckinPatch(rawOutput) {
+  if (!rawOutput) return null;
+  try {
+    var m = rawOutput.match(/```json\s*([\s\S]*?)```/i);
+    if (!m || !m[1]) return null;
+    var patch = JSON.parse(m[1].trim());
+    if (!patch || typeof patch !== 'object') return null;
+    if (!Array.isArray(patch.changed)) return null;
+    return patch;
+  } catch (e) {
+    console.warn('Check-in patch parse failed:', e);
+    return null;
+  }
+}
+
+/* Applies a patch to the stored TYPE-1 plan object.
+   Mutates and returns a NEW object. Returns the original unchanged
+   if the patch is null or nothing applies. Never throws. */
+function applyCheckinPatch(plan, patch, weekNumber) {
+  if (!plan || !patch || !Array.isArray(patch.changed)) return plan;
+  var out;
+  try { out = JSON.parse(JSON.stringify(plan)); } catch (e) { return plan; }
+
+  try {
+    var tab1 = out.tab1 || {};
+    var tab2 = out.tab2 || {};
+    var icps = Array.isArray(tab1.icps) ? tab1.icps : [];
+    var msgs = Array.isArray(tab2.messages) ? tab2.messages : [];
+
+    /* Guard: never retire unless this patch also adds at least one message */
+    var hasAdd = patch.changed.some(function(c){ return c.type === 'message_add'; });
+
+    patch.changed.forEach(function(c) {
+      if (!c || !c.type) return;
+
+      if (c.type === 'message_retire' && hasAdd) {
+        var i = findIdx(msgs, c.target_icp, c.target_index);
+        if (i > -1 && msgs.length > 1) {
+          msgs[i].status        = 'retired';
+          msgs[i].retiredWeek   = weekNumber;
+          msgs[i].retiredReason = c.reason || '';
+        }
+      }
+
+      if (c.type === 'message_add' && c.content) {
+        msgs.push({
+          icp: c.for_icp || '',
+          type: 'primary',
+          channel: c.channel || 'WhatsApp',
+          language: c.language || '',
+          versionA: c.content,
+          followupDay3: c.followupDay3 || '',
+          followupDay7: c.followupDay7 || '',
+          status: 'active',
+          addedWeek: weekNumber,
+          addedReason: c.reason || ''
+        });
+      }
+
+      if (c.type === 'icp_promote' || c.type === 'icp_demote') {
+        var j = -1;
+        for (var k = 0; k < icps.length; k++) {
+          if (icps[k] && icps[k].name === c.target) { j = k; break; }
+        }
+        if (j > -1) {
+          var item = icps.splice(j, 1)[0];
+          item.rankChangedWeek = weekNumber;
+          item.rankReason      = c.reason || '';
+          if (c.type === 'icp_promote') icps.unshift(item);
+          else icps.push(item);
+        }
+      }
+
+      if (c.type === 'action_update' && Array.isArray(c.content)) {
+        out.thisWeekActions = { week: weekNumber, actions: c.content };
+      }
+    });
+
+    tab1.icps     = icps;
+    tab2.messages = msgs;
+    out.tab1      = tab1;
+    out.tab2      = tab2;
+    out.lastPatchedWeek = weekNumber;
+  } catch (e) {
+    console.error('applyCheckinPatch failed:', e);
+    return plan;
+  }
+  return out;
+
+  /* Resolve a message by icp name first, falling back to index */
+  function findIdx(arr, icpName, idx) {
+    if (icpName) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] && arr[i].icp === icpName && arr[i].status !== 'retired') return i;
+      }
+    }
+    if (typeof idx === 'number' && arr[idx]) return idx;
+    return -1;
+  }
+}
+
+/* Round-trips the stored scoutOutput STRING through applyCheckinPatch().
+   scoutOutput is stored as a raw string (possibly fence-wrapped), so we must
+   clean → parse → patch → stringify. Fail-safe: returns the ORIGINAL string
+   unchanged if anything goes wrong. Never throws. */
+function applyPatchToStoredPlan(rawPlanString, patch, weekNumber) {
+  if (!rawPlanString || typeof rawPlanString !== 'string') return rawPlanString;
+  if (!patch) return rawPlanString;
+  try {
+    /* Same cleaning pipeline parseAndRender() uses */
+    var cleaned = rawPlanString
+      .replace(/^```json\s*/im, '')
+      .replace(/^```\s*/im, '')
+      .replace(/```\s*$/im, '')
+      .trim();
+    var first = cleaned.indexOf('{');
+    var last  = cleaned.lastIndexOf('}');
+    if (first === -1 || last === -1 || last <= first) return rawPlanString;
+    cleaned = cleaned.slice(first, last + 1);
+
+    var planObj = JSON.parse(cleaned);
+    if (!planObj || !planObj.tab1) return rawPlanString;  /* not a TYPE-1 plan */
+
+    var patched = applyCheckinPatch(planObj, patch, weekNumber);
+    if (!patched || patched === planObj) return rawPlanString;  /* nothing applied */
+    if (!patched.tab1 || !patched.tab2) return rawPlanString;   /* sanity guard */
+
+    return JSON.stringify(patched);
+  } catch (e) {
+    console.error('applyPatchToStoredPlan failed, plan left unchanged:', e);
+    return rawPlanString;
+  }
+}
 
 // ─────────────────────────────────────────────────────────────
 // FUNCTION 4 — getScoutHistory()
