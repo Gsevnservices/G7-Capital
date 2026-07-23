@@ -26,6 +26,18 @@
 // ─────────────────────────────────────────────────────────────
 const G7_WORKER = 'https://g7-proxy.gsevnservices.workers.dev';
 
+/* Resolves a path relative to the site root, working both at the domain
+   root (prod) and under a subpath like /G7-Capital-dev/ (dev). */
+function g7SiteRoot() {
+  var parts = window.location.pathname.split('/');
+  /* Drop the filename; if the remaining first segment is a repo folder, keep it */
+  parts.pop();
+  var base = parts.join('/');
+  /* Walk up out of scout/ alex/ workspace/ if we are inside one */
+  base = base.replace(/\/(scout|alex|workspace)$/, '');
+  return base.endsWith('/') ? base : base + '/';
+}
+
 
 // ═══════════════════════════════════════════════════════════════
 // SESSION MANAGEMENT
@@ -135,7 +147,7 @@ async function g7Logout() {
   localStorage.removeItem('g7_demo_mode');
   localStorage.removeItem('g7_session_name');
   // Redirect to Alex intro page
-  window.location.href = '/alex/index.html';
+  window.location.href = g7SiteRoot() + 'alex/index.html';
 }
 
 
@@ -178,7 +190,7 @@ async function requireAuth() {
   const valid = await g7ValidateSession();
   if (!valid) {
     clearToken();
-    window.location.href = '/login.html';
+    window.location.href = g7SiteRoot() + 'login.html';
     return false;
   }
   return true;

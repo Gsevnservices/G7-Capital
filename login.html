@@ -248,7 +248,7 @@ body::before{
 
   <!-- Wordmark -->
   <div class="login-logo">
-    <a href="/index.html" class="login-logo-text">
+    <a href="index.html" class="login-logo-text">
       <em>G</em>7 Capital
     </a>
     <div class="login-logo-sub">Workspace</div>
@@ -324,14 +324,14 @@ body::before{
         const urlParams = new URLSearchParams(window.location.search);
         const product   = urlParams.get('product');
         if (product === 'scout') {
-          window.location.href = '/scout/index.html';
+          window.location.href = 'scout/index.html';
           return;
         }
         // Already logged in — send to dashboard if onboarded, onboarding if not
         const config = localStorage.getItem('g7_firm_config');
         window.location.href = config
-          ? '/workspace/index.html'
-          : '/workspace/onboard.html';
+          ? 'workspace/index.html'
+          : 'workspace/onboard.html';
         return;
       }
     } catch(e) {
@@ -380,15 +380,15 @@ async function handleLogin(event) {
     const urlParams = new URLSearchParams(window.location.search);
     const product   = urlParams.get('product');
     if (product === 'scout') {
-      window.location.href = '/scout/index.html';
+      window.location.href = 'scout/index.html';
       return;
     }
 
     // Success — go to dashboard if onboarded, onboarding if new firm
     const config = localStorage.getItem('g7_firm_config');
     window.location.href = config
-      ? '/workspace/index.html'
-      : '/workspace/onboard.html';
+      ? 'workspace/index.html'
+      : 'workspace/onboard.html';
 
   } catch(err) {
     // Show error to user
