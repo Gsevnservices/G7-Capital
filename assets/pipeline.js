@@ -147,3 +147,68 @@ function pipelineWeekStats(week) {
   });
   return stats;
 }
+
+/* ---------- Chase rules ---------- */
+
+/* Days between two ISO timestamps */
+function pipelineDaysSince(iso) {
+  if (!iso) return 999;
+  var then = new Date(iso).getTime();
+  if (isNaN(then)) return 999;
+  return Math.floor((Date.now() - then) / 86400000);
+}
+
+/* Returns people who need action today, each with a reason and a suggested message.
+   Rules:
+     contacted, no reply 3+ days   -> follow up
+     contacted, no reply 7+ days   -> final follow up
+     replied, no trial 5+ days     -> stall breaker
+     trial_booked, 1+ days past    -> did they show
+     any status, 14+ days silent   -> gone quiet, win-back
+   joined and not_interested are never chased. */
+function pipelineDue() {
+  var store = pipelineLoad();
+  var out = [];
+  store.people.forEach(function(p) {
+    if (p.status === 'joined' || p.status === 'not_interested') return;
+    var d = pipelineDaysSince(p.lastStatusAt || p.lastContactedAt);
+    var first = (p.name || '').split(' ')[0] || 'there';
+    var item = null;
+
+    if (p.status === 'contacted' && d >= 14) {
+      item = { reason: 'No response in ' + d + ' days', urgency: 3,
+               msg: 'Hi ' + first + ' — last try from my side. Agar kabhi fitness start karna ho toh bas message kar dena. Door nahi hain, Juhu Circle ke paas hi.' };
+    } else if (p.status === 'contacted' && d >= 7) {
+      item = { reason: 'No reply for ' + d + ' days — final follow-up', urgency: 2,
+               msg: 'Hi ' + first + ' — ek baar aur pooch raha hoon. Ek free session try karna ho toh bata dena, slot main hold kar leta hoon.' };
+    } else if (p.status === 'contacted' && d >= 3) {
+      item = { reason: 'No reply for ' + d + ' days', urgency: 1,
+               msg: 'Hi ' + first + ' — pichle message ka follow-up. Free session ke liye koi din suit karta hai?' };
+    } else if (p.status === 'replied' && d >= 5) {
+      item = { reason: 'Replied ' + d + ' days ago but has not booked', urgency: 3,
+               msg: 'Hi ' + first + ' — aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
+    } else if (p.status === 'trial_booked' && d >= 1) {
+      item = { reason: 'Trial was ' + d + ' day(s) ago — did they show?', urgency: 3,
+               msg: 'Hi ' + first + ' — session kaisa raha? Agar miss ho gaya toh koi baat nahi, dobara rakh dete hain.' };
+    } else if (p.status === 'gone_quiet' && d >= 14) {
+      item = { reason: 'Quiet for ' + d + ' days', urgency: 1,
+               msg: 'Hi ' + first + ' — kaafi time ho gaya. Ek free session pe aa jao, koi commitment nahi.' };
+    }
+
+    if (item) {
+      item.person = p;
+      out.push(item);
+    }
+  });
+  out.sort(function(a, b) { return b.urgency - a.urgency; });
+  return out;
+}
+
+/* Everyone, sorted: active statuses first, then joined/not_interested */
+function pipelineAll() {
+  var order = { replied: 0, trial_booked: 1, contacted: 2, gone_quiet: 3, joined: 4, not_interested: 5 };
+  var store = pipelineLoad();
+  return store.people.slice().sort(function(a, b) {
+    return (order[a.status] || 9) - (order[b.status] || 9);
+  });
+}
