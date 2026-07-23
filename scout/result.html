@@ -1381,7 +1381,7 @@ function parseAndRender(rawOutput, biz) {
     scoutData = data;
     renderTab1JSON(data.tab1, data);
     renderTab2JSON(data.tab2);
-    renderTab3JSON(data.tab3);
+    renderTab3JSON(data.tab3, data);
     renderTab4JSON(data.tab4, biz);
     renderTab5JSON(data.tab5);
     updateReasoningPanel(data);
@@ -1546,16 +1546,21 @@ function renderTab1JSON(tab1, data) {
     html += '</div>'; /* /icp-card */
   });
 
-  /* Priority Order */
+  /* Priority Order — suppressed if any ICP has been re-ranked by a patch */
   var po = tab1.priorityOrder || [];
+  var icpsReranked = (tab1.icps || []).some(function(icp) { return !!icp.rankChangedWeek; });
   if (po.length > 0) {
     html += '<div class="section-block" style="margin-top:28px"><div class="section-block-title">Priority Order</div><div class="section-block-body">';
-    po.forEach(function(p) {
-      html += '<div style="margin-bottom:8px">';
-      if (p.icp)    html += '<span style="color:var(--white)">' + escHtml(p.icp) + '</span>';
-      if (p.reason) html += ' — ' + escHtml(p.reason);
-      html += '</div>';
-    });
+    if (icpsReranked) {
+      html += '<div class="patch-reason">Priority order updated after your week ' + escHtml(String(data.lastPatchedWeek || '')) + ' check-in — see the card order above.</div>';
+    } else {
+      po.forEach(function(p) {
+        html += '<div style="margin-bottom:8px">';
+        if (p.icp)    html += '<span style="color:var(--white)">' + escHtml(p.icp) + '</span>';
+        if (p.reason) html += ' — ' + escHtml(p.reason);
+        html += '</div>';
+      });
+    }
     html += '</div></div>';
   }
 
@@ -1638,12 +1643,26 @@ function renderTab2JSON(tab2) {
   el.innerHTML = html || '<div class="scout-prose">(No message data found)</div>';
 }
 
-function renderTab3JSON(tab3) {
+function renderTab3JSON(tab3, data) {
+  data = data || {};
   var el = document.getElementById('tab3Content');
   if (!tab3) { el.innerHTML = '<div class="scout-prose">(No weekly plan found)</div>'; return; }
   var days = tab3.days || [];
   var total = days.length;
   var html = '';
+
+  /* Updated priorities override block — shown when patch has set thisWeekActions */
+  if (data.thisWeekActions && Array.isArray(data.thisWeekActions.actions) && data.thisWeekActions.actions.length > 0) {
+    html += '<div class="change-summary">';
+    html += '<div class="change-summary-title">Updated priorities — week ' + escHtml(String(data.thisWeekActions.week || '')) + '</div>';
+    html += '<div class="change-summary-body">These replace the actions below, based on your last check-in.';
+    html += '<ul style="margin:12px 0 0 18px;padding:0">';
+    data.thisWeekActions.actions.forEach(function(a) {
+      html += '<li style="margin-bottom:8px">' + escHtml(a) + '</li>';
+    });
+    html += '</ul></div>';
+    html += '</div>';
+  }
 
   /* Progress Bar */
   if (total > 0) {
