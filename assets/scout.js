@@ -817,7 +817,9 @@ function applyCheckinPatch(plan, patch, weekNumber) {
     tab2.messages = msgs;
     out.tab1      = tab1;
     out.tab2      = tab2;
-    out.lastPatchedWeek = weekNumber;
+    out.lastPatchSummary = patch.summary || '';
+    out.lastPatchVerdict = patch.verdict || '';
+    out.lastPatchedWeek  = weekNumber;
   } catch (e) {
     console.error('applyCheckinPatch failed:', e);
     return plan;

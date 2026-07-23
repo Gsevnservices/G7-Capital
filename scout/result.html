@@ -875,6 +875,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-family:'Tenor Sans',sans-serif;transition:all .3s
 }
 .btn-submit:hover{background:var(--gold2)}
+/* Patch visibility */
+.msg-retired{opacity:0.45}
+.msg-retired .message-text{text-decoration:line-through;text-decoration-color:rgba(250,250,248,0.3)}
+.patch-badge{
+  display:inline-block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 8px;margin-left:8px;border:1px solid var(--gold);color:var(--gold);vertical-align:middle
+}
+.patch-badge.retired{border-color:var(--grey2);color:var(--grey2)}
+.patch-reason{font-size:11px;color:var(--grey1);font-style:italic;margin-top:6px;line-height:1.6}
+.change-summary{
+  border:1px solid var(--gold);padding:20px 24px;margin-bottom:32px;background:rgba(201,168,76,0.04)
+}
+.change-summary-title{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px
+}
+.change-summary-body{font-size:13px;color:var(--white2);line-height:1.7}
 </style>
 </head>
 <body>
@@ -1363,7 +1379,7 @@ function parseAndRender(rawOutput, biz) {
       document.getElementById('momentumBar').style.width = Math.min(h.momentumScore || 0, 100) + '%';
     }, 300);
     scoutData = data;
-    renderTab1JSON(data.tab1);
+    renderTab1JSON(data.tab1, data);
     renderTab2JSON(data.tab2);
     renderTab3JSON(data.tab3);
     renderTab4JSON(data.tab4, biz);
@@ -1423,10 +1439,19 @@ function parseAndRender(rawOutput, biz) {
    Each function receives its tab's data object directly.
 ═══════════════════════════════════════════ */
 
-function renderTab1JSON(tab1) {
+function renderTab1JSON(tab1, data) {
+  data = data || {};
   var el = document.getElementById('tab1Content');
   if (!tab1) { el.innerHTML = '<div class="scout-prose">(No ICP data found)</div>'; return; }
   var html = '';
+
+  /* What changed summary — shown when a patch has been applied */
+  if (data.lastPatchSummary) {
+    html += '<div class="change-summary">';
+    html += '<div class="change-summary-title">What changed after your week ' + escHtml(String(data.lastPatchedWeek || '')) + ' check-in</div>';
+    html += '<div class="change-summary-body">' + escHtml(data.lastPatchSummary) + '</div>';
+    html += '</div>';
+  }
 
   /* Scout's Honest Assessment */
   if (tab1.honestAssessment) {
@@ -1459,8 +1484,16 @@ function renderTab1JSON(tab1) {
     html += '<div class="icp-card-header">';
     html += '<div class="icp-badge' + (isPriority ? ' priority' : '') + '">' + (isPriority ? '⭐ Highest Priority' : 'ICP ' + (idx + 1)) + '</div>';
     html += '<div class="icp-title">' + escHtml(icp.name || 'ICP ' + (idx + 1)) + '</div>';
+    if (icp.rankChangedWeek) {
+      html += '<span class="patch-badge">Re-ranked week ' + escHtml(String(icp.rankChangedWeek)) + '</span>';
+    }
     if (confClass) html += '<div class="conf-badge ' + confClass + '">' + confLabel + '</div>';
     html += '</div>';
+
+    /* Rank change reason */
+    if (icp.rankChangedWeek && icp.rankReason) {
+      html += '<div class="patch-reason">' + escHtml(icp.rankReason) + '</div>';
+    }
 
     /* Confidence reason — shown below header in small muted text */
     if (icp.confidenceReason) {
@@ -1544,17 +1577,29 @@ function renderTab2JSON(tab2) {
   var messages = tab2.messages || [];
 
   messages.forEach(function(msg, idx) {
-    var cardId = 'msgcard_' + idx;
-    var label  = escHtml((msg.icp || '') + (msg.type ? ' — ' + msg.type : ''));
-    var meta   = [msg.channel, msg.language].filter(Boolean).join(' · ');
+    var cardId   = 'msgcard_' + idx;
+    var label    = escHtml((msg.icp || '') + (msg.type ? ' — ' + msg.type : ''));
+    var meta     = [msg.channel, msg.language].filter(Boolean).join(' · ');
+    var isRetired = msg.status === 'retired';
 
     var body = msg.versionA || '';
     if (!body) return;
-    html += '<div class="message-card" id="' + cardId + '">';
-    html += '<div class="message-card-header"><div><div class="message-card-label">' + label + '</div>';
+    html += '<div class="message-card' + (isRetired ? ' msg-retired' : '') + '" id="' + cardId + '">';
+    html += '<div class="message-card-header"><div><div class="message-card-label">' + label;
+    if (isRetired) {
+      html += '<span class="patch-badge retired">Retired week ' + escHtml(String(msg.retiredWeek || '')) + '</span>';
+    } else if (msg.addedWeek) {
+      html += '<span class="patch-badge">New — week ' + escHtml(String(msg.addedWeek)) + '</span>';
+    }
+    html += '</div>';
     if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
     html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + cardId + '\', this)">Send on WhatsApp</button></div>';
     html += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
+    if (isRetired && msg.retiredReason) {
+      html += '<div class="patch-reason">' + escHtml(msg.retiredReason) + '</div>';
+    } else if (msg.addedWeek && msg.addedReason) {
+      html += '<div class="patch-reason">' + escHtml(msg.addedReason) + '</div>';
+    }
     html += '</div>';
 
     /* Follow-up Day 3 */
