@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline — Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<script src="../assets/auth.js"></script>
+<script src="../assets/scout.js"></script>
+<script src="../assets/pipeline.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<style>
+/* ─── RESET & VARIABLES ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
+  --amber:#E0922F;--amber-d:#D17B2E;--amber-l:#F0B968;
+  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(224,146,47,0.18);--border2:rgba(250,250,248,0.08)
+}
+body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh;visibility:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+
+/* ─── CURSOR ─── */
+.cursor{position:fixed;width:8px;height:8px;background:var(--amber);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+@media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:normal;color:var(--amber)}
+.nav-right{display:flex;align-items:center;gap:32px}
+.nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--white)}
+.nav-link.active{color:var(--amber)}
+.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(224,146,47,0.6);margin-right:8px}
+.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(224,146,47,0.4);color:var(--amber);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.nav-logout:hover{border-color:var(--amber);background:rgba(224,146,47,0.08)}
+@media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
+
+/* ─── PAGE LAYOUT ─── */
+.page-wrap{margin-top:80px;padding:48px 64px 80px}
+@media(max-width:768px){.page-wrap{padding:32px 24px 60px}}
+
+/* ─── PAGE HEADER ─── */
+.page-eyebrow{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.page-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,40px);font-weight:300;color:var(--white);margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--grey1);letter-spacing:.04em;line-height:1.7;margin-bottom:48px}
+
+/* ─── SECTION DIVIDERS ─── */
+.section-block{margin-bottom:48px}
+.section-label{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+
+/* ─── CHASE CARDS ─── */
+.chase-card{background:var(--black2);border:1px solid var(--border);padding:24px 28px;margin-bottom:16px}
+.chase-card-header{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.chase-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white)}
+.chase-icp{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey2)}
+.chase-reason{font-size:11px;letter-spacing:.06em;color:var(--amber);margin-bottom:14px;line-height:1.5}
+.chase-msg{background:var(--black3);border:1px solid var(--border2);padding:14px 16px;font-size:13px;color:var(--white2);line-height:1.8;margin-bottom:16px;font-style:italic}
+.chase-btns{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ─── COPY BTN (mirrors result.html) ─── */
+.copy-btn{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--grey1);padding:8px 14px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .2s}
+.copy-btn:hover{border-color:var(--amber);color:var(--amber)}
+.copy-btn.primary{background:var(--amber);border-color:var(--amber);color:var(--black);font-weight:600}
+.copy-btn.primary:hover{background:var(--amber-l);border-color:var(--amber-l)}
+
+/* ─── EVERYONE LIST ─── */
+.everyone-row{display:flex;align-items:center;gap:0;border:1px solid var(--border2);margin-bottom:8px;transition:border-color .2s}
+.everyone-row:hover{border-color:rgba(224,146,47,0.3)}
+.ev-cell{padding:14px 18px;border-right:1px solid var(--border2);flex:1;min-width:0}
+.ev-cell:last-child{border-right:none;flex:0 0 auto}
+.ev-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-icp{font-size:10px;color:var(--grey2);letter-spacing:.06em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-status{display:inline-block;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:4px 10px;border:1px solid}
+.ev-status.contacted{color:var(--grey1);border-color:rgba(138,136,128,0.3)}
+.ev-status.replied{color:#5A9E6F;border-color:rgba(90,158,111,0.3)}
+.ev-status.trial_booked{color:var(--amber);border-color:rgba(224,146,47,0.4)}
+.ev-status.joined{color:var(--amber-l);border-color:rgba(240,185,104,0.4);background:rgba(240,185,104,0.06)}
+.ev-status.gone_quiet{color:var(--grey2);border-color:rgba(90,88,85,0.4)}
+.ev-status.not_interested{color:#C45A5A;border-color:rgba(196,90,90,0.3)}
+.ev-days{font-size:10px;color:var(--grey2);letter-spacing:.05em;white-space:nowrap}
+.ev-actions{display:flex;gap:6px;padding:10px 14px;flex-wrap:wrap}
+@media(max-width:700px){.everyone-row{flex-wrap:wrap}.ev-cell{min-width:50%;border-bottom:1px solid var(--border2)}.ev-actions{padding:10px 14px;border-right:none;flex:100%}}
+
+/* ─── ADD PERSON FORM ─── */
+.add-form{background:var(--black2);border:1px solid var(--border2);padding:20px 24px;margin-top:16px;display:none}
+.add-form.open{display:block}
+.add-form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.add-input{flex:1;min-width:160px;background:var(--black3);border:1px solid var(--border2);color:var(--white);padding:11px 14px;font-family:'Tenor Sans',sans-serif;font-size:14px}
+.add-input:focus{outline:none;border-color:var(--amber)}
+.add-input::placeholder{color:var(--grey2)}
+.add-form-btns{display:flex;gap:8px}
+
+/* ─── EMPTY STATE ─── */
+.empty-msg{font-size:13px;color:var(--grey2);letter-spacing:.05em;line-height:1.8;padding:24px 0}
+
+/* ─── ADD BTN ─── */
+.btn-add{font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--amber);padding:8px 18px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .25s;margin-top:16px}
+.btn-add:hover{border-color:var(--amber);background:rgba(224,146,47,0.06)}
+
+/* ─── FADE IN ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.page-wrap{animation:fadeUp .5s ease both}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">G<em>7</em> Scout</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Dashboard</a>
+    <a href="onboard.html" class="nav-link">New Analysis</a>
+    <a href="history.html" class="nav-link">History</a>
+    <a href="checkin.html" class="nav-link">Check-In</a>
+    <a href="pipeline.html" class="nav-link active">Pipeline</a>
+    <span class="nav-firm-indicator" id="navFirmName"></span>
+    <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page-wrap">
+
+  <div class="page-eyebrow">Scout</div>
+  <div class="page-heading">Pipeline</div>
+  <div class="page-sub">Track every person you've contacted. Scout tells you who needs a follow-up today.</div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 1 — CHASE TODAY
+  ══════════════════════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Chase Today</div>
+    <div id="chaseSection"><!-- rendered by JS --></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 2 — EVERYONE
+  ══════════════════════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Everyone</div>
+    <div id="everyoneSection"><!-- rendered by JS --></div>
+
+    <button class="btn-add" onclick="toggleAddForm()">+ Add Person</button>
+
+    <!-- Inline add form — shown on button click -->
+    <div class="add-form" id="addForm">
+      <div class="add-form-row">
+        <input class="add-input" id="addName" type="text" placeholder="Name (e.g. Rakesh)" autocomplete="off">
+        <input class="add-input" id="addPhone" type="tel" placeholder="Phone with country code — optional" autocomplete="off">
+        <input class="add-input" id="addIcp" type="text" placeholder="ICP (e.g. Young Professional)" autocomplete="off">
+      </div>
+      <div class="add-form-btns">
+        <button class="copy-btn primary" onclick="submitAddPerson()">Add</button>
+        <button class="copy-btn" onclick="toggleAddForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+
+/* ═══════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════ */
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* Status display labels */
+var STATUS_LABELS = {
+  contacted:      'Contacted',
+  replied:        'Replied',
+  trial_booked:   'Trial booked',
+  joined:         'Joined',
+  gone_quiet:     'Gone quiet',
+  not_interested: 'Not interested'
+};
+
+/* ═══════════════════════════════════════════
+   RENDER STATE — chase items indexed for
+   popup-safe WhatsApp sends
+═══════════════════════════════════════════ */
+var _chaseItems = [];
+
+/* ═══════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════ */
+function render() {
+  renderChase();
+  renderEveryone();
+}
+
+function renderChase() {
+  _chaseItems = pipelineDue();
+  var el = document.getElementById('chaseSection');
+  if (!_chaseItems.length) {
+    el.innerHTML = '<div class="empty-msg">Nobody needs chasing today. Come back tomorrow.</div>';
+    return;
+  }
+
+  var html = '';
+  _chaseItems.forEach(function(item, idx) {
+    var p = item.person;
+    html += '<div class="chase-card">';
+    html += '<div class="chase-card-header">';
+    html += '<div class="chase-name">' + escHtml(p.name) + '</div>';
+    if (p.icp) html += '<div class="chase-icp">' + escHtml(p.icp) + '</div>';
+    html += '</div>';
+    html += '<div class="chase-reason">' + escHtml(item.reason) + '</div>';
+    html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
+    html += '<div class="chase-btns">';
+    html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'replied\')">Replied</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">Booked trial</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'joined\')">Joined</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderEveryone() {
+  var people = pipelineAll();
+  var el = document.getElementById('everyoneSection');
+  if (!people.length) {
+    el.innerHTML = '<div class="empty-msg">No contacts yet. Add someone using the button below, or send a WhatsApp from your Scout plan — Scout will ask for their name.</div>';
+    return;
+  }
+
+  var html = '';
+  people.forEach(function(p) {
+    var days = pipelineDaysSince(p.lastStatusAt || p.lastContactedAt);
+    var daysLabel = days === 999 ? 'No contact yet' : days === 0 ? 'Today' : days === 1 ? '1 day ago' : days + ' days ago';
+    var statusClass = p.status.replace(/_/g, '_'); /* keep underscores for CSS class match */
+    html += '<div class="everyone-row">';
+    /* Name + ICP */
+    html += '<div class="ev-cell" style="min-width:140px">';
+    html += '<div class="ev-name">' + escHtml(p.name) + '</div>';
+    if (p.icp) html += '<div class="ev-icp">' + escHtml(p.icp) + '</div>';
+    html += '</div>';
+    /* Status */
+    html += '<div class="ev-cell" style="flex:0 0 auto">';
+    html += '<span class="ev-status ' + escHtml(p.status) + '">' + escHtml(STATUS_LABELS[p.status] || p.status) + '</span>';
+    html += '</div>';
+    /* Days */
+    html += '<div class="ev-cell" style="flex:0 0 auto">';
+    html += '<div class="ev-days">' + escHtml(daysLabel) + '</div>';
+    html += '</div>';
+    /* Actions */
+    html += '<div class="ev-actions ev-cell">';
+    if (p.status !== 'replied' && p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'replied\')">Replied</button>';
+    }
+    if (p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">Booked</button>';
+    }
+    if (p.status !== 'joined' && p.status !== 'not_interested') {
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'joined\')">Joined</button>';
+    }
+    if (p.status !== 'not_interested') {
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">✕</button>';
+    }
+    html += '</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   CHASE ACTIONS
+═══════════════════════════════════════════ */
+
+/* Send WhatsApp from a chase card.
+   window.open FIRST (popup blocker rule), storage after. */
+function chaseSend(idx, btn) {
+  var item = _chaseItems[idx];
+  if (!item) return;
+  var p = item.person;
+
+  /* Open WhatsApp FIRST — must stay inside the user gesture */
+  var url = p.phone
+    ? 'https://wa.me/' + p.phone + '?text=' + encodeURIComponent(item.msg)
+    : 'https://wa.me/?text=' + encodeURIComponent(item.msg);
+  window.open(url, '_blank');
+
+  /* Update lastStatusAt so the person drops off today's list — storage after */
+  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  try {
+    pipelineSetStatus(p.id, 'contacted', week);
+  } catch(e) { console.error('pipeline update failed:', e); }
+
+  render();
+}
+
+/* Update status from a chase card button */
+function chaseStatus(personId, status) {
+  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  pipelineSetStatus(personId, status, week);
+  render();
+}
+
+/* ═══════════════════════════════════════════
+   EVERYONE ACTIONS
+═══════════════════════════════════════════ */
+function evStatus(personId, status) {
+  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  pipelineSetStatus(personId, status, week);
+  render();
+}
+
+/* ═══════════════════════════════════════════
+   ADD PERSON FORM
+═══════════════════════════════════════════ */
+function toggleAddForm() {
+  var form = document.getElementById('addForm');
+  form.classList.toggle('open');
+  if (form.classList.contains('open')) {
+    document.getElementById('addName').value = '';
+    document.getElementById('addPhone').value = '';
+    document.getElementById('addIcp').value = '';
+    setTimeout(function(){ document.getElementById('addName').focus(); }, 80);
+  }
+}
+
+function submitAddPerson() {
+  var name  = String(document.getElementById('addName').value || '').trim();
+  var phone = String(document.getElementById('addPhone').value || '').replace(/[^0-9]/g, '');
+  var icp   = String(document.getElementById('addIcp').value || '').trim();
+  if (!name) { document.getElementById('addName').focus(); return; }
+
+  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  pipelineAddPerson(name, { phone: phone, icp: icp, week: week });
+
+  document.getElementById('addForm').classList.remove('open');
+  render();
+}
+
+/* Enter key submits the add form */
+['addName','addPhone','addIcp'].forEach(function(id) {
+  document.getElementById(id) && (document.getElementById(id).onkeydown = function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); submitAddPerson(); }
+  });
+});
+
+/* ═══════════════════════════════════════════
+   AUTH + INIT
+═══════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', function() {
+  var token = localStorage.getItem('g7_session_token');
+  if (!token) {
+    window.location.href = '../login.html?product=scout';
+    return;
+  }
+
+  document.body.style.visibility = 'visible';
+
+  var firmName = localStorage.getItem('g7_session_name') || '';
+  if (firmName) document.getElementById('navFirmName').textContent = firmName;
+
+  render();
+  initCursor();
+});
+
+/* ═══════════════════════════════════════════
+   LOGOUT
+═══════════════════════════════════════════ */
+function handleLogout() {
+  ['g7_session_token','g7_session_firm','g7_session_name',
+   'scout_pending_result','scout_history','scout_week_number','scout_streak',
+   'scout_last_checkin_week','scout_health_score','scout_health_breakdown',
+   'scout_weekly_insight','scout_insight_week','scout_last_targets','scout_icp_names',
+   'scout_first_customer_celebrated','scout_week_checklist','scout_referral_chain'
+  ].forEach(function(k){ localStorage.removeItem(k); });
+  window.location.href = 'landing.html';
+}
+
+/* ═══════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════ */
+function initCursor() {
+  var c = document.getElementById('cursor'), r = document.getElementById('cursorRing');
+  if (!c || !r) return;
+  document.addEventListener('mousemove', function(e){
+    c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
+  });
+  document.addEventListener('mousedown', function(){
+    c.style.transform='translate(-50%,-50%) scale(0.7)';
+    r.style.transform='translate(-50%,-50%) scale(0.8)';
+  });
+  document.addEventListener('mouseup', function(){
+    c.style.transform='translate(-50%,-50%) scale(1)';
+    r.style.transform='translate(-50%,-50%) scale(1)';
+  });
+}
+
+</script>
+</body>
+</html>
