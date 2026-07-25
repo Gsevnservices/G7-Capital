@@ -296,7 +296,7 @@ function chaseSend(idx, btn) {
   window.open(url, '_blank');
 
   /* Update lastStatusAt so the person drops off today's list — storage after */
-  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
   try {
     pipelineSetStatus(p.id, 'contacted', week);
   } catch(e) { console.error('pipeline update failed:', e); }
@@ -306,7 +306,7 @@ function chaseSend(idx, btn) {
 
 /* Update status from a chase card button */
 function chaseStatus(personId, status) {
-  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
   pipelineSetStatus(personId, status, week);
   render();
 }
@@ -315,7 +315,7 @@ function chaseStatus(personId, status) {
    EVERYONE ACTIONS
 ═══════════════════════════════════════════ */
 function evStatus(personId, status) {
-  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
   pipelineSetStatus(personId, status, week);
   render();
 }
@@ -340,7 +340,7 @@ function submitAddPerson() {
   var icp   = String(document.getElementById('addIcp').value || '').trim();
   if (!name) { document.getElementById('addName').focus(); return; }
 
-  var week = parseInt(localStorage.getItem('scout_week_number') || '1', 10);
+  var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
   pipelineAddPerson(name, { phone: phone, icp: icp, week: week });
 
   document.getElementById('addForm').classList.remove('open');
