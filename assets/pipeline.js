@@ -14,14 +14,25 @@
 
 'use strict';
 
+/* ---------- Firm-scoped storage keys ---------- */
+/* All Scout data is namespaced by the logged-in firm so multiple accounts
+   on one browser never share state. Reads the firm fresh each call. */
+function scoutKey(base) {
+  var firm = '';
+  try { firm = localStorage.getItem('g7_session_firm') || ''; } catch (e) {}
+  firm = String(firm).replace(/[^a-zA-Z0-9]/g, '') || 'default';
+  return base + '_' + firm;
+}
+
 /* ---------- Pipeline store (Scout) ---------- */
 
-var PIPELINE_KEY = 'scout_pipeline';
+/* Returns the firm-scoped localStorage key for the pipeline store. */
+function pipelineKey() { return scoutKey('scout_pipeline'); }
 
 /* Read the whole pipeline. Never throws — returns an empty store on any failure. */
 function pipelineLoad() {
   try {
-    var raw = localStorage.getItem(PIPELINE_KEY);
+    var raw = localStorage.getItem(pipelineKey());
     if (!raw) return { people: [], anonymousContacts: [] };
     var p = JSON.parse(raw);
     if (!p || typeof p !== 'object') return { people: [], anonymousContacts: [] };
@@ -38,7 +49,7 @@ function pipelineLoad() {
 function pipelineSave(store) {
   try {
     if (!store || !Array.isArray(store.people)) return false;
-    localStorage.setItem(PIPELINE_KEY, JSON.stringify(store));
+    localStorage.setItem(pipelineKey(), JSON.stringify(store));
     return true;
   } catch (e) {
     console.error('pipelineSave failed:', e);
