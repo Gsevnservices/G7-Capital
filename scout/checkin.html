@@ -352,6 +352,7 @@ window.addEventListener('DOMContentLoaded', async function() {
 
   document.body.style.visibility = 'visible';
 
+  migrateUnscopedScoutKeys();
   await loadScoutStateFromServer();
 
   var firmName = localStorage.getItem('g7_session_name') || '';

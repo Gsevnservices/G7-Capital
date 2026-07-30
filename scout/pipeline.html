@@ -365,6 +365,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 
   document.body.style.visibility = 'visible';
+  migrateUnscopedScoutKeys();
 
   var firmName = localStorage.getItem('g7_session_name') || '';
   if (firmName) document.getElementById('navFirmName').textContent = firmName;
