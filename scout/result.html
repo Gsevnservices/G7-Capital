@@ -1120,6 +1120,7 @@ window.addEventListener('DOMContentLoaded', async function() {
 
   document.body.style.visibility = 'visible';
 
+  migrateUnscopedScoutKeys();
   await loadScoutStateFromServer();
 
   /* Firm name in nav */

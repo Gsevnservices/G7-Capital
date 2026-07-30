@@ -49,6 +49,34 @@ var SCOUT_STATE_KEYS = [
   'scout_pipeline'
 ];
 
+/* One-time migration for users whose data predates firm-scoped keys.
+   Copies raw key -> scoped key ONLY when the scoped key is empty.
+   Never overwrites scoped data. Never deletes the raw key (kept as backup).
+   Safe to call on every page load. */
+function migrateUnscopedScoutKeys() {
+  try {
+    var firm = localStorage.getItem('g7_session_firm');
+    if (!firm) return false;  /* not logged in yet — nothing to scope to */
+    var migrated = 0;
+    for (var i = 0; i < SCOUT_STATE_KEYS.length; i++) {
+      var base = SCOUT_STATE_KEYS[i];
+      var scoped = scoutKey(base);
+      var rawVal = localStorage.getItem(base);
+      var scopedVal = localStorage.getItem(scoped);
+      /* Only fill an empty scoped key from a non-empty raw key */
+      if (rawVal !== null && rawVal !== '' && (scopedVal === null || scopedVal === '')) {
+        localStorage.setItem(scoped, rawVal);
+        migrated++;
+      }
+    }
+    if (migrated > 0) console.log('Scout: migrated ' + migrated + ' legacy keys to scoped storage');
+    return migrated > 0;
+  } catch (e) {
+    console.warn('Scout key migration failed (non-blocking):', e);
+    return false;
+  }
+}
+
 // Bundle all Scout state keys from localStorage into one object and
 // POST to the server. Fire-and-forget: logs on failure, never throws.
 async function saveScoutStateToServer() {
