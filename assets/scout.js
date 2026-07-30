@@ -45,7 +45,8 @@ var SCOUT_STATE_KEYS = [
   'scout_icp_names',
   'scout_first_customer_celebrated',
   'scout_week_checklist',
-  'scout_referral_chain'
+  'scout_referral_chain',
+  'scout_pipeline'
 ];
 
 // Bundle all Scout state keys from localStorage into one object and
@@ -56,9 +57,9 @@ async function saveScoutStateToServer() {
     if (!token) return;
     var blob = {};
     for (var i = 0; i < SCOUT_STATE_KEYS.length; i++) {
-      var k = SCOUT_STATE_KEYS[i];
-      var v = localStorage.getItem(k);
-      if (v !== null) blob[k] = v;
+      var base = SCOUT_STATE_KEYS[i];
+      var v = localStorage.getItem(scoutKey(base));
+      if (v !== null) blob[base] = v;
     }
     await fetch(SCOUT_WORKER + '/data/save', {
       method: 'POST',
@@ -76,12 +77,9 @@ async function saveScoutStateToServer() {
 // Load Scout state blob from the server and write each key into
 // localStorage, seeding this device. Returns true if data was loaded,
 // false if none / on error. Never throws.
+// IMPORTANT: local state is only cleared AFTER we have confirmed real
+// server data — a failed fetch must never destroy what is on this device.
 async function loadScoutStateFromServer() {
-  // Always clear this browser's Scout state first, so an account can never
-  // see another account's residual localStorage data. Server is source of truth.
-  for (var c = 0; c < SCOUT_STATE_KEYS.length; c++) {
-    localStorage.removeItem(SCOUT_STATE_KEYS[c]);
-  }
   try {
     var token = localStorage.getItem('g7_session_token') || '';
     if (!token) return false;
@@ -93,9 +91,15 @@ async function loadScoutStateFromServer() {
     var json = await res.json();
     var blob = json && json.data ? json.data : null;
     if (!blob) return false;
+
+    /* Only replace local state once we have real server data.
+       A failed fetch must never destroy what is on this device. */
+    for (var c = 0; c < SCOUT_STATE_KEYS.length; c++) {
+      localStorage.removeItem(scoutKey(SCOUT_STATE_KEYS[c]));
+    }
     for (var key in blob) {
       if (blob.hasOwnProperty(key) && blob[key] !== null && blob[key] !== undefined) {
-        localStorage.setItem(key, blob[key]);
+        localStorage.setItem(scoutKey(key), blob[key]);
       }
     }
     return true;
