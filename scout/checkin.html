@@ -600,6 +600,7 @@ async function handleSubmit() {
     var history = [];
     try { history = JSON.parse(localStorage.getItem(scoutKey('scout_history')) || '[]'); } catch(e) {}
     history.push({
+      type:          'checkin',
       week:          d.weekNum,
       date:          d.submittedAt,
       icp1_sent:     d.icp1_sent,    icp1_replies: d.icp1_replies, icp1_conv: d.icp1_conv,
