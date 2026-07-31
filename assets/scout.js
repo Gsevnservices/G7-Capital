@@ -1117,7 +1117,7 @@ function calculateHealthScore() {
   } else {
     acqScore = 5;
   }
-  breakdown.acquisition = { score: acqScore, label: 'Customer Acquisition' };
+  breakdown.acquisition = { score: acqScore, label: 'Winning Customers' };
   total += acqScore;
 
   // ── DIMENSION 2: Revenue Velocity (20 pts) ──────────────────
@@ -1140,7 +1140,7 @@ function calculateHealthScore() {
   } else {
     revScore = 5;
   }
-  breakdown.revenue = { score: revScore, label: 'Revenue Velocity' };
+  breakdown.revenue = { score: revScore, label: 'Money Coming In' };
   total += revScore;
 
   // ── DIMENSION 3: Customer Retention (20 pts) ─────────────────
@@ -1159,22 +1159,25 @@ function calculateHealthScore() {
   } else {
     retScore = 0;
   }
-  breakdown.retention = { score: retScore, label: 'Customer Retention' };
+  breakdown.retention = { score: retScore, label: 'Keeping Customers' };
   total += retScore;
 
-  // ── DIMENSION 4: Competitive Position (20 pts) ───────────────
-  var momentum  = parseInt(lastEntry.momentum, 10) || 0;
+  // ── DIMENSION 4: Standing Out / Reply Rate (20 pts) ──────────
+  var totalSent    = (parseInt(lastEntry.icp1_sent,     10) || 0) +
+                     (parseInt(lastEntry.icp2_sent,     10) || 0) +
+                     (parseInt(lastEntry.icp3_sent,     10) || 0);
+  var totalReplies = (parseInt(lastEntry.icp1_replies,  10) || 0) +
+                     (parseInt(lastEntry.icp2_replies,  10) || 0) +
+                     (parseInt(lastEntry.icp3_replies,  10) || 0);
+  var replyRate = totalSent > 0 ? totalReplies / totalSent : 0;
   var compScore;
-  if (momentum > 60) {
-    compScore = 20;
-  } else if (momentum >= 40) {
-    compScore = 15;
-  } else if (momentum >= 20) {
-    compScore = 10;
-  } else {
-    compScore = 5;
-  }
-  breakdown.competitive = { score: compScore, label: 'Competitive Position' };
+  if (totalSent === 0)        { compScore = 0;  }
+  else if (replyRate > 0.20)  { compScore = 20; }
+  else if (replyRate >= 0.10) { compScore = 15; }
+  else if (replyRate >= 0.05) { compScore = 10; }
+  else if (replyRate > 0)     { compScore = 5;  }
+  else                        { compScore = 0;  }
+  breakdown.competitive = { score: compScore, label: 'People Replying' };
   total += compScore;
 
   // ── DIMENSION 5: Seasonal Preparedness (20 pts) ──────────────
@@ -1188,11 +1191,32 @@ function calculateHealthScore() {
       seasonalScore = 20;
     }
   }
-  breakdown.seasonal = { score: seasonalScore, label: 'Seasonal Preparedness' };
+  breakdown.seasonal = { score: seasonalScore, label: 'Ready For Festival Season' };
   total += seasonalScore;
 
-  localStorage.setItem(scoutKey('scout_health_score'),     String(Math.min(total, 100)));
+  var finalScore = Math.min(total, 100);
+  localStorage.setItem(scoutKey('scout_health_score'),     String(finalScore));
   localStorage.setItem(scoutKey('scout_health_breakdown'), JSON.stringify(breakdown));
+
+  // ── PER-WEEK HEALTH SCORE ────────────────────────────────────
+  // Write score and breakdown onto the last check-in entry in
+  // scout_history so history.html can chart it per week.
+  try {
+    var hw = getScoutHistory();
+    if (hw && hw.length > 0) {
+      var lastCheckinIdx = -1;
+      for (var hi = hw.length - 1; hi >= 0; hi--) {
+        if (isCheckinEntry(hw[hi])) { lastCheckinIdx = hi; break; }
+      }
+      if (lastCheckinIdx !== -1) {
+        hw[lastCheckinIdx].healthScore     = finalScore;
+        hw[lastCheckinIdx].healthBreakdown = breakdown;
+        localStorage.setItem(scoutKey('scout_history'), JSON.stringify(hw));
+      }
+    }
+  } catch (e) {}
+
+  return finalScore;
 }
 
 

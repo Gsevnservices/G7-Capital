@@ -949,9 +949,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="metric-sub">contacts needed per new customer</div>
     </div>
   </div>
-  <div class="momentum-block">
+  <div class="momentum-block" style="display:none">
     <div class="momentum-header">
-      <div class="momentum-label">Scout Momentum</div>
+      <div class="momentum-label">Your Scout Score</div>
       <div>
         <span class="momentum-score" id="momentumScore">0</span>
         <span class="momentum-denom">/100</span>
@@ -1208,6 +1208,25 @@ function parseScoutOutput(text) {
 }
 
 /* ═══════════════════════════════════════════
+   RENDER HEALTH SCORE INTO MOMENTUM BLOCK
+   Shows the block with the stored health score,
+   or hides it entirely if none exists yet.
+═══════════════════════════════════════════ */
+function renderHealthBlock() {
+  var block = document.querySelector('.momentum-block');
+  if (!block) return;
+  var raw = localStorage.getItem(scoutKey('scout_health_score'));
+  var hs  = parseInt(raw, 10);
+  if (!raw || isNaN(hs)) { block.style.display = 'none'; return; }
+  block.style.display = '';
+  document.getElementById('momentumScore').textContent = hs;
+  document.getElementById('momentumNote').textContent  = '';
+  setTimeout(function() {
+    document.getElementById('momentumBar').style.width = Math.min(hs, 100) + '%';
+  }, 300);
+}
+
+/* ═══════════════════════════════════════════
    EXTRACT HEADLINE METRICS
 ═══════════════════════════════════════════ */
 function extractMetrics(text) {
@@ -1385,25 +1404,9 @@ function parseAndRender(rawOutput, biz) {
   if (data) {
     /* JSON path — direct field access, no regex */
     var h = data.headline || {};
-    /* Live momentum override — check-ins write to scout_history[].momentum
-       but result.html was previously frozen at onboarding value in h.momentumScore.
-       Read the latest history entry and prefer it for display only (no data mutation). */
-    var liveMomentum = null, liveMomentumWeek = null;
-    try {
-      var hist = JSON.parse(localStorage.getItem(scoutKey('scout_history')) || '[]');
-      if (hist.length) {
-        var last = hist[hist.length - 1];
-        var m = parseInt(last.momentum, 10);
-        if (!isNaN(m) && m > 0) { liveMomentum = m; liveMomentumWeek = last.week; }
-      }
-    } catch(e) {}
     document.getElementById('metricRevenue').textContent = h.revenueVelocity || '—';
     document.getElementById('metricAcq').textContent     = h.acquisitionEfficiency || '—';
-    document.getElementById('momentumScore').textContent = (liveMomentum !== null ? liveMomentum : (h.momentumScore || 0));
-    document.getElementById('momentumNote').textContent  = (liveMomentum !== null ? 'Updated after your week ' + (liveMomentumWeek || '') + ' check-in.' : (h.momentumNote || ''));
-    setTimeout(function() {
-      document.getElementById('momentumBar').style.width = Math.min((liveMomentum !== null ? liveMomentum : (h.momentumScore || 0)), 100) + '%';
-    }, 300);
+    renderHealthBlock();
     scoutData = data;
     renderTab1JSON(data.tab1, data);
     renderTab2JSON(data.tab2);
@@ -1425,11 +1428,7 @@ function parseAndRender(rawOutput, biz) {
 
   document.getElementById('metricRevenue').textContent = metrics.revenueVelocity;
   document.getElementById('metricAcq').textContent     = metrics.acquisitionEff;
-  document.getElementById('momentumScore').textContent = metrics.momentumScore;
-  document.getElementById('momentumNote').textContent  = metrics.momentumNote;
-  setTimeout(function() {
-    document.getElementById('momentumBar').style.width = Math.min(metrics.momentumScore, 100) + '%';
-  }, 300);
+  renderHealthBlock();
 
   var sections = parseScoutOutput(cleanText);
   renderTab1(sections.tab1);

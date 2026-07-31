@@ -363,15 +363,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   background:rgba(138,136,128,0.06)
 }
 .health-bars{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
-.health-dim{}
+.health-dim{margin-bottom:2px}
 .health-dim-row{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:5px
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:8px;margin-bottom:7px
 }
-.health-dim-label{font-size:10px;letter-spacing:.06em;color:var(--grey1)}
+.health-dim-label{font-size:10px;letter-spacing:.06em;color:var(--grey1);min-width:0;overflow-wrap:break-word}
 .health-dim-score{
   font-family:'Cormorant Garamond',serif;font-size:13px;
-  font-weight:300;color:var(--white)
+  font-weight:300;color:var(--white);white-space:nowrap;flex-shrink:0
 }
 .health-bar-wrap{
   height:2px;background:var(--border2);overflow:hidden
@@ -537,7 +537,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <div class="momentum-card" id="momentumCard">
       <div class="momentum-card-top">
         <div class="momentum-label-block">
-          <div class="momentum-eyebrow">Your Progress</div>
+          <div class="momentum-eyebrow">Your Scout Score</div>
           <div class="momentum-level-name" id="dashLevelName">Getting Started</div>
           <div class="momentum-score-display">
             <div class="momentum-big" id="dashMomentumScore">0</div>
@@ -562,19 +562,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <!-- FOUR METRIC CARDS -->
     <div class="metric-row">
       <div class="metric-card">
-        <div class="metric-card-label">Extra Income Coming</div>
+        <div class="metric-card-label">Money Coming In</div>
         <div class="metric-card-value" id="dashRevenue">—</div>
-        <div class="metric-card-sub" id="dashRevenueSub">expected each month at this pace · after your first check-in</div>
+        <div class="metric-card-sub" id="dashRevenueSub">once you record your first sale</div>
       </div>
       <div class="metric-card">
-        <div class="metric-card-label">Effort Per Customer</div>
+        <div class="metric-card-label">Messages Per Customer</div>
         <div class="metric-card-value" id="dashAcq">—</div>
-        <div class="metric-card-sub" id="dashAcqSub">people to reach to win one customer · after your first check-in</div>
+        <div class="metric-card-sub" id="dashAcqSub">after your first check-in</div>
       </div>
       <div class="metric-card">
         <div class="metric-card-label">New Customers</div>
         <div class="metric-card-value" id="dashCustomers">—</div>
-        <div class="metric-card-sub" id="dashCustomersSub">won this week · after your first check-in</div>
+        <div class="metric-card-sub" id="dashCustomersSub">after your first check-in</div>
       </div>
       <div class="metric-card">
         <div class="metric-card-label">Total New Business</div>
@@ -594,7 +594,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
     <!-- SCOUT BUSINESS HEALTH SCORE (Feature 5.2) -->
     <div class="health-card" id="healthScoreCard">
-      <div class="health-empty">Your health score appears after your first Friday check-in — it shows how your business is doing across 5 areas.</div>
+      <div class="health-eyebrow">What's Driving Your Score</div>
+      <div class="health-empty">Your business health score appears after your first check-in.</div>
     </div>
 
     <!-- QUICK ACTIONS -->
@@ -702,8 +703,18 @@ function showDashboard(history, weekNum, firmName) {
   var prev = checkins.length > 1 ? checkins[checkins.length - 2] : null;
 
   /* ── MOMENTUM PROGRESSION ── */
-  var score     = checkins.length > 0 ? parseInt(last.momentum || '0', 10) : null;
-  var prevScore = prev ? parseInt(prev.momentum || '0', 10) : null;
+  var score;
+  if (checkins.length === 0) {
+    score = null;
+  } else if (last.healthScore !== undefined) {
+    score = last.healthScore;
+  } else {
+    var _hsRaw = parseInt(localStorage.getItem(scoutKey('scout_health_score')), 10);
+    score = isNaN(_hsRaw) ? null : _hsRaw;
+  }
+  var prevScore = prev
+    ? (prev.healthScore !== undefined ? prev.healthScore : null)
+    : null;
   var level     = getMomentumLevel(score !== null ? score : 0);
   var prevLevel = prevScore !== null ? getMomentumLevel(prevScore) : null;
 
@@ -717,7 +728,7 @@ function showDashboard(history, weekNum, firmName) {
     document.getElementById('dashLevelName').textContent     = level.name;
     document.getElementById('dashLevelDesc').textContent     = level.desc;
     document.getElementById('dashNextLevel').textContent     = level.next
-      ? 'Next stage at ' + level.next + ' points — complete your Friday check-in to grow your score.'
+      ? 'Next level at ' + level.next + ' points.'
       : '';
   }
 
@@ -780,54 +791,56 @@ function showDashboard(history, weekNum, firmName) {
   }
 
   /* ── METRIC CARDS ── */
-  var revenue  = '—';
-  var acq      = '—';
-  var custNew  = checkins.length > 0 ? (last.totalCustomers || '—') : '—';
+  var custNew = checkins.length > 0 ? (last.totalCustomers || '—') : '—';
 
-  /* Only parse pending result for revenue/acq when check-ins exist */
+  /* Card 1: Money Coming In — computed from check-in revenueAdded fields */
+  var revenue    = '—';
+  var revenueSub = 'once you record your first sale';
   if (checkins.length > 0) {
-    var pendingRaw = localStorage.getItem(scoutKey('scout_pending_result'));
-    if (pendingRaw) {
-      try {
-        var pending = JSON.parse(pendingRaw);
-        var output  = pending.scoutOutput || '';
+    var totalRev = checkins.reduce(function(s, e) { return s + (parseFloat(e.revenueAdded) || 0); }, 0);
+    if (totalRev > 0) {
+      var avgWeekly = totalRev / checkins.length;
+      if (checkins.length >= 3) {
+        revenue    = '₹' + Math.round(avgWeekly * 4.33).toLocaleString('en-IN') + '/month';
+        revenueSub = 'average, based on your last ' + checkins.length + ' weeks';
+      } else {
+        revenue    = '₹' + Math.round(avgWeekly).toLocaleString('en-IN') + '/week';
+        revenueSub = 'your weekly average so far';
+      }
+    }
+  }
 
-        /* Revenue velocity */
-        var rvMatch = output.match(/REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month))/i);
-        if (rvMatch) revenue = rvMatch[1].replace(/\s+/g,' ').trim();
-        if (revenue === '—') {
-          var rvFb = output.match(/₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month)/i);
-          if (rvFb) revenue = rvFb[0].replace(/\s+/g,' ').trim();
-        }
-
-        /* Acquisition efficiency */
-        var aeMatch = output.match(/(\d+)\s+contacts?\s+needed/i);
-        if (aeMatch) acq = aeMatch[1] + ' contacts';
-
-      } catch(e) {}
+  /* Card 2: Messages Per Customer — cumulative sent vs conversions */
+  var acq    = '—';
+  var acqSub = 'after your first check-in';
+  if (checkins.length > 0) {
+    var totalSentAll = checkins.reduce(function(s, e) {
+      return s + (parseInt(e.icp1_sent, 10) || 0)
+               + (parseInt(e.icp2_sent, 10) || 0)
+               + (parseInt(e.icp3_sent, 10) || 0);
+    }, 0);
+    var totalWonAll = checkins.reduce(function(s, e) {
+      return s + (parseInt(e.icp1_conv, 10) || 0)
+               + (parseInt(e.icp2_conv, 10) || 0)
+               + (parseInt(e.icp3_conv, 10) || 0);
+    }, 0);
+    if (totalWonAll > 0) {
+      acq    = String(Math.round(totalSentAll / totalWonAll));
+      acqSub = 'messages to win one customer';
+    } else if (totalSentAll > 0) {
+      acqSub = totalSentAll + ' messages sent, no customers yet';
+    } else {
+      acqSub = 'after your first check-in';
     }
   }
 
   document.getElementById('dashRevenue').textContent   = revenue;
   document.getElementById('dashAcq').textContent       = acq;
   document.getElementById('dashCustomers').textContent = custNew;
-
-  /* Sub-labels: "after your first check-in" when no check-ins yet */
-  if (checkins.length === 0) {
-    document.getElementById('dashRevenueSub').textContent   = 'after your first check-in';
-    document.getElementById('dashAcqSub').textContent       = 'after your first check-in';
-    document.getElementById('dashCustomersSub').textContent = 'after your first check-in';
-  } else {
-    if (revenue !== '—') {
-      document.getElementById('dashRevenueSub').textContent = 'expected each month at this pace';
-    }
-    if (acq !== '—') {
-      document.getElementById('dashAcqSub').textContent = 'people to reach to win one customer';
-    }
-    if (custNew !== '—') {
-      document.getElementById('dashCustomersSub').textContent = 'won this week';
-    }
-  }
+  document.getElementById('dashRevenueSub').textContent   = revenueSub;
+  document.getElementById('dashAcqSub').textContent       = acqSub;
+  document.getElementById('dashCustomersSub').textContent =
+    checkins.length === 0 ? 'after your first check-in' : (custNew !== '—' ? 'won this week' : '');
 
   /* ── TOTAL REVENUE COUNTER (Feature 3.5) ── */
   var totalRevenue = checkins.reduce(function(sum, entry) {
@@ -854,11 +867,7 @@ function showDashboard(history, weekNum, firmName) {
     var healthEl = document.getElementById('healthScoreCard');
     if (healthEl) {
       healthEl.innerHTML =
-        '<div class="health-eyebrow">Your Business Health</div>' +
-        '<div class="health-score-row">' +
-          '<span class="health-score-big">—</span>' +
-          '<span class="health-score-denom">/100</span>' +
-        '</div>' +
+        '<div class="health-eyebrow">What\'s Driving Your Score</div>' +
         '<div class="health-empty">Your business health score appears after your first check-in.</div>';
     }
   } else {
@@ -1022,32 +1031,15 @@ function renderHealthScore() {
     return;
   }
 
-  var score = parseInt(scoreRaw, 10) || 0;
   var breakdown;
   try { breakdown = JSON.parse(breakdownRaw); } catch(e) { return; }
 
-  /* Overall health label */
-  var label, labelClass;
-  if (score >= 81)      { label = 'Thriving';       labelClass = 'thriving'; }
-  else if (score >= 61) { label = 'Doing Well';      labelClass = 'healthy'; }
-  else if (score >= 41) { label = 'Growing';         labelClass = 'developing'; }
-  else                  { label = 'Room to Grow';    labelClass = 'attention'; }
-
-  /* Plain-language dimension names — override whatever label is stored */
-  var dimPlainNames = {
-    acquisition: 'Finding Customers',
-    revenue:     'Income',
-    retention:   'Keeping Customers',
-    competitive: 'Standing Out',
-    seasonal:    'Season Readiness'
-  };
-
-  /* Ordered dimension list with plain names applied */
+  /* Ordered dimension list — use label stored by calculateHealthScore(), key as fallback */
   var dimKeys = ['acquisition', 'revenue', 'retention', 'competitive', 'seasonal'];
   var dims = dimKeys.map(function(k) {
     var d = breakdown[k];
     if (!d) return null;
-    return { key: k, score: d.score, label: dimPlainNames[k] || d.label };
+    return { key: k, score: d.score, label: d.label || k };
   }).filter(Boolean);
 
   /* Find lowest-scoring dimension for focus area */
@@ -1056,12 +1048,7 @@ function renderHealthScore() {
   }, null);
 
   var html = '';
-  html += '<div class="health-eyebrow">Your Business Health</div>';
-  html += '<div class="health-score-row">';
-  html += '<span class="health-score-big">' + score + '</span>';
-  html += '<span class="health-score-denom">/100</span>';
-  html += '<span class="health-label ' + labelClass + '">' + label + '</span>';
-  html += '</div>';
+  html += '<div class="health-eyebrow">What\'s Driving Your Score</div>';
 
   /* Dimension bars */
   html += '<div class="health-bars">';
@@ -1121,7 +1108,7 @@ function renderRecentRows(history) {
     var date    = formatDate(week.date);
     var custNew = week.totalCustomers || '0';
     var revenue = week.revenueAdded   || '0';
-    var score   = week.momentum       || '0';
+    var score   = week.healthScore !== undefined ? week.healthScore : '—';
 
     html += '<div class="history-row">';
     html += '<div class="hr-cell">';
@@ -1130,7 +1117,7 @@ function renderRecentRows(history) {
     html += '</div>';
     html += '<div class="hr-cell"><div class="hr-val">' + escHtml(custNew) + '</div><div class="hr-lbl">New Customers</div></div>';
     html += '<div class="hr-cell"><div class="hr-val">₹' + escHtml(revenue) + '</div><div class="hr-lbl">New Business (₹)</div></div>';
-    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(score) + '/100</div><div class="hr-lbl">Progress</div></div>';
+    html += '<div class="hr-cell"><div class="hr-val">' + escHtml(String(score)) + (score !== '—' ? '/100' : '') + '</div><div class="hr-lbl">Score</div></div>';
     html += '<div class="hr-cell"><a href="#" class="hr-link" onclick="viewWeek(' + origIdx + ');return false;">View →</a></div>';
     html += '</div>';
   });
