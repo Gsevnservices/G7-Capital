@@ -211,11 +211,11 @@ async function callScout(businessContext) {
   }
 
   // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
-  var result = await readSSEStream(response);
-  if (!result) {
+  var streamResult = await readSSEStream(response);
+  if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return result;
+  return { text: streamResult.text, complete: streamResult.complete };
 }
 
 
@@ -267,11 +267,11 @@ async function callScoutRaw(userMessage) {
     throw new Error('Scout API error ' + response.status + ': ' + errBody);
   }
 
-  var result = await readSSEStream(response);
-  if (!result) {
+  var streamResult = await readSSEStream(response);
+  if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return result;
+  return { text: streamResult.text, complete: streamResult.complete };
 }
 
 
@@ -439,11 +439,11 @@ async function callScoutCheckin(checkinData) {
   }
 
   // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
-  var result = await readSSEStream(response);
-  if (!result) {
+  var streamResult = await readSSEStream(response);
+  if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return result;
+  return { text: streamResult.text, complete: streamResult.complete };
 }
 
 
@@ -460,7 +460,11 @@ async function callScoutCheckin(checkinData) {
 //   data: {"type":"message_stop"}
 //
 // response — the fetch() Response object (must be ok before calling)
-// Returns:  full assembled text string
+// Returns:  { text: string, complete: boolean }
+//             text     — the assembled output (may be partial if complete is false)
+//             complete — true only if message_stop or [DONE] was received,
+//                        meaning the model finished normally.
+//                        false means the connection was cut before the model finished.
 // Throws:   Error if the stream cannot be read
 // ─────────────────────────────────────────────────────────────
 async function readSSEStream(response) {
@@ -469,6 +473,7 @@ async function readSSEStream(response) {
   var fullText = '';
   var buffer = '';
   var done = false;
+  var receivedStopSignal = false; // set true only on message_stop or [DONE]
 
   while (!done) {
     var chunk = await reader.read();
@@ -487,7 +492,7 @@ async function readSSEStream(response) {
         if (!line.startsWith('data: ')) continue;
 
         var jsonStr = line.slice(6);
-        if (jsonStr === '[DONE]') { done = true; break; }
+        if (jsonStr === '[DONE]') { receivedStopSignal = true; done = true; break; }
 
         var event;
         try {
@@ -507,6 +512,7 @@ async function readSSEStream(response) {
         }
 
         if (event.type === 'message_stop') {
+          receivedStopSignal = true;
           done = true;
           break;
         }
@@ -528,10 +534,11 @@ async function readSSEStream(response) {
       ) {
         fullText += tailEvent.delta.text;
       }
+      if (tailEvent.type === 'message_stop') { receivedStopSignal = true; }
     } catch (e) { /* ignore incomplete tail */ }
   }
 
-  return fullText;
+  return { text: fullText, complete: receivedStopSignal };
 }
 
 
