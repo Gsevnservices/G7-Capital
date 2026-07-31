@@ -270,17 +270,23 @@ function renderChart(history) {
   var container = document.getElementById('momentumChart');
   if (!history || history.length === 0) return;
 
+  /* Only plot check-in entries that have a health score */
+  var plotEntries = history.filter(function(w) {
+    return isCheckinEntry(w) && w.healthScore !== undefined;
+  });
+  if (plotEntries.length === 0) return;
+
   /* Find max score for scaling */
   var maxScore = 0;
-  history.forEach(function(w) { var s = parseInt(w.momentum || '0', 10); if (s > maxScore) maxScore = s; });
+  plotEntries.forEach(function(w) { if (w.healthScore > maxScore) maxScore = w.healthScore; });
   if (maxScore === 0) maxScore = 100;
 
   var html = '';
-  var currentIdx = history.length - 1;
+  var lastIdx = plotEntries.length - 1;
 
-  history.forEach(function(week, i) {
-    var score     = parseInt(week.momentum || '0', 10);
-    var isCurrent = i === currentIdx;
+  plotEntries.forEach(function(week, i) {
+    var score     = week.healthScore;
+    var isCurrent = i === lastIdx;
     /* Scale bar height: max 100px, min 2px */
     var barH = Math.max(2, Math.round((score / maxScore) * 100));
 
@@ -304,17 +310,20 @@ function renderHistory(history) {
     return;
   }
 
-  /* Newest first */
-  var sorted = history.slice().reverse();
+  /* Newest first — filter to check-in entries only */
+  var sorted = history.slice().reverse().filter(isCheckinEntry);
+  if (sorted.length === 0) { renderEmpty(); return; }
   var html = '';
 
   sorted.forEach(function(week) {
     var date    = formatDate(week.date);
-    var score   = week.momentum || '0';
+    var score   = week.healthScore !== undefined ? week.healthScore : '—';
     var sent    = (parseInt(week.icp1_sent || '0', 10) + parseInt(week.icp2_sent || '0', 10) + parseInt(week.icp3_sent || '0', 10));
     var replies = (parseInt(week.icp1_replies || '0', 10) + parseInt(week.icp2_replies || '0', 10) + parseInt(week.icp3_replies || '0', 10));
     var custNew = week.totalCustomers || '0';
     var revenue = week.revenueAdded   || '0';
+    /* history.indexOf uses object reference — finds original index in unfiltered array */
+    var origIdx = history.indexOf(week);
 
     html += '<div class="week-card">';
 
@@ -324,7 +333,7 @@ function renderHistory(history) {
     html += '<div class="week-num">Week ' + week.week + '</div>';
     html += '<div class="week-date">' + date + '</div>';
     html += '</div>';
-    html += '<div class="momentum-pill">' + score + '/100</div>';
+    html += '<div class="momentum-pill">' + score + (score !== '—' ? '/100' : '') + '</div>';
     html += '</div>';
 
     /* Stats row */
@@ -337,7 +346,7 @@ function renderHistory(history) {
 
     /* Footer link — loads this week's output into result.html */
     html += '<div class="week-card-footer">';
-    html += '<a href="#" class="view-link" onclick="viewWeek(' + history.indexOf(week) + ');return false;">View Full Playbook →</a>';
+    html += '<a href="#" class="view-link" onclick="viewWeek(' + origIdx + ');return false;">View Full Playbook →</a>';
     html += '</div>';
 
     html += '</div>';
