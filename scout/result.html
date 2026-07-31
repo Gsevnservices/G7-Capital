@@ -785,7 +785,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   /* Page breaks */
   #panel0{page-break-before:auto}
-  #panel1,#panel2,#panel3,#panel4{page-break-before:always}
+  #panel1,#panel2,#panel3{page-break-before:always}
 
   /* Headline block */
   .headline-block{
@@ -972,47 +972,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
 <!-- TAB NAV -->
 <div class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab(0)" id="tabBtn0">Who to Target</button>
-  <button class="tab-btn" onclick="switchTab(1)" id="tabBtn1">What to Say</button>
-  <button class="tab-btn" onclick="switchTab(2)" id="tabBtn2">This Week</button>
-  <button class="tab-btn" onclick="switchTab(3)" id="tabBtn3">Pipeline</button>
-  <button class="tab-btn" onclick="switchTab(4)" id="tabBtn4">Expansion Plan</button>
+  <button class="tab-btn active" onclick="switchTab(0)" id="tabBtn0">This Week</button>
+  <button class="tab-btn" onclick="switchTab(1)" id="tabBtn1">My Plan</button>
+  <button class="tab-btn" onclick="switchTab(2)" id="tabBtn2">My Customers</button>
+  <button class="tab-btn" onclick="switchTab(3)" id="tabBtn3">What's Next</button>
 </div>
 
 <!-- TAB PANELS -->
 <div class="tab-panels">
 
-  <!-- TAB 1: WHO TO TARGET -->
+  <!-- PANEL 0: THIS WEEK — contains tab3Content -->
   <div class="tab-panel active" id="panel0">
-    <div class="print-section-header">SECTION 1: WHO TO TARGET</div>
-    <div id="tab1Content">
-      <div class="result-loading">
-        <div class="result-loading-spinner">
-          <div class="result-loading-ring"></div>
-          <span class="result-loading-letter">S</span>
-        </div>
-        <div class="result-loading-msg">Rendering analysis...</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 2: WHAT TO SAY -->
-  <div class="tab-panel" id="panel1">
-    <div class="print-section-header">SECTION 2: WHAT TO SAY</div>
-    <div id="tab2Content">
-      <div class="result-loading">
-        <div class="result-loading-spinner">
-          <div class="result-loading-ring"></div>
-          <span class="result-loading-letter">S</span>
-        </div>
-        <div class="result-loading-msg">Rendering messages...</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 3: THIS WEEK -->
-  <div class="tab-panel" id="panel2">
-    <div class="print-section-header">SECTION 3: WHAT TO DO THIS WEEK</div>
+    <div class="print-section-header">SECTION 1: THIS WEEK</div>
     <div id="tab3Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -1024,23 +995,37 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     </div>
   </div>
 
-  <!-- TAB 4: PIPELINE -->
-  <div class="tab-panel" id="panel3">
-    <div class="print-section-header">SECTION 4: PIPELINE TRACKER</div>
+  <!-- PANEL 1: MY PLAN — contains tab1Content (ICPs + messages + competitor watch + WA calendar) -->
+  <div class="tab-panel" id="panel1">
+    <div class="print-section-header">SECTION 2: MY PLAN</div>
+    <div id="tab1Content">
+      <div class="result-loading">
+        <div class="result-loading-spinner">
+          <div class="result-loading-ring"></div>
+          <span class="result-loading-letter">S</span>
+        </div>
+        <div class="result-loading-msg">Rendering analysis...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: MY CUSTOMERS — contains tab4Content (referral engine + lost customer recovery) -->
+  <div class="tab-panel" id="panel2">
+    <div class="print-section-header">SECTION 3: MY CUSTOMERS</div>
     <div id="tab4Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
           <div class="result-loading-ring"></div>
           <span class="result-loading-letter">S</span>
         </div>
-        <div class="result-loading-msg">Rendering pipeline...</div>
+        <div class="result-loading-msg">Rendering customer tools...</div>
       </div>
     </div>
   </div>
 
-  <!-- TAB 5: EXPANSION PLAN -->
-  <div class="tab-panel" id="panel4">
-    <div class="print-section-header">SECTION 5: EXPANSION PLAN</div>
+  <!-- PANEL 3: WHAT'S NEXT — contains tab5Content (90-day projection + expansion plan) -->
+  <div class="tab-panel" id="panel3">
+    <div class="print-section-header">SECTION 4: WHAT'S NEXT</div>
     <div id="tab5Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -1053,6 +1038,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   </div>
 
 </div><!-- /tab-panels -->
+
+<!-- HIDDEN: tab2Content — renderTab2JSON writes here; kept off-screen so the render function has a target element -->
+<div id="tab2Content" style="display:none" aria-hidden="true"></div>
 
 <!-- PRINT COVER PAGE (Feature 4.3 — hidden on screen, visible when printing) -->
 <div class="print-cover" id="printCover">
@@ -1409,10 +1397,28 @@ function parseAndRender(rawOutput, biz) {
     renderHealthBlock();
     scoutData = data;
     renderTab1JSON(data.tab1, data);
-    renderTab2JSON(data.tab2);
+    /* Append competitor watch + WhatsApp calendar from tab3 into My Plan (tab1Content) */
+    (function() {
+      var _t3 = data.tab3 || {};
+      var _el1 = document.getElementById('tab1Content');
+      if (!_el1) return;
+      var _extra = '';
+      var _comp = _t3.competitorWatch || {};
+      if (_comp.competitor) {
+        _extra += '<div class="comp-watch-card"><div class="comp-watch-title">COMPETITOR WATCH</div><div class="comp-watch-body">';
+        _extra += '<div style="margin-bottom:6px"><strong style="color:var(--white)">' + escHtml(_comp.competitor) + '</strong></div>';
+        if (_comp.likelyDoing)  _extra += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(_comp.likelyDoing) + '</div>';
+        if (_comp.yourResponse) _extra += '<div>Your response: ' + escHtml(_comp.yourResponse) + '</div>';
+        _extra += '</div></div>';
+      }
+      _extra += renderWhatsAppCalendar(_t3.whatsappCalendar);
+      if (_extra) _el1.innerHTML += _extra;
+    })();
+    renderTab2JSON(data.tab2, data.tab1);
     renderTab3JSON(data.tab3, data);
+    renderWeekTargets(data.tab4);
     renderTab4JSON(data.tab4, biz);
-    renderTab5JSON(data.tab5);
+    renderWhatsNextTab(data.tab4, data.tab5);
     updateReasoningPanel(data);
     return;
   }
@@ -1464,7 +1470,60 @@ function parseAndRender(rawOutput, biz) {
    Each function receives its tab's data object directly.
 ═══════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════
+   MESSAGE CARD BUILDER — shared by renderTab1JSON and renderTab2JSON
+   Builds the full HTML for one message card (primary + optional Day 3/7 follow-ups).
+   idx = the message's original index in the full messages array (for globally unique ids).
+   Returns '' if there is no body text.
+═══════════════════════════════════════════ */
+function buildMessageCardHTML(msg, idx) {
+  var cardId    = 'msgcard_' + idx;
+  var label     = escHtml((msg.icp || '') + (msg.type ? ' — ' + msg.type : ''));
+  var meta      = [msg.channel, msg.language].filter(Boolean).join(' · ');
+  var isRetired = msg.status === 'retired';
+  var body      = msg.versionA || '';
+  if (!body) return '';
+  var h = '';
+  h += '<div class="message-card' + (isRetired ? ' msg-retired' : '') + '" id="' + cardId + '">';
+  h += '<div class="message-card-header"><div><div class="message-card-label">' + label;
+  if (isRetired) {
+    h += '<span class="patch-badge retired">Retired week ' + escHtml(String(msg.retiredWeek || '')) + '</span>';
+  } else if (msg.addedWeek) {
+    h += '<span class="patch-badge">New — week ' + escHtml(String(msg.addedWeek)) + '</span>';
+  }
+  h += '</div>';
+  if (meta) h += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
+  h += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + cardId + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
+  h += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
+  if (isRetired && msg.retiredReason) {
+    h += '<div class="patch-reason">' + escHtml(msg.retiredReason) + '</div>';
+  } else if (msg.addedWeek && msg.addedReason) {
+    h += '<div class="patch-reason">' + escHtml(msg.addedReason) + '</div>';
+  }
+  h += '</div>';
+  if (msg.followupDay3) {
+    var id3 = 'msgcard_fu3_' + idx;
+    h += '<div class="message-card" id="' + id3 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.3)">';
+    h += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 3 — ' + escHtml(msg.icp || '') + '</div></div>';
+    h += '<button class="copy-btn" onclick="copyMessage(\'' + id3 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id3 + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
+    h += '<div class="message-text" data-text="' + escAttr(msg.followupDay3) + '">' + escHtml(msg.followupDay3) + '</div>';
+    h += '</div>';
+  }
+  if (msg.followupDay7) {
+    var id7 = 'msgcard_fu7_' + idx;
+    h += '<div class="message-card" id="' + id7 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.2)">';
+    h += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 7 — ' + escHtml(msg.icp || '') + '</div></div>';
+    h += '<button class="copy-btn" onclick="copyMessage(\'' + id7 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id7 + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
+    h += '<div class="message-text" data-text="' + escAttr(msg.followupDay7) + '">' + escHtml(msg.followupDay7) + '</div>';
+    h += '</div>';
+  }
+  return h;
+}
+
 function renderTab1JSON(tab1, data) {
+  /* Build normalised ICP name set from tab2 for matching */
+  var _tab2Messages = (data && data.tab2 && data.tab2.messages) ? data.tab2.messages : [];
+  var _icpNameNorm  = function(s) { return (s || '').trim().toLowerCase(); };
   data = data || {};
   var el = document.getElementById('tab1Content');
   if (!tab1) { el.innerHTML = '<div class="scout-prose">(No ICP data found)</div>'; return; }
@@ -1547,6 +1606,21 @@ function renderTab1JSON(tab1, data) {
       html += '<div class="icp-body" style="margin-bottom:14px">' + escHtml(icp.summary).replace(/\n/g, '<br>') + '</div>';
     }
 
+    /* Matched messages from Tab 2 — injected inline */
+    var _icpNorm     = _icpNameNorm(icp.name);
+    var _icpMessages = _tab2Messages.filter(function(msg) {
+      return _icpNameNorm(msg.icp) === _icpNorm;
+    });
+    if (_icpMessages.length > 0) {
+      html += '<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border2)">';
+      html += '<div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">What to say</div>';
+      _icpMessages.forEach(function(msg) {
+        var _midx = _tab2Messages.indexOf(msg);
+        html += buildMessageCardHTML(msg, _midx);
+      });
+      html += '</div>';
+    }
+
     /* Meta row: volume / conversion / revenue */
     if (icp.volumeEstimate || icp.conversionProbability || icp.revenuePerCustomer) {
       html += '<div class="icp-meta-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border2)">';
@@ -1571,24 +1645,6 @@ function renderTab1JSON(tab1, data) {
     html += '</div>'; /* /icp-card */
   });
 
-  /* Priority Order — suppressed if any ICP has been re-ranked by a patch */
-  var po = tab1.priorityOrder || [];
-  var icpsReranked = (tab1.icps || []).some(function(icp) { return !!icp.rankChangedWeek; });
-  if (po.length > 0) {
-    html += '<div class="section-block" style="margin-top:28px"><div class="section-block-title">Priority Order</div><div class="section-block-body">';
-    if (icpsReranked) {
-      html += '<div class="patch-reason">Priority order updated after your week ' + escHtml(String(data.lastPatchedWeek || '')) + ' check-in — see the card order above.</div>';
-    } else {
-      po.forEach(function(p) {
-        html += '<div style="margin-bottom:8px">';
-        if (p.icp)    html += '<span style="color:var(--white)">' + escHtml(p.icp) + '</span>';
-        if (p.reason) html += ' — ' + escHtml(p.reason);
-        html += '</div>';
-      });
-    }
-    html += '</div></div>';
-  }
-
   /* Hard Stops */
   var hs = tab1.hardStops || [];
   if (hs.length > 0) {
@@ -1600,56 +1656,28 @@ function renderTab1JSON(tab1, data) {
   el.innerHTML = html || '<div class="scout-prose">(No ICP data found)</div>';
 }
 
-function renderTab2JSON(tab2) {
+function renderTab2JSON(tab2, tab1) {
   var el = document.getElementById('tab2Content');
   if (!tab2) { el.innerHTML = '<div class="scout-prose">(No message data found)</div>'; return; }
   var html = '';
   var messages = tab2.messages || [];
 
-  messages.forEach(function(msg, idx) {
-    var cardId   = 'msgcard_' + idx;
-    var label    = escHtml((msg.icp || '') + (msg.type ? ' — ' + msg.type : ''));
-    var meta     = [msg.channel, msg.language].filter(Boolean).join(' · ');
-    var isRetired = msg.status === 'retired';
+  /* Build set of ICP names that Tab 1 owns — messages matching these are shown in Tab 1 */
+  var _norm     = function(s) { return (s || '').trim().toLowerCase(); };
+  var _icpNames = ((tab1 && tab1.icps) ? tab1.icps : []).map(function(icp) { return _norm(icp.name); });
 
-    var body = msg.versionA || '';
-    if (!body) return;
-    html += '<div class="message-card' + (isRetired ? ' msg-retired' : '') + '" id="' + cardId + '">';
-    html += '<div class="message-card-header"><div><div class="message-card-label">' + label;
-    if (isRetired) {
-      html += '<span class="patch-badge retired">Retired week ' + escHtml(String(msg.retiredWeek || '')) + '</span>';
-    } else if (msg.addedWeek) {
-      html += '<span class="patch-badge">New — week ' + escHtml(String(msg.addedWeek)) + '</span>';
-    }
-    html += '</div>';
-    if (meta) html += '<div class="message-card-channel">' + escHtml(meta) + '</div>';
-    html += '</div><button class="copy-btn" onclick="copyMessage(\'' + cardId + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + cardId + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
-    html += '<div class="message-text" data-text="' + escAttr(body) + '">' + escHtml(body) + '</div>';
-    if (isRetired && msg.retiredReason) {
-      html += '<div class="patch-reason">' + escHtml(msg.retiredReason) + '</div>';
-    } else if (msg.addedWeek && msg.addedReason) {
-      html += '<div class="patch-reason">' + escHtml(msg.addedReason) + '</div>';
-    }
-    html += '</div>';
+  /* Only render messages whose icp does NOT match any Tab 1 ICP */
+  var unmatched = messages.filter(function(msg) {
+    return _icpNames.indexOf(_norm(msg.icp)) === -1;
+  });
 
-    /* Follow-up Day 3 */
-    if (msg.followupDay3) {
-      var id3 = 'msgcard_fu3_' + idx;
-      html += '<div class="message-card" id="' + id3 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.3)">';
-      html += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 3 — ' + escHtml(msg.icp || '') + '</div></div>';
-      html += '<button class="copy-btn" onclick="copyMessage(\'' + id3 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id3 + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
-      html += '<div class="message-text" data-text="' + escAttr(msg.followupDay3) + '">' + escHtml(msg.followupDay3) + '</div>';
-      html += '</div>';
-    }
-    /* Follow-up Day 7 */
-    if (msg.followupDay7) {
-      var id7 = 'msgcard_fu7_' + idx;
-      html += '<div class="message-card" id="' + id7 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.2)">';
-      html += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 7 — ' + escHtml(msg.icp || '') + '</div></div>';
-      html += '<button class="copy-btn" onclick="copyMessage(\'' + id7 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id7 + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
-      html += '<div class="message-text" data-text="' + escAttr(msg.followupDay7) + '">' + escHtml(msg.followupDay7) + '</div>';
-      html += '</div>';
-    }
+  if (unmatched.length > 0) {
+    html += '<div class="section-block-title" style="margin-bottom:16px">Other messages</div>';
+  }
+
+  unmatched.forEach(function(msg) {
+    var idx = messages.indexOf(msg); /* preserve original index for globally unique ids */
+    html += buildMessageCardHTML(msg, idx);
   });
 
   /* Response Handlers */
@@ -1743,19 +1771,6 @@ function renderTab3JSON(tab3, data) {
     avoid.forEach(function(item) { html += '<div style="margin-bottom:4px">— ' + escHtml(item) + '</div>'; });
     html += '</div></div>';
   }
-
-  /* Competitor Watch */
-  var comp = tab3.competitorWatch || {};
-  if (comp.competitor) {
-    html += '<div class="comp-watch-card"><div class="comp-watch-title">COMPETITOR WATCH</div><div class="comp-watch-body">';
-    html += '<div style="margin-bottom:6px"><strong style="color:var(--white)">' + escHtml(comp.competitor) + '</strong></div>';
-    if (comp.likelyDoing)  html += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(comp.likelyDoing) + '</div>';
-    if (comp.yourResponse) html += '<div>Your response: ' + escHtml(comp.yourResponse) + '</div>';
-    html += '</div></div>';
-  }
-
-  /* WhatsApp Calendar appended after existing content */
-  html += renderWhatsAppCalendar(tab3.whatsappCalendar);
 
   el.innerHTML = html || '<div class="scout-prose">(No weekly plan found)</div>';
 
@@ -2047,37 +2062,22 @@ function refCopy(elId, btn) {
   });
 }
 
-function renderTab4JSON(tab4, biz) {
-  var t4  = tab4 || {};
-  var wt  = t4.weekTargets || {};
-  var proj = t4.projection90Day || {};
-  var icpTargets = t4.icpTargets || [];
-
-  /* Use ICP names from JSON targets, or fall back to names extracted from tab1 */
-  var names = icpTargets.length > 0
-    ? icpTargets.map(function(t) { return t.icp || ''; })
-    : (icpNames.length > 0 ? icpNames : ['ICP 1', 'ICP 2', 'ICP 3']);
-
+/* ── WEEK TARGETS — appended to tab3Content (This Week panel) ── */
+function renderWeekTargets(tab4) {
+  var t4 = tab4 || {};
+  var wt = t4.weekTargets || {};
+  var el = document.getElementById('tab3Content');
+  if (!el) return;
   var html = '';
 
-  /* Week targets */
-  html += '<div class="targets-block"><div class="targets-title">Week 1 Targets</div>';
-  html += '<div class="target-row"><span class="target-key">Contacts</span><span class="target-val">'       + escHtml(String(wt.contacts || '—'))      + '</span></div>';
-  html += '<div class="target-row"><span class="target-key">Responses</span><span class="target-val">'      + escHtml(String(wt.responses || '—'))     + '</span></div>';
-  html += '<div class="target-row"><span class="target-key">New Customers</span><span class="target-val">'  + escHtml(String(wt.newCustomers || '—'))  + '</span></div>';
+  html += '<div class="targets-block" style="margin-top:28px"><div class="targets-title">Week 1 Targets</div>';
+  html += '<div class="target-row"><span class="target-key">Contacts</span><span class="target-val">'       + escHtml(String(wt.contacts || '—'))     + '</span></div>';
+  html += '<div class="target-row"><span class="target-key">Responses</span><span class="target-val">'      + escHtml(String(wt.responses || '—'))    + '</span></div>';
+  html += '<div class="target-row"><span class="target-key">New Customers</span><span class="target-val">'  + escHtml(String(wt.newCustomers || '—')) + '</span></div>';
   if (wt.revenueVelocityTarget) {
     html += '<div class="target-row"><span class="target-key">Revenue Velocity Target</span><span class="target-val">' + escHtml(wt.revenueVelocityTarget) + '</span></div>';
   }
   html += '</div>';
-
-  /* 90-day projection */
-  if (proj.month1 || proj.month2 || proj.month3) {
-    html += '<div class="section-block" style="margin-bottom:28px"><div class="section-block-title">90-Day Projection</div><div class="section-block-body scout-prose">';
-    if (proj.month1) html += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 1: </span>' + escHtml(proj.month1) + '</div>';
-    if (proj.month2) html += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 2: </span>' + escHtml(proj.month2) + '</div>';
-    if (proj.month3) html += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 3: </span>' + escHtml(proj.month3) + '</div>';
-    html += '</div></div>';
-  }
 
   /* Friday Reminder */
   if (t4.fridayReminder) {
@@ -2087,7 +2087,7 @@ function renderTab4JSON(tab4, biz) {
     html += '</div>';
   }
 
-  /* Weekly Check-In — link to dedicated page */
+  /* Weekly Check-In CTA */
   html += '<div style="border-top:1px solid var(--border2);padding-top:36px;margin-top:12px">';
   html += '<div style="text-align:center;padding:48px 24px">';
   html += '<h2 class="form-section-title" style="margin-bottom:12px">Weekly Check-In</h2>';
@@ -2095,6 +2095,39 @@ function renderTab4JSON(tab4, biz) {
   html += '<a href="checkin.html" class="btn-submit" style="display:inline-block;text-decoration:none;width:auto;padding:20px 48px">START CHECK-IN →</a>';
   html += '</div>';
   html += '</div>';
+
+  el.innerHTML += html;
+}
+
+/* ── WHAT'S NEXT TAB — renders 90-day projection (from tab4) + all of Tab 5 into tab5Content ── */
+function renderWhatsNextTab(tab4, tab5) {
+  var t4   = tab4 || {};
+  var proj = t4.projection90Day || {};
+  var projHtml = '';
+
+  /* 90-day projection from Tab 4 */
+  if (proj.month1 || proj.month2 || proj.month3) {
+    projHtml += '<div class="section-block" style="margin-bottom:28px"><div class="section-block-title">90-Day Projection</div><div class="section-block-body scout-prose">';
+    if (proj.month1) projHtml += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 1: </span>' + escHtml(proj.month1) + '</div>';
+    if (proj.month2) projHtml += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 2: </span>' + escHtml(proj.month2) + '</div>';
+    if (proj.month3) projHtml += '<div style="margin-bottom:6px"><span style="color:var(--gold);font-size:9px;letter-spacing:.12em;text-transform:uppercase">Month 3: </span>' + escHtml(proj.month3) + '</div>';
+    projHtml += '</div></div>';
+  }
+
+  /* Render Tab 5 expansion content — this writes into tab5Content and overwrites its innerHTML */
+  renderTab5JSON(tab5);
+
+  /* Prepend the 90-day projection to whatever renderTab5JSON just wrote */
+  if (projHtml) {
+    var el = document.getElementById('tab5Content');
+    if (el) el.innerHTML = projHtml + el.innerHTML;
+  }
+}
+
+function renderTab4JSON(tab4, biz) {
+  var t4 = tab4 || {};
+
+  var html = '';
 
   /* ── Referral Engine (from JSON) ── */
   var re = t4.referralEngine;
@@ -3010,7 +3043,7 @@ function renderTab5(content) {
 ═══════════════════════════════════════════ */
 function switchTab(n) {
   /* Deactivate all */
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 4; i++) {
     document.getElementById('tabBtn' + i).classList.remove('active');
     document.getElementById('panel' + i).classList.remove('active');
   }
