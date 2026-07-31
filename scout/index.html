@@ -696,39 +696,49 @@ function showDashboard(history, weekNum, firmName) {
   document.getElementById('greetingHello').textContent = greeting + (name ? ', ' + name + '.' : '.');
   document.getElementById('greetingWeek').textContent  = 'Week ' + weekNum + ' of 12';
 
-  /* ── Last week's data ── */
-  var last = history[history.length - 1] || {};
-  var prev = history.length > 1 ? history[history.length - 2] : null;
+  /* ── Filter to check-in entries only for all metric displays ── */
+  var checkins = history.filter(isCheckinEntry);
+  var last = checkins[checkins.length - 1] || {};
+  var prev = checkins.length > 1 ? checkins[checkins.length - 2] : null;
 
   /* ── MOMENTUM PROGRESSION ── */
-  var score     = parseInt(last.momentum || '0', 10);
+  var score     = checkins.length > 0 ? parseInt(last.momentum || '0', 10) : null;
   var prevScore = prev ? parseInt(prev.momentum || '0', 10) : null;
-  var level     = getMomentumLevel(score);
+  var level     = getMomentumLevel(score !== null ? score : 0);
   var prevLevel = prevScore !== null ? getMomentumLevel(prevScore) : null;
 
-  document.getElementById('dashMomentumScore').textContent = score;
-  document.getElementById('dashLevelName').textContent     = level.name;
-  document.getElementById('dashLevelDesc').textContent     = level.desc;
-  document.getElementById('dashNextLevel').textContent     = level.next
-    ? 'Next stage at ' + level.next + ' points — complete your Friday check-in to grow your score.'
-    : '';
+  if (score === null) {
+    document.getElementById('dashMomentumScore').textContent = '—';
+    document.getElementById('dashLevelName').textContent     = '';
+    document.getElementById('dashLevelDesc').textContent     = 'Complete your first Friday check-in to see your progress score.';
+    document.getElementById('dashNextLevel').textContent     = '';
+  } else {
+    document.getElementById('dashMomentumScore').textContent = score;
+    document.getElementById('dashLevelName').textContent     = level.name;
+    document.getElementById('dashLevelDesc').textContent     = level.desc;
+    document.getElementById('dashNextLevel').textContent     = level.next
+      ? 'Next stage at ' + level.next + ' points — complete your Friday check-in to grow your score.'
+      : '';
+  }
 
   /* Mastery glow */
   var card = document.getElementById('momentumCard');
-  if (score >= 81) { card.classList.add('mastery'); }
+  if (score !== null && score >= 81) { card.classList.add('mastery'); }
 
   /* Level-up celebration flash */
-  if (prevLevel && level.name !== prevLevel.name) {
+  if (score !== null && prevLevel && level.name !== prevLevel.name) {
     card.classList.add('level-up');
     setTimeout(function() { card.classList.remove('level-up'); }, 900);
   }
 
-  /* Animate bar */
-  setTimeout(function() {
-    document.getElementById('dashMomentumBar').style.width = Math.min(score, 100) + '%';
-  }, 300);
+  /* Animate bar — only when there is a real score */
+  if (score !== null) {
+    setTimeout(function() {
+      document.getElementById('dashMomentumBar').style.width = Math.min(score, 100) + '%';
+    }, 300);
+  }
 
-  /* Trend indicator */
+  /* Trend indicator — only when there are at least 2 check-ins */
   if (prevScore !== null) {
     var diff = score - prevScore;
     var trendEl = document.getElementById('dashMomentumTrend');
@@ -744,7 +754,9 @@ function showDashboard(history, weekNum, firmName) {
   }
 
   /* Momentum note */
-  if (score === 0) {
+  if (score === null) {
+    document.getElementById('dashMomentumNote').textContent = '';
+  } else if (score === 0) {
     document.getElementById('dashMomentumNote').textContent =
       'Your score starts at zero and grows every week you use Scout. This is week one — you\'re right on track.';
   } else if (last.scoutOutput) {
@@ -770,51 +782,62 @@ function showDashboard(history, weekNum, firmName) {
   /* ── METRIC CARDS ── */
   var revenue  = '—';
   var acq      = '—';
-  var custNew  = last.totalCustomers || '—';
+  var custNew  = checkins.length > 0 ? (last.totalCustomers || '—') : '—';
 
-  var pendingRaw = localStorage.getItem(scoutKey('scout_pending_result'));
-  if (pendingRaw) {
-    try {
-      var pending = JSON.parse(pendingRaw);
-      var output  = pending.scoutOutput || '';
+  /* Only parse pending result for revenue/acq when check-ins exist */
+  if (checkins.length > 0) {
+    var pendingRaw = localStorage.getItem(scoutKey('scout_pending_result'));
+    if (pendingRaw) {
+      try {
+        var pending = JSON.parse(pendingRaw);
+        var output  = pending.scoutOutput || '';
 
-      /* Revenue velocity */
-      var rvMatch = output.match(/REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month))/i);
-      if (rvMatch) revenue = rvMatch[1].replace(/\s+/g,' ').trim();
-      if (revenue === '—') {
-        var rvFb = output.match(/₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month)/i);
-        if (rvFb) revenue = rvFb[0].replace(/\s+/g,' ').trim();
-      }
+        /* Revenue velocity */
+        var rvMatch = output.match(/REVENUE\s+VELOCITY[\s\S]{0,200}?(₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month))/i);
+        if (rvMatch) revenue = rvMatch[1].replace(/\s+/g,' ').trim();
+        if (revenue === '—') {
+          var rvFb = output.match(/₹[\d,\.]+(?:\s*(?:lakh|crore|L|Cr)?)?(?:\s*\/\s*month|\s*per\s*month)/i);
+          if (rvFb) revenue = rvFb[0].replace(/\s+/g,' ').trim();
+        }
 
-      /* Acquisition efficiency */
-      var aeMatch = output.match(/(\d+)\s+contacts?\s+needed/i);
-      if (aeMatch) acq = aeMatch[1] + ' contacts';
+        /* Acquisition efficiency */
+        var aeMatch = output.match(/(\d+)\s+contacts?\s+needed/i);
+        if (aeMatch) acq = aeMatch[1] + ' contacts';
 
-    } catch(e) {}
+      } catch(e) {}
+    }
   }
 
   document.getElementById('dashRevenue').textContent   = revenue;
   document.getElementById('dashAcq').textContent       = acq;
   document.getElementById('dashCustomers').textContent = custNew;
 
-  /* Update sub-labels once data is known */
-  if (revenue !== '—') {
-    document.getElementById('dashRevenueSub').textContent = 'expected each month at this pace';
-  }
-  if (acq !== '—') {
-    document.getElementById('dashAcqSub').textContent = 'people to reach to win one customer';
-  }
-  if (custNew !== '—') {
-    document.getElementById('dashCustomersSub').textContent = 'won this week';
+  /* Sub-labels: "after your first check-in" when no check-ins yet */
+  if (checkins.length === 0) {
+    document.getElementById('dashRevenueSub').textContent   = 'after your first check-in';
+    document.getElementById('dashAcqSub').textContent       = 'after your first check-in';
+    document.getElementById('dashCustomersSub').textContent = 'after your first check-in';
+  } else {
+    if (revenue !== '—') {
+      document.getElementById('dashRevenueSub').textContent = 'expected each month at this pace';
+    }
+    if (acq !== '—') {
+      document.getElementById('dashAcqSub').textContent = 'people to reach to win one customer';
+    }
+    if (custNew !== '—') {
+      document.getElementById('dashCustomersSub').textContent = 'won this week';
+    }
   }
 
   /* ── TOTAL REVENUE COUNTER (Feature 3.5) ── */
-  var totalRevenue = history.reduce(function(sum, entry) {
+  var totalRevenue = checkins.reduce(function(sum, entry) {
     return sum + (parseFloat(entry.revenueAdded) || 0);
   }, 0);
   document.getElementById('dashTotalRevenue').textContent =
-    totalRevenue > 0 ? '₹' + totalRevenue.toLocaleString('en-IN') : '₹0';
-  if (totalRevenue > 0) {
+    checkins.length === 0 ? '—' : (totalRevenue > 0 ? '₹' + totalRevenue.toLocaleString('en-IN') : '₹0');
+  if (checkins.length === 0) {
+    document.getElementById('dashTotalRevenueSub').textContent = 'after your first check-in';
+  } else if (totalRevenue > 0) {
     document.getElementById('dashTotalRevenueSub').textContent = 'earned since you started Scout';
   }
 
@@ -826,7 +849,21 @@ function showDashboard(history, weekNum, firmName) {
   }
 
   /* ── BUSINESS HEALTH SCORE (Feature 5.2) ── */
-  renderHealthScore();
+  if (checkins.length === 0) {
+    /* No check-in entries yet — render placeholder with dash score, no bars */
+    var healthEl = document.getElementById('healthScoreCard');
+    if (healthEl) {
+      healthEl.innerHTML =
+        '<div class="health-eyebrow">Your Business Health</div>' +
+        '<div class="health-score-row">' +
+          '<span class="health-score-big">—</span>' +
+          '<span class="health-score-denom">/100</span>' +
+        '</div>' +
+        '<div class="health-empty">Your business health score appears after your first check-in.</div>';
+    }
+  } else {
+    renderHealthScore();
+  }
 
   /* ── 12-WEEK ARC (Feature 3.7) ── */
   renderTransformationArc(weekNum);
@@ -1060,18 +1097,27 @@ function renderHealthScore() {
 ═══════════════════════════════════════════ */
 function renderRecentRows(history) {
   var container = document.getElementById('recentRows');
-  if (!history || history.length === 0) {
+
+  /* Pair each check-in entry with its original index in the full history array.
+     viewWeek(idx) re-reads scout_history from localStorage and uses history[idx],
+     so origIdx must refer to the position in the unfiltered array. */
+  var checkinWithIdx = [];
+  for (var j = 0; j < history.length; j++) {
+    if (isCheckinEntry(history[j])) checkinWithIdx.push({ entry: history[j], origIdx: j });
+  }
+
+  if (checkinWithIdx.length === 0) {
     document.getElementById('recentSection').style.display = 'none';
     return;
   }
 
   /* Newest first, max 3 */
-  var recent = history.slice().reverse().slice(0, 3);
+  var recent = checkinWithIdx.slice().reverse().slice(0, 3);
   var html   = '';
 
-  recent.forEach(function(week, i) {
-    /* Original index in history array for viewWeek() */
-    var origIdx = history.length - 1 - i;
+  recent.forEach(function(item) {
+    var week    = item.entry;
+    var origIdx = item.origIdx;
     var date    = formatDate(week.date);
     var custNew = week.totalCustomers || '0';
     var revenue = week.revenueAdded   || '0';

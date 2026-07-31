@@ -627,6 +627,7 @@ function saveScoutResult(rawOutput, weekNumber) {
 
   // Build the result object
   var resultObj = {
+    type:            'onboarding',
     weekNumber:      weekNumber,
     timestamp:       new Date().toISOString(),
     scoutOutput:     rawOutput,
@@ -640,7 +641,7 @@ function saveScoutResult(rawOutput, weekNumber) {
   };
 
   // Save as pending result (result.html reads this on load)
-  localStorage.setItem('scout_pending_result', JSON.stringify(resultObj));
+  localStorage.setItem(scoutKey('scout_pending_result'), JSON.stringify(resultObj));
 
   // Append to history (max 12 entries — oldest dropped first)
   var history = getScoutHistory();
@@ -648,11 +649,11 @@ function saveScoutResult(rawOutput, weekNumber) {
   if (history.length > 12) {
     history = history.slice(history.length - 12);
   }
-  localStorage.setItem('scout_history', JSON.stringify(history));
+  localStorage.setItem(scoutKey('scout_history'), JSON.stringify(history));
 
   // Advance the week counter and clear the scorecard checklist for the new week
-  localStorage.setItem('scout_week_number', String(weekNumber));
-  localStorage.removeItem('scout_week_checklist');
+  localStorage.setItem(scoutKey('scout_week_number'), String(weekNumber));
+  localStorage.removeItem(scoutKey('scout_week_checklist'));
 
   // ── STREAK TRACKING ────────────────────────────────────────
   // Streak = consecutive weeks with a check-in.
@@ -678,7 +679,7 @@ function saveScoutResult(rawOutput, weekNumber) {
     var _pending  = {};
     try {
       _pending = JSON.parse(
-        localStorage.getItem('scout_pending_result') || '{}'
+        localStorage.getItem(scoutKey('scout_pending_result')) || '{}'
       );
     } catch(e) {}
     var _bizData = _pending.businessData || {};
@@ -714,8 +715,8 @@ function saveScoutResult(rawOutput, weekNumber) {
 // Updates scout_last_checkin_week to weekNumber.
 // ─────────────────────────────────────────────────────────────
 function updateStreak(weekNumber) {
-  var lastCheckinWeek = parseInt(localStorage.getItem('scout_last_checkin_week') || '0', 10);
-  var currentStreak   = parseInt(localStorage.getItem('scout_streak') || '0', 10);
+  var lastCheckinWeek = parseInt(localStorage.getItem(scoutKey('scout_last_checkin_week')) || '0', 10);
+  var currentStreak   = parseInt(localStorage.getItem(scoutKey('scout_streak')) || '0', 10);
 
   if (lastCheckinWeek > 0 && lastCheckinWeek === weekNumber - 1) {
     // Consecutive week — increment streak
@@ -725,8 +726,8 @@ function updateStreak(weekNumber) {
     currentStreak = 1;
   }
 
-  localStorage.setItem('scout_streak',            String(currentStreak));
-  localStorage.setItem('scout_last_checkin_week', String(weekNumber));
+  localStorage.setItem(scoutKey('scout_streak'),            String(currentStreak));
+  localStorage.setItem(scoutKey('scout_last_checkin_week'), String(weekNumber));
 }
 
 
@@ -755,8 +756,8 @@ function extractAndSaveInsight(rawOutput, weekNumber) {
       .replace(/```[\s\S]*$/, '')       /* unclosed fence to end of string */
       .trim();
     if (cleanInsight.length > 20) {
-      localStorage.setItem('scout_weekly_insight', cleanInsight);
-      localStorage.setItem('scout_insight_week',   String(weekNumber));
+      localStorage.setItem(scoutKey('scout_weekly_insight'), cleanInsight);
+      localStorage.setItem(scoutKey('scout_insight_week'),   String(weekNumber));
     }
   }
 }
@@ -910,7 +911,7 @@ function applyPatchToStoredPlan(rawPlanString, patch, weekNumber) {
 // Safe — always returns an array even if storage is empty or corrupt.
 // ─────────────────────────────────────────────────────────────
 function getScoutHistory() {
-  var raw = localStorage.getItem('scout_history');
+  var raw = localStorage.getItem(scoutKey('scout_history'));
   if (!raw) return [];
   try {
     var parsed = JSON.parse(raw);
@@ -918,6 +919,17 @@ function getScoutHistory() {
   } catch (e) {
     return [];
   }
+}
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — isCheckinEntry(e)
+//
+// Returns true if e is a check-in history entry (written by checkin.html).
+// Distinguishes check-ins from onboarding entries (written by saveScoutResult).
+// A check-in entry always has revenueAdded (may be '0') or type === 'checkin'.
+// ─────────────────────────────────────────────────────────────
+function isCheckinEntry(e) {
+  return !!e && (e.type === 'checkin' || Object.prototype.hasOwnProperty.call(e, 'revenueAdded'));
 }
 
 
@@ -933,7 +945,7 @@ function getScoutHistory() {
 //   weekNumber     — current week number (integer, defaults to 1)
 // ─────────────────────────────────────────────────────────────
 function getScoutContext() {
-  var raw = localStorage.getItem('scout_pending_result');
+  var raw = localStorage.getItem(scoutKey('scout_pending_result'));
   if (!raw) {
     return { onboardContext: null, priorOutput: null, weekNumber: 1 };
   }
@@ -1067,8 +1079,12 @@ function calculateHealthScore() {
   var history = getScoutHistory();
   if (!history || history.length === 0) return;
 
-  var lastEntry = history[history.length - 1];
-  var prevEntry = history.length > 1 ? history[history.length - 2] : null;
+  /* Only use check-in entries — onboarding entries lack the fields needed */
+  var checkins = history.filter(isCheckinEntry);
+  if (checkins.length === 0) return;
+
+  var lastEntry = checkins[checkins.length - 1];
+  var prevEntry = checkins.length > 1 ? checkins[checkins.length - 2] : null;
 
   var breakdown = {};
   var total = 0;
@@ -1085,7 +1101,7 @@ function calculateHealthScore() {
 
   var contactsTarget = 0;
   try {
-    var tRaw = localStorage.getItem('scout_last_targets');
+    var tRaw = localStorage.getItem(scoutKey('scout_last_targets'));
     if (tRaw) contactsTarget = parseInt(JSON.parse(tRaw).contacts || 0, 10) || 0;
   } catch (e) {}
 
@@ -1175,8 +1191,8 @@ function calculateHealthScore() {
   breakdown.seasonal = { score: seasonalScore, label: 'Seasonal Preparedness' };
   total += seasonalScore;
 
-  localStorage.setItem('scout_health_score',     String(Math.min(total, 100)));
-  localStorage.setItem('scout_health_breakdown', JSON.stringify(breakdown));
+  localStorage.setItem(scoutKey('scout_health_score'),     String(Math.min(total, 100)));
+  localStorage.setItem(scoutKey('scout_health_breakdown'), JSON.stringify(breakdown));
 }
 
 
