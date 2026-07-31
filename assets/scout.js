@@ -647,7 +647,7 @@ function saveScoutResult(rawOutput, weekNumber) {
   };
 
   // Save as pending result (result.html reads this on load)
-  localStorage.setItem('scout_pending_result', JSON.stringify(resultObj));
+  localStorage.setItem(scoutKey('scout_pending_result'), JSON.stringify(resultObj));
 
   // Append to history (max 12 entries — oldest dropped first)
   var history = getScoutHistory();
@@ -655,11 +655,11 @@ function saveScoutResult(rawOutput, weekNumber) {
   if (history.length > 12) {
     history = history.slice(history.length - 12);
   }
-  localStorage.setItem('scout_history', JSON.stringify(history));
+  localStorage.setItem(scoutKey('scout_history'), JSON.stringify(history));
 
   // Advance the week counter and clear the scorecard checklist for the new week
-  localStorage.setItem('scout_week_number', String(weekNumber));
-  localStorage.removeItem('scout_week_checklist');
+  localStorage.setItem(scoutKey('scout_week_number'), String(weekNumber));
+  localStorage.removeItem(scoutKey('scout_week_checklist'));
 
   // ── STREAK TRACKING ────────────────────────────────────────
   // Streak = consecutive weeks with a check-in.
@@ -685,7 +685,7 @@ function saveScoutResult(rawOutput, weekNumber) {
     var _pending  = {};
     try {
       _pending = JSON.parse(
-        localStorage.getItem('scout_pending_result') || '{}'
+        localStorage.getItem(scoutKey('scout_pending_result')) || '{}'
       );
     } catch(e) {}
     var _bizData = _pending.businessData || {};
@@ -721,8 +721,8 @@ function saveScoutResult(rawOutput, weekNumber) {
 // Updates scout_last_checkin_week to weekNumber.
 // ─────────────────────────────────────────────────────────────
 function updateStreak(weekNumber) {
-  var lastCheckinWeek = parseInt(localStorage.getItem('scout_last_checkin_week') || '0', 10);
-  var currentStreak   = parseInt(localStorage.getItem('scout_streak') || '0', 10);
+  var lastCheckinWeek = parseInt(localStorage.getItem(scoutKey('scout_last_checkin_week')) || '0', 10);
+  var currentStreak   = parseInt(localStorage.getItem(scoutKey('scout_streak')) || '0', 10);
 
   if (lastCheckinWeek > 0 && lastCheckinWeek === weekNumber - 1) {
     // Consecutive week — increment streak
@@ -732,8 +732,8 @@ function updateStreak(weekNumber) {
     currentStreak = 1;
   }
 
-  localStorage.setItem('scout_streak',            String(currentStreak));
-  localStorage.setItem('scout_last_checkin_week', String(weekNumber));
+  localStorage.setItem(scoutKey('scout_streak'),            String(currentStreak));
+  localStorage.setItem(scoutKey('scout_last_checkin_week'), String(weekNumber));
 }
 
 
@@ -762,8 +762,8 @@ function extractAndSaveInsight(rawOutput, weekNumber) {
       .replace(/```[\s\S]*$/, '')       /* unclosed fence to end of string */
       .trim();
     if (cleanInsight.length > 20) {
-      localStorage.setItem('scout_weekly_insight', cleanInsight);
-      localStorage.setItem('scout_insight_week',   String(weekNumber));
+      localStorage.setItem(scoutKey('scout_weekly_insight'), cleanInsight);
+      localStorage.setItem(scoutKey('scout_insight_week'),   String(weekNumber));
     }
   }
 }
@@ -917,7 +917,7 @@ function applyPatchToStoredPlan(rawPlanString, patch, weekNumber) {
 // Safe — always returns an array even if storage is empty or corrupt.
 // ─────────────────────────────────────────────────────────────
 function getScoutHistory() {
-  var raw = localStorage.getItem('scout_history');
+  var raw = localStorage.getItem(scoutKey('scout_history'));
   if (!raw) return [];
   try {
     var parsed = JSON.parse(raw);
@@ -940,7 +940,7 @@ function getScoutHistory() {
 //   weekNumber     — current week number (integer, defaults to 1)
 // ─────────────────────────────────────────────────────────────
 function getScoutContext() {
-  var raw = localStorage.getItem('scout_pending_result');
+  var raw = localStorage.getItem(scoutKey('scout_pending_result'));
   if (!raw) {
     return { onboardContext: null, priorOutput: null, weekNumber: 1 };
   }
@@ -1092,7 +1092,7 @@ function calculateHealthScore() {
 
   var contactsTarget = 0;
   try {
-    var tRaw = localStorage.getItem('scout_last_targets');
+    var tRaw = localStorage.getItem(scoutKey('scout_last_targets'));
     if (tRaw) contactsTarget = parseInt(JSON.parse(tRaw).contacts || 0, 10) || 0;
   } catch (e) {}
 
@@ -1182,8 +1182,126 @@ function calculateHealthScore() {
   breakdown.seasonal = { score: seasonalScore, label: 'Seasonal Preparedness' };
   total += seasonalScore;
 
-  localStorage.setItem('scout_health_score',     String(Math.min(total, 100)));
-  localStorage.setItem('scout_health_breakdown', JSON.stringify(breakdown));
+  localStorage.setItem(scoutKey('scout_health_score'),     String(Math.min(total, 100)));
+  localStorage.setItem(scoutKey('scout_health_breakdown'), JSON.stringify(breakdown));
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — repairOrphanedScoutResult()
+//
+// Self-heal for users whose analysis ran before the scoping fix.
+// Their server blob holds a stub object (scoped key, empty scoutOutput)
+// while the real analysis sits in the unscoped raw key.
+//
+// MUST be called AFTER loadScoutStateFromServer() — if called before,
+// the server load overwrites the repair.
+//
+// Repairs two things:
+//   1. scout_pending_result — scoped stub has no/empty scoutOutput;
+//      raw key has a complete one → merge raw into scoped.
+//   2. scout_history — scoped array is empty but raw array has entries
+//      → copy raw to scoped.
+//
+// After any repair, calls saveScoutStateToServer() to persist.
+// No-ops silently if nothing needs fixing.
+// ─────────────────────────────────────────────────────────────
+async function repairOrphanedScoutResult() {
+  try {
+    var pendingRepaired = false;
+
+    // ── 1. scout_pending_result ────────────────────────────────
+    //
+    // Safety gate: only repair when ALL of these are true:
+    //   a) Scoped key EXISTS in localStorage (proof this firm has been here)
+    //   b) Scoped object has onboardContext OR businessData (proof it belongs
+    //      to the current firm — not a stale stub from a different firm)
+    //   c) Scoped object has no/empty scoutOutput (the actual gap to fill)
+    //   d) Raw unscoped key has a non-empty scoutOutput (data to restore)
+    //
+    // If the scoped key is MISSING ENTIRELY → skip. We have no proof
+    // the current firm ever produced a result, so copying raw data would
+    // be a cross-firm data leak. Log clearly and bail.
+    //
+    var scopedRaw = localStorage.getItem(scoutKey('scout_pending_result'));
+
+    if (scopedRaw === null) {
+      // Scoped key is completely absent — safe to do nothing.
+      console.log('[repairOrphanedScoutResult] Scoped key missing entirely — skipped for safety (no proof this firm onboarded here).');
+    } else {
+      var scopedObj = null;
+      try { scopedObj = JSON.parse(scopedRaw); } catch(e) {}
+
+      // Gate b): must have onboardContext OR businessData as proof of firm identity
+      var hasFirmProof = scopedObj && (scopedObj.onboardContext || scopedObj.businessData);
+
+      if (!hasFirmProof) {
+        console.log('[repairOrphanedScoutResult] Scoped key exists but has no firm identity markers — skipped for safety.');
+      } else {
+        // Gate c): only proceed if scoutOutput is genuinely missing
+        var hasOutput = scopedObj.scoutOutput && scopedObj.scoutOutput.trim() !== '';
+
+        if (!hasOutput) {
+          // Gate d): read raw key and verify it has content
+          var rawPending = localStorage.getItem('scout_pending_result');
+          if (rawPending) {
+            var rawObj = null;
+            try { rawObj = JSON.parse(rawPending); } catch(e) {}
+            if (rawObj && rawObj.scoutOutput && rawObj.scoutOutput.trim() !== '') {
+              // Safe to repair: merge raw result into scoped stub,
+              // preserving the firm's own onboardContext + businessData
+              var merged = rawObj;
+              if (scopedObj.onboardContext) merged.onboardContext = scopedObj.onboardContext;
+              if (scopedObj.businessData)   merged.businessData   = scopedObj.businessData;
+              localStorage.setItem(scoutKey('scout_pending_result'), JSON.stringify(merged));
+              console.log('[repairOrphanedScoutResult] Repaired scout_pending_result — restored scoutOutput from unscoped key.');
+              pendingRepaired = true;
+            }
+          }
+        }
+      }
+    }
+
+    // ── 2. scout_history ──────────────────────────────────────
+    //
+    // Only repair history if the pending_result repair above actually fired.
+    // History repair in isolation (without a confirmed pending_result repair)
+    // could pull another firm's history into the current scoped namespace.
+    //
+    if (pendingRepaired) {
+      var scopedHistRaw = localStorage.getItem(scoutKey('scout_history'));
+      var scopedHist = [];
+      try { scopedHist = scopedHistRaw ? JSON.parse(scopedHistRaw) : []; } catch(e) {}
+
+      if (!Array.isArray(scopedHist) || scopedHist.length === 0) {
+        var rawHistRaw = localStorage.getItem('scout_history');
+        if (rawHistRaw) {
+          var rawHist = null;
+          try { rawHist = JSON.parse(rawHistRaw); } catch(e) {}
+          if (Array.isArray(rawHist) && rawHist.length > 0) {
+            localStorage.setItem(scoutKey('scout_history'), JSON.stringify(rawHist));
+            console.log('[repairOrphanedScoutResult] Repaired scout_history — copied ' + rawHist.length + ' entries from unscoped key.');
+          }
+        }
+      }
+
+      // ── Persist repair to server, then clean up raw keys ────
+      // Raw key removal only happens if server sync SUCCEEDS.
+      // If sync fails, leave raw keys intact so repair can retry next load.
+      try {
+        await saveScoutStateToServer();
+        localStorage.removeItem('scout_pending_result');
+        localStorage.removeItem('scout_history');
+        console.log('[repairOrphanedScoutResult] Server sync succeeded — raw unscoped keys removed.');
+      } catch(e) {
+        console.warn('[repairOrphanedScoutResult] Server sync failed — raw keys left in place for retry:', e);
+      }
+    }
+
+  } catch(e) {
+    // Never let repair logic crash the page
+    console.warn('[repairOrphanedScoutResult] Unexpected error:', e);
+  }
 }
 
 

@@ -634,6 +634,7 @@ window.addEventListener('DOMContentLoaded', async function() {
 
   migrateUnscopedScoutKeys();
   await loadScoutStateFromServer();
+  await repairOrphanedScoutResult(); // must run after server load, before first scoped read
 
   /* Firm name in nav */
   var firmName = localStorage.getItem('g7_session_name') || '';
