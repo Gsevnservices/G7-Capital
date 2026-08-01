@@ -1472,6 +1472,8 @@ function parseAndRender(rawOutput, biz) {
         '</details>' +
         '</div>';
     }
+    var _wacElT = document.getElementById('wacContent');
+    if (_wacElT) _wacElT.innerHTML = '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
     return;
   }
 
@@ -1491,6 +1493,8 @@ function parseAndRender(rawOutput, biz) {
         '</details>' +
         '</div>';
     }
+    var _wacElE = document.getElementById('wacContent');
+    if (_wacElE) _wacElE.innerHTML = '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
     return;
   }
 
@@ -1513,6 +1517,10 @@ function parseAndRender(rawOutput, biz) {
   renderTab3(sections.tab3);
   renderTab4(sections.tab4, biz);
   renderTab5(sections.tab5);
+
+  /* Text path has no calendar data — show placeholder in WhatsApp tab */
+  var _wacElTxt = document.getElementById('wacContent');
+  if (_wacElTxt) _wacElTxt.innerHTML = '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
 
   /* Reasoning panel for text path */
   var rData = parseReasoningData(cleanText);
