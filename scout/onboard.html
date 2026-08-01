@@ -870,8 +870,62 @@ async function handleSubmit() {
     }
 
     /* Read SSE stream using readSSEStream() from scout.js */
-    var scoutOutput = await readSSEStream(response);
+    var streamResult = await readSSEStream(response);
+    var scoutOutput  = streamResult.text;
+    var streamComplete = streamResult.complete;
+
     if (!scoutOutput) throw new Error('Scout returned an empty response. Please try again.');
+
+    /* Guard: if the stream was cut before message_stop, the JSON will be
+       truncated and unparseable. Do NOT save a partial result.
+       Instead, show a retry prompt. The 'data' object still holds all the
+       user's form answers in memory — retry re-sends without re-typing. */
+    if (!streamComplete) {
+      overlay.classList.remove('active');
+      document.getElementById('submitBtn').disabled = false;
+      var retryMsg =
+        'The analysis was interrupted before it finished — this is usually a network ' +
+        'hiccup, not an error with your answers.\n\n' +
+        'Tap OK to try again. Your answers are saved and will be re-sent automatically.';
+      if (confirm(retryMsg)) {
+        /* Re-submit immediately using the same data object already in memory */
+        document.getElementById('submitBtn').disabled = true;
+        overlay.classList.add('active');
+        bar.style.animation = 'none';
+        bar.offsetHeight;
+        bar.style.animation = '';
+        var retryResponse = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout/analyse', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sessionToken
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 28000,
+            system: [{ type: 'text', text: SCOUT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+            messages: [{ role: 'user', content: userMessage }]
+          })
+        });
+        if (!retryResponse.ok) {
+          var retryErr = await retryResponse.text();
+          throw new Error('Scout error ' + retryResponse.status + ': ' + retryErr);
+        }
+        var retryStream = await readSSEStream(retryResponse);
+        scoutOutput    = retryStream.text;
+        streamComplete = retryStream.complete;
+        if (!scoutOutput) throw new Error('Scout returned an empty response. Please try again.');
+        if (!streamComplete) {
+          overlay.classList.remove('active');
+          document.getElementById('submitBtn').disabled = false;
+          alert('The analysis was interrupted again. Please check your internet connection and try once more.');
+          return;
+        }
+      } else {
+        /* User cancelled retry — leave form intact, do nothing */
+        return;
+      }
+    }
 
     /* Save result using saveScoutResult() from scout.js —
        handles scout_pending_result, scout_history (max 12), scout_week_number */

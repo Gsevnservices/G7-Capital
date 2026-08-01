@@ -49,32 +49,23 @@ var SCOUT_STATE_KEYS = [
   'scout_pipeline'
 ];
 
-/* One-time migration for users whose data predates firm-scoped keys.
-   Copies raw key -> scoped key ONLY when the scoped key is empty.
-   Never overwrites scoped data. Never deletes the raw key (kept as backup).
-   Safe to call on every page load. */
+/* DEPRECATED — intentionally disabled.
+   This function previously copied raw unscoped keys into the current firm's
+   scoped keys on every page load. That caused a cross-firm data leak:
+   any new firm on a shared browser inherited the previous firm's full
+   Scout analysis, history, and ICP data.
+
+   Recovery for users who ran before scoping was added is now handled by:
+     • repairOrphanedScoutResult() — targeted, gated, safe (scout.js)
+     • loadScoutStateFromServer()  — authoritative server restore (scout.js)
+     • raw key purge on login      — removes leftover raw keys so no future
+                                      firm can inherit them (login.html)
+
+   The function is kept as a no-op because all Scout pages still call it.
+   Removing the calls from every page would risk a missed site. */
 function migrateUnscopedScoutKeys() {
-  try {
-    var firm = localStorage.getItem('g7_session_firm');
-    if (!firm) return false;  /* not logged in yet — nothing to scope to */
-    var migrated = 0;
-    for (var i = 0; i < SCOUT_STATE_KEYS.length; i++) {
-      var base = SCOUT_STATE_KEYS[i];
-      var scoped = scoutKey(base);
-      var rawVal = localStorage.getItem(base);
-      var scopedVal = localStorage.getItem(scoped);
-      /* Only fill an empty scoped key from a non-empty raw key */
-      if (rawVal !== null && rawVal !== '' && (scopedVal === null || scopedVal === '')) {
-        localStorage.setItem(scoped, rawVal);
-        migrated++;
-      }
-    }
-    if (migrated > 0) console.log('Scout: migrated ' + migrated + ' legacy keys to scoped storage');
-    return migrated > 0;
-  } catch (e) {
-    console.warn('Scout key migration failed (non-blocking):', e);
-    return false;
-  }
+  /* no-op — migration disabled to prevent cross-firm data leaks */
+  return false;
 }
 
 // Bundle all Scout state keys from localStorage into one object and
@@ -211,11 +202,11 @@ async function callScout(businessContext) {
   }
 
   // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
-  var result = await readSSEStream(response);
-  if (!result) {
+  var streamResult = await readSSEStream(response);
+  if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return result;
+  return { text: streamResult.text, complete: streamResult.complete };
 }
 
 
@@ -267,11 +258,11 @@ async function callScoutRaw(userMessage) {
     throw new Error('Scout API error ' + response.status + ': ' + errBody);
   }
 
-  var result = await readSSEStream(response);
-  if (!result) {
+  var streamResult = await readSSEStream(response);
+  if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return result;
+  return { text: streamResult.text, complete: streamResult.complete };
 }
 
 
@@ -439,11 +430,11 @@ async function callScoutCheckin(checkinData) {
   }
 
   // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
-  var result = await readSSEStream(response);
-  if (!result) {
+  var streamResult = await readSSEStream(response);
+  if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return result;
+  return { text: streamResult.text, complete: streamResult.complete };
 }
 
 
@@ -460,7 +451,11 @@ async function callScoutCheckin(checkinData) {
 //   data: {"type":"message_stop"}
 //
 // response — the fetch() Response object (must be ok before calling)
-// Returns:  full assembled text string
+// Returns:  { text: string, complete: boolean }
+//             text     — the assembled output (may be partial if complete is false)
+//             complete — true only if message_stop or [DONE] was received,
+//                        meaning the model finished normally.
+//                        false means the connection was cut before the model finished.
 // Throws:   Error if the stream cannot be read
 // ─────────────────────────────────────────────────────────────
 async function readSSEStream(response) {
@@ -469,6 +464,7 @@ async function readSSEStream(response) {
   var fullText = '';
   var buffer = '';
   var done = false;
+  var receivedStopSignal = false; // set true only on message_stop or [DONE]
 
   while (!done) {
     var chunk = await reader.read();
@@ -487,7 +483,7 @@ async function readSSEStream(response) {
         if (!line.startsWith('data: ')) continue;
 
         var jsonStr = line.slice(6);
-        if (jsonStr === '[DONE]') { done = true; break; }
+        if (jsonStr === '[DONE]') { receivedStopSignal = true; done = true; break; }
 
         var event;
         try {
@@ -507,6 +503,7 @@ async function readSSEStream(response) {
         }
 
         if (event.type === 'message_stop') {
+          receivedStopSignal = true;
           done = true;
           break;
         }
@@ -528,10 +525,11 @@ async function readSSEStream(response) {
       ) {
         fullText += tailEvent.delta.text;
       }
+      if (tailEvent.type === 'message_stop') { receivedStopSignal = true; }
     } catch (e) { /* ignore incomplete tail */ }
   }
 
-  return fullText;
+  return { text: fullText, complete: receivedStopSignal };
 }
 
 
@@ -1217,6 +1215,192 @@ function calculateHealthScore() {
   } catch (e) {}
 
   return finalScore;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — purgeRawScoutKeys()
+//
+// Removes all 15 raw (unscoped) SCOUT_STATE_KEYS entries from
+// localStorage. Called by repairOrphanedScoutResult() once the
+// repair decision has been made and any needed server sync has
+// succeeded — so the raw keys are either already rescued into
+// the scoped namespace and persisted to the server, or the gates
+// confirmed they do not belong to the current firm.
+//
+// This is the permanent backstop against cross-firm data leaks:
+// after this runs, migrateUnscopedScoutKeys (now a no-op) and
+// any future migration path cannot find anything to copy.
+// ─────────────────────────────────────────────────────────────
+function purgeRawScoutKeys() {
+  var keys = [
+    'scout_pending_result',
+    'scout_history',
+    'scout_week_number',
+    'scout_streak',
+    'scout_last_checkin_week',
+    'scout_health_score',
+    'scout_health_breakdown',
+    'scout_weekly_insight',
+    'scout_insight_week',
+    'scout_last_targets',
+    'scout_icp_names',
+    'scout_first_customer_celebrated',
+    'scout_week_checklist',
+    'scout_referral_chain',
+    'scout_pipeline'
+  ];
+  for (var i = 0; i < keys.length; i++) {
+    localStorage.removeItem(keys[i]);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// HELPER — repairOrphanedScoutResult()
+//
+// Self-heal for users whose analysis ran before the scoping fix.
+// Their server blob holds a stub object (scoped key, empty scoutOutput)
+// while the real analysis sits in the unscoped raw key.
+//
+// MUST be called AFTER loadScoutStateFromServer() — if called before,
+// the server load overwrites the repair.
+//
+// Repairs two things:
+//   1. scout_pending_result — scoped stub has no/empty scoutOutput;
+//      raw key has a complete one → merge raw into scoped.
+//   2. scout_history — scoped array is empty but raw array has entries
+//      → copy raw to scoped.
+//
+// After any repair, calls saveScoutStateToServer() to persist.
+// No-ops silently if nothing needs fixing.
+// ─────────────────────────────────────────────────────────────
+async function repairOrphanedScoutResult() {
+  try {
+    var pendingRepaired = false;
+
+    // ── 1. scout_pending_result ────────────────────────────────
+    //
+    // Safety gate: only repair when ALL of these are true:
+    //   a) Scoped key EXISTS in localStorage (proof this firm has been here)
+    //   b) Scoped object has onboardContext OR businessData (proof it belongs
+    //      to the current firm — not a stale stub from a different firm)
+    //   c) Scoped object has no/empty scoutOutput (the actual gap to fill)
+    //   d) Raw unscoped key has a non-empty scoutOutput (data to restore)
+    //
+    // If the scoped key is MISSING ENTIRELY → skip. We have no proof
+    // the current firm ever produced a result, so copying raw data would
+    // be a cross-firm data leak. Log clearly and bail.
+    //
+    var scopedRaw = localStorage.getItem(scoutKey('scout_pending_result'));
+
+    if (scopedRaw === null) {
+      // Scoped key is completely absent — safe to do nothing.
+      console.log('[repairOrphanedScoutResult] Scoped key missing entirely — skipped for safety (no proof this firm onboarded here).');
+    } else {
+      var scopedObj = null;
+      try { scopedObj = JSON.parse(scopedRaw); } catch(e) {}
+
+      // Gate b): must have onboardContext OR businessData as proof of firm identity
+      var hasFirmProof = scopedObj && (scopedObj.onboardContext || scopedObj.businessData);
+
+      if (!hasFirmProof) {
+        console.log('[repairOrphanedScoutResult] Scoped key exists but has no firm identity markers — skipped for safety.');
+      } else {
+        // Gate c): only proceed if scoutOutput is genuinely missing
+        var hasOutput = scopedObj.scoutOutput && scopedObj.scoutOutput.trim() !== '';
+
+        if (!hasOutput) {
+          // Gate d): read raw key and verify it has content
+          var rawPending = localStorage.getItem('scout_pending_result');
+          if (rawPending) {
+            var rawObj = null;
+            try { rawObj = JSON.parse(rawPending); } catch(e) {}
+            if (rawObj && rawObj.scoutOutput && rawObj.scoutOutput.trim() !== '') {
+              // Safe to repair: merge raw result into scoped stub,
+              // preserving the firm's own onboardContext + businessData
+              var merged = rawObj;
+              if (scopedObj.onboardContext) merged.onboardContext = scopedObj.onboardContext;
+              if (scopedObj.businessData)   merged.businessData   = scopedObj.businessData;
+              localStorage.setItem(scoutKey('scout_pending_result'), JSON.stringify(merged));
+              console.log('[repairOrphanedScoutResult] Repaired scout_pending_result — restored scoutOutput from unscoped key.');
+              pendingRepaired = true;
+            }
+          }
+        }
+      }
+    }
+
+    // ── 2. scout_history ──────────────────────────────────────
+    //
+    // Only repair history if the pending_result repair above actually fired.
+    // History repair in isolation (without a confirmed pending_result repair)
+    // could pull another firm's history into the current scoped namespace.
+    //
+    if (pendingRepaired) {
+      var scopedHistRaw = localStorage.getItem(scoutKey('scout_history'));
+      var scopedHist = [];
+      try { scopedHist = scopedHistRaw ? JSON.parse(scopedHistRaw) : []; } catch(e) {}
+
+      if (!Array.isArray(scopedHist) || scopedHist.length === 0) {
+        var rawHistRaw = localStorage.getItem('scout_history');
+        if (rawHistRaw) {
+          var rawHist = null;
+          try { rawHist = JSON.parse(rawHistRaw); } catch(e) {}
+          if (Array.isArray(rawHist) && rawHist.length > 0) {
+            localStorage.setItem(scoutKey('scout_history'), JSON.stringify(rawHist));
+            console.log('[repairOrphanedScoutResult] Repaired scout_history — copied ' + rawHist.length + ' entries from unscoped key.');
+          }
+        }
+      }
+
+      // ── Persist repair to server, then clean up all raw keys ─
+      // Raw key removal only happens if server sync SUCCEEDS.
+      // If sync fails, leave ALL raw keys intact so this repair
+      // can retry on the next page load.
+      try {
+        await saveScoutStateToServer();
+        purgeRawScoutKeys();
+        console.log('[repairOrphanedScoutResult] Server sync succeeded — all raw unscoped Scout keys removed.');
+      } catch(e) {
+        console.warn('[repairOrphanedScoutResult] Server sync failed — raw keys left in place for retry:', e);
+      }
+    } else {
+      // ── No repair fired. Purge raw keys ONLY if this firm
+      //    demonstrably has its own complete scoped data.
+      //
+      // Condition: scoped scout_pending_result exists AND has a
+      // non-empty scoutOutput. That proves the firm has a full
+      // analysis in the scoped namespace and does not need the
+      // raw keys as a fallback.
+      //
+      // Do NOT purge when:
+      //   • scoped key is absent  — legacy user whose only copy
+      //     is in the raw key; purging would destroy it permanently
+      //   • scoped key has no scoutOutput — firm is mid-onboard
+      //     or in the same gap state the repair targets; keep raw
+      //     keys as the safety net
+      //
+      var canPurge = false;
+      try {
+        var _chk = scopedRaw ? JSON.parse(scopedRaw) : null;
+        if (_chk && _chk.scoutOutput && _chk.scoutOutput.trim() !== '') {
+          canPurge = true;
+        }
+      } catch(e) {}
+
+      if (canPurge) {
+        purgeRawScoutKeys();
+        console.log('[repairOrphanedScoutResult] Firm has complete scoped data — raw unscoped Scout keys purged.');
+      } else {
+        console.log('[repairOrphanedScoutResult] Raw keys preserved — scoped data absent or incomplete; raw keys may be the only copy.');
+      }
+    }
+
+  } catch(e) {
+    // Never let repair logic crash the page
+    console.warn('[repairOrphanedScoutResult] Unexpected error:', e);
+  }
 }
 
 
