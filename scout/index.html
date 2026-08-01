@@ -198,6 +198,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-size:9px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--grey2);margin-top:6px
 }
+/* Score detail collapse */
+.score-detail-toggle{
+  display:inline-block;
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--grey2);background:none;border:none;
+  cursor:pointer;font-family:'Tenor Sans',sans-serif;
+  padding:6px 0;margin-top:8px;transition:color .2s
+}
+.score-detail-toggle:hover{color:var(--grey1)}
+.score-detail{display:none}
+.score-detail.open{display:block}
+
 /* Amber glow for Market Leader level */
 .momentum-card.mastery{
   border-color:rgba(224,146,47,0.5);
@@ -226,6 +238,38 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   border-color:rgba(224,146,47,0.4);
   background:rgba(224,146,47,0.1);
   text-shadow:0 0 12px rgba(224,146,47,0.4)
+}
+
+/* ── TODAY CARD / CHASE CARD ── */
+.tc-eyebrow{
+  font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:10px
+}
+.tc-text{
+  font-size:13px;color:var(--grey1);line-height:1.7;
+  letter-spacing:.03em;margin-bottom:16px
+}
+.tc-btn{
+  display:inline-block;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--amber);
+  text-decoration:none;transition:color .2s;
+  border-bottom:1px solid rgba(224,146,47,0.3);
+  padding-bottom:2px
+}
+.tc-btn:hover{color:var(--amber-l)}
+.chase-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.chase-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;
+  background:rgba(224,146,47,0.04);
+  border-left:2px solid rgba(224,146,47,0.4)
+}
+.chase-name{font-size:13px;color:var(--white);letter-spacing:.03em;margin-bottom:2px}
+.chase-reason{font-size:10px;color:var(--grey2);letter-spacing:.04em}
+.tc-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;color:var(--white);
+  margin-bottom:8px;line-height:1.3
 }
 
 /* ── MONDAY BRIEFING CARD ── */
@@ -523,41 +567,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="greeting-week" id="greetingWeek">Week 1 of 12</div>
     </div>
 
-    <!-- MONDAY BRIEFING CARD (shown only on Mondays with prior history) -->
-    <div class="monday-card" id="mondayCard" style="display:none">
-      <button class="monday-card-close" onclick="dismissMonday()" aria-label="Dismiss">✕</button>
-      <div class="monday-eyebrow">Monday Briefing</div>
-      <div class="monday-heading" id="mondayHeading">Week begins.</div>
-      <div class="monday-row" id="mondayLastWeek"></div>
-      <div class="monday-row" id="mondayTargets"></div>
-      <div class="monday-action" id="mondayAction"></div>
-    </div>
+    <!-- TODAY'S ACTION — shown when check-in is due or focus extracted from last plan -->
+    <div class="momentum-card" id="todayCard" style="display:none"></div>
 
-    <!-- MOMENTUM CARD (Progression System) -->
-    <div class="momentum-card" id="momentumCard">
-      <div class="momentum-card-top">
-        <div class="momentum-label-block">
-          <div class="momentum-eyebrow">Your Scout Score</div>
-          <div class="momentum-level-name" id="dashLevelName">Getting Started</div>
-          <div class="momentum-score-display">
-            <div class="momentum-big" id="dashMomentumScore">0</div>
-            <div class="momentum-denom">/100</div>
-          </div>
-        </div>
-        <div class="momentum-trend" id="dashMomentumTrend"></div>
-      </div>
-      <div class="momentum-bar-wrap">
-        <div class="momentum-bar-fill" id="dashMomentumBar"></div>
-      </div>
-      <div class="momentum-level-desc" id="dashLevelDesc">Scout is learning your market and you're taking your first steps. Every message you send this week builds momentum.</div>
-      <div class="momentum-next-level" id="dashNextLevel"></div>
-      <div class="momentum-note" id="dashMomentumNote">
-        Your score starts at zero and grows every week you use Scout. This is week one — you're right on track.
-      </div>
-    </div>
-
-    <!-- STREAK BADGE -->
-    <div class="streak-badge" id="streakBadge"></div>
+    <!-- CHASE TODAY — shown when pipeline contacts need follow-up -->
+    <div class="momentum-card" id="chaseCard" style="display:none"></div>
 
     <!-- FOUR METRIC CARDS -->
     <div class="metric-row">
@@ -583,14 +597,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       </div>
     </div>
 
-    <!-- 12-WEEK TRANSFORMATION ARC -->
-    <div class="arc-wrap" id="arcWrap" style="display:none">
-      <div class="arc-header">Your 12-Week Journey</div>
-      <div class="arc-track" id="arcTrack"><!-- rendered by JS --></div>
-      <div class="arc-labels" id="arcLabels"><!-- rendered by JS --></div>
-      <div class="arc-phase-name" id="arcPhaseName"></div>
-      <div class="arc-phase-desc" id="arcPhaseDesc"></div>
+    <!-- MOMENTUM CARD (Progression System) -->
+    <div class="momentum-card" id="momentumCard">
+      <div class="momentum-card-top">
+        <div class="momentum-label-block">
+          <div class="momentum-eyebrow">Your Scout Score</div>
+          <div class="momentum-level-name" id="dashLevelName">Getting Started</div>
+          <div class="momentum-score-display">
+            <div class="momentum-big" id="dashMomentumScore">0</div>
+            <div class="momentum-denom">/100</div>
+          </div>
+        </div>
+        <div class="momentum-trend" id="dashMomentumTrend"></div>
+      </div>
+      <div class="momentum-bar-wrap">
+        <div class="momentum-bar-fill" id="dashMomentumBar"></div>
+      </div>
+      <button class="score-detail-toggle" id="scoreDetailToggle" onclick="toggleScoreDetail()">Why this score ▾</button>
+      <div class="score-detail" id="scoreDetail">
+        <div class="momentum-level-desc" id="dashLevelDesc">Scout is learning your market and you're taking your first steps. Every message you send this week builds momentum.</div>
+        <div class="momentum-next-level" id="dashNextLevel"></div>
+        <div class="momentum-note" id="dashMomentumNote">
+          Your score starts at zero and grows every week you use Scout. This is week one — you're right on track.
+        </div>
+      </div>
     </div>
+
+    <!-- STREAK BADGE -->
+    <div class="streak-badge" id="streakBadge"></div>
 
     <!-- SCOUT BUSINESS HEALTH SCORE (Feature 5.2) -->
     <div class="health-card" id="healthScoreCard">
@@ -613,6 +647,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div id="recentRows">
         <!-- Rendered by JS -->
       </div>
+    </div>
+
+    <!-- MONDAY BRIEFING CARD (shown only on Mondays with prior history) -->
+    <div class="monday-card" id="mondayCard" style="display:none">
+      <button class="monday-card-close" onclick="dismissMonday()" aria-label="Dismiss">✕</button>
+      <div class="monday-eyebrow">Monday Briefing</div>
+      <div class="monday-heading" id="mondayHeading">Week begins.</div>
+      <div class="monday-row" id="mondayLastWeek"></div>
+      <div class="monday-row" id="mondayTargets"></div>
+      <div class="monday-action" id="mondayAction"></div>
     </div>
 
   </div>
@@ -691,12 +735,33 @@ function getMomentumLevel(score) {
 function showDashboard(history, weekNum, firmName) {
   document.getElementById('stateDashboard').classList.add('active');
 
-  /* Greeting */
+  /* ── Parse scout_pending_result once — shared by greeting and Today Card ── */
+  var pendingData   = null;  /* outer object: businessData, scoutOutput, … */
+  var pendingParsed = null;  /* JSON.parse(scoutOutput) — has .tab3.days     */
+  try {
+    var _pendingRaw = localStorage.getItem(scoutKey('scout_pending_result'));
+    if (_pendingRaw) {
+      pendingData = JSON.parse(_pendingRaw);
+      var _raw = pendingData.scoutOutput || '';
+      var _cleaned = _raw
+        .replace(/^```json\s*/im, '')
+        .replace(/^```\s*/im, '')
+        .replace(/```\s*$/im, '')
+        .trim();
+      var _fb = _cleaned.indexOf('{');
+      if (_fb > 0) _cleaned = _cleaned.slice(_fb);
+      pendingParsed = JSON.parse(_cleaned);
+    }
+  } catch(_e) {}
+
+  /* Greeting — prefer businessData.businessName over firm code (g7_session_name) */
+  var businessName = (pendingData && pendingData.businessData && pendingData.businessData.businessName)
+    ? pendingData.businessData.businessName
+    : firmName;
   var hour = new Date().getHours();
   var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  var name = firmName ? firmName : '';
-  document.getElementById('greetingHello').textContent = greeting + (name ? ', ' + name + '.' : '.');
-  document.getElementById('greetingWeek').textContent  = 'Week ' + weekNum + ' of 12';
+  document.getElementById('greetingHello').textContent = greeting + (businessName ? ', ' + businessName + '.' : '.');
+  /* greetingWeek is owned by renderTransformationArc() — written there, not here */
 
   /* ── Filter to check-in entries only for all metric displays ── */
   var checkins = history.filter(isCheckinEntry);
@@ -855,6 +920,83 @@ function showDashboard(history, weekNum, firmName) {
     document.getElementById('dashTotalRevenueSub').textContent = 'earned since you started Scout';
   }
 
+  /* ── TODAY'S ACTION CARD ── */
+  var todayCard = document.getElementById('todayCard');
+  if (todayCard) {
+    var daysSinceCheckin = 999;
+    if (last.submittedAt) {
+      daysSinceCheckin = Math.floor((Date.now() - new Date(last.submittedAt).getTime()) / 86400000);
+    }
+    var todayHtml = '';
+
+    if (daysSinceCheckin >= 5) {
+      /* Check-in overdue — takes priority over daily plan */
+      todayHtml =
+        '<div class="tc-eyebrow">Action Required</div>' +
+        '<div class="tc-text">Your weekly check-in is due. Log this week\'s results and get your updated plan from Scout.</div>' +
+        '<a href="checkin.html" class="tc-btn">Start Check-In →</a>';
+    } else {
+      /* Parse tab3.days for today's entry */
+      try {
+        var todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+        if (pendingParsed && pendingParsed.tab3 && Array.isArray(pendingParsed.tab3.days)) {
+          var _dayEntry = null;
+          for (var _di = 0; _di < pendingParsed.tab3.days.length; _di++) {
+            var _d = pendingParsed.tab3.days[_di];
+            if (_d.day && _d.day.toLowerCase() === todayName.toLowerCase()) {
+              _dayEntry = _d;
+              break;
+            }
+          }
+          if (_dayEntry) {
+            var _timeLine = _dayEntry.timeRequired || '';
+            if (_dayEntry.target) _timeLine += (_timeLine ? ' · ' : '') + _dayEntry.target;
+            todayHtml =
+              '<div class="tc-eyebrow">TODAY — ' + todayName.toUpperCase() + '</div>' +
+              (_dayEntry.action ? '<div class="tc-heading">' + escHtml(_dayEntry.action) + '</div>' : '') +
+              (_timeLine ? '<div class="tc-text">' + escHtml(_timeLine) + '</div>' : '') +
+              (_dayEntry.messageToUse ? '<div class="tc-text">Use: ' + escHtml(_dayEntry.messageToUse) + '</div>' : '') +
+              '<a href="result.html" class="tc-btn">Open my plan →</a>';
+          }
+        }
+      } catch(_te) {}
+    }
+
+    if (todayHtml) {
+      todayCard.innerHTML = todayHtml;
+      todayCard.style.display = 'block';
+    }
+  }
+
+  /* ── CHASE TODAY CARD ── */
+  var chaseCard = document.getElementById('chaseCard');
+  if (chaseCard) {
+    var dueList = [];
+    try { dueList = pipelineDue(); } catch(_ce) {}
+    if (dueList.length > 0) {
+      var chaseItems = dueList.slice(0, 3).map(function(item) {
+        var phone = item.person.phone ? String(item.person.phone).replace(/[^0-9]/g, '') : '';
+        var waBtn = '';
+        if (phone && item.msg) {
+          waBtn = '<a href="https://wa.me/' + phone + '?text=' + encodeURIComponent(item.msg) +
+            '" target="_blank" rel="noopener" class="tc-btn" style="flex-shrink:0">WhatsApp →</a>';
+        }
+        return '<div class="chase-item">' +
+          '<div style="flex:1;min-width:0">' +
+          '<div class="chase-name">' + escHtml(item.person.name) + '</div>' +
+          '<div class="chase-reason">' + escHtml(item.reason) + '</div>' +
+          '</div>' +
+          waBtn +
+          '</div>';
+      }).join('');
+      chaseCard.innerHTML =
+        '<div class="tc-eyebrow">Chase Today — ' + dueList.length + ' prospect' + (dueList.length !== 1 ? 's' : '') + ' need follow-up</div>' +
+        '<div class="chase-list">' + chaseItems + '</div>' +
+        '<a href="pipeline.html" class="tc-btn">Open Pipeline →</a>';
+      chaseCard.style.display = 'block';
+    }
+  }
+
   /* ── MONDAY BRIEFING (Feature 3.1) ── */
   var dayOfWeek = new Date().getDay(); /* 1 = Monday */
   var dismissed = sessionStorage.getItem('scout_monday_dismissed') === 'true';
@@ -957,61 +1099,27 @@ function dismissMonday() {
    12-WEEK TRANSFORMATION ARC (Feature 3.7)
 ═══════════════════════════════════════════ */
 function renderTransformationArc(weekNum) {
-  var arcWrap = document.getElementById('arcWrap');
-
   var phases = [
-    { weeks: '1–2',  name: 'DISCOVER',        desc: 'Finding the right customers for your business' },
-    { weeks: '3–4',  name: 'TEST',             desc: 'Learning which messages bring people in' },
-    { weeks: '5–6',  name: 'IMPROVE',          desc: 'Doing more of what\'s working' },
-    { weeks: '7–8',  name: 'GROW',             desc: 'Reaching customers in new ways' },
-    { weeks: '9–10', name: 'MAKE IT ROUTINE',  desc: 'Turning it into a simple weekly habit' },
-    { weeks: '11–12',name: 'MASTER',           desc: 'You now have a system that brings in customers on its own' }
+    { desc: 'Finding the right customers for your business' },
+    { desc: 'Learning which messages bring people in' },
+    { desc: 'Doing more of what\'s working' },
+    { desc: 'Reaching customers in new ways' },
+    { desc: 'Turning it into a simple weekly habit' },
+    { desc: 'You now have a system that brings in customers on its own' }
   ];
 
-  /* Which phase are we in? Phase index = Math.floor((weekNum-1)/2), capped at 5 */
+  /* Which phase are we in? Same formula as before. */
   var phaseIdx = Math.min(Math.floor((weekNum - 1) / 2), 5);
   var graduated = weekNum > 12;
 
-  /* Build dot track + labels */
-  var trackHtml  = '';
-  var labelsHtml = '';
-
-  for (var i = 0; i < phases.length; i++) {
-    var isDone    = i < phaseIdx;
-    var isCurrent = i === phaseIdx && !graduated;
-
-    /* Line before dot (except first) */
-    if (i > 0) {
-      trackHtml += '<div class="arc-line' + (isDone ? ' done' : '') + '"></div>';
-    }
-
-    /* Dot */
-    var dotClass = 'arc-dot';
-    if (isDone)    dotClass += ' done';
-    if (isCurrent) dotClass += ' current';
-    trackHtml += '<div class="' + dotClass + '"></div>';
-
-    /* Label */
-    labelsHtml += '<div class="arc-label' + (isCurrent ? ' current' : '') + '">' +
-      phases[i].name + '</div>';
-  }
-
-  document.getElementById('arcTrack').innerHTML  = trackHtml;
-  document.getElementById('arcLabels').innerHTML = labelsHtml;
+  var el = document.getElementById('greetingWeek');
+  if (!el) return;
 
   if (graduated) {
-    document.getElementById('arcPhaseName').innerHTML =
-      '<div class="arc-graduate">' +
-        '<span class="arc-graduate-badge">YOU DID IT 🎉</span>' +
-        '<span class="arc-graduate-text">You now have a proven system that brings in customers every week.</span>' +
-      '</div>';
-    document.getElementById('arcPhaseDesc').textContent = '';
+    el.textContent = 'Week ' + weekNum + ' of 12 · You now have a proven system that brings in customers every week.';
   } else {
-    document.getElementById('arcPhaseName').textContent = phases[phaseIdx].name;
-    document.getElementById('arcPhaseDesc').textContent = phases[phaseIdx].desc;
+    el.textContent = 'Week ' + weekNum + ' of 12 · ' + phases[phaseIdx].desc;
   }
-
-  arcWrap.style.display = 'block';
 }
 
 /* ═══════════════════════════════════════════
@@ -1159,9 +1267,12 @@ function formatDate(iso) {
   } catch(e) { return iso.slice(0, 10); }
 }
 
-function escHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function toggleScoreDetail() {
+  var detail = document.getElementById('scoreDetail');
+  var btn    = document.getElementById('scoreDetailToggle');
+  if (!detail || !btn) return;
+  var isOpen = detail.classList.toggle('open');
+  btn.textContent = isOpen ? 'Why this score ▴' : 'Why this score ▾';
 }
 
 /* ═══════════════════════════════════════════
