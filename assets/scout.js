@@ -357,7 +357,7 @@ function buildScoutOnboardMessage(ctx) {
 // Returns: Scout's raw text output (string)
 // Throws:  Error with user-readable message
 // ─────────────────────────────────────────────────────────────
-async function callScoutCheckin(checkinData) {
+async function callScoutCheckin(checkinData, onProgress) {
 
   var sessionToken = localStorage.getItem('g7_session_token') || '';
   var systemPrompt = SCOUT_SYSTEM_PROMPT;
@@ -430,7 +430,7 @@ async function callScoutCheckin(checkinData) {
   }
 
   // Worker returns text/event-stream (streaming SSE) — read via readSSEStream()
-  var streamResult = await readSSEStream(response);
+  var streamResult = await readSSEStream(response, onProgress);
   if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
@@ -439,7 +439,7 @@ async function callScoutCheckin(checkinData) {
 
 
 // ─────────────────────────────────────────────────────────────
-// HELPER — readSSEStream(response)
+// HELPER — readSSEStream(response, onProgress)
 //
 // Reads an Anthropic SSE streaming response body and assembles
 // the full text output. Called by callScout() and callScoutCheckin().
@@ -458,7 +458,7 @@ async function callScoutCheckin(checkinData) {
 //                        false means the connection was cut before the model finished.
 // Throws:   Error if the stream cannot be read
 // ─────────────────────────────────────────────────────────────
-async function readSSEStream(response) {
+async function readSSEStream(response, onProgress) {
   var reader  = response.body.getReader();
   var decoder = new TextDecoder('utf-8');
   var fullText = '';
@@ -500,6 +500,7 @@ async function readSSEStream(response) {
           event.delta.text
         ) {
           fullText += event.delta.text;
+          if (onProgress) onProgress(fullText.length);
         }
 
         if (event.type === 'message_stop') {
@@ -524,6 +525,7 @@ async function readSSEStream(response) {
         tailEvent.delta.text
       ) {
         fullText += tailEvent.delta.text;
+        if (onProgress) onProgress(fullText.length);
       }
       if (tailEvent.type === 'message_stop') { receivedStopSignal = true; }
     } catch (e) { /* ignore incomplete tail */ }
