@@ -785,7 +785,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
   /* Page breaks */
   #panel0{page-break-before:auto}
-  #panel1,#panel2,#panel3{page-break-before:always}
+  #panel1,#panel2,#panel3,#panel4{page-break-before:always}
 
   /* Headline block */
   .headline-block{
@@ -974,8 +974,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <div class="tab-nav">
   <button class="tab-btn active" onclick="switchTab(0)" id="tabBtn0">This Week</button>
   <button class="tab-btn" onclick="switchTab(1)" id="tabBtn1">My Plan</button>
-  <button class="tab-btn" onclick="switchTab(2)" id="tabBtn2">My Customers</button>
-  <button class="tab-btn" onclick="switchTab(3)" id="tabBtn3">What's Next</button>
+  <button class="tab-btn" onclick="switchTab(2)" id="tabBtn2">WhatsApp</button>
+  <button class="tab-btn" onclick="switchTab(3)" id="tabBtn3">My Customers</button>
+  <button class="tab-btn" onclick="switchTab(4)" id="tabBtn4">What's Next</button>
 </div>
 
 <!-- TAB PANELS -->
@@ -1009,9 +1010,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     </div>
   </div>
 
-  <!-- PANEL 2: MY CUSTOMERS — contains tab4Content (referral engine + lost customer recovery) -->
+  <!-- PANEL 2: WHATSAPP — contains wacContent (WhatsApp broadcast calendar) -->
   <div class="tab-panel" id="panel2">
-    <div class="print-section-header">SECTION 3: MY CUSTOMERS</div>
+    <div class="print-section-header">SECTION 3: WHATSAPP CALENDAR</div>
+    <div id="wacContent">
+      <div class="result-loading">
+        <div class="result-loading-spinner">
+          <div class="result-loading-ring"></div>
+          <span class="result-loading-letter">S</span>
+        </div>
+        <div class="result-loading-msg">Rendering WhatsApp calendar...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: MY CUSTOMERS — contains tab4Content (referral engine + lost customer recovery) -->
+  <div class="tab-panel" id="panel3">
+    <div class="print-section-header">SECTION 4: MY CUSTOMERS</div>
     <div id="tab4Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -1023,9 +1038,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     </div>
   </div>
 
-  <!-- PANEL 3: WHAT'S NEXT — contains tab5Content (90-day projection + expansion plan) -->
-  <div class="tab-panel" id="panel3">
-    <div class="print-section-header">SECTION 4: WHAT'S NEXT</div>
+  <!-- PANEL 4: WHAT'S NEXT — contains tab5Content (90-day projection + expansion plan) -->
+  <div class="tab-panel" id="panel4">
+    <div class="print-section-header">SECTION 5: WHAT'S NEXT</div>
     <div id="tab5Content">
       <div class="result-loading">
         <div class="result-loading-spinner">
@@ -1416,8 +1431,14 @@ function parseAndRender(rawOutput, biz) {
         if (_comp.yourResponse) _extra += '<div>Your response: ' + escHtml(plainLang(_comp.yourResponse)) + '</div>';
         _extra += '</div></div></div>';
       }
-      _extra += renderWhatsAppCalendar(_t3.whatsappCalendar);
       if (_extra) _el1.innerHTML += _extra;
+    })();
+    /* WhatsApp calendar goes into its own dedicated tab panel */
+    (function() {
+      var _wacEl = document.getElementById('wacContent');
+      if (!_wacEl) return;
+      var _wacHtml = renderWhatsAppCalendar((data.tab3 || {}).whatsappCalendar);
+      _wacEl.innerHTML = _wacHtml || '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
     })();
     renderTab2JSON(data.tab2, data.tab1);
     renderTab3JSON(data.tab3, data);
@@ -1451,6 +1472,8 @@ function parseAndRender(rawOutput, biz) {
         '</details>' +
         '</div>';
     }
+    var _wacElT = document.getElementById('wacContent');
+    if (_wacElT) _wacElT.innerHTML = '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
     return;
   }
 
@@ -1470,6 +1493,8 @@ function parseAndRender(rawOutput, biz) {
         '</details>' +
         '</div>';
     }
+    var _wacElE = document.getElementById('wacContent');
+    if (_wacElE) _wacElE.innerHTML = '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
     return;
   }
 
@@ -1492,6 +1517,10 @@ function parseAndRender(rawOutput, biz) {
   renderTab3(sections.tab3);
   renderTab4(sections.tab4, biz);
   renderTab5(sections.tab5);
+
+  /* Text path has no calendar data — show placeholder in WhatsApp tab */
+  var _wacElTxt = document.getElementById('wacContent');
+  if (_wacElTxt) _wacElTxt.innerHTML = '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
 
   /* Reasoning panel for text path */
   var rData = parseReasoningData(cleanText);
@@ -1908,10 +1937,6 @@ function renderWhatsAppCalendar(cal) {
   var html = '';
 
   html += '<div class="wac-section">';
-  /* Toggle header — collapsed by default */
-  html += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'wacPanel\',\'wacArrow\')">';
-  html += '<span id="wacArrow">▶</span>&nbsp;WhatsApp calendar</button>';
-  html += '<div id="wacPanel" style="display:none;margin-top:14px">';
   html += '<div class="wac-heading">Your WhatsApp Calendar</div>';
   if (cal.instructions) {
     html += '<div class="wac-instructions">' + escHtml(cal.instructions) + '</div>';
@@ -1987,7 +2012,6 @@ function renderWhatsAppCalendar(cal) {
     html += '</div>';
   }
 
-  html += '</div>'; /* end wacPanel */
   html += '</div>'; /* end wac-section */
   return html;
 }
@@ -3121,7 +3145,7 @@ function renderTab5(content) {
 ═══════════════════════════════════════════ */
 function switchTab(n) {
   /* Deactivate all */
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 5; i++) {
     document.getElementById('tabBtn' + i).classList.remove('active');
     document.getElementById('panel' + i).classList.remove('active');
   }
