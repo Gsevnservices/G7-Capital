@@ -582,7 +582,20 @@ async function handleSubmit() {
       nextFocus: ''
     };
 
-    var checkinOutput = await callScoutCheckin(checkinData);
+    var checkinResult   = await callScoutCheckin(checkinData);
+    var checkinOutput   = checkinResult.text;
+    var checkinComplete = checkinResult.complete;
+
+    /* Guard: if the stream was cut before message_stop, do NOT save a partial
+       check-in result — it would corrupt history with incomplete Scout output. */
+    if (!checkinComplete) {
+      overlay.classList.remove('active');
+      alert(
+        'The check-in was interrupted before Scout finished — your numbers have NOT been saved.\n\n' +
+        'Please tap "Submit Check-In" again. Your answers are still on screen.'
+      );
+      return;
+    }
 
     /* Advance week number */
     var nextWeek = d.weekNum + 1;

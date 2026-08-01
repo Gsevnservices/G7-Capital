@@ -1110,6 +1110,7 @@ window.addEventListener('DOMContentLoaded', async function() {
 
   migrateUnscopedScoutKeys();
   await loadScoutStateFromServer();
+  await repairOrphanedScoutResult(); // must run after server load, before first scoped read
 
   /* Firm name in nav */
   var firmName = localStorage.getItem('g7_session_name') || '';
@@ -1301,6 +1302,7 @@ function parseAndRender(rawOutput, biz) {
 
   /* ── Attempt JSON parse (new architecture, TYPE 1 onboarding) ── */
   var data = null;
+  var jsonParseError = null; /* saved for last-resort error screen */
   try {
     var cleaned = rawOutput;
 
@@ -1325,11 +1327,23 @@ function parseAndRender(rawOutput, biz) {
       cleaned = cleaned.slice(firstBrace);
     }
 
-    /* Level 2: strip any text after last } */
+    /* Level 2: strip any text after last } — ONLY when the brace count is
+       balanced, meaning there really is trailing non-JSON prose after a
+       complete structure. If the JSON is truncated the brace count will be
+       unbalanced and slicing to lastIndexOf('}') would discard valid content,
+       so we leave the string intact and let later levels handle it. */
     var lastBrace = cleaned.lastIndexOf('}');
     if (lastBrace > -1 && lastBrace < cleaned.length - 1) {
-      console.warn('Text after JSON stripped:', cleaned.slice(lastBrace + 1));
-      cleaned = cleaned.slice(0, lastBrace + 1);
+      var openCount  = (cleaned.match(/\{/g) || []).length;
+      var closeCount = (cleaned.match(/\}/g) || []).length;
+      if (openCount === closeCount) {
+        /* Balanced — safe to trim trailing prose */
+        console.warn('Text after JSON stripped (balanced braces):', cleaned.slice(lastBrace + 1));
+        cleaned = cleaned.slice(0, lastBrace + 1);
+      } else {
+        /* Unbalanced — JSON is truncated; leave cleaned as-is */
+        console.warn('Unbalanced braces (open=' + openCount + ' close=' + closeCount + ') — Level 2 skip to avoid worsening truncation');
+      }
     }
 
     /* Level 3: attempt normal parse */
@@ -1339,6 +1353,7 @@ function parseAndRender(rawOutput, biz) {
       console.log('Has tab1:', !!testParse.tab1, '| tab2:', !!testParse.tab2, '| tab3:', !!testParse.tab3, '| tab4:', !!testParse.tab4, '| tab5:', !!testParse.tab5);
       if (testParse && (testParse.tab1 || testParse.headline)) { data = testParse; }
     } catch(e1) {
+      jsonParseError = e1;
       console.log('JSON.parse: FAILED —', e1.message);
       var errMatch = e1.message.match(/position (\d+)/);
       if (errMatch) {
@@ -1369,22 +1384,9 @@ function parseAndRender(rawOutput, biz) {
           }
         } catch(e3) { /* partial extraction also failed */ }
 
-        /* Level 6: show error with collapsible raw output */
-        if (!data) {
-          var tab1El = document.getElementById('tab1Content');
-          if (tab1El) {
-            tab1El.innerHTML =
-              '<div style="padding:24px;color:var(--gold)">' +
-              '<p style="margin-bottom:12px;font-size:13px">Scout output could not be parsed. Please run the analysis again.</p>' +
-              '<p style="font-size:11px;opacity:0.5;margin-bottom:8px">Error: ' + escHtml(e1.message) + '</p>' +
-              '<details style="margin-top:12px">' +
-              '<summary style="cursor:pointer;font-size:11px;opacity:0.4;user-select:none">Show raw output (for debugging)</summary>' +
-              '<pre style="font-size:9px;white-space:pre-wrap;opacity:0.4;margin-top:8px;max-height:400px;overflow-y:auto">' +
-              escHtml((rawOutput || '').slice(0, 4000)) + '</pre>' +
-              '</details></div>';
-          }
-          return;
-        }
+        /* All JSON levels failed — data stays null.
+           Fall through to text fallback below (no return here). */
+        console.log('All JSON levels failed — falling through to text fallback.');
       }
     }
   } catch(e) { data = null; }
@@ -1420,6 +1422,51 @@ function parseAndRender(rawOutput, biz) {
     renderTab4JSON(data.tab4, biz);
     renderWhatsNextTab(data.tab4, data.tab5);
     updateReasoningPanel(data);
+    return;
+  }
+
+  /* ── Truncated JSON recovery screen ──────────────────────────────────────
+     If JSON parsing failed AND the output starts with '{', the model was
+     writing JSON that was cut mid-stream. Running the text fallback would
+     render raw JSON fragments as prose — worse than useless.
+     Show a clear recovery screen instead and do not attempt text rendering. ── */
+  if (jsonParseError && rawOutput && rawOutput.trim().charAt(0) === '{') {
+    var tab1El = document.getElementById('tab1Content');
+    if (tab1El) {
+      tab1El.innerHTML =
+        '<div class="section-block" style="padding:32px;margin:0">' +
+        '<div class="section-block-title" style="margin-bottom:16px">Your analysis didn\'t finish</div>' +
+        '<div class="section-block-body" style="margin-bottom:28px">' +
+        'The connection dropped while Scout was writing your plan. ' +
+        'Nothing is wrong with your answers.' +
+        '</div>' +
+        '<a href="onboard.html" class="btn-submit" style="display:inline-block;text-decoration:none;width:auto;padding:14px 32px;margin-bottom:28px">Generate my plan again</a>' +
+        '<details style="margin-top:4px">' +
+        '<summary style="cursor:pointer;font-size:11px;color:var(--grey2);letter-spacing:.05em;user-select:none">Show raw output (for debugging)</summary>' +
+        '<pre style="font-size:9px;white-space:pre-wrap;color:var(--grey2);margin-top:8px;max-height:400px;overflow-y:auto">' +
+        escHtml((rawOutput || '').slice(0, 4000)) + '</pre>' +
+        '</details>' +
+        '</div>';
+    }
+    return;
+  }
+
+  /* ── Last resort: rawOutput is empty — nothing for any renderer to work with ── */
+  if (!rawOutput || !rawOutput.trim()) {
+    var tab1El = document.getElementById('tab1Content');
+    if (tab1El) {
+      tab1El.innerHTML =
+        '<div class="section-block" style="padding:32px;margin:0">' +
+        '<div class="section-block-title" style="margin-bottom:12px">Scout output could not be parsed</div>' +
+        '<div class="section-block-body" style="margin-bottom:16px">Please run the analysis again.</div>' +
+        (jsonParseError ? '<p style="font-size:11px;color:var(--grey2);margin-bottom:12px">Error: ' + escHtml(jsonParseError.message) + '</p>' : '') +
+        '<details style="margin-top:4px">' +
+        '<summary style="cursor:pointer;font-size:11px;color:var(--grey2);letter-spacing:.05em;user-select:none">Show raw output (for debugging)</summary>' +
+        '<pre style="font-size:9px;white-space:pre-wrap;color:var(--grey2);margin-top:8px;max-height:400px;overflow-y:auto">' +
+        escHtml((rawOutput || '').slice(0, 4000)) + '</pre>' +
+        '</details>' +
+        '</div>';
+    }
     return;
   }
 
@@ -2816,7 +2863,21 @@ async function submitCheckin() {
       nextFocus: ''
     };
 
-    var checkinOutput = await callScoutCheckin(checkinData);
+    var checkinResult   = await callScoutCheckin(checkinData);
+    var checkinOutput   = checkinResult.text;
+    var checkinComplete = checkinResult.complete;
+
+    /* Guard: if the stream was cut before message_stop, do NOT write anything —
+       no scout_pending_result update, no patch, no insight, no server sync.
+       All writes below are blocked until this check passes. */
+    if (!checkinComplete) {
+      document.getElementById('checkinOverlay').classList.remove('active');
+      alert(
+        'The check-in was interrupted before Scout finished — your numbers have NOT been saved.\n\n' +
+        'Please try again.'
+      );
+      return;
+    }
 
     /* Save updated result */
     var updated = JSON.parse(localStorage.getItem(scoutKey('scout_pending_result')) || '{}');
@@ -3553,7 +3614,8 @@ async function buildReferralChain() {
     ].join('\n');
 
     /* Call Scout API via callScoutRaw() from scout.js */
-    var rawOutput = await callScoutRaw(prompt);
+    var rawResult = await callScoutRaw(prompt);
+    var rawOutput = rawResult.text;
 
     /* Parse and display results */
     displayReferralResults(rawOutput, customers);
