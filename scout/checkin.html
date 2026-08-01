@@ -129,8 +129,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .spinner-letter{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-bar{width:240px;height:1px;background:var(--border);overflow:hidden}
-.loading-bar-fill{height:100%;width:0%;background:var(--gold);animation:loadProg 25s ease-out forwards}
-@keyframes loadProg{0%{width:0%}55%{width:68%}82%{width:88%}100%{width:94%}}
+.loading-bar-fill{height:100%;width:0%;background:var(--gold);transition:width .6s ease-out}
 .loading-msg{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white)}
 .loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
 
@@ -333,8 +332,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <span class="spinner-letter">S</span>
   </div>
   <div>
-    <div class="loading-msg">Scout is analysing your results...</div>
-    <div class="loading-sub" style="margin-top:10px">Updating your playbook</div>
+    <div class="loading-msg" id="checkinStage">Reading your numbers...</div>
+    <div class="loading-sub" style="margin-top:10px">This takes 1–2 minutes. Please keep this tab open.</div>
   </div>
   <div class="loading-bar">
     <div class="loading-bar-fill" id="loadBar"></div>
@@ -548,7 +547,26 @@ async function handleSubmit() {
   var overlay = document.getElementById('loadingOverlay');
   var bar = document.getElementById('loadBar');
   overlay.classList.add('active');
-  bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = '';
+  bar.style.width = '0%';
+  document.getElementById('checkinStage').textContent = 'Reading your numbers...';
+
+  /* Progress callback — updates stage label and bar width as chars arrive */
+  var CHECKIN_TARGET = 30000;
+  var CHECKIN_STAGES = [
+    { chars:     0, label: 'Reading your numbers...' },
+    { chars:  2000, label: 'Comparing this week to last...' },
+    { chars:  8000, label: 'Updating your action plan...' },
+    { chars: 18000, label: 'Almost done \u2014 writing your new messages...' }
+  ];
+  function onCheckinProgress(charCount) {
+    var pct = Math.min(95, Math.round(charCount / CHECKIN_TARGET * 100));
+    bar.style.width = pct + '%';
+    var label = CHECKIN_STAGES[0].label;
+    for (var si = 0; si < CHECKIN_STAGES.length; si++) {
+      if (charCount >= CHECKIN_STAGES[si].chars) label = CHECKIN_STAGES[si].label;
+    }
+    document.getElementById('checkinStage').textContent = label;
+  }
 
   try {
     /* Read prior context from localStorage */
@@ -582,7 +600,7 @@ async function handleSubmit() {
       nextFocus: ''
     };
 
-    var checkinResult   = await callScoutCheckin(checkinData);
+    var checkinResult   = await callScoutCheckin(checkinData, onCheckinProgress);
     var checkinOutput   = checkinResult.text;
     var checkinComplete = checkinResult.complete;
 

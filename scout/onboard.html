@@ -130,8 +130,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .scout-spinner-letter{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--gold)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-bar{width:240px;height:1px;background:var(--border);overflow:hidden}
-.loading-bar-fill{height:100%;width:0%;background:var(--gold);animation:loadProgress 28s ease-out forwards}
-@keyframes loadProgress{0%{width:0%}50%{width:65%}80%{width:86%}100%{width:94%}}
+.loading-bar-fill{height:100%;width:0%;background:var(--gold);transition:width .6s ease-out}
 .loading-message{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--white)}
 .loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
 
@@ -575,8 +574,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <span class="scout-spinner-letter">S</span>
   </div>
   <div>
-    <div class="loading-message">Scout is analysing your market...</div>
-    <div class="loading-sub" style="margin-top:10px">This takes 20–30 seconds</div>
+    <div class="loading-message" id="loadingStage">Studying your market...</div>
+    <div class="loading-sub" style="margin-top:10px" id="loadingKeepOpen">This takes 2–3 minutes. Please keep this tab open.</div>
   </div>
   <div class="loading-bar">
     <div class="loading-bar-fill" id="loadBarFill"></div>
@@ -817,13 +816,31 @@ async function handleSubmit() {
 
   var data = collectFormData();
 
-  /* Show loading overlay, restart progress bar animation */
+  /* Show loading overlay and reset progress bar */
   var overlay = document.getElementById('loadingOverlay');
   var bar = document.getElementById('loadBarFill');
   overlay.classList.add('active');
-  bar.style.animation = 'none';
-  bar.offsetHeight;
-  bar.style.animation = '';
+  bar.style.width = '0%';
+  document.getElementById('loadingStage').textContent = 'Studying your market...';
+
+  /* Progress callback — updates stage label and bar width as chars arrive */
+  var SOFT_TARGET = 55000;
+  var STAGES = [
+    { chars:     0, label: 'Studying your market...' },
+    { chars:  3000, label: 'Finding your best customer types...' },
+    { chars: 12000, label: 'Writing your messages...' },
+    { chars: 25000, label: 'Building your weekly plan...' },
+    { chars: 40000, label: 'Almost done \u2014 putting it together...' }
+  ];
+  function onAnalysisProgress(charCount) {
+    var pct = Math.min(95, Math.round(charCount / SOFT_TARGET * 100));
+    bar.style.width = pct + '%';
+    var label = STAGES[0].label;
+    for (var si = 0; si < STAGES.length; si++) {
+      if (charCount >= STAGES[si].chars) label = STAGES[si].label;
+    }
+    document.getElementById('loadingStage').textContent = label;
+  }
 
   try {
     /* Build the rich user message using onboard.html's own builder —
@@ -870,7 +887,7 @@ async function handleSubmit() {
     }
 
     /* Read SSE stream using readSSEStream() from scout.js */
-    var streamResult = await readSSEStream(response);
+    var streamResult = await readSSEStream(response, onAnalysisProgress);
     var scoutOutput  = streamResult.text;
     var streamComplete = streamResult.complete;
 
@@ -891,9 +908,8 @@ async function handleSubmit() {
         /* Re-submit immediately using the same data object already in memory */
         document.getElementById('submitBtn').disabled = true;
         overlay.classList.add('active');
-        bar.style.animation = 'none';
-        bar.offsetHeight;
-        bar.style.animation = '';
+        bar.style.width = '0%';
+        document.getElementById('loadingStage').textContent = 'Studying your market...';
         var retryResponse = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout/analyse', {
           method: 'POST',
           headers: {
@@ -911,7 +927,7 @@ async function handleSubmit() {
           var retryErr = await retryResponse.text();
           throw new Error('Scout error ' + retryResponse.status + ': ' + retryErr);
         }
-        var retryStream = await readSSEStream(retryResponse);
+        var retryStream = await readSSEStream(retryResponse, onAnalysisProgress);
         scoutOutput    = retryStream.text;
         streamComplete = retryStream.complete;
         if (!scoutOutput) throw new Error('Scout returned an empty response. Please try again.');
