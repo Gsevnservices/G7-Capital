@@ -711,26 +711,25 @@ function showFirstCustomerMilestone(d, checkinOutput) {
       revPerCust = Math.round(avgVal);
     } catch(e) {}
   }
-  var annualVal  = revPerCust * 12;
-
-  /* Days for Scout to pay for itself (₹3,000 / monthly revenue × 30) */
-  var daysPayback = revPerCust > 0 ? Math.ceil((3000 / revPerCust) * 30) : '—';
-
   document.getElementById('milestoneHeading').textContent = bizName + "'s first Scout win.";
 
-  document.getElementById('milestoneStats').innerHTML =
-    '<div class="milestone-stat-row">' +
-      '<span class="milestone-stat-label">Revenue from this customer</span>' +
-      '<span class="milestone-stat-value">₹' + formatNum(revPerCust) + '/month</span>' +
-    '</div>' +
-    '<div class="milestone-stat-row">' +
-      '<span class="milestone-stat-label">Annual value</span>' +
-      '<span class="milestone-stat-value">₹' + formatNum(annualVal) + '/year</span>' +
-    '</div>' +
-    '<div class="milestone-stat-row">' +
-      '<span class="milestone-stat-label">Scout paid for itself in</span>' +
-      '<span class="milestone-stat-value">' + daysPayback + ' days</span>' +
-    '</div>';
+  if (revPerCust > 0) {
+    var annualVal   = revPerCust * 12;
+    var daysPayback = Math.ceil((3000 / revPerCust) * 30);
+    document.getElementById('milestoneStats').innerHTML =
+      '<div class="milestone-stat-row">' +
+        '<span class="milestone-stat-label">Revenue from this customer</span>' +
+        '<span class="milestone-stat-value">₹' + formatNum(revPerCust) + '/month</span>' +
+      '</div>' +
+      '<div class="milestone-stat-row">' +
+        '<span class="milestone-stat-label">Annual value</span>' +
+        '<span class="milestone-stat-value">₹' + formatNum(annualVal) + '/year</span>' +
+      '</div>' +
+      '<div class="milestone-stat-row">' +
+        '<span class="milestone-stat-label">Scout paid for itself in</span>' +
+        '<span class="milestone-stat-value">' + daysPayback + ' days</span>' +
+      '</div>';
+  }
 
   document.getElementById('milestoneOverlay').classList.add('active');
 }

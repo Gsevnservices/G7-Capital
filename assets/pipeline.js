@@ -188,22 +188,22 @@ function pipelineDue() {
 
     if (p.status === 'contacted' && d >= 14) {
       item = { reason: 'No response in ' + d + ' days', urgency: 3,
-               msg: 'Hi ' + first + ' — last try from my side. Agar kabhi fitness start karna ho toh bas message kar dena. Door nahi hain, Juhu Circle ke paas hi.' };
+               msg: 'Hi ' + first + ' — last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
     } else if (p.status === 'contacted' && d >= 7) {
       item = { reason: 'No reply for ' + d + ' days — final follow-up', urgency: 2,
-               msg: 'Hi ' + first + ' — ek baar aur pooch raha hoon. Ek free session try karna ho toh bata dena, slot main hold kar leta hoon.' };
+               msg: 'Hi ' + first + ' — ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'contacted' && d >= 3) {
       item = { reason: 'No reply for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' — pichle message ka follow-up. Free session ke liye koi din suit karta hai?' };
+               msg: 'Hi ' + first + ' — pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'replied' && d >= 5) {
       item = { reason: 'Replied ' + d + ' days ago but has not booked', urgency: 3,
                msg: 'Hi ' + first + ' — aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
     } else if (p.status === 'trial_booked' && d >= 1) {
       item = { reason: 'Trial was ' + d + ' day(s) ago — did they show?', urgency: 3,
-               msg: 'Hi ' + first + ' — session kaisa raha? Agar miss ho gaya toh koi baat nahi, dobara rakh dete hain.' };
+               msg: 'Hi ' + first + ' — kaisa raha? Koi baat ho toh bata dena.' };
     } else if (p.status === 'gone_quiet' && d >= 14) {
       item = { reason: 'Quiet for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' — kaafi time ho gaya. Ek free session pe aa jao, koi commitment nahi.' };
+               msg: 'Hi ' + first + ' — kaafi time ho gaya. Jab ready ho, bata dena.' };
     }
 
     if (item) {
