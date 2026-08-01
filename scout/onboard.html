@@ -134,6 +134,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .loading-message{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--white)}
 .loading-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)}
 
+/* ── DRAFT SAVED INDICATOR ── */
+#draftSavedMsg{font-size:10px;letter-spacing:.06em;color:var(--grey1);margin-top:24px;opacity:0;transition:opacity .4s;text-align:center}
+/* ── DRAFT RESTORE BAR ── */
+.draft-bar{align-items:center;gap:12px;flex-wrap:wrap;background:rgba(224,146,47,0.06);border:1px solid var(--border);border-left:2px solid var(--gold);padding:14px 20px;margin-bottom:28px}
+.draft-bar-btn{font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 16px;cursor:pointer;font-family:'Tenor Sans',sans-serif;border:none;white-space:nowrap}
+.draft-bar-continue{background:var(--gold);color:var(--black)}
+.draft-bar-fresh{background:transparent;border:1px solid var(--border2);color:var(--grey1)}
 /* ── ONBOARD TWO-COLUMN LAYOUT ── */
 .onboard-layout{display:grid;grid-template-columns:1fr 320px;gap:32px;max-width:1100px;margin:0 auto;padding:0 24px;align-items:start}
 .onboard-score-col{position:sticky;top:104px}
@@ -204,6 +211,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <!-- PROGRESS BAR -->
 <div class="progress-wrap">
   <div class="progress-steps" id="progressSteps"></div>
+  <div id="draftSavedMsg"></div>
 </div>
 
 <!-- QUALITY TIP BANNER — shown when score 5-7, hidden otherwise -->
@@ -216,6 +224,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <div class="onboard-form-col">
 <!-- FORM -->
 <div class="form-wrap">
+
+  <!-- DRAFT RESTORE BAR — shown on load if a saved draft exists; hidden otherwise -->
+  <div id="draftBar" style="display:none" class="draft-bar">
+    <span class="qi-text">You have a saved draft from <span id="draftBarTime"></span>.</span>
+    <button id="draftContinue" class="draft-bar-btn draft-bar-continue">Continue →</button>
+    <button id="draftFresh" class="draft-bar-btn draft-bar-fresh">Start fresh</button>
+  </div>
 
   <!-- SECTION 1: BUSINESS BASICS -->
   <div class="form-section active" id="section-1">
@@ -603,6 +618,8 @@ window.addEventListener('DOMContentLoaded', function() {
   initCursor();
   initQualityScoring();
   initQualityPanel();
+  initDraftAutoSave();
+  checkForDraft();
 });
 
 /* ─── LOGOUT ─── */
@@ -613,7 +630,7 @@ function handleLogout() {
      'scout_last_checkin_week','scout_health_score','scout_health_breakdown',
      'scout_weekly_insight','scout_insight_week','scout_last_targets','scout_icp_names',
      'scout_first_customer_celebrated','scout_week_checklist','scout_referral_chain',
-     'scout_pipeline'
+     'scout_pipeline','scout_onboard_draft'
     ].forEach(function(base){ localStorage.removeItem(scoutKey(base)); });
     window.location.href = 'landing.html';
   }
@@ -639,8 +656,8 @@ function renderProgress(active) {
 }
 
 /* ─── SECTION NAV ─── */
-function goNext(from) { if (validateSection(from)) showSection(from + 1); }
-function goBack(from) { showSection(from - 1); }
+function goNext(from) { if (validateSection(from)) { saveDraft(); showSection(from + 1); } }
+function goBack(from) { saveDraft(); showSection(from - 1); }
 function showSection(n) {
   document.getElementById('section-' + currentSection).classList.remove('active');
   document.getElementById('section-' + n).classList.add('active');
@@ -947,6 +964,9 @@ async function handleSubmit() {
        handles scout_pending_result, scout_history (max 12), scout_week_number */
     saveScoutResult(scoutOutput, 1);
 
+    /* Analysis succeeded — delete draft so server sync does not preserve it */
+    localStorage.removeItem(scoutKey('scout_onboard_draft'));
+
     /* Augment pending result with onboardContext (needed by checkin.html
        to assemble the multi-turn conversation) and raw business data */
     var pending = JSON.parse(localStorage.getItem(scoutKey('scout_pending_result')) || '{}');
@@ -985,6 +1005,159 @@ function initCursor() {
     c.style.transform = 'translate(-50%,-50%) scale(1)';
     r.style.transform = 'translate(-50%,-50%) scale(1)';
   });
+}
+
+/* ─── DRAFT AUTO-SAVE ─── */
+
+/* saveDraft — collects raw field values (no normalisation) plus currentSection.
+   Deliberately does not call collectFormData() so that the language radio and
+   regionalLangName sub-field are stored separately and can be restored exactly.
+   Never throws — wrapped in try/catch. */
+function saveDraft() {
+  try {
+    var channels = [];
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb){ channels.push(cb.value); });
+    var langEl = document.querySelector('input[name="language"]:checked');
+    var draft = {
+      section:          currentSection,
+      savedAt:          new Date().toISOString(),
+      businessName:     document.getElementById('businessName').value,
+      whatYouSell:      document.getElementById('whatYouSell').value,
+      location:         document.getElementById('location').value,
+      monthlyRevenue:   document.getElementById('monthlyRevenue').value,
+      avgTransaction:   document.getElementById('avgTransaction').value,
+      currentCustomers: document.getElementById('currentCustomers').value,
+      targetCustomers:  document.getElementById('targetCustomers').value,
+      areaType:         document.getElementById('areaType').value,
+      landmark1:        document.getElementById('landmark1').value,
+      landmark2:        document.getElementById('landmark2').value,
+      landmark3:        document.getElementById('landmark3').value,
+      bestCustomers:    document.getElementById('bestCustomers').value,
+      comp1name:        document.getElementById('comp1name').value,
+      comp1better:      document.getElementById('comp1better').value,
+      comp1worse:       document.getElementById('comp1worse').value,
+      comp2name:        document.getElementById('comp2name').value,
+      comp2better:      document.getElementById('comp2better').value,
+      comp2worse:       document.getElementById('comp2worse').value,
+      largeChains:      document.getElementById('largeChains').value,
+      channels:         channels,
+      whatWorked:       document.getElementById('whatWorked').value,
+      whatFailed:       document.getElementById('whatFailed').value,
+      language:         langEl ? langEl.value : '',
+      regionalLangName: document.getElementById('regionalLangName').value,
+      bestMonths:       document.getElementById('bestMonths').value,
+      worstMonths:      document.getElementById('worstMonths').value,
+      seasonalEvents:   document.getElementById('seasonalEvents').value,
+      triedSoFar:       document.getElementById('triedSoFar').value,
+      whatsappListSize: document.getElementById('whatsappListSize').value,
+      howFoundYou:      document.getElementById('howFoundYou').value,
+      specificFocus:    document.getElementById('specificFocus').value
+    };
+    localStorage.setItem(scoutKey('scout_onboard_draft'), JSON.stringify(draft));
+    showDraftSaved();
+  } catch(e) {}
+}
+
+/* Fades in "Draft saved" under the progress steps, then fades out after 2s */
+function showDraftSaved() {
+  var el = document.getElementById('draftSavedMsg');
+  if (!el) return;
+  el.textContent = 'Draft saved';
+  el.style.opacity = '1';
+  clearTimeout(el._fadeTimer);
+  el._fadeTimer = setTimeout(function(){ el.style.opacity = '0'; }, 2000);
+}
+
+/* Restores every field from a draft object.
+   Text inputs and textareas: set .value directly.
+   Selects: set .value (browser selects matching option).
+   Checkboxes: check if value is in draft.channels array.
+   Language radio: check the matching radio, then fill regionalLangName if needed.
+   Jumps to the section that was active when draft was saved. */
+function restoreDraft(draft) {
+  var textFields = [
+    'businessName','whatYouSell','location','monthlyRevenue','avgTransaction',
+    'currentCustomers','targetCustomers','landmark1','landmark2','landmark3',
+    'bestCustomers','comp1name','comp1better','comp1worse','comp2name',
+    'comp2better','comp2worse','largeChains','whatWorked','whatFailed',
+    'bestMonths','worstMonths','seasonalEvents','triedSoFar','specificFocus'
+  ];
+  textFields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && draft[id] !== undefined) el.value = draft[id];
+  });
+  /* Select fields */
+  ['areaType','whatsappListSize','howFoundYou'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && draft[id]) el.value = draft[id];
+  });
+  /* Checkboxes */
+  var saved = Array.isArray(draft.channels) ? draft.channels : [];
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+    cb.checked = saved.indexOf(cb.value) !== -1;
+  });
+  /* Language radio + regional sub-field */
+  if (draft.language) {
+    document.querySelectorAll('input[name="language"]').forEach(function(r) {
+      r.checked = (r.value === draft.language);
+    });
+    if (draft.language === 'Regional') {
+      var rn = document.getElementById('regionalLangName');
+      if (rn) rn.value = draft.regionalLangName || '';
+    }
+  }
+  /* Refresh quality panel to reflect restored values */
+  updateQualityPanel();
+  /* Jump to the section that was active when saved */
+  var targetSection = parseInt(draft.section, 10) || 1;
+  if (targetSection !== currentSection) showSection(targetSection);
+}
+
+/* Returns a human-readable relative time string for the draft age */
+function draftRelativeTime(iso) {
+  var then = new Date(iso).getTime();
+  if (isNaN(then)) return 'earlier';
+  var mins = Math.round((Date.now() - then) / 60000);
+  if (mins < 1)  return 'just now';
+  if (mins < 60) return mins + ' minute' + (mins === 1 ? '' : 's') + ' ago';
+  var hrs = Math.round(mins / 60);
+  if (hrs < 24)  return hrs + ' hour' + (hrs === 1 ? '' : 's') + ' ago';
+  return 'yesterday';
+}
+
+/* Wire delegated input/change events on the form container for debounced auto-save */
+function initDraftAutoSave() {
+  var wrap = document.querySelector('.form-wrap');
+  if (!wrap) return;
+  var _draftTimer = null;
+  function scheduleSave() {
+    clearTimeout(_draftTimer);
+    _draftTimer = setTimeout(saveDraft, 800);
+  }
+  wrap.addEventListener('input',  scheduleSave);
+  wrap.addEventListener('change', scheduleSave);
+}
+
+/* On load: if a draft exists, show the restore bar. Wire Continue and Start fresh. */
+function checkForDraft() {
+  try {
+    var raw = localStorage.getItem(scoutKey('scout_onboard_draft'));
+    if (!raw) return;
+    var draft = JSON.parse(raw);
+    var bar      = document.getElementById('draftBar');
+    var timeEl   = document.getElementById('draftBarTime');
+    if (!bar || !timeEl) return;
+    timeEl.textContent = draftRelativeTime(draft.savedAt);
+    bar.style.display = 'flex';
+    document.getElementById('draftContinue').onclick = function() {
+      bar.style.display = 'none';
+      restoreDraft(draft);
+    };
+    document.getElementById('draftFresh').onclick = function() {
+      localStorage.removeItem(scoutKey('scout_onboard_draft'));
+      bar.style.display = 'none';
+    };
+  } catch(e) {}
 }
 
 /* ─── QUALITY SCORING ─── */
