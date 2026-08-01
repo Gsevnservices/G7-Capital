@@ -715,13 +715,16 @@ function showWelcome() {
    MOMENTUM LEVEL SYSTEM
    Returns level data for a given score 0-100.
 ═══════════════════════════════════════════ */
+/* Health score bands — 5 dimensions × 20 pts each.
+   90/100 = near-perfect across winning customers, revenue, retention,
+   reply rate and festival readiness. Bands reflect realistic weekly progress. */
 function getMomentumLevel(score) {
   var levels = [
-    { min: 0,  max: 20,  name: 'Getting Started',      desc: 'Scout is learning your market and you\'re taking your first steps. Every message you send this week builds momentum.',            next: 21  },
-    { min: 21, max: 40,  name: 'Finding Your Customers', desc: 'Your best customer types are starting to respond. You\'re learning what works.',                                                 next: 41  },
-    { min: 41, max: 60,  name: 'Gaining Ground',        desc: 'Your customer-finding system is taking shape. More replies, more visits, more sales.',                                            next: 61  },
-    { min: 61, max: 80,  name: 'Running Smoothly',      desc: 'You have a working system for bringing in customers, week after week.',                                                           next: 81  },
-    { min: 81, max: 100, name: 'Market Leader',         desc: 'You\'re outperforming other businesses in your area. Scout has become your growth engine.',                                       next: null }
+    { min: 0,  max: 30,  name: 'Getting Started',   desc: 'Scout is learning your market. Every message you send builds momentum.',                    next: 31  },
+    { min: 31, max: 50,  name: 'Finding Your Feet',  desc: 'You\'re starting to see what works. Keep going.',                                           next: 51  },
+    { min: 51, max: 70,  name: 'Working Well',       desc: 'Your system is bringing in customers steadily.',                                             next: 71  },
+    { min: 71, max: 85,  name: 'Strong',             desc: 'You have a repeatable way of winning customers.',                                             next: 86  },
+    { min: 86, max: 100, name: 'Outstanding',        desc: 'You\'re running one of the best customer systems in your area.',                              next: null }
   ];
   for (var i = 0; i < levels.length; i++) {
     if (score <= levels[i].max) return levels[i];
@@ -798,9 +801,9 @@ function showDashboard(history, weekNum, firmName) {
       : '';
   }
 
-  /* Mastery glow */
+  /* Mastery glow — Outstanding band starts at 86 */
   var card = document.getElementById('momentumCard');
-  if (score !== null && score >= 81) { card.classList.add('mastery'); }
+  if (score !== null && score >= 86) { card.classList.add('mastery'); }
 
   /* Level-up celebration flash */
   if (score !== null && prevLevel && level.name !== prevLevel.name) {
@@ -839,7 +842,7 @@ function showDashboard(history, weekNum, firmName) {
   } else if (last.scoutOutput) {
     var learnedMatch = last.scoutOutput.match(/WHAT\s+SCOUT\s+LEARNED[\s\S]{0,20}?\n([^\n]+)/i);
     if (learnedMatch) {
-      document.getElementById('dashMomentumNote').textContent = learnedMatch[1].trim();
+      document.getElementById('dashMomentumNote').textContent = plainLang(learnedMatch[1].trim());
     }
   }
 
@@ -1255,6 +1258,20 @@ function viewWeek(idx) {
 /* ═══════════════════════════════════════════
    UTILITIES
 ═══════════════════════════════════════════ */
+
+/* Plain-language substitution — applied at display time only, never to stored data.
+   Call this on any Scout output text before showing it to the user. */
+function plainLang(str) {
+  if (!str) return str;
+  return str
+    .replace(/\bICP\s*1\b/gi, 'Group 1')
+    .replace(/\bICP\s*2\b/gi, 'Group 2')
+    .replace(/\bICP\s*3\b/gi, 'Group 3')
+    .replace(/\bclose\s+rate\s+from\s+replies\b/gi, 'how many replies became customers')
+    .replace(/\breply\s+rate\b/gi, 'how many people replied')
+    .replace(/\bconversion\s+rate\b/gi, 'how many became customers');
+}
+
 function escHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
