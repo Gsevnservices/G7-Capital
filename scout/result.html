@@ -10,15 +10,15 @@
 <script src="../assets/auth.js"></script>
 <script src="../assets/scout.js"></script>
 <script src="../assets/pipeline.js"></script>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23E0922F'>G</text></svg>">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;font-size:16px}
 :root{
   --black:#080808;--black2:#0F0F0F;--black3:#161616;--black4:#1E1E1E;
-  --gold:#C9A84C;--gold2:#E2C97E;--gold3:#A8873A;
+  --gold:#E0922F;--gold2:#F0B968;--gold3:#D17B2E;
   --white:#FAFAF8;--white2:#F0EFE9;--grey1:#8A8880;--grey2:#5A5855;
-  --border:rgba(201,168,76,0.15);--border2:rgba(250,250,248,0.08);
+  --border:rgba(224,146,47,0.15);--border2:rgba(250,250,248,0.08);
   --green:#5A9E6F;--red:#C45A5A
 }
 body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;padding-bottom:96px;visibility:hidden}
@@ -28,7 +28,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* CURSOR */
 .cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(224,146,47,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
 @media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
 
 /* NAV */
@@ -39,9 +39,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
 .nav-link:hover{color:var(--white)}
 .nav-link.active{color:var(--gold)}
-.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
-.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
-.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(224,146,47,0.6);margin-right:8px}
+.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(224,146,47,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.nav-logout:hover{border-color:var(--gold);background:rgba(224,146,47,0.08)}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
 
 /* ── REASONING BAR + PANEL (Feature 4.1) ── */
@@ -203,7 +203,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   color:var(--gold);border:1px solid var(--border);
   padding:4px 10px
 }
-.icp-badge.priority{background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.5)}
+.icp-badge.priority{background:rgba(224,146,47,0.12);border-color:rgba(224,146,47,0.5)}
 .icp-title{
   font-family:'Cormorant Garamond',serif;
   font-size:18px;font-weight:300;color:var(--white)
@@ -222,7 +222,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   padding:3px 10px;border:1px solid;margin-left:auto;flex-shrink:0
 }
 .conf-badge.high{color:var(--green);border-color:rgba(90,158,111,0.4);background:rgba(90,158,111,0.08)}
-.conf-badge.medium{color:var(--gold);border-color:rgba(201,168,76,0.4);background:rgba(201,168,76,0.08)}
+.conf-badge.medium{color:var(--gold);border-color:rgba(224,146,47,0.4);background:rgba(224,146,47,0.08)}
 .conf-badge.low{color:var(--grey1);border-color:rgba(138,136,128,0.4);background:rgba(138,136,128,0.06)}
 
 /* ── MESSAGE CARDS (Tab 2) ── */
@@ -260,7 +260,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-family:'Tenor Sans',sans-serif;transition:all .2s
 }
 .ab-tab-btn:first-child{border-right:none}
-.ab-tab-btn.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.4);color:var(--gold)}
+.ab-tab-btn.active{background:rgba(224,146,47,0.1);border-color:rgba(224,146,47,0.4);color:var(--gold)}
 .ab-hint{font-size:10px;color:var(--grey2);margin-top:10px;line-height:1.65;font-style:italic}
 
 /* ── DAY CARDS (Tab 3) ── */
@@ -281,7 +281,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .day-check-wrapper{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .day-checkbox{
   width:20px;height:20px;flex-shrink:0;
-  border:1px solid rgba(201,168,76,0.4);
+  border:1px solid rgba(224,146,47,0.4);
   background:transparent;cursor:pointer;
   appearance:none;-webkit-appearance:none;
   position:relative;transition:background .2s,border-color .2s
@@ -340,7 +340,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
 /* ── COMPETITOR WATCH CARD (Feature 4.6) ── */
 .comp-watch-card{
-  background:var(--black3);border:1px solid rgba(201,168,76,0.25);
+  background:var(--black3);border:1px solid rgba(224,146,47,0.25);
   border-left:3px solid var(--gold);padding:20px 24px;margin-top:20px
 }
 .comp-watch-title{
@@ -368,7 +368,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-size:18px;padding:12px 14px;outline:none;transition:border-color .3s;
   text-align:center
 }
-.pipeline-field input:focus{border-color:rgba(201,168,76,0.5)}
+.pipeline-field input:focus{border-color:rgba(224,146,47,0.5)}
 .pipeline-field input::placeholder{color:var(--grey2);font-size:13px}
 .pipeline-totals{
   display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0
@@ -496,7 +496,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .festival-panel{display:none;margin-top:16px}
 .festival-week-card{
   background:var(--black3);border:1px solid var(--border2);
-  border-left:2px solid rgba(201,168,76,0.5);
+  border-left:2px solid rgba(224,146,47,0.5);
   padding:16px 20px;margin-bottom:10px
 }
 .festival-week-label{
@@ -523,7 +523,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:12px;
   padding:10px 14px;outline:none;transition:border-color .3s
 }
-.referral-input:focus{border-color:rgba(201,168,76,0.5)}
+.referral-input:focus{border-color:rgba(224,146,47,0.5)}
 .referral-input::placeholder{color:var(--grey2);font-size:11px}
 .referral-add-link{
   font-size:9px;letter-spacing:.15em;text-transform:uppercase;
@@ -567,8 +567,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   background:rgba(90,158,111,0.08)
 }
 .referral-potential-badge.medium{
-  color:var(--gold);border-color:rgba(201,168,76,0.4);
-  background:rgba(201,168,76,0.08)
+  color:var(--gold);border-color:rgba(224,146,47,0.4);
+  background:rgba(224,146,47,0.08)
 }
 .referral-potential-badge.low{
   color:var(--grey1);border-color:rgba(138,136,128,0.4);
@@ -589,7 +589,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   padding-left:12px;margin-bottom:8px
 }
 .referral-total-block{
-  background:rgba(201,168,76,0.06);border:1px solid var(--border);
+  background:rgba(224,146,47,0.06);border:1px solid var(--border);
   padding:16px 20px;margin-top:16px
 }
 .referral-total-label{
@@ -620,7 +620,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .ref-reward-pills{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 @media(max-width:600px){.ref-reward-pills{grid-template-columns:1fr}}
 .ref-reward-pill{
-  background:rgba(201,168,76,0.06);border:1px solid var(--border);
+  background:rgba(224,146,47,0.06);border:1px solid var(--border);
   padding:12px 16px
 }
 .ref-pill-label{
@@ -639,7 +639,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 }
 .ref-tier{
   background:var(--black3);border:1px solid var(--border2);
-  border-left:2px solid rgba(201,168,76,0.5);
+  border-left:2px solid rgba(224,146,47,0.5);
   padding:16px 20px;margin-bottom:10px
 }
 .ref-tier-label{
@@ -670,7 +670,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   font-size:11px;color:var(--grey1);line-height:1.7;margin-bottom:6px
 }
 .ref-projection-card{
-  background:rgba(201,168,76,0.05);border:1px solid var(--border);
+  background:rgba(224,146,47,0.05);border:1px solid var(--border);
   padding:20px 24px;margin-bottom:24px
 }
 .ref-projection-heading{
@@ -699,7 +699,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .ref-action-item:last-child{border-bottom:none}
 .ref-action-num{
   flex-shrink:0;width:20px;height:20px;
-  background:rgba(201,168,76,0.12);border:1px solid var(--border);
+  background:rgba(224,146,47,0.12);border:1px solid var(--border);
   font-size:9px;color:var(--gold);display:flex;
   align-items:center;justify-content:center
 }
@@ -745,7 +745,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .lcr-seg-reason{font-size:10px;color:var(--grey2);margin-bottom:10px;line-height:1.6}
 .lcr-seg-text{font-size:13px;color:var(--white2);line-height:1.8;white-space:pre-wrap;margin-bottom:8px}
 .lcr-seg-time{font-size:10px;color:var(--grey2)}
-.lcr-winback{margin-top:20px;padding:20px;border:1px solid rgba(201,168,76,0.35);background:rgba(201,168,76,0.03)}
+.lcr-winback{margin-top:20px;padding:20px;border:1px solid rgba(224,146,47,0.35);background:rgba(224,146,47,0.03)}
 .lcr-winback-label{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .lcr-winback-type{font-size:12px;color:var(--grey1);margin-bottom:12px;line-height:1.6}
 .lcr-winback-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -886,7 +886,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .patch-badge.retired{border-color:var(--grey2);color:var(--grey2)}
 .patch-reason{font-size:11px;color:var(--grey1);font-style:italic;margin-top:6px;line-height:1.6}
 .change-summary{
-  border:1px solid var(--gold);padding:20px 24px;margin-bottom:32px;background:rgba(201,168,76,0.04)
+  border:1px solid var(--gold);padding:20px 24px;margin-bottom:32px;background:rgba(224,146,47,0.04)
 }
 .change-summary-title{
   font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px
@@ -1407,11 +1407,14 @@ function parseAndRender(rawOutput, biz) {
       var _extra = '';
       var _comp = _t3.competitorWatch || {};
       if (_comp.competitor) {
-        _extra += '<div class="comp-watch-card"><div class="comp-watch-title">COMPETITOR WATCH</div><div class="comp-watch-body">';
+        _extra += '<div class="comp-watch-card">';
+        _extra += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'compPanel\',\'compArrow\')">';
+        _extra += '<span id="compArrow">▶</span>&nbsp;What competitors are doing</button>';
+        _extra += '<div id="compPanel" style="display:none;margin-top:12px"><div class="comp-watch-body">';
         _extra += '<div style="margin-bottom:6px"><strong style="color:var(--white)">' + escHtml(_comp.competitor) + '</strong></div>';
-        if (_comp.likelyDoing)  _extra += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(_comp.likelyDoing) + '</div>';
-        if (_comp.yourResponse) _extra += '<div>Your response: ' + escHtml(_comp.yourResponse) + '</div>';
-        _extra += '</div></div>';
+        if (_comp.likelyDoing)  _extra += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(plainLang(_comp.likelyDoing)) + '</div>';
+        if (_comp.yourResponse) _extra += '<div>Your response: ' + escHtml(plainLang(_comp.yourResponse)) + '</div>';
+        _extra += '</div></div></div>';
       }
       _extra += renderWhatsAppCalendar(_t3.whatsappCalendar);
       if (_extra) _el1.innerHTML += _extra;
@@ -1550,7 +1553,7 @@ function buildMessageCardHTML(msg, idx) {
   h += '</div>';
   if (msg.followupDay3) {
     var id3 = 'msgcard_fu3_' + idx;
-    h += '<div class="message-card" id="' + id3 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.3)">';
+    h += '<div class="message-card" id="' + id3 + '" style="margin-left:20px;border-left:2px solid rgba(224,146,47,0.3)">';
     h += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 3 — ' + escHtml(msg.icp || '') + '</div></div>';
     h += '<button class="copy-btn" onclick="copyMessage(\'' + id3 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id3 + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
     h += '<div class="message-text" data-text="' + escAttr(msg.followupDay3) + '">' + escHtml(msg.followupDay3) + '</div>';
@@ -1558,7 +1561,7 @@ function buildMessageCardHTML(msg, idx) {
   }
   if (msg.followupDay7) {
     var id7 = 'msgcard_fu7_' + idx;
-    h += '<div class="message-card" id="' + id7 + '" style="margin-left:20px;border-left:2px solid rgba(201,168,76,0.2)">';
+    h += '<div class="message-card" id="' + id7 + '" style="margin-left:20px;border-left:2px solid rgba(224,146,47,0.2)">';
     h += '<div class="message-card-header"><div><div class="message-card-label">Follow-up Day 7 — ' + escHtml(msg.icp || '') + '</div></div>';
     h += '<button class="copy-btn" onclick="copyMessage(\'' + id7 + '\', this)">Copy</button><button class="copy-btn" onclick="waSendFromCard(\'' + id7 + '\', this, \'' + escAttr(msg.icp || '') + '\')">Send on WhatsApp</button></div>';
     h += '<div class="message-text" data-text="' + escAttr(msg.followupDay7) + '">' + escHtml(msg.followupDay7) + '</div>';
@@ -1580,23 +1583,26 @@ function renderTab1JSON(tab1, data) {
   if (data.lastPatchSummary) {
     html += '<div class="change-summary">';
     html += '<div class="change-summary-title">What changed after your week ' + escHtml(String(data.lastPatchedWeek || '')) + ' check-in</div>';
-    html += '<div class="change-summary-body">' + escHtml(data.lastPatchSummary) + '</div>';
+    html += '<div class="change-summary-body">' + escHtml(plainLang(data.lastPatchSummary)) + '</div>';
     html += '</div>';
   }
 
   /* Scout's Honest Assessment */
   if (tab1.honestAssessment) {
-    html += '<div class="section-block" style="background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.25);padding:24px;margin-bottom:28px">';
+    html += '<div class="section-block" style="background:rgba(224,146,47,0.04);border:1px solid rgba(224,146,47,0.25);padding:24px;margin-bottom:28px">';
     html += '<div class="section-block-title" style="color:var(--gold)">Scout\'s Honest Assessment</div>';
-    html += '<div class="section-block-body">' + escHtml(tab1.honestAssessment) + '</div>';
+    html += '<div class="section-block-body">' + escHtml(plainLang(tab1.honestAssessment)) + '</div>';
     html += '</div>';
   }
 
-  /* Your Unfair Advantage */
+  /* Your Unfair Advantage — collapsed by default */
   if (tab1.unfairAdvantage) {
     html += '<div class="section-block" style="background:var(--black3);border:1px solid var(--border);padding:24px;margin-bottom:28px">';
-    html += '<div class="section-block-title">Your Unfair Advantage</div>';
-    html += '<div class="section-block-body">' + escHtml(tab1.unfairAdvantage) + '</div>';
+    html += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'advPanel\',\'advArrow\')">';
+    html += '<span id="advArrow">▶</span>&nbsp;Why you win</button>';
+    html += '<div id="advPanel" style="display:none;margin-top:14px">';
+    html += '<div class="section-block-body">' + escHtml(plainLang(tab1.unfairAdvantage)) + '</div>';
+    html += '</div>';
     html += '</div>';
   }
 
@@ -1638,19 +1644,19 @@ function renderTab1JSON(tab1, data) {
     if (icp.whoExactly || icp.whyNow || icp.whereToFind) {
       if (icp.whoExactly) {
         html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Who Exactly</div>';
-        html += '<div class="icp-body">' + escHtml(icp.whoExactly) + '</div></div>';
+        html += '<div class="icp-body">' + escHtml(plainLang(icp.whoExactly)) + '</div></div>';
       }
       if (icp.whyNow) {
         html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Why They Buy Now</div>';
-        html += '<div class="icp-body">' + escHtml(icp.whyNow) + '</div></div>';
+        html += '<div class="icp-body">' + escHtml(plainLang(icp.whyNow)) + '</div></div>';
       }
       if (icp.whereToFind) {
         html += '<div style="margin-bottom:14px"><div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Where to Find Them</div>';
-        html += '<div class="icp-body">' + escHtml(icp.whereToFind) + '</div></div>';
+        html += '<div class="icp-body">' + escHtml(plainLang(icp.whereToFind)) + '</div></div>';
       }
     } else if (icp.summary) {
       /* Summary field — convert \n to <br> so bullet points render correctly */
-      html += '<div class="icp-body" style="margin-bottom:14px">' + escHtml(icp.summary).replace(/\n/g, '<br>') + '</div>';
+      html += '<div class="icp-body" style="margin-bottom:14px">' + escHtml(plainLang(icp.summary)).replace(/\n/g, '<br>') + '</div>';
     }
 
     /* Matched messages from Tab 2 — injected inline */
@@ -1733,7 +1739,7 @@ function renderTab2JSON(tab2, tab1) {
     html += '<div class="section-block" style="margin-top:32px"><div class="section-block-title">Response Handlers</div><div class="section-block-body">';
     rh.forEach(function(pair) {
       html += '<div style="background:var(--black3);border:1px solid var(--border2);padding:16px;margin-bottom:10px">';
-      if (pair.theySay) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(pair.theySay) + '</span></div>';
+      if (pair.theySay) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(plainLang(pair.theySay)) + '</span></div>';
       if (pair.youSay)  html += '<div style="font-size:12px;line-height:1.7;color:var(--white2)">' + escHtml(pair.youSay) + '</div>';
       html += '</div>';
     });
@@ -1758,7 +1764,7 @@ function renderTab3JSON(tab3, data) {
     html += '<div class="change-summary-body">These replace the actions below, based on your last check-in.';
     html += '<ul style="margin:12px 0 0 18px;padding:0">';
     data.thisWeekActions.actions.forEach(function(a) {
-      html += '<li style="margin-bottom:8px">' + escHtml(a) + '</li>';
+      html += '<li style="margin-bottom:8px">' + escHtml(plainLang(a)) + '</li>';
     });
     html += '</ul></div>';
     html += '</div>';
@@ -1774,7 +1780,7 @@ function renderTab3JSON(tab3, data) {
 
   /* Weekly Focus */
   if (tab3.weeklyFocus) {
-    html += '<div style="background:rgba(201,168,76,0.08);border:1px solid var(--border);padding:20px;margin-bottom:28px">';
+    html += '<div style="background:rgba(224,146,47,0.08);border:1px solid var(--border);padding:20px;margin-bottom:28px">';
     html += '<div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">This Week\'s Focus</div>';
     html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-weight:300;color:var(--white)">' + escHtml(tab3.weeklyFocus) + '</div>';
     html += '</div>';
@@ -1792,11 +1798,11 @@ function renderTab3JSON(tab3, data) {
     html += '</div>';
     /* Content */
     html += '<div class="day-content">';
-    if (day.action)       html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Action:</span> ' + escHtml(day.action) + '</div>';
-    if (day.target)       html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Target:</span> ' + escHtml(day.target) + '</div>';
+    if (day.action)       html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Action:</span> ' + escHtml(plainLang(day.action)) + '</div>';
+    if (day.target)       html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Target:</span> ' + escHtml(plainLang(day.target)) + '</div>';
     if (day.messageToUse) html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">Message to use:</span> ' + escHtml(day.messageToUse) + '</div>';
-    if (day.ifAhead)      html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">If ahead:</span> ' + escHtml(day.ifAhead) + '</div>';
-    if (day.ifBehind)     html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">If behind:</span> ' + escHtml(day.ifBehind) + '</div>';
+    if (day.ifAhead)      html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">If ahead:</span> ' + escHtml(plainLang(day.ifAhead)) + '</div>';
+    if (day.ifBehind)     html += '<div style="margin-bottom:4px"><span style="color:var(--gold);font-size:9px;letter-spacing:.15em;text-transform:uppercase">If behind:</span> ' + escHtml(plainLang(day.ifBehind)) + '</div>';
     html += '</div>';
     html += '</div>';
   });
@@ -1902,6 +1908,10 @@ function renderWhatsAppCalendar(cal) {
   var html = '';
 
   html += '<div class="wac-section">';
+  /* Toggle header — collapsed by default */
+  html += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'wacPanel\',\'wacArrow\')">';
+  html += '<span id="wacArrow">▶</span>&nbsp;WhatsApp calendar</button>';
+  html += '<div id="wacPanel" style="display:none;margin-top:14px">';
   html += '<div class="wac-heading">Your WhatsApp Calendar</div>';
   if (cal.instructions) {
     html += '<div class="wac-instructions">' + escHtml(cal.instructions) + '</div>';
@@ -1977,6 +1987,7 @@ function renderWhatsAppCalendar(cal) {
     html += '</div>';
   }
 
+  html += '</div>'; /* end wacPanel */
   html += '</div>'; /* end wac-section */
   return html;
 }
@@ -2013,7 +2024,7 @@ function renderLostCustomerRecovery(lcr) {
   }
 
   /* 3 segments */
-  var segBorderColors = ['var(--gold)', 'rgba(201,168,76,0.55)', 'rgba(196,90,90,0.7)'];
+  var segBorderColors = ['var(--gold)', 'rgba(224,146,47,0.55)', 'rgba(196,90,90,0.7)'];
   (lcr.segments || []).forEach(function(seg, idx) {
     if (!seg) return;
     var segId = 'lcr_seg_' + idx;
@@ -2128,7 +2139,7 @@ function renderWeekTargets(tab4) {
 
   /* Friday Reminder */
   if (t4.fridayReminder) {
-    html += '<div style="background:rgba(201,168,76,0.06);border:1px solid var(--border);padding:16px 20px;margin-bottom:28px">';
+    html += '<div style="background:rgba(224,146,47,0.06);border:1px solid var(--border);padding:16px 20px;margin-bottom:28px">';
     html += '<div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Friday Reminder</div>';
     html += '<div style="font-size:12px;color:var(--grey1);line-height:1.7">' + escHtml(t4.fridayReminder) + '</div>';
     html += '</div>';
@@ -2347,7 +2358,7 @@ function renderTab5JSON(tab5) {
   var fest = tab5.festivalCampaign;
   if (fest && fest.festival) {
     html += '<div class="festival-toggle-wrap">';
-    html += '<button class="festival-toggle-btn" id="festToggleBtn" onclick="toggleFestival()">';
+    html += '<button class="festival-toggle-btn" id="festToggleBtn" onclick="toggleCollapse(\'festivalPanel\',\'festArrow\')">';
     html += '<span id="festArrow">▶</span>&nbsp;Festival Campaign — ' + escHtml(fest.festival);
     if (fest.weeksAway) html += ' (' + escHtml(String(fest.weeksAway)) + ' weeks away)';
     html += '</button>';
@@ -2419,21 +2430,24 @@ function renderTab1(content) {
 
   var html = '';
 
-  /* Render unfair advantage block if present */
+  /* Render unfair advantage block if present — collapsed by default */
   var advMatch = content.match(/YOUR\s+UNFAIR\s+ADVANTAGE[:\s]*([\s\S]+?)(?=ICP\s+\d|━|SCOUT|$)/i);
   if (advMatch) {
     html += '<div class="section-block" style="background:var(--black3);border:1px solid var(--border);padding:24px;margin-bottom:28px">';
-    html += '<div class="section-block-title">Your Unfair Advantage</div>';
-    html += '<div class="section-block-body">' + escHtml(advMatch[1].trim()) + '</div>';
+    html += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'advPanel\',\'advArrow\')">';
+    html += '<span id="advArrow">▶</span>&nbsp;Why you win</button>';
+    html += '<div id="advPanel" style="display:none;margin-top:14px">';
+    html += '<div class="section-block-body">' + escHtml(plainLang(advMatch[1].trim())) + '</div>';
+    html += '</div>';
     html += '</div>';
   }
 
   /* Render Scout's Honest Assessment if present */
   var honestMatch = content.match(/SCOUT[''']?S?\s+HONEST\s+ASSESSMENT([\s\S]+?)(?=YOUR\s+UNFAIR\s+ADVANTAGE|ICP\s*[123]|$)/i);
   if (honestMatch) {
-    html += '<div class="section-block" style="background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.25);padding:24px;margin-bottom:28px">';
+    html += '<div class="section-block" style="background:rgba(224,146,47,0.04);border:1px solid rgba(224,146,47,0.25);padding:24px;margin-bottom:28px">';
     html += '<div class="section-block-title" style="color:var(--gold)">Scout\'s Honest Assessment</div>';
-    html += '<div class="section-block-body">' + escHtml(honestMatch[1].trim()) + '</div>';
+    html += '<div class="section-block-body">' + escHtml(plainLang(honestMatch[1].trim())) + '</div>';
     html += '</div>';
   }
 
@@ -2485,7 +2499,7 @@ function renderTab1(content) {
         if (m) {
           subHtml += '<div style="margin-bottom:14px">';
           subHtml += '<div style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">' + ss.label + '</div>';
-          subHtml += '<div class="icp-body">' + escHtml(m[1].trim()) + '</div>';
+          subHtml += '<div class="icp-body">' + escHtml(plainLang(m[1].trim())) + '</div>';
           subHtml += '</div>';
         }
       });
@@ -2508,7 +2522,7 @@ function renderTab1(content) {
 
       /* If sub-section parsing found nothing — just render the raw block */
       if (!subHtml && !metaHtml) {
-        html += '<div class="icp-body">' + escHtml(cleanBlock(block)) + '</div>';
+        html += '<div class="icp-body">' + escHtml(plainLang(cleanBlock(block))) + '</div>';
       }
 
       html += '</div>';
@@ -2646,7 +2660,7 @@ function renderTab2(content) {
       var youMatch  = pair.match(/(?:\*\*)?YOU\s+SAY(?:\*\*)?[:\s]*"?([\s\S]+?)(?:"|$)/i);
       if (theyMatch || youMatch) {
         html += '<div style="background:var(--black3);border:1px solid var(--border2);padding:16px;margin-bottom:10px">';
-        if (theyMatch) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(theyMatch[1].trim()) + '</span></div>';
+        if (theyMatch) html += '<div style="font-size:10px;letter-spacing:.1em;color:var(--grey2);margin-bottom:6px">THEY SAY: <span style="color:var(--grey1)">' + escHtml(plainLang(theyMatch[1].trim())) + '</span></div>';
         if (youMatch)  html += '<div style="font-size:12px;line-height:1.7;color:var(--white2)">' + escHtml(youMatch[1].trim()) + '</div>';
         html += '</div>';
       }
@@ -2682,7 +2696,7 @@ function renderTab3(content) {
   /* Weekly focus headline */
   var focusMatch = content.match(/THIS\s+WEEK'?S?\s+FOCUS\s*[:\n]\s*([^\n]+)/i);
   if (focusMatch) {
-    html += '<div style="background:rgba(201,168,76,0.08);border:1px solid var(--border);padding:20px;margin-bottom:28px">';
+    html += '<div style="background:rgba(224,146,47,0.08);border:1px solid var(--border);padding:20px;margin-bottom:28px">';
     html += '<div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">This Week\'s Focus</div>';
     html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-weight:300;color:var(--white)">' + escHtml(focusMatch[1].trim()) + '</div>';
     html += '</div>';
@@ -2738,14 +2752,17 @@ function renderTab3(content) {
     html += '</div>';
   }
 
-  /* ── Feature 4.6: Competitor Watch card ── */
+  /* ── Feature 4.6: Competitor Watch card — collapsed by default ── */
   var compWatch = content.match(/COMPETITOR\s+WATCH(?:\s+THIS\s+WEEK)?[:\s━]*([\s\S]+?)(?=RULES\s+FOR|$)/i);
   if (compWatch) {
     var compBody = compWatch[1].replace(/━+/g,'').trim();
     if (compBody.length > 10) {
       html += '<div class="comp-watch-card">';
-      html += '<div class="comp-watch-title">COMPETITOR WATCH</div>';
-      html += '<div class="comp-watch-body">' + escHtml(compBody) + '</div>';
+      html += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'compPanel\',\'compArrow\')">';
+      html += '<span id="compArrow">▶</span>&nbsp;What competitors are doing</button>';
+      html += '<div id="compPanel" style="display:none;margin-top:12px">';
+      html += '<div class="comp-watch-body">' + escHtml(plainLang(compBody)) + '</div>';
+      html += '</div>';
       html += '</div>';
     }
   }
@@ -3050,7 +3067,7 @@ function renderTab5(content) {
     var festName = festNameMatch ? festNameMatch[1].trim() : 'Upcoming Festival';
 
     html += '<div class="festival-toggle-wrap">';
-    html += '<button class="festival-toggle-btn" id="festToggleBtn" onclick="toggleFestival()">';
+    html += '<button class="festival-toggle-btn" id="festToggleBtn" onclick="toggleCollapse(\'festivalPanel\',\'festArrow\')">';
     html += '<span id="festArrow">▶</span>&nbsp;Festival Campaign — ' + escHtml(festName);
     html += '</button>';
     html += '<div class="festival-panel" id="festivalPanel">';
@@ -3338,11 +3355,13 @@ function toggleReasoning() {
 }
 
 /* ═══════════════════════════════════════════
-   FESTIVAL CAMPAIGN TOGGLE (Feature 4.5)
+   GENERIC COLLAPSE TOGGLE
+   panelId — id of the content div to show/hide
+   arrowId — id of the ▶/▼ span inside the button
 ═══════════════════════════════════════════ */
-function toggleFestival() {
-  var panel = document.getElementById('festivalPanel');
-  var arrow = document.getElementById('festArrow');
+function toggleCollapse(panelId, arrowId) {
+  var panel = document.getElementById(panelId);
+  var arrow = document.getElementById(arrowId);
   if (!panel || !arrow) return;
   if (panel.style.display === 'none' || panel.style.display === '') {
     panel.style.display = 'block';
@@ -3352,6 +3371,8 @@ function toggleFestival() {
     arrow.textContent = '▶';
   }
 }
+/* Back-compat shim — festival callers keep working if any stale ref remains */
+function toggleFestival() { toggleCollapse('festivalPanel','festArrow'); }
 
 /* ═══════════════════════════════════════════
    INSTITUTIONAL PDF (Feature 4.3)
@@ -3456,6 +3477,19 @@ function escHtml(str) {
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;');
+}
+
+/* Plain-language substitution — applied at display time only, never to stored data.
+   Do NOT use on message bodies (those go verbatim to customers). */
+function plainLang(str) {
+  if (!str) return str;
+  return str
+    .replace(/\bICP\s*1\b/gi, 'Group 1')
+    .replace(/\bICP\s*2\b/gi, 'Group 2')
+    .replace(/\bICP\s*3\b/gi, 'Group 3')
+    .replace(/\bclose\s+rate\s+from\s+replies\b/gi, 'how many replies became customers')
+    .replace(/\breply\s+rate\b/gi, 'how many people replied')
+    .replace(/\bconversion\s+rate\b/gi, 'how many became customers');
 }
 
 /* Escape for HTML attribute values */

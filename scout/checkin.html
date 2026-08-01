@@ -23,7 +23,7 @@ html{scroll-behavior:smooth;font-size:16px}
 body{font-family:'Tenor Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;cursor:none;min-height:100vh;visibility:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
 .cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(224,146,47,.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all .12s ease;transform:translate(-50%,-50%);left:-100px;top:-100px}
 @media(max-width:480px){.cursor,.cursor-ring{display:none}body{cursor:auto}}
 nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:80px;background:rgba(8,8,8,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2)}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--white);text-decoration:none}
@@ -32,9 +32,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .nav-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
 .nav-link:hover{color:var(--white)}
 .nav-link.active{color:var(--gold)}
-.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-right:8px}
-.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
-.nav-logout:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+.nav-firm-indicator{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(224,146,47,0.6);margin-right:8px}
+.nav-logout{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid rgba(224,146,47,0.4);color:var(--gold);padding:6px 16px;cursor:pointer;transition:all .3s;font-family:'Tenor Sans',sans-serif}
+.nav-logout:hover{border-color:var(--gold);background:rgba(224,146,47,0.08)}
 @media(max-width:768px){nav{padding:0 24px}.nav-link{display:none}}
 
 /* PAGE HEADER */
@@ -42,7 +42,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .eyebrow{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
 .page-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,42px);font-weight:300;line-height:1.2;color:var(--white);margin-bottom:12px}
 .page-subheading{font-size:13px;line-height:1.9;color:var(--grey1);max-width:520px;margin-bottom:16px}
-.week-badge{display:inline-block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px;background:rgba(201,168,76,0.06)}
+.week-badge{display:inline-block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:6px 16px;background:rgba(224,146,47,0.06)}
 @media(max-width:768px){.page-header{padding:40px 24px 32px}}
 
 /* LAST WEEK'S TARGETS */
@@ -69,7 +69,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 @media(max-width:600px){.icp-inputs{grid-template-columns:1fr}}
 .icp-field label{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey1);display:block;margin-bottom:6px}
 .icp-field input{width:100%;background:var(--black2);border:1px solid var(--border2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:20px;padding:12px 14px;outline:none;transition:border-color .3s;text-align:center}
-.icp-field input:focus{border-color:rgba(201,168,76,0.5)}
+.icp-field input:focus{border-color:rgba(224,146,47,0.5)}
 .icp-field input::placeholder{color:var(--grey2);font-size:14px}
 
 /* TAP SELECTORS */
@@ -86,7 +86,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .field-label{display:block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
 .field-label .optional{color:var(--grey2);font-size:8px;letter-spacing:.1em;margin-left:6px;text-transform:lowercase}
 .field-input,.field-textarea{width:100%;background:var(--black2);border:1px solid var(--border2);color:var(--white);font-family:'Tenor Sans',sans-serif;font-size:13px;line-height:1.6;padding:14px 18px;transition:border-color .3s;outline:none}
-.field-input:focus,.field-textarea:focus{border-color:rgba(201,168,76,0.5)}
+.field-input:focus,.field-textarea:focus{border-color:rgba(224,146,47,0.5)}
 .field-input::placeholder,.field-textarea::placeholder{color:var(--grey2);font-size:12px}
 .field-textarea{resize:vertical;min-height:80px;line-height:1.8}
 
@@ -163,7 +163,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   background:transparent;color:var(--gold);border:1px solid var(--border);
   padding:14px 28px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .3s
 }
-.btn-share:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+.btn-share:hover{border-color:var(--gold);background:rgba(224,146,47,0.08)}
 .btn-continue{
   font-size:10px;letter-spacing:.2em;text-transform:uppercase;
   background:var(--gold);color:var(--black);border:none;
