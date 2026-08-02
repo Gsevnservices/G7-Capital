@@ -6146,7 +6146,7 @@ REVENUE VELOCITY RULES:
       {
         "day": "Monday",
         "timeRequired": "[X] minutes",
-        "action": "[Specific action]",
+        "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Specific number]",
         "messageToUse": "[Reference to Tab 2 message]",
         "ifAhead": "[What to do with extra time]",
@@ -6155,7 +6155,7 @@ REVENUE VELOCITY RULES:
       {
         "day": "Tuesday",
         "timeRequired": "[X] minutes",
-        "action": "[Action]",
+        "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Target]",
         "messageToUse": "[Message reference]",
         "ifAhead": "[If ahead]",
@@ -6164,7 +6164,7 @@ REVENUE VELOCITY RULES:
       {
         "day": "Wednesday",
         "timeRequired": "[X] minutes",
-        "action": "[Action]",
+        "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Target]",
         "messageToUse": "[Message reference]",
         "ifAhead": "[If ahead]",
@@ -6173,7 +6173,7 @@ REVENUE VELOCITY RULES:
       {
         "day": "Thursday",
         "timeRequired": "[X] minutes",
-        "action": "[Action]",
+        "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Target]",
         "messageToUse": "[Message reference]",
         "ifAhead": "[If ahead]",
@@ -6531,11 +6531,7 @@ WHAT SCOUT LEARNED THIS WEEK:
 [2-3 sentences. What the numbers revealed
 about what is working and what is not.
 Specific — not generic analysis.
-"Your ICP 1 reply rate of 28% is above
-the Metro Core benchmark of 20% —
-this ICP is working. Your ICP 2 reply rate
-of 4% is below benchmark — the message
-or the channel needs to change."]
+"28 out of every 100 people you messaged in the Juhu homemakers group wrote back — that is above what most businesses in your area see, so this group is working. Only 4 out of 100 replied in the corporate accounts group — either the message or the channel needs to change."]
 
 NEXT WEEK'S ADJUSTMENTS:
 
@@ -6584,9 +6580,10 @@ Rules for this section:
   rates, conversion numbers)
 — Must draw a non-obvious conclusion that
   requires pattern recognition across the
-  ICP data — not "you sent more messages"
-  but "your ICP 2 reply rate of 28% is 8
-  points above the Tier 3 benchmark of 20%"
+  customer data — not "you sent more messages"
+  but "28 out of every 100 people in the
+  homebuilders group wrote back — that is 8
+  points above what similar businesses see"
 — Must give one specific action as a direct
   result of the observation
 — 3–4 sentences maximum
@@ -6594,14 +6591,7 @@ Rules for this section:
 — Always specific and data-driven
 
 Example:
-"Your ICP 2 reply rate of 28% is 8 points
-above the Tier 3 benchmark of 20% — this
-is an exceptional signal. Your ICP 3
-conversion rate of 1-in-4 means every
-4 contacts here yields a customer. Double
-your ICP 2 outreach next week to 40
-contacts and target 10 new customers from
-ICP 3 alone."]
+"28 out of every 100 people you messaged in the homebuilders group wrote back — that is 8 points above what similar businesses in your area see, which is an exceptional signal. In the referral network group, 1 in every 4 people you contact becomes a customer. Double your homebuilders outreach next week to 40 contacts and target 10 new customers from the referral network group alone."]
 
 MOMENTUM SCORE CALCULATION:
 
@@ -6742,6 +6732,28 @@ by someone who:
 If the output feels like it was generated
 by a tool that has never met this business
 — rewrite it until it doesn't.
+
+PLAIN LANGUAGE RULE FOR NARRATIVE TEXT:
+
+When writing narrative text the business
+owner reads — assessments, weekly actions,
+change summaries, competitor notes, and
+the check-in summary — write in plain
+English for a small business owner with
+no marketing background.
+
+Refer to customer groups by their
+descriptive name, never as "ICP 1".
+Say "how many people replied" not
+"reply rate". Say "how many replies
+became customers" not "close rate".
+Never use the terms ICP, conversion rate,
+acquisition efficiency or revenue velocity
+in narrative text.
+
+Section headers and JSON field values
+are unaffected and must follow the
+schema exactly.
 
 OUTPUT LENGTH RULES:
 The complete JSON output must be complete.
