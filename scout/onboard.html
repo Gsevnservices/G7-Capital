@@ -1162,20 +1162,23 @@ function checkForDraft() {
 
 /* ─── QUALITY SCORING ─── */
 
-/* The 5 fields being scored and their display names */
+/* The 7 fields being scored and their display names */
 var QUALITY_FIELDS = {
-  whatYouSell:   'What You Sell',
-  location:      'Location',
-  bestCustomers: 'Best Existing Customers',
-  landmark1:     'Landmark 1',
-  comp1worse:    'What Makes You Different'
+  whatYouSell:    'What You Sell',
+  location:       'Location',
+  bestCustomers:  'Best Existing Customers',
+  landmark1:      'Landmark 1',
+  comp1worse:     'What Makes You Different',
+  monthlyRevenue: 'Monthly Revenue',
+  avgTransaction: 'Average Transaction Value'
 };
 
 /* Section each scored field lives in — used by "Improve my inputs" to navigate */
 var QUALITY_FIELD_SECTION = {
   whatYouSell: 1, location: 1,
   bestCustomers: 2, landmark1: 2,
-  comp1worse: 3
+  comp1worse: 3,
+  monthlyRevenue: 1, avgTransaction: 1
 };
 
 /* Score a single field 0-2:
@@ -1234,6 +1237,13 @@ function scoreFieldQuality(fieldId, value) {
     return 0;
   }
 
+  if (fieldId === 'monthlyRevenue' || fieldId === 'avgTransaction') {
+    if (!v || !/\d/.test(v)) return 0;
+    var hasUnit = /month|week|visit|per|\/|day|year|annual/.test(v.toLowerCase());
+    if (hasUnit) return 2;
+    return 1;
+  }
+
   return 0;
 }
 
@@ -1259,18 +1269,37 @@ function initQualityScoring() {
   });
 }
 
+/* Per-field score-0 and score-1 messages. Score-2 is generic across all fields. */
+var FIELD_QUALITY_MSGS = {
+  whatYouSell:    { 0: 'Say what you sell and what it costs — e.g. gym memberships at ₹2,500/month',
+                    1: 'Add your price — Scout needs it to work out your revenue potential' },
+  location:       { 0: 'Add your area and city',
+                    1: 'Add a nearby reference point so Scout can target locally' },
+  bestCustomers:  { 0: 'Describe one real customer — their job, age, where they live',
+                    1: 'Add where they live or work' },
+  landmark1:      { 0: 'Name a specific place nearby — a bank, school, office or temple',
+                    1: 'Add a direction or distance — opposite, 200m from, same lane as' },
+  comp1worse:     { 0: 'What do you do that they don\'t? Be concrete',
+                    1: 'Add one more specific difference' },
+  monthlyRevenue: { 0: 'Enter a number — Scout uses this to calculate what growth is realistic',
+                    1: 'Add the period — per month, per week' },
+  avgTransaction: { 0: 'Enter a number — what does one customer typically spend?',
+                    1: 'Add the unit — per visit, per month, per order' }
+};
+
 /* Render the coloured dot + message for a given field */
 function renderQualityIndicator(fieldId, score) {
   var el = document.getElementById('qi-' + fieldId);
   if (!el) return;
 
   var dotClass, text;
+  var msgs = FIELD_QUALITY_MSGS[fieldId] || {};
   if (score === 0) {
     dotClass = 'qi-dot qi-red';
-    text = 'Be more specific — Scout needs detail to give you hyper-local recommendations';
+    text = msgs[0] || 'Be more specific — Scout needs detail to give you hyper-local recommendations';
   } else if (score === 1) {
     dotClass = 'qi-dot qi-amber';
-    text = 'Good — add one more specific detail to improve Scout\'s output';
+    text = msgs[1] || 'Add one more specific detail to improve Scout\'s output';
   } else {
     dotClass = 'qi-dot qi-green';
     text = 'Perfect — Scout has what it needs';
@@ -1282,17 +1311,23 @@ function renderQualityIndicator(fieldId, score) {
   setTimeout(function(){ el.style.opacity = '1'; }, 10);
 }
 
-/* Calculate total quality score and list of weak field names */
+/* Calculate total quality score (normalised to 0-10) and list of weak field names.
+   Raw sum is over all QUALITY_FIELDS (7 × max 2 = 14). Normalising keeps the
+   gate thresholds (≤4 modal, ≤7 tip banner) semantically stable regardless of
+   how many fields are in QUALITY_FIELDS. */
 function calcTotalQuality() {
-  var total = 0;
+  var rawTotal = 0;
   var weakFields = [];
-  Object.keys(QUALITY_FIELDS).forEach(function(fieldId) {
+  var keys = Object.keys(QUALITY_FIELDS);
+  keys.forEach(function(fieldId) {
     var el = document.getElementById(fieldId);
     var val = el ? el.value : '';
     var score = scoreFieldQuality(fieldId, val);
-    total += score;
+    rawTotal += score;
     if (score <= 1) weakFields.push(QUALITY_FIELDS[fieldId]);
   });
+  var maxRaw = keys.length * 2;
+  var total = maxRaw > 0 ? Math.round(rawTotal / maxRaw * 10) : 0;
   return { total: total, weakFields: weakFields };
 }
 
@@ -1486,7 +1521,8 @@ function updateDim(name, score, hints) {
 function initQualityPanel() {
   /* Wire input/change events for all scored fields */
   ['whatYouSell','location','landmark1','landmark2','bestCustomers',
-   'comp1name','comp1worse','bestMonths','seasonalEvents'
+   'comp1name','comp1worse','bestMonths','seasonalEvents',
+   'monthlyRevenue','avgTransaction'
   ].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) {
