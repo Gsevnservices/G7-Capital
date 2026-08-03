@@ -9,12 +9,15 @@
 //   ADMIN_PASSWORD     — Password for /admin/* routes (set in Cloudflare dashboard)
 //
 // KV key schema:
-//   auth:users:{FIRMCODE}            → { firmName, passwordHash, createdAt, tier }
-//   auth:sessions:{token}            → { firmCode, firmName, createdAt, expiresAt }
-//   firms:{FIRMCODE}:config          → firm configuration object
-//   firms:{FIRMCODE}:kb              → firm knowledge base text
-//   firms:{FIRMCODE}:deals           → array of screened deals
-//   firms:{FIRMCODE}:calibrations    → array of partner corrections
+//   auth:users:{FIRMCODE}                        → { firmName, passwordHash, createdAt, tier, plan }
+//   auth:sessions:{token}                        → { firmCode, firmName, createdAt, expiresAt }
+//   firms:{FIRMCODE}:config                      → firm configuration object
+//   firms:{FIRMCODE}:kb                          → firm knowledge base text
+//   firms:{FIRMCODE}:deals                       → array of screened deals
+//   firms:{FIRMCODE}:calibrations                → array of partner corrections
+//   places:cache:{queryHash}                     → cached Google Places results (30-day TTL)
+//   scout:limit:{FIRMCODE}:places                → free lifetime places counter (string int)
+//   scout:limit:{FIRMCODE}:places:{YYYY-MM}      → paid monthly places counter (string int)
 //
 // Route map:
 //   POST /api/message            — Anthropic proxy (session-protected)
@@ -29,6 +32,7 @@
 //   GET  /admin/firm-usage       — Get deal usage count for a firm (admin-protected)
 //   POST /admin/reset-usage      — Reset deal usage counter for a firm (admin-protected)
 //   POST /email/send-founder-questions — Send Alex questions to founder via email
+//   GET  /places/search              — Google Places proxy (session-protected, cached)
 //
 // Health check:
 //   GET /                        → { status: 'G7 Proxy is running' }
@@ -1025,6 +1029,154 @@ export default {
         paidAnalyses: paidAnalysesRaw ? parseInt(paidAnalysesRaw, 10) : 0,
         paidCheckins: paidCheckinsRaw ? parseInt(paidCheckinsRaw, 10) : 0,
         month: monthKey
+      });
+    }
+
+    // =========================================================================
+    // ROUTE — GET /places/search
+    // Google Places (New) Text Search proxy. Session-protected, cached.
+    //
+    // Query params:
+    //   q  — search string (required, max 200 chars)
+    //
+    // Rate limits (matching /scout/analyse pattern exactly):
+    //   free: 'scout:limit:{firm}:places'            — 5 lifetime,  max 2 results
+    //   paid: 'scout:limit:{firm}:places:{YYYY-MM}'  — 20/month,   max 50 results
+    //
+    // Cache: 'places:cache:{sha256(lower(trim(q)))}' — 30-day KV TTL
+    //   Cache hit: return stored results, do NOT increment counter.
+    //   Cache miss: call Google, store result, increment counter.
+    //
+    // Field mask (Text Search Basic SKU — lowest cost tier):
+    //   places.displayName,places.formattedAddress,
+    //   places.nationalPhoneNumber,places.websiteUri
+    //   — No ratings, reviews, opening hours, or photos.
+    //   — No Place Details follow-up calls.
+    //
+    // Response shape:
+    //   { cacheHit, results: [{name,address,phone,website}],
+    //     quota: { used, limit } }
+    // =========================================================================
+    if (request.method === 'GET' && path === '/places/search') {
+
+      // 1. Auth
+      const session = await validateSession(request, env);
+      if (!session) {
+        return jsonResponse({ error: 'Unauthorized' }, 401);
+      }
+
+      // 2. Validate query param
+      const rawQ = url.searchParams.get('q') || '';
+      const q = rawQ.trim();
+      if (!q) {
+        return jsonResponse({ error: 'q parameter is required' }, 400);
+      }
+      if (q.length > 200) {
+        return jsonResponse({ error: 'q must be 200 characters or fewer' }, 400);
+      }
+
+      // 3. Read plan from user record
+      const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
+      const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
+      const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+
+      // Determine limit and result cap based on plan
+      const isPaid   = plan === 'paid';
+      const cap      = isPaid ? 50 : 2;
+      const hardLimit = isPaid ? 20 : 5;
+
+      // Counter key follows the exact same pattern as /scout/analyse
+      const placesCounterKey = isPaid
+        ? 'scout:limit:' + session.firmCode + ':places:' + monthKey
+        : 'scout:limit:' + session.firmCode + ':places';
+
+      // 4. Rate limit check (before cache — so limit applies even on cache hits
+      //    only on live calls; cache hits skip this block below)
+      const cntRaw = await env.G7_KV.get(placesCounterKey);
+      const placesCount = cntRaw ? parseInt(cntRaw, 10) : 0;
+
+      // 5. Cache lookup — normalise query to lowercase for stable cache key
+      const normalised = q.toLowerCase();
+      // SHA-256 hash of the normalised query, hex-encoded, for the cache key
+      const encoder = new TextEncoder();
+      const hashBuf = await crypto.subtle.digest('SHA-256', encoder.encode(normalised));
+      const hashHex = Array.from(new Uint8Array(hashBuf))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+      const cacheKey = 'places:cache:' + hashHex;
+
+      const cached = await env.G7_KV.get(cacheKey, 'json');
+      if (cached) {
+        // Cache hit — return stored results, no counter increment, no Google call
+        return jsonResponse({
+          cacheHit: true,
+          results:  cached.slice(0, cap),
+          quota:    { used: placesCount, limit: hardLimit }
+        });
+      }
+
+      // Cache miss — enforce rate limit before calling Google
+      if (placesCount >= hardLimit) {
+        return jsonResponse({ error: 'limit_reached', limit: 'places' }, 403);
+      }
+
+      // 6. Call Google Places API (New) — Text Search POST
+      // Field mask requests ONLY the four Basic SKU fields:
+      //   places.displayName, places.formattedAddress,
+      //   places.nationalPhoneNumber, places.websiteUri
+      // This keeps every call at the Text Search (Basic) SKU ($0.017/req).
+      // Adding any field from Atmosphere or Preferred tiers doubles or triples cost.
+      const PLACES_FIELD_MASK =
+        'places.displayName,places.formattedAddress,' +
+        'places.nationalPhoneNumber,places.websiteUri';
+
+      let placesRaw;
+      try {
+        const placesResp = await fetch(
+          'https://places.googleapis.com/v1/places:searchText',
+          {
+            method:  'POST',
+            headers: {
+              'Content-Type':     'application/json',
+              'X-Goog-Api-Key':   env.GOOGLE_PLACES_KEY,
+              'X-Goog-FieldMask': PLACES_FIELD_MASK
+            },
+            body: JSON.stringify({
+              textQuery:   q,
+              maxResultCount: Math.min(cap, 20) // API hard max is 20 per call
+            })
+          }
+        );
+        if (!placesResp.ok) {
+          const errText = await placesResp.text();
+          return jsonResponse(
+            { error: 'Google Places error', detail: errText },
+            placesResp.status
+          );
+        }
+        placesRaw = await placesResp.json();
+      } catch (e) {
+        return jsonResponse({ error: 'Failed to reach Google Places API' }, 502);
+      }
+
+      // 7. Normalise results — strip everything Google returned except our four fields
+      const places = (placesRaw.places || []).map(p => ({
+        name:    (p.displayName    && p.displayName.text) ? p.displayName.text : '',
+        address: p.formattedAddress            || '',
+        phone:   p.nationalPhoneNumber         || '',
+        website: p.websiteUri                  || ''
+      }));
+
+      // 8. Store in cache — 30-day TTL (2592000 seconds)
+      // Fire-and-forget; does not block the response
+      env.G7_KV.put(cacheKey, JSON.stringify(places), { expirationTtl: 2592000 });
+
+      // 9. Increment counter only on a successful non-cached call
+      await env.G7_KV.put(placesCounterKey, String(placesCount + 1));
+
+      return jsonResponse({
+        cacheHit: false,
+        results:  places.slice(0, cap),
+        quota:    { used: placesCount + 1, limit: hardLimit }
       });
     }
 
