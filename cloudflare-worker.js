@@ -670,7 +670,7 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      // ---- Limit gate: free = 1 lifetime, paid = 30 per calendar month ----
+      // ---- Limit gate: free = 1 lifetime, paid = 2 per calendar month ----
       const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
       const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
       const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
@@ -680,7 +680,7 @@ export default {
         analysisCounterKey = 'scout:limit:' + session.firmCode + ':analyses:' + monthKey;
         const cntRaw = await env.G7_KV.get(analysisCounterKey);
         analysisCount = cntRaw ? parseInt(cntRaw, 10) : 0;
-        if (analysisCount >= 30) {
+        if (analysisCount >= 2) {
           return jsonResponse({ error: 'limit_reached', limit: 'analysis' }, 403);
         }
       } else {
@@ -746,7 +746,7 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      // ---- Limit gate: free = 4 lifetime, paid = 30 per calendar month ----
+      // ---- Limit gate: free = 0 (upgrade_required), paid = 8 per calendar month ----
       const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
       const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
       const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
@@ -756,16 +756,12 @@ export default {
         checkinCounterKey = 'scout:limit:' + session.firmCode + ':checkins:' + monthKey;
         const cntRaw = await env.G7_KV.get(checkinCounterKey);
         checkinCount = cntRaw ? parseInt(cntRaw, 10) : 0;
-        if (checkinCount >= 30) {
+        if (checkinCount >= 8) {
           return jsonResponse({ error: 'limit_reached', limit: 'checkin' }, 403);
         }
       } else {
-        checkinCounterKey = 'scout:limit:' + session.firmCode + ':checkins';
-        const cntRaw = await env.G7_KV.get(checkinCounterKey);
-        checkinCount = cntRaw ? parseInt(cntRaw, 10) : 0;
-        if (checkinCount >= 4) {
-          return jsonResponse({ error: 'limit_reached', limit: 'checkin' }, 403);
-        }
+        // Free users cannot check in — check-ins are a paid-only feature
+        return jsonResponse({ error: 'upgrade_required', limit: 'checkin' }, 403);
       }
       // ---- end limit gate ----
 
@@ -1041,7 +1037,7 @@ export default {
     //
     // Rate limits (matching /scout/analyse pattern exactly):
     //   free: 'scout:limit:{firm}:places'            — 5 lifetime,  max 2 results
-    //   paid: 'scout:limit:{firm}:places:{YYYY-MM}'  — 20/month,   max 50 results
+    //   paid: 'scout:limit:{firm}:places:{YYYY-MM}'  — 2/month,    max 50 results
     //
     // Cache: 'places:cache:{sha256(lower(trim(q)))}' — 30-day KV TTL
     //   Cache hit: return stored results, do NOT increment counter.
@@ -1083,7 +1079,7 @@ export default {
       // Determine limit and result cap based on plan
       const isPaid   = plan === 'paid';
       const cap      = isPaid ? 50 : 2;
-      const hardLimit = isPaid ? 20 : 5;
+      const hardLimit = isPaid ? 2 : 5;
 
       // Counter key follows the exact same pattern as /scout/analyse
       const placesCounterKey = isPaid
