@@ -670,7 +670,7 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
-      // ---- Limit gate: free = 1 lifetime, paid = 2 per calendar month ----
+      // ---- Limit gate: free = 1 lifetime, paid = 3 per calendar month ----
       const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
       const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
       const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
@@ -680,7 +680,7 @@ export default {
         analysisCounterKey = 'scout:limit:' + session.firmCode + ':analyses:' + monthKey;
         const cntRaw = await env.G7_KV.get(analysisCounterKey);
         analysisCount = cntRaw ? parseInt(cntRaw, 10) : 0;
-        if (analysisCount >= 2) {
+        if (analysisCount >= 3) {
           return jsonResponse({ error: 'limit_reached', limit: 'analysis' }, 403);
         }
       } else {
@@ -1037,7 +1037,7 @@ export default {
     //
     // Rate limits (matching /scout/analyse pattern exactly):
     //   free: 'scout:limit:{firm}:places'            — 5 lifetime,  max 2 results
-    //   paid: 'scout:limit:{firm}:places:{YYYY-MM}'  — 2/month,    max 50 results
+    //   paid: 'scout:limit:{firm}:places:{YYYY-MM}'  — 6/month,    max 50 results
     //
     // Cache: 'places:cache:{sha256(lower(trim(q)))}' — 30-day KV TTL
     //   Cache hit: return stored results, do NOT increment counter.
@@ -1079,7 +1079,7 @@ export default {
       // Determine limit and result cap based on plan
       const isPaid   = plan === 'paid';
       const cap      = isPaid ? 50 : 2;
-      const hardLimit = isPaid ? 2 : 5;
+      const hardLimit = isPaid ? 6 : 5;
 
       // Counter key follows the exact same pattern as /scout/analyse
       const placesCounterKey = isPaid
