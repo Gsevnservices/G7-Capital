@@ -654,12 +654,12 @@ function renderFirmsTable(filter) {
     const usage = _allUsageData[origIdx] || {};
     var usageCellHtml;
     if (usage._product === 'scout') {
-      // Scout: show analyses + check-ins. Free limits 1/4, paid limits 30/30.
+      // Scout: show analyses + check-ins. Free limits 1 analyse / 0 checkins. Paid limits 3/8 per month.
       var isPaid = (firm.plan === 'paid');
       var aUsed = isPaid ? (usage.paidAnalyses || 0) : (usage.freeAnalyses || 0);
       var cUsed = isPaid ? (usage.paidCheckins || 0) : (usage.freeCheckins || 0);
-      var aLimit = isPaid ? 30 : 1;
-      var cLimit = isPaid ? 30 : 4;
+      var aLimit = isPaid ? 3 : 1;
+      var cLimit = isPaid ? 8 : 0;
       var aColor = aUsed >= aLimit ? '#e08080' : '#ccc';
       var cColor = cUsed >= cLimit ? '#e08080' : '#ccc';
       usageCellHtml = '<span style="color:' + aColor + '">A: ' + aUsed + '/' + aLimit + '</span>' +

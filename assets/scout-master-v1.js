@@ -6061,6 +6061,7 @@ REVENUE VELOCITY RULES:
         "whoExactly": "[2-3 sentences. Age, occupation, location, behaviour.]",
         "whyNow": "[1-2 sentences. Specific trigger.]",
         "whereToFind": "[3 specific locations referencing user landmarks]",
+        "searchQuery": "[A Google Maps search string that would find real businesses of this type near the user. Format: business category + specific area + city. Example: 'advertising agencies Andheri West Mumbai'. Use the business category a map would recognise, not the ICP name. Set to null if this ICP is individual consumers rather than businesses — individuals cannot be found on a map.]",
         "volumeEstimate": "[Realistic number with calculation shown]",
         "conversionProbability": "HIGH",
         "revenuePerCustomer": "₹[X]/month",
@@ -6074,6 +6075,7 @@ REVENUE VELOCITY RULES:
         "whoExactly": "[Conversational paragraph — different format from ICP 1]",
         "whyNow": "[Trigger]",
         "whereToFind": "[Locations]",
+        "searchQuery": "[Google Maps search string — business category + specific area + city, or null if consumers]",
         "volumeEstimate": "[Number with working]",
         "conversionProbability": "MEDIUM",
         "revenuePerCustomer": "₹[X]/month",
@@ -6085,6 +6087,7 @@ REVENUE VELOCITY RULES:
         "name": "[ICP 3 name]",
         "priority": "third",
         "summary": "[3 bullet points: who they are, why now, how to reach them]",
+        "searchQuery": "[Google Maps search string — business category + specific area + city, or null if consumers]",
         "revenuePerCustomer": "₹[X]/month",
         "confidence": "LOW",
         "confidenceReason": "[One sentence]"
@@ -7053,7 +7056,29 @@ It tells the business owner exactly what
 to listen for in customer conversations —
 the signal that someone is ready to switch.
 
-ADDITION 5 — STREET-LEVEL LANGUAGE RULES
+ADDITION 5 — SEARCH QUERY FIELD RULES
+
+The searchQuery field in each ICP enables
+the app to find real businesses on Google Maps
+that match this customer group.
+
+Rules:
+— Use a business category Google Maps
+  recognises: "gyms", "advertising agencies",
+  "coaching institutes", "marble suppliers" —
+  not the ICP name or a descriptive phrase.
+— Include the specific area and city drawn
+  from the user's landmarks and location —
+  not just the city. "Andheri West Mumbai"
+  not "Mumbai".
+— Set to null when the ICP is individual
+  consumers: housewives, students, residents,
+  professionals at home. Individuals are not
+  on a map. A null is correct here — a guess
+  wastes the user's search quota and returns
+  irrelevant results.
+
+ADDITION 6 — STREET-LEVEL LANGUAGE RULES
 
 ADDITION TO COMPONENT 6 — HINDI AND HINGLISH:
 

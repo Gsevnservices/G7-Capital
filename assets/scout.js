@@ -420,6 +420,12 @@ async function callScoutCheckin(checkinData, onProgress) {
     if (response.status === 403) {
       var parsed = null;
       try { parsed = JSON.parse(errBody); } catch (e) {}
+      if (parsed && parsed.error === 'upgrade_required') {
+        var upgradeErr = new Error('upgrade_required');
+        upgradeErr.code = 'upgrade_required';
+        upgradeErr.limit = parsed.limit || 'checkin';
+        throw upgradeErr;
+      }
       if (parsed && parsed.error === 'limit_reached') {
         var limitErr = new Error('limit_reached');
         limitErr.code = 'limit_reached';
