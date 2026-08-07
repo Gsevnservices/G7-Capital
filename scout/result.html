@@ -903,6 +903,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .pipe-btns{display:flex;gap:10px}
 .pipe-btn{flex:1;padding:13px;cursor:pointer;font-family:'Tenor Sans',sans-serif;font-size:13px;border:none;background:var(--gold);color:var(--black);font-weight:600}
 .pipe-btn.skip{background:transparent;border:1px solid var(--border2);color:var(--grey1)}
+
+/* ── Customer Finder ── */
+.cf-block{margin-top:18px;padding-top:16px;border-top:1px solid var(--border2)}
+.cf-query{font-size:10px;color:var(--grey2);letter-spacing:.04em;margin-bottom:10px;font-style:italic}
+.cf-btn{font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--gold);padding:9px 18px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .25s}
+.cf-btn:hover:not(:disabled){border-color:var(--gold2);color:var(--gold2)}
+.cf-btn:disabled{opacity:.5;cursor:default}
+.cf-results{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.cf-place{background:var(--black3);border:1px solid var(--border2);padding:14px 16px}
+.cf-place-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--white);margin-bottom:4px}
+.cf-place-addr{font-size:11px;color:var(--grey2);margin-bottom:6px;line-height:1.5}
+.cf-place-links{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.cf-link{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:color .2s}
+.cf-link:hover{color:var(--gold2)}
+.cf-add-btn{font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--grey1);padding:7px 14px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .2s}
+.cf-add-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.cf-add-btn:disabled{opacity:.6;cursor:default}
+.cf-msg{font-size:11px;color:var(--grey2);margin-top:12px;line-height:1.6;font-style:italic}
+.cf-quota{font-size:10px;color:var(--grey2);letter-spacing:.04em;margin-top:12px}
 </style>
 </head>
 <body>
@@ -1112,6 +1131,7 @@ var businessData     = null;   // form data from onboarding
 var currentTab       = 0;
 var icpNames         = [];     // extracted ICP names for pipeline form
 var referralRowCount = 3;      // tracks how many referral input rows are showing
+var _cfPlaces        = {};     // Customer Finder: place data keyed by '{icpIdx}_{placeIdx}'
 
 /* ═══════════════════════════════════════════
    PAGE INIT
@@ -1686,6 +1706,20 @@ function renderTab1JSON(tab1, data) {
     } else if (icp.summary) {
       /* Summary field — convert \n to <br> so bullet points render correctly */
       html += '<div class="icp-body" style="margin-bottom:14px">' + escHtml(plainLang(icp.summary)).replace(/\n/g, '<br>') + '</div>';
+    }
+
+    /* Customer Finder block — only rendered when icp.searchQuery exists and is not null.
+       Older analyses lack the field entirely, so nothing renders for them. */
+    if (icp.searchQuery) {
+      var _cfIdx = idx;
+      var _cfQ   = String(icp.searchQuery);
+      html += '<div class="cf-block" id="cf-block-' + _cfIdx + '">';
+      html += '<div class="cf-query">Searching: ' + escHtml(_cfQ) + '</div>';
+      html += '<button class="cf-btn" id="cf-btn-' + _cfIdx + '" ';
+      html += 'onclick="searchPlaces(' + JSON.stringify(_cfQ) + ',' + JSON.stringify(icp.name || '') + ',' + _cfIdx + ')">';
+      html += 'Find these businesses near you \u2192</button>';
+      html += '<div id="cf-results-' + _cfIdx + '"></div>';
+      html += '</div>';
     }
 
     /* Matched messages from Tab 2 — injected inline */
@@ -3186,6 +3220,149 @@ function copyMessage(cardId, btn) {
   });
 }
 
+/* ═══════════════════════════════════════════
+   CUSTOMER FINDER
+   Calls GET /places/search on the Worker, renders
+   a list of nearby businesses under each ICP card,
+   and lets the user add them to the pipeline in one tap.
+═══════════════════════════════════════════ */
+
+async function searchPlaces(query, icpName, icpIdx) {
+  var btn       = document.getElementById('cf-btn-'     + icpIdx);
+  var resultsEl = document.getElementById('cf-results-' + icpIdx);
+  if (!btn || !resultsEl) return;
+
+  btn.textContent = 'Searching\u2026';
+  btn.disabled    = true;
+  resultsEl.innerHTML = '';
+
+  try {
+    var token = localStorage.getItem('g7_session_token') || '';
+    var res = await fetch(
+      SCOUT_WORKER + '/places/search?q=' + encodeURIComponent(query),
+      { method: 'GET', headers: { 'Authorization': 'Bearer ' + token } }
+    );
+
+    /* 403 — quota exhausted */
+    if (res.status === 403) {
+      var errData = null;
+      try { errData = await res.json(); } catch(e) {}
+      if (errData && errData.error === 'limit_reached') {
+        document.getElementById('cfUpgradeModal').style.display = 'flex';
+      } else {
+        resultsEl.innerHTML = '<div class="cf-msg">Search unavailable — please try again later.</div>';
+      }
+      btn.textContent = 'Find these businesses near you \u2192';
+      btn.disabled = false;
+      return;
+    }
+
+    /* Any other non-OK response */
+    if (!res.ok) {
+      resultsEl.innerHTML = '<div class="cf-msg">Something went wrong. Please try again.</div>';
+      btn.textContent = 'Find these businesses near you \u2192';
+      btn.disabled = false;
+      return;
+    }
+
+    var data   = await res.json();
+    var places = data.places || [];
+
+    /* Empty results */
+    if (places.length === 0) {
+      resultsEl.innerHTML = '<div class="cf-msg">No businesses found for this search. Try the plan\'s other groups.</div>';
+      btn.textContent = 'Find these businesses near you \u2192';
+      btn.disabled = false;
+      return;
+    }
+
+    /* Store place data for add-to-list callbacks */
+    places.forEach(function(p, j) {
+      _cfPlaces[icpIdx + '_' + j] = {
+        name:    p.name    || '',
+        phone:   p.phone   || '',
+        address: p.address || '',
+        website: p.website || ''
+      };
+    });
+
+    /* Check which are already in the pipeline (name + phone match) */
+    var pipeStore = pipelineLoad();
+    function alreadyInPipeline(p) {
+      var cleanPhone = String(p.phone || '').replace(/[^0-9]/g, '');
+      var cleanName  = String(p.name  || '').trim().toLowerCase();
+      return pipeStore.people.some(function(person) {
+        return person.name && person.name.toLowerCase() === cleanName &&
+               cleanPhone && person.phone === cleanPhone;
+      });
+    }
+
+    /* Render result cards */
+    var html = '<div class="cf-results">';
+    places.forEach(function(p, j) {
+      var placeKey = icpIdx + '_' + j;
+      var exists   = alreadyInPipeline(p);
+      /* Validate website — only allow http/https to prevent javascript: URLs */
+      var safeWebsite = (p.website && /^https?:\/\//i.test(p.website)) ? p.website : '';
+      html += '<div class="cf-place">';
+      html += '<div class="cf-place-name">' + escHtml(p.name) + '</div>';
+      if (p.address) html += '<div class="cf-place-addr">' + escHtml(p.address) + '</div>';
+      if (p.phone || safeWebsite) {
+        html += '<div class="cf-place-links">';
+        if (p.phone)     html += '<a class="cf-link" href="tel:' + escAttr(p.phone) + '">' + escHtml(p.phone) + '</a>';
+        if (safeWebsite) html += '<a class="cf-link" href="' + escAttr(safeWebsite) + '" target="_blank" rel="noopener noreferrer">Website \u2192</a>';
+        html += '</div>';
+      }
+      if (exists) {
+        html += '<button class="cf-add-btn" disabled>Already in your list</button>';
+      } else {
+        html += '<button class="cf-add-btn" id="cf-add-' + escHtml(placeKey) + '" ';
+        html += 'onclick="cfAddToList(' + icpIdx + ',' + j + ',' + JSON.stringify(icpName) + ')">';
+        html += 'Add to my list</button>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+
+    /* Quota line */
+    if (data.remaining !== undefined) {
+      var rem  = data.remaining;
+      var unit = data.paid ? 'search' : 'lifetime search';
+      html += '<div class="cf-quota">' + escHtml(String(rem)) + ' ' + unit + (rem !== 1 ? 'es' : '') + ' left this month</div>';
+    }
+
+    resultsEl.innerHTML = html;
+    btn.textContent = 'Search again \u2192';
+    btn.disabled    = false;
+
+  } catch (e) {
+    resultsEl.innerHTML = '<div class="cf-msg">Something went wrong. Please try again.</div>';
+    btn.textContent = 'Find these businesses near you \u2192';
+    btn.disabled    = false;
+  }
+}
+
+function cfAddToList(icpIdx, placeIdx, icpName) {
+  var key   = icpIdx + '_' + placeIdx;
+  var place = _cfPlaces[key];
+  if (!place) return;
+  var addBtn = document.getElementById('cf-add-' + key);
+  if (!addBtn || addBtn.disabled) return;
+
+  var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
+  pipelineAddPerson(place.name, {
+    phone:   place.phone,
+    address: place.address,
+    website: place.website,
+    source:  'places',
+    status:  'found',
+    icp:     icpName,
+    week:    week
+  });
+  addBtn.textContent = 'Added \u2713';
+  addBtn.disabled    = true;
+}
+
 /* Pipeline capture state — holds pending send until modal is confirmed */
 var _pipePending = null;
 
@@ -3798,6 +3975,16 @@ function showError(msg) {
       <button class="pipe-btn skip" onclick="pipeConfirm(true)">Skip</button>
       <button class="pipe-btn" onclick="pipeConfirm(false)">Send</button>
     </div>
+  </div>
+</div>
+
+<!-- Customer Finder — upgrade modal (shown when places search quota is exhausted) -->
+<div id="cfUpgradeModal" style="display:none;position:fixed;inset:0;background:rgba(8,8,8,.88);z-index:9999;align-items:center;justify-content:center;padding:24px">
+  <div style="max-width:440px;width:100%;background:var(--black2);border:1px solid var(--gold);padding:36px 32px;text-align:center;font-family:'Tenor Sans',sans-serif">
+    <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:28px;color:var(--gold2);margin-bottom:16px;line-height:1.2">You've used all your searches this month</div>
+    <p style="font-size:14px;color:var(--white2);line-height:1.65;margin-bottom:28px">Customer Finder searches reset each month. Message us to increase your limit, or wait until next month.</p>
+    <a href="mailto:gsevnservices@gmail.com?subject=Upgrade%20my%20Scout%20account&body=Hi%2C%20I'd%20like%20to%20upgrade%20my%20Scout%20account%20to%20the%20paid%20plan." style="display:inline-block;background:var(--gold);color:var(--black);text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;padding:13px 28px;margin-bottom:14px">Message us →</a>
+    <div><button onclick="document.getElementById('cfUpgradeModal').style.display='none'" style="background:none;border:none;color:var(--grey2);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;margin-top:6px;font-family:'Tenor Sans',sans-serif">Close</button></div>
   </div>
 </div>
 </body>
