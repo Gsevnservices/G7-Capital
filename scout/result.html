@@ -3266,7 +3266,7 @@ async function searchPlaces(query, icpName, icpIdx) {
     }
 
     var data   = await res.json();
-    var places = data.places || [];
+    var places = data.results || [];
 
     /* Empty results */
     if (places.length === 0) {
@@ -3324,11 +3324,11 @@ async function searchPlaces(query, icpName, icpIdx) {
     });
     html += '</div>';
 
-    /* Quota line */
-    if (data.remaining !== undefined) {
-      var rem  = data.remaining;
-      var unit = data.paid ? 'search' : 'lifetime search';
-      html += '<div class="cf-quota">' + escHtml(String(rem)) + ' ' + unit + (rem !== 1 ? 'es' : '') + ' left this month</div>';
+    /* Quota line — derived from data.quota.{used,limit} sent by the Worker */
+    if (data.quota && data.quota.limit !== undefined && data.quota.used !== undefined) {
+      var rem = data.quota.limit - data.quota.used;
+      if (rem < 0) rem = 0;
+      html += '<div class="cf-quota">' + (rem === 1 ? '1 search left this month' : escHtml(String(rem)) + ' searches left this month') + '</div>';
     }
 
     resultsEl.innerHTML = html;
