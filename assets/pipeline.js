@@ -8,8 +8,18 @@
 // Storage key: 'scout_pipeline'
 // Shape: { people: [...], anonymousContacts: [...] }
 //
-// People statuses: contacted | replied | trial_booked | joined |
+// People statuses: found | contacted | replied | trial_booked | joined |
 //                  gone_quiet | not_interested
+//
+// 'found'     — added by Customer Finder; user has NOT sent a message yet.
+//               Skipped by chase rules. Transitions to 'contacted' when the
+//               user sends a first message.
+//
+// Optional fields added for Customer Finder (absent on older entries):
+//   address  — street address from Google Places (string, may be '')
+//   website  — business website from Google Places (string, may be '')
+//   source   — 'manual' (hand-added) or 'places' (found via Customer Finder)
+// All code that reads person objects must tolerate these being undefined.
 // ═══════════════════════════════════════════════════════════════
 
 'use strict';
@@ -57,14 +67,45 @@ function pipelineSave(store) {
   }
 }
 
-/* Add a named person. Returns the new person object, or the existing one
-   if a person with the same name already exists (case-insensitive). */
+/* Add a named person. Returns the new person object, or an existing one
+   on duplicate.
+
+   Dedupe rules (checked in order):
+   1. Strict: same normalised name AND same non-empty phone → exact
+      duplicate. Return existing immediately — no mutations, no history
+      event. Prevents double-adds when Customer Finder returns the same
+      business across two searches.
+   2. Soft: same normalised name, phone not matched → treat as a
+      re-message of a known contact. Update lastContactedAt and push a
+      history event (existing behaviour kept for the outreach flow).
+
+   New optional fields populated from opts (absent on older entries —
+   all readers must tolerate undefined):
+     address  (string)  — street address, default ''
+     website  (string)  — business website URL, default ''
+     source   (string)  — 'manual' | 'places', default 'manual'
+*/
 function pipelineAddPerson(name, opts) {
   opts = opts || {};
   var store = pipelineLoad();
   var clean = String(name || '').trim();
   if (!clean) return null;
+  var cleanPhone = String(opts.phone || '').replace(/[^0-9]/g, '');
 
+  /* ── Strict dedupe: same name + same non-empty phone ── */
+  if (cleanPhone) {
+    for (var j = 0; j < store.people.length; j++) {
+      var p = store.people[j];
+      if (p.name &&
+          p.name.toLowerCase() === clean.toLowerCase() &&
+          p.phone === cleanPhone) {
+        /* Exact duplicate — return existing record unchanged */
+        return p;
+      }
+    }
+  }
+
+  /* ── Soft dedupe: same name only (re-message flow) ── */
   var existing = null;
   for (var i = 0; i < store.people.length; i++) {
     if (store.people[i].name && store.people[i].name.toLowerCase() === clean.toLowerCase()) {
@@ -83,18 +124,26 @@ function pipelineAddPerson(name, opts) {
     return existing;
   }
 
+  /* ── New person ── */
+  /* opts.status overrides the initial status. Customer Finder passes 'found'
+     so that a business added from a Places search is not treated as contacted
+     until the user actually sends a first message. Default: 'contacted'. */
+  var initialStatus = opts.status || 'contacted';
   var person = {
     id: 'p_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
     name: clean,
-    phone: String(opts.phone || '').replace(/[^0-9]/g, ''),
+    phone: cleanPhone,
     icp: opts.icp || '',
-    status: 'contacted',
+    status: initialStatus,
     addedWeek: opts.week || 0,
     lastContactedAt: now,
     lastStatusAt: now,
     messagesSent: opts.messageId ? [opts.messageId] : [],
     note: opts.note || '',
-    history: [{ week: opts.week || 0, event: 'contacted', at: now }]
+    address: opts.address || '',        /* from Customer Finder — '' when hand-added */
+    website: opts.website || '',        /* from Customer Finder — '' when hand-added */
+    source: opts.source || 'manual',   /* 'places' when added from Customer Finder */
+    history: [{ week: opts.week || 0, event: initialStatus, at: now }]
   };
   store.people.push(person);
   pipelineSave(store);
@@ -117,9 +166,12 @@ function pipelineAddAnonymous(icp, week) {
   return true;
 }
 
-/* Update a person's status. Valid: contacted, replied, trial_booked, joined, gone_quiet, not_interested */
+/* Update a person's status.
+   Valid: found, contacted, replied, trial_booked, joined, gone_quiet, not_interested
+   'found' → 'contacted' is the normal transition when a Customer Finder
+   business receives its first message. */
 function pipelineSetStatus(personId, status, week, note) {
-  var VALID = ['contacted','replied','trial_booked','joined','gone_quiet','not_interested'];
+  var VALID = ['found','contacted','replied','trial_booked','joined','gone_quiet','not_interested'];
   if (VALID.indexOf(status) === -1) return false;
   var store = pipelineLoad();
   for (var i = 0; i < store.people.length; i++) {
@@ -176,12 +228,14 @@ function pipelineDaysSince(iso) {
      replied, no trial 5+ days     -> stall breaker
      trial_booked, 1+ days past    -> did they show
      any status, 14+ days silent   -> gone quiet, win-back
-   joined and not_interested are never chased. */
+   joined, not_interested, and found are never chased.
+   'found' is excluded because the user has never sent a message — the
+   business is a lead, not an open conversation. */
 function pipelineDue() {
   var store = pipelineLoad();
   var out = [];
   store.people.forEach(function(p) {
-    if (p.status === 'joined' || p.status === 'not_interested') return;
+    if (p.status === 'joined' || p.status === 'not_interested' || p.status === 'found') return;
     var d = pipelineDaysSince(p.lastStatusAt || p.lastContactedAt);
     var first = (p.name || '').split(' ')[0] || 'there';
     var item = null;
@@ -215,9 +269,12 @@ function pipelineDue() {
   return out;
 }
 
-/* Everyone, sorted: active statuses first, then joined/not_interested */
+/* Everyone, sorted: found first (freshest leads), then active, then closed.
+   found: -1  — top of list; just discovered, awaiting first message
+   replied: 0, trial_booked: 1, contacted: 2, gone_quiet: 3
+   joined: 4, not_interested: 5 */
 function pipelineAll() {
-  var order = { replied: 0, trial_booked: 1, contacted: 2, gone_quiet: 3, joined: 4, not_interested: 5 };
+  var order = { found: -1, replied: 0, trial_booked: 1, contacted: 2, gone_quiet: 3, joined: 4, not_interested: 5 };
   var store = pipelineLoad();
   return store.people.slice().sort(function(a, b) {
     return (order[a.status] || 9) - (order[b.status] || 9);
