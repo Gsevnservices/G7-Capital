@@ -78,6 +78,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .ev-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev-icp{font-size:10px;color:var(--grey2);letter-spacing:.06em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev-status{display:inline-block;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:4px 10px;border:1px solid}
+.ev-status.found{color:var(--gold2);border-color:rgba(226,201,126,0.45);background:rgba(226,201,126,0.05)}
 .ev-status.contacted{color:var(--grey1);border-color:rgba(138,136,128,0.3)}
 .ev-status.replied{color:#5A9E6F;border-color:rgba(90,158,111,0.3)}
 .ev-status.trial_booked{color:var(--amber);border-color:rgba(224,146,47,0.4)}
@@ -177,8 +178,9 @@ function escHtml(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* Status display labels */
+/* Status display labels — 'found' is a Customer Finder business not yet messaged */
 var STATUS_LABELS = {
+  found:          'Found',
   contacted:      'Contacted',
   replied:        'Replied',
   trial_booked:   'Trial booked',
