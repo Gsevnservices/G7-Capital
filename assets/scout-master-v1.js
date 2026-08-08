@@ -6061,7 +6061,7 @@ REVENUE VELOCITY RULES:
         "whoExactly": "[2-3 sentences. Age, occupation, location, behaviour.]",
         "whyNow": "[1-2 sentences. Specific trigger.]",
         "whereToFind": "[3 specific locations referencing user landmarks]",
-        "searchQuery": "[A Google Maps search string that would find real businesses of this type near the user. Format: business category + specific area + city. Example: 'advertising agencies Andheri West Mumbai'. Use the business category a map would recognise, not the ICP name. Set to null if this ICP is individual consumers rather than businesses — individuals cannot be found on a map.]",
+        "searchQuery": "[A Google Maps search string that finds BUSINESSES THAT COULD BECOME CUSTOMERS — not businesses in the same category as the user. Rule: the businesses returned must be potential buyers, not competitors. Pattern: find the organisation that contains the people. Example: ICP is 'startup employees relocating to Koramangala' → 'software companies Koramangala Bengaluru' (the employer is findable; its staff become customers). Wrong: ICP is 'weekend cafe visitors' for a cafe → null, not 'cafes Koramangala' (returns competitors). Set to null for any ICP describing individual people — consumers, residents, students, professionals, visitors, homemakers — they are not on a map regardless of their habits or neighbourhood. Format when not null: recognisable business category + specific area + city.]",
         "volumeEstimate": "[Realistic number with calculation shown]",
         "conversionProbability": "HIGH",
         "revenuePerCustomer": "₹[X]/month",
@@ -6075,7 +6075,7 @@ REVENUE VELOCITY RULES:
         "whoExactly": "[Conversational paragraph — different format from ICP 1]",
         "whyNow": "[Trigger]",
         "whereToFind": "[Locations]",
-        "searchQuery": "[Google Maps search string — business category + specific area + city, or null if consumers]",
+        "searchQuery": "[Business category + specific area + city that finds POTENTIAL BUYERS, not competitors. Null for any ICP of individual people.]",
         "volumeEstimate": "[Number with working]",
         "conversionProbability": "MEDIUM",
         "revenuePerCustomer": "₹[X]/month",
@@ -6087,7 +6087,7 @@ REVENUE VELOCITY RULES:
         "name": "[ICP 3 name]",
         "priority": "third",
         "summary": "[3 bullet points: who they are, why now, how to reach them]",
-        "searchQuery": "[Google Maps search string — business category + specific area + city, or null if consumers]",
+        "searchQuery": "[Business category + specific area + city that finds POTENTIAL BUYERS, not competitors. Null for any ICP of individual people.]",
         "revenuePerCustomer": "₹[X]/month",
         "confidence": "LOW",
         "confidenceReason": "[One sentence]"
@@ -7058,25 +7058,47 @@ the signal that someone is ready to switch.
 
 ADDITION 5 — SEARCH QUERY FIELD RULES
 
-The searchQuery field in each ICP enables
-the app to find real businesses on Google Maps
-that match this customer group.
+The searchQuery field lets the app find real
+businesses on Google Maps that could become
+paying customers.
 
-Rules:
-— Use a business category Google Maps
-  recognises: "gyms", "advertising agencies",
-  "coaching institutes", "marble suppliers" —
-  not the ICP name or a descriptive phrase.
-— Include the specific area and city drawn
-  from the user's landmarks and location —
-  not just the city. "Andheri West Mumbai"
-  not "Mumbai".
-— Set to null when the ICP is individual
-  consumers: housewives, students, residents,
-  professionals at home. Individuals are not
-  on a map. A null is correct here — a guess
-  wastes the user's search quota and returns
-  irrelevant results.
+The only correct use: find businesses whose
+staff or clients are the ICP described.
+The returned businesses must be potential
+buyers — never the user's own competitors.
+
+Before writing a query, ask: "Would the
+businesses this returns pay me money?"
+If no, or if they compete with the user,
+the answer is null.
+
+CORRECT pattern — find the organisation
+that contains the people:
+  ICP: "startup employees relocating to
+  Koramangala" → searchQuery: "software
+  companies Koramangala Bengaluru"
+  (the employer is on the map; its staff
+  become the user's customers)
+
+WRONG pattern — never return competitors:
+  User is a cafe. ICP: "weekend cafe
+  visitors aged 26-35". searchQuery must
+  be null — not "cafes Koramangala".
+  "Cafes Koramangala" returns the user's
+  own rivals, not prospects.
+
+Set to null for every ICP that describes
+individual people: consumers, residents,
+students, professionals, visitors,
+homemakers. A person's job title or
+neighbourhood does not make them findable
+on a map. Null is correct — a wrong query
+wastes search quota and returns rivals.
+
+Format when not null: a business category
+Google Maps recognises + specific area +
+city. "advertising agencies Andheri West
+Mumbai" — not the ICP name, not a phrase.
 
 ADDITION 6 — STREET-LEVEL LANGUAGE RULES
 
