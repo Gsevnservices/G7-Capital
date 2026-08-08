@@ -292,8 +292,9 @@ function chaseSend(idx, btn) {
   var p = item.person;
 
   /* Open WhatsApp FIRST — must stay inside the user gesture */
-  var url = p.phone
-    ? 'https://wa.me/' + p.phone + '?text=' + encodeURIComponent(item.msg)
+  var _wp  = waPhone(p.phone);
+  var url = _wp
+    ? 'https://wa.me/' + _wp + '?text=' + encodeURIComponent(item.msg)
     : 'https://wa.me/?text=' + encodeURIComponent(item.msg);
   window.open(url, '_blank');
 
