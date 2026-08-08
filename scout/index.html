@@ -1005,8 +1005,9 @@ function showDashboard(history, weekNum, firmName) {
         _msgs.forEach(function(m) {
           var _k = _normStr(m.icp);
           if (!_k) return;
-          /* Keep primary if available; otherwise keep first seen */
-          if (!_msgMap[_k] || m.type === 'primary') _msgMap[_k] = m.text || '';
+          /* Keep primary if available; otherwise keep first seen.
+             Schema field is versionA; fall back to text for any older outputs. */
+          if (!_msgMap[_k] || m.type === 'primary') _msgMap[_k] = m.versionA || m.text || '';
         });
       } catch(_me) {}
 
@@ -1047,11 +1048,10 @@ function showDashboard(history, weekNum, firmName) {
 
       leadsCard.style.display = 'block';
 
-      /* Delegated listener — one per card mount, promotes to 'contacted' on WA tap */
+      /* Delegated listener — one per card mount, promotes to 'contacted' on WA tap.
+         closest() is available on all browsers that support async/await. */
       leadsCard.addEventListener('click', function(e) {
-        var _a = e.target.closest
-          ? e.target.closest('[data-lead-idx]')
-          : (e.target.getAttribute && e.target.getAttribute('data-lead-idx') !== null ? e.target : null);
+        var _a = e.target.closest('[data-lead-idx]');
         if (!_a) return;
         var _i  = parseInt(_a.getAttribute('data-lead-idx'), 10);
         var _p  = _foundLeads[_i];
