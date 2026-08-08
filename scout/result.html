@@ -1453,6 +1453,9 @@ function parseAndRender(rawOutput, biz) {
       }
       if (_extra) _el1.innerHTML += _extra;
     })();
+    /* Attach delegated listener for Customer Finder buttons now that
+       tab1Content is fully written (renderTab1JSON + competitor watch). */
+    attachCFListeners();
     /* WhatsApp calendar goes into its own dedicated tab panel */
     (function() {
       var _wacEl = document.getElementById('wacContent');
@@ -1709,14 +1712,18 @@ function renderTab1JSON(tab1, data) {
     }
 
     /* Customer Finder block — only rendered when icp.searchQuery exists and is not null.
-       Older analyses lack the field entirely, so nothing renders for them. */
+       Older analyses lack the field entirely, so nothing renders for them.
+       Data attributes carry the parameters — no inline onclick, which breaks when
+       JSON.stringify produces double quotes inside an HTML attribute. */
     if (icp.searchQuery) {
       var _cfIdx = idx;
       var _cfQ   = String(icp.searchQuery);
       html += '<div class="cf-block" id="cf-block-' + _cfIdx + '">';
       html += '<div class="cf-query">Searching: ' + escHtml(_cfQ) + '</div>';
       html += '<button class="cf-btn" id="cf-btn-' + _cfIdx + '" ';
-      html += 'onclick="searchPlaces(' + JSON.stringify(_cfQ) + ',' + JSON.stringify(icp.name || '') + ',' + _cfIdx + ')">';
+      html += 'data-cf-query="' + escAttr(_cfQ) + '" ';
+      html += 'data-cf-icp="'   + escAttr(icp.name || '') + '" ';
+      html += 'data-cf-idx="'   + _cfIdx + '">';
       html += 'Find these businesses near you \u2192</button>';
       html += '<div id="cf-results-' + _cfIdx + '"></div>';
       html += '</div>';
@@ -3225,7 +3232,43 @@ function copyMessage(cardId, btn) {
    Calls GET /places/search on the Worker, renders
    a list of nearby businesses under each ICP card,
    and lets the user add them to the pipeline in one tap.
+
+   Buttons carry data attributes (not inline onclick) because
+   JSON.stringify produces double quotes that corrupt HTML attributes.
+   A single delegated listener on tab1Content handles all CF clicks.
 ═══════════════════════════════════════════ */
+
+/* Attach one delegated listener on tab1Content for all CF buttons.
+   Called once after tab1Content is fully written (including the
+   competitor-watch append that follows renderTab1JSON).
+   Guards against double-attachment with a _cfListenerAttached flag. */
+function attachCFListeners() {
+  var container = document.getElementById('tab1Content');
+  if (!container || container._cfListenerAttached) return;
+  container._cfListenerAttached = true;
+
+  container.addEventListener('click', function(e) {
+    var btn = e.target;
+
+    /* Search button (.cf-btn) */
+    if (btn.classList.contains('cf-btn') && !btn.disabled) {
+      var query   = btn.getAttribute('data-cf-query') || '';
+      var icpName = btn.getAttribute('data-cf-icp')   || '';
+      var icpIdx  = parseInt(btn.getAttribute('data-cf-idx'), 10);
+      if (query) searchPlaces(query, icpName, icpIdx);
+      return;
+    }
+
+    /* Add-to-list button (.cf-add-btn) */
+    if (btn.classList.contains('cf-add-btn') && !btn.disabled) {
+      var icpIdx2  = parseInt(btn.getAttribute('data-cf-idx'),     10);
+      var placeIdx = parseInt(btn.getAttribute('data-cf-place'),   10);
+      var icpName2 = btn.getAttribute('data-cf-icpname') || '';
+      cfAddToList(icpIdx2, placeIdx, icpName2, btn);
+      return;
+    }
+  });
+}
 
 async function searchPlaces(query, icpName, icpIdx) {
   var btn       = document.getElementById('cf-btn-'     + icpIdx);
@@ -3316,8 +3359,11 @@ async function searchPlaces(query, icpName, icpIdx) {
       if (exists) {
         html += '<button class="cf-add-btn" disabled>Already in your list</button>';
       } else {
-        html += '<button class="cf-add-btn" id="cf-add-' + escHtml(placeKey) + '" ';
-        html += 'onclick="cfAddToList(' + icpIdx + ',' + j + ',' + JSON.stringify(icpName) + ')">';
+        /* Data attributes carry parameters — no inline onclick with JSON.stringify */
+        html += '<button class="cf-add-btn" id="cf-add-' + escAttr(placeKey) + '" ';
+        html += 'data-cf-idx="'      + icpIdx + '" ';
+        html += 'data-cf-place="'    + j + '" ';
+        html += 'data-cf-icpname="'  + escAttr(icpName) + '">';
         html += 'Add to my list</button>';
       }
       html += '</div>';
@@ -3342,11 +3388,12 @@ async function searchPlaces(query, icpName, icpIdx) {
   }
 }
 
-function cfAddToList(icpIdx, placeIdx, icpName) {
+/* btn is the actual button element, passed by the delegated listener. */
+function cfAddToList(icpIdx, placeIdx, icpName, btn) {
   var key   = icpIdx + '_' + placeIdx;
   var place = _cfPlaces[key];
   if (!place) return;
-  var addBtn = document.getElementById('cf-add-' + key);
+  var addBtn = btn || document.getElementById('cf-add-' + key);
   if (!addBtn || addBtn.disabled) return;
 
   var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
