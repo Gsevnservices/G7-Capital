@@ -3442,7 +3442,7 @@ function pipeConfirm(skipped) {
 
   /* Read inputs before opening */
   var name  = skipped ? '' : String(document.getElementById('pipeName').value || '').trim();
-  var phone = skipped ? '' : String(document.getElementById('pipePhone').value || '').replace(/[^0-9]/g, '');
+  var phone = skipped ? '' : waPhone(document.getElementById('pipePhone').value || '');
 
   /* Open WhatsApp FIRST — must stay inside the user gesture */
   var url = phone

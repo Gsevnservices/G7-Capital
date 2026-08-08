@@ -1018,7 +1018,7 @@ function showDashboard(history, weekNum, firmName) {
       var _extraCount = _allFound.length - _showLeads.length;
 
       var _leadRows = _showLeads.map(function(p, i) {
-        var _phone    = p.phone ? String(p.phone).replace(/[^0-9]/g, '') : '';
+        var _phone    = waPhone(p.phone);
         var _msg      = _msgMap[_normStr(p.icp)] || '';
         var _addr     = p.address ? escHtml(p.address) : '';
         var _waBtn    = '';
@@ -1069,7 +1069,7 @@ function showDashboard(history, weekNum, firmName) {
     try { dueList = pipelineDue(); } catch(_ce) {}
     if (dueList.length > 0) {
       var chaseItems = dueList.slice(0, 3).map(function(item) {
-        var phone = item.person.phone ? String(item.person.phone).replace(/[^0-9]/g, '') : '';
+        var phone = waPhone(item.person.phone);
         var waBtn = '';
         if (phone && item.msg) {
           waBtn = '<a href="https://wa.me/' + phone + '?text=' + encodeURIComponent(item.msg) +

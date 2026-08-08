@@ -280,3 +280,26 @@ function pipelineAll() {
     return (order[a.status] || 9) - (order[b.status] || 9);
   });
 }
+
+/* Normalise a raw phone string for use in a wa.me URL.
+   Google Places returns Indian numbers in domestic format ("093727 58713").
+   wa.me requires the international number with no leading +, e.g. "919372758713".
+
+   Rules applied in order:
+   1. Strip everything except digits.
+   2. If already 12 digits starting with 91  → already international, return as-is.
+   3. If starts with 0 (Indian trunk prefix)  → strip the 0.
+   4. If now 10 digits                        → prepend 91 (Indian mobile).
+   5. Otherwise                               → return as-is (non-Indian or landline).
+
+   Numbers with other country codes (e.g. 447911…) fall through step 3 (no leading 0)
+   and step 4 (not 10 digits) and are returned unchanged — wa.me handles them correctly.
+   Stored phone values are never modified; normalise only at link-build time. */
+function waPhone(raw) {
+  var d = String(raw || '').replace(/[^0-9]/g, '');
+  if (!d) return '';
+  if (d.indexOf('91') === 0 && d.length === 12) return d;  // already 91XXXXXXXXXX
+  if (d.indexOf('0') === 0) d = d.slice(1);                 // strip trunk prefix
+  if (d.length === 10) return '91' + d;                     // bare Indian mobile
+  return d;                                                  // leave anything else alone
+}
