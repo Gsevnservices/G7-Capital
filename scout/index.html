@@ -570,6 +570,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <!-- TODAY'S ACTION — shown when check-in is due or focus extracted from last plan -->
     <div class="momentum-card" id="todayCard" style="display:none"></div>
 
+    <!-- YOUR LEADS — businesses found via Customer Finder, status 'found', not yet messaged -->
+    <div class="momentum-card" id="leadsCard" style="display:none"></div>
+
     <!-- CHASE TODAY — shown when pipeline contacts need follow-up -->
     <div class="momentum-card" id="chaseCard" style="display:none"></div>
 
@@ -971,6 +974,94 @@ function showDashboard(history, weekNum, firmName) {
     }
   }
 
+  /* ── YOUR LEADS CARD ── */
+  /* Shows businesses found via Customer Finder (status 'found') that the user
+     has not messaged yet. Sorted most recently added first (lastContactedAt desc).
+     Up to 3 rows; "See all →" link when more exist.
+     WA button: looks up the primary message for that person's ICP from tab2.messages,
+     opens WhatsApp, then promotes the person to 'contacted' so chase rules take over. */
+  var leadsCard = document.getElementById('leadsCard');
+  if (leadsCard) {
+    var _allFound = [];
+    try {
+      var _store = pipelineLoad();
+      _allFound = _store.people
+        .filter(function(p) { return p.status === 'found'; })
+        .sort(function(a, b) {
+          /* Most recently added first — use lastContactedAt (set to addedAt on creation) */
+          var ta = a.lastContactedAt ? new Date(a.lastContactedAt).getTime() : 0;
+          var tb = b.lastContactedAt ? new Date(b.lastContactedAt).getTime() : 0;
+          return tb - ta;
+        });
+    } catch(_le) {}
+
+    if (_allFound.length > 0) {
+      /* Build ICP-message lookup from pendingParsed.tab2.messages */
+      var _normStr = function(s) { return (s || '').trim().toLowerCase(); };
+      var _msgMap  = {};
+      try {
+        var _msgs = (pendingParsed && pendingParsed.tab2 && Array.isArray(pendingParsed.tab2.messages))
+          ? pendingParsed.tab2.messages : [];
+        _msgs.forEach(function(m) {
+          var _k = _normStr(m.icp);
+          if (!_k) return;
+          /* Keep primary if available; otherwise keep first seen */
+          if (!_msgMap[_k] || m.type === 'primary') _msgMap[_k] = m.text || '';
+        });
+      } catch(_me) {}
+
+      /* Store leads for delegated handler */
+      _foundLeads = _allFound;
+
+      var _showLeads  = _allFound.slice(0, 3);
+      var _extraCount = _allFound.length - _showLeads.length;
+
+      var _leadRows = _showLeads.map(function(p, i) {
+        var _phone    = p.phone ? String(p.phone).replace(/[^0-9]/g, '') : '';
+        var _msg      = _msgMap[_normStr(p.icp)] || '';
+        var _addr     = p.address ? escHtml(p.address) : '';
+        var _waBtn    = '';
+        if (_phone) {
+          var _waUrl = 'https://wa.me/' + _phone + (_msg ? '?text=' + encodeURIComponent(_msg) : '');
+          _waBtn = '<a href="' + _waUrl + '" target="_blank" rel="noopener" ' +
+            'class="tc-btn" style="flex-shrink:0" ' +
+            'data-lead-idx="' + i + '">WhatsApp \u2192</a>';
+        }
+        return '<div class="chase-item">' +
+          '<div style="flex:1;min-width:0;overflow:hidden">' +
+          '<div class="chase-name">' + escHtml(p.name) + '</div>' +
+          (_addr ? '<div class="chase-reason" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + _addr + '</div>' : '') +
+          '</div>' +
+          _waBtn +
+          '</div>';
+      }).join('');
+
+      leadsCard.innerHTML =
+        '<div class="tc-eyebrow">' + _allFound.length + ' business' +
+          (_allFound.length !== 1 ? 'es' : '') + ' to contact</div>' +
+        '<div class="chase-list">' + _leadRows + '</div>' +
+        (_extraCount > 0
+          ? '<a href="pipeline.html" class="tc-btn" style="margin-right:20px">See all \u2192</a>'
+          : '') +
+        '<a href="pipeline.html" class="tc-btn">Open Pipeline \u2192</a>';
+
+      leadsCard.style.display = 'block';
+
+      /* Delegated listener — one per card mount, promotes to 'contacted' on WA tap */
+      leadsCard.addEventListener('click', function(e) {
+        var _a = e.target.closest
+          ? e.target.closest('[data-lead-idx]')
+          : (e.target.getAttribute && e.target.getAttribute('data-lead-idx') !== null ? e.target : null);
+        if (!_a) return;
+        var _i  = parseInt(_a.getAttribute('data-lead-idx'), 10);
+        var _p  = _foundLeads[_i];
+        if (!_p) return;
+        /* Promote to 'contacted' — person now enters normal chase flow */
+        try { pipelineSetStatus(_p.id, 'contacted', weekNum); } catch(_pe) {}
+      });
+    }
+  }
+
   /* ── CHASE TODAY CARD ── */
   var chaseCard = document.getElementById('chaseCard');
   if (chaseCard) {
@@ -1271,6 +1362,9 @@ function plainLang(str) {
     .replace(/\breply\s+rate\b/gi, 'how many people replied')
     .replace(/\bconversion\s+rate\b/gi, 'how many became customers');
 }
+
+/* Leads card — found businesses stored for delegated WA button handler */
+var _foundLeads = [];
 
 function escHtml(str) {
   if (!str) return '';
