@@ -242,6 +242,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <input class="field-input" type="text" id="businessName" placeholder="e.g. Sharma Supermart or FitZone Gym" required>
     </div>
     <div class="field-group">
+      <label class="field-label" for="businessPhone">Your WhatsApp Number</label>
+      <input class="field-input" type="tel" id="businessPhone" placeholder="e.g. 98765 43210 — customers who tap your link will message you here" required>
+    </div>
+    <div class="field-group">
       <label class="field-label" for="whatYouSell">What You Sell</label>
       <textarea class="field-textarea" id="whatYouSell" rows="3" placeholder="Be specific — 'premium gym memberships at ₹2,500/month' not just 'gym'" required></textarea>
     </div>
@@ -675,7 +679,7 @@ function validateSection(n) {
     if (!el.value.trim()) { el.classList.add('error'); valid = false; }
     else el.classList.remove('error');
   }
-  if (n === 1) ['businessName','whatYouSell','location','monthlyRevenue','avgTransaction','currentCustomers','targetCustomers'].forEach(check);
+  if (n === 1) ['businessName','businessPhone','whatYouSell','location','monthlyRevenue','avgTransaction','currentCustomers','targetCustomers'].forEach(check);
   if (n === 2) ['areaType','landmark1','bestCustomers'].forEach(check);
   if (n === 5) {
     if (!document.querySelector('input[name="language"]:checked')) {
@@ -702,6 +706,7 @@ function collectFormData() {
   }
   return {
     businessName:document.getElementById('businessName').value.trim(),
+    businessPhone:waPhone(document.getElementById('businessPhone').value.trim()),
     whatYouSell:document.getElementById('whatYouSell').value.trim(),
     location:document.getElementById('location').value.trim(),
     monthlyRevenue:document.getElementById('monthlyRevenue').value.trim(),
@@ -753,6 +758,7 @@ function buildScoutUserMessage(d) {
     'BUSINESS PROFILE',
     '═══════════════════════════════════════',
     'BUSINESS NAME: ' + d.businessName,
+    'OWNER WHATSAPP NUMBER: ' + (d.businessPhone || 'not provided') + ' (customers message here)',
     'WHAT THEY SELL: ' + d.whatYouSell,
     'LOCATION: ' + d.location,
     'AREA TYPE: ' + d.areaType,
@@ -1022,6 +1028,7 @@ function saveDraft() {
       section:          currentSection,
       savedAt:          new Date().toISOString(),
       businessName:     document.getElementById('businessName').value,
+      businessPhone:    document.getElementById('businessPhone').value,
       whatYouSell:      document.getElementById('whatYouSell').value,
       location:         document.getElementById('location').value,
       monthlyRevenue:   document.getElementById('monthlyRevenue').value,
@@ -1076,7 +1083,7 @@ function showDraftSaved() {
    Jumps to the section that was active when draft was saved. */
 function restoreDraft(draft) {
   var textFields = [
-    'businessName','whatYouSell','location','monthlyRevenue','avgTransaction',
+    'businessName','businessPhone','whatYouSell','location','monthlyRevenue','avgTransaction',
     'currentCustomers','targetCustomers','landmark1','landmark2','landmark3',
     'bestCustomers','comp1name','comp1better','comp1worse','comp2name',
     'comp2better','comp2worse','largeChains','whatWorked','whatFailed',
@@ -1162,8 +1169,9 @@ function checkForDraft() {
 
 /* ─── QUALITY SCORING ─── */
 
-/* The 7 fields being scored and their display names */
+/* The 8 fields being scored and their display names */
 var QUALITY_FIELDS = {
+  businessPhone:  'WhatsApp Number',
   whatYouSell:    'What You Sell',
   location:       'Location',
   bestCustomers:  'Best Existing Customers',
@@ -1175,7 +1183,7 @@ var QUALITY_FIELDS = {
 
 /* Section each scored field lives in — used by "Improve my inputs" to navigate */
 var QUALITY_FIELD_SECTION = {
-  whatYouSell: 1, location: 1,
+  businessPhone: 1, whatYouSell: 1, location: 1,
   bestCustomers: 2, landmark1: 2,
   comp1worse: 3,
   monthlyRevenue: 1, avgTransaction: 1
@@ -1188,6 +1196,12 @@ var QUALITY_FIELD_SECTION = {
 function scoreFieldQuality(fieldId, value) {
   var v = (value || '').trim();
   var words = v.split(/\s+/).filter(function(w){ return w.length > 0; });
+
+  if (fieldId === 'businessPhone') {
+    var digits = v.replace(/[^0-9]/g, '');
+    if (digits.length >= 10) return 2;
+    return 0;
+  }
 
   if (fieldId === 'whatYouSell') {
     if (!v || words.length < 3) return 0;
@@ -1271,6 +1285,7 @@ function initQualityScoring() {
 
 /* Per-field score-0 and score-1 messages. Score-2 is generic across all fields. */
 var FIELD_QUALITY_MSGS = {
+  businessPhone:  { 0: 'Enter your WhatsApp number — this is where customers will message you' },
   whatYouSell:    { 0: 'Say what you sell and what it costs — e.g. gym memberships at ₹2,500/month',
                     1: 'Add your price — Scout needs it to work out your revenue potential' },
   location:       { 0: 'Add your area and city',
