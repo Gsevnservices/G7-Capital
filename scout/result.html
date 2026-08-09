@@ -1746,8 +1746,8 @@ function renderTab1JSON(tab1, data) {
 
     /* Card header: badge + title + confidence badge */
     html += '<div class="icp-card-header">';
-    html += '<div class="icp-badge' + (isPriority ? ' priority' : '') + '">' + (isPriority ? '⭐ Highest Priority' : 'ICP ' + (idx + 1)) + '</div>';
-    html += '<div class="icp-title">' + escHtml(icp.name || 'ICP ' + (idx + 1)) + '</div>';
+    html += '<div class="icp-badge' + (isPriority ? ' priority' : '') + '">' + (isPriority ? '⭐ Highest Priority' : 'Group ' + (idx + 1)) + '</div>';
+    html += '<div class="icp-title">' + escHtml(icp.name || 'Group ' + (idx + 1)) + '</div>';
     if (icp.rankChangedWeek) {
       html += '<span class="patch-badge">Re-ranked week ' + escHtml(String(icp.rankChangedWeek)) + '</span>';
     }
@@ -2620,7 +2620,7 @@ function renderTab1(content) {
 
       html += '<div class="icp-card">';
       html += '<div class="icp-card-header">';
-      html += '<div class="icp-badge' + (isPriority && idx === 0 ? ' priority' : '') + '">' + (isPriority && idx === 0 ? '⭐ Highest Priority' : 'ICP ' + (idx + 1)) + '</div>';
+      html += '<div class="icp-badge' + (isPriority && idx === 0 ? ' priority' : '') + '">' + (isPriority && idx === 0 ? '⭐ Highest Priority' : 'Group ' + (idx + 1)) + '</div>';
       html += '<div class="icp-title">' + escHtml(title) + '</div>';
       /* Confidence badge — right-aligned in header */
       if (confidence) {

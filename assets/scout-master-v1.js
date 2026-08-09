@@ -6051,6 +6051,16 @@ REVENUE VELOCITY RULES:
 — Show the calculation in the note field
 — Example for marble: "3 new contractors × ₹85,000 × 2 orders = ₹5,10,000 added"
 — Example for gym: "8 new members × ₹2,500/month = ₹20,000 added"
+
+90-DAY PROJECTION RULES:
+— projection90Day.month1/2/3 shows TOTAL monthly revenue (existing + new customers)
+— NOT the same number as revenueVelocity. revenueVelocity is the new revenue added.
+  month1 total = current revenue + new revenue from Scout at month-1 customer volume
+— The three numbers must grow month-on-month and must be mathematically consistent
+  with revenueVelocity and velocityCalculation.currentRevenue
+— Format each value as: "Total ₹[X]/month (existing ₹[Y] + ₹[Z] new from Scout)"
+  so the reader can see both components and understand the two numbers are
+  measuring different things. Never write a bare ₹[X]/month with no context label.
   "tab1": {
     "honestAssessment": "[One paragraph. 3-5 sentences. One specific problem with current approach. Ends connecting to Scout plan.]",
     "unfairAdvantage": "[One paragraph. 3 sentences max. The single most powerful competitive advantage.]",
@@ -6151,7 +6161,7 @@ REVENUE VELOCITY RULES:
         "timeRequired": "[X] minutes",
         "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Specific number]",
-        "messageToUse": "[Reference to Tab 2 message]",
+        "messageToUse": "[Name the customer group descriptively and the message type — e.g. 'The primary WhatsApp message for the Juhu homemakers group' or 'The day 3 follow-up for the startup employees group'. Never write 'Tab 2' or a tab number — the owner does not know what Tab 2 is.]",
         "ifAhead": "[What to do with extra time]",
         "ifBehind": "[Minimum acceptable action]"
       },
@@ -6160,7 +6170,7 @@ REVENUE VELOCITY RULES:
         "timeRequired": "[X] minutes",
         "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Target]",
-        "messageToUse": "[Message reference]",
+        "messageToUse": "[Name the customer group descriptively and the message type — e.g. 'The primary WhatsApp message for the [group name]' or 'The day 3 follow-up for the [group name]'. Never write 'Tab 2' or a tab number.]",
         "ifAhead": "[If ahead]",
         "ifBehind": "[If behind]"
       },
@@ -6169,7 +6179,7 @@ REVENUE VELOCITY RULES:
         "timeRequired": "[X] minutes",
         "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Target]",
-        "messageToUse": "[Message reference]",
+        "messageToUse": "[Name the customer group descriptively and the message type — e.g. 'The primary WhatsApp message for the [group name]' or 'The day 3 follow-up for the [group name]'. Never write 'Tab 2' or a tab number.]",
         "ifAhead": "[If ahead]",
         "ifBehind": "[If behind]"
       },
@@ -6178,7 +6188,7 @@ REVENUE VELOCITY RULES:
         "timeRequired": "[X] minutes",
         "action": "[Specific action — name the customer group descriptively, not as ICP 1 or ICP 2]",
         "target": "[Target]",
-        "messageToUse": "[Message reference]",
+        "messageToUse": "[Name the customer group descriptively and the message type — e.g. 'The primary WhatsApp message for the [group name]' or 'The day 3 follow-up for the [group name]'. Never write 'Tab 2' or a tab number.]",
         "ifAhead": "[If ahead]",
         "ifBehind": "[If behind]"
       },
@@ -6186,8 +6196,8 @@ REVENUE VELOCITY RULES:
         "day": "Friday",
         "timeRequired": "[X] minutes",
         "action": "Follow-ups and pipeline update",
-        "target": "Update Tab 4 numbers",
-        "messageToUse": "Tab 2, Day 3 follow-ups",
+        "target": "Chase anyone who did not reply this week",
+        "messageToUse": "The day 3 or day 7 follow-up message for whichever customer group you contacted earlier this week",
         "ifAhead": "[If ahead]",
         "ifBehind": "[If behind]"
       }
@@ -6333,9 +6343,9 @@ REVENUE VELOCITY RULES:
       "pipelineValue": "₹[X]"
     },
     "projection90Day": {
-      "month1": "₹[X]/month",
-      "month2": "₹[X]/month",
-      "month3": "₹[X]/month"
+      "month1": "Total ₹[X]/month (existing ₹[Y] + ₹[Z] new from Scout)",
+      "month2": "Total ₹[X]/month (existing ₹[Y] + ₹[Z] new from Scout)",
+      "month3": "Total ₹[X]/month (existing ₹[Y] + ₹[Z] new from Scout)"
     },
     "acquisitionEfficiencyTarget": {
       "contactsPerCustomer": 0,
