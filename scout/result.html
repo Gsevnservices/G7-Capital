@@ -763,6 +763,35 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .print-section-header{display:none}
 
 @media print {
+  /* ── CSS variable overrides — resolves var() in class rules AND JS-generated
+     inline styles in one declaration. Added before any per-class rules so that
+     any remaining class overrides take precedence where they differ. ── */
+  :root{
+    --grey1:#333!important;--grey2:#555!important;
+    --white:#000!important;--white2:#111!important;
+    --border2:#ddd!important;
+  }
+
+  /* ── Font rendering fixes ── */
+  /* Suppress ligature glyphs — Cormorant Garamond ligatures (fi, fl, Th, etc.)
+     embed without correct ToUnicode maps in browser PDF export, producing
+     garbled characters ("!is", "#rst", "Co%ee"). */
+  *{font-variant-ligatures:none;font-feature-settings:"liga" 0,"dlig" 0,"clig" 0}
+  /* Prevent synthetic bold — Tenor Sans has no bold weight; the browser's
+     synthetic-bold algorithm paints glyphs multiple times with offsets, and PDF
+     serialisers record each pass as a separate text object, producing triplicated
+     labels ("Best days: Best days: Best days:"). Letter-spacing gives print
+     emphasis instead. */
+  *{font-synthesis:none}
+  strong,b{font-weight:400;letter-spacing:.02em}
+  /* Neutralise mixed letter-spacing on inline label spans — when a span with
+     letter-spacing sits next to a plain text node on the same line, some PDF
+     generators split the run at the boundary and re-draw the tail text from
+     that point, producing repeated sentence fragments. Class-based eyebrow
+     labels (letter-spacing set via class rule, not inline style) are unaffected
+     by this attribute selector. */
+  span[style*="letter-spacing"]{letter-spacing:normal!important}
+
   /* Hide all UI chrome */
   nav,.tab-nav,.action-bar,.reasoning-bar,.reasoning-panel,
   .checkin-overlay,.festival-toggle-btn,.ab-toggle-wrap,
@@ -792,7 +821,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     margin-top:0!important;padding:20px 40px;
     background:white!important;border-bottom:2px solid #C9A84C
   }
-  .headline-business{color:black!important}
+  /* .headline-business removed — superseded by --white:#000 */
   .headline-meta{color:#666!important}
   .metric-card{border:1px solid #ccc!important;background:white!important;margin-bottom:8px}
   .metric-label{color:#C9A84C!important}
@@ -800,7 +829,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .metric-sub{color:#666!important}
   .momentum-block{border:1px solid #ccc!important;background:white!important}
   .momentum-label{color:#C9A84C!important}
-  .momentum-score,.momentum-denom{color:black!important}
+  /* .momentum-score,.momentum-denom removed — superseded by --white:#000 */
   .momentum-note{color:#666!important}
   .momentum-bar-wrap{background:#eee!important}
   .momentum-bar-fill{background:#C9A84C!important}
@@ -817,29 +846,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .icp-title,.day-content,.exp-card-body{color:black!important}
   .icp-badge,.icp-meta strong,.message-card-label,
   .exp-card-timeline,.comp-watch-title,.festival-week-label span{color:#C9A84C!important}
-  .icp-body,.message-text,.section-block-body,
-  .comp-watch-body,.festival-msg{color:#333!important}
+  /* .icp-body/.message-text/.section-block-body/.comp-watch-body/.festival-msg removed
+     — superseded by --grey1:#333 and --white2:#111 */
   .avoid-block{border:1px solid #C45A5A!important;background:white!important}
   .avoid-title{color:#C45A5A!important}
-  .avoid-body{color:#333!important}
+  /* .avoid-body removed — superseded by --grey1:#333 */
   .three-numbers{display:grid;grid-template-columns:1fr 1fr 1fr}
   .number-chip{border:1px solid #ccc!important;background:white!important}
-  .number-chip-val{color:black!important}
+  /* .number-chip-val removed — superseded by --white:#000 */
   .number-chip-lbl{color:#C9A84C!important}
   .section-block-title{color:#C9A84C!important;border-bottom-color:#ccc!important}
   .targets-block{border:1px solid #ccc!important;background:white!important}
   .targets-title{color:#C9A84C!important}
   .target-key{color:#666!important}
-  .target-val{color:black!important}
+  /* .target-val removed — superseded by --white:#000 */
   .conf-badge.high{color:#5A9E6F!important;border-color:#5A9E6F!important}
   .conf-badge.medium{color:#C9A84C!important;border-color:#C9A84C!important}
   .conf-badge.low{color:#666!important;border-color:#666!important}
 
-  /* Festival panel — always expanded in print */
+  /* Festival panel expanded via CSS class. Inline-collapsed panels (#advPanel,
+     #compPanel) are handled by the beforeprint JS listener which selects all
+     [id$="Panel"] elements — CSS cannot override inline display:none. */
   .festival-panel{display:block!important}
   .festival-week-card{border:1px solid #ccc!important;background:white!important}
 
-  /* Print-only elements */
+  /* Print-only elements — cover and exec summary are moved before .tab-panels
+     in the DOM so they render on pages 1 and 2, not after all content. */
   .print-cover{
     display:flex!important;flex-direction:column;
     align-items:center;justify-content:center;
@@ -998,6 +1030,33 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   <button class="tab-btn" onclick="switchTab(4)" id="tabBtn4">What's Next</button>
 </div>
 
+<!-- PRINT COVER PAGE (hidden on screen, first page when printing) -->
+<div class="print-cover" id="printCover">
+  <div style="margin-bottom:56px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:48pt;font-weight:300;color:#C9A84C;letter-spacing:.3em">G7 SCOUT</div>
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:10pt;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-top:10px">AI Business Development Employee</div>
+  </div>
+  <div style="border-top:1px solid #C9A84C;border-bottom:1px solid #C9A84C;padding:32px 0;margin-bottom:44px;width:300px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22pt;font-weight:300;color:black;margin-bottom:8px" id="printBizName">Business Analysis</div>
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.15em;color:#888;text-transform:uppercase">Customer Acquisition Analysis</div>
+  </div>
+  <div style="font-family:'Tenor Sans',sans-serif;font-size:10pt;color:#666;margin-bottom:6px" id="printLocation"></div>
+  <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;color:#999" id="printDate"></div>
+  <div style="margin-top:64px">
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:8pt;letter-spacing:.18em;color:#999;text-transform:uppercase">Prepared by G7 Scout</div>
+    <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.12em;color:#C9A84C;text-transform:uppercase;margin-top:5px">G7 Capital · AI Employees</div>
+  </div>
+  <div style="margin-top:44px;font-family:'Tenor Sans',sans-serif;font-size:8pt;letter-spacing:.25em;color:#aaa;text-transform:uppercase">CONFIDENTIAL</div>
+</div>
+
+<!-- PRINT EXECUTIVE SUMMARY (hidden on screen, second page when printing) -->
+<div class="print-exec-summary" id="printExecSummary">
+  <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;border-bottom:1px solid #C9A84C;padding-bottom:8px;margin-bottom:24px">Executive Summary</div>
+  <table style="width:100%;border-collapse:collapse;font-family:'Tenor Sans',sans-serif;font-size:10pt">
+    <tbody id="printExecTable"></tbody>
+  </table>
+</div>
+
 <!-- TAB PANELS -->
 <div class="tab-panels">
 
@@ -1075,33 +1134,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
 <!-- HIDDEN: tab2Content — renderTab2JSON writes here; kept off-screen so the render function has a target element -->
 <div id="tab2Content" style="display:none" aria-hidden="true"></div>
-
-<!-- PRINT COVER PAGE (Feature 4.3 — hidden on screen, visible when printing) -->
-<div class="print-cover" id="printCover">
-  <div style="margin-bottom:56px">
-    <div style="font-family:'Cormorant Garamond',serif;font-size:48pt;font-weight:300;color:#C9A84C;letter-spacing:.3em">G7 SCOUT</div>
-    <div style="font-family:'Tenor Sans',sans-serif;font-size:10pt;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-top:10px">AI Business Development Employee</div>
-  </div>
-  <div style="border-top:1px solid #C9A84C;border-bottom:1px solid #C9A84C;padding:32px 0;margin-bottom:44px;width:300px">
-    <div style="font-family:'Cormorant Garamond',serif;font-size:22pt;font-weight:300;color:black;margin-bottom:8px" id="printBizName">Business Analysis</div>
-    <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.15em;color:#888;text-transform:uppercase">Customer Acquisition Analysis</div>
-  </div>
-  <div style="font-family:'Tenor Sans',sans-serif;font-size:10pt;color:#666;margin-bottom:6px" id="printLocation"></div>
-  <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;color:#999" id="printDate"></div>
-  <div style="margin-top:64px">
-    <div style="font-family:'Tenor Sans',sans-serif;font-size:8pt;letter-spacing:.18em;color:#999;text-transform:uppercase">Prepared by G7 Scout</div>
-    <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.12em;color:#C9A84C;text-transform:uppercase;margin-top:5px">G7 Capital · AI Employees</div>
-  </div>
-  <div style="margin-top:44px;font-family:'Tenor Sans',sans-serif;font-size:8pt;letter-spacing:.25em;color:#aaa;text-transform:uppercase">CONFIDENTIAL</div>
-</div>
-
-<!-- PRINT EXECUTIVE SUMMARY (Feature 4.3 — hidden on screen) -->
-<div class="print-exec-summary" id="printExecSummary">
-  <div style="font-family:'Tenor Sans',sans-serif;font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;border-bottom:1px solid #C9A84C;padding-bottom:8px;margin-bottom:24px">Executive Summary</div>
-  <table style="width:100%;border-collapse:collapse;font-family:'Tenor Sans',sans-serif;font-size:10pt">
-    <tbody id="printExecTable"></tbody>
-  </table>
-</div>
 
 <!-- FIXED BOTTOM ACTION BAR -->
 <div class="action-bar">
@@ -3676,6 +3708,35 @@ function preparePrint() {
 
   window.print();
 }
+
+/* ═══════════════════════════════════════════
+   PRINT: EXPAND / RESTORE COLLAPSED PANELS
+   CSS cannot override inline display:none, so we expand all collapsible panels
+   before the browser renders the print layout and restore their state after.
+   Selector [id$="Panel"] matches compPanel, advPanel, festivalPanel and any
+   future panel following the same naming convention — no hardcoded IDs.
+═══════════════════════════════════════════ */
+var _printCollapsedPanels = [];
+
+window.addEventListener('beforeprint', function() {
+  _printCollapsedPanels = [];
+  document.querySelectorAll('[id$="Panel"]').forEach(function(el) {
+    /* Expand if collapsed (empty inline style falls through to CSS display:none) */
+    if (el.style.display === 'none' || el.style.display === '') {
+      _printCollapsedPanels.push(el.id);
+      el.style.display = 'block';
+    }
+  });
+});
+
+window.addEventListener('afterprint', function() {
+  /* Restore only the panels that were collapsed before printing */
+  _printCollapsedPanels.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  _printCollapsedPanels = [];
+});
 
 /* ═══════════════════════════════════════════
    LOGOUT
