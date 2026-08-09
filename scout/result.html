@@ -784,6 +784,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
      emphasis instead. */
   *{font-synthesis:none}
   strong,b{font-weight:400;letter-spacing:.02em}
+  /* Cormorant Garamond has a real 600 weight loaded (wght@0,300;0,400;0,600 in
+     the Google Fonts declaration). Override the synthetic-bold suppression rule
+     for Cormorant headings only — these use genuine weight, not synthetic fill.
+     Tenor Sans labels (.section-block-title, .print-section-header, etc.) stay
+     at 400; they read as headings via uppercase + letter-spacing + darker gold. */
+  .icp-title,.exp-card-title,.ref-engine-heading,.day-name,.day-label{
+    font-weight:600!important
+  }
   /* Neutralise mixed letter-spacing on inline label spans — when a span with
      letter-spacing sits next to a plain text node on the same line, some PDF
      generators split the run at the boundary and re-draw the tail text from
@@ -824,27 +832,35 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .headline-block{display:none!important}
   .headline-meta{color:#666!important}
   .metric-card{border:1px solid #ccc!important;background:white!important;margin-bottom:8px}
-  .metric-label{color:#C9A84C!important}
+  .metric-label{color:#8A6D1F!important}
   .metric-value{color:black!important;font-size:22pt}
   .metric-sub{color:#666!important}
   .momentum-block{border:1px solid #ccc!important;background:white!important}
-  .momentum-label{color:#C9A84C!important}
+  .momentum-label{color:#8A6D1F!important}
   /* .momentum-score,.momentum-denom removed — superseded by --white:#000 */
   .momentum-note{color:#666!important}
   .momentum-bar-wrap{background:#eee!important}
   .momentum-bar-fill{background:#C9A84C!important}
+  /* border-left and border-bottom kept at #C9A84C — thin lines read fine on white */
   .insight-card{background:white!important;border-left:3px solid #C9A84C!important;border-bottom:1px solid #ccc!important}
-  .insight-eyebrow{color:#C9A84C!important}
+  .insight-eyebrow{color:#8A6D1F!important}
   .insight-body{color:#333!important}
 
-  /* Cards — dark backgrounds whited out.
-     .wac-list-card was missed in the first pass — it has background:var(--black3)
-     same as the others. */
-  .icp-card,.message-card,.day-card,.exp-card,
+  /* Cards — dark backgrounds whited out. */
+  .message-card,.day-card,
   .festival-week-card,.comp-watch-card,
   .wac-timing-bar,.wac-list-card,.ref-program-card,.ref-tier,
   .lcr-metric,.lcr-identify,.lcr-seg-header,.lcr-segment{
     border:1px solid #ccc!important;background:white!important
+  }
+  /* Large cards (.icp-card, .exp-card) can flow across a page break. A full box
+     border cut in half mid-page looks broken. Remove all borders and use a top
+     border as a separator instead — the card reads as continuous flowing text. */
+  .icp-card,.exp-card{
+    border:none!important;
+    border-top:2px solid #8A6D1F!important;
+    padding-top:16px!important;margin-bottom:28px!important;
+    background:white!important
   }
   /* Suppress the section-wrapper top borders in print.
      .wac-section and .ref-engine-section each have border-top + 36-40px margin-top
@@ -862,7 +878,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   }
   .icp-title,.day-content,.exp-card-body{color:black!important}
   .icp-badge,.icp-meta strong,.message-card-label,
-  .exp-card-timeline,.comp-watch-title,.festival-week-label span{color:#C9A84C!important}
+  .exp-card-timeline,.comp-watch-title,.festival-week-label span{color:#8A6D1F!important}
   /* .icp-body/.message-text/.section-block-body/.comp-watch-body/.festival-msg removed
      — superseded by --grey1:#333 and --white2:#111 */
   .avoid-block{border:1px solid #C45A5A!important;background:white!important}
@@ -871,14 +887,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .three-numbers{display:grid;grid-template-columns:1fr 1fr 1fr}
   .number-chip{border:1px solid #ccc!important;background:white!important}
   /* .number-chip-val removed — superseded by --white:#000 */
-  .number-chip-lbl{color:#C9A84C!important}
-  .section-block-title{color:#C9A84C!important;border-bottom-color:#ccc!important}
+  .number-chip-lbl{color:#8A6D1F!important}
+  .section-block-title{color:#8A6D1F!important;border-bottom-color:#ccc!important}
   .targets-block{border:1px solid #ccc!important;background:white!important}
-  .targets-title{color:#C9A84C!important}
+  .targets-title{color:#8A6D1F!important}
   .target-key{color:#666!important}
   /* .target-val removed — superseded by --white:#000 */
   .conf-badge.high{color:#5A9E6F!important;border-color:#5A9E6F!important}
-  .conf-badge.medium{color:#C9A84C!important;border-color:#C9A84C!important}
+  /* conf-badge.medium: text darkened for print contrast; border kept at original
+     gold — a thin colored border reads fine on white */
+  .conf-badge.medium{color:#8A6D1F!important;border-color:#C9A84C!important}
   .conf-badge.low{color:#666!important;border-color:#666!important}
 
   /* Festival panel expanded via CSS class. Inline-collapsed panels (#advPanel,
@@ -908,7 +926,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     display:block!important;
     font-family:'Tenor Sans',sans-serif;
     font-size:9pt;letter-spacing:.2em;text-transform:uppercase;
-    color:#C9A84C;border-bottom:1px solid #C9A84C;
+    /* text darkened for print contrast; border-bottom kept at original gold —
+       a thin ruled line reads fine on white */
+    color:#8A6D1F;border-bottom:1px solid #C9A84C;
     padding-bottom:8px;margin-bottom:20px;
     /* Keep section header on same page as the content that follows it */
     page-break-after:avoid
