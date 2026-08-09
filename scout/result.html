@@ -804,7 +804,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   body{
     background:white!important;color:black!important;
     font-size:11pt;padding-bottom:0;cursor:auto;
-    visibility:visible!important
+    visibility:visible!important;
+    /* Prevent single orphaned lines at page bottom / top */
+    orphans:3;widows:3
   }
   body::before{display:none}
 
@@ -816,12 +818,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   #panel0{page-break-before:auto}
   #panel1,#panel2,#panel3,#panel4{page-break-before:always}
 
-  /* Headline block */
-  .headline-block{
-    margin-top:0!important;padding:20px 40px;
-    background:white!important;border-bottom:2px solid #C9A84C
-  }
-  /* .headline-business removed — superseded by --white:#000 */
+  /* Headline block — hidden in print; the print-cover replaces it as page 1.
+     Without this rule the headline-block (DOM line ~988, above .print-cover)
+     would print above the cover, pushing the cover off page 1. */
+  .headline-block{display:none!important}
   .headline-meta{color:#666!important}
   .metric-card{border:1px solid #ccc!important;background:white!important;margin-bottom:8px}
   .metric-label{color:#C9A84C!important}
@@ -837,10 +837,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .insight-eyebrow{color:#C9A84C!important}
   .insight-body{color:#333!important}
 
-  /* Cards */
+  /* Cards — dark backgrounds whited out */
   .icp-card,.message-card,.day-card,.exp-card,
-  .festival-week-card,.comp-watch-card{
-    border:1px solid #ccc!important;background:white!important;
+  .festival-week-card,.comp-watch-card,
+  .wac-timing-bar,.ref-program-card,.ref-tier,
+  .lcr-metric,.lcr-identify,.lcr-seg-header,.lcr-segment{
+    border:1px solid #ccc!important;background:white!important
+  }
+  /* page-break-inside:avoid only on small cards — large cards (.icp-card,
+     .exp-card) can legitimately exceed one page; forcing avoid on them just
+     produces a blank page followed by an overflowing card. */
+  .message-card,.day-card,.festival-week-card,.comp-watch-card{
     page-break-inside:avoid
   }
   .icp-title,.day-content,.exp-card-body{color:black!important}
@@ -875,8 +882,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .print-cover{
     display:flex!important;flex-direction:column;
     align-items:center;justify-content:center;
-    min-height:100vh;text-align:center;
-    page-break-after:always;padding:60mm 20mm;
+    /* min-height:100vh would use viewport height, not page height — too tall on
+       landscape, wrong on A4. Use an explicit mm height that fills one A4 page
+       minus the default browser print margins (~19mm top + 19mm bottom). */
+    height:250mm;min-height:0;
+    text-align:center;
+    page-break-after:always;padding:40mm 20mm;
     background:white
   }
   .print-exec-summary{
@@ -888,7 +899,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     font-family:'Tenor Sans',sans-serif;
     font-size:9pt;letter-spacing:.2em;text-transform:uppercase;
     color:#C9A84C;border-bottom:1px solid #C9A84C;
-    padding-bottom:8px;margin-bottom:20px
+    padding-bottom:8px;margin-bottom:20px;
+    /* Keep section header on same page as the content that follows it */
+    page-break-after:avoid
   }
   /* Copy buttons in print */
   .copy-btn{display:none!important}
