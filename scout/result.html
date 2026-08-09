@@ -837,12 +837,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   .insight-eyebrow{color:#C9A84C!important}
   .insight-body{color:#333!important}
 
-  /* Cards — dark backgrounds whited out */
+  /* Cards — dark backgrounds whited out.
+     .wac-list-card was missed in the first pass — it has background:var(--black3)
+     same as the others. */
   .icp-card,.message-card,.day-card,.exp-card,
   .festival-week-card,.comp-watch-card,
-  .wac-timing-bar,.ref-program-card,.ref-tier,
+  .wac-timing-bar,.wac-list-card,.ref-program-card,.ref-tier,
   .lcr-metric,.lcr-identify,.lcr-seg-header,.lcr-segment{
     border:1px solid #ccc!important;background:white!important
+  }
+  /* Suppress the section-wrapper top borders in print.
+     .wac-section and .ref-engine-section each have border-top + 36-40px margin-top
+     + 32-36px padding-top, which creates a thin grey line floating in ~72px of
+     whitespace before any text — visually an empty bordered element.
+     The print-section-header gold underline already serves as the divider. */
+  .wac-section,.ref-engine-section{
+    border-top:none!important;margin-top:8px!important;padding-top:8px!important
   }
   /* page-break-inside:avoid only on small cards — large cards (.icp-card,
      .exp-card) can legitimately exceed one page; forcing avoid on them just
@@ -2088,14 +2098,19 @@ function renderWhatsAppCalendar(cal) {
     html += '</div>';
   });
 
-  /* Timing rules */
+  /* Timing rules — only emit the bar when at least one field has content.
+     Without this guard, an empty <div class="wac-timing-bar"></div> is rendered
+     when cal.timingRules exists but all three fields are absent, producing an
+     empty full-border box in the PDF. */
   if (cal.timingRules) {
     var tr = cal.timingRules;
-    html += '<div class="wac-timing-bar">';
-    if (tr.bestDays)  html += '<strong>Best days:</strong> ' + escHtml(tr.bestDays) + '<br>';
-    if (tr.bestTimes) html += '<strong>Best times:</strong> ' + escHtml(tr.bestTimes) + '<br>';
-    if (tr.avoidDays) html += '<strong>Avoid:</strong> ' + escHtml(tr.avoidDays);
-    html += '</div>';
+    if (tr.bestDays || tr.bestTimes || tr.avoidDays) {
+      html += '<div class="wac-timing-bar">';
+      if (tr.bestDays)  html += '<strong>Best days:</strong> ' + escHtml(tr.bestDays) + '<br>';
+      if (tr.bestTimes) html += '<strong>Best times:</strong> ' + escHtml(tr.bestTimes) + '<br>';
+      if (tr.avoidDays) html += '<strong>Avoid:</strong> ' + escHtml(tr.avoidDays);
+      html += '</div>';
+    }
   }
 
   html += '</div>'; /* end wac-section */
