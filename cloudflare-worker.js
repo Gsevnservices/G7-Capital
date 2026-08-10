@@ -18,6 +18,9 @@
 //   places:cache:{queryHash}                     → cached Google Places results (30-day TTL)
 //   scout:limit:{FIRMCODE}:places                → free lifetime places counter (string int)
 //   scout:limit:{FIRMCODE}:places:{YYYY-MM}      → paid monthly places counter (string int)
+//   scout:inbound:link:{CODE}                    → { firmCode, source, waNumber, message, createdAt }
+//   scout:inbound:{FIRMCODE}:links               → { bio: CODE, google: CODE, status: CODE }
+//   scout:inbound:{FIRMCODE}:{SOURCE}:clicks     → click count (string int); SOURCE ∈ bio|google|status
 //
 // Route map:
 //   POST /api/message            — Anthropic proxy (session-protected)
@@ -33,6 +36,9 @@
 //   POST /admin/reset-usage      — Reset deal usage counter for a firm (admin-protected)
 //   POST /email/send-founder-questions — Send Alex questions to founder via email
 //   GET  /places/search              — Google Places proxy (session-protected, cached)
+//   POST /inbound/create             — Create inbound short links bio/google/status (session-protected, idempotent)
+//   GET  /inbound/stats              — Get link codes + click counts (session-protected)
+//   GET  /i/{CODE}                   — Public inbound redirect: logs click, 302 → wa.me (no CORS applied)
 //
 // Health check:
 //   GET /                        → { status: 'G7 Proxy is running' }
@@ -82,6 +88,21 @@ async function hashPassword(password) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPER: GENERATE INBOUND LINK CODE
+// Produces a 6-character lowercase base36 code (0-9, a-z).
+// Uses crypto.getRandomValues for unpredictability — not sequential, not the
+// firm code. Gives ~2.2 billion possible values; collision is astronomically rare.
+// ─────────────────────────────────────────────────────────────────────────────
+function genInboundCode() {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+  const bytes = new Uint8Array(6);
+  crypto.getRandomValues(bytes);
+  let code = '';
+  for (const b of bytes) code += chars[b % 36];
+  return code;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1173,6 +1194,166 @@ export default {
         cacheHit: false,
         results:  places.slice(0, cap),
         quota:    { used: placesCount + 1, limit: hardLimit }
+      });
+    }
+
+    // =========================================================================
+    // ROUTE A — POST /inbound/create
+    // Creates three inbound short links for the firm: bio, google, status.
+    // Each link is: https://g7-proxy.gsevnservices.workers.dev/i/{CODE}
+    // Codes are opaque 6-char base36 strings — never the firmCode.
+    // Session-protected.
+    //
+    // IDEMPOTENT: if the firm already has links, updates waNumber/message on
+    // the existing three records and returns the original codes unchanged.
+    // (Owner may have pasted the link in their bio — regenerating would break it.)
+    //
+    // Body: { waNumber, message }
+    //   waNumber — digits only, wa.me format (e.g. "919876543210")
+    //   message  — pre-filled WhatsApp text customers will send
+    //
+    // Returns: { links: { bio, google, status }, clicks: { bio, google, status } }
+    // =========================================================================
+    if (request.method === 'POST' && path === '/inbound/create') {
+      const session = await validateSession(request, env);
+      if (!session) return jsonResponse({ error: 'Unauthorized' }, 401);
+
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+
+      const { waNumber, message } = body;
+      if (!waNumber || !message) {
+        return jsonResponse({ error: 'waNumber and message are required' }, 400);
+      }
+
+      const firmCode = session.firmCode;
+      const linksKey = 'scout:inbound:' + firmCode + ':links';
+      const now      = new Date().toISOString();
+      const sources  = ['bio', 'google', 'status'];
+
+      // ── Idempotent path: firm already has links ──────────────────────────────
+      const existing = await env.G7_KV.get(linksKey, 'json');
+      if (existing) {
+        // Update waNumber + message on each existing link record (in parallel)
+        await Promise.all(sources.map(source => {
+          const code = existing[source];
+          if (!code) return;
+          return env.G7_KV.put(
+            'scout:inbound:link:' + code,
+            JSON.stringify({ firmCode, source, waNumber, message, createdAt: now })
+          );
+        }));
+
+        // Fetch current click counts (in parallel)
+        const clicks = {};
+        await Promise.all(sources.map(async source => {
+          const raw = await env.G7_KV.get('scout:inbound:' + firmCode + ':' + source + ':clicks');
+          clicks[source] = raw ? parseInt(raw, 10) : 0;
+        }));
+
+        return jsonResponse({ links: existing, clicks });
+      }
+
+      // ── New firm: generate 3 codes, one per source ───────────────────────────
+      const codes = {};
+      for (const source of sources) {
+        let code = genInboundCode();
+        // Collision check — retry once if the code is already taken
+        if (await env.G7_KV.get('scout:inbound:link:' + code)) {
+          code = genInboundCode();
+          // Second collision is astronomically unlikely; fail loudly if it happens
+          if (await env.G7_KV.get('scout:inbound:link:' + code)) {
+            return jsonResponse({ error: 'Code generation collision — please retry' }, 500);
+          }
+        }
+        codes[source] = code;
+      }
+
+      // Write all link records + the index in parallel
+      await Promise.all([
+        ...sources.map(source =>
+          env.G7_KV.put(
+            'scout:inbound:link:' + codes[source],
+            JSON.stringify({ firmCode, source, waNumber, message, createdAt: now })
+          )
+        ),
+        env.G7_KV.put(linksKey, JSON.stringify(codes))
+      ]);
+
+      return jsonResponse({
+        links:  codes,
+        clicks: { bio: 0, google: 0, status: 0 }
+      });
+    }
+
+    // =========================================================================
+    // ROUTE C — GET /inbound/stats
+    // Returns the firm's link codes and current click counts.
+    // Session-protected — firms can only read their own stats.
+    // Returns: { links: { bio, google, status } | null,
+    //            clicks: { bio, google, status } | null }
+    // =========================================================================
+    if (request.method === 'GET' && path === '/inbound/stats') {
+      const session = await validateSession(request, env);
+      if (!session) return jsonResponse({ error: 'Unauthorized' }, 401);
+
+      const firmCode = session.firmCode;
+      const links    = await env.G7_KV.get('scout:inbound:' + firmCode + ':links', 'json');
+
+      if (!links) {
+        // Firm has not created links yet
+        return jsonResponse({ links: null, clicks: null });
+      }
+
+      const sources = ['bio', 'google', 'status'];
+      const clicks  = {};
+      await Promise.all(sources.map(async source => {
+        const raw = await env.G7_KV.get('scout:inbound:' + firmCode + ':' + source + ':clicks');
+        clicks[source] = raw ? parseInt(raw, 10) : 0;
+      }));
+
+      return jsonResponse({ links, clicks });
+    }
+
+    // =========================================================================
+    // ROUTE B — GET /i/{CODE}
+    // Public inbound link redirect. No session required — a real customer taps
+    // this link on their phone.
+    //
+    // Flow:
+    //   1. Look up scout:inbound:link:{CODE}
+    //   2. If not found: return 404 as plain text (not JSON — a human may see it)
+    //   3. Increment the per-source click counter (fire-and-forget)
+    //   4. 302-redirect to https://wa.me/{waNumber}?text={encodedMessage}
+    //
+    // CORS: intentionally NOT applied. This is a browser navigation (not a JS
+    // fetch from another origin), so CORS headers are irrelevant. The global
+    // OPTIONS handler above is harmless but will never be triggered by a tap.
+    // =========================================================================
+    if (request.method === 'GET' && path.startsWith('/i/') && path.length > 3) {
+      const code = path.slice(3); // strip '/i/' prefix
+
+      const link = await env.G7_KV.get('scout:inbound:link:' + code, 'json');
+      if (!link) {
+        return new Response('Link not found.', {
+          status:  404,
+          headers: { 'Content-Type': 'text/plain' }
+        });
+      }
+
+      // Increment click counter — fire-and-forget, never blocks the redirect
+      const clickKey = 'scout:inbound:' + link.firmCode + ':' + link.source + ':clicks';
+      const clickRaw = await env.G7_KV.get(clickKey);
+      const clicks   = clickRaw ? parseInt(clickRaw, 10) : 0;
+      env.G7_KV.put(clickKey, String(clicks + 1)); // intentionally not awaited
+
+      // Build wa.me URL and redirect
+      const waUrl = 'https://wa.me/' + link.waNumber +
+                    '?text=' + encodeURIComponent(link.message);
+
+      return new Response(null, {
+        status:  302,
+        headers: { 'Location': waUrl }
       });
     }
 
