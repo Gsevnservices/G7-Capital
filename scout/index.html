@@ -641,6 +641,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <a href="result.html" class="btn-action-outline">View My Full Plan →</a>
     </div>
 
+    <!-- INBOUND LINKS CARD — shown only when businessPhone is set -->
+    <div class="momentum-card" id="inboundCard" style="display:none"></div>
+
     <!-- RECENT HISTORY -->
     <div class="recent-section" id="recentSection">
       <div class="recent-header">
@@ -1091,6 +1094,9 @@ function showDashboard(history, weekNum, firmName) {
     }
   }
 
+  /* ── INBOUND LINKS CARD ── */
+  initInboundCard(pendingData, pendingParsed, token);
+
   /* ── MONDAY BRIEFING (Feature 3.1) ── */
   var dayOfWeek = new Date().getDay(); /* 1 = Monday */
   var dismissed = sessionStorage.getItem('scout_monday_dismissed') === 'true';
@@ -1365,6 +1371,166 @@ function plainLang(str) {
 
 /* Leads card — found businesses stored for delegated WA button handler */
 var _foundLeads = [];
+
+/* ═══════════════════════════════════════════
+   INBOUND LINKS CARD
+   Shows three copyable short links (bio / google / status) that
+   redirect customers to the owner's WhatsApp with a pre-filled
+   message. Requires businessPhone in businessData.
+═══════════════════════════════════════════ */
+
+/* Copy a URL string to clipboard — matches refCopy() pattern from result.html.
+   Takes the text directly (not an element id) because the URL is never
+   rendered as a DOM text node we could read. */
+function copyInboundLink(text, btn) {
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function() {
+    /* Fallback for older / non-https contexts */
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity  = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* Render the card into its "links exist" state.
+   links  = { bio, google, status }  (codes, not full URLs)
+   clicks = { bio, google, status }  (integers) */
+function renderInboundLinksState(card, links, clicks) {
+  var BASE    = 'https://g7-proxy.gsevnservices.workers.dev/i/';
+  var SOURCES = [
+    { key: 'bio',    label: 'Bio Link',    where: 'Instagram or Facebook bio' },
+    { key: 'google', label: 'Google Link', where: 'Your Google Business listing' },
+    { key: 'status', label: 'Status Link', where: 'WhatsApp status or broadcast' }
+  ];
+
+  var totalClicks = (clicks.bio || 0) + (clicks.google || 0) + (clicks.status || 0);
+
+  var rows = SOURCES.map(function(s) {
+    var url   = BASE + escHtml(links[s.key]);
+    var count = clicks[s.key] || 0;
+    return '<div class="chase-item" style="flex-direction:column;align-items:flex-start;gap:6px;padding-bottom:14px;border-bottom:1px solid var(--border2);margin-bottom:14px">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px">' +
+        '<div>' +
+          '<div class="chase-name" style="font-size:12px">' + escHtml(s.label) + '</div>' +
+          '<div class="chase-reason" style="font-size:10px">' + escHtml(s.where) + '</div>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">' +
+          (count > 0 ? '<span style="font-size:10px;color:var(--amber);letter-spacing:.05em">' + count + ' tap' + (count !== 1 ? 's' : '') + '</span>' : '') +
+          '<button class="tc-btn" style="padding:6px 14px;font-size:10px" data-inbound-copy="' + url + '">Copy</button>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:10px;color:var(--grey1);word-break:break-all;line-height:1.5">' + url + '</div>' +
+    '</div>';
+  }).join('');
+
+  card.innerHTML =
+    '<div class="tc-eyebrow">Your Customer Links' +
+      (totalClicks > 0 ? ' — ' + totalClicks + ' tap' + (totalClicks !== 1 ? 's' : '') + ' so far' : '') +
+    '</div>' +
+    '<div style="margin-top:12px">' + rows + '</div>';
+
+  card.style.display = 'block';
+}
+
+/* Init: fetch existing stats, then set up the card and delegated listener.
+   Guard: if businessPhone is absent, do nothing — card stays hidden. */
+async function initInboundCard(pendingData, pendingParsed, token) {
+  var card = document.getElementById('inboundCard');
+  if (!card) return;
+
+  /* Require businessPhone — if absent, leave card hidden, fire no fetch */
+  var businessPhone = (pendingData && pendingData.businessData && pendingData.businessData.businessPhone) || '';
+  if (!businessPhone) return;
+
+  /* inboundStarter from latest analysis, with fallback */
+  var inboundStarter = (pendingParsed && pendingParsed.tab2 && pendingParsed.tab2.inboundStarter)
+    ? pendingParsed.tab2.inboundStarter
+    : "Hi, I'd like to know more.";
+
+  /* Delegated click handler — handles both Copy and Create buttons.
+     Uses data attributes so URLs with special characters are never
+     embedded in onclick strings (avoids the Customer Finder breakage pattern). */
+  card.addEventListener('click', function(e) {
+    /* Copy button */
+    var copyBtn = e.target.closest('[data-inbound-copy]');
+    if (copyBtn) {
+      copyInboundLink(copyBtn.getAttribute('data-inbound-copy'), copyBtn);
+      return;
+    }
+
+    /* Create button */
+    var createBtn = e.target.closest('[data-inbound-create]');
+    if (!createBtn || createBtn.disabled) return;
+
+    createBtn.disabled    = true;
+    createBtn.textContent = 'Creating…';
+
+    var errEl = card.querySelector('.inbound-err');
+    if (errEl) errEl.textContent = '';
+
+    fetch(SCOUT_WORKER + '/inbound/create', {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ waNumber: businessPhone, message: inboundStarter })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(json) {
+      if (!json.links) throw new Error('no links in response');
+      renderInboundLinksState(card, json.links, json.clicks || { bio: 0, google: 0, status: 0 });
+    })
+    .catch(function() {
+      createBtn.disabled    = false;
+      createBtn.textContent = 'Create my links';
+      var e2 = card.querySelector('.inbound-err');
+      if (e2) e2.textContent = 'Could not create links — please try again.';
+    });
+  });
+
+  /* Fetch current stats — if links already exist, render them directly */
+  try {
+    var res  = await fetch(SCOUT_WORKER + '/inbound/stats', {
+      method:  'GET',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (res.ok) {
+      var json = await res.json();
+      if (json.links) {
+        renderInboundLinksState(card, json.links, json.clicks || { bio: 0, google: 0, status: 0 });
+        return; /* done — already in links state */
+      }
+    }
+  } catch(_e) {
+    /* Network failure — stay hidden. A failed fetch must not show a broken card. */
+    return;
+  }
+
+  /* No links yet — show the "create" prompt */
+  card.innerHTML =
+    '<div class="tc-eyebrow">Your Customer Links</div>' +
+    '<div class="tc-text" style="margin:10px 0 14px">Get three links — for your bio, Google listing and WhatsApp status. ' +
+    'When a customer taps one, WhatsApp opens with a message already typed and ready to send.</div>' +
+    '<button class="tc-btn" data-inbound-create="1">Create my links</button>' +
+    '<div class="inbound-err" style="margin-top:8px;font-size:10px;color:#C45A5A"></div>';
+  card.style.display = 'block';
+}
 
 function escHtml(str) {
   if (!str) return '';
