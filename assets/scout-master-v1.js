@@ -6114,6 +6114,19 @@ REVENUE VELOCITY RULES:
       "[Customer type 3 to avoid and why]"
     ]
   },
+INBOUND LINK MESSAGE RULES (for inboundStarter only):
+— This message is sent BY the customer TO the business after tapping the owner's link.
+  It is the OPPOSITE direction of every other message in this schema.
+  Every other message = owner sends to customer. This one = customer sends to owner.
+— Write it entirely from the customer's point of view, in first person ("Hi, I'd like to…")
+— Never write it from the business's point of view.
+— Must be short enough that a real person will press Send without editing it.
+  Target: 1-2 sentences, under 15 words. If it reads like marketing copy it is wrong.
+— Must give the owner enough context to know why they are being contacted:
+  name the specific thing (a trial, an offer, a class, a service).
+— Write it in the same language as the outreach messages for this business.
+— Test it: would a first-time customer actually type this and press Send without feeling awkward?
+
   "tab2": {
     "messages": [
       {
@@ -6150,7 +6163,8 @@ REVENUE VELOCITY RULES:
       {"theySay": "[Objection 3]", "youSay": "[Response 3]"},
       {"theySay": "[Objection 4]", "youSay": "[Response 4]"},
       {"theySay": "[Objection 5]", "youSay": "[Response 5]"}
-    ]
+    ],
+    "inboundStarter": "[The message a CUSTOMER sends to the business after tapping the owner's link. Written from the customer's point of view, not the owner's. 1-2 short sentences. Must name the specific thing that would make someone reach out — a trial, an offer, a question about a service. Sounds like a real person typing on their phone, not marketing copy. Example for a gym: 'Hi, I\\'d like to book a free trial session.' Example for a cafe: 'Hi, I saw your weekend offer — is it on this Saturday?']"
   },
 
   "tab3": {
