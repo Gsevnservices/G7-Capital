@@ -779,6 +779,17 @@ For every business, Scout must identify the business type
 and apply the specific customer acquisition intelligence
 for that type.
 
+BUSINESS TYPE SELECTION RULE:
+When the user's submission includes a BUSINESS TYPE field
+(selected from the onboarding dropdown), use that value
+to identify the correct playbook directly — do not
+re-infer from free text. The structured field is more
+reliable than text inference.
+
+When BUSINESS TYPE is "Other" or absent, infer the
+business type from WHAT THEY SELL and other context
+fields as before.
+
 Generic acquisition advice is failure.
 A gym and a clinic are both local services but
 their ICPs, triggers, objections, and channels
@@ -6046,11 +6057,37 @@ Output this exact JSON structure:
 REVENUE VELOCITY RULES:
 — This is NOT current revenue
 — This is projected NEW revenue added from Scout's acquisition plan
-— Calculate as:
-  (new customers per month target) × (average revenue per customer) × (purchase frequency per month)
-— Show the calculation in the note field
-— Example for marble: "3 new contractors × ₹85,000 × 2 orders = ₹5,10,000 added"
-— Example for gym: "8 new members × ₹2,500/month = ₹20,000 added"
+— The formula depends on the REVENUE MODEL field provided in the submission:
+
+  RECURRING (membership / subscription / retainer):
+  new customers per month × monthly fee
+  No frequency multiplier — each customer pays every month automatically.
+  The added revenue persists and compounds as more customers join.
+  Example: "8 new gym members × ₹2,500/month = ₹20,000/month added"
+
+  REPEAT (customer returns regularly, pays each time):
+  new customers per month × average transaction value × PURCHASE FREQUENCY
+  Use the PURCHASE FREQUENCY given by the owner exactly as stated.
+  If PURCHASE FREQUENCY is absent from the submission, do NOT invent a number.
+  Instead write: "Purchase frequency not provided — velocity shown as revenue
+  per new customer per visit only. Owner should confirm how often customers return."
+  Example: "6 new grocery customers × ₹650/visit × 8 visits/month = ₹31,200/month added"
+
+  PROJECT (customer pays per project, returns rarely):
+  new projects won per month × average project value
+  Do NOT express as a recurring monthly figure.
+  State plainly that this is revenue from projects won, not a recurring stream.
+  Example: "2 new interior design projects × ₹85,000/project = ₹1,70,000 in project revenue"
+
+  ONE-OFF (customer buys once, does not return):
+  new customers × transaction value, stated as a one-time acquisition figure
+  Note explicitly: there is no repeat revenue from these customers —
+  acquisition must be continuous to sustain revenue.
+  Example: "5 new driving school students × ₹8,000 = ₹40,000 in new enrolments"
+
+— Show the calculation in the note field (revenueVelocityNote)
+— When REVENUE MODEL is absent, use the formula that best matches the business type
+  from Component 3 and note the assumption made
 
 90-DAY PROJECTION RULES:
 — projection90Day.month1/2/3 shows TOTAL monthly revenue (existing + new customers)
@@ -6061,6 +6098,13 @@ REVENUE VELOCITY RULES:
 — Format each value as: "Total ₹[X]/month (existing ₹[Y] + ₹[Z] new from Scout)"
   so the reader can see both components and understand the two numbers are
   measuring different things. Never write a bare ₹[X]/month with no context label.
+— PROJECT and ONE-OFF revenue model caveat (mandatory when applicable):
+  For project and oneoff businesses, add a note to each month's projection:
+  "Note: actual monthly revenue will be lumpy — this projection assumes a steady
+  flow of new work each month. A month with no new projects will show zero
+  Scout-sourced revenue regardless of pipeline. Do not treat this as a smooth
+  monthly income curve."
+  Do NOT present a smooth month-on-month growth curve as certainty for these models.
   "tab1": {
     "honestAssessment": "[One paragraph. 3-5 sentences. One specific problem with current approach. Ends connecting to Scout plan.]",
     "unfairAdvantage": "[One paragraph. 3 sentences max. The single most powerful competitive advantage.]",
@@ -6074,7 +6118,7 @@ REVENUE VELOCITY RULES:
         "searchQuery": "[A Google Maps search string that finds BUSINESSES THAT COULD BECOME CUSTOMERS — not businesses in the same category as the user. Rule: the businesses returned must be potential buyers, not competitors. Pattern: find the organisation that contains the people. Example: ICP is 'startup employees relocating to Koramangala' → 'software companies Koramangala Bengaluru' (the employer is findable; its staff become customers). Wrong: ICP is 'weekend cafe visitors' for a cafe → null, not 'cafes Koramangala' (returns competitors). Set to null for any ICP describing individual people — consumers, residents, students, professionals, visitors, homemakers — they are not on a map regardless of their habits or neighbourhood. Format when not null: recognisable business category + specific area + city.]",
         "volumeEstimate": "[Realistic number with calculation shown]",
         "conversionProbability": "HIGH",
-        "revenuePerCustomer": "₹[X]/month",
+        "revenuePerCustomer": "₹[X]/month for recurring | ₹[X] per visit × [N] visits/month for repeat | ₹[X] per project for project | ₹[X] one-time for oneoff — match to REVENUE MODEL",
         "confidence": "HIGH",
         "confidenceReason": "[One sentence why]",
         "switchTrigger": "[Competitor name]'s customers leave when: [specific frustration]"
@@ -6088,7 +6132,7 @@ REVENUE VELOCITY RULES:
         "searchQuery": "[Business category + specific area + city that finds POTENTIAL BUYERS, not competitors. Null for any ICP of individual people.]",
         "volumeEstimate": "[Number with working]",
         "conversionProbability": "MEDIUM",
-        "revenuePerCustomer": "₹[X]/month",
+        "revenuePerCustomer": "₹[X]/month for recurring | ₹[X] per visit × [N] visits/month for repeat | ₹[X] per project for project | ₹[X] one-time for oneoff — match to REVENUE MODEL",
         "confidence": "MEDIUM",
         "confidenceReason": "[One sentence]",
         "switchTrigger": "[Switch trigger sentence]"
@@ -6098,7 +6142,7 @@ REVENUE VELOCITY RULES:
         "priority": "third",
         "summary": "[3 bullet points: who they are, why now, how to reach them]",
         "searchQuery": "[Business category + specific area + city that finds POTENTIAL BUYERS, not competitors. Null for any ICP of individual people.]",
-        "revenuePerCustomer": "₹[X]/month",
+        "revenuePerCustomer": "₹[X]/month for recurring | ₹[X] per visit × [N] visits/month for repeat | ₹[X] per project for project | ₹[X] one-time for oneoff — match to REVENUE MODEL",
         "confidence": "LOW",
         "confidenceReason": "[One sentence]"
       }
@@ -6352,8 +6396,8 @@ INBOUND LINK MESSAGE RULES (for inboundStarter only):
     "velocityCalculation": {
       "currentRevenue": "₹[X]/month",
       "newCustomersTarget": 0,
-      "revenuePerCustomer": "₹[X]/month",
-      "revenueIfTargetsHit": "₹[X]/month",
+      "revenuePerCustomer": "₹[X]/month for recurring | ₹[X] per visit × [N] visits/month for repeat | ₹[X] per project for project | ₹[X] one-time for oneoff — match to REVENUE MODEL",
+      "revenueIfTargetsHit": "₹[X]/month for recurring and repeat | ₹[X] in project revenue for project | ₹[X] in new enrolments for oneoff",
       "pipelineValue": "₹[X]"
     },
     "projection90Day": {
@@ -6996,9 +7040,12 @@ RULES FOR TRANSPARENT NUMBERS:
   market type benchmarks:
   "Typical [market type] catchment for
   [business type]: [X] households within [Y]km"
-— Revenue calculations must show:
-  customers × transaction value × frequency
-  not just the final monthly figure
+— Revenue calculations must show the full working:
+  recurring: customers × monthly fee
+  repeat: customers × transaction value × purchase frequency
+  project: projects won × project value
+  oneoff: new customers × transaction value (one-time)
+  Never show just the final figure without the components
 — Conversion probability must have
   one sentence of reasoning:
   "HIGH — habit not yet formed,
