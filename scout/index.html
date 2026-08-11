@@ -1095,7 +1095,7 @@ function showDashboard(history, weekNum, firmName) {
   }
 
   /* ── INBOUND LINKS CARD ── */
-  initInboundCard(pendingData, pendingParsed, token);
+  initInboundCard(pendingData, pendingParsed);
 
   /* ── MONDAY BRIEFING (Feature 3.1) ── */
   var dayOfWeek = new Date().getDay(); /* 1 = Monday */
@@ -1449,9 +1449,14 @@ function renderInboundLinksState(card, links, clicks) {
 
 /* Init: fetch existing stats, then set up the card and delegated listener.
    Guard: if businessPhone is absent, do nothing — card stays hidden. */
-async function initInboundCard(pendingData, pendingParsed, token) {
+async function initInboundCard(pendingData, pendingParsed) {
   var card = document.getElementById('inboundCard');
   if (!card) return;
+
+  /* Read token here — same pattern as scout.js line 104 and result.html line 3363.
+     token is declared inside DOMContentLoaded and is not in showDashboard's scope. */
+  var token = localStorage.getItem('g7_session_token') || '';
+  if (!token) return;
 
   /* Require businessPhone — if absent, leave card hidden, fire no fetch */
   var businessPhone = (pendingData && pendingData.businessData && pendingData.businessData.businessPhone) || '';
