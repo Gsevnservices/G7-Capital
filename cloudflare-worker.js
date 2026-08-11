@@ -131,7 +131,7 @@ async function validateSession(request, env) {
 // MAIN HANDLER
 // ─────────────────────────────────────────────────────────────────────────────
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
 
     // Normalise pathname — strip trailing slash so /auth/login and
     // /auth/login/ both match
@@ -1341,11 +1341,13 @@ export default {
         });
       }
 
-      // Increment click counter — fire-and-forget, never blocks the redirect
+      // Increment click counter after the redirect is sent.
+      // ctx.waitUntil() keeps the KV write alive after the 302 response is returned —
+      // without it the Worker is terminated immediately on redirect and the write is lost.
       const clickKey = 'scout:inbound:' + link.firmCode + ':' + link.source + ':clicks';
       const clickRaw = await env.G7_KV.get(clickKey);
       const clicks   = clickRaw ? parseInt(clickRaw, 10) : 0;
-      env.G7_KV.put(clickKey, String(clicks + 1)); // intentionally not awaited
+      ctx.waitUntil(env.G7_KV.put(clickKey, String(clicks + 1)));
 
       // Build wa.me URL and redirect
       const waUrl = 'https://wa.me/' + link.waNumber +
