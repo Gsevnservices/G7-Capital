@@ -1250,8 +1250,22 @@ window.addEventListener('DOMContentLoaded', async function() {
     (businessData.location || '') + ' · Scout Customer Acquisition System';
   document.getElementById('actionBarBiz').textContent = bizName + ' — Scout Analysis';
 
-  /* Parse and render — reasoning panel is now handled inside parseAndRender */
-  parseAndRender(scoutRaw, businessData);
+  /* Parse and render — reasoning panel is now handled inside parseAndRender.
+     The finally block guarantees every tab panel clears its spinner even if
+     parseAndRender exits early or an uncaught exception escapes. */
+  try {
+    parseAndRender(scoutRaw, businessData);
+  } finally {
+    /* Clear any tab panel that still shows a spinner — write an empty string
+       so the panel is blank rather than spinning forever. Only clears panels
+       that parseAndRender did not already write to. */
+    ['tab1Content','tab2Content','tab3Content','tab4Content','tab5Content','wacContent'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.querySelector('.result-loading')) {
+        el.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">This section could not be rendered. Re-run the analysis to fix this.</div>';
+      }
+    });
+  }
 
   /* Show Scout Insight card if one exists from the most recent check-in.
      insightWeek is the week number when the insight was generated.
@@ -1508,42 +1522,83 @@ function parseAndRender(rawOutput, biz) {
     document.getElementById('metricAcq').textContent     = h.acquisitionEfficiency || '—';
     renderHealthBlock();
     scoutData = data;
-    renderTab1JSON(data.tab1, data);
-    /* Append competitor watch + WhatsApp calendar from tab3 into My Plan (tab1Content) */
-    (function() {
-      var _t3 = data.tab3 || {};
-      var _el1 = document.getElementById('tab1Content');
-      if (!_el1) return;
-      var _extra = '';
-      var _comp = _t3.competitorWatch || {};
-      if (_comp.competitor) {
-        _extra += '<div class="comp-watch-card">';
-        _extra += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'compPanel\',\'compArrow\')">';
-        _extra += '<span id="compArrow">▶</span>&nbsp;What competitors are doing</button>';
-        _extra += '<div id="compPanel" style="display:none;margin-top:12px"><div class="comp-watch-body">';
-        _extra += '<div style="margin-bottom:6px"><strong style="color:var(--white)">' + escHtml(_comp.competitor) + '</strong></div>';
-        if (_comp.likelyDoing)  _extra += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(plainLang(_comp.likelyDoing)) + '</div>';
-        if (_comp.yourResponse) _extra += '<div>Your response: ' + escHtml(plainLang(_comp.yourResponse)) + '</div>';
-        _extra += '</div></div></div>';
-      }
-      if (_extra) _el1.innerHTML += _extra;
-    })();
+
+    /* ── Section renderers — each wrapped individually so one malformed section
+       cannot prevent any other section from rendering or leave a spinner showing.
+       The finally block below guarantees every tab panel clears its spinner. ── */
+    try { renderTab1JSON(data.tab1, data); } catch(_e1) {
+      console.error('renderTab1JSON threw:', _e1);
+      var _el1Err = document.getElementById('tab1Content');
+      if (_el1Err) _el1Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Your plan could not be rendered for this section. Re-run the analysis to fix this.</div>';
+    }
+
+    /* Append competitor watch into My Plan (tab1Content) */
+    try {
+      (function() {
+        var _t3 = data.tab3 || {};
+        var _el1 = document.getElementById('tab1Content');
+        if (!_el1) return;
+        var _extra = '';
+        var _comp = _t3.competitorWatch || {};
+        if (_comp.competitor) {
+          _extra += '<div class="comp-watch-card">';
+          _extra += '<button class="festival-toggle-btn" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:\'Tenor Sans\',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1);padding:0;margin-bottom:0" onclick="toggleCollapse(\'compPanel\',\'compArrow\')">';
+          _extra += '<span id="compArrow">▶</span>&nbsp;What competitors are doing</button>';
+          _extra += '<div id="compPanel" style="display:none;margin-top:12px"><div class="comp-watch-body">';
+          _extra += '<div style="margin-bottom:6px"><strong style="color:var(--white)">' + escHtml(_comp.competitor) + '</strong></div>';
+          if (_comp.likelyDoing)  _extra += '<div style="margin-bottom:4px">They\'re likely: ' + escHtml(plainLang(_comp.likelyDoing)) + '</div>';
+          if (_comp.yourResponse) _extra += '<div>Your response: ' + escHtml(plainLang(_comp.yourResponse)) + '</div>';
+          _extra += '</div></div></div>';
+        }
+        if (_extra) _el1.innerHTML += _extra;
+      })();
+    } catch(_eComp) { console.error('Competitor watch threw:', _eComp); }
+
     /* Attach delegated listener for Customer Finder buttons now that
        tab1Content is fully written (renderTab1JSON + competitor watch). */
-    attachCFListeners();
-    /* WhatsApp calendar goes into its own dedicated tab panel */
-    (function() {
-      var _wacEl = document.getElementById('wacContent');
-      if (!_wacEl) return;
-      var _wacHtml = renderWhatsAppCalendar((data.tab3 || {}).whatsappCalendar);
-      _wacEl.innerHTML = _wacHtml || '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
-    })();
-    renderTab2JSON(data.tab2, data.tab1);
-    renderTab3JSON(data.tab3, data);
-    renderWeekTargets(data.tab4);
-    renderTab4JSON(data.tab4, biz);
-    renderWhatsNextTab(data.tab4, data.tab5);
-    updateReasoningPanel(data);
+    try { attachCFListeners(); } catch(_eCF) { console.error('attachCFListeners threw:', _eCF); }
+
+    /* WhatsApp calendar — its own tab panel */
+    try {
+      (function() {
+        var _wacEl = document.getElementById('wacContent');
+        if (!_wacEl) return;
+        var _wacHtml = renderWhatsAppCalendar((data.tab3 || {}).whatsappCalendar);
+        _wacEl.innerHTML = _wacHtml || '<div class="result-section-body" style="color:var(--grey1);font-size:13px;padding:24px 0">Your WhatsApp calendar appears here after your next analysis.</div>';
+      })();
+    } catch(_eWac) {
+      console.error('renderWhatsAppCalendar threw:', _eWac);
+      var _wacErr = document.getElementById('wacContent');
+      if (_wacErr) _wacErr.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">WhatsApp calendar could not be rendered. Re-run the analysis to fix this.</div>';
+    }
+
+    try { renderTab2JSON(data.tab2, data.tab1); } catch(_e2) {
+      console.error('renderTab2JSON threw:', _e2);
+      /* tab2Content is hidden — no visible fallback needed */
+    }
+
+    try { renderTab3JSON(data.tab3, data); } catch(_e3) {
+      console.error('renderTab3JSON threw:', _e3);
+      var _el3Err = document.getElementById('tab3Content');
+      if (_el3Err) _el3Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">This week\'s action plan could not be rendered. Re-run the analysis to fix this.</div>';
+    }
+
+    try { renderWeekTargets(data.tab4); } catch(_eWt) { console.error('renderWeekTargets threw:', _eWt); }
+
+    try { renderTab4JSON(data.tab4, biz); } catch(_e4) {
+      console.error('renderTab4JSON threw:', _e4);
+      var _el4Err = document.getElementById('tab4Content');
+      if (_el4Err) _el4Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Customer tools could not be rendered. Re-run the analysis to fix this.</div>';
+    }
+
+    try { renderWhatsNextTab(data.tab4, data.tab5); } catch(_e5) {
+      console.error('renderWhatsNextTab threw:', _e5);
+      var _el5Err = document.getElementById('tab5Content');
+      if (_el5Err) _el5Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Expansion plan could not be rendered. Re-run the analysis to fix this.</div>';
+    }
+
+    try { updateReasoningPanel(data); } catch(_eRp) { console.error('updateReasoningPanel threw:', _eRp); }
+
     return;
   }
 
@@ -2333,115 +2388,123 @@ function renderTab4JSON(tab4, biz) {
   var html = '';
 
   /* ── Referral Engine (from JSON) ── */
-  var re = t4.referralEngine;
-  if (re) {
-    /* Schema guard: new schema has offer.line; old schema has programName.
-       If this is an old-schema analysis, skip the referral engine block entirely
-       rather than rendering a broken half-view. Lost Customer Recovery still renders. */
-    var isNewSchema = re.offer && typeof re.offer.line === 'string';
-    var isOldSchema = !isNewSchema && re.programName;
-    if (isOldSchema) {
-      console.log('renderTab4JSON: old referralEngine schema detected (programName present, offer.line absent). Referral engine section skipped — re-run analysis to get the updated layout.');
-    }
+  try {
+    var re = t4.referralEngine;
+    if (re) {
+      /* Schema guard: distinguishing field is moments being a real array.
+         Hybrid analyses (old-schema fields present BUT offer also present,
+         moments absent/undefined) pass the old offer.line test but then throw
+         on moments iteration — so we test the field that actually matters. */
+      var isNewSchema = Array.isArray(re.moments);
+      if (!isNewSchema) {
+        console.log('renderTab4JSON: referralEngine missing moments array — old or hybrid schema. Referral engine section skipped. Re-run analysis to get the updated layout.');
+      } else {
+        html += '<div class="ref-engine-section">';
+        html += '<div class="ref-engine-heading">Your Referral Engine</div>';
+        html += '<div class="ref-engine-sub">Scout has built a referral system calibrated for your business type. Activate it this week.</div>';
 
-    if (isNewSchema) {
-      html += '<div class="ref-engine-section">';
-      html += '<div class="ref-engine-heading">Your Referral Engine</div>';
-      html += '<div class="ref-engine-sub">Scout has built a referral system calibrated for your business type. Activate it this week.</div>';
+        /* ── 1. THE OFFER ── */
+        var offer = re.offer || {};
+        html += '<div class="ref-program-card">';
+        /* offer.line — prominent headline */
+        if (offer.line) {
+          html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;font-weight:300;color:var(--white);line-height:1.35;margin-bottom:16px">' + escHtml(offer.line) + '</div>';
+        }
+        /* Two cells: They get / You get */
+        html += '<div class="ref-reward-pills">';
+        html += '<div class="ref-reward-pill"><div class="ref-pill-label">They Get</div><div class="ref-pill-value">' + escHtml(offer.referredGets || '—') + '</div></div>';
+        html += '<div class="ref-reward-pill"><div class="ref-pill-label">You Get</div><div class="ref-pill-value">' + escHtml(offer.referrerGets || '—') + '</div></div>';
+        html += '</div>';
+        /* howToRedeem */
+        if (offer.howToRedeem) {
+          html += '<div class="ref-champion-note"><span style="color:var(--white2)">How it works:</span> ' + escHtml(offer.howToRedeem) + '</div>';
+        }
+        html += '</div>';
 
-      /* ── 1. THE OFFER ── */
-      var offer = re.offer;
-      html += '<div class="ref-program-card">';
-      /* offer.line — prominent headline */
-      if (offer.line) {
-        html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;font-weight:300;color:var(--white);line-height:1.35;margin-bottom:16px">' + escHtml(offer.line) + '</div>';
-      }
-      /* Two cells: They get / You get */
-      html += '<div class="ref-reward-pills">';
-      html += '<div class="ref-reward-pill"><div class="ref-pill-label">They Get</div><div class="ref-pill-value">' + escHtml(offer.referredGets || '—') + '</div></div>';
-      html += '<div class="ref-reward-pill"><div class="ref-pill-label">You Get</div><div class="ref-pill-value">' + escHtml(offer.referrerGets || '—') + '</div></div>';
-      html += '</div>';
-      /* howToRedeem */
-      if (offer.howToRedeem) {
-        html += '<div class="ref-champion-note"><span style="color:var(--white2)">How it works:</span> ' + escHtml(offer.howToRedeem) + '</div>';
-      }
-      html += '</div>';
-
-      /* ── 2. WHEN TO ASK ── */
-      var moments = Array.isArray(re.moments) ? re.moments : [];
-      if (moments.length > 0) {
-        html += '<div class="ref-chain-wrap">';
-        html += '<div class="ref-chain-heading">When To Ask</div>';
-        moments.forEach(function(m, mi) {
-          if (!m || !m.trigger) return;
-          var isWa  = (m.channel || '').toLowerCase() === 'whatsapp';
-          var elId  = 'refM_' + mi;
-          var chLbl = isWa ? 'Send this' : 'Say this';
-          html += '<div class="ref-tier">';
-          html += '<div class="ref-tier-label">' + escHtml(m.trigger) + '</div>';
-          if (m.whatToSay) {
-            html += '<div class="ref-msg-block">';
-            html += '<div class="ref-msg-type">' + escHtml(chLbl) + '</div>';
-            html += '<div class="ref-msg-row">';
-            html += '<div class="ref-msg-text" id="' + elId + '">' + escHtml(m.whatToSay) + '</div>';
-            /* Copy on every moment */
-            html += '<button class="ref-copy-btn" onclick="refCopy(\'' + elId + '\',this)">Copy</button>';
-            /* WhatsApp button only for whatsapp channel */
-            if (isWa) {
-              html += '<button class="ref-copy-btn" onclick="waSendFromEl(\'' + elId + '\',this)">Send on WhatsApp</button>';
+        /* ── 2. WHEN TO ASK ── */
+        var moments = re.moments; /* already confirmed Array.isArray above */
+        if (moments.length > 0) {
+          html += '<div class="ref-chain-wrap">';
+          html += '<div class="ref-chain-heading">When To Ask</div>';
+          moments.forEach(function(m, mi) {
+            if (!m || !m.trigger) return;
+            var isWa  = (m.channel || '').toLowerCase() === 'whatsapp';
+            var elId  = 'refM_' + mi;
+            var chLbl = isWa ? 'Send this' : 'Say this';
+            html += '<div class="ref-tier">';
+            html += '<div class="ref-tier-label">' + escHtml(m.trigger) + '</div>';
+            if (m.whatToSay) {
+              html += '<div class="ref-msg-block">';
+              html += '<div class="ref-msg-type">' + escHtml(chLbl) + '</div>';
+              html += '<div class="ref-msg-row">';
+              html += '<div class="ref-msg-text" id="' + elId + '">' + escHtml(m.whatToSay) + '</div>';
+              /* Copy on every moment */
+              html += '<button class="ref-copy-btn" onclick="refCopy(\'' + elId + '\',this)">Copy</button>';
+              /* WhatsApp button only for whatsapp channel */
+              if (isWa) {
+                html += '<button class="ref-copy-btn" onclick="waSendFromEl(\'' + elId + '\',this)">Send on WhatsApp</button>';
+              }
+              html += '</div></div>';
             }
-            html += '</div></div>';
-          }
+            html += '</div>';
+          });
           html += '</div>';
-        });
-        html += '</div>';
-      }
+        }
 
-      /* ── 3. TELL EVERYONE ── */
-      if (re.broadcast) {
-        html += '<div class="ref-chain-wrap">';
-        html += '<div class="ref-chain-heading">Tell Everyone</div>';
-        html += '<div class="ref-tier">';
-        html += '<div class="ref-tier-label">Send this once to your full customer list</div>';
-        html += '<div class="ref-msg-block">';
-        html += '<div class="ref-msg-row">';
-        html += '<div class="ref-msg-text" id="refBcast">' + escHtml(re.broadcast) + '</div>';
-        html += '<button class="ref-copy-btn" onclick="refCopy(\'refBcast\',this)">Copy</button>';
-        html += '<button class="ref-copy-btn" onclick="waSendFromEl(\'refBcast\',this)">Send on WhatsApp</button>';
-        html += '</div></div>';
-        html += '</div></div>';
-      }
+        /* ── 3. TELL EVERYONE ── */
+        if (re.broadcast) {
+          html += '<div class="ref-chain-wrap">';
+          html += '<div class="ref-chain-heading">Tell Everyone</div>';
+          html += '<div class="ref-tier">';
+          html += '<div class="ref-tier-label">Send this once to your full customer list</div>';
+          html += '<div class="ref-msg-block">';
+          html += '<div class="ref-msg-row">';
+          html += '<div class="ref-msg-text" id="refBcast">' + escHtml(re.broadcast) + '</div>';
+          html += '<button class="ref-copy-btn" onclick="refCopy(\'refBcast\',this)">Copy</button>';
+          html += '<button class="ref-copy-btn" onclick="waSendFromEl(\'refBcast\',this)">Send on WhatsApp</button>';
+          html += '</div></div>';
+          html += '</div></div>';
+        }
 
-      /* ── 4. KEEP IT RUNNING ── */
-      if (re.keepItRunning) {
-        html += '<div style="background:rgba(224,146,47,0.06);border:1px solid var(--border);border-left:2px solid var(--gold);padding:14px 20px;margin-bottom:24px">';
-        html += '<div class="ref-chain-heading" style="margin-bottom:8px">Keep It Running</div>';
-        html += '<div style="font-size:12px;color:var(--white2);line-height:1.7">' + escHtml(re.keepItRunning) + '</div>';
-        html += '</div>';
-      }
+        /* ── 4. KEEP IT RUNNING ── */
+        if (re.keepItRunning) {
+          html += '<div style="background:rgba(224,146,47,0.06);border:1px solid var(--border);border-left:2px solid var(--gold);padding:14px 20px;margin-bottom:24px">';
+          html += '<div class="ref-chain-heading" style="margin-bottom:8px">Keep It Running</div>';
+          html += '<div style="font-size:12px;color:var(--white2);line-height:1.7">' + escHtml(re.keepItRunning) + '</div>';
+          html += '</div>';
+        }
 
-      /* ── 5. REGULAR REFERRERS ── */
-      var champ = re.championTier || {};
-      if (champ.label) {
-        html += '<div class="ref-champion-note" style="margin-bottom:24px">';
-        html += 'Send <strong style="color:var(--white2)">' + escHtml(String(champ.threshold || 3)) + '+</strong> referrals ';
-        html += '→ earn <strong style="color:var(--gold)">' + escHtml(champ.label) + '</strong> status';
-        if (champ.reward) html += ': ' + escHtml(champ.reward);
-        html += '</div>';
-      }
+        /* ── 5. REGULAR REFERRERS ── */
+        var champ = re.championTier || {};
+        if (champ.label) {
+          html += '<div class="ref-champion-note" style="margin-bottom:24px">';
+          html += 'Send <strong style="color:var(--white2)">' + escHtml(String(champ.threshold || 3)) + '+</strong> referrals ';
+          html += '→ earn <strong style="color:var(--gold)">' + escHtml(champ.label) + '</strong> status';
+          if (champ.reward) html += ': ' + escHtml(champ.reward);
+          html += '</div>';
+        }
 
-      /* ── 6. WHAT THIS COULD BE WORTH ── */
-      var proj = re.projection || {};
-      if (proj.summary) {
-        html += '<div style="font-size:11px;color:var(--grey2);line-height:1.7;padding-top:16px;border-top:1px solid var(--border2)">' + escHtml(proj.summary) + '</div>';
-      }
+        /* ── 6. WHAT THIS COULD BE WORTH ── */
+        var proj = re.projection || {};
+        if (proj.summary) {
+          html += '<div style="font-size:11px;color:var(--grey2);line-height:1.7;padding-top:16px;border-top:1px solid var(--border2)">' + escHtml(proj.summary) + '</div>';
+        }
 
-      html += '</div>'; /* end ref-engine-section */
+        html += '</div>'; /* end ref-engine-section */
+      }
     }
+  } catch (_reErr) {
+    console.error('renderTab4JSON: referral engine threw —', _reErr);
+    html += '<div style="font-size:11px;color:var(--grey2);padding:12px 0">Referral engine could not be rendered for this analysis.</div>';
   }
 
   /* Lost Customer Recovery appended after referral engine */
-  html += renderLostCustomerRecovery(t4.lostCustomerRecovery);
+  try {
+    html += renderLostCustomerRecovery(t4.lostCustomerRecovery);
+  } catch (_lcrErr) {
+    console.error('renderTab4JSON: lost customer recovery threw —', _lcrErr);
+    html += '<div style="font-size:11px;color:var(--grey2);padding:12px 0">Lost customer recovery could not be rendered for this analysis.</div>';
+  }
 
   document.getElementById('tab4Content').innerHTML = html;
 }
