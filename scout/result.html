@@ -2335,121 +2335,109 @@ function renderTab4JSON(tab4, biz) {
   /* ── Referral Engine (from JSON) ── */
   var re = t4.referralEngine;
   if (re) {
-    html += '<div class="ref-engine-section">';
-    html += '<div class="ref-engine-heading">Your Referral Engine</div>';
-    html += '<div class="ref-engine-sub">Scout has built a referral system calibrated for your business type. Copy the messages and activate it this week.</div>';
-
-    /* Program Overview */
-    html += '<div class="ref-program-card">';
-    if (re.programName) {
-      html += '<div class="ref-program-name">' + escHtml(re.programName) + '</div>';
+    /* Schema guard: new schema has offer.line; old schema has programName.
+       If this is an old-schema analysis, skip the referral engine block entirely
+       rather than rendering a broken half-view. Lost Customer Recovery still renders. */
+    var isNewSchema = re.offer && typeof re.offer.line === 'string';
+    var isOldSchema = !isNewSchema && re.programName;
+    if (isOldSchema) {
+      console.log('renderTab4JSON: old referralEngine schema detected (programName present, offer.line absent). Referral engine section skipped — re-run analysis to get the updated layout.');
     }
-    var offer = re.offer || {};
-    html += '<div class="ref-reward-pills">';
-    html += '<div class="ref-reward-pill"><div class="ref-pill-label">You Get (Referrer)</div><div class="ref-pill-value">' + escHtml(offer.referrerGets || '—') + '</div></div>';
-    html += '<div class="ref-reward-pill"><div class="ref-pill-label">New Customer Gets</div><div class="ref-pill-value">' + escHtml(offer.referredGets || '—') + '</div></div>';
-    html += '</div>';
-    if (offer.offerDuration) {
-      html += '<div class="ref-champion-note">Valid: ' + escHtml(offer.offerDuration) + '</div>';
-    }
-    var champ = re.championTier || {};
-    if (champ.label) {
-      html += '<div class="ref-champion-note" style="margin-top:6px">Send ' + (champ.threshold || 3) + '+ referrals → earn <strong style="color:var(--gold)">' + escHtml(champ.label) + '</strong> status: ' + escHtml(champ.reward || '') + '</div>';
-    }
-    html += '</div>';
 
-    /* The Chain */
-    var chain = re.chain || {};
-    var tier1 = chain.tier1 || {};
-    var tier2 = chain.tier2 || {};
-    var tier3 = chain.tier3 || {};
-    html += '<div class="ref-chain-wrap">';
-    html += '<div class="ref-chain-heading">The Referral Chain</div>';
+    if (isNewSchema) {
+      html += '<div class="ref-engine-section">';
+      html += '<div class="ref-engine-heading">Your Referral Engine</div>';
+      html += '<div class="ref-engine-sub">Scout has built a referral system calibrated for your business type. Activate it this week.</div>';
 
-    /* Tier 1 */
-    html += '<div class="ref-tier">';
-    html += '<div class="ref-tier-label">Tier 1 — Activate First</div>';
-    if (tier1.who) html += '<div class="ref-tier-who">' + escHtml(tier1.who) + '</div>';
-    var msgs1 = [
-      { type: 'WhatsApp Message', text: tier1.message_whatsapp },
-      { type: 'In Person',        text: tier1.message_inperson },
-      { type: 'Follow-Up (Day 7)', text: tier1.message_followup }
-    ];
-    msgs1.forEach(function(m, mi) {
-      if (!m.text) return;
-      html += '<div class="ref-msg-block">';
-      html += '<div class="ref-msg-type">' + escHtml(m.type) + '</div>';
-      html += '<div class="ref-msg-row">';
-      html += '<div class="ref-msg-text" id="refMsg1_' + mi + '">' + escHtml(m.text) + '</div>';
-      html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg1_' + mi + '\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'refMsg1_' + mi + '\',this)">Send on WhatsApp</button>';
-      html += '</div></div>';
-    });
-    html += '</div>';
-
-    /* Tier 2 */
-    if (tier2.who || tier2.message_whatsapp) {
-      html += '<div class="ref-tier">';
-      html += '<div class="ref-tier-label">Tier 2 — Second Wave</div>';
-      if (tier2.who) html += '<div class="ref-tier-who">' + escHtml(tier2.who) + '</div>';
-      if (tier2.activationTrigger) {
-        html += '<div class="ref-tier-who" style="color:var(--grey2)">Activate when: ' + escHtml(tier2.activationTrigger) + '</div>';
+      /* ── 1. THE OFFER ── */
+      var offer = re.offer;
+      html += '<div class="ref-program-card">';
+      /* offer.line — prominent headline */
+      if (offer.line) {
+        html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:22px;font-weight:300;color:var(--white);line-height:1.35;margin-bottom:16px">' + escHtml(offer.line) + '</div>';
       }
-      if (tier2.message_whatsapp) {
+      /* Two cells: They get / You get */
+      html += '<div class="ref-reward-pills">';
+      html += '<div class="ref-reward-pill"><div class="ref-pill-label">They Get</div><div class="ref-pill-value">' + escHtml(offer.referredGets || '—') + '</div></div>';
+      html += '<div class="ref-reward-pill"><div class="ref-pill-label">You Get</div><div class="ref-pill-value">' + escHtml(offer.referrerGets || '—') + '</div></div>';
+      html += '</div>';
+      /* howToRedeem */
+      if (offer.howToRedeem) {
+        html += '<div class="ref-champion-note"><span style="color:var(--white2)">How it works:</span> ' + escHtml(offer.howToRedeem) + '</div>';
+      }
+      html += '</div>';
+
+      /* ── 2. WHEN TO ASK ── */
+      var moments = Array.isArray(re.moments) ? re.moments : [];
+      if (moments.length > 0) {
+        html += '<div class="ref-chain-wrap">';
+        html += '<div class="ref-chain-heading">When To Ask</div>';
+        moments.forEach(function(m, mi) {
+          if (!m || !m.trigger) return;
+          var isWa  = (m.channel || '').toLowerCase() === 'whatsapp';
+          var elId  = 'refM_' + mi;
+          var chLbl = isWa ? 'Send this' : 'Say this';
+          html += '<div class="ref-tier">';
+          html += '<div class="ref-tier-label">' + escHtml(m.trigger) + '</div>';
+          if (m.whatToSay) {
+            html += '<div class="ref-msg-block">';
+            html += '<div class="ref-msg-type">' + escHtml(chLbl) + '</div>';
+            html += '<div class="ref-msg-row">';
+            html += '<div class="ref-msg-text" id="' + elId + '">' + escHtml(m.whatToSay) + '</div>';
+            /* Copy on every moment */
+            html += '<button class="ref-copy-btn" onclick="refCopy(\'' + elId + '\',this)">Copy</button>';
+            /* WhatsApp button only for whatsapp channel */
+            if (isWa) {
+              html += '<button class="ref-copy-btn" onclick="waSendFromEl(\'' + elId + '\',this)">Send on WhatsApp</button>';
+            }
+            html += '</div></div>';
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+
+      /* ── 3. TELL EVERYONE ── */
+      if (re.broadcast) {
+        html += '<div class="ref-chain-wrap">';
+        html += '<div class="ref-chain-heading">Tell Everyone</div>';
+        html += '<div class="ref-tier">';
+        html += '<div class="ref-tier-label">Send this once to your full customer list</div>';
         html += '<div class="ref-msg-block">';
-        html += '<div class="ref-msg-type">WhatsApp Message</div>';
         html += '<div class="ref-msg-row">';
-        html += '<div class="ref-msg-text" id="refMsg2_0">' + escHtml(tier2.message_whatsapp) + '</div>';
-        html += '<button class="ref-copy-btn" onclick="refCopy(\'refMsg2_0\',this)">Copy</button><button class="ref-copy-btn" onclick="waSendFromEl(\'refMsg2_0\',this)">Send on WhatsApp</button>';
+        html += '<div class="ref-msg-text" id="refBcast">' + escHtml(re.broadcast) + '</div>';
+        html += '<button class="ref-copy-btn" onclick="refCopy(\'refBcast\',this)">Copy</button>';
+        html += '<button class="ref-copy-btn" onclick="waSendFromEl(\'refBcast\',this)">Send on WhatsApp</button>';
+        html += '</div></div>';
         html += '</div></div>';
       }
-      html += '</div>';
-    }
 
-    /* Tier 3 */
-    if (tier3.mechanism || tier3.amplifier) {
-      html += '<div class="ref-tier">';
-      html += '<div class="ref-tier-label">Tier 3 — Organic Spread</div>';
-      if (tier3.mechanism) html += '<div class="ref-tier3-note">' + escHtml(tier3.mechanism) + '</div>';
-      if (tier3.amplifier) {
-        html += '<div style="font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;margin-top:8px">Amplifier</div>';
-        html += '<div class="ref-tier3-note">' + escHtml(tier3.amplifier) + '</div>';
-      }
-      html += '</div>';
-    }
-    html += '</div>';
-
-    /* Projection */
-    var proj = re.projection || {};
-    if (proj.revenueWeek4 || proj.revenueWeek12) {
-      html += '<div class="ref-projection-card">';
-      html += '<div class="ref-projection-heading">Projected Impact</div>';
-      html += '<div class="ref-projection-grid">';
-      html += '<div class="ref-metric"><div class="ref-metric-val">' + escHtml(String(proj.week4Referrals || '—')) + '</div><div class="ref-metric-label">Referrals by Week 4</div></div>';
-      html += '<div class="ref-metric"><div class="ref-metric-val">' + escHtml(String(proj.week12Referrals || '—')) + '</div><div class="ref-metric-label">Referrals by Week 12</div></div>';
-      html += '<div class="ref-metric"><div class="ref-metric-val">' + escHtml(proj.revenueWeek4 || '—') + '</div><div class="ref-metric-label">Revenue Week 4</div></div>';
-      html += '<div class="ref-metric"><div class="ref-metric-val" style="color:var(--gold)">' + escHtml(proj.revenueWeek12 || '—') + '</div><div class="ref-metric-label">Revenue Week 12</div></div>';
-      html += '</div>';
-      if (proj.roi) {
-        html += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border2);font-size:10px;color:var(--grey2)">Program Cost: ' + escHtml(proj.programCost || '—') + ' &nbsp;·&nbsp; ROI: <strong style="color:var(--gold)">' + escHtml(proj.roi) + '</strong></div>';
-      }
-      html += '</div>';
-    }
-
-    /* Week 1 Actions */
-    var actions = re.weekOneActions || [];
-    if (actions.length > 0) {
-      html += '<div class="ref-actions-wrap">';
-      html += '<div class="ref-actions-heading">Week 1 Actions — Do These First</div>';
-      actions.forEach(function(action, ai) {
-        html += '<div class="ref-action-item">';
-        html += '<div class="ref-action-num">' + (ai + 1) + '</div>';
-        html += '<div class="ref-action-text">' + escHtml(action) + '</div>';
+      /* ── 4. KEEP IT RUNNING ── */
+      if (re.keepItRunning) {
+        html += '<div style="background:rgba(224,146,47,0.06);border:1px solid var(--border);border-left:2px solid var(--gold);padding:14px 20px;margin-bottom:24px">';
+        html += '<div class="ref-chain-heading" style="margin-bottom:8px">Keep It Running</div>';
+        html += '<div style="font-size:12px;color:var(--white2);line-height:1.7">' + escHtml(re.keepItRunning) + '</div>';
         html += '</div>';
-      });
-      html += '</div>';
-    }
+      }
 
-    html += '</div>'; /* end ref-engine-section */
+      /* ── 5. REGULAR REFERRERS ── */
+      var champ = re.championTier || {};
+      if (champ.label) {
+        html += '<div class="ref-champion-note" style="margin-bottom:24px">';
+        html += 'Send <strong style="color:var(--white2)">' + escHtml(String(champ.threshold || 3)) + '+</strong> referrals ';
+        html += '→ earn <strong style="color:var(--gold)">' + escHtml(champ.label) + '</strong> status';
+        if (champ.reward) html += ': ' + escHtml(champ.reward);
+        html += '</div>';
+      }
+
+      /* ── 6. WHAT THIS COULD BE WORTH ── */
+      var proj = re.projection || {};
+      if (proj.summary) {
+        html += '<div style="font-size:11px;color:var(--grey2);line-height:1.7;padding-top:16px;border-top:1px solid var(--border2)">' + escHtml(proj.summary) + '</div>';
+      }
+
+      html += '</div>'; /* end ref-engine-section */
+    }
   }
 
   /* Lost Customer Recovery appended after referral engine */

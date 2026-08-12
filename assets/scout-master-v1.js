@@ -6381,6 +6381,40 @@ INBOUND LINK MESSAGE RULES (for inboundStarter only):
       }
     }
   },
+
+REFERRAL ENGINE RULES:
+
+— moments must contain 3–5 entries. Draw each trigger directly from this
+  business type's referral playbook in Component 3 — the TRIGGER MOMENT
+  and TIER 2 AMPLIFIER fields are your source. Do not invent moments that
+  are not grounded in observable events in that specific business.
+  Each trigger must be a real observable event: a completion, a compliment,
+  a milestone, a repeat visit. Never use a calendar date as a trigger.
+  Wrong: "Every Friday" or "After 30 days". Right: "The day the student
+  passes their RTO test" or "When a customer compliments the finish".
+
+— Never name individual customers in any referralEngine field. Named
+  people belong in the pipeline (referral chain analysis). This is the
+  system — the offer, the moments, the words — not the contact list.
+
+— whatToSay must differ across moments. The words that fit a compliment
+  moment are not the words that fit a milestone or a post-delivery moment.
+  Do not reuse phrases across entries.
+
+— howToRedeem must work without any tracking system. No codes, no
+  spreadsheets, no logins. A staff member who has never been briefed must
+  be able to apply it correctly on the first encounter. If it requires
+  any infrastructure to operate, it is wrong.
+
+— The offer.line must be sayable from memory by the owner or any staff
+  member in under five seconds. Test it: if it takes two sentences to
+  explain the offer, it is not a line — it is a paragraph. Rewrite it.
+
+— projection.summary is one sentence with two numbers: referrals expected
+  and approximate revenue, followed by the approximate cost. No table.
+  No month-by-month breakdown. The owner needs to know if it is worth it,
+  not a spreadsheet.
+
   "tab4": {
     "icpTargets": [
       {"icp": "[ICP 1 name]", "outreachTarget": 0, "responseTarget": 0, "conversionTarget": 0},
@@ -6412,54 +6446,29 @@ INBOUND LINK MESSAGE RULES (for inboundStarter only):
     },
     "fridayReminder": "[Specific sentence about what Scout will adjust next week]",
     "referralEngine": {
-      "programName": "[Business-specific referral program name — e.g. 'Vishwas Laao, Inam Pao' or 'Refer a Friend, Get a Free Month']",
       "offer": {
-        "referrerGets": "[Non-cash reward — service discount, free item, or upgrade. 8–12% of average transaction value]",
-        "referredGets": "[Welcome offer for new customer — specific and time-limited, e.g. '10% off first order']",
-        "offerDuration": "[Time window — e.g. 'Reward valid for 30 days after referral converts']",
-        "estimatedCost": "₹[X] per referral (8–12% of average transaction value)"
+        "line": "[One sentence the owner can say out loud at the counter. Under 15 words. e.g. 'Bring a friend — their first coffee is free and your next one is on us.']",
+        "referrerGets": "[Non-cash reward, 8–12% of average transaction value]",
+        "referredGets": "[Welcome offer for the new customer — specific and time-limited]",
+        "howToRedeem": "[The one rule that makes it work at the counter — e.g. 'They mention who sent them' or 'They show the WhatsApp message'. Must be simple enough that any staff member can apply it without checking anything.]"
       },
-      "trackingSystem": {
-        "method": "Name-based referral codes",
-        "referralCode": "[Customer first name]-Sends",
-        "howToTrack": "[Simple tracking — notebook entry, WhatsApp screenshot, or verbal mention at point of service]"
-      },
-      "chain": {
-        "tier1": {
-          "who": "[Description of the 3–5 best existing customers to activate first — loyal, social, frequent buyers]",
-          "message_whatsapp": "[Complete ready-to-send WhatsApp message in Hindi/local language. Mentions the reward, addresses recipient by name placeholder, specific and personal. 2–3 sentences.]",
-          "message_inperson": "[What to say face-to-face — conversational, warm, not a sales pitch. 1–2 sentences.]",
-          "message_followup": "[Follow-up WhatsApp message to send if no referral within 7 days — friendly nudge, no pressure]"
-        },
-        "tier2": {
-          "who": "[Second-degree contacts — neighbors, colleagues, family members of Tier 1 customers]",
-          "message_whatsapp": "[WhatsApp message explicitly referencing Tier 1 person by name — 'Ramesh bhai ne bheja']",
-          "activationTrigger": "[The event that signals it's time to ask Tier 2 — e.g. after first successful Tier 1 referral converts]"
-        },
-        "tier3": {
-          "mechanism": "[How Tier 2 referrals naturally produce Tier 3 without direct asking — social proof, visible usage, community spread]",
-          "amplifier": "[One specific action that accelerates organic spread — e.g. display board with referrer names, WhatsApp group post, thank-you shoutout]"
+      "moments": [
+        {
+          "trigger": "[The specific moment when asking feels natural, not awkward. Drawn from this business type's referral playbook in Component 3. e.g. 'The day a student passes their RTO test' or 'When a customer compliments something specific']",
+          "whatToSay": "[The exact words for this moment. Conversational. If in person, sounds like speech not a script. If a message, ready to send.]",
+          "channel": "[in-person | whatsapp]"
         }
-      },
-      "projection": {
-        "week4Referrals": 0,
-        "week12Referrals": 0,
-        "revenueWeek4": "₹[X]",
-        "revenueWeek12": "₹[X]",
-        "programCost": "₹[X] total (value of rewards given out)",
-        "roi": "[X]× return on referral investment"
-      },
+      ],
+      "broadcast": "[One WhatsApp message announcing the offer to the entire existing customer list. Sent once. Warm, not promotional.]",
+      "keepItRunning": "[The single weekly habit that stops this dying in week two. One specific repeatable action — e.g. 'Mention it in your WhatsApp status every Friday' or 'A card at the counter, restocked Monday'.]",
       "championTier": {
         "threshold": 3,
-        "label": "[Title for top referrers — e.g. 'Brand Ambassador', 'Vishwas Doost', 'Gold Referrer']",
-        "reward": "[Special ongoing reward for customers who send 3+ referrals — meaningful but still non-cash]",
-        "recognition": "[How to publicly acknowledge champions — name on board, WhatsApp group mention, priority service]"
+        "label": "[Title for repeat referrers]",
+        "reward": "[Ongoing non-cash reward]"
       },
-      "weekOneActions": [
-        "[Day 1 — Name the 3 customers to message first and paste their exact message]",
-        "[Day 3 — Follow-up action if no response, or next batch of 3 customers to activate]",
-        "[Day 7 — Review: who referred, who converted, who to escalate to Tier 2 outreach]"
-      ]
+      "projection": {
+        "summary": "[One line. e.g. '12 referrals by week 4 — about ₹66,000, at a cost of ₹2,160 in free coffees.']"
+      }
     },
     "lostCustomerRecovery": {
       "overview": "[One sentence: why recovering lost customers is higher ROI than acquiring new ones for this specific business type — reference the margin structure and zero acquisition cost]",
