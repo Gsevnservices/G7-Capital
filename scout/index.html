@@ -937,19 +937,33 @@ function showDashboard(history, weekNum, firmName) {
        start (Mon, Tue)       → D=1, C=2, B=3, A=4
        mid   (Wed, Thu)       → B=1, D=2, C=3, A=4
        end   (Fri, Sat, Sun)  → A=1, B=2, C=3, D=4
-     A forces position 0 (overrides day) when 7+ days since last check-in. */
+     A forces position 0 (overrides day) when 10+ days since the last check-in
+     and at least one check-in has been recorded. */
   var _tlEl = document.getElementById('todayList');
   if (_tlEl) {
     var todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
     var _dow = new Date().getDay();
 
-    /* ── Check-in condition — same as original overdue branch ── */
-    var daysSinceCheckin = 999;
-    if (last.submittedAt) {
-      daysSinceCheckin = Math.floor((Date.now() - new Date(last.submittedAt).getTime()) / 86400000);
-    }
-    var _checkinDue      = daysSinceCheckin >= 5;  /* task appears */
-    var _checkinForce1st = daysSinceCheckin >= 7;  /* overrides day-of-week to position 0 */
+    /* ── Check-in condition ──
+       last.submittedAt is the ISO timestamp on the most recent isCheckinEntry row.
+       Absent (new user, no check-ins ever) → neverCheckedIn = true.
+       daysSinceCheckin is only computed when a real timestamp exists — this prevents
+       "never checked in" from being treated as "infinitely overdue".
+
+       Rule 1 — Never checked in (week-1 user): task appears ONLY on Fri/Sat/Sun
+                 (the end-of-week group). Mon–Thu it must not appear at all.
+       Rule 2 — Has checked in: task appears whenever daysSinceCheckin >= 5,
+                 and forces position 0 (override) when >= 10 days (not 7),
+                 so a Saturday check-in does not immediately read as "late". */
+    var _neverCheckedIn   = !last.submittedAt;
+    var daysSinceCheckin  = _neverCheckedIn
+      ? null
+      : Math.floor((Date.now() - new Date(last.submittedAt).getTime()) / 86400000);
+    var _isEndOfWeek      = (_dow === 5 || _dow === 6 || _dow === 0); /* Fri=5, Sat=6, Sun=0 */
+    var _checkinDue       = _neverCheckedIn
+      ? _isEndOfWeek                              /* new user: Fri/Sat/Sun only */
+      : daysSinceCheckin >= 5;                   /* returning user: 5+ days since last */
+    var _checkinForce1st  = !_neverCheckedIn && daysSinceCheckin >= 10; /* override: 10+ days, only when has history */
 
     /* Day-of-week priority map */
     var _tlGrp = (_dow === 1 || _dow === 2) ? 'start' : (_dow === 3 || _dow === 4) ? 'mid' : 'end';
