@@ -567,14 +567,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       <div class="greeting-week" id="greetingWeek">Week 1 of 12</div>
     </div>
 
-    <!-- TODAY'S ACTION — shown when check-in is due or focus extracted from last plan -->
-    <div class="momentum-card" id="todayCard" style="display:none"></div>
-
-    <!-- YOUR LEADS — businesses found via Customer Finder, status 'found', not yet messaged -->
-    <div class="momentum-card" id="leadsCard" style="display:none"></div>
-
-    <!-- CHASE TODAY — shown when pipeline contacts need follow-up -->
-    <div class="momentum-card" id="chaseCard" style="display:none"></div>
+    <!-- TODAY LIST — ordered task list: check-in, chase, leads, Scout's plan -->
+    <div class="momentum-card" id="todayList" style="display:none"></div>
 
     <!-- FOUR METRIC CARDS -->
     <div class="metric-row">
@@ -929,77 +923,90 @@ function showDashboard(history, weekNum, firmName) {
     document.getElementById('dashTotalRevenueSub').textContent = 'earned since you started Scout';
   }
 
-  /* ── TODAY'S ACTION CARD ── */
-  var todayCard = document.getElementById('todayCard');
-  if (todayCard) {
+  /* ── TODAY LIST — ordered task list replacing todayCard / leadsCard / chaseCard ──
+     Tasks A–D are collected into an array, sorted by day-of-week priority, then
+     rendered as a numbered list.  One delegated listener handles lead WA promotion.
+
+     Priority by day:
+       start (Mon, Tue)       → D=1, C=2, B=3, A=4
+       mid   (Wed, Thu)       → B=1, D=2, C=3, A=4
+       end   (Fri, Sat, Sun)  → A=1, B=2, C=3, D=4
+     A forces position 0 (overrides day) when 7+ days since last check-in. */
+  var _tlEl = document.getElementById('todayList');
+  if (_tlEl) {
+    var todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+    var _dow = new Date().getDay();
+
+    /* ── Check-in condition — same as original overdue branch ── */
     var daysSinceCheckin = 999;
     if (last.submittedAt) {
       daysSinceCheckin = Math.floor((Date.now() - new Date(last.submittedAt).getTime()) / 86400000);
     }
-    var todayHtml = '';
+    var _checkinDue      = daysSinceCheckin >= 5;  /* task appears */
+    var _checkinForce1st = daysSinceCheckin >= 7;  /* overrides day-of-week to position 0 */
 
-    if (daysSinceCheckin >= 5) {
-      /* Check-in overdue — takes priority over daily plan */
-      todayHtml =
-        '<div class="tc-eyebrow">Action Required</div>' +
-        '<div class="tc-text">Your weekly check-in is due. Log this week\'s results and get your updated plan from Scout.</div>' +
-        '<a href="checkin.html" class="tc-btn">Start Check-In →</a>';
-    } else {
-      /* Parse tab3.days for today's entry */
-      try {
-        var todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
-        if (pendingParsed && pendingParsed.tab3 && Array.isArray(pendingParsed.tab3.days)) {
-          var _dayEntry = null;
-          for (var _di = 0; _di < pendingParsed.tab3.days.length; _di++) {
-            var _d = pendingParsed.tab3.days[_di];
-            if (_d.day && _d.day.toLowerCase() === todayName.toLowerCase()) {
-              _dayEntry = _d;
-              break;
-            }
-          }
-          if (_dayEntry) {
-            var _timeLine = _dayEntry.timeRequired || '';
-            if (_dayEntry.target) _timeLine += (_timeLine ? ' · ' : '') + _dayEntry.target;
-            todayHtml =
-              '<div class="tc-eyebrow">TODAY — ' + todayName.toUpperCase() + '</div>' +
-              (_dayEntry.action ? '<div class="tc-heading">' + escHtml(_dayEntry.action) + '</div>' : '') +
-              (_timeLine ? '<div class="tc-text">' + escHtml(_timeLine) + '</div>' : '') +
-              (_dayEntry.messageToUse ? '<div class="tc-text">Use: ' + escHtml(_dayEntry.messageToUse) + '</div>' : '') +
-              '<a href="result.html" class="tc-btn">Open my plan →</a>';
-          }
+    /* Day-of-week priority map */
+    var _tlGrp = (_dow === 1 || _dow === 2) ? 'start' : (_dow === 3 || _dow === 4) ? 'mid' : 'end';
+    var _tlPri = _tlGrp === 'start' ? { A: 4, B: 3, C: 2, D: 1 }
+               : _tlGrp === 'mid'   ? { A: 4, B: 1, C: 3, D: 2 }
+               :                      { A: 1, B: 2, C: 3, D: 4 };
+
+    var _tasks = [];
+
+    /* ── A: Check-in ── */
+    if (_checkinDue) {
+      _tasks.push({
+        type: 'A',
+        priority: _checkinForce1st ? 0 : _tlPri.A,
+        label: 'Do your weekly check-in',
+        html: '<a href="checkin.html" class="tc-btn">Start Check-In \u2192</a>'
+      });
+    }
+
+    /* ── B: Chase — people who need follow-up today ── */
+    var _dueList = [];
+    try { _dueList = pipelineDue(); } catch(_ce) {}
+    if (_dueList.length > 0) {
+      var _chaseRows = _dueList.slice(0, 3).map(function(item) {
+        var _cp = waPhone(item.person.phone);
+        var _cb = '';
+        if (_cp && item.msg) {
+          _cb = '<a href="https://wa.me/' + _cp + '?text=' + encodeURIComponent(item.msg) +
+            '" target="_blank" rel="noopener" class="tc-btn" style="flex-shrink:0">WhatsApp \u2192</a>';
         }
-      } catch(_te) {}
+        return '<div class="chase-item">' +
+          '<div style="flex:1;min-width:0">' +
+          '<div class="chase-name">' + escHtml(item.person.name) + '</div>' +
+          '<div class="chase-reason">' + escHtml(item.reason) + '</div>' +
+          '</div>' + _cb + '</div>';
+      }).join('');
+      _tasks.push({
+        type: 'B',
+        priority: _tlPri.B,
+        label: 'Chase ' + _dueList.length + (_dueList.length === 1 ? ' person' : ' people') + ' who haven\u2019t replied',
+        html: '<div class="chase-list">' + _chaseRows + '</div>' +
+          (_dueList.length > 3 ? '<a href="pipeline.html" class="tc-btn" style="margin-right:20px">See all \u2192</a>' : '') +
+          '<a href="pipeline.html" class="tc-btn">Open Pipeline \u2192</a>'
+      });
     }
 
-    if (todayHtml) {
-      todayCard.innerHTML = todayHtml;
-      todayCard.style.display = 'block';
-    }
-  }
-
-  /* ── YOUR LEADS CARD ── */
-  /* Shows businesses found via Customer Finder (status 'found') that the user
-     has not messaged yet. Sorted most recently added first (lastContactedAt desc).
-     Up to 3 rows; "See all →" link when more exist.
-     WA button: looks up the primary message for that person's ICP from tab2.messages,
-     opens WhatsApp, then promotes the person to 'contacted' so chase rules take over. */
-  var leadsCard = document.getElementById('leadsCard');
-  if (leadsCard) {
+    /* ── C: Leads — 'found' businesses not yet messaged ── */
     var _allFound = [];
     try {
       var _store = pipelineLoad();
       _allFound = _store.people
         .filter(function(p) { return p.status === 'found'; })
         .sort(function(a, b) {
-          /* Most recently added first — use lastContactedAt (set to addedAt on creation) */
+          /* Most recently added first — lastContactedAt is set to addedAt on creation */
           var ta = a.lastContactedAt ? new Date(a.lastContactedAt).getTime() : 0;
           var tb = b.lastContactedAt ? new Date(b.lastContactedAt).getTime() : 0;
           return tb - ta;
         });
     } catch(_le) {}
-
+    /* Keep module var in sync — read by the delegated listener below */
+    _foundLeads = _allFound;
     if (_allFound.length > 0) {
-      /* Build ICP-message lookup from pendingParsed.tab2.messages */
+      /* ICP → message lookup from tab2.messages — same logic as original leadsCard */
       var _normStr = function(s) { return (s || '').trim().toLowerCase(); };
       var _msgMap  = {};
       try {
@@ -1009,89 +1016,104 @@ function showDashboard(history, weekNum, firmName) {
           var _k = _normStr(m.icp);
           if (!_k) return;
           /* Keep primary if available; otherwise keep first seen.
-             Schema field is versionA; fall back to text for any older outputs. */
+             Schema field is versionA; fall back to text for older outputs. */
           if (!_msgMap[_k] || m.type === 'primary') _msgMap[_k] = m.versionA || m.text || '';
         });
       } catch(_me) {}
-
-      /* Store leads for delegated handler */
-      _foundLeads = _allFound;
-
       var _showLeads  = _allFound.slice(0, 3);
       var _extraCount = _allFound.length - _showLeads.length;
-
       var _leadRows = _showLeads.map(function(p, i) {
-        var _phone    = waPhone(p.phone);
-        var _msg      = _msgMap[_normStr(p.icp)] || '';
-        var _addr     = p.address ? escHtml(p.address) : '';
-        var _waBtn    = '';
-        if (_phone) {
-          var _waUrl = 'https://wa.me/' + _phone + (_msg ? '?text=' + encodeURIComponent(_msg) : '');
-          _waBtn = '<a href="' + _waUrl + '" target="_blank" rel="noopener" ' +
-            'class="tc-btn" style="flex-shrink:0" ' +
-            'data-lead-idx="' + i + '">WhatsApp \u2192</a>';
+        var _lp   = waPhone(p.phone);
+        var _lm   = _msgMap[_normStr(p.icp)] || '';
+        var _addr = p.address ? escHtml(p.address) : '';
+        var _lb   = '';
+        if (_lp) {
+          var _lu = 'https://wa.me/' + _lp + (_lm ? '?text=' + encodeURIComponent(_lm) : '');
+          _lb = '<a href="' + _lu + '" target="_blank" rel="noopener"' +
+            ' class="tc-btn" style="flex-shrink:0"' +
+            ' data-lead-idx="' + i + '">WhatsApp \u2192</a>';
         }
         return '<div class="chase-item">' +
           '<div style="flex:1;min-width:0;overflow:hidden">' +
           '<div class="chase-name">' + escHtml(p.name) + '</div>' +
           (_addr ? '<div class="chase-reason" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + _addr + '</div>' : '') +
-          '</div>' +
-          _waBtn +
-          '</div>';
+          '</div>' + _lb + '</div>';
       }).join('');
-
-      leadsCard.innerHTML =
-        '<div class="tc-eyebrow">' + _allFound.length + ' business' +
-          (_allFound.length !== 1 ? 'es' : '') + ' to contact</div>' +
-        '<div class="chase-list">' + _leadRows + '</div>' +
-        (_extraCount > 0
-          ? '<a href="pipeline.html" class="tc-btn" style="margin-right:20px">See all \u2192</a>'
-          : '') +
-        '<a href="pipeline.html" class="tc-btn">Open Pipeline \u2192</a>';
-
-      leadsCard.style.display = 'block';
-
-      /* Delegated listener — one per card mount, promotes to 'contacted' on WA tap.
-         closest() is available on all browsers that support async/await. */
-      leadsCard.addEventListener('click', function(e) {
-        var _a = e.target.closest('[data-lead-idx]');
-        if (!_a) return;
-        var _i  = parseInt(_a.getAttribute('data-lead-idx'), 10);
-        var _p  = _foundLeads[_i];
-        if (!_p) return;
-        /* Promote to 'contacted' — person now enters normal chase flow */
-        try { pipelineSetStatus(_p.id, 'contacted', weekNum); } catch(_pe) {}
+      _tasks.push({
+        type: 'C',
+        priority: _tlPri.C,
+        label: 'Message ' + _allFound.length + (_allFound.length === 1 ? ' business' : ' businesses') + ' you found',
+        html: '<div class="chase-list">' + _leadRows + '</div>' +
+          (_extraCount > 0 ? '<a href="pipeline.html" class="tc-btn" style="margin-right:20px">See all \u2192</a>' : '') +
+          '<a href="pipeline.html" class="tc-btn">Open Pipeline \u2192</a>'
       });
     }
-  }
 
-  /* ── CHASE TODAY CARD ── */
-  var chaseCard = document.getElementById('chaseCard');
-  if (chaseCard) {
-    var dueList = [];
-    try { dueList = pipelineDue(); } catch(_ce) {}
-    if (dueList.length > 0) {
-      var chaseItems = dueList.slice(0, 3).map(function(item) {
-        var phone = waPhone(item.person.phone);
-        var waBtn = '';
-        if (phone && item.msg) {
-          waBtn = '<a href="https://wa.me/' + phone + '?text=' + encodeURIComponent(item.msg) +
-            '" target="_blank" rel="noopener" class="tc-btn" style="flex-shrink:0">WhatsApp →</a>';
+    /* ── D: Scout's plan — today's tab3.days entry ── */
+    try {
+      if (pendingParsed && pendingParsed.tab3 && Array.isArray(pendingParsed.tab3.days)) {
+        var _dayEntry = null;
+        for (var _di = 0; _di < pendingParsed.tab3.days.length; _di++) {
+          var _dd = pendingParsed.tab3.days[_di];
+          if (_dd.day && _dd.day.toLowerCase() === todayName.toLowerCase()) {
+            _dayEntry = _dd; break;
+          }
         }
-        return '<div class="chase-item">' +
-          '<div style="flex:1;min-width:0">' +
-          '<div class="chase-name">' + escHtml(item.person.name) + '</div>' +
-          '<div class="chase-reason">' + escHtml(item.reason) + '</div>' +
-          '</div>' +
-          waBtn +
-          '</div>';
+        if (_dayEntry) {
+          var _timeLine = _dayEntry.timeRequired || '';
+          if (_dayEntry.target) _timeLine += (_timeLine ? ' \u00b7 ' : '') + _dayEntry.target;
+          _tasks.push({
+            type: 'D',
+            priority: _tlPri.D,
+            label: _dayEntry.action || 'Scout\u2019s plan for ' + todayName,
+            html: (_timeLine ? '<div class="tc-text">' + escHtml(_timeLine) + '</div>' : '') +
+              (_dayEntry.messageToUse ? '<div class="tc-text">Use: ' + escHtml(_dayEntry.messageToUse) + '</div>' : '') +
+              '<a href="result.html" class="tc-btn">Open my plan \u2192</a>'
+          });
+        }
+      }
+    } catch(_te) {}
+
+    /* ── Sort ascending by priority number ── */
+    _tasks.sort(function(a, b) { return a.priority - b.priority; });
+
+    /* ── Render ── */
+    var _tn = _tasks.length;
+    var _thead = '<div class="tc-eyebrow">TODAY \u2014 ' + todayName.toUpperCase() + '</div>' +
+      '<div style="font-size:12px;color:var(--grey2);letter-spacing:.06em;margin-bottom:24px">' +
+      _tn + (_tn === 1 ? ' thing to do' : ' things to do') + '</div>';
+
+    if (_tn === 0) {
+      _tlEl.innerHTML = _thead +
+        '<div class="tc-text" style="color:var(--grey2);margin-bottom:0">Nothing waiting on you today.</div>';
+      _tlEl.style.display = 'block';
+    } else {
+      var _tbody = _tasks.map(function(task, idx) {
+        var _sep = idx < _tn - 1
+          ? '<div style="height:1px;background:var(--border2);margin:20px 0 24px"></div>'
+          : '';
+        return '<div>' +
+          '<div style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;' +
+          'color:var(--grey2);margin-bottom:6px">' + (idx + 1) + '</div>' +
+          '<div class="tc-heading" style="margin-bottom:12px">' + escHtml(task.label) + '</div>' +
+          task.html +
+          '</div>' + _sep;
       }).join('');
-      chaseCard.innerHTML =
-        '<div class="tc-eyebrow">Chase Today — ' + dueList.length + ' prospect' + (dueList.length !== 1 ? 's' : '') + ' need follow-up</div>' +
-        '<div class="chase-list">' + chaseItems + '</div>' +
-        '<a href="pipeline.html" class="tc-btn">Open Pipeline →</a>';
-      chaseCard.style.display = 'block';
+      _tlEl.innerHTML = _thead + _tbody;
+      _tlEl.style.display = 'block';
     }
+
+    /* ── One delegated listener on todayList — handles lead WA tap → 'contacted' promotion ──
+       Chase rows are plain anchors; only lead rows carry data-lead-idx and need promotion. */
+    _tlEl.addEventListener('click', function(e) {
+      var _a = e.target.closest('[data-lead-idx]');
+      if (!_a) return;
+      var _i = parseInt(_a.getAttribute('data-lead-idx'), 10);
+      var _p = _foundLeads[_i];
+      if (!_p) return;
+      /* Promote to 'contacted' — person now enters normal chase flow */
+      try { pipelineSetStatus(_p.id, 'contacted', weekNum); } catch(_pe) {}
+    });
   }
 
   /* ── INBOUND LINKS CARD ── */
@@ -1369,7 +1391,7 @@ function plainLang(str) {
     .replace(/\bconversion\s+rate\b/gi, 'how many became customers');
 }
 
-/* Leads card — found businesses stored for delegated WA button handler */
+/* todayList — found leads stored for delegated WA tap → 'contacted' promotion */
 var _foundLeads = [];
 
 /* ═══════════════════════════════════════════
