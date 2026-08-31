@@ -1384,25 +1384,64 @@ export default {
       const YEARS = ['2026', '2027', '2028'];
       const BASE  = 'https://date.nager.at/api/v3/PublicHolidays/';
 
-      const results = await Promise.all(
+      // Test 1-3: India by year — raw, no JSON.parse
+      const yearResults = await Promise.all(
         YEARS.map(async (year) => {
           try {
             const res  = await fetch(BASE + year + '/IN');
-            const text = await res.text();
-            if (!res.ok) {
-              return { year, ok: false, status: res.status, body: text };
-            }
-            return { year, ok: true, data: JSON.parse(text) };
+            const body = await res.text();
+            return {
+              year,
+              status:      res.status,
+              statusText:  res.statusText,
+              contentType: res.headers.get('content-type'),
+              bodyLength:  body.length,
+              body:        body   // verbatim, even if empty
+            };
           } catch (err) {
-            return { year, ok: false, error: String(err) };
+            return { year, fetchError: String(err) };
           }
         })
       );
 
-      const out = { ok: true };
-      results.forEach(function(r) {
-        out['y' + r.year] = r.ok ? r.data : { error: r.error || null, status: r.status || null, body: r.body || null };
-      });
+      // Test 4: AvailableCountries — is IN listed at all?
+      let availableCountries = {};
+      try {
+        const res  = await fetch('https://date.nager.at/api/v3/AvailableCountries');
+        const body = await res.text();
+        availableCountries = {
+          status:      res.status,
+          statusText:  res.statusText,
+          contentType: res.headers.get('content-type'),
+          bodyLength:  body.length,
+          body:        body
+        };
+      } catch (err) {
+        availableCountries = { fetchError: String(err) };
+      }
+
+      // Test 5: US 2027 — does the API work at all?
+      let usProbe = {};
+      try {
+        const res  = await fetch('https://date.nager.at/api/v3/PublicHolidays/2027/US');
+        const body = await res.text();
+        usProbe = {
+          status:      res.status,
+          statusText:  res.statusText,
+          contentType: res.headers.get('content-type'),
+          bodyLength:  body.length
+          // body omitted — would be large; length is enough to confirm it works
+        };
+      } catch (err) {
+        usProbe = { fetchError: String(err) };
+      }
+
+      const out = {
+        ok:                true,
+        indiaByYear:       yearResults,
+        availableCountries: availableCountries,
+        usProbe2027:       usProbe
+      };
 
       return new Response(JSON.stringify(out, null, 2), {
         status:  200,
