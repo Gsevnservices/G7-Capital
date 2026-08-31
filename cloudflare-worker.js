@@ -1373,6 +1373,43 @@ export default {
       });
     }
 
+    // ── DIAGNOSTIC — GET /festivals/raw ───────────────────────────────────────
+    // TEMPORARY — remove once festival date table is sourced and committed.
+    // Public, no session check. Fetches date.nager.at from the Worker (server-side,
+    // not subject to robots.txt) and returns raw JSON for all three years so we can
+    // build the festival date table in scout-master-v1.js.
+    // No KV reads, no KV writes, no caching.
+    // =========================================================================
+    if (request.method === 'GET' && path === '/festivals/raw') {
+      const YEARS = ['2026', '2027', '2028'];
+      const BASE  = 'https://date.nager.at/api/v3/PublicHolidays/';
+
+      const results = await Promise.all(
+        YEARS.map(async (year) => {
+          try {
+            const res  = await fetch(BASE + year + '/IN');
+            const text = await res.text();
+            if (!res.ok) {
+              return { year, ok: false, status: res.status, body: text };
+            }
+            return { year, ok: true, data: JSON.parse(text) };
+          } catch (err) {
+            return { year, ok: false, error: String(err) };
+          }
+        })
+      );
+
+      const out = { ok: true };
+      results.forEach(function(r) {
+        out['y' + r.year] = r.ok ? r.data : { error: r.error || null, status: r.status || null, body: r.body || null };
+      });
+
+      return new Response(JSON.stringify(out, null, 2), {
+        status:  200,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders() }
+      });
+    }
+
     // ── Catch-all 404 ─────────────────────────────────────────────────────────
     return jsonResponse({ error: 'Not found' }, 404);
   }
