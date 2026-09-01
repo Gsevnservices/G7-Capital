@@ -1375,73 +1375,67 @@ export default {
 
     // ── DIAGNOSTIC — GET /festivals/raw ───────────────────────────────────────
     // TEMPORARY — remove once festival date table is sourced and committed.
-    // Public, no session check. Fetches date.nager.at from the Worker (server-side,
-    // not subject to robots.txt) and returns raw JSON for all three years so we can
-    // build the festival date table in scout-master-v1.js.
-    // No KV reads, no KV writes, no caching.
+    // Step 1: fetch the CalendarLabs India holidays page and extract the .ics URL.
+    // Step 2: fetch the .ics and return status, contentType, bodyLength, and the
+    //         first 4000 characters verbatim so we can inspect the VEVENT structure.
+    // No KV reads, no KV writes, no caching, no parsing.
     // =========================================================================
     if (request.method === 'GET' && path === '/festivals/raw') {
-      const YEARS = ['2026', '2027', '2028'];
-      const BASE  = 'https://date.nager.at/api/v3/PublicHolidays/';
+      const PAGE_URL = 'https://www.calendarlabs.com/ical-calendar/holidays/india-holidays-33/';
+      const out = { ok: true };
 
-      // Test 1-3: India by year — raw, no JSON.parse
-      const yearResults = await Promise.all(
-        YEARS.map(async (year) => {
-          try {
-            const res  = await fetch(BASE + year + '/IN');
-            const body = await res.text();
-            return {
-              year,
-              status:      res.status,
-              statusText:  res.statusText,
-              contentType: res.headers.get('content-type'),
-              bodyLength:  body.length,
-              body:        body   // verbatim, even if empty
-            };
-          } catch (err) {
-            return { year, fetchError: String(err) };
-          }
-        })
-      );
-
-      // Test 4: AvailableCountries — is IN listed at all?
-      let availableCountries = {};
+      // Step 1 — Fetch the CalendarLabs page and find the .ics download link.
+      let icsUrl = null;
       try {
-        const res  = await fetch('https://date.nager.at/api/v3/AvailableCountries');
-        const body = await res.text();
-        availableCountries = {
-          status:      res.status,
-          statusText:  res.statusText,
-          contentType: res.headers.get('content-type'),
-          bodyLength:  body.length,
-          body:        body
+        const pageRes  = await fetch(PAGE_URL, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; G7Scout/1.0)' }
+        });
+        const pageBody = await pageRes.text();
+        out.pageProbe = {
+          status:      pageRes.status,
+          statusText:  pageRes.statusText,
+          contentType: pageRes.headers.get('content-type'),
+          bodyLength:  pageBody.length
         };
+
+        // Extract every .ics URL from the HTML (href or src attributes).
+        const icsMatches = pageBody.match(/https?:\/\/[^"'\s]+\.ics[^"'\s]*/gi) || [];
+        // Also catch relative paths like /ical-calendar/ics/...
+        const relMatches = pageBody.match(/\/[^"'\s]+\.ics[^"'\s]*/gi) || [];
+        out.icsUrlsFound = [
+          ...new Set([
+            ...icsMatches,
+            ...relMatches.map(r => 'https://www.calendarlabs.com' + r)
+          ])
+        ];
+
+        // Use the first match as the candidate to fetch.
+        icsUrl = out.icsUrlsFound[0] || null;
       } catch (err) {
-        availableCountries = { fetchError: String(err) };
+        out.pageProbe = { fetchError: String(err) };
       }
 
-      // Test 5: US 2027 — does the API work at all?
-      let usProbe = {};
-      try {
-        const res  = await fetch('https://date.nager.at/api/v3/PublicHolidays/2027/US');
-        const body = await res.text();
-        usProbe = {
-          status:      res.status,
-          statusText:  res.statusText,
-          contentType: res.headers.get('content-type'),
-          bodyLength:  body.length
-          // body omitted — would be large; length is enough to confirm it works
-        };
-      } catch (err) {
-        usProbe = { fetchError: String(err) };
+      // Step 2 — Fetch the .ics file if a URL was found.
+      if (icsUrl) {
+        try {
+          const icsRes  = await fetch(icsUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; G7Scout/1.0)' }
+          });
+          const icsBody = await icsRes.text();
+          out.icsProbe = {
+            url:         icsUrl,
+            status:      icsRes.status,
+            statusText:  icsRes.statusText,
+            contentType: icsRes.headers.get('content-type'),
+            bodyLength:  icsBody.length,
+            bodyPreview: icsBody.slice(0, 4000)  // first 4000 chars verbatim
+          };
+        } catch (err) {
+          out.icsProbe = { url: icsUrl, fetchError: String(err) };
+        }
+      } else {
+        out.icsProbe = { skipped: 'No .ics URL found in page HTML — check icsUrlsFound and pageProbe' };
       }
-
-      const out = {
-        ok:                true,
-        indiaByYear:       yearResults,
-        availableCountries: availableCountries,
-        usProbe2027:       usProbe
-      };
 
       return new Response(JSON.stringify(out, null, 2), {
         status:  200,
