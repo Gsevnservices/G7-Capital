@@ -1425,7 +1425,7 @@ function scoutNewsRender(news) {
   if (!el) return;
   var flat = scoutNewsFlatItems(news);
   if (!flat.length) {
-    el.innerHTML = '<div class="cc-task-why">Nothing has changed in your market today that needs you. Scout checks again tomorrow.</div>';
+    el.innerHTML = '<div class="cc-task-why">No news yet \u2014 Scout is getting set up.</div>';
     return;
   }
   var show = [];
@@ -1440,6 +1440,10 @@ function scoutNewsRender(news) {
     }
   }
   var html = '';
+  if (news && news.stale && news.staleDate) {
+    var wd = new Date(news.staleDate + 'T12:00:00+05:30').toLocaleDateString('en-IN', { weekday: 'long', timeZone: 'Asia/Kolkata' });
+    html += '<div style="font-size:12px;color:var(--grey2);margin-bottom:8px">From ' + escHtml(wd) + ' \u2014 today\u2019s update is on its way.</div>';
+  }
   show.forEach(function(it) {
     html += '<a href="news.html#item-' + it._idx + '" style="display:block;text-decoration:none;padding:6px 0;border-bottom:1px solid var(--border2)">' +
       '<span style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-right:8px">' + escHtml(it._label) + '</span>' +
