@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', async function() {
   var flat = scoutNewsFlatItems(news);
 
   if (!flat.length) {
-    wrap.innerHTML = '<div class="news-empty">No news yet today \u2014 Scout updates this at 6\u202Fam.</div>';
+    wrap.innerHTML = '<div class="news-empty">No news yet \u2014 Scout is getting set up.</div>';
     return;
   }
 
@@ -118,6 +118,11 @@ window.addEventListener('DOMContentLoaded', async function() {
   });
 
   var html = '';
+  /* Stale notice — shown when today's generation failed and we're serving older news. */
+  if (news && news.stale && news.staleDate) {
+    var wd = new Date(news.staleDate + 'T12:00:00+05:30').toLocaleDateString('en-IN', { weekday: 'long', timeZone: 'Asia/Kolkata' });
+    html += '<div style="font-size:12px;color:var(--grey2);padding:0 0 12px">From ' + escHtml(wd) + ' \u2014 today\u2019s update is on its way.</div>';
+  }
   groups.forEach(function(g) {
     html += '<div class="news-section">';
     html += '<div class="news-section-label">' + escHtml(g.label) + '</div>';

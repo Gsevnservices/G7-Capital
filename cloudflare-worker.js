@@ -164,6 +164,25 @@ async function sendEmail(env, to, subject, text, html, headers) {
   } catch (e) { return false; }
 }
 
+/* Returns true when an error looks like a billing / credit-exhaustion failure
+   from Anthropic (403, 429-overquota, or explicit credit messages). */
+function isBillingError(e) {
+  var msg = String((e && e.message) || e).toLowerCase();
+  return /anthropic 403|anthropic 429|billing|credit|overloaded|quota|insufficient/i.test(msg);
+}
+
+/* Send one admin alert per IST day when Anthropic credits are exhausted.
+   Uses KV flag alert:credit:{day} so it fires at most once. */
+async function sendCreditAlert(env, day) {
+  var flagKey = 'alert:credit:' + day;
+  if (await env.G7_KV.get(flagKey)) return;
+  await env.G7_KV.put(flagKey, '1', { expirationTtl: 172800 });
+  await sendEmail(env, 'contact@gsevnservices.in',
+    'Anthropic credit exhausted — Scout running on fallback',
+    'Scout could not generate today\'s news (' + day + ') because the Anthropic API returned a billing or credit error.\n\nAll firms are being served yesterday\'s news with a stale notice. Top up the account to resume.',
+    '<p>Scout could not generate today\'s news (' + day + ') because the Anthropic API returned a billing or credit error.</p><p>All firms are being served yesterday\'s news with a stale notice. Top up the account to resume.</p>');
+}
+
 /* Where reset links may point. Built from the request's Origin, but only
    ever one of these — never a caller-supplied host, which would let an
    attacker email a user a link to a site they control. */
@@ -377,6 +396,11 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
   };
   const cacheKey = 'market:' + firmCode + ':' + day;
   await env.G7_KV.put(cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
+
+  /* Persist as last-known-good for fallback when generation fails. */
+  if (items.length > 0) {
+    await env.G7_KV.put('market:last:' + firmCode, JSON.stringify(result));
+  }
 
   /* Append today's items to history, keep last 15. */
   const nextHist = history.concat(items.map(function(it){
@@ -1168,6 +1192,13 @@ async function generateSharedNews(env, cat, day, city) {
 
   const result = { category: cat, label: def.label, items: kept, date: day };
   await env.G7_KV.put(cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
+
+  /* Persist as last-known-good for fallback when generation fails. */
+  if (kept.length > 0) {
+    var lastKey = 'news:last:' + cat + (cat === 'city' ? ':' + citySlug : '');
+    await env.G7_KV.put(lastKey, JSON.stringify(result));
+  }
+
   return result;
 }
 
@@ -1246,11 +1277,27 @@ async function resolveNewsPrefs(env, firmCode, rawPrefs) {
 /* Everything a firm reads today: business brief + chosen categories,
    each item carrying a `why` line. Used by the dashboard route and email. */
 async function buildDailyNews(env, firmCode, day, context, city, prefs) {
+  var stale = false;
   let business = await env.G7_KV.get('market:' + firmCode + ':' + day, 'json');
-  if (!business) business = await generateMarketBrief(env, firmCode, day, context, city, false);
+  if (!business) {
+    try {
+      business = await generateMarketBrief(env, firmCode, day, context, city, false);
+    } catch (e) {
+      var bizErr = String((e && e.message) || e).slice(0, 300);
+      console.log(JSON.stringify({ newsFallback: firmCode, reason: bizErr }));
+      if (isBillingError(e)) await sendCreditAlert(env, day);
+      /* Fall back to last known good. */
+      var last = await env.G7_KV.get('market:last:' + firmCode, 'json');
+      if (last && last.items && last.items.length) {
+        business = last;
+        stale = true;
+      }
+    }
+  }
   const chosen = (Array.isArray(prefs) ? prefs : []).filter(function(c){ return NEWS_CATS[c]; });
   const sections = [];
   const errors = [];
+  var citySlug = (city || '').toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
   for (const c of chosen) {
     try {
       const s = await generateSharedNews(env, c, day, city);
@@ -1262,7 +1309,15 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
     } catch (e) {
       var errMsg = String((e && e.message) || e).slice(0, 300);
       errors.push({ category: c, error: errMsg });
-      console.log(JSON.stringify({ newsCategoryFailed: c, error: errMsg }));
+      console.log(JSON.stringify({ newsFallback: c, reason: errMsg }));
+      if (isBillingError(e)) await sendCreditAlert(env, day);
+      /* Fall back to last known good for this category. */
+      var lastKey = 'news:last:' + c + (c === 'city' ? ':' + citySlug : '');
+      var lastCat = await env.G7_KV.get(lastKey, 'json');
+      if (lastCat && lastCat.items && lastCat.items.length) {
+        sections.push(lastCat);
+        stale = true;
+      }
     }
   }
   const all = [{ category: 'business', items: (business && business.items) || [] }].concat(sections);
@@ -1300,7 +1355,12 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
   for (let i = sections.length - 1; i >= 0; i--) {
     if (!sections[i].items.length) sections.splice(i, 1);
   }
-  return { business: business, sections: sections, errors: errors };
+  var out = { business: business, sections: sections, errors: errors };
+  if (stale) {
+    out.stale = true;
+    out.staleDate = (business && business.date) || '';
+  }
+  return out;
 }
 
 /* One decision per firm per day: the single most useful thing to do today,
@@ -2383,6 +2443,12 @@ export default {
       const attempts = parseInt((await env.G7_KV.get(attemptKey)) || '0', 10);
       if (attempts >= 3) {
         await env.G7_KV.delete(lockKey);
+        /* All attempts exhausted — serve last known good if available. */
+        var lastBrief = await env.G7_KV.get('market:last:' + session.firmCode, 'json');
+        if (lastBrief && lastBrief.items && lastBrief.items.length) {
+          console.log(JSON.stringify({ newsFallback: session.firmCode, reason: 'attempts exhausted' }));
+          return jsonResponse(Object.assign({}, lastBrief, { stale: true, staleDate: lastBrief.date || '' }));
+        }
         return jsonResponse({ items: [], date: day, limited: true });
       }
       await env.G7_KV.put(attemptKey, String(attempts + 1), { expirationTtl: 172800 });
@@ -2393,6 +2459,13 @@ export default {
         return jsonResponse(result);
       } catch (e) {
         await env.G7_KV.delete(lockKey);
+        console.log(JSON.stringify({ newsFallback: session.firmCode, reason: String(e.message || '').slice(0, 300) }));
+        if (isBillingError(e)) await sendCreditAlert(env, day);
+        /* Fall back to last known good. */
+        var lastOnErr = await env.G7_KV.get('market:last:' + session.firmCode, 'json');
+        if (lastOnErr && lastOnErr.items && lastOnErr.items.length) {
+          return jsonResponse(Object.assign({}, lastOnErr, { stale: true, staleDate: lastOnErr.date || '' }));
+        }
         return jsonResponse({ error: 'market_failed', detail: String(e.message || '').slice(0, 500) }, 502);
       }
     }

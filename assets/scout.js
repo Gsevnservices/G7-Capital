@@ -1644,7 +1644,8 @@ function scoutNewsLoad() {
       var j = await r.json();
       if (j && (Array.isArray(j.sections) || (j.business && j.business.items))) {
         try {
-          localStorage.setItem(localKey, JSON.stringify(j));
+          /* Don't cache stale fallback — let the next load retry for fresh news. */
+          if (!j.stale) localStorage.setItem(localKey, JSON.stringify(j));
           /* Clean up old scout_news_ and scout_news2_ keys for other days. */
           for (var i = localStorage.length - 1; i >= 0; i--) {
             var k = localStorage.key(i);
