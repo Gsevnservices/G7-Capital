@@ -164,23 +164,55 @@ async function sendEmail(env, to, subject, text, html, headers) {
   } catch (e) { return false; }
 }
 
-/* Returns true when an error looks like a billing / credit-exhaustion failure
-   from Anthropic (403, 429-overquota, or explicit credit messages). */
+/* Returns true when an error is a confirmed credit/billing problem (not
+   transient overload). Only these trigger the admin alert email. */
 function isBillingError(e) {
-  var msg = String((e && e.message) || e).toLowerCase();
-  return /anthropic 403|anthropic 429|billing|credit|overloaded|quota|insufficient/i.test(msg);
+  var msg = String((e && e.message) || e);
+  return /anthropic 403|credit balance|billing|insufficient/i.test(msg);
 }
 
 /* Send one admin alert per IST day when Anthropic credits are exhausted.
-   Uses KV flag alert:credit:{day} so it fires at most once. */
+   Uses KV flag alert:credit:{day} so it fires at most once. Reads
+   env.ADMIN_EMAIL — if not set, logs a warning and skips. */
 async function sendCreditAlert(env, day) {
+  if (!env.ADMIN_EMAIL) { console.log(JSON.stringify({ creditAlert: 'skipped', reason: 'ADMIN_EMAIL not set' })); return; }
   var flagKey = 'alert:credit:' + day;
   if (await env.G7_KV.get(flagKey)) return;
   await env.G7_KV.put(flagKey, '1', { expirationTtl: 172800 });
-  await sendEmail(env, 'contact@gsevnservices.in',
+  await sendEmail(env, env.ADMIN_EMAIL,
     'Anthropic credit exhausted — Scout running on fallback',
     'Scout could not generate today\'s news (' + day + ') because the Anthropic API returned a billing or credit error.\n\nAll firms are being served yesterday\'s news with a stale notice. Top up the account to resume.',
     '<p>Scout could not generate today\'s news (' + day + ') because the Anthropic API returned a billing or credit error.</p><p>All firms are being served yesterday\'s news with a stale notice. Top up the account to resume.</p>');
+}
+
+/* Try market:last:{firm}, then yesterday's and day-before's daily cache.
+   Returns the best available result or null. */
+async function lastMarketBrief(env, firmCode, today) {
+  var last = await env.G7_KV.get('market:last:' + firmCode, 'json');
+  if (last && last.items && last.items.length) return last;
+  for (var d = 1; d <= 2; d++) {
+    var prev = new Date(new Date(today + 'T12:00:00+05:30').getTime() - d * 86400000).toISOString().slice(0, 10);
+    var old = await env.G7_KV.get('market:' + firmCode + ':' + prev, 'json');
+    if (old && old.items && old.items.length) return old;
+  }
+  return null;
+}
+
+/* Try news:last:{cat}, then yesterday's and day-before's daily cache.
+   Returns the best available result or null. */
+async function lastSharedNews(env, cat, citySlug) {
+  var lastKey = 'news:last:' + cat + (cat === 'city' ? ':' + citySlug : '');
+  var last = await env.G7_KV.get(lastKey, 'json');
+  if (last && last.items && last.items.length) return last;
+  var ist = new Date(Date.now() + 5.5 * 3600 * 1000);
+  var today = ist.toISOString().slice(0, 10);
+  for (var d = 1; d <= 2; d++) {
+    var prev = new Date(new Date(today + 'T12:00:00+05:30').getTime() - d * 86400000).toISOString().slice(0, 10);
+    var cacheKey = 'news:' + cat + (cat === 'city' ? ':' + citySlug : '') + ':' + prev;
+    var old = await env.G7_KV.get(cacheKey, 'json');
+    if (old && old.items && old.items.length) return old;
+  }
+  return null;
 }
 
 /* Where reset links may point. Built from the request's Origin, but only
@@ -1286,9 +1318,9 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
       var bizErr = String((e && e.message) || e).slice(0, 300);
       console.log(JSON.stringify({ newsFallback: firmCode, reason: bizErr }));
       if (isBillingError(e)) await sendCreditAlert(env, day);
-      /* Fall back to last known good. */
-      var last = await env.G7_KV.get('market:last:' + firmCode, 'json');
-      if (last && last.items && last.items.length) {
+      /* Fall back to last known good, or yesterday/day-before cache. */
+      var last = await lastMarketBrief(env, firmCode, day);
+      if (last) {
         business = last;
         stale = true;
       }
@@ -1311,10 +1343,9 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
       errors.push({ category: c, error: errMsg });
       console.log(JSON.stringify({ newsFallback: c, reason: errMsg }));
       if (isBillingError(e)) await sendCreditAlert(env, day);
-      /* Fall back to last known good for this category. */
-      var lastKey = 'news:last:' + c + (c === 'city' ? ':' + citySlug : '');
-      var lastCat = await env.G7_KV.get(lastKey, 'json');
-      if (lastCat && lastCat.items && lastCat.items.length) {
+      /* Fall back to last known good, or yesterday/day-before cache. */
+      var lastCat = await lastSharedNews(env, c, citySlug);
+      if (lastCat) {
         sections.push(lastCat);
         stale = true;
       }
@@ -2444,8 +2475,8 @@ export default {
       if (attempts >= 3) {
         await env.G7_KV.delete(lockKey);
         /* All attempts exhausted — serve last known good if available. */
-        var lastBrief = await env.G7_KV.get('market:last:' + session.firmCode, 'json');
-        if (lastBrief && lastBrief.items && lastBrief.items.length) {
+        var lastBrief = await lastMarketBrief(env, session.firmCode, day);
+        if (lastBrief) {
           console.log(JSON.stringify({ newsFallback: session.firmCode, reason: 'attempts exhausted' }));
           return jsonResponse(Object.assign({}, lastBrief, { stale: true, staleDate: lastBrief.date || '' }));
         }
@@ -2461,9 +2492,9 @@ export default {
         await env.G7_KV.delete(lockKey);
         console.log(JSON.stringify({ newsFallback: session.firmCode, reason: String(e.message || '').slice(0, 300) }));
         if (isBillingError(e)) await sendCreditAlert(env, day);
-        /* Fall back to last known good. */
-        var lastOnErr = await env.G7_KV.get('market:last:' + session.firmCode, 'json');
-        if (lastOnErr && lastOnErr.items && lastOnErr.items.length) {
+        /* Fall back to last known good, or yesterday/day-before cache. */
+        var lastOnErr = await lastMarketBrief(env, session.firmCode, day);
+        if (lastOnErr) {
           return jsonResponse(Object.assign({}, lastOnErr, { stale: true, staleDate: lastOnErr.date || '' }));
         }
         return jsonResponse({ error: 'market_failed', detail: String(e.message || '').slice(0, 500) }, 502);
