@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/scout-master-v1.js?v=19"></script>
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=26"></script>
+<script src="../assets/scout.js?v=27"></script>
 <script src="../assets/pipeline.js?v=16"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
@@ -824,9 +824,7 @@ window.addEventListener('DOMContentLoaded', async function() {
   scoutNewsLoad().then(scoutNewsRender);
   scoutSettingsRender();
 
-  /* Firm name in nav */
   var firmName = localStorage.getItem('g7_session_name') || '';
-  if (firmName) document.getElementById('navFirmName').textContent = firmName;
 
   /* Read state from localStorage */
   var history = [];
@@ -883,7 +881,7 @@ function showDashboard(history, weekNum, firmName) {
   /* Greeting — prefer businessData.businessName over firm code (g7_session_name) */
   var businessName = (pendingData && pendingData.businessData && pendingData.businessData.businessName)
     ? pendingData.businessData.businessName
-    : firmName;
+    : displayName(firmName);
   var hour = new Date().getHours();
   var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
   document.getElementById('greetingHello').textContent = greeting + (businessName ? ', ' + businessName + '.' : '.');

@@ -1661,6 +1661,76 @@ function scoutNewsLoad() {
 }
 
 // ─────────────────────────────────────────────────────────────
+// DISPLAY NAME — strip product suffixes like " — Scout" or " — SCOUT"
+// ─────────────────────────────────────────────────────────────
+function displayName(raw) {
+  if (!raw) return '';
+  return raw.replace(/\s*[—–-]\s*(scout|workspace)\s*$/i, '').trim();
+}
+
+// ─────────────────────────────────────────────────────────────
+// MOBILE NAV — hamburger menu for <=700px
+// Injected once from scout.js so every Scout page gets it.
+// ─────────────────────────────────────────────────────────────
+(function() {
+  if (typeof document === 'undefined') return; /* Node guard */
+
+  /* Inject CSS once. */
+  var style = document.createElement('style');
+  style.textContent =
+    '.scout-menu-btn{display:none;background:transparent;border:1px solid rgba(224,146,47,.4);' +
+    'color:#E0922F;font-family:inherit;font-size:9px;letter-spacing:.18em;text-transform:uppercase;' +
+    'padding:6px 14px;cursor:pointer}' +
+    '@media(max-width:700px){' +
+    '.scout-menu-btn{display:inline-block}' +
+    '.nav-right{display:none !important;position:fixed;top:80px;left:0;right:0;' +
+    'background:rgba(8,8,8,.97);backdrop-filter:blur(24px);flex-direction:column !important;' +
+    'align-items:stretch !important;padding:12px 24px 20px !important;gap:0 !important;' +
+    'z-index:998;border-bottom:1px solid rgba(250,250,248,.08)}' +
+    '.nav-right.scout-menu-open{display:flex !important}' +
+    '.nav-right .nav-link,.nav-right .nav-firm-indicator,.nav-right .nav-logout{' +
+    'display:block !important;padding:14px 0;font-size:11px;border-bottom:1px solid rgba(250,250,248,.06)}' +
+    '.nav-right .nav-logout{border-bottom:none;margin-top:4px}' +
+    '}';
+  document.head.appendChild(style);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var navRight = document.querySelector('.nav-right');
+    if (!navRight) return;
+
+    /* Set firm name via displayName. */
+    var firmEl = document.getElementById('navFirmName');
+    if (firmEl) {
+      var raw = localStorage.getItem('g7_session_name') || '';
+      firmEl.textContent = displayName(raw);
+    }
+
+    /* Create menu button. */
+    var btn = document.createElement('button');
+    btn.className = 'scout-menu-btn';
+    btn.textContent = 'Menu';
+    btn.setAttribute('aria-label', 'Toggle navigation menu');
+    navRight.parentNode.insertBefore(btn, navRight);
+
+    function close() { navRight.classList.remove('scout-menu-open'); btn.textContent = 'Menu'; }
+    function toggle() {
+      var open = navRight.classList.toggle('scout-menu-open');
+      btn.textContent = open ? 'Close' : 'Menu';
+    }
+
+    btn.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
+    document.addEventListener('click', function(e) {
+      if (!navRight.classList.contains('scout-menu-open')) return;
+      if (navRight.contains(e.target) && !e.target.classList.contains('nav-link')) return;
+      close();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') close();
+    });
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────
 // MODULE EXPORT (Node.js validation only)
 // Not used in browser — Scout pages load this via <script> tag
 // ─────────────────────────────────────────────────────────────
