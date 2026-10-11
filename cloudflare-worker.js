@@ -181,8 +181,8 @@ async function sendCreditAlert(env, day) {
   await env.G7_KV.put(flagKey, '1', { expirationTtl: 172800 });
   await sendEmail(env, env.ADMIN_EMAIL,
     'Anthropic credit exhausted — Scout running on fallback',
-    'Scout could not generate today\'s news (' + day + ') because the Anthropic API returned a billing or credit error.\n\nAll firms are being served yesterday\'s news with a stale notice. Top up the account to resume.',
-    '<p>Scout could not generate today\'s news (' + day + ') because the Anthropic API returned a billing or credit error.</p><p>All firms are being served yesterday\'s news with a stale notice. Top up the account to resume.</p>');
+    'Scout couldn\'t generate today\'s news (' + day + '): Anthropic returned a billing/credit error.\n\nFirms with recent news are seeing it with a \'From ' + day + '\' note; firms without see \'No news yet\'. Top up to resume.',
+    '<p>Scout couldn\'t generate today\'s news (' + day + '): Anthropic returned a billing/credit error.</p><p>Firms with recent news are seeing it with a \u201cFrom ' + day + '\u201d note; firms without see \u201cNo news yet\u201d. Top up to resume.</p>');
 }
 
 /* Try market:last:{firm}, then yesterday's and day-before's daily cache.
