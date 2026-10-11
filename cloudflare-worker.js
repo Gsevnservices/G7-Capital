@@ -1219,19 +1219,27 @@ async function personaliseNews(env, firmCode, day, context, sections) {
 }
 
 /* Resolve effective news prefs. undefined (never chosen) → smart defaults
-   by business type. [] (explicitly saved empty) → respected as-is.
+   by business type bucket. [] (explicitly saved empty) → respected as-is.
    Returns an array of NEWS_CATS keys. */
+const NEWS_PRO_TYPES = [
+  'Training / Corporate Learning','Digital Marketing Agency','CA / Accounting Firm',
+  'Legal Firm / Lawyer','IT Services / Software Company','SaaS / Software Product',
+  'Consulting / Advisory Firm','B2B Services','Recruitment / Staffing Firm'
+];
 async function resolveNewsPrefs(env, firmCode, rawPrefs) {
   if (Array.isArray(rawPrefs)) return rawPrefs;
   /* Never chosen — pick defaults from business type. */
   const st = await loadScoutState(env, firmCode);
   const pend = st ? (st.pick('scout_pending_result') || {}) : {};
-  const btype = String((pend.businessData && pend.businessData.businessType) || '').toLowerCase();
-  var pro = ['consultant','consulting','professional','agency','architect','lawyer',
-    'chartered accountant','ca ','advocate','doctor','clinic','hospital','diagnostic',
-    'financial','insurance','wealth','advisor','audit','tax','legal','it services',
-    'software','saas','tech','digital','marketing agency'];
-  var isPro = pro.some(function(k){ return btype.indexOf(k) !== -1; });
+  const btype = String((pend.businessData && pend.businessData.businessType) || '');
+  /* Exact bucket match (matches onboard.html BT_BUCKET). */
+  if (btype && NEWS_PRO_TYPES.indexOf(btype) !== -1) return ['india_policy','india_markets','city'];
+  if (btype) return ['india_policy','city']; /* retail, food, personal, trade, Other */
+  /* Fallback: keyword heuristic for older accounts without businessType. */
+  var typed = String((pend.businessData && pend.businessData.businessTypeInput) || '').toLowerCase();
+  var proKw = ['consultant','consulting','agency','lawyer','advocate','ca ','chartered',
+    'legal','it services','software','saas','digital','marketing agency'];
+  var isPro = proKw.some(function(k){ return typed.indexOf(k) !== -1; });
   return isPro ? ['india_policy','india_markets','city'] : ['india_policy','city'];
 }
 
