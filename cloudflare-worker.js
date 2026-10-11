@@ -3030,7 +3030,21 @@ export default {
       const ist = new Date(Date.now() + 5.5 * 3600 * 1000);
       const today = ist.toISOString().slice(0, 10);
       const saved = await env.G7_KV.get('market:ctx:' + session.firmCode, 'json');
-      if (!saved || !saved.context) return jsonResponse({ business: { items: [] }, sections: [] });
+      if (!saved || !saved.context) {
+        /* No context saved yet — still try fallback from previous days. */
+        var lastBiz = await lastMarketBrief(env, session.firmCode, today);
+        if (!lastBiz) return jsonResponse({ business: { items: [] }, sections: [] });
+        var user0 = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
+        var prefs0 = await resolveNewsPrefs(env, session.firmCode, user0.newsPrefs);
+        var citySlug0 = '';
+        var sections0 = [];
+        var chosen0 = (Array.isArray(prefs0) ? prefs0 : []).filter(function(c){ return NEWS_CATS[c]; });
+        for (var ci = 0; ci < chosen0.length; ci++) {
+          var lc = await lastSharedNews(env, chosen0[ci], citySlug0);
+          if (lc) sections0.push(lc);
+        }
+        return jsonResponse({ business: lastBiz, sections: sections0, stale: true, staleDate: lastBiz.date || '' });
+      }
       const user = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
       const effectivePrefs = await resolveNewsPrefs(env, session.firmCode, user.newsPrefs);
       const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', effectivePrefs);
