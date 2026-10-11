@@ -630,11 +630,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 @media(max-width:700px){
   body{overflow-x:hidden}
   .cc-wrap{flex-direction:column}
-  .cc-mid{order:3}
-  .cc-core{display:none}
   .cc-rail-r{order:1}
-  .cc-rail-l{order:2}
+  .cc-mid{order:2}
+  .cc-rail-l{order:3}
   .cc-metrics{grid-template-columns:1fr 1fr}
+  .cc-core-stage,.cc-core-tag{display:none}
+  .cc-core{padding:18px 16px;min-height:0}
+  .cc-core-btns{margin-top:0}
 }
 
 </style>
@@ -809,6 +811,14 @@ window.addEventListener('DOMContentLoaded', async function() {
   scoutWriteSnapshot();
   await scoutMigratePinKey();
   scoutPinnedRender();
+  /* Fetch saved message language for scoutContext(). Non-blocking fallback to bd.language. */
+  try {
+    var _lr = await fetch(SCOUT_WORKER + '/scout/message-lang', {
+      headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '') }
+    });
+    if (_lr.ok) { var _lj = await _lr.json(); _scoutMsgLang = _lj.language || null; }
+  } catch (e) {}
+
   ccRender();
   scoutMarketLoad(); /* preload for voice/briefing — not rendered into #ccMarket */
   scoutNewsLoad().then(scoutNewsRender);
@@ -1525,6 +1535,8 @@ async function scoutSettingsRender() {
             body: JSON.stringify({ language: picked })
           });
         } catch (e) {}
+        _scoutMsgLang = picked;
+        _scoutCtx = null; /* force rebuild with new language */
         scoutSettingsRender();
       };
     });
@@ -2055,6 +2067,7 @@ window.scoutCleanSpoken = scoutCleanSpoken;
    load and reused.
 ═══════════════════════════════════════════ */
 var _scoutCtx = null;
+var _scoutMsgLang = null; /* fetched once from /scout/message-lang */
 function scoutContext() {
   if (_scoutCtx !== null) return _scoutCtx;
   var parts = [];
@@ -2089,7 +2102,8 @@ function scoutContext() {
       } catch (e) {}
     }
     if (a.headline && a.headline.momentumNote) parts.push('SCOUT ASSESSMENT: ' + a.headline.momentumNote);
-    if (bd.language) parts.push('PREFERRED LANGUAGE: ' + bd.language);
+    var _lang = _scoutMsgLang || bd.language || '';
+    if (_lang) parts.push('PREFERRED LANGUAGE: ' + _lang);
   } catch (e) {}
   _scoutCtx = parts.join('\n');
   if (_scoutCtx.length > 3500) _scoutCtx = _scoutCtx.slice(0, 3500);
