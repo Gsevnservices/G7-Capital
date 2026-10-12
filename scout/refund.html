@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refund &amp; Cancellation — Scout · G7 Capital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23080808'/%3E%3Ctext y='.9em' font-size='70' font-family='serif' fill='%23E0922F'%3EG%3C/text%3E%3C/svg%3E">
+<script src="../assets/scout-site.js?v=1"></script>
+<style>
+:root{
+  --black:#080808;--black2:#0F0F0F;--black3:#161616;
+  --amber:#E0922F;--amber-d:#D17B2E;--amber-l:#F0B968;
+  --white:#FAFAF8;--grey1:#8A8880;--grey2:#5A5855;
+  --border:rgba(224,146,47,0.18);--border2:rgba(250,250,248,0.08);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Tenor Sans',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--white);background:var(--black);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.24;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;
+  padding:24px 44px;background:rgba(8,8,8,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--border2)}
+.wordmark{font-family:var(--serif);font-size:19px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;color:var(--white);white-space:nowrap}
+.wordmark b{font-weight:400;color:var(--amber)}
+.back-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s}
+.back-link:hover{color:var(--white)}
+.policy{max-width:680px;margin:0 auto;padding:120px 32px 80px}
+.policy h1{font-family:var(--serif);font-size:clamp(26px,4vw,38px);font-weight:300;color:var(--white);margin-bottom:8px}
+.policy .updated{font-size:11px;color:var(--grey2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:40px}
+.policy h2{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin:36px 0 14px;font-weight:400}
+.policy p,.policy li{font-size:14px;line-height:1.85;color:var(--grey1);margin-bottom:12px}
+.policy ul{padding-left:20px;margin-bottom:12px}
+.policy a{color:var(--amber);text-decoration:none}
+.policy a:hover{text-decoration:underline}
+footer{border-top:1px solid var(--border2);padding:32px;text-align:center}
+.foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin-bottom:12px}
+.foot-links a{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey2);text-decoration:none;transition:color .3s}
+.foot-links a:hover{color:var(--grey1)}
+.foot-copy{font-size:11px;color:var(--grey2)}
+@media(max-width:600px){.topbar{padding:18px 20px}.policy{padding:100px 20px 60px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="landing.html" class="wordmark"><b>G7</b> Capital</a>
+  <a href="landing.html" class="back-link">&larr; Back to Scout</a>
+</div>
+
+<!-- DRAFT — founder to approve -->
+<div class="policy">
+  <h1>Refund &amp; Cancellation Policy</h1>
+  <div class="updated">Last updated: October 2026</div>
+
+  <h2>1. Monthly Subscription</h2>
+  <p>Scout is a monthly subscription service. There is no lock-in period. You can cancel at any time, and your access will continue until the end of the current billing cycle.</p>
+
+  <h2>2. First-Payment Refund</h2>
+  <p>If you are not satisfied with Scout after your first payment, you may request a full refund within 7 days of that payment. No questions asked.</p>
+
+  <h2>3. Subsequent Payments</h2>
+  <p>After the first billing cycle, refunds are not provided for partial months. You may cancel to prevent the next charge. Access continues until the end of the paid period.</p>
+
+  <h2>4. How to Request a Refund</h2>
+  <p>Email us at <a id="contactEmail"></a> with the subject "Refund Request" and your registered email address. We will process your refund within 5–7 working days.</p>
+
+  <h2>5. Refund Method</h2>
+  <p>Refunds are issued to the original payment method. The timeline depends on your bank or payment provider.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about billing or refunds? Email us at <a id="contactEmail2"></a>.</p>
+</div>
+
+<footer>
+  <div class="foot-links">
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="refund.html">Refund &amp; Cancellation</a>
+    <a href="contact.html">Contact</a>
+    <a href="delivery.html">Delivery</a>
+  </div>
+  <div class="foot-copy" id="footCopy"></div>
+</footer>
+
+<script>
+(function() {
+  var e = SCOUT_SITE.email || 'gsevnservices@gmail.com';
+  ['contactEmail','contactEmail2'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.href = 'mailto:' + e; el.textContent = e; }
+  });
+  var fc = document.getElementById('footCopy');
+  if (fc) fc.textContent = '\u00A9 2026 ' + (SCOUT_SITE.legalName || 'G7 Capital');
+})();
+</script>
+</body>
+</html>

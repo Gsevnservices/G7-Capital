@@ -237,7 +237,8 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
     <button class="lang-toggle active" id="btnEn" onclick="setLang('en')">EN</button>
     <span class="lang-sep">|</span>
     <button class="lang-toggle" id="btnHi" onclick="setLang('hi')">हिंदी</button>
-    <a href="../login.html?product=scout" class="btn-amber nav-cta" id="navCta">Get Started →</a>
+    <a class="btn-amber nav-cta" id="navCta">Book a Demo</a>
+    <a href="../login.html?product=scout" class="nav-signin" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .3s;padding:8px 4px">Sign in</a>
   </div>
 </div>
 
@@ -249,9 +250,9 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
       <div class="eyebrow">G7 Capital · AI Employees</div>
       <h1>
         <span class="nm">Scout</span>
-        <span class="rl" data-hi="आपका AI बिज़नेस डेवलपमेंट एम्प्लॉई">Your AI Business Development Employee</span>
+        <span class="rl" data-hi="आपका AI सेल्स साथी">Your AI Business Development Employee</span>
       </h1>
-      <p data-hi="Scout आपके बेस्ट कस्टमर ढूंढता है, उन्हें जीतने में मदद करता है, बार-बार लाता है, और आपका रेवेन्यू बढ़ाता है — एक सिंपल प्लान जो आप Day 1 से फॉलो कर सकते हैं।">Scout finds your best customers, helps you win them, keeps them coming back, and grows your revenue — all in a simple plan you can follow from day one.</p>
+      <p data-hi="Scout आपके सही कस्टमर ढूंढता है, उन्हें जोड़ने के लिए तैयार मैसेज देता है, और उन्हें बार-बार वापस लाता है — रोज़ का एक आसान प्लान, पहले दिन से।">Scout finds your best customers, helps you win them, keeps them coming back, and grows your revenue — all in a simple plan you can follow from day one.</p>
       <div class="hero-actions">
         <a id="heroCta" class="btn-amber" href="#pricing">Book a Free Demo</a>
         <a href="../login.html?product=scout" class="hero-signin">Sign in →</a>
@@ -440,39 +441,27 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.39-1.587l-.376-.232-3.897 1.306 1.306-3.897-.232-.376A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
 </a>
 
+<script src="../assets/scout-site.js?v=1"></script>
 <script>
-/* ============================================================
-   CONFIG — empty values hide their sections/elements
-   ============================================================ */
-var SCOUT_SITE = {
-  legalName: '',
-  gstin: '',
-  address: '',
-  phone: '',
-  whatsapp: '',   /* digits with 91 prefix */
-  email: 'gsevnservices@gmail.com',
-  demoUrl: '',    /* Cal.com link */
-  gstInvoice: false
-};
 
 /* ============================================================
    HINDI STRINGS — hero, pricing heading, FAQ
    ============================================================ */
 var HI = {
-  heroRole: 'आपका AI बिज़नेस डेवलपमेंट एम्प्लॉई',
-  heroBody: 'Scout आपके बेस्ट कस्टमर ढूंढता है, उन्हें जीतने में मदद करता है, बार-बार लाता है, और आपका रेवेन्यू बढ़ाता है — एक सिंपल प्लान जो आप Day 1 से फॉलो कर सकते हैं।',
+  heroRole: 'आपका AI सेल्स साथी',
+  heroBody: 'Scout आपके सही कस्टमर ढूंढता है, उन्हें जोड़ने के लिए तैयार मैसेज देता है, और उन्हें बार-बार वापस लाता है — रोज़ का एक आसान प्लान, पहले दिन से।',
   heroSub: 'एक नया कस्टमर ही इसकी कीमत निकाल देता है।',
   heroCta: 'फ्री डेमो बुक करें',
   pricingH: 'एक नया कस्टमर ही <span class="it">इसकी कीमत निकाल देता है।</span>',
   faq: [
-    { q: 'क्या मेरा डेटा सेफ है?', a: 'हाँ। आपका डेटा सुरक्षित रखा जाता है — सिर्फ आप देख सकते हैं। कभी भी डिलीट करवा सकते हैं।' },
+    { q: 'क्या मेरा डेटा सेफ है?', a: 'आपका डेटा सुरक्षित रहता है — कभी शेयर या बेचा नहीं जाता। कभी भी डिलीट करवा सकते हैं।' },
     { q: 'क्या Scout मेरे कस्टमर को खुद मैसेज करता है?', a: 'नहीं। Scout मैसेज लिखता है, भेजते आप हैं — अपने WhatsApp से, एक टैप में।' },
-    { q: 'कौन-कौन सी भाषा?', a: 'Hindi, Hinglish, English — Settings में कभी भी बदलो।' },
-    { q: 'अगर काम नहीं आया तो?', a: 'हम कॉल पर सेटअप करते हैं और हर हफ्ते चेक करते हैं। अगर फ़ायदा नहीं हो रहा, बंद कर दो।' },
-    { q: 'क्या कैंसल कर सकते हैं?', a: 'हाँ, मंथली है, कोई लॉक-इन नहीं।' },
-    { q: 'लैपटॉप चाहिए?', a: 'नहीं, फ़ोन पर चलता है।' },
+    { q: 'कौन-कौन सी भाषा?', a: 'Hindi, Hinglish, English — Settings में कभी भी बदल सकते हैं।' },
+    { q: 'अगर काम नहीं आया तो?', a: 'हम कॉल पर आपके साथ सेटअप करते हैं और हर हफ़्ते चेक करते हैं। अगर फ़ायदा नहीं हो रहा, तो आप कभी भी बंद कर सकते हैं।' },
+    { q: 'क्या कैंसल कर सकते हैं?', a: 'हाँ। मंथली प्लान है, कोई लॉक-इन नहीं।' },
+    { q: 'लैपटॉप चाहिए?', a: 'नहीं, आपके फ़ोन पर चलता है।' },
     { q: 'सेटअप में कितना टाइम?', a: 'करीब 10 मिनट।' },
-    { q: 'GST इनवॉइस मिलता है?', a: 'हाँ, हर महीने GST इनवॉइस मिलेगा।' }
+    { q: 'GST इनवॉइस मिलता है?', a: 'हाँ, हर महीने GST इनवॉइस मिलेगा।', gst: true }
   ]
 };
 
@@ -480,7 +469,7 @@ var HI = {
    FAQ DATA (English)
    ============================================================ */
 var FAQ_EN = [
-  { q: 'Is my data safe?', a: 'Yes. Your data is stored securely — only you can see it. Request a delete anytime.' },
+  { q: 'Is my data safe?', a: 'Your data is stored securely, never shared or sold. Delete it anytime on request.' },
   { q: 'Does Scout message my customers itself?', a: 'No. Scout writes the message; you send it from your own WhatsApp with one tap.' },
   { q: 'Which languages?', a: 'Hindi, Hinglish, and English. Change anytime in settings.' },
   { q: 'What if it doesn\'t work for me?', a: 'We set it up with you on a call and check in weekly. If it isn\'t helping, you stop.' },
@@ -535,8 +524,6 @@ function renderFaq() {
   var html = '';
   items.forEach(function(f, i) {
     if (f.gst && !SCOUT_SITE.gstInvoice) return;
-    /* In Hindi, always show last Q (GST) only if gstInvoice */
-    if (_lang === 'hi' && i === items.length - 1 && !SCOUT_SITE.gstInvoice) return;
     html += '<div class="faq-item"><button class="faq-q" onclick="this.parentNode.classList.toggle(\'open\')">' +
       esc(f.q) + '</button><div class="faq-a"><p>' + esc(f.a) + '</p></div></div>';
   });
@@ -571,7 +558,8 @@ function renderFooter() {
     '<a href="terms.html">Terms</a>' +
     '<a href="privacy.html">Privacy</a>' +
     '<a href="refund.html">Refund &amp; Cancellation</a>' +
-    '<a href="mailto:' + esc(S.email || 'gsevnservices@gmail.com') + '">Contact</a>' +
+    '<a href="contact.html">Contact</a>' +
+    '<a href="delivery.html">Delivery</a>' +
     '</div></div>' +
     '<div class="foot-copy">© 2026 ' + esc(S.legalName || 'G7 Capital') + '</div>';
   el.innerHTML = html;
@@ -605,10 +593,15 @@ function renderWhatsApp() {
 function renderHeroCta() {
   var btn = document.getElementById('heroCta');
   var ctaBtn = document.getElementById('ctaBtn');
+  var navCta = document.getElementById('navCta');
   var demoHref = SCOUT_SITE.demoUrl || (SCOUT_SITE.whatsapp ? 'https://wa.me/' + SCOUT_SITE.whatsapp + '?text=' + encodeURIComponent('Hi, I\'d like a demo of Scout.') : '');
   if (demoHref) {
-    if (btn) { btn.href = demoHref; btn.target = '_blank'; btn.rel = 'noopener'; }
-    if (ctaBtn) { ctaBtn.href = demoHref; ctaBtn.target = '_blank'; ctaBtn.rel = 'noopener'; }
+    [btn, ctaBtn, navCta].forEach(function(el) {
+      if (el) { el.href = demoHref; el.target = '_blank'; el.rel = 'noopener'; }
+    });
+  } else {
+    /* Fallback: scroll to pricing section */
+    if (navCta) navCta.href = '#pricing';
   }
 }
 
