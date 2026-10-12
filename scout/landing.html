@@ -38,10 +38,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;o
 .wordmark b{font-weight:400;color:var(--amber)}
 .brand-sep{width:1px;height:15px;background:var(--border);align-self:center}
 .brand-tag{font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+.nav-right{display:flex;align-items:center;gap:20px}
+.lang-toggle{font-size:11px;color:var(--grey1);cursor:pointer;background:none;border:none;font-family:var(--sans);letter-spacing:.04em;transition:color .3s;padding:8px 4px}
+.lang-toggle:hover,.lang-toggle.active{color:var(--amber)}
+.lang-sep{color:var(--grey2);font-size:11px}
 .btn-amber{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--black);background:var(--amber);
-  padding:14px 30px;text-decoration:none;border:none;cursor:pointer;transition:all .35s;display:inline-block;white-space:nowrap}
+  padding:14px 30px;text-decoration:none;border:none;cursor:pointer;transition:all .35s;display:inline-block;white-space:nowrap;min-height:44px;line-height:1}
 .btn-amber:hover{background:var(--amber-l);transform:translateY(-2px);box-shadow:0 14px 44px rgba(224,146,47,.32)}
-.nav-cta{padding:12px 26px}
+.btn-ghost{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);background:transparent;
+  border:1px solid rgba(224,146,47,.4);padding:14px 30px;text-decoration:none;cursor:pointer;transition:all .35s;display:inline-block;white-space:nowrap;min-height:44px;line-height:1}
+.btn-ghost:hover{border-color:var(--amber);background:rgba(224,146,47,.08)}
+.nav-cta{padding:12px 26px;min-height:44px}
 
 /* ============ HERO ============ */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
@@ -54,8 +61,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;o
 .hero h1 .nm{display:block;font-size:clamp(56px,8vw,104px);line-height:.95}
 .hero h1 .rl{display:block;font-style:italic;color:var(--amber);font-size:clamp(26px,3.3vw,42px);margin-top:10px;line-height:1.1}
 .hero p{font-size:16px;line-height:1.95;color:var(--grey1);max-width:486px;margin-bottom:38px;opacity:0;animation:rise 1s ease .5s both}
-.hero-actions{display:flex;gap:24px;align-items:center;flex-wrap:wrap;opacity:0;animation:rise 1s ease .65s both}
-.btn-cap{font-size:11px;letter-spacing:.04em;color:var(--grey2);font-family:var(--serif);font-style:italic}
+.hero-actions{display:flex;gap:18px;align-items:center;flex-wrap:wrap;opacity:0;animation:rise 1s ease .65s both}
+.hero-sub{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--grey2);margin-top:14px}
+.hero-signin{font-size:11px;letter-spacing:.04em;color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .35s,border-color .35s}
+.hero-signin:hover{color:var(--amber);border-color:var(--amber)}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 .scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:3;opacity:0;animation:rise 1s ease 1.2s both}
 .scrollcue .ln{width:1px;height:42px;background:linear-gradient(var(--amber),transparent);animation:cue 2.6s ease infinite}
@@ -91,7 +100,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;o
 .fnode .fn-d{font-size:12.5px;line-height:1.7;color:var(--grey1)}
 .farrow{display:flex;align-items:center;justify-content:center;color:var(--amber);font-size:15px;opacity:.65}
 
-/* what you get */
+/* what you get — daily + plan */
 .get-sub{font-size:16px;line-height:1.9;color:var(--grey1);max-width:620px;margin-top:24px}
 .get-group{display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin:60px 0 18px}
 .get-group::before{content:'';width:28px;height:1px;background:var(--amber)}
@@ -105,6 +114,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;o
 .get-t{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--white);margin-bottom:16px;line-height:1.5}
 .get-d{font-size:13px;line-height:1.85;color:var(--grey1);margin-top:auto}
 
+/* screenshots */
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.shot{background:#0c0b09;border:1px solid var(--border3);overflow:hidden;display:flex;flex-direction:column}
+.shot img{width:100%;height:auto;display:block}
+.shot-ph{aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--grey2);letter-spacing:.1em}
+.shot-cap{padding:18px 20px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);border-top:1px solid var(--border3)}
+
 /* tag cloud */
 .tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:60px;max-width:920px}
 .tag{font-size:12px;letter-spacing:.06em;color:var(--grey1);border:1px solid var(--border);padding:10px 18px;border-radius:999px;transition:all .35s;cursor:default}
@@ -113,21 +129,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;o
 
 /* pricing */
 .price-wrap{display:flex;justify-content:center;margin-top:64px}
-.price{width:100%;max-width:460px;background:#0c0b09;border:1px solid var(--border);padding:46px 44px 40px;text-align:center;position:relative}
+.price{width:100%;max-width:520px;background:#0c0b09;border:1px solid var(--border);padding:46px 44px 40px;text-align:center;position:relative}
 .price::after{content:'';position:absolute;inset:0;border:1px solid transparent;background:linear-gradient(180deg,rgba(224,146,47,.5),transparent 60%) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
 .price-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:24px}
-.price-free{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:28px;padding:14px 28px;border:1px solid var(--border);border-radius:999px;background:rgba(224,146,47,.07)}
-.price-free b{font-family:var(--sans);font-weight:400;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
-.price-free small{font-size:11px;letter-spacing:.06em;color:var(--grey1)}
-.price-amt{font-family:var(--serif);font-weight:300;font-size:54px;color:var(--white);line-height:1;opacity:.82}
-.price-amt .pre{font-size:15px;color:var(--grey1);font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:8px;opacity:.9}
-.price-amt span{font-size:15px;color:var(--grey1);font-family:var(--sans);letter-spacing:.04em}
-.price-feats{list-style:none;text-align:left;margin:36px 0 32px;display:flex;flex-direction:column;gap:14px}
+.price-feats{list-style:none;text-align:left;margin:0 0 36px;display:flex;flex-direction:column;gap:14px}
 .price-feats li{display:flex;align-items:flex-start;gap:13px;font-size:13.5px;line-height:1.5;color:var(--grey1)}
 .price-feats li::before{content:'';flex:none;width:16px;height:16px;margin-top:1px;border-radius:50%;background:rgba(224,146,47,.14);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23E0922F' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
-.price .btn-amber{display:block;width:100%;padding:17px;font-size:11px}
-.price-cap{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--grey2);margin-top:18px}
+.price-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.price-btns .btn-amber,.price-btns .btn-ghost{flex:1;min-width:160px;padding:17px 20px;font-size:11px;text-align:center}
+
+/* FAQ */
+.faq-list{max-width:720px;margin-top:48px}
+.faq-item{border-bottom:1px solid var(--border3)}
+.faq-q{width:100%;background:none;border:none;color:var(--white);font-family:var(--sans);font-size:14px;letter-spacing:.02em;
+  padding:22px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;line-height:1.5}
+.faq-q::after{content:'+';font-size:18px;color:var(--amber);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;padding:0 0 0 0}
+.faq-item.open .faq-a{max-height:200px;padding:0 0 20px 0}
+.faq-a p{font-size:13px;line-height:1.85;color:var(--grey1)}
 
 /* final CTA */
 .cta{position:relative;text-align:center;padding:150px 32px;overflow:hidden;border-top:1px solid var(--border3)}
@@ -138,21 +159,27 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;o
 .cta h2 .it{font-style:italic;color:var(--amber)}
 .cta .lead{font-size:16px;line-height:1.9;color:var(--grey1);max-width:440px;margin-bottom:42px}
 .cta .btn-amber{font-size:11px;padding:18px 48px}
-.cta-cap{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--grey2);margin-top:22px}
 .cta-links{margin-top:40px;display:flex;flex-direction:column;gap:14px;align-items:center}
 .cta-links .row{font-size:11px;letter-spacing:.04em;color:var(--grey2)}
 .cta-links a{color:var(--grey1);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .35s,border-color .35s}
 .cta-links a:hover{color:var(--amber);border-color:var(--amber)}
 
+/* floating WhatsApp */
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:500;width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;text-decoration:none;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);transition:transform .3s}
+.wa-float:hover{transform:scale(1.08)}
+.wa-float svg{width:28px;height:28px;fill:#fff}
+
 /* footer */
-footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
-.foot-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey2)}
-.foot-l b{color:var(--amber);font-weight:400}
-.foot-c{font-size:11px;letter-spacing:.1em;color:var(--grey2)}
-.foot-r{display:flex;gap:26px}
-.foot-r a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .35s}
-.foot-r a:hover{color:var(--amber)}
+footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;margin:0 auto}
+.foot-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:24px}
+.foot-info{font-size:11px;line-height:1.9;color:var(--grey2)}
+.foot-info b{color:var(--amber);font-weight:400}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap}
+.foot-links a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey1);text-decoration:none;transition:color .35s}
+.foot-links a:hover{color:var(--amber)}
+.foot-copy{font-size:11px;letter-spacing:.1em;color:var(--grey2)}
 
 /* ============ RESPONSIVE ============ */
 @media(max-width:980px){
@@ -168,6 +195,7 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
   .pains,.gets{grid-template-columns:1fr}
   .flow4{grid-template-columns:1fr;gap:6px}
   .farrow{transform:rotate(90deg);padding:2px 0}
+  .shots{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}
 }
 @media(max-width:560px){
   .topbar{padding:16px 20px}
@@ -175,8 +203,18 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
   .nav-cta{padding:11px 18px;font-size:9px;letter-spacing:.16em}
   .section{padding:78px 22px}
   .price{padding:38px 26px 32px}
-  footer{flex-direction:column;text-align:center;padding:38px 22px}
+  .price-btns{flex-direction:column}
+  .price-btns .btn-amber,.price-btns .btn-ghost{min-width:0;width:100%}
+  footer{padding:38px 22px}
+  .foot-top{flex-direction:column}
+  .foot-links{flex-direction:column;gap:14px}
   .cta{padding:110px 22px}
+  .wa-float{bottom:18px;right:18px;width:52px;height:52px}
+}
+@media(max-width:375px){
+  .hero-inner{padding:110px 18px 340px}
+  .section{padding:64px 16px}
+  .price{padding:32px 18px 28px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -195,7 +233,12 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
     <span class="brand-sep"></span>
     <span class="brand-tag">Scout</span>
   </div>
-  <a href="../login.html?product=scout" class="btn-amber nav-cta">Get Started →</a>
+  <div class="nav-right">
+    <button class="lang-toggle active" id="btnEn" onclick="setLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-toggle" id="btnHi" onclick="setLang('hi')">हिंदी</button>
+    <a href="../login.html?product=scout" class="btn-amber nav-cta" id="navCta">Get Started →</a>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -206,13 +249,14 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
       <div class="eyebrow">G7 Capital · AI Employees</div>
       <h1>
         <span class="nm">Scout</span>
-        <span class="rl">Your AI Business Development Employee</span>
+        <span class="rl" data-hi="आपका AI बिज़नेस डेवलपमेंट एम्प्लॉई">Your AI Business Development Employee</span>
       </h1>
-      <p>Scout finds your best customers, helps you win them, keeps them coming back, and grows your revenue — all in a simple plan you can follow from day one.</p>
+      <p data-hi="Scout आपके बेस्ट कस्टमर ढूंढता है, उन्हें जीतने में मदद करता है, बार-बार लाता है, और आपका रेवेन्यू बढ़ाता है — एक सिंपल प्लान जो आप Day 1 से फॉलो कर सकते हैं।">Scout finds your best customers, helps you win them, keeps them coming back, and grows your revenue — all in a simple plan you can follow from day one.</p>
       <div class="hero-actions">
-        <a href="../login.html?product=scout" class="btn-amber">Get Started →</a>
-        <span class="btn-cap">First month free. No card required.</span>
+        <a id="heroCta" class="btn-amber" href="#pricing">Book a Free Demo</a>
+        <a href="../login.html?product=scout" class="hero-signin">Sign in →</a>
       </div>
+      <div class="hero-sub" data-hi="एक नया कस्टमर ही इसकी कीमत निकाल देता है।">One new customer pays for it.</div>
     </div>
   </div>
   <div class="scrollcue"><div class="ln"></div><span>Scroll</span></div>
@@ -252,7 +296,7 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
   <div class="reveal">
     <div class="sec-label">02 · Meet Scout</div>
     <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px);margin-bottom:46px">Scout is the AI employee that<br><span class="it">grows your business.</span></h2>
-    <p class="sec-body">Tell Scout about your business in 5 minutes. Scout studies your local market and gives you a complete plan — who your best customers are, exactly what to say to them, and what to do each day to win and keep them. Then every week, Scout adjusts the plan based on what worked.</p>
+    <p class="sec-body">Tell Scout about your business in 10 minutes. Scout studies your local market and gives you a complete plan — who your best customers are, exactly what to say to them, and what to do each day to win and keep them. Then every week, Scout adjusts the plan based on what worked.</p>
   </div>
   <div class="flow4 reveal">
     <div class="fnode"><div class="fn-no">STAGE 01</div><div class="fn-k">Find</div><div class="fn-d">Scout finds your best customers nearby.</div></div>
@@ -267,10 +311,32 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
   </div>
 </section>
 
-<!-- 03 — WHAT YOU GET -->
+<!-- 03 — WHAT YOU GET EVERY DAY -->
+<section class="section" id="daily">
+  <div class="reveal">
+    <div class="sec-label">03 · What You Get Every Day</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">Every morning, Scout tells you<br><span class="it">exactly what to do.</span></h2>
+  </div>
+  <div class="get-group first reveal">Every Day</div>
+  <div class="gets reveal">
+    <div class="get"><div class="get-n">01</div><div class="get-t">Scout's Move Today</div><div class="get-d">One clear action each morning with a ready message you can send right away.</div></div>
+    <div class="get"><div class="get-n">02</div><div class="get-t">Talk to Scout</div><div class="get-d">Ask "What's my update?" by voice or type any question — Scout answers about your business.</div></div>
+    <div class="get"><div class="get-n">03</div><div class="get-t">Morning Brief</div><div class="get-d">Today's actions and today's news, every day at 6 am in your inbox.</div></div>
+  </div>
+  <div class="gets reveal" style="margin-top:1px">
+    <div class="get"><div class="get-n">04</div><div class="get-t">News with "Do This"</div><div class="get-d">What changed in your market and what to do about it — not just headlines.</div></div>
+    <div class="get"><div class="get-n">05</div><div class="get-t">Follow-Ups</div><div class="get-d">Who to chase today and what to say, with one-tap WhatsApp send.</div></div>
+    <div class="get"><div class="get-n">06</div><div class="get-t">Customer Links</div><div class="get-d">Track which of your links bring customers. Know what's working.</div></div>
+  </div>
+  <div class="gets reveal" style="margin-top:1px">
+    <div class="get"><div class="get-n">07</div><div class="get-t">Hindi, Hinglish or English</div><div class="get-d">All messages in your language. Switch anytime in settings.</div></div>
+  </div>
+</section>
+
+<!-- 04 — YOUR GROWTH PLAN -->
 <section class="section" id="get">
   <div class="reveal">
-    <div class="sec-label">03 · What You Get</div>
+    <div class="sec-label">04 · Your Growth Plan</div>
     <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">Not advice.<br><span class="it">A plan you can actually follow.</span></h2>
     <p class="get-sub">Scout covers everything — from finding your first customer to growing your revenue month after month.</p>
   </div>
@@ -297,67 +363,268 @@ footer{border-top:1px solid var(--border3);padding:44px 64px;max-width:1340px;ma
   </div>
 </section>
 
-<!-- 04 — WHO IT WORKS FOR -->
+<!-- SEE YOUR DAY WITH SCOUT -->
+<section class="section" id="shots">
+  <div class="reveal">
+    <div class="sec-label">See Your Day With Scout</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">This is what your morning <span class="it">looks like.</span></h2>
+  </div>
+  <div class="shots reveal" id="shotGrid"></div>
+</section>
+
+<!-- 05 — WHO IT WORKS FOR -->
 <section class="section" id="who">
   <div class="reveal">
-    <div class="sec-label">04 · Built For Your Business</div>
+    <div class="sec-label">05 · Built For Your Business</div>
     <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">41 business types.<br><span class="it">Every Indian market.</span></h2>
   </div>
   <div class="tags reveal" id="tags"></div>
   <div class="tag-note reveal">From metro suburbs to Tier 2 towns to Tier 3 districts — Scout calibrates to your exact market.</div>
 </section>
 
-<!-- 05 — PRICING -->
+<!-- 06 — PRICING -->
 <section class="section" id="pricing">
   <div class="reveal">
-    <div class="sec-label">05 · Pricing</div>
-    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px)">Less than you spend on chai<br>for the shop. <span class="it">Every month.</span></h2>
+    <div class="sec-label">06 · Pricing</div>
+    <h2 class="sec-h" style="font-size:clamp(30px,4.4vw,44px)" data-hi="एक नया कस्टमर ही <span class='it'>इसकी कीमत निकाल देता है।</span>">One new customer <span class="it">pays for it.</span></h2>
   </div>
   <div class="price-wrap reveal">
     <div class="price">
-      <div class="price-label">Scout</div>
-      <div class="price-free"><b>First Month Free</b><small>No card required</small></div>
-      <div class="price-amt"><span class="pre">Then</span>₹3,000<span> / month</span></div>
-      <ul class="price-feats">
-        <li>Complete customer acquisition plan</li>
-        <li>Weekly plan updates</li>
-        <li>WhatsApp broadcast calendar</li>
-        <li>Referral network builder</li>
-        <li>Lost customer recovery</li>
-        <li>Government scheme recommendations</li>
-        <li>Festival campaign messages</li>
-        <li>All 41 business types covered</li>
+      <div class="price-label">Scout — Everything Included</div>
+      <ul class="price-feats" id="priceFeats">
+        <li>Scout's move every morning with a ready message</li>
+        <li>Talk to Scout — voice or text, any question about your business</li>
+        <li>Morning brief at 6 am — actions + news in your inbox</li>
+        <li>News with "Do this" — market changes and what to do</li>
+        <li>Follow-ups — who to chase and one-tap WhatsApp send</li>
+        <li>Customer links — track what brings customers</li>
+        <li>3 customer types with ready-to-send messages</li>
+        <li>5-day action plan, updated weekly</li>
+        <li>WhatsApp broadcast calendar — 4 weeks of messages</li>
+        <li>Win-back, referral, and expansion plans</li>
+        <li>Government schemes matched to your business</li>
+        <li>Weekly check-in — Scout sharpens the plan each week</li>
+        <li>Hindi, Hinglish, or English — switch anytime</li>
       </ul>
-      <a href="../login.html?product=scout" class="btn-amber">Get Started →</a>
+      <div class="price-btns" id="priceBtns"></div>
     </div>
   </div>
 </section>
 
-<!-- 06 — FINAL CTA -->
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="reveal">
+    <div class="sec-label">Questions</div>
+    <h2 class="sec-h" style="font-size:clamp(28px,4vw,40px)">Frequently asked.</h2>
+  </div>
+  <div class="faq-list reveal" id="faqList"></div>
+</section>
+
+<!-- FINAL CTA — "Your competition is already using it" -->
 <section class="cta" id="start">
   <div class="cta-inner reveal">
     <h2>Your competition is already using it —<br><span class="it">and getting ahead.</span></h2>
-    <p class="lead">Just one new customer covers your monthly cost. Everything after that is profit.</p>
-    <a href="../login.html?product=scout" class="btn-amber">Get Started →</a>
-    <div class="cta-cap">First month free. No card required.</div>
+    <p class="lead">Just one new customer covers your cost. Everything after that is profit.</p>
+    <a id="ctaBtn" class="btn-amber" href="#pricing">Book a Free Demo</a>
     <div class="cta-links">
       <div class="row">Already have an account? <a href="../login.html?product=scout">Sign in →</a></div>
-      <div class="row">Want to talk to us first? <a href="mailto:gsevnservices@gmail.com?subject=Scout%20Access%20Request">Request access →</a></div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer id="contact">
-  <div class="foot-l"><b>Scout</b> · A G7 Capital AI Employee</div>
-  <div class="foot-c">© 2026 G7 Capital</div>
-  <div class="foot-r">
-    <a href="../index.html">All Employees →</a>
-    <a href="mailto:gsevnservices@gmail.com?subject=Scout%20Access%20Request">Contact</a>
-  </div>
-</footer>
+<footer id="contact"></footer>
+
+<!-- FLOATING WHATSAPP -->
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener noreferrer" style="display:none" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.39-1.587l-.376-.232-3.897 1.306 1.306-3.897-.232-.376A9.94 9.94 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+</a>
 
 <script>
+/* ============================================================
+   CONFIG — empty values hide their sections/elements
+   ============================================================ */
+var SCOUT_SITE = {
+  legalName: '',
+  gstin: '',
+  address: '',
+  phone: '',
+  whatsapp: '',   /* digits with 91 prefix */
+  email: 'gsevnservices@gmail.com',
+  demoUrl: '',    /* Cal.com link */
+  gstInvoice: false
+};
+
+/* ============================================================
+   HINDI STRINGS — hero, pricing heading, FAQ
+   ============================================================ */
+var HI = {
+  heroRole: 'आपका AI बिज़नेस डेवलपमेंट एम्प्लॉई',
+  heroBody: 'Scout आपके बेस्ट कस्टमर ढूंढता है, उन्हें जीतने में मदद करता है, बार-बार लाता है, और आपका रेवेन्यू बढ़ाता है — एक सिंपल प्लान जो आप Day 1 से फॉलो कर सकते हैं।',
+  heroSub: 'एक नया कस्टमर ही इसकी कीमत निकाल देता है।',
+  heroCta: 'फ्री डेमो बुक करें',
+  pricingH: 'एक नया कस्टमर ही <span class="it">इसकी कीमत निकाल देता है।</span>',
+  faq: [
+    { q: 'क्या मेरा डेटा सेफ है?', a: 'हाँ। आपका डेटा सुरक्षित रखा जाता है — सिर्फ आप देख सकते हैं। कभी भी डिलीट करवा सकते हैं।' },
+    { q: 'क्या Scout मेरे कस्टमर को खुद मैसेज करता है?', a: 'नहीं। Scout मैसेज लिखता है, भेजते आप हैं — अपने WhatsApp से, एक टैप में।' },
+    { q: 'कौन-कौन सी भाषा?', a: 'Hindi, Hinglish, English — Settings में कभी भी बदलो।' },
+    { q: 'अगर काम नहीं आया तो?', a: 'हम कॉल पर सेटअप करते हैं और हर हफ्ते चेक करते हैं। अगर फ़ायदा नहीं हो रहा, बंद कर दो।' },
+    { q: 'क्या कैंसल कर सकते हैं?', a: 'हाँ, मंथली है, कोई लॉक-इन नहीं।' },
+    { q: 'लैपटॉप चाहिए?', a: 'नहीं, फ़ोन पर चलता है।' },
+    { q: 'सेटअप में कितना टाइम?', a: 'करीब 10 मिनट।' },
+    { q: 'GST इनवॉइस मिलता है?', a: 'हाँ, हर महीने GST इनवॉइस मिलेगा।' }
+  ]
+};
+
+/* ============================================================
+   FAQ DATA (English)
+   ============================================================ */
+var FAQ_EN = [
+  { q: 'Is my data safe?', a: 'Yes. Your data is stored securely — only you can see it. Request a delete anytime.' },
+  { q: 'Does Scout message my customers itself?', a: 'No. Scout writes the message; you send it from your own WhatsApp with one tap.' },
+  { q: 'Which languages?', a: 'Hindi, Hinglish, and English. Change anytime in settings.' },
+  { q: 'What if it doesn\'t work for me?', a: 'We set it up with you on a call and check in weekly. If it isn\'t helping, you stop.' },
+  { q: 'Can I cancel?', a: 'Yes, monthly, no lock-in.' },
+  { q: 'Do I need a laptop?', a: 'No, works on your phone.' },
+  { q: 'How long is setup?', a: 'About 10 minutes.' },
+  { q: 'Is a GST invoice given?', a: 'Yes, you receive a GST invoice every month.', gst: true }
+];
+
+/* ============================================================
+   LANGUAGE TOGGLE
+   ============================================================ */
+var _lang = 'en';
+try { var s = localStorage.getItem('scout_lang'); if (s === 'hi') _lang = 'hi'; } catch(e){}
+
+function setLang(l) {
+  _lang = l;
+  try { localStorage.setItem('scout_lang', l); } catch(e){}
+  applyLang();
+}
+
+function applyLang() {
+  var hi = (_lang === 'hi');
+  document.getElementById('btnEn').classList.toggle('active', !hi);
+  document.getElementById('btnHi').classList.toggle('active', hi);
+
+  /* Hero */
+  var els = document.querySelectorAll('[data-hi]');
+  els.forEach(function(el) {
+    if (!el._enText) el._enText = el.innerHTML;
+    el.innerHTML = hi ? el.getAttribute('data-hi') : el._enText;
+  });
+
+  /* Hero CTA */
+  var heroCta = document.getElementById('heroCta');
+  if (heroCta) {
+    if (!heroCta._enText) heroCta._enText = heroCta.textContent;
+    heroCta.textContent = hi ? HI.heroCta : heroCta._enText;
+  }
+
+  /* FAQ */
+  renderFaq();
+}
+
+/* ============================================================
+   RENDER FUNCTIONS
+   ============================================================ */
+function renderFaq() {
+  var list = document.getElementById('faqList');
+  if (!list) return;
+  var items = (_lang === 'hi') ? HI.faq : FAQ_EN;
+  var html = '';
+  items.forEach(function(f, i) {
+    if (f.gst && !SCOUT_SITE.gstInvoice) return;
+    /* In Hindi, always show last Q (GST) only if gstInvoice */
+    if (_lang === 'hi' && i === items.length - 1 && !SCOUT_SITE.gstInvoice) return;
+    html += '<div class="faq-item"><button class="faq-q" onclick="this.parentNode.classList.toggle(\'open\')">' +
+      esc(f.q) + '</button><div class="faq-a"><p>' + esc(f.a) + '</p></div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function renderPriceButtons() {
+  var el = document.getElementById('priceBtns');
+  if (!el) return;
+  var demoHref = SCOUT_SITE.demoUrl || (SCOUT_SITE.whatsapp ? 'https://wa.me/' + SCOUT_SITE.whatsapp + '?text=' + encodeURIComponent('Hi, I\'d like a demo of Scout.') : '');
+  var waHref = SCOUT_SITE.whatsapp ? 'https://wa.me/' + SCOUT_SITE.whatsapp + '?text=' + encodeURIComponent('Hi, I\'d like to know more about Scout.') : '';
+  var html = '';
+  if (demoHref) html += '<a href="' + esc(demoHref) + '" class="btn-amber" target="_blank" rel="noopener">Book a Demo</a>';
+  if (waHref) html += '<a href="' + esc(waHref) + '" class="btn-ghost" target="_blank" rel="noopener">WhatsApp Us</a>';
+  if (!html) html = '<a href="mailto:' + esc(SCOUT_SITE.email) + '?subject=Scout%20Pricing" class="btn-amber">Contact for Pricing</a>';
+  el.innerHTML = html;
+}
+
+function renderFooter() {
+  var el = document.getElementById('contact');
+  if (!el) return;
+  var S = SCOUT_SITE;
+  var info = [];
+  if (S.legalName) info.push('<b>' + esc(S.legalName) + '</b>');
+  if (S.gstin) info.push('GSTIN: ' + esc(S.gstin));
+  if (S.address) info.push(esc(S.address));
+  if (S.phone) info.push('Phone: ' + esc(S.phone));
+  if (S.email) info.push('<a href="mailto:' + esc(S.email) + '" style="color:var(--grey1);text-decoration:none">' + esc(S.email) + '</a>');
+  var html = '<div class="foot-top">' +
+    '<div class="foot-info">' + (info.length ? info.join('<br>') : '<b>Scout</b> · A G7 Capital AI Employee') + '</div>' +
+    '<div class="foot-links">' +
+    '<a href="terms.html">Terms</a>' +
+    '<a href="privacy.html">Privacy</a>' +
+    '<a href="refund.html">Refund &amp; Cancellation</a>' +
+    '<a href="mailto:' + esc(S.email || 'gsevnservices@gmail.com') + '">Contact</a>' +
+    '</div></div>' +
+    '<div class="foot-copy">© 2026 ' + esc(S.legalName || 'G7 Capital') + '</div>';
+  el.innerHTML = html;
+}
+
+function renderShots() {
+  var grid = document.getElementById('shotGrid');
+  if (!grid) return;
+  var frames = [
+    { src: '../assets/scout/shots/move.png', cap: 'Scout\'s Move' },
+    { src: '../assets/scout/shots/messages.png', cap: 'Ready Messages' },
+    { src: '../assets/scout/shots/followups.png', cap: 'Follow-Ups Today' }
+  ];
+  var html = '';
+  frames.forEach(function(f) {
+    html += '<div class="shot">' +
+      '<img src="' + esc(f.src) + '" alt="' + esc(f.cap) + '" onerror="this.outerHTML=\'<div class=shot-ph>' + esc(f.cap) + '</div>\'">' +
+      '<div class="shot-cap">' + esc(f.cap) + '</div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+function renderWhatsApp() {
+  var el = document.getElementById('waFloat');
+  if (!el) return;
+  if (!SCOUT_SITE.whatsapp) { el.style.display = 'none'; return; }
+  el.href = 'https://wa.me/' + SCOUT_SITE.whatsapp + '?text=' + encodeURIComponent('Hi, I\'d like to know more about Scout.');
+  el.style.display = 'flex';
+}
+
+function renderHeroCta() {
+  var btn = document.getElementById('heroCta');
+  var ctaBtn = document.getElementById('ctaBtn');
+  var demoHref = SCOUT_SITE.demoUrl || (SCOUT_SITE.whatsapp ? 'https://wa.me/' + SCOUT_SITE.whatsapp + '?text=' + encodeURIComponent('Hi, I\'d like a demo of Scout.') : '');
+  if (demoHref) {
+    if (btn) { btn.href = demoHref; btn.target = '_blank'; btn.rel = 'noopener'; }
+    if (ctaBtn) { ctaBtn.href = demoHref; ctaBtn.target = '_blank'; ctaBtn.rel = 'noopener'; }
+  }
+}
+
+function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderFooter();
+renderPriceButtons();
+renderFaq();
+renderShots();
+renderWhatsApp();
+renderHeroCta();
+applyLang();
+
 const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 /* nav scroll state */
@@ -381,12 +648,7 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
 })();
 
 /* ============================================================
-   HERO — GROWTH LOOP
-   A warm business core at the centre. Four stations on a ring —
-   FIND (top), CONVERT (right), RETAIN (bottom), GROW (left) —
-   light in sequence. Customer pins appear, a few convert (lines
-   draw into the business), retained pins keep pulsing, and the
-   business glow grows — bigger and brighter each cycle. Loops.
+   HERO — GROWTH LOOP (canvas animation — unchanged)
    ============================================================ */
 (function(){
   const canvas=document.getElementById('loop'); if(!canvas) return;
@@ -440,21 +702,19 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
   }
 
   function onStage(s){
-    if(s===0){ // FIND — refresh & top up pins
-      if(level>=MAXLEVEL){ level=MAXLEVEL; } // plateau (stay big)
+    if(s===0){
+      if(level>=MAXLEVEL){ level=MAXLEVEL; }
       const target = 7 + level*3;
-      // retire some old un-won pins to keep things churning
       const unwon=pins.filter(p=>!p.won && !p.dead);
       if(unwon.length>3){ for(let i=0;i<Math.min(2,unwon.length-3);i++) unwon[i].dead=true; }
       while(pins.filter(p=>!p.dead).length < target) pins.push(newPin());
-    } else if(s===1){ // CONVERT — win ~40% of lit un-won pins
+    } else if(s===1){
       const cand=pins.filter(p=>!p.won && !p.dead && p.lit>0.4);
       const n=Math.max(1,Math.round(cand.length*0.4));
       for(let i=0;i<n && i<cand.length;i++) cand[i].won=true;
-      // cap retained customers
       const won=pins.filter(p=>p.won && !p.dead);
       if(won.length>11){ for(let i=0;i<won.length-11;i++) won[i].dead=true; }
-    } else if(s===3){ // GROW — bigger, brighter
+    } else if(s===3){
       level=Math.min(level+1,MAXLEVEL);
       coreTargetR = baseCoreR + (maxCoreR-baseCoreR)*(level/MAXLEVEL);
       glowT = 0.5 + 0.5*(level/MAXLEVEL);
@@ -471,7 +731,6 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
       const want = p.dead?0:1;
       p.lit=lerp(p.lit,want,Math.min(1,dt*(p.dead?2.4:1.6)));
       if(p.won) p.conn=lerp(p.conn,1,Math.min(1,dt*2.2));
-      // gently push outwards if core grew into them
       const minR=coreR*1.55; if(p.rad<minR) p.rad=lerp(p.rad,minR,Math.min(1,dt*2));
     }
     pins=pins.filter(p=>!(p.dead && p.lit<0.03));
@@ -490,7 +749,6 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
   function drawRing(){
     ctx.strokeStyle=rgba(AMB,0.10); ctx.lineWidth=1;
     ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.stroke();
-    // travelling flow arc
     if(!REDUCE){
       const a0=perf*0.5%TAU, span=0.5;
       const g=ctx.createLinearGradient(cx+Math.cos(a0)*R,cy+Math.sin(a0)*R,cx+Math.cos(a0+span)*R,cy+Math.sin(a0+span)*R);
@@ -504,7 +762,7 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
     for(const p of pins){
       if(!p.won || p.conn<=0.02) continue;
       const [px,py]=pinXY(p);
-      const dx=cx-px, dy=cy-py, d=Math.hypot(dx,dy)||1;
+      const dx=cx-px, dy=cy-py;
       const ex=px+dx*p.conn, ey=py+dy*p.conn;
       const pulse=REDUCE?0.7:(0.5+0.4*Math.sin(perf*2+p.ph));
       ctx.strokeStyle=rgba(AMB_L,0.18*pulse*p.lit);
@@ -521,15 +779,12 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
       const pulse=won?(REDUCE?1:(0.7+0.3*Math.sin(perf*2.2+p.ph))):0.55;
       const rr= won?5.2:4;
       const col= won?AMB_L:AMB;
-      // glow
       if(won){ ctx.shadowColor=rgba(AMB_L,0.8*p.lit); ctx.shadowBlur=12*pulse; }
-      // map-pin: circle + point
       ctx.fillStyle=rgba(col, (won?0.95:0.5)*p.lit*pulse);
       ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr,Math.PI*0.15,Math.PI*0.85,true);
       ctx.lineTo(px,py+rr*1.1); ctx.closePath(); ctx.fill();
       ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr,0,TAU); ctx.fill();
       ctx.shadowBlur=0;
-      // inner dot
       ctx.fillStyle=rgba([20,14,6],0.8*p.lit);
       ctx.beginPath(); ctx.arc(px,py-rr*0.4,rr*0.42,0,TAU); ctx.fill();
     }
@@ -547,7 +802,6 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
       ctx.shadowBlur=0;
       ctx.fillStyle= active?rgba([20,14,6],0.9):'rgba(0,0,0,0)';
       ctx.beginPath(); ctx.arc(s.x,s.y,r*0.4,0,TAU); ctx.fill();
-      // label outside the node
       const lx=s.x+Math.cos(s.ang)*22, ly=s.y+Math.sin(s.ang)*22;
       ctx.font='10px "Tenor Sans", sans-serif';
       if('letterSpacing' in ctx) ctx.letterSpacing='2px';
@@ -562,34 +816,28 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
   function drawCore(){
     const pulse=REDUCE?1:(0.92+Math.sin(perf*1.5)*0.08);
     const r=coreR;
-    // bloom
     const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,r*6.5);
     bg.addColorStop(0,rgba(AMB_L,0.34*glow*pulse));
     bg.addColorStop(0.16,rgba(AMB,0.18*glow*pulse));
     bg.addColorStop(0.5,rgba(AMB,0.05*glow));
     bg.addColorStop(1,rgba(AMB,0));
     ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(cx,cy,r*6.5,0,TAU); ctx.fill();
-    // orb
     const o=ctx.createRadialGradient(cx-r*0.3,cy-r*0.32,r*0.1,cx,cy,r);
     o.addColorStop(0,'#fff1da'); o.addColorStop(0.4,'#F0B968'); o.addColorStop(0.74,'#E0922F'); o.addColorStop(1,'#8a531c');
     ctx.save();
     ctx.shadowColor=rgba(AMB_L,0.7); ctx.shadowBlur=30*pulse*glow;
     ctx.fillStyle=o; ctx.beginPath(); ctx.arc(cx,cy,r*pulse,0,TAU); ctx.fill();
     ctx.restore();
-    // simple storefront glyph (warm dark, scales with core)
-    const s=r*0.9;
+    const sc=r*0.9;
     ctx.save();
     ctx.translate(cx,cy);
     ctx.fillStyle='rgba(40,24,8,0.62)'; ctx.strokeStyle='rgba(40,24,8,0.62)';
-    // awning roof (trapezoid)
     ctx.beginPath();
-    ctx.moveTo(-s*0.62,-s*0.16); ctx.lineTo(s*0.62,-s*0.16);
-    ctx.lineTo(s*0.5,-s*0.42); ctx.lineTo(-s*0.5,-s*0.42); ctx.closePath(); ctx.fill();
-    // body
-    ctx.fillRect(-s*0.5,-s*0.16,s*1.0,s*0.62);
-    // door (cut with lighter)
+    ctx.moveTo(-sc*0.62,-sc*0.16); ctx.lineTo(sc*0.62,-sc*0.16);
+    ctx.lineTo(sc*0.5,-sc*0.42); ctx.lineTo(-sc*0.5,-sc*0.42); ctx.closePath(); ctx.fill();
+    ctx.fillRect(-sc*0.5,-sc*0.16,sc*1.0,sc*0.62);
     ctx.fillStyle='rgba(255,241,218,0.5)';
-    ctx.fillRect(-s*0.14,s*0.10,s*0.28,s*0.36);
+    ctx.fillRect(-sc*0.14,sc*0.10,sc*0.28,sc*0.36);
     ctx.restore();
   }
 
@@ -617,12 +865,11 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
     drawCore();
     drawStations();
     drawCaption();
-    // left scrim — keep the loop clear of the headline
     if(!narrow){
       const sx=Math.max(0, (heroCopy?heroCopy.getBoundingClientRect().right:W*0.3));
-      const sc=ctx.createLinearGradient(0,0,sx,0);
-      sc.addColorStop(0,'rgba(8,8,8,1)'); sc.addColorStop(0.7,'rgba(8,8,8,0.9)'); sc.addColorStop(1,'rgba(8,8,8,0)');
-      ctx.fillStyle=sc; ctx.fillRect(0,0,sx,H);
+      const sc2=ctx.createLinearGradient(0,0,sx,0);
+      sc2.addColorStop(0,'rgba(8,8,8,1)'); sc2.addColorStop(0.7,'rgba(8,8,8,0.9)'); sc2.addColorStop(1,'rgba(8,8,8,0)');
+      ctx.fillStyle=sc2; ctx.fillRect(0,0,sx,H);
     }
   }
 
@@ -636,7 +883,6 @@ const REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
   addEventListener('resize',resize);
 
   if(REDUCE){
-    // static, fully-grown representative frame
     level=MAXLEVEL; coreTargetR=maxCoreR*0.8; coreR=coreTargetR; glow=0.95; glowT=0.95;
     for(let i=0;i<16;i++){ const p=newPin(); p.lit=1; if(i%2===0){p.won=true;p.conn=1;} pins.push(p); }
     stage=2; prevStage=2;
