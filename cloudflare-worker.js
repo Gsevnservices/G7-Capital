@@ -523,14 +523,15 @@ function wStageLabel(stage, bucket) {
   return stage;
 }
 
-function pipelineDueFromStore(store, now, bizName, bucket) {
+function pipelineDueFromStore(store, now, bizName, bucket, reviewSkip) {
   if (!store || !Array.isArray(store.people)) return [];
   var bk = bucket || 'retail';
   var out = [];
   store.people.forEach(function(p) {
-    /* Review ask: joined, not yet asked. Shows day 0–7, then stops. */
+    /* Review ask: joined, not yet asked. Shows day 0–7, then stops.
+       Skipped entirely if user has set scout_review_skip. */
     if (p.status === 'joined') {
-      if (!p.reviewAskedAt && p.wonAt) {
+      if (!reviewSkip && !p.reviewAskedAt && p.wonAt) {
         var dw = daysSince(p.wonAt, now);
         if (dw <= 7) {
           var first = (p.name || '').split(' ')[0] || 'there';
@@ -748,7 +749,8 @@ async function sendActionsEmail(env, firmCode, day, move) {
   var pipeline = st ? st.pick('scout_pipeline') : null;
   var bizName = (pend && pend.businessData && pend.businessData.businessName) || '';
   var _bucket = (st ? st.pick('scout_bucket') : null) || 'retail';
-  var due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bucket);
+  var _reviewSkip = (st ? st.pick('scout_review_skip') : null) === 'true';
+  var due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bucket, _reviewSkip);
   if (due.length > 0) {
     htmlParts.push(emailHeading('Follow up today'));
     var show = due.slice(0, 5);
@@ -1474,7 +1476,8 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
   const counts = {};
   people.forEach(function(p){ counts[p.status] = (counts[p.status] || 0) + 1; });
   const _bkt = (st ? st.pick('scout_bucket') : null) || 'retail';
-  const due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bkt).slice(0, 5)
+  const _rskip = (st ? st.pick('scout_review_skip') : null) === 'true';
+  const due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bkt, _rskip).slice(0, 5)
     .map(function(d){ return { name: (d.person && d.person.name) || '', status: d.person && d.person.status, reason: d.reason }; });
 
   /* Today's plan step and the customer group names. */
