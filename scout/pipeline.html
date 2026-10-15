@@ -170,20 +170,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <div id="everyoneSection"><!-- rendered by JS --></div>
   </div>
 
-  <!-- ══════════════════════════════════════
-       SECTION 3 — GOOGLE REVIEW LINK
-  ══════════════════════════════════════ -->
-  <div class="section-block">
-    <div class="section-label">Google Review Link</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <input class="add-input" id="reviewLinkInput" type="url" placeholder="Paste your Google review link here" autocomplete="off" style="flex:1;min-width:200px">
-      <button class="copy-btn primary" onclick="saveReviewLink()">Save</button>
-    </div>
-    <div style="font-size:11px;color:var(--grey2);margin-top:8px;line-height:1.6" id="reviewHelp">
-      Google Business Profile → Ask for reviews → copy the link.
-    </div>
-  </div>
-
 </div><!-- /page-wrap -->
 
 <script>
@@ -205,7 +191,6 @@ var _chaseItems = [];
 function render() {
   renderChase();
   renderEveryone();
-  renderReviewLink();
 }
 
 function renderChase() {
@@ -232,16 +217,22 @@ function renderChase() {
     /* Review-ask card */
     if (item.isReview) {
       if (!reviewLink) {
-        html += '<div class="chase-msg" style="font-style:normal;color:var(--grey1)">Add your Google review link first (below) so Scout can include it in the message.</div>';
+        html += '<div style="font-size:13px;color:var(--grey1);line-height:1.7;margin-bottom:12px">Add your Google review link so customers can review you in one tap.</div>';
+        html += '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">';
+        html += '<input class="add-input" id="reviewInline_' + idx + '" type="url" placeholder="Paste link here" style="flex:1;min-width:180px">';
+        html += '<button class="copy-btn primary" onclick="saveReviewInline(' + idx + ')">Save</button>';
+        html += '</div>';
+        html += '<div id="reviewErr_' + idx + '" style="font-size:11px;color:#C45A5A;display:none;margin-bottom:8px"></div>';
+        html += '<div style="font-size:11px;color:var(--grey2);line-height:1.6">Find it: Google Business Profile \u2192 Ask for reviews \u2192 Copy link.</div>';
       } else {
         html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
+        html += '<div class="chase-btns">';
+        if (waPhone(p.phone)) {
+          html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
+        }
+        html += '<button class="copy-btn" onclick="markReviewDone(\'' + p.id + '\')">Done</button>';
+        html += '</div>';
       }
-      html += '<div class="chase-btns">';
-      if (reviewLink && waPhone(p.phone)) {
-        html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
-      }
-      html += '<button class="copy-btn" onclick="markReviewDone(\'' + p.id + '\')">Done</button>';
-      html += '</div>';
     } else {
       html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
       html += '<div class="chase-btns">';
@@ -308,14 +299,17 @@ function renderEveryone() {
   el.innerHTML = html;
 }
 
-function renderReviewLink() {
-  var el = document.getElementById('reviewLinkInput');
-  if (!el) return;
-  try { el.value = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
-}
-
-function saveReviewLink() {
-  var val = String(document.getElementById('reviewLinkInput').value || '').trim();
+/* Save review link from the inline input inside a chase card */
+function saveReviewInline(idx) {
+  var inp = document.getElementById('reviewInline_' + idx);
+  var err = document.getElementById('reviewErr_' + idx);
+  if (!inp) return;
+  var val = String(inp.value || '').trim();
+  if (!val.match(/^https:\/\//i)) {
+    if (err) { err.textContent = "That doesn\u2019t look like a link"; err.style.display = ''; }
+    inp.focus();
+    return;
+  }
   try {
     localStorage.setItem(scoutKey('scout_review_link'), val);
     if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();

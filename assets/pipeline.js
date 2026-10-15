@@ -369,15 +369,16 @@ function pipelineDue() {
   try { reviewLink = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
 
   store.people.forEach(function(p) {
-    /* Review ask: joined leads, 2+ days after wonAt, not yet asked, once only */
+    /* Review ask: joined leads, not yet asked.
+       Appears immediately on join (day 0), then again at 2+ days if not done. */
     if (p.status === 'joined') {
       if (!p.reviewAskedAt && p.wonAt) {
         var dw = pipelineDaysSince(p.wonAt);
-        if (dw >= 2) {
+        if (dw === 0 || dw >= 2) {
           var first = (p.name || '').split(' ')[0] || 'there';
           var msg = templateMsg('review', lang, { name: first, business: bizName, link: reviewLink });
           out.push({
-            person: p, urgency: 1, isReview: true,
+            person: p, urgency: dw === 0 ? 2 : 1, isReview: true,
             reason: 'Ask ' + first + ' for a Google review',
             msg: msg
           });
