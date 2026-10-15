@@ -51,7 +51,8 @@ var SCOUT_STATE_KEYS = [
   'scout_daily_snapshot',
   'scout_pinned',
   'scout_bucket',
-  'scout_review_link'
+  'scout_review_link',
+  'scout_review_skip'
 ];
 
 /* ═══════════════════════════════════════════

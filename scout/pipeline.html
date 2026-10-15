@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=29"></script>
+<script src="../assets/scout.js?v=30"></script>
 <script src="../assets/pipeline.js?v=20"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
@@ -224,6 +224,7 @@ function renderChase() {
         html += '</div>';
         html += '<div id="reviewErr_' + idx + '" style="font-size:11px;color:#C45A5A;display:none;margin-bottom:8px"></div>';
         html += '<div style="font-size:11px;color:var(--grey2);line-height:1.6">Find it: Google Business Profile \u2192 Ask for reviews \u2192 Copy link.</div>';
+        html += '<div style="margin-top:10px"><a href="#" onclick="skipReviewAsks();return false" style="font-size:11px;color:var(--grey2);text-decoration:underline">Skip \u2014 no Google profile</a></div>';
       } else {
         html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
         html += '<div class="chase-btns">';
@@ -390,6 +391,15 @@ function markReviewDone(personId) {
   render();
 }
 
+/* Skip all review asks — user has no Google profile */
+function skipReviewAsks() {
+  try {
+    localStorage.setItem(scoutKey('scout_review_skip'), 'true');
+    if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
+  } catch(e) {}
+  render();
+}
+
 /* Enter key submits the add form */
 ['addName','addPhone','addNote'].forEach(function(id) {
   document.getElementById(id) && (document.getElementById(id).onkeydown = function(e) {
@@ -400,7 +410,7 @@ function markReviewDone(personId) {
 /* ═══════════════════════════════════════════
    AUTH + INIT
 ═══════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', async function() {
   var token = localStorage.getItem('g7_session_token');
   if (!token) {
     window.location.href = '../login.html?product=scout';
@@ -410,6 +420,10 @@ window.addEventListener('DOMContentLoaded', function() {
   document.body.style.visibility = 'visible';
   migrateUnscopedScoutKeys();
   pipelineFetchMsgLang();
+
+  /* Load server state first so scout_review_link / scout_review_skip
+     are available before the first render. */
+  await loadScoutStateFromServer();
 
   render();
   initCursor();
