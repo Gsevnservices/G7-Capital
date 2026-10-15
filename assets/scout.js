@@ -49,7 +49,9 @@ var SCOUT_STATE_KEYS = [
   'scout_pipeline',
   'scout_onboard_draft',
   'scout_daily_snapshot',
-  'scout_pinned'
+  'scout_pinned',
+  'scout_bucket',
+  'scout_review_link'
 ];
 
 /* ═══════════════════════════════════════════
@@ -1659,6 +1661,58 @@ function scoutNewsLoad() {
     } catch (e) { return null; }
   })();
   return _scoutNewsPromise;
+}
+
+// ─────────────────────────────────────────────────────────────
+// BUSINESS TYPE BUCKETS — maps 41 business types to 5 buckets
+// Moved here from onboard.html so every Scout page can use them.
+// ─────────────────────────────────────────────────────────────
+var BT_BUCKET = {
+  retail:   ['Grocery / Supermart','Wholesale / Distribution','Pharmacy / Medical Store','Stationery / Gift Shop','Clothing / Apparel Store','Jewellery Store','Furniture / Home Decor','Electronics / Appliance Store','Hardware / Building Materials','Sweet Shop / Mithai Store','D2C Brand / Online Store'],
+  food:     ['Restaurant / Dhaba / Cafe','Catering Business','Cloud Kitchen'],
+  personal: ['Gym / Fitness Centre','Salon / Spa / Beauty Parlour','Medical Clinic / Doctor','Ayurvedic Clinic / Wellness Centre','Diagnostic Lab / Pathology','Coaching Centre / Tuition','Driving School','Tailoring / Garment Stitching'],
+  trade:    ['Interior Designer / Architect','Real Estate / Property Broker','Mobile / Electronics Repair','Automobile Workshop / Garage','Courier / Logistics','Printing / Packaging','Event Management','Photography / Videography','Travel Agency / Tour Operator','Security Agency / Manpower Supply'],
+  pro:      ['Training / Corporate Learning','Digital Marketing Agency','CA / Accounting Firm','Legal Firm / Lawyer','IT Services / Software Company','SaaS / Software Product','Consulting / Advisory Firm','B2B Services','Recruitment / Staffing Firm']
+};
+
+function btBucketFor(type) {
+  for (var k in BT_BUCKET) {
+    if (BT_BUCKET[k].indexOf(type) !== -1) return k;
+  }
+  return null;
+}
+
+/* Returns the bucket for the current firm from scout state.
+   Reads businessData.businessType from scout_pending_result. */
+function scoutBucket() {
+  try {
+    var raw = localStorage.getItem(scoutKey('scout_pending_result'));
+    if (!raw) return 'retail';
+    var d = JSON.parse(raw);
+    var bt = (d && d.businessData && d.businessData.businessType) || '';
+    return btBucketFor(bt) || 'retail';
+  } catch (e) { return 'retail'; }
+}
+
+// ─────────────────────────────────────────────────────────────
+// STAGE LABELS — bucket-specific display names for pipeline stages
+// Internal stage keys (found, contacted, etc.) never change.
+// ─────────────────────────────────────────────────────────────
+var STAGE_LABELS = {
+  trade:    { found: 'New lead', contacted: 'Messaged', replied: 'Enquiry', trial_booked: 'Quote sent', joined: 'Work won' },
+  retail:   { found: 'New lead', contacted: 'Messaged', replied: 'Interested', trial_booked: 'Visit / Order', joined: 'Customer' },
+  food:     { found: 'New lead', contacted: 'Messaged', replied: 'Interested', trial_booked: 'Visit / Order', joined: 'Customer' },
+  personal: { found: 'New lead', contacted: 'Messaged', replied: 'Interested', trial_booked: 'Trial booked', joined: 'Member' },
+  pro:      { found: 'New lead', contacted: 'Messaged', replied: 'Enquiry', trial_booked: 'Consultation booked', joined: 'Client' },
+  _all:     { gone_quiet: 'Gone quiet', not_interested: 'Not interested' }
+};
+
+/* Returns the user-visible label for a stage key. */
+function stageLabel(stage) {
+  var b = scoutBucket();
+  if (STAGE_LABELS[b] && STAGE_LABELS[b][stage]) return STAGE_LABELS[b][stage];
+  if (STAGE_LABELS._all[stage]) return STAGE_LABELS._all[stage];
+  return stage;
 }
 
 // ─────────────────────────────────────────────────────────────

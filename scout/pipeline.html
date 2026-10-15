@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pipeline — Scout</title>
+<title>Customers — Scout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=28"></script>
-<script src="../assets/pipeline.js?v=18"></script>
+<script src="../assets/scout.js?v=29"></script>
+<script src="../assets/pipeline.js?v=19"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
 /* ─── RESET & VARIABLES ─── */
@@ -124,7 +124,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <a href="onboard.html" class="nav-link">New Analysis</a>
     <a href="history.html" class="nav-link">History</a>
     <a href="checkin.html" class="nav-link">Check-In</a>
-    <a href="pipeline.html" class="nav-link active">Pipeline</a>
+    <a href="pipeline.html" class="nav-link active">Customers</a>
     <span class="nav-firm-indicator" id="navFirmName"></span>
     <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
   </div>
@@ -134,8 +134,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 <div class="page-wrap">
 
   <div class="page-eyebrow">Scout</div>
-  <div class="page-heading">Pipeline</div>
+  <div class="page-heading">Customers</div>
   <div class="page-sub">Track every person you've contacted. Scout tells you who needs a follow-up today.</div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 0 — QUICK ADD
+  ══════════════════════════════════════ -->
+  <div class="section-block" id="add">
+    <div class="section-label">Add Customer</div>
+    <div class="add-form open" id="addForm" style="display:block">
+      <div class="add-form-row">
+        <input class="add-input" id="addName" type="text" placeholder="Name (e.g. Rakesh)" autocomplete="off">
+        <input class="add-input" id="addPhone" type="tel" placeholder="Phone — optional" autocomplete="off">
+        <input class="add-input" id="addNote" type="text" placeholder="Short note — optional" autocomplete="off">
+      </div>
+      <div class="add-form-btns">
+        <button class="copy-btn primary" onclick="submitAddPerson()">Add</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════════
        SECTION 1 — CHASE TODAY
@@ -151,20 +168,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   <div class="section-block">
     <div class="section-label">Everyone</div>
     <div id="everyoneSection"><!-- rendered by JS --></div>
+  </div>
 
-    <button class="btn-add" onclick="toggleAddForm()">+ Add Person</button>
-
-    <!-- Inline add form — shown on button click -->
-    <div class="add-form" id="addForm">
-      <div class="add-form-row">
-        <input class="add-input" id="addName" type="text" placeholder="Name (e.g. Rakesh)" autocomplete="off">
-        <input class="add-input" id="addPhone" type="tel" placeholder="Phone with country code — optional" autocomplete="off">
-        <input class="add-input" id="addIcp" type="text" placeholder="ICP (e.g. Young Professional)" autocomplete="off">
-      </div>
-      <div class="add-form-btns">
-        <button class="copy-btn primary" onclick="submitAddPerson()">Add</button>
-        <button class="copy-btn" onclick="toggleAddForm()">Cancel</button>
-      </div>
+  <!-- ══════════════════════════════════════
+       SECTION 3 — GOOGLE REVIEW LINK
+  ══════════════════════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Google Review Link</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <input class="add-input" id="reviewLinkInput" type="url" placeholder="Paste your Google review link here" autocomplete="off" style="flex:1;min-width:200px">
+      <button class="copy-btn primary" onclick="saveReviewLink()">Save</button>
+    </div>
+    <div style="font-size:11px;color:var(--grey2);margin-top:8px;line-height:1.6" id="reviewHelp">
+      Google Business Profile → Ask for reviews → copy the link.
     </div>
   </div>
 
@@ -175,18 +191,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 /* ═══════════════════════════════════════════
    UTILITY
 ═══════════════════════════════════════════ */
-/* escHtml is now in scout.js */
-
-/* Status display labels — 'found' is a Customer Finder business not yet messaged */
-var STATUS_LABELS = {
-  found:          'Found',
-  contacted:      'Contacted',
-  replied:        'Replied',
-  trial_booked:   'Trial booked',
-  joined:         'Joined',
-  gone_quiet:     'Gone quiet',
-  not_interested: 'Not interested'
-};
+/* escHtml, stageLabel, scoutBucket are in scout.js */
 
 /* ═══════════════════════════════════════════
    RENDER STATE — chase items indexed for
@@ -200,6 +205,7 @@ var _chaseItems = [];
 function render() {
   renderChase();
   renderEveryone();
+  renderReviewLink();
 }
 
 function renderChase() {
@@ -210,6 +216,9 @@ function renderChase() {
     return;
   }
 
+  var reviewLink = '';
+  try { reviewLink = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
+
   var html = '';
   _chaseItems.forEach(function(item, idx) {
     var p = item.person;
@@ -219,14 +228,30 @@ function renderChase() {
     if (p.icp) html += '<div class="chase-icp">' + escHtml(p.icp) + '</div>';
     html += '</div>';
     html += '<div class="chase-reason">' + escHtml(item.reason) + '</div>';
-    html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
-    html += '<div class="chase-btns">';
-    html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'replied\')">Replied</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">Booked trial</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'joined\')">Joined</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
-    html += '</div>';
+
+    /* Review-ask card */
+    if (item.isReview) {
+      if (!reviewLink) {
+        html += '<div class="chase-msg" style="font-style:normal;color:var(--grey1)">Add your Google review link first (below) so Scout can include it in the message.</div>';
+      } else {
+        html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
+      }
+      html += '<div class="chase-btns">';
+      if (reviewLink && waPhone(p.phone)) {
+        html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
+      }
+      html += '<button class="copy-btn" onclick="markReviewDone(' + JSON.stringify(p.id) + ')">Done</button>';
+      html += '</div>';
+    } else {
+      html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
+      html += '<div class="chase-btns">';
+      html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'replied\')">' + escHtml(stageLabel('replied')) + '</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">' + escHtml(stageLabel('trial_booked')) + '</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'joined\')">' + escHtml(stageLabel('joined')) + '</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
+      html += '</div>';
+    }
     html += '</div>';
   });
   el.innerHTML = html;
@@ -236,7 +261,7 @@ function renderEveryone() {
   var people = pipelineAll();
   var el = document.getElementById('everyoneSection');
   if (!people.length) {
-    el.innerHTML = '<div class="empty-msg">No contacts yet. Add someone using the button below, or send a WhatsApp from your Scout plan — Scout will ask for their name.</div>';
+    el.innerHTML = '<div class="empty-msg">No contacts yet. Add someone above, or send a WhatsApp from your Scout plan — Scout will ask for their name.</div>';
     return;
   }
 
@@ -244,27 +269,20 @@ function renderEveryone() {
   people.forEach(function(p) {
     var days = pipelineDaysSince(p.lastStatusAt || p.lastContactedAt);
     var dayN = days === 1 ? '1 day ago' : days + ' days ago';
-    var daysVerb = p.status === 'found'          ? 'Found '
-                 : p.status === 'contacted'      ? 'Messaged '
-                 : p.status === 'replied'        ? 'Replied '
-                 : p.status === 'trial_booked'   ? 'Booked '
-                 : p.status === 'joined'         ? 'Joined '
-                 : p.status === 'not_interested' ? 'Closed '
-                 : p.status === 'gone_quiet'     ? 'Quiet '
-                 : '';
+    var lbl = stageLabel(p.status);
     var daysLabel = days === 999 ? 'No contact yet'
-                  : days === 0   ? daysVerb + 'today'
-                  :                daysVerb + dayN;
-    var statusClass = p.status.replace(/_/g, '_'); /* keep underscores for CSS class match */
+                  : days === 0   ? lbl + ' today'
+                  :                lbl + ' ' + dayN;
     html += '<div class="everyone-row">';
-    /* Name + ICP */
+    /* Name + note */
     html += '<div class="ev-cell" style="min-width:140px">';
     html += '<div class="ev-name">' + escHtml(p.name) + '</div>';
-    if (p.icp) html += '<div class="ev-icp">' + escHtml(p.icp) + '</div>';
+    if (p.note) html += '<div class="ev-icp">' + escHtml(p.note) + '</div>';
+    else if (p.icp) html += '<div class="ev-icp">' + escHtml(p.icp) + '</div>';
     html += '</div>';
     /* Status */
     html += '<div class="ev-cell" style="flex:0 0 auto">';
-    html += '<span class="ev-status ' + escHtml(p.status) + '">' + escHtml(STATUS_LABELS[p.status] || p.status) + '</span>';
+    html += '<span class="ev-status ' + escHtml(p.status) + '">' + escHtml(stageLabel(p.status)) + '</span>';
     html += '</div>';
     /* Days */
     html += '<div class="ev-cell" style="flex:0 0 auto">';
@@ -273,13 +291,13 @@ function renderEveryone() {
     /* Actions */
     html += '<div class="ev-actions ev-cell">';
     if (p.status !== 'replied' && p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'replied\')">Replied</button>';
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'replied\')">' + escHtml(stageLabel('replied')) + '</button>';
     }
     if (p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">Booked</button>';
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">' + escHtml(stageLabel('trial_booked')) + '</button>';
     }
     if (p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'joined\')">Joined</button>';
+      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'joined\')">' + escHtml(stageLabel('joined')) + '</button>';
     }
     if (p.status !== 'not_interested' && p.status !== 'joined') {
       html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
@@ -288,6 +306,21 @@ function renderEveryone() {
     html += '</div>';
   });
   el.innerHTML = html;
+}
+
+function renderReviewLink() {
+  var el = document.getElementById('reviewLinkInput');
+  if (!el) return;
+  try { el.value = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
+}
+
+function saveReviewLink() {
+  var val = String(document.getElementById('reviewLinkInput').value || '').trim();
+  try {
+    localStorage.setItem(scoutKey('scout_review_link'), val);
+    if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
+  } catch(e) {}
+  render();
 }
 
 /* ═══════════════════════════════════════════
@@ -336,32 +369,37 @@ function evStatus(personId, status) {
 /* ═══════════════════════════════════════════
    ADD PERSON FORM
 ═══════════════════════════════════════════ */
-function toggleAddForm() {
-  var form = document.getElementById('addForm');
-  form.classList.toggle('open');
-  if (form.classList.contains('open')) {
-    document.getElementById('addName').value = '';
-    document.getElementById('addPhone').value = '';
-    document.getElementById('addIcp').value = '';
-    setTimeout(function(){ document.getElementById('addName').focus(); }, 80);
-  }
-}
-
 function submitAddPerson() {
   var name  = String(document.getElementById('addName').value || '').trim();
   var phone = String(document.getElementById('addPhone').value || '').replace(/[^0-9]/g, '');
-  var icp   = String(document.getElementById('addIcp').value || '').trim();
+  var note  = String(document.getElementById('addNote').value || '').trim();
   if (!name) { document.getElementById('addName').focus(); return; }
 
   var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
-  pipelineAddPerson(name, { phone: phone, icp: icp, week: week });
+  pipelineAddPerson(name, { phone: phone, note: note, week: week });
 
-  document.getElementById('addForm').classList.remove('open');
+  document.getElementById('addName').value = '';
+  document.getElementById('addPhone').value = '';
+  document.getElementById('addNote').value = '';
+  document.getElementById('addName').focus();
+  render();
+}
+
+/* Mark a review as done — sets reviewAskedAt on the lead */
+function markReviewDone(personId) {
+  var store = pipelineLoad();
+  for (var i = 0; i < store.people.length; i++) {
+    if (store.people[i].id === personId) {
+      store.people[i].reviewAskedAt = new Date().toISOString();
+      pipelineSave(store);
+      break;
+    }
+  }
   render();
 }
 
 /* Enter key submits the add form */
-['addName','addPhone','addIcp'].forEach(function(id) {
+['addName','addPhone','addNote'].forEach(function(id) {
   document.getElementById(id) && (document.getElementById(id).onkeydown = function(e) {
     if (e.key === 'Enter') { e.preventDefault(); submitAddPerson(); }
   });
@@ -379,9 +417,16 @@ window.addEventListener('DOMContentLoaded', function() {
 
   document.body.style.visibility = 'visible';
   migrateUnscopedScoutKeys();
+  pipelineFetchMsgLang();
 
   render();
   initCursor();
+
+  /* If navigated via pipeline.html#add, focus the name field */
+  if (location.hash === '#add') {
+    var addEl = document.getElementById('addName');
+    if (addEl) setTimeout(function(){ addEl.focus(); }, 120);
+  }
 });
 
 /* ═══════════════════════════════════════════

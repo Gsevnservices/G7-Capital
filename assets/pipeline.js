@@ -210,6 +210,7 @@ function pipelineSetStatus(personId, status, week, note) {
       var now = new Date().toISOString();
       store.people[i].status = status;
       store.people[i].lastStatusAt = now;
+      if (status === 'joined') store.people[i].wonAt = now;
       if (note) store.people[i].note = note;
       store.people[i].history.push({ week: week || 0, event: status, at: now });
       return pipelineSave(store);
@@ -242,6 +243,89 @@ function pipelineWeekStats(week) {
   return stats;
 }
 
+/* ---------- Follow-up message templates ---------- */
+/* Templates for quote follow-ups (trade bucket) and review requests.
+   {name} = contact first name, {business} = user's business name, {link} = Google review URL.
+   If {link} is empty the ": {link}" part is dropped automatically by templateMsg(). */
+var FOLLOW_UP_TEMPLATES = {
+  quote_3: {
+    English:  'Hi {name}, just checking \u2014 did you get a chance to look at the quote? Happy to explain anything.',
+    Hinglish: 'Namaste {name} ji, quote dekh liya? Koi sawaal ho toh bataiye, hum samjha denge.',
+    Hindi:    '\u0928\u092E\u0938\u094D\u0924\u0947 {name} \u091C\u0940, \u0915\u094D\u092F\u093E \u0906\u092A\u0928\u0947 quote \u0926\u0947\u0916 \u0932\u093F\u092F\u093E? \u0915\u094B\u0908 \u0938\u0935\u093E\u0932 \u0939\u094B \u0924\u094B \u092C\u0924\u093E\u0907\u090F, \u0939\u092E \u0938\u092E\u091D\u093E \u0926\u0947\u0902\u0917\u0947\u0964'
+  },
+  quote_7: {
+    English:  'Hi {name}, following up on last week\'s quote. Would you like any changes?',
+    Hinglish: 'Namaste {name} ji, pichle hafte ka quote \u2014 kuch badalna ho toh bataiye.',
+    Hindi:    '\u0928\u092E\u0938\u094D\u0924\u0947 {name} \u091C\u0940, \u092A\u093F\u091B\u0932\u0947 \u0939\u092B\u093C\u094D\u0924\u0947 \u0915\u0947 quote \u0915\u0947 \u092C\u093E\u0930\u0947 \u092E\u0947\u0902 \u2014 \u0915\u0941\u091B \u092C\u0926\u0932\u0928\u093E \u0939\u094B \u0924\u094B \u092C\u0924\u093E\u0907\u090F\u0964'
+  },
+  quote_15: {
+    English:  'Hi {name}, it\'s been a couple of weeks since our quote. Still interested? No rush at all.',
+    Hinglish: 'Namaste {name} ji, quote bheje kuch din ho gaye. Abhi bhi interest ho toh bataiye, koi jaldi nahi.',
+    Hindi:    '\u0928\u092E\u0938\u094D\u0924\u0947 {name} \u091C\u0940, quote \u092D\u0947\u091C\u0947 \u0915\u0941\u091B \u0926\u093F\u0928 \u0939\u094B \u0917\u090F\u0964 \u0905\u092D\u0940 \u092D\u0940 \u0930\u0941\u091A\u093F \u0939\u094B \u0924\u094B \u092C\u0924\u093E\u0907\u090F, \u0915\u094B\u0908 \u091C\u0932\u094D\u0926\u0940 \u0928\u0939\u0940\u0902\u0964'
+  },
+  review: {
+    English:  'Hi {name}, thank you for choosing {business}! If you have a minute, a Google review would really help us: {link}',
+    Hinglish: 'Namaste {name} ji, {business} chunne ke liye dhanyavaad! Ek minute ho toh Google review de dijiye, bahut madad hogi: {link}',
+    Hindi:    '\u0928\u092E\u0938\u094D\u0924\u0947 {name} \u091C\u0940, {business} \u091A\u0941\u0928\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0927\u0928\u094D\u092F\u0935\u093E\u0926! \u090F\u0915 \u092E\u093F\u0928\u091F \u0939\u094B \u0924\u094B Google review \u0926\u0947 \u0926\u0940\u091C\u093F\u090F, \u092C\u0939\u0941\u0924 \u092E\u0926\u0926 \u0939\u094B\u0917\u0940: {link}'
+  }
+};
+
+/* Fill a template. Drops ": {link}" when link is empty. */
+function templateMsg(key, lang, vars) {
+  var tpl = FOLLOW_UP_TEMPLATES[key];
+  if (!tpl) return '';
+  var msg = tpl[lang] || tpl.Hinglish || '';
+  msg = msg.replace(/\{name\}/g, vars.name || 'there');
+  msg = msg.replace(/\{business\}/g, vars.business || '');
+  if (!vars.link) {
+    msg = msg.replace(/[:\s]*\{link\}/g, '');
+  } else {
+    msg = msg.replace(/\{link\}/g, vars.link);
+  }
+  return msg;
+}
+
+/* Resolve the message language: try cached setting, fall back to onboarding language. */
+var _cachedMsgLang = null;
+function pipelineMsgLang() {
+  if (_cachedMsgLang) return _cachedMsgLang;
+  /* Try businessData.language from scout state */
+  try {
+    var raw = localStorage.getItem(scoutKey('scout_pending_result'));
+    if (raw) {
+      var d = JSON.parse(raw);
+      var lang = (d && d.businessData && d.businessData.language) || 'Hinglish';
+      if (/^Regional/i.test(lang)) lang = 'Hinglish';
+      /* Normalise to template keys */
+      if (/hindi/i.test(lang) && !/hinglish/i.test(lang)) _cachedMsgLang = 'Hindi';
+      else if (/english/i.test(lang)) _cachedMsgLang = 'English';
+      else _cachedMsgLang = 'Hinglish';
+      return _cachedMsgLang;
+    }
+  } catch (e) {}
+  return 'Hinglish';
+}
+
+/* Fetch message-lang from worker (fire-and-forget, updates cached value). */
+function pipelineFetchMsgLang() {
+  try {
+    var token = localStorage.getItem('g7_session_token') || '';
+    if (!token) return;
+    fetch((typeof SCOUT_WORKER !== 'undefined' ? SCOUT_WORKER : 'https://g7-proxy.gsevnservices.workers.dev') +
+      '/scout/message-lang', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    }).then(function(r) { return r.json(); }).then(function(j) {
+      if (j && j.language) {
+        var l = j.language;
+        if (/^Regional/i.test(l)) l = 'Hinglish';
+        if (/hindi/i.test(l) && !/hinglish/i.test(l)) _cachedMsgLang = 'Hindi';
+        else if (/english/i.test(l)) _cachedMsgLang = 'English';
+        else _cachedMsgLang = 'Hinglish';
+      }
+    }).catch(function() {});
+  } catch (e) {}
+}
+
 /* ---------- Chase rules ---------- */
 
 /* Days between two ISO timestamps */
@@ -264,46 +348,82 @@ function pipelineBusinessName() {
 }
 
 /* Returns people who need action today, each with a reason and a suggested message.
-   Rules:
+   Rules (bucket-aware):
      contacted, no reply 3+ days   -> follow up
      contacted, no reply 7+ days   -> final follow up
      replied, no trial 5+ days     -> stall breaker
-     trial_booked, 1+ days past    -> did they show
+     trial_booked (trade):         -> quote follow-up at 3, 7, 15 days
+     trial_booked (other buckets): -> 1+ day: did they show?
+     joined + no reviewAskedAt, 2+ days since wonAt -> ask for Google review (once)
      any status, 14+ days silent   -> gone quiet, win-back
-   joined, not_interested, and found are never chased.
+   joined (except review ask), not_interested, and found are never chased.
    'found' is excluded because the user has never sent a message — the
    business is a lead, not an open conversation. */
 function pipelineDue() {
   var store = pipelineLoad();
   var out = [];
+  var bucket = (typeof scoutBucket === 'function') ? scoutBucket() : 'retail';
+  var lang = pipelineMsgLang();
+  var bizName = pipelineBusinessName() || ((typeof displayName === 'function') ? displayName(localStorage.getItem('g7_session_name') || '') : '');
+  var reviewLink = '';
+  try { reviewLink = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
+
   store.people.forEach(function(p) {
-    if (p.status === 'joined' || p.status === 'not_interested') return;
+    /* Review ask: joined leads, 2+ days after wonAt, not yet asked, once only */
+    if (p.status === 'joined') {
+      if (!p.reviewAskedAt && p.wonAt) {
+        var dw = pipelineDaysSince(p.wonAt);
+        if (dw >= 2) {
+          var first = (p.name || '').split(' ')[0] || 'there';
+          var msg = templateMsg('review', lang, { name: first, business: bizName, link: reviewLink });
+          out.push({
+            person: p, urgency: 1, isReview: true,
+            reason: 'Ask ' + first + ' for a Google review',
+            msg: msg
+          });
+        }
+      }
+      return;
+    }
+    if (p.status === 'not_interested') return;
+
     var d = pipelineDaysSince(p.lastStatusAt || p.lastContactedAt);
     var first = (p.name || '').split(' ')[0] || 'there';
     var item = null;
 
     if (p.status === 'contacted' && d >= 14) {
       item = { reason: 'No response in ' + d + ' days', urgency: 3,
-               msg: 'Hi ' + first + ' — last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
+               msg: 'Hi ' + first + ' \u2014 last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
     } else if (p.status === 'contacted' && d >= 7) {
-      item = { reason: 'No reply for ' + d + ' days — final follow-up', urgency: 2,
-               msg: 'Hi ' + first + ' — ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
+      item = { reason: 'No reply for ' + d + ' days \u2014 final follow-up', urgency: 2,
+               msg: 'Hi ' + first + ' \u2014 ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'contacted' && d >= 3) {
       item = { reason: 'No reply for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' — pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
+               msg: 'Hi ' + first + ' \u2014 pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'replied' && d >= 5) {
       item = { reason: 'Replied ' + d + ' days ago but has not booked', urgency: 3,
-               msg: 'Hi ' + first + ' — aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
+               msg: 'Hi ' + first + ' \u2014 aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
+    } else if (p.status === 'trial_booked' && bucket === 'trade') {
+      /* Trade bucket: quote follow-ups at 3, 7, 15 days */
+      if (d >= 15) {
+        item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
+                 msg: templateMsg('quote_15', lang, { name: first, business: bizName, link: '' }) };
+      } else if (d >= 7) {
+        item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
+                 msg: templateMsg('quote_7', lang, { name: first, business: bizName, link: '' }) };
+      } else if (d >= 3) {
+        item = { reason: 'Quote sent ' + d + ' days ago', urgency: 1,
+                 msg: templateMsg('quote_3', lang, { name: first, business: bizName, link: '' }) };
+      }
     } else if (p.status === 'trial_booked' && d >= 1) {
-      item = { reason: 'Trial was ' + d + ' day(s) ago — did they show?', urgency: 3,
-               msg: 'Hi ' + first + ' — kaisa raha? Koi baat ho toh bata dena.' };
+      item = { reason: stageLabel('trial_booked') + ' was ' + d + ' day(s) ago \u2014 did they show?', urgency: 3,
+               msg: 'Hi ' + first + ' \u2014 kaisa raha? Koi baat ho toh bata dena.' };
     } else if (p.status === 'gone_quiet' && d >= 14) {
       item = { reason: 'Quiet for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' — kaafi time ho gaya. Jab ready ho, bata dena.' };
+               msg: 'Hi ' + first + ' \u2014 kaafi time ho gaya. Jab ready ho, bata dena.' };
     } else if (p.status === 'found' && d >= 1) {
-      var biz = pipelineBusinessName();
-      item = { reason: 'Found ' + d + ' day(s) ago — never messaged', urgency: 2,
-               msg: 'Hi ' + (p.name || 'there') + ' — ' + (biz ? 'main ' + biz + ' se hoon. ' : '') + 'Aapke liye ek baat thi, 2 min baat kar sakte hain?' };
+      item = { reason: 'Found ' + d + ' day(s) ago \u2014 never messaged', urgency: 2,
+               msg: 'Hi ' + (p.name || 'there') + ' \u2014 ' + (bizName ? 'main ' + bizName + ' se hoon. ' : '') + 'Aapke liye ek baat thi, 2 min baat kar sakte hain?' };
     }
 
     if (item) {

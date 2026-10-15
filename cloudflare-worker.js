@@ -507,11 +507,43 @@ function daysSince(iso, now) {
   return Math.floor((now - then) / 86400000);
 }
 
-function pipelineDueFromStore(store, now, bizName) {
+/* Stage labels for the worker email — mirrors STAGE_LABELS from scout.js. */
+var W_STAGE_LABELS = {
+  trade:    { found: 'New lead', contacted: 'Messaged', replied: 'Enquiry', trial_booked: 'Quote sent', joined: 'Work won' },
+  retail:   { found: 'New lead', contacted: 'Messaged', replied: 'Interested', trial_booked: 'Visit / Order', joined: 'Customer' },
+  food:     { found: 'New lead', contacted: 'Messaged', replied: 'Interested', trial_booked: 'Visit / Order', joined: 'Customer' },
+  personal: { found: 'New lead', contacted: 'Messaged', replied: 'Interested', trial_booked: 'Trial booked', joined: 'Member' },
+  pro:      { found: 'New lead', contacted: 'Messaged', replied: 'Enquiry', trial_booked: 'Consultation booked', joined: 'Client' },
+  _all:     { gone_quiet: 'Gone quiet', not_interested: 'Not interested' }
+};
+function wStageLabel(stage, bucket) {
+  var b = bucket || 'retail';
+  if (W_STAGE_LABELS[b] && W_STAGE_LABELS[b][stage]) return W_STAGE_LABELS[b][stage];
+  if (W_STAGE_LABELS._all[stage]) return W_STAGE_LABELS._all[stage];
+  return stage;
+}
+
+function pipelineDueFromStore(store, now, bizName, bucket) {
   if (!store || !Array.isArray(store.people)) return [];
+  var bk = bucket || 'retail';
   var out = [];
   store.people.forEach(function(p) {
-    if (p.status === 'joined' || p.status === 'not_interested') return;
+    /* Review ask: joined, 2+ days after wonAt, not yet asked */
+    if (p.status === 'joined') {
+      if (!p.reviewAskedAt && p.wonAt) {
+        var dw = daysSince(p.wonAt, now);
+        if (dw >= 2) {
+          var first = (p.name || '').split(' ')[0] || 'there';
+          out.push({
+            person: p, urgency: 1, isReview: true,
+            reason: 'Ask ' + first + ' for a Google review',
+            msg: ''
+          });
+        }
+      }
+      return;
+    }
+    if (p.status === 'not_interested') return;
     var d = daysSince(p.lastStatusAt || p.lastContactedAt, now);
     var first = (p.name || '').split(' ')[0] || 'there';
     var item = null;
@@ -528,8 +560,20 @@ function pipelineDueFromStore(store, now, bizName) {
     } else if (p.status === 'replied' && d >= 5) {
       item = { reason: 'Replied ' + d + ' days ago but has not booked', urgency: 3,
                msg: 'Hi ' + first + ' \u2014 aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
+    } else if (p.status === 'trial_booked' && bk === 'trade') {
+      /* Trade: quote follow-ups at 3, 7, 15 days */
+      if (d >= 15) {
+        item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
+                 msg: 'Namaste ' + first + ' ji, quote bheje kuch din ho gaye. Abhi bhi interest ho toh bataiye, koi jaldi nahi.' };
+      } else if (d >= 7) {
+        item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
+                 msg: 'Namaste ' + first + ' ji, pichle hafte ka quote \u2014 kuch badalna ho toh bataiye.' };
+      } else if (d >= 3) {
+        item = { reason: 'Quote sent ' + d + ' days ago', urgency: 1,
+                 msg: 'Namaste ' + first + ' ji, quote dekh liya? Koi sawaal ho toh bataiye, hum samjha denge.' };
+      }
     } else if (p.status === 'trial_booked' && d >= 1) {
-      item = { reason: 'Trial was ' + d + ' day(s) ago \u2014 did they show?', urgency: 3,
+      item = { reason: wStageLabel('trial_booked', bk) + ' was ' + d + ' day(s) ago \u2014 did they show?', urgency: 3,
                msg: 'Hi ' + first + ' \u2014 kaisa raha? Koi baat ho toh bata dena.' };
     } else if (p.status === 'gone_quiet' && d >= 14) {
       item = { reason: 'Quiet for ' + d + ' days', urgency: 1,
@@ -703,7 +747,8 @@ async function sendActionsEmail(env, firmCode, day, move) {
   /* ── FOLLOW UP TODAY ── */
   var pipeline = st ? st.pick('scout_pipeline') : null;
   var bizName = (pend && pend.businessData && pend.businessData.businessName) || '';
-  var due = pipelineDueFromStore(pipeline, Date.now(), bizName);
+  var _bucket = (st ? st.pick('scout_bucket') : null) || 'retail';
+  var due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bucket);
   if (due.length > 0) {
     htmlParts.push(emailHeading('Follow up today'));
     var show = due.slice(0, 5);
@@ -1428,7 +1473,8 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
   const people = (pipeline && Array.isArray(pipeline.people)) ? pipeline.people : [];
   const counts = {};
   people.forEach(function(p){ counts[p.status] = (counts[p.status] || 0) + 1; });
-  const due = pipelineDueFromStore(pipeline, Date.now(), bizName).slice(0, 5)
+  const _bkt = (st ? st.pick('scout_bucket') : null) || 'retail';
+  const due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bkt).slice(0, 5)
     .map(function(d){ return { name: (d.person && d.person.name) || '', status: d.person && d.person.status, reason: d.reason }; });
 
   /* Today's plan step and the customer group names. */
