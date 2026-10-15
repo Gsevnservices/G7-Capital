@@ -528,11 +528,11 @@ function pipelineDueFromStore(store, now, bizName, bucket) {
   var bk = bucket || 'retail';
   var out = [];
   store.people.forEach(function(p) {
-    /* Review ask: joined, not yet asked. Immediate (day 0) + again at 2+ days. */
+    /* Review ask: joined, not yet asked. Shows day 0–7, then stops. */
     if (p.status === 'joined') {
       if (!p.reviewAskedAt && p.wonAt) {
         var dw = daysSince(p.wonAt, now);
-        if (dw === 0 || dw >= 2) {
+        if (dw <= 7) {
           var first = (p.name || '').split(' ')[0] || 'there';
           out.push({
             person: p, urgency: dw === 0 ? 2 : 1, isReview: true,

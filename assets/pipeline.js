@@ -370,11 +370,11 @@ function pipelineDue() {
 
   store.people.forEach(function(p) {
     /* Review ask: joined leads, not yet asked.
-       Appears immediately on join (day 0), then again at 2+ days if not done. */
+       Shows every day from wonAt day 0 through day 7, then stops. */
     if (p.status === 'joined') {
       if (!p.reviewAskedAt && p.wonAt) {
         var dw = pipelineDaysSince(p.wonAt);
-        if (dw === 0 || dw >= 2) {
+        if (dw <= 7) {
           var first = (p.name || '').split(' ')[0] || 'there';
           var msg = templateMsg('review', lang, { name: first, business: bizName, link: reviewLink });
           out.push({
