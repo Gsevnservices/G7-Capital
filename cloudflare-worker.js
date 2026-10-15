@@ -749,7 +749,8 @@ async function sendActionsEmail(env, firmCode, day, move) {
   var pipeline = st ? st.pick('scout_pipeline') : null;
   var bizName = (pend && pend.businessData && pend.businessData.businessName) || '';
   var _bucket = (st ? st.pick('scout_bucket') : null) || 'retail';
-  var _reviewSkip = (st ? st.pick('scout_review_skip') : null) === 'true';
+  var _rsRaw = st ? st.pick('scout_review_skip') : null;
+  var _reviewSkip = _rsRaw === true || _rsRaw === 'true';
   var due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bucket, _reviewSkip);
   if (due.length > 0) {
     htmlParts.push(emailHeading('Follow up today'));
@@ -1476,7 +1477,8 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
   const counts = {};
   people.forEach(function(p){ counts[p.status] = (counts[p.status] || 0) + 1; });
   const _bkt = (st ? st.pick('scout_bucket') : null) || 'retail';
-  const _rskip = (st ? st.pick('scout_review_skip') : null) === 'true';
+  const _rsRaw2 = st ? st.pick('scout_review_skip') : null;
+  const _rskip = _rsRaw2 === true || _rsRaw2 === 'true';
   const due = pipelineDueFromStore(pipeline, Date.now(), bizName, _bkt, _rskip).slice(0, 5)
     .map(function(d){ return { name: (d.person && d.person.name) || '', status: d.person && d.person.status, reason: d.reason }; });
 
