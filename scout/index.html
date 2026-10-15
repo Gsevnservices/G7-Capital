@@ -1514,12 +1514,43 @@ async function scoutSettingsRender() {
   html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
     '<span>Message language</span>' +
     '<span id="ccLangPicker" style="display:flex;gap:6px"></span></div>';
+  /* Google review link setting */
+  var _rl = '';
+  try { _rl = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
+  html += '<div style="margin-bottom:8px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
+    '<span>Google review link</span></div>' +
+    '<div style="display:flex;gap:6px;align-items:center">' +
+    '<input id="ccReviewLink" type="url" placeholder="https://g.page/\u2026" value="' + escHtml(_rl) + '" ' +
+    'style="flex:1;background:var(--black3);border:1px solid var(--border2);color:var(--white);padding:6px 10px;font-family:inherit;font-size:12px">' +
+    '<button id="ccReviewSave" style="color:var(--amber)">Save</button></div>' +
+    '<div id="ccReviewErr" style="font-size:11px;color:#C45A5A;display:none;margin-top:4px"></div></div>';
   html += '<div><button id="ccNewsCatsBtn" style="color:var(--amber)">Choose my news</button></div>';
   html += '<div id="ccNewsCats" style="display:none;margin-top:10px"></div>';
   el.innerHTML = html;
 
   document.getElementById('ccActionsToggle').onclick = function(){ saveToggle({ actions: !st.actions }); };
   document.getElementById('ccNewsToggle').onclick = function(){ saveToggle({ news: !st.news }); };
+
+  /* Review link save */
+  document.getElementById('ccReviewSave').onclick = function() {
+    var inp = document.getElementById('ccReviewLink');
+    var err = document.getElementById('ccReviewErr');
+    var val = (inp.value || '').trim();
+    if (val && !val.match(/^https:\/\//i)) {
+      err.textContent = "That doesn\u2019t look like a link";
+      err.style.display = '';
+      inp.focus();
+      return;
+    }
+    try {
+      localStorage.setItem(scoutKey('scout_review_link'), val);
+      if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
+    } catch(e) {}
+    err.style.display = 'none';
+    inp.style.borderColor = 'var(--amber)';
+    setTimeout(function(){ inp.style.borderColor = ''; }, 1500);
+  };
 
   /* Language picker — load current, render three buttons. */
   (async function() {
