@@ -367,12 +367,15 @@ function pipelineDue() {
   var bizName = pipelineBusinessName() || ((typeof displayName === 'function') ? displayName(localStorage.getItem('g7_session_name') || '') : '');
   var reviewLink = '';
   try { reviewLink = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
+  var reviewSkip = false;
+  try { reviewSkip = localStorage.getItem(scoutKey('scout_review_skip')) === 'true'; } catch(e) {}
 
   store.people.forEach(function(p) {
     /* Review ask: joined leads, not yet asked.
-       Shows every day from wonAt day 0 through day 7, then stops. */
+       Shows every day from wonAt day 0 through day 7, then stops.
+       Skipped entirely if user has set scout_review_skip. */
     if (p.status === 'joined') {
-      if (!p.reviewAskedAt && p.wonAt) {
+      if (!reviewSkip && !p.reviewAskedAt && p.wonAt) {
         var dw = pipelineDaysSince(p.wonAt);
         if (dw <= 7) {
           var first = (p.name || '').split(' ')[0] || 'there';
