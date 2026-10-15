@@ -240,16 +240,16 @@ function renderChase() {
       if (reviewLink && waPhone(p.phone)) {
         html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
       }
-      html += '<button class="copy-btn" onclick="markReviewDone(' + JSON.stringify(p.id) + ')">Done</button>';
+      html += '<button class="copy-btn" onclick="markReviewDone(\'' + p.id + '\')">Done</button>';
       html += '</div>';
     } else {
       html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
       html += '<div class="chase-btns">';
       html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
-      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'replied\')">' + escHtml(stageLabel('replied')) + '</button>';
-      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">' + escHtml(stageLabel('trial_booked')) + '</button>';
-      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'joined\')">' + escHtml(stageLabel('joined')) + '</button>';
-      html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'replied\')">' + escHtml(stageLabel('replied')) + '</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'trial_booked\')">' + escHtml(stageLabel('trial_booked')) + '</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'joined\')">' + escHtml(stageLabel('joined')) + '</button>';
+      html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'not_interested\')">Not interested</button>';
       html += '</div>';
     }
     html += '</div>';
@@ -291,16 +291,16 @@ function renderEveryone() {
     /* Actions */
     html += '<div class="ev-actions ev-cell">';
     if (p.status !== 'replied' && p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'replied\')">' + escHtml(stageLabel('replied')) + '</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'replied\')">' + escHtml(stageLabel('replied')) + '</button>';
     }
     if (p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">' + escHtml(stageLabel('trial_booked')) + '</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'trial_booked\')">' + escHtml(stageLabel('trial_booked')) + '</button>';
     }
     if (p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'joined\')">' + escHtml(stageLabel('joined')) + '</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'joined\')">' + escHtml(stageLabel('joined')) + '</button>';
     }
     if (p.status !== 'not_interested' && p.status !== 'joined') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'not_interested\')">Not interested</button>';
     }
     html += '</div>';
     html += '</div>';
