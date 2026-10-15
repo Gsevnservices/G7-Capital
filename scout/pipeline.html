@@ -223,10 +223,10 @@ function renderChase() {
     html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
     html += '<div class="chase-btns">';
     html += '<button class="copy-btn primary" onclick="chaseSend(' + idx + ', this)">Send on WhatsApp</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'replied\')">Replied</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">Booked trial</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'joined\')">Joined</button>';
-    html += '<button class="copy-btn" onclick="chaseStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'replied\')">Replied</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'trial_booked\')">Booked trial</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'joined\')">Joined</button>';
+    html += '<button class="copy-btn" onclick="chaseStatus(\'' + p.id + '\', \'not_interested\')">Not interested</button>';
     html += '</div>';
     html += '</div>';
   });
@@ -274,16 +274,16 @@ function renderEveryone() {
     /* Actions */
     html += '<div class="ev-actions ev-cell">';
     if (p.status !== 'replied' && p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'replied\')">Replied</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'replied\')">Replied</button>';
     }
     if (p.status !== 'trial_booked' && p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'trial_booked\')">Booked</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'trial_booked\')">Booked</button>';
     }
     if (p.status !== 'joined' && p.status !== 'not_interested') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'joined\')">Joined</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'joined\')">Joined</button>';
     }
     if (p.status !== 'not_interested' && p.status !== 'joined') {
-      html += '<button class="copy-btn" onclick="evStatus(' + JSON.stringify(p.id) + ', \'not_interested\')">Not interested</button>';
+      html += '<button class="copy-btn" onclick="evStatus(\'' + p.id + '\', \'not_interested\')">Not interested</button>';
     }
     html += '</div>';
     html += '</div>';
