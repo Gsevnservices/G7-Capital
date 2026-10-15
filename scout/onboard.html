@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/scout-master-v1.js?v=19"></script>
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=28"></script>
-<script src="../assets/pipeline.js?v=16"></script>
+<script src="../assets/scout.js?v=29"></script>
+<script src="../assets/pipeline.js?v=19"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -745,17 +745,9 @@ var BT_OPTIONS = [
 
 /* ═══════════════════════════════════════════
    PLACEHOLDER BUCKETS — the examples that read wrong for the wrong trade.
-   Five buckets cover all 41 business types. Fields not listed here are
-   trade-agnostic and keep their markup placeholder.
+   BT_BUCKET and btBucketFor() are now in scout.js (loaded before this file).
+   BT_PLACEHOLDERS stays here — only used by the onboarding form.
 ═══════════════════════════════════════════ */
-var BT_BUCKET = {
-  retail:   ['Grocery / Supermart','Wholesale / Distribution','Pharmacy / Medical Store','Stationery / Gift Shop','Clothing / Apparel Store','Jewellery Store','Furniture / Home Decor','Electronics / Appliance Store','Hardware / Building Materials','Sweet Shop / Mithai Store','D2C Brand / Online Store'],
-  food:     ['Restaurant / Dhaba / Cafe','Catering Business','Cloud Kitchen'],
-  personal: ['Gym / Fitness Centre','Salon / Spa / Beauty Parlour','Medical Clinic / Doctor','Ayurvedic Clinic / Wellness Centre','Diagnostic Lab / Pathology','Coaching Centre / Tuition','Driving School','Tailoring / Garment Stitching'],
-  trade:    ['Interior Designer / Architect','Real Estate / Property Broker','Mobile / Electronics Repair','Automobile Workshop / Garage','Courier / Logistics','Printing / Packaging','Event Management','Photography / Videography','Travel Agency / Tour Operator','Security Agency / Manpower Supply'],
-  pro:      ['Training / Corporate Learning','Digital Marketing Agency','CA / Accounting Firm','Legal Firm / Lawyer','IT Services / Software Company','SaaS / Software Product','Consulting / Advisory Firm','B2B Services','Recruitment / Staffing Firm']
-};
-
 var BT_PLACEHOLDERS = {
   retail: {
     businessName:    'e.g. Sharma Supermart',
@@ -809,12 +801,7 @@ var BT_PLACEHOLDERS = {
   }
 };
 
-function btBucketFor(type) {
-  for (var k in BT_BUCKET) {
-    if (BT_BUCKET[k].indexOf(type) !== -1) return k;
-  }
-  return null;
-}
+/* btBucketFor() is now in scout.js */
 
 /* Applies the bucket's examples. Never overwrites a field the user has
    already typed into — placeholders only. */

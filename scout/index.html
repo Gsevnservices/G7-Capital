@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/scout-master-v1.js?v=19"></script>
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=28"></script>
-<script src="../assets/pipeline.js?v=16"></script>
+<script src="../assets/scout.js?v=29"></script>
+<script src="../assets/pipeline.js?v=19"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -655,7 +655,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <a href="onboard.html" class="nav-link">New Analysis</a>
     <a href="history.html" class="nav-link">History</a>
     <a href="checkin.html" class="nav-link">Check-In</a>
-    <a href="pipeline.html" class="nav-link">Pipeline</a>
+    <a href="pipeline.html" class="nav-link">Customers</a>
     <span class="nav-firm-indicator" id="navFirmName"></span>
     <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
   </div>
@@ -703,7 +703,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 
       <div class="cc-rail cc-rail-l">
         <div class="cc-panel">
-          <div class="cc-label">Pipeline</div>
+          <div class="cc-label">Customers</div>
           <div id="ccFunnel"></div>
         </div>
         <div class="cc-panel">
@@ -809,6 +809,16 @@ window.addEventListener('DOMContentLoaded', async function() {
   await loadScoutStateFromServer();
   await repairOrphanedScoutResult(); // must run after server load, before first scoped read
   scoutWriteSnapshot();
+
+  /* Save scout_bucket so the worker can read it. Only write if changed. */
+  try {
+    var _bk = scoutBucket();
+    var _prevBk = localStorage.getItem(scoutKey('scout_bucket'));
+    if (_bk !== _prevBk) {
+      localStorage.setItem(scoutKey('scout_bucket'), _bk);
+      if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
+    }
+  } catch(e) {}
   await scoutMigratePinKey();
   scoutPinnedRender();
   /* Fetch saved message language for scoutContext(). Non-blocking fallback to bd.language. */
@@ -1661,11 +1671,11 @@ function ccRender() {
   var funnelEl = document.getElementById('ccFunnel');
   if (funnelEl) {
     var stages = [
-      { label: 'Found',         n: s.leadsFound },
-      { label: 'Contacted',     n: s.contacted },
-      { label: 'Replied',       n: s.replied },
-      { label: 'Trial booked',  n: s.booked },
-      { label: 'Joined',        n: s.joined }
+      { label: stageLabel('found'),        n: s.leadsFound },
+      { label: stageLabel('contacted'),    n: s.contacted },
+      { label: stageLabel('replied'),      n: s.replied },
+      { label: stageLabel('trial_booked'), n: s.booked },
+      { label: stageLabel('joined'),       n: s.joined }
     ];
     var fh = '';
     stages.forEach(function(st) {
@@ -1781,12 +1791,18 @@ function ccRender() {
     } catch(e) {}
 
     var ccTasks = [];
-    /* Chase */
-    if (_dueList.length === 1 && _dueList[0].person) {
-      ccTasks.push({ title: 'Chase ' + speakableName(_dueList[0].person.name || ''), why: 'No reply yet', link: 'pipeline.html' });
-    } else if (_dueList.length > 1) {
-      ccTasks.push({ title: 'Chase ' + _dueList.length + ' people', why: 'No reply yet', link: 'pipeline.html' });
+    /* Chase — show top 3 people */
+    var _chaseShow = _dueList.slice(0, 3);
+    _chaseShow.forEach(function(item) {
+      if (item.person) {
+        ccTasks.push({ title: 'Chase ' + speakableName(item.person.name || ''), why: item.reason || 'No reply yet', link: 'pipeline.html' });
+      }
+    });
+    if (_dueList.length > 3) {
+      ccTasks.push({ title: 'All customers \u2192', why: (_dueList.length - 3) + ' more need follow-up', link: 'pipeline.html' });
     }
+    /* Add customer shortcut */
+    ccTasks.push({ title: '+ Add customer', why: '', link: 'pipeline.html#add' });
     /* New leads */
     if (_allFound.length === 1) {
       ccTasks.push({ title: 'Message ' + speakableName(_allFound[0].name || ''), why: 'Found but never messaged', link: 'pipeline.html' });
@@ -1853,12 +1869,7 @@ function ccRender() {
         .sort(function(a,b){ return new Date(b.lastStatusAt) - new Date(a.lastStatusAt); })
         .slice(0, 5);
       recent.forEach(function(p) {
-        var verb = p.status === 'found' ? 'Found' :
-                   p.status === 'contacted' ? 'Messaged' :
-                   p.status === 'replied' ? 'Replied' :
-                   p.status === 'trial_booked' ? 'Trial booked' :
-                   p.status === 'joined' ? 'Joined' :
-                   p.status === 'not_interested' ? 'Not interested' : 'Updated';
+        var verb = stageLabel(p.status) || 'Updated';
         var col = p.status === 'joined' ? '#5A9E6F' :
                   p.status === 'replied' ? 'var(--amber)' :
                   p.status === 'not_interested' ? '#C45A5A' : 'var(--grey2)';
