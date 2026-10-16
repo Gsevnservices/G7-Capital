@@ -164,6 +164,32 @@ async function sendEmail(env, to, subject, text, html, headers) {
   } catch (e) { return false; }
 }
 
+/* ── KV PUT HELPER ──
+   Wraps every KV write. On 429 / limit errors, sends one admin alert
+   per UTC day via Resend (in-memory flag — no KV dependency).
+   Accepts possible duplicate across isolate restarts. */
+var _kvAlertSentDate = null;
+
+async function kvPut(env, key, value, opts) {
+  try {
+    await env.G7_KV.put(key, value, opts || undefined);
+  } catch (e) {
+    var msg = String((e && e.message) || e);
+    if (/429|limit|exceeded|quota/i.test(msg)) {
+      var utcDay = new Date().toISOString().slice(0, 10);
+      if (_kvAlertSentDate !== utcDay && env.ADMIN_EMAIL) {
+        _kvAlertSentDate = utcDay;
+        sendEmail(env, env.ADMIN_EMAIL,
+          'Cloudflare KV daily write limit hit',
+          'Cloudflare KV daily write limit hit — logins and saves are failing until 00:00 UTC. Upgrade to Workers Paid to restore immediately.',
+          '<p>Cloudflare KV daily write limit hit &mdash; logins and saves are failing until 00:00 UTC.</p><p>Upgrade to Workers Paid to restore immediately.</p>'
+        ).catch(function() {});
+      }
+    }
+    throw e;
+  }
+}
+
 /* Returns true when an error is a confirmed credit/billing problem (not
    transient overload). Only these trigger the admin alert email. */
 function isBillingError(e) {
@@ -178,7 +204,7 @@ async function sendCreditAlert(env, day) {
   if (!env.ADMIN_EMAIL) { console.log(JSON.stringify({ creditAlert: 'skipped', reason: 'ADMIN_EMAIL not set' })); return; }
   var flagKey = 'alert:credit:' + day;
   if (await env.G7_KV.get(flagKey)) return;
-  await env.G7_KV.put(flagKey, '1', { expirationTtl: 172800 });
+  await kvPut(env,flagKey, '1', { expirationTtl: 172800 });
   await sendEmail(env, env.ADMIN_EMAIL,
     'Anthropic credit exhausted — Scout running on fallback',
     'Scout couldn\'t generate today\'s news (' + day + '): Anthropic returned a billing/credit error.\n\nFirms with recent news are seeing it with a \'From ' + day + '\' note; firms without see \'No news yet\'. Top up to resume.',
@@ -427,18 +453,18 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     dropped: (Array.isArray(parsed.items) ? parsed.items.length : 0) - items.length
   };
   const cacheKey = 'market:' + firmCode + ':' + day;
-  await env.G7_KV.put(cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
+  await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
 
   /* Persist as last-known-good for fallback when generation fails. */
   if (items.length > 0) {
-    await env.G7_KV.put('market:last:' + firmCode, JSON.stringify(result));
+    await kvPut(env,'market:last:' + firmCode, JSON.stringify(result));
   }
 
   /* Append today's items to history, keep last 15. */
   const nextHist = history.concat(items.map(function(it){
     return { headline: it.headline, sourceUrl: it.sourceUrl, date: day };
   })).slice(-15);
-  await env.G7_KV.put(histKey, JSON.stringify(nextHist));
+  await kvPut(env,histKey, JSON.stringify(nextHist));
 
   return result;
 }
@@ -475,8 +501,8 @@ async function unsubToken(env, firmCode) {
   if (existing) return existing;
   const bytes = crypto.getRandomValues(new Uint8Array(24));
   const t = Array.from(bytes).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-  await env.G7_KV.put('unsub:firm:' + firmCode, t);
-  await env.G7_KV.put('unsub:' + t, firmCode);
+  await kvPut(env,'unsub:firm:' + firmCode, t);
+  await kvPut(env,'unsub:' + t, firmCode);
   return t;
 }
 
@@ -613,7 +639,7 @@ async function tapReport(env, firmCode, day) {
   }
   const y = new Date(new Date(day + 'T00:00:00Z').getTime() - 86400000).toISOString().slice(0, 10);
   const prev = await env.G7_KV.get('scout:inbound:' + firmCode + ':snap:' + y, 'json');
-  await env.G7_KV.put('scout:inbound:' + firmCode + ':snap:' + day, JSON.stringify(now), { expirationTtl: 4 * 86400 });
+  await kvPut(env,'scout:inbound:' + firmCode + ':snap:' + day, JSON.stringify(now), { expirationTtl: 4 * 86400 });
   return { now: now, prev: prev };
 }
 
@@ -873,7 +899,7 @@ async function sendActionsEmail(env, firmCode, day, move) {
     'List-Unsubscribe': '<' + unsubUrl + '>',
     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
   });
-  if (ok) await env.G7_KV.put(sentKey, '1', { expirationTtl: 172800 });
+  if (ok) await kvPut(env,sentKey, '1', { expirationTtl: 172800 });
   return ok ? 'sent' : 'send_failed';
 }
 
@@ -978,7 +1004,7 @@ async function sendNewsEmail(env, firmCode, day, news) {
     'List-Unsubscribe': '<' + unsubUrl + '>',
     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
   });
-  if (ok) await env.G7_KV.put(sentKey, '1', { expirationTtl: 172800 });
+  if (ok) await kvPut(env,sentKey, '1', { expirationTtl: 172800 });
   return ok ? 'sent' : 'send_failed';
 }
 
@@ -1226,7 +1252,7 @@ async function generateSharedNews(env, cat, day, city) {
     if (!m) throw new Error('shared ' + cat + ' 400: ' + errText.slice(0, 300));
     const rejected = m[1].split(',').map(function(s){ return s.replace(/['"\s]/g, ''); }).filter(Boolean);
     rejected.forEach(function(d){ blocked.add(d); });
-    await env.G7_KV.put('news:blocked-domains', JSON.stringify(Array.from(blocked)), { expirationTtl: 30 * 86400 });
+    await kvPut(env,'news:blocked-domains', JSON.stringify(Array.from(blocked)), { expirationTtl: 30 * 86400 });
     domains = domains.filter(function(d){ return !blocked.has(d); });
     console.log(JSON.stringify({ newsDomainsBlocked: rejected, category: cat, remaining: domains }));
     /* With fewer than two trusted outlets left, the category is not
@@ -1271,12 +1297,12 @@ async function generateSharedNews(env, cat, day, city) {
     });
 
   const result = { category: cat, label: def.label, items: kept, date: day };
-  await env.G7_KV.put(cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
+  await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
 
   /* Persist as last-known-good for fallback when generation fails. */
   if (kept.length > 0) {
     var lastKey = 'news:last:' + cat + (cat === 'city' ? ':' + citySlug : '');
-    await env.G7_KV.put(lastKey, JSON.stringify(result));
+    await kvPut(env,lastKey, JSON.stringify(result));
   }
 
   return result;
@@ -1325,7 +1351,7 @@ async function personaliseNews(env, firmCode, day, context, sections) {
       if (a !== -1 && z > a) out = JSON.parse(t.slice(a, z + 1));
     } catch (e) {}
   }
-  await env.G7_KV.put(key, JSON.stringify(out), { expirationTtl: 172800 });
+  await kvPut(env,key, JSON.stringify(out), { expirationTtl: 172800 });
   return out;
 }
 
@@ -1581,9 +1607,9 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
     confidence: ['high','medium','low'].indexOf(mv.confidence) !== -1 ? mv.confidence : 'medium',
     status: 'suggested'
   };
-  await env.G7_KV.put(cacheKey, JSON.stringify(move), { expirationTtl: 172800 });
+  await kvPut(env,cacheKey, JSON.stringify(move), { expirationTtl: 172800 });
   const nextHist = history.concat([{ date: day, headline: move.headline, basedOn: move.basedOn, status: 'suggested' }]).slice(-30);
-  await env.G7_KV.put('move:history:' + firmCode, JSON.stringify(nextHist));
+  await kvPut(env,'move:history:' + firmCode, JSON.stringify(nextHist));
   return move;
 }
 
@@ -1695,7 +1721,7 @@ export default {
       if (isFirstCall && anthropicResponse.ok) {
         const usageKey = 'usage:' + session.firmCode + ':deals';
         const currentUsage = await env.G7_KV.get(usageKey, 'json') || { count: 0 };
-        env.G7_KV.put(usageKey, JSON.stringify({
+        kvPut(env,usageKey, JSON.stringify({
           count:    currentUsage.count + 1,
           lastUsed: Date.now(),
           firmCode: session.firmCode
@@ -1751,7 +1777,7 @@ export default {
       if (check.needsUpgrade) {
         try {
           const upgraded = await hashPassword(password);
-          await env.G7_KV.put('auth:users:' + normalizedCode, JSON.stringify(
+          await kvPut(env,'auth:users:' + normalizedCode, JSON.stringify(
             Object.assign({}, user, { passwordHash: upgraded, hashUpgradedAt: Date.now() })
           ));
         } catch (e) { /* non-blocking — login proceeds either way */ }
@@ -1763,7 +1789,7 @@ export default {
       // Store session in KV with 7-day TTL
       // expiresAt is checked on each request; Cloudflare also auto-deletes
       // the key after expirationTtl seconds as a backup cleanup mechanism
-      await env.G7_KV.put(
+      await kvPut(env,
         'auth:sessions:' + token,
         JSON.stringify({
           firmCode: normalizedCode,
@@ -1824,7 +1850,7 @@ export default {
       });
       if (recoveryEmail) updated.recoveryEmail = recoveryEmail;
 
-      await env.G7_KV.put(key, JSON.stringify(updated));
+      await kvPut(env,key, JSON.stringify(updated));
       return jsonResponse({ success: true });
     }
 
@@ -1845,14 +1871,14 @@ export default {
       const rlKey = 'auth:reset-rl:' + code;
       const rlCount = parseInt((await env.G7_KV.get(rlKey)) || '0', 10);
       if (rlCount >= 3) return generic;
-      await env.G7_KV.put(rlKey, String(rlCount + 1), { expirationTtl: 3600 });
+      await kvPut(env,rlKey, String(rlCount + 1), { expirationTtl: 3600 });
 
       const user = await env.G7_KV.get('auth:users:' + code, 'json');
       if (!user || !user.recoveryEmail) return generic;
 
       const tokenBytes = crypto.getRandomValues(new Uint8Array(32));
       const token = Array.from(tokenBytes).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-      await env.G7_KV.put('auth:reset:' + token,
+      await kvPut(env,'auth:reset:' + token,
         JSON.stringify({ firmCode: code, createdAt: Date.now() }),
         { expirationTtl: 1800 });
 
@@ -1905,7 +1931,7 @@ export default {
       const user = await env.G7_KV.get(key, 'json');
       if (!user) return jsonResponse({ error: 'Account not found.' }, 404);
 
-      await env.G7_KV.put(key, JSON.stringify(Object.assign({}, user, {
+      await kvPut(env,key, JSON.stringify(Object.assign({}, user, {
         passwordHash: await hashPassword(newPassword),
         passwordSetByUser: true,
         passwordChangedAt: Date.now()
@@ -1991,7 +2017,7 @@ export default {
       const key = 'firms:' + session.firmCode + ':' + type;
 
       // Save to KV — no TTL on firm data, it persists until explicitly deleted
-      await env.G7_KV.put(key, JSON.stringify(data));
+      await kvPut(env,key, JSON.stringify(data));
 
       return jsonResponse({ success: true });
     }
@@ -2065,7 +2091,7 @@ export default {
       const passwordHash = await hashPassword(password);
 
       // Store the firm user record in KV
-      await env.G7_KV.put(
+      await kvPut(env,
         'auth:users:' + normalizedCode,
         JSON.stringify({
           firmName,
@@ -2079,11 +2105,11 @@ export default {
 
       // Initialise empty firm data stores so /data/load always returns
       // an array (never null) for these two high-frequency keys
-      await env.G7_KV.put(
+      await kvPut(env,
         'firms:' + normalizedCode + ':deals',
         JSON.stringify([])
       );
-      await env.G7_KV.put(
+      await kvPut(env,
         'firms:' + normalizedCode + ':calibrations',
         JSON.stringify([])
       );
@@ -2155,7 +2181,7 @@ export default {
       }
 
       const newHash = await hashPassword(newPassword);
-      await env.G7_KV.put('auth:users:' + normalizedCode, JSON.stringify({
+      await kvPut(env,'auth:users:' + normalizedCode, JSON.stringify({
         ...user,
         passwordHash: newHash,
         passwordResetAt: Date.now(),
@@ -2400,7 +2426,7 @@ export default {
       }
 
       // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
-      await env.G7_KV.put(analysisCounterKey, String(analysisCount + 1));
+      await kvPut(env,analysisCounterKey, String(analysisCount + 1));
 
       return new Response(anthropicResponse.body, {
         headers: {
@@ -2434,7 +2460,7 @@ export default {
 
       // Increment BEFORE the Anthropic call — a failed call still consumed
       // the attempt, and this prevents a retry loop draining the key.
-      await env.G7_KV.put(briefingKey, JSON.stringify({
+      await kvPut(env,briefingKey, JSON.stringify({
         count:    briefingUsage.count + 1,
         lastUsed: Date.now(),
         firmCode: session.firmCode
@@ -2498,7 +2524,7 @@ export default {
       /* Save the latest context so the 06:00 IST cron can generate without
          a browser open. 7-day expiry: inactive firms drop out on their own. */
       if (context) {
-        await env.G7_KV.put('market:ctx:' + session.firmCode,
+        await kvPut(env,'market:ctx:' + session.firmCode,
           JSON.stringify({ context: context, city: city }),
           { expirationTtl: 7 * 86400 });
       }
@@ -2517,7 +2543,7 @@ export default {
          at the same time. Auto-expires after 120 s as a safety net. */
       const lockKey = 'market:lock:' + session.firmCode + ':' + day;
       if (await env.G7_KV.get(lockKey)) return jsonResponse({ items: [], date: day, pending: true });
-      await env.G7_KV.put(lockKey, '1', { expirationTtl: 120 });
+      await kvPut(env,lockKey, '1', { expirationTtl: 120 });
 
       /* Three generation attempts per firm per day. A failure writes no
          cache, so without this a broken call would retry on every load. */
@@ -2533,7 +2559,7 @@ export default {
         }
         return jsonResponse({ items: [], date: day, limited: true });
       }
-      await env.G7_KV.put(attemptKey, String(attempts + 1), { expirationTtl: 172800 });
+      await kvPut(env,attemptKey, String(attempts + 1), { expirationTtl: 172800 });
 
       try {
         const result = await generateMarketBrief(env, session.firmCode, day, context, city);
@@ -2613,7 +2639,7 @@ export default {
       }
 
       // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
-      await env.G7_KV.put(checkinCounterKey, String(checkinCount + 1));
+      await kvPut(env,checkinCounterKey, String(checkinCount + 1));
 
       return new Response(anthropicResponse.body, {
         headers: {
@@ -2653,20 +2679,20 @@ export default {
         // Increment lifetime total
         const totalRaw = await env.G7_KV.get('scout:usage:total');
         const total    = totalRaw ? parseInt(totalRaw) + 1 : 1;
-        await env.G7_KV.put('scout:usage:total', String(total));
+        await kvPut(env,'scout:usage:total', String(total));
 
         // Increment per-day counter
         const dateKey  = 'scout:usage:date:' + today;
         const dateRaw  = await env.G7_KV.get(dateKey);
         const dateCount = dateRaw ? parseInt(dateRaw) + 1 : 1;
-        await env.G7_KV.put(dateKey, String(dateCount));
+        await kvPut(env,dateKey, String(dateCount));
 
         // Increment per-business-type counter (normalised key)
         if (businessType) {
           const btKey  = 'scout:usage:bt:' + businessType.replace(/\s+/g, '_').toLowerCase();
           const btRaw  = await env.G7_KV.get(btKey);
           const btCount = btRaw ? parseInt(btRaw) + 1 : 1;
-          await env.G7_KV.put(btKey, String(btCount));
+          await kvPut(env,btKey, String(btCount));
         }
 
         // Increment per-city counter (normalised key)
@@ -2674,7 +2700,7 @@ export default {
           const cityKey  = 'scout:usage:city:' + city.replace(/\s+/g, '_').toLowerCase();
           const cityRaw  = await env.G7_KV.get(cityKey);
           const cityCount = cityRaw ? parseInt(cityRaw) + 1 : 1;
-          await env.G7_KV.put(cityKey, String(cityCount));
+          await kvPut(env,cityKey, String(cityCount));
         }
 
         // Prepend to log (keep last 50 entries)
@@ -2687,7 +2713,7 @@ export default {
           city:         city
         });
         if (log.length > 50) log = log.slice(0, 50);
-        await env.G7_KV.put('scout:usage:log', JSON.stringify(log));
+        await kvPut(env,'scout:usage:log', JSON.stringify(log));
 
         return jsonResponse({ success: true, total });
       } catch (e) {
@@ -2755,8 +2781,8 @@ export default {
         return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
       }
 
-      await env.G7_KV.put('scout:usage:total', '0');
-      await env.G7_KV.put('scout:usage:log',   '[]');
+      await kvPut(env,'scout:usage:total', '0');
+      await kvPut(env,'scout:usage:log',   '[]');
 
       return jsonResponse({ success: true });
     }
@@ -2793,7 +2819,7 @@ export default {
 
       const newPlan = (rawPlan === 'paid') ? 'paid' : 'free';
       record.plan = newPlan;
-      await env.G7_KV.put(key, JSON.stringify(record));
+      await kvPut(env,key, JSON.stringify(record));
 
       return jsonResponse({ success: true, firmCode: normalizedCode, plan: newPlan });
     }
@@ -2950,10 +2976,10 @@ export default {
 
       // 8. Store in cache — 30-day TTL (2592000 seconds)
       // Fire-and-forget; does not block the response
-      env.G7_KV.put(cacheKey, JSON.stringify(places), { expirationTtl: 2592000 });
+      kvPut(env,cacheKey, JSON.stringify(places), { expirationTtl: 2592000 });
 
       // 9. Increment counter only on a successful non-cached call
-      await env.G7_KV.put(placesCounterKey, String(placesCount + 1));
+      await kvPut(env,placesCounterKey, String(placesCount + 1));
 
       return jsonResponse({
         cacheHit: false,
@@ -3000,7 +3026,7 @@ export default {
         if (typeof body.news === 'boolean') user.emailNews = body.news;
       }
       user.briefEmail = !!(user.emailActions || user.emailNews);
-      await env.G7_KV.put(key, JSON.stringify(user));
+      await kvPut(env,key, JSON.stringify(user));
       const ep = emailPrefs(user);
       return jsonResponse({ actions: ep.actions, news: ep.news, on: ep.actions || ep.news, hasEmail: true });
     }
@@ -3032,7 +3058,7 @@ export default {
       if (!user) return jsonResponse({ error: 'Account not found.' }, 404);
       const valid = (Array.isArray(body.prefs) ? body.prefs : []).filter(function(c){ return NEWS_CATS[c]; });
       user.newsPrefs = valid;
-      await env.G7_KV.put(key, JSON.stringify(user));
+      await kvPut(env,key, JSON.stringify(user));
       return jsonResponse({ prefs: user.newsPrefs });
     }
 
@@ -3068,7 +3094,7 @@ export default {
       const user = await env.G7_KV.get(key, 'json');
       if (!user) return jsonResponse({ error: 'Account not found.' }, 404);
       user.messageLanguage = lang;
-      await env.G7_KV.put(key, JSON.stringify(user));
+      await kvPut(env,key, JSON.stringify(user));
       return jsonResponse({ language: user.messageLanguage });
     }
 
@@ -3148,7 +3174,7 @@ export default {
             user.emailNews = false;
           }
           user.briefEmail = !!(user.emailActions || user.emailNews);
-          await env.G7_KV.put(key, JSON.stringify(user));
+          await kvPut(env,key, JSON.stringify(user));
         }
       }
       return new Response(
@@ -3204,7 +3230,7 @@ export default {
           await Promise.all(sources.map(source => {
             const code = existing[source];
             if (!code) return;
-            return env.G7_KV.put(
+            return kvPut(env,
               'scout:inbound:link:' + code,
               JSON.stringify({ firmCode, source, waNumber, message, createdAt: now })
             );
@@ -3238,12 +3264,12 @@ export default {
         // Write all link records + the index in parallel
         await Promise.all([
           ...sources.map(source =>
-            env.G7_KV.put(
+            kvPut(env,
               'scout:inbound:link:' + codes[source],
               JSON.stringify({ firmCode, source, waNumber, message, createdAt: now })
             )
           ),
-          env.G7_KV.put(linksKey, JSON.stringify(codes))
+          kvPut(env,linksKey, JSON.stringify(codes))
         ]);
 
         return jsonResponse({
@@ -3323,7 +3349,7 @@ export default {
       const clickKey = 'scout:inbound:' + link.firmCode + ':' + link.source + ':clicks';
       const clickRaw = await env.G7_KV.get(clickKey);
       const clicks   = clickRaw ? parseInt(clickRaw, 10) : 0;
-      ctx.waitUntil(env.G7_KV.put(clickKey, String(clicks + 1)));
+      ctx.waitUntil(kvPut(env,clickKey, String(clicks + 1)));
 
       // Build wa.me URL and redirect
       const waUrl = 'https://wa.me/' + link.waNumber +
@@ -3344,23 +3370,23 @@ export default {
     const day = ist.toISOString().slice(0, 10);
     const report = { day: day, startedAt: new Date().toISOString(), firms: [] };
     report.state = 'running';
-    await env.G7_KV.put('cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+    await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
     let cursor;
     do {
       const page = await env.G7_KV.list({ prefix: 'market:ctx:', cursor: cursor });
       for (const k of page.keys) {
         const firmCode = k.name.slice('market:ctx:'.length);
         report.current = firmCode;
-        await env.G7_KV.put('cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+        await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
         const t0 = Date.now();
         try {
           const status = await runMorningForFirm(env, firmCode, day);
           report.firms.push({ firm: firmCode, status: status, ms: Date.now() - t0 });
-          await env.G7_KV.put('cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+          await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
         } catch (e) {
           report.firms.push({ firm: firmCode, status: 'error',
             error: String((e && e.message) || e).slice(0, 300), ms: Date.now() - t0 });
-          await env.G7_KV.put('cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+          await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
         }
       }
       cursor = page.list_complete ? undefined : page.cursor;
@@ -3369,6 +3395,6 @@ export default {
     delete report.current;
     report.finishedAt = new Date().toISOString();
     console.log(JSON.stringify({ cron: report }));
-    await env.G7_KV.put('cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+    await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
   }
 };
