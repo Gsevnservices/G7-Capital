@@ -2413,7 +2413,7 @@ export default {
         },
         body: JSON.stringify({
           model:    'claude-sonnet-5-5',
-          max_tokens: Math.min(body.max_tokens || 24000, 32000),
+          max_tokens: Math.min(body.max_tokens || 16384, 16384),
           stream:   true,
           system:   body.system   || '',
           messages: body.messages || []
@@ -2428,7 +2428,33 @@ export default {
       // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
       await kvPut(env,analysisCounterKey, String(analysisCount + 1));
 
-      return new Response(anthropicResponse.body, {
+      /* Pass through the SSE stream but log stop_reason and output_tokens
+         from the message_delta event for debugging truncation issues. */
+      const { readable, writable } = new TransformStream({
+        transform(chunk, controller) {
+          controller.enqueue(chunk);
+          try {
+            var text = new TextDecoder().decode(chunk);
+            var lines = text.split('\n');
+            for (var li = 0; li < lines.length; li++) {
+              var ln = lines[li].trim();
+              if (!ln.startsWith('data: ') || ln === 'data: [DONE]') continue;
+              var ev = JSON.parse(ln.slice(6));
+              if (ev.type === 'message_delta' && ev.usage) {
+                console.log(JSON.stringify({
+                  route: '/scout/analyse',
+                  firm: session.firmCode,
+                  stop_reason: ev.delta && ev.delta.stop_reason,
+                  output_tokens: ev.usage.output_tokens
+                }));
+              }
+            }
+          } catch (_) { /* logging only — never break the stream */ }
+        }
+      });
+      anthropicResponse.body.pipeTo(writable);
+
+      return new Response(readable, {
         headers: {
           'Content-Type': 'text/event-stream',
           'Access-Control-Allow-Origin': '*',

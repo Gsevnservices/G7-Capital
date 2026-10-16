@@ -1515,9 +1515,11 @@ function parseAndRender(rawOutput, biz) {
         console.log('Error at position:', pos, '— context:', cleaned.slice(Math.max(0, pos - 100), pos + 100));
       }
 
-      /* Level 4: fix trailing comma issues then retry */
+      /* Level 4: fix trailing commas and smart quotes then retry */
       try {
         var fixed = cleaned
+          .replace(/[\u201C\u201D\u201E\u201F]/g, '"')
+          .replace(/[\u2018\u2019\u201A\u201B]/g, "'")
           .replace(/,\s*,/g, ',')
           .replace(/,\s*}/g, '}')
           .replace(/,\s*]/g, ']');
@@ -1544,6 +1546,16 @@ function parseAndRender(rawOutput, biz) {
       }
     }
   } catch(e) { data = null; }
+
+  /* On any parse failure, save raw text for debugging.
+     Console: copy(localStorage.getItem(scoutKey('scout_last_raw'))) */
+  if (!data) {
+    try {
+      localStorage.setItem(scoutKey('scout_last_raw'), rawOutput);
+      console.error('Scout parse failed — raw output saved to scout_last_raw (' + (rawOutput ? rawOutput.length : 0) + ' chars). Copy with:\n  copy(localStorage.getItem("' + scoutKey('scout_last_raw') + '"))');
+      if (jsonParseError) console.error('Last JSON parse error:', jsonParseError.message);
+    } catch(_eSave) {}
+  }
 
   if (data) {
     /* JSON path — direct field access, no regex */
