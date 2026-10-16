@@ -2428,50 +2428,57 @@ export default {
       // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
       await kvPut(env,analysisCounterKey, String(analysisCount + 1));
 
-      /* Pass through the SSE stream but log stop_reason and output_tokens
-         from the message_delta event for debugging truncation issues. */
+      /* Pass through the SSE stream, collecting diagnostics:
+         - input_tokens from message_start
+         - content_block types from content_block_start
+         - stop_reason + output_tokens from message_delta
+         Logged as a single JSON line in flush() when the stream ends. */
       var _sseDecoder = new TextDecoder('utf-8');
       var _sseBuf = '';
+      var _logData = { input_tokens: null, blocks: {}, stop_reason: null, output_tokens: null };
+      function _parseSSEEvent(ev) {
+        if (ev.type === 'message_start' && ev.message && ev.message.usage) {
+          _logData.input_tokens = ev.message.usage.input_tokens || null;
+        }
+        if (ev.type === 'content_block_start' && ev.content_block) {
+          var btype = ev.content_block.type || 'unknown';
+          _logData.blocks[btype] = (_logData.blocks[btype] || 0) + 1;
+        }
+        if (ev.type === 'message_delta') {
+          if (ev.delta && ev.delta.stop_reason) _logData.stop_reason = ev.delta.stop_reason;
+          if (ev.usage && ev.usage.output_tokens) _logData.output_tokens = ev.usage.output_tokens;
+        }
+      }
       const { readable, writable } = new TransformStream({
         transform(chunk, controller) {
           controller.enqueue(chunk);
           try {
             _sseBuf += _sseDecoder.decode(chunk, { stream: true });
             var parts = _sseBuf.split('\n');
-            /* Keep the last element — it may be an incomplete line */
             _sseBuf = parts.pop() || '';
             for (var li = 0; li < parts.length; li++) {
               var ln = parts[li].trim();
               if (!ln.startsWith('data: ') || ln === 'data: [DONE]') continue;
-              var ev = JSON.parse(ln.slice(6));
-              if (ev.type === 'message_delta' && ev.usage) {
-                console.log(JSON.stringify({
-                  route: '/scout/analyse',
-                  firm: session.firmCode,
-                  stop_reason: ev.delta && ev.delta.stop_reason,
-                  output_tokens: ev.usage.output_tokens
-                }));
-              }
+              _parseSSEEvent(JSON.parse(ln.slice(6)));
             }
           } catch (_) { /* logging only — never break the stream */ }
         },
         flush() {
-          /* Parse any trailing data left in the buffer */
           try {
             var ln = (_sseBuf + _sseDecoder.decode()).trim();
             _sseBuf = '';
             if (ln.startsWith('data: ') && ln !== 'data: [DONE]') {
-              var ev = JSON.parse(ln.slice(6));
-              if (ev.type === 'message_delta' && ev.usage) {
-                console.log(JSON.stringify({
-                  route: '/scout/analyse',
-                  firm: '(flush)',
-                  stop_reason: ev.delta && ev.delta.stop_reason,
-                  output_tokens: ev.usage.output_tokens
-                }));
-              }
+              _parseSSEEvent(JSON.parse(ln.slice(6)));
             }
           } catch (_) {}
+          console.log(JSON.stringify({
+            route: '/scout/analyse',
+            firm: session.firmCode,
+            input_tokens: _logData.input_tokens,
+            blocks: _logData.blocks,
+            stop_reason: _logData.stop_reason,
+            output_tokens: _logData.output_tokens
+          }));
         }
       });
       anthropicResponse.body.pipeTo(writable);
