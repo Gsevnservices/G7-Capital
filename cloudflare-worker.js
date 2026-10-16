@@ -2413,7 +2413,7 @@ export default {
         },
         body: JSON.stringify({
           model:    'claude-sonnet-5-5',
-          max_tokens: Math.min(body.max_tokens || 16384, 16384),
+          max_tokens: Math.min(body.max_tokens || 24000, 32000),
           stream:   true,
           system:   body.system   || '',
           messages: body.messages || []
@@ -2430,14 +2430,18 @@ export default {
 
       /* Pass through the SSE stream but log stop_reason and output_tokens
          from the message_delta event for debugging truncation issues. */
+      var _sseDecoder = new TextDecoder('utf-8');
+      var _sseBuf = '';
       const { readable, writable } = new TransformStream({
         transform(chunk, controller) {
           controller.enqueue(chunk);
           try {
-            var text = new TextDecoder().decode(chunk);
-            var lines = text.split('\n');
-            for (var li = 0; li < lines.length; li++) {
-              var ln = lines[li].trim();
+            _sseBuf += _sseDecoder.decode(chunk, { stream: true });
+            var parts = _sseBuf.split('\n');
+            /* Keep the last element — it may be an incomplete line */
+            _sseBuf = parts.pop() || '';
+            for (var li = 0; li < parts.length; li++) {
+              var ln = parts[li].trim();
               if (!ln.startsWith('data: ') || ln === 'data: [DONE]') continue;
               var ev = JSON.parse(ln.slice(6));
               if (ev.type === 'message_delta' && ev.usage) {
@@ -2450,6 +2454,24 @@ export default {
               }
             }
           } catch (_) { /* logging only — never break the stream */ }
+        },
+        flush() {
+          /* Parse any trailing data left in the buffer */
+          try {
+            var ln = (_sseBuf + _sseDecoder.decode()).trim();
+            _sseBuf = '';
+            if (ln.startsWith('data: ') && ln !== 'data: [DONE]') {
+              var ev = JSON.parse(ln.slice(6));
+              if (ev.type === 'message_delta' && ev.usage) {
+                console.log(JSON.stringify({
+                  route: '/scout/analyse',
+                  firm: '(flush)',
+                  stop_reason: ev.delta && ev.delta.stop_reason,
+                  output_tokens: ev.usage.output_tokens
+                }));
+              }
+            }
+          } catch (_) {}
         }
       });
       anthropicResponse.body.pipeTo(writable);
