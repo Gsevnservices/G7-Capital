@@ -698,9 +698,14 @@ function saveScoutResult(rawOutput, weekNumber) {
   // (new architecture: TYPE 1 onboarding outputs pure JSON)
   try {
     var _cleaned = rawOutput
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/```\s*$/i, '').trim();
+      .replace(/```json\s*/gi, '')
+      .replace(/```\s*/gi, '')
+      .trim();
+    /* Strip any prose before first { and after last matching } */
+    var _fb = _cleaned.indexOf('{');
+    if (_fb > 0) _cleaned = _cleaned.slice(_fb);
+    var _lb = _cleaned.lastIndexOf('}');
+    if (_lb > -1 && _lb < _cleaned.length - 1) _cleaned = _cleaned.slice(0, _lb + 1);
     var _parsed = JSON.parse(_cleaned);
     if (_parsed && _parsed.headline) {
       var _hl = _parsed.headline;

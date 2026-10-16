@@ -1218,7 +1218,7 @@ function buildScoutUserMessage(d) {
     'COMMUNICATION',
     '═══════════════════════════════════════',
     'PREFERRED LANGUAGE: ' + d.language,
-    'INSTRUCTION: Write every customer-facing message in ' + (/^Regional/i.test(d.language) ? 'Hinglish' : d.language) + '. Hinglish = Hindi words in Roman script mixed with English.',
+    'INSTRUCTION: Keep the JSON keys and structure exactly as specified. Only the customer-facing message text values are written in ' + (/^Regional/i.test(d.language) ? 'Hinglish' : d.language) + '. Hinglish = Hindi words in Roman script mixed with English.',
     '',
     '═══════════════════════════════════════',
     'SEASONAL INTELLIGENCE',
@@ -1313,7 +1313,7 @@ async function handleSubmit() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-5-5',
-        max_tokens: 28000,
+        max_tokens: 16384,
         system: [
           {
             type: 'text',
@@ -1371,7 +1371,7 @@ async function handleSubmit() {
           },
           body: JSON.stringify({
             model: 'claude-sonnet-5-5',
-            max_tokens: 28000,
+            max_tokens: 16384,
             system: [{ type: 'text', text: SCOUT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
             messages: [{ role: 'user', content: userMessage }]
           })
