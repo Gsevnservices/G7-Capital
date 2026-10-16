@@ -285,7 +285,7 @@ async function callScout(businessContext) {
   if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return { text: streamResult.text, complete: streamResult.complete };
+  return streamResult;
 }
 
 
@@ -341,7 +341,7 @@ async function callScoutRaw(userMessage) {
   if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return { text: streamResult.text, complete: streamResult.complete };
+  return streamResult;
 }
 
 
@@ -519,7 +519,7 @@ async function callScoutCheckin(checkinData, onProgress) {
   if (!streamResult.text) {
     throw new Error('Scout returned an empty response. Please try again.');
   }
-  return { text: streamResult.text, complete: streamResult.complete };
+  return streamResult;
 }
 
 
@@ -549,17 +549,17 @@ async function readSSEStream(response, onProgress) {
   var fullText = '';
   var buffer = '';
   var done = false;
-  var receivedStopSignal = false; // set true only on message_stop or [DONE]
+  var receivedStop = false;   // message_stop received
+  var stopReason   = null;    // from message_delta.delta.stop_reason
+  var sseError     = null;    // from Anthropic error events
 
   while (!done) {
     var chunk = await reader.read();
     done = chunk.done;
 
     if (chunk.value) {
-      // Append decoded bytes to the buffer (do NOT split per-chunk)
       buffer += decoder.decode(chunk.value, { stream: true });
 
-      // Process only COMPLETE lines; keep the trailing partial line in the buffer
       var newlineIdx;
       while ((newlineIdx = buffer.indexOf('\n')) !== -1) {
         var line = buffer.slice(0, newlineIdx).trim();
@@ -568,16 +568,16 @@ async function readSSEStream(response, onProgress) {
         if (!line.startsWith('data: ')) continue;
 
         var jsonStr = line.slice(6);
-        if (jsonStr === '[DONE]') { receivedStopSignal = true; done = true; break; }
+        if (jsonStr === '[DONE]') { done = true; break; }
 
         var event;
         try {
           event = JSON.parse(jsonStr);
         } catch (e) {
-          // A genuinely malformed complete line — skip
           continue;
         }
 
+        /* Collect text deltas */
         if (
           event.type === 'content_block_delta' &&
           event.delta &&
@@ -588,8 +588,21 @@ async function readSSEStream(response, onProgress) {
           if (onProgress) onProgress(fullText.length);
         }
 
+        /* Capture stop_reason from message_delta (arrives before message_stop) */
+        if (event.type === 'message_delta' && event.delta && event.delta.stop_reason) {
+          stopReason = event.delta.stop_reason;
+        }
+
+        /* Anthropic error event — log and surface */
+        if (event.type === 'error') {
+          sseError = event.error || event;
+          console.error('[readSSEStream] SSE error event:', JSON.stringify(sseError));
+          done = true;
+          break;
+        }
+
         if (event.type === 'message_stop') {
-          receivedStopSignal = true;
+          receivedStop = true;
           done = true;
           break;
         }
@@ -597,7 +610,7 @@ async function readSSEStream(response, onProgress) {
     }
   }
 
-  // Flush any final complete data line left in the buffer (no trailing newline)
+  /* Flush any final complete data line left in the buffer */
   var tail = buffer.trim();
   if (tail.startsWith('data: ')) {
     var tailJson = tail.slice(6);
@@ -612,11 +625,27 @@ async function readSSEStream(response, onProgress) {
         fullText += tailEvent.delta.text;
         if (onProgress) onProgress(fullText.length);
       }
-      if (tailEvent.type === 'message_stop') { receivedStopSignal = true; }
+      if (tailEvent.type === 'message_delta' && tailEvent.delta && tailEvent.delta.stop_reason) {
+        stopReason = tailEvent.delta.stop_reason;
+      }
+      if (tailEvent.type === 'message_stop') { receivedStop = true; }
     } catch (e) { /* ignore incomplete tail */ }
   }
 
-  return { text: fullText, complete: receivedStopSignal };
+  /* A run is only complete if message_stop was received AND the model
+     finished naturally (stop_reason === 'end_turn'). Truncation by
+     max_tokens still sends message_stop but with stop_reason 'max_tokens'
+     — that is NOT a successful completion. */
+  var isComplete = receivedStop && stopReason === 'end_turn';
+
+  if (!isComplete) {
+    console.warn('[readSSEStream] Incomplete run — receivedStop=' + receivedStop +
+      ', stopReason=' + (stopReason || 'null') +
+      ', sseError=' + (sseError ? JSON.stringify(sseError) : 'none') +
+      ', chars=' + fullText.length);
+  }
+
+  return { text: fullText, complete: isComplete, stopReason: stopReason, sseError: sseError };
 }
 
 
