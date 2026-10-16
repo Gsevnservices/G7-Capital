@@ -387,6 +387,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     body: JSON.stringify({
       model: 'claude-sonnet-5-5',
       max_tokens: 6000,
+      thinking: { type: 'between_tools' },
       system: system,
       tools: [tool],
       messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
@@ -1063,6 +1064,7 @@ async function findBusinesses(env, query, cap) {
     body: JSON.stringify({
       model: 'claude-sonnet-5-5',
       max_tokens: 6000,
+      thinking: { type: 'between_tools' },
       system: system,
       tools: [
         { type: 'web_search_20250305', name: 'web_search', max_uses: 5,
@@ -1237,8 +1239,8 @@ async function generateSharedNews(env, cat, day, city) {
       headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
                  'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
-        model: 'claude-sonnet-5-5', max_tokens: 4000, system: system,
-        tools: [tool],
+        model: 'claude-sonnet-5-5', max_tokens: 6000, thinking: { type: 'between_tools' },
+        system: system, tools: [tool],
         messages: [{ role: 'user', content: 'Today\'s ' + def.label + ' news.' }]
       })
     });
@@ -1574,8 +1576,8 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
                'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-5-5', max_tokens: 4000, system: system,
-                           messages: [{ role: 'user', content: userMsg }] })
+    body: JSON.stringify({ model: 'claude-sonnet-5-5', max_tokens: 6000, thinking: { type: 'between_tools' },
+                           system: system, messages: [{ role: 'user', content: userMsg }] })
   });
   if (!r.ok) throw new Error('move ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const d = await r.json();
@@ -2413,7 +2415,8 @@ export default {
         },
         body: JSON.stringify({
           model:    'claude-sonnet-5-5',
-          max_tokens: Math.min(body.max_tokens || 24000, 32000),
+          max_tokens: Math.min(body.max_tokens || 48000, 64000),
+          thinking: { type: 'between_tools' },
           stream:   true,
           system:   body.system   || '',
           messages: body.messages || []
@@ -2537,7 +2540,8 @@ export default {
         },
         body: JSON.stringify({
           model:      'claude-sonnet-5-5',
-          max_tokens: 2000,
+          max_tokens: 6000,
+          thinking:   { type: 'between_tools' },
           stream:     false,
           messages:   body.messages || []
         })
@@ -2681,7 +2685,8 @@ export default {
         },
         body: JSON.stringify({
           model:    'claude-sonnet-5-5',
-          max_tokens: 3000,
+          max_tokens: 8000,
+          thinking: { type: 'between_tools' },
           stream:   true,
           system:   body.system   || '',
           messages: body.messages || []
