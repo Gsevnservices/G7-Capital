@@ -1313,7 +1313,7 @@ async function handleSubmit() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-5-5',
-        max_tokens: 28000,
+        max_tokens: 48000,
         system: [
           {
             type: 'text',
@@ -1367,7 +1367,7 @@ async function handleSubmit() {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-5-5',
-          max_tokens: 28000,
+          max_tokens: 48000,
           system: [{ type: 'text', text: SCOUT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
           messages: [{ role: 'user', content: userMessage }]
         })
