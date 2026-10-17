@@ -3221,13 +3221,15 @@ export default {
       if (!forceRefresh) {
         const cached = await env.G7_KV.get(cacheKey, 'json');
         if (cached) {
-          // Cache hit — return stored results + cachedAt date, no counter increment
-          return jsonResponse({
+          // Cache hit — handle both old format (plain array) and new format ({_cachedAt, results})
+          var _list = Array.isArray(cached) ? cached : (cached.results || []);
+          var _resp = {
             cacheHit: true,
-            cachedAt: cached._cachedAt || null,
-            results:  (cached.results || cached).slice ? (cached.results || []).slice(0, cap) : [],
+            results:  _list.slice(0, cap),
             quota:    { used: placesCount, limit: hardLimit, period: 'day' }
-          });
+          };
+          if (cached._cachedAt) _resp.cachedAt = cached._cachedAt;
+          return jsonResponse(_resp);
         }
       }
 
