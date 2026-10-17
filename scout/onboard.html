@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/scout-master-v1.js?v=19"></script>
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=31"></script>
+<script src="../assets/scout.js?v=32"></script>
 <script src="../assets/pipeline.js?v=20"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
@@ -1143,112 +1143,7 @@ function collectFormData() {
 }
 
 /* ─── BUILD SCOUT USER MESSAGE ─── */
-function buildScoutUserMessage(d) {
-  var lm = ['  — ' + d.landmark1];
-  if (d.landmark2) lm.push('  — ' + d.landmark2);
-  if (d.landmark3) lm.push('  — ' + d.landmark3);
-  var comp = [];
-  if (d.comp1name) { comp.push('COMPETITOR 1: ' + d.comp1name); if (d.comp1better) comp.push('  They do better: ' + d.comp1better); if (d.comp1worse) comp.push('  We do better: ' + d.comp1worse); }
-  if (d.comp2name) { comp.push('COMPETITOR 2: ' + d.comp2name); if (d.comp2better) comp.push('  They do better: ' + d.comp2better); if (d.comp2worse) comp.push('  We do better: ' + d.comp2worse); }
-  if (d.largeChains) comp.push('LARGE CHAINS NEARBY: ' + d.largeChains);
-  /* Derive today's date at send time — full prose format the model reads best */
-  var _now = new Date();
-  var _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var _todayStr = _now.getDate() + ' ' + _months[_now.getMonth()] + ' ' + _now.getFullYear();
-  return [
-    'TODAY\'S DATE: ' + _todayStr,
-    '',
-    'Please produce a complete Scout Customer Acquisition System for this business.',
-    'Follow the exact 4-tab output format from Component 7 of your system prompt.',
-    'Apply the Anti-Generic Filter before delivering.',
-    '',
-    '═══════════════════════════════════════',
-    'BUSINESS PROFILE',
-    '═══════════════════════════════════════',
-    'BUSINESS NAME: ' + d.businessName,
-    'BUSINESS TYPE: ' + (d.businessType || d.businessTypeInput || 'not specified'),
-    'OWNER WHATSAPP NUMBER: ' + (d.businessPhone || 'not provided') + ' (customers message here)',
-    'WHAT THEY SELL: ' + d.whatYouSell,
-    'LOCATION: ' + d.location,
-    'AREA TYPE: ' + d.areaType,
-    '',
-    'LANDMARKS:', lm.join('\n'),
-    '',
-    'REVENUE MODEL: ' + (
-      d.revenueModel === 'recurring' ? 'Recurring (membership / subscription / retainer)' :
-      d.revenueModel === 'repeat'    ? 'Repeat purchase (customer returns regularly, pays each time)' :
-      d.revenueModel === 'project'   ? 'Project / event (customer pays per project, returns rarely)' :
-      d.revenueModel === 'oneoff'    ? 'One-off (customer buys once, usually does not return)' :
-      'not specified'
-    ),
-    d.revenueModel === 'recurring' ? 'BILLING PERIOD: ' + (
-      d.billingPeriod === 'monthly'   ? 'Monthly — customers pay every month' :
-      d.billingPeriod === 'quarterly' ? 'Quarterly — customers pay every three months' :
-      d.billingPeriod === 'yearly'    ? 'Annual — customers pay once a year' :
-      'not specified — assume monthly'
-    ) : '',
-    d.purchaseFrequency ? 'PURCHASE FREQUENCY: ' + d.purchaseFrequency : '',
-    '',
-    'FINANCIAL BASELINE:',
-    '  Monthly Revenue: ' + d.monthlyRevenue,
-    '  Average Transaction: ' + d.avgTransaction,
-    '  Current Customers: ' + d.currentCustomers,
-    '  Target (12 months): ' + d.targetCustomers,
-    '',
-    'BEST EXISTING CUSTOMERS:', d.bestCustomers,
-    d.customerType ? 'CUSTOMER TYPE: ' + (d.customerType === 'businesses' ? 'B2B — sells to other businesses' : 'B2C — sells to individual consumers') : '',
-    d.b2bIndustries    ? 'B2B TARGET INDUSTRIES: ' + d.b2bIndustries    : '',
-    d.b2bDecisionMaker ? 'B2B DECISION MAKER: '   + d.b2bDecisionMaker : '',
-    d.b2bSalesCycle    ? 'B2B SALES CYCLE: '      + d.b2bSalesCycle    : '',
-    d.b2bCompanySize   ? 'B2B COMPANY SIZE: '     + d.b2bCompanySize   : '',
-    '',
-    '═══════════════════════════════════════',
-    'COMPETITIVE LANDSCAPE',
-    '═══════════════════════════════════════',
-    comp.length > 0 ? comp.join('\n') : 'No specific competitors named.',
-    '',
-    '═══════════════════════════════════════',
-    'AVAILABLE CHANNELS',
-    '═══════════════════════════════════════',
-    d.channels.length > 0 ? d.channels.join(', ') : 'None specified',
-    d.whatWorked ? 'WHAT WORKED BEFORE: ' + d.whatWorked : '',
-    d.whatFailed ? 'WHAT FAILED: ' + d.whatFailed : '',
-    '',
-    '═══════════════════════════════════════',
-    'COMMUNICATION',
-    '═══════════════════════════════════════',
-    'PREFERRED LANGUAGE: ' + d.language,
-    'INSTRUCTION: Keep the JSON keys and structure exactly as specified. Only the customer-facing message text values are written in ' + (/^Regional/i.test(d.language) ? 'Hinglish' : d.language) + '. Hinglish = Hindi words in Roman script mixed with English.',
-    '',
-    '═══════════════════════════════════════',
-    'SEASONAL INTELLIGENCE',
-    '═══════════════════════════════════════',
-    'BEST MONTHS: ' + d.bestMonths,
-    'WORST MONTHS: ' + d.worstMonths,
-    d.seasonalEvents ? 'LOCAL SEASONAL EVENTS: ' + d.seasonalEvents : '',
-    '',
-    '═══════════════════════════════════════',
-    'CURRENT SITUATION',
-    '═══════════════════════════════════════',
-    d.triedSoFar       ? 'TRIED SO FAR: '                 + d.triedSoFar       : 'Nothing tried yet.',
-    d.whatsappListSize ? 'WHATSAPP LIST SIZE: '            + d.whatsappListSize : '',
-    d.howFoundYou      ? 'HOW CUSTOMERS FIND THEM NOW: '   + d.howFoundYou      : '',
-    d.specificFocus    ? 'SPECIFIC FOCUS REQUEST: '        + d.specificFocus    : '',
-    '',
-    '═══════════════════════════════════════',
-    'REQUIRED OUTPUT',
-    '═══════════════════════════════════════',
-    'Produce the full onboarding output:',
-    '  HEADLINE BLOCK — Revenue Velocity, Acquisition Efficiency, Momentum Score 0/100',
-    '  TAB 1 — WHO TO TARGET — 3 named ICPs with triggers, locations, volume, conversion probability',
-    '  TAB 2 — WHAT TO SAY — primary messages + Day 3 + Day 7 follow-ups + 5 response handlers',
-    '  TAB 3 — WHAT TO DO THIS WEEK — Mon–Fri daily plan with time, action, target, message reference',
-    '  TAB 4 — PIPELINE TRACKER — Week 1 targets + 90-day revenue projection',
-    '',
-    'Every ICP, message, and action must be specific to this exact business in this exact location.',
-    'No generic phrases. Every message must pass the 5-point quality test from Component 6.'
-  ].filter(function(l){ return l !== undefined; }).join('\n');
-}
+/* buildScoutUserMessage() now lives in scout.js (shared with result.html re-run) */
 
 /* ─── SUBMIT HANDLER ─── */
 async function handleSubmit() {
