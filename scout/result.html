@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/scout-master-v1.js?v=19"></script>
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=31"></script>
+<script src="../assets/scout.js?v=32"></script>
 <script src="../assets/pipeline.js?v=20"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23E0922F'>G</text></svg>">
 <style>
@@ -1225,6 +1225,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
   <div class="loading-sub" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)">Analysing this week's results</div>
 </div>
 
+<!-- Re-run analysis overlay — same pattern as checkin overlay -->
+<div class="checkin-overlay" id="rerunOverlay">
+  <div class="result-loading-spinner" style="width:72px;height:72px">
+    <div class="result-loading-ring"></div>
+    <span class="result-loading-letter" style="font-size:26px">S</span>
+  </div>
+  <div class="loading-message" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white)" id="rerunMessage">Re-running your analysis...</div>
+  <div class="loading-sub" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey1)" id="rerunStage">Studying your market...</div>
+  <div style="width:200px;height:2px;background:var(--border2);border-radius:1px;margin-top:8px">
+    <div id="rerunBarFill" style="height:100%;width:0%;background:var(--amber);border-radius:1px;transition:width .3s ease"></div>
+  </div>
+</div>
+
 <script>
 
 /* ═══════════════════════════════════════════
@@ -1292,7 +1305,7 @@ window.addEventListener('DOMContentLoaded', async function() {
     ['tab1Content','tab2Content','tab3Content','tab4Content','tab5Content','wacContent'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.querySelector('.result-loading')) {
-        el.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">This section could not be rendered. Re-run the analysis to fix this.</div>';
+        el.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">This section could not be rendered. <button onclick="rerunAnalysis()" style="background:none;border:none;color:var(--amber);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline;padding:0">Re-run my analysis</button></div>';
       }
     });
   }
@@ -1579,7 +1592,7 @@ function parseAndRender(rawOutput, biz) {
     try { renderTab1JSON(data.tab1, data); } catch(_e1) {
       console.error('renderTab1JSON threw:', _e1.message, _e1.stack);
       var _el1Err = document.getElementById('tab1Content');
-      if (_el1Err) _el1Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Your plan could not be rendered for this section. Re-run the analysis to fix this.</div>';
+      if (_el1Err) _el1Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Your plan could not be rendered for this section. <button onclick="rerunAnalysis()" style="background:none;border:none;color:var(--amber);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline;padding:0">Re-run my analysis</button></div>';
     }
 
     /* Append competitor watch into My Plan (tab1Content) */
@@ -1619,7 +1632,7 @@ function parseAndRender(rawOutput, biz) {
     } catch(_eWac) {
       console.error('renderWhatsAppCalendar threw:', _eWac);
       var _wacErr = document.getElementById('wacContent');
-      if (_wacErr) _wacErr.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">WhatsApp calendar could not be rendered. Re-run the analysis to fix this.</div>';
+      if (_wacErr) _wacErr.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">WhatsApp calendar could not be rendered. <button onclick="rerunAnalysis()" style="background:none;border:none;color:var(--amber);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline;padding:0">Re-run my analysis</button></div>';
     }
 
     try { renderTab2JSON(data.tab2, data.tab1); } catch(_e2) {
@@ -1630,7 +1643,7 @@ function parseAndRender(rawOutput, biz) {
     try { renderTab3JSON(data.tab3, data); } catch(_e3) {
       console.error('renderTab3JSON threw:', _e3);
       var _el3Err = document.getElementById('tab3Content');
-      if (_el3Err) _el3Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">This week\'s action plan could not be rendered. Re-run the analysis to fix this.</div>';
+      if (_el3Err) _el3Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">This week\'s action plan could not be rendered. <button onclick="rerunAnalysis()" style="background:none;border:none;color:var(--amber);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline;padding:0">Re-run my analysis</button></div>';
     }
 
     try { renderWeekTargets(data.tab4); } catch(_eWt) { console.error('renderWeekTargets threw:', _eWt); }
@@ -1638,13 +1651,13 @@ function parseAndRender(rawOutput, biz) {
     try { renderTab4JSON(data.tab4, biz); } catch(_e4) {
       console.error('renderTab4JSON threw:', _e4);
       var _el4Err = document.getElementById('tab4Content');
-      if (_el4Err) _el4Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Customer tools could not be rendered. Re-run the analysis to fix this.</div>';
+      if (_el4Err) _el4Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Customer tools could not be rendered. <button onclick="rerunAnalysis()" style="background:none;border:none;color:var(--amber);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline;padding:0">Re-run my analysis</button></div>';
     }
 
     try { renderWhatsNextTab(data.tab4, data.tab5); } catch(_e5) {
       console.error('renderWhatsNextTab threw:', _e5);
       var _el5Err = document.getElementById('tab5Content');
-      if (_el5Err) _el5Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Expansion plan could not be rendered. Re-run the analysis to fix this.</div>';
+      if (_el5Err) _el5Err.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--grey2)">Expansion plan could not be rendered. <button onclick="rerunAnalysis()" style="background:none;border:none;color:var(--amber);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline;padding:0">Re-run my analysis</button></div>';
     }
 
     try { updateReasoningPanel(data); } catch(_eRp) { console.error('updateReasoningPanel threw:', _eRp); }
@@ -4262,6 +4275,151 @@ function handleLogout() {
     ['g7_session_token','g7_session_firm','g7_session_name'].forEach(function(k){ localStorage.removeItem(k); });
     window.location.href = 'landing.html';
   }
+
+/* ═══════════════════════════════════════════
+   RE-RUN ANALYSIS
+   Uses saved businessData to re-run the full
+   analysis without going back to the form.
+═══════════════════════════════════════════ */
+async function rerunAnalysis() {
+  /* Guard: need businessData to rebuild the prompt */
+  if (!businessData || !businessData.businessName) {
+    alert('Your original answers were not saved. Please fill in the form again.');
+    window.location.href = 'onboard.html';
+    return;
+  }
+
+  var sessionToken = localStorage.getItem('g7_session_token') || '';
+  if (!sessionToken) { window.location.href = '../login.html?product=scout'; return; }
+
+  /* Show overlay */
+  var overlay = document.getElementById('rerunOverlay');
+  var bar     = document.getElementById('rerunBarFill');
+  var stageEl = document.getElementById('rerunStage');
+  overlay.classList.add('active');
+  bar.style.width = '0%';
+  stageEl.textContent = 'Studying your market...';
+
+  /* Progress stages — same as onboard.html */
+  var SOFT_TARGET = 55000;
+  var STAGES = [
+    { chars:     0, label: 'Studying your market...' },
+    { chars:  3000, label: 'Finding your best customer types...' },
+    { chars: 12000, label: 'Writing your messages...' },
+    { chars: 25000, label: 'Building your weekly plan...' },
+    { chars: 40000, label: 'Almost done \u2014 putting it together...' }
+  ];
+  function onProgress(charCount) {
+    var pct = Math.min(95, Math.round(charCount / SOFT_TARGET * 100));
+    bar.style.width = pct + '%';
+    var label = STAGES[0].label;
+    for (var si = 0; si < STAGES.length; si++) {
+      if (charCount >= STAGES[si].chars) label = STAGES[si].label;
+    }
+    stageEl.textContent = label;
+  }
+
+  /* Build user message from saved form data */
+  var userMessage = buildScoutUserMessage(businessData);
+
+  try {
+    var response = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout/analyse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + sessionToken
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-5-5',
+        max_tokens: 48000,
+        system: [{ type: 'text', text: SCOUT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+        messages: [{ role: 'user', content: userMessage }]
+      })
+    });
+
+    if (!response.ok) {
+      var errBody = await response.text();
+      if (response.status === 403) {
+        var parsed = null;
+        try { parsed = JSON.parse(errBody); } catch(e) {}
+        if (parsed && parsed.error === 'limit_reached') {
+          overlay.classList.remove('active');
+          alert('You\u2019ve reached your analysis limit. Upgrade your plan for more.');
+          return;
+        }
+      }
+      throw new Error('Scout error ' + response.status + ': ' + errBody);
+    }
+
+    var streamResult = await readSSEStream(response, onProgress);
+    var scoutOutput  = streamResult.text;
+    var streamComplete = streamResult.complete;
+
+    if (!scoutOutput) throw new Error('Scout returned an empty response. Please try again.');
+
+    /* Same completeness check as onboard.html — auto-retry once on failure */
+    if (!streamComplete) {
+      console.warn('[rerun] First attempt incomplete — stopReason=' +
+        (streamResult.stopReason || 'null') + ', sseError=' +
+        (streamResult.sseError ? JSON.stringify(streamResult.sseError) : 'none') +
+        ', chars=' + scoutOutput.length);
+
+      bar.style.width = '0%';
+      stageEl.textContent = 'Retrying analysis...';
+
+      var retryResponse = await fetch('https://g7-proxy.gsevnservices.workers.dev/scout/analyse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + sessionToken
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-5-5',
+          max_tokens: 48000,
+          system: [{ type: 'text', text: SCOUT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      });
+
+      if (!retryResponse.ok) {
+        var retryErr = await retryResponse.text();
+        throw new Error('Scout error ' + retryResponse.status + ': ' + retryErr);
+      }
+
+      var retryStream = await readSSEStream(retryResponse, onProgress);
+      scoutOutput    = retryStream.text;
+      streamComplete = retryStream.complete;
+
+      if (!scoutOutput) throw new Error('Scout returned an empty response. Please try again.');
+      if (!streamComplete) {
+        console.warn('[rerun] Retry also incomplete — stopReason=' +
+          (retryStream.stopReason || 'null') + ', chars=' + scoutOutput.length);
+        overlay.classList.remove('active');
+        alert('Scout couldn\u2019t finish your analysis \u2014 tap Re-run again to try once more.');
+        return;
+      }
+    }
+
+    /* Save the new result — same flow as onboard.html */
+    var weekNum = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
+    saveScoutResult(scoutOutput, weekNum);
+
+    /* Preserve businessData and onboardContext on the new pending result */
+    var pending = JSON.parse(localStorage.getItem(scoutKey('scout_pending_result')) || '{}');
+    pending.onboardContext = userMessage;
+    pending.businessData   = businessData;
+    localStorage.setItem(scoutKey('scout_pending_result'), JSON.stringify(pending));
+
+    await saveScoutStateToServer();
+
+    /* Reload to render the new result */
+    window.location.reload();
+
+  } catch (err) {
+    overlay.classList.remove('active');
+    alert('Re-run failed: ' + (err.message || 'Please try again.'));
+  }
+}
 
 /* ═══════════════════════════════════════════
    CURSOR
