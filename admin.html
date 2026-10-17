@@ -752,7 +752,7 @@ function renderFirmsTable(filter) {
     var planBtn = firm.plan === 'paid'
       ? '<button class="btn" style="font-size:9px;padding:4px 8px;background:#2a2a2a;color:#ccc" onclick="setPlan(\'' + fc + '\',\'free\')">↓Free</button>'
       : '<button class="btn" style="font-size:9px;padding:4px 8px;background:#7BC47B;color:#0a0a0a" onclick="setPlan(\'' + fc + '\',\'paid\')">↑Paid</button>';
-    html += '<td>' + planBtn + '</td>';
+    html += '<td>' + planBtn + ' <button class="btn btn-danger" style="font-size:9px;padding:4px 8px" onclick="resetUsage(\'' + fc + '\',\'' + product + '\')">Reset</button></td>';
     html += '</tr>';
   });
 
