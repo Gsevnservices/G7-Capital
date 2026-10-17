@@ -402,7 +402,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'claude-haiku-5-5',
       max_tokens: 6000,
       thinking: { type: 'disabled' },
       system: system,
@@ -461,8 +461,10 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
       };
     });
 
-  /* If nothing survived and we haven't tried macro-only yet, retry. */
-  if (items.length === 0 && !macroOnly) {
+  /* Retry macro-only ONLY when the model returned nothing parseable —
+     not when items existed but were removed by source/history/home-page gates. */
+  var rawItemCount = Array.isArray(parsed.items) ? parsed.items.length : 0;
+  if (items.length === 0 && rawItemCount === 0 && !macroOnly) {
     return generateMarketBrief(env, firmCode, day, context, city, true);
   }
 
@@ -1268,7 +1270,7 @@ async function generateSharedNews(env, cat, day, city) {
       headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
                  'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001', max_tokens: 6000, thinking: { type: 'disabled' },
+        model: 'claude-haiku-5-5', max_tokens: 6000, thinking: { type: 'disabled' },
         system: system, tools: [tool],
         messages: [{ role: 'user', content: 'Today\'s ' + def.label + ' news.' }]
       })
@@ -3204,7 +3206,7 @@ export default {
       var _lsKey = 'scout:lastSeen:' + session.firmCode;
       var _lsRaw = await env.G7_KV.get(_lsKey);
       if (!_lsRaw || _lsRaw.slice(0, 10) !== today) {
-        kvPut(env, _lsKey, today + 'T' + ist.toISOString().slice(11, 19) + '+05:30');
+        ctx.waitUntil(kvPut(env, _lsKey, today + 'T' + ist.toISOString().slice(11, 19) + '+05:30'));
       }
       const saved = await env.G7_KV.get('market:ctx:' + session.firmCode, 'json');
       if (!saved || !saved.context) {
