@@ -146,6 +146,16 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
       </div>
     </div>
 
+    <!-- PART 0: Morning Job Status Bar -->
+    <div id="cronStatusBar" style="display:flex;align-items:center;justify-content:space-between;background:#0d0d0d;border:1px solid #222;padding:16px 20px;margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#555">Morning Job</div>
+        <span id="cronStateLabel" style="font-size:12px;font-weight:600;color:#888">—</span>
+        <span id="cronLastTime" style="font-size:11px;color:#444"></span>
+      </div>
+      <button class="btn btn-outline" id="cronPauseBtn" style="font-size:10px;padding:6px 14px" onclick="toggleCronPause()">—</button>
+    </div>
+
     <!-- PART A: Platform Overview — 4 metric tiles -->
     <div id="scoutMetrics" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#222;border:1px solid #222;margin-bottom:24px">
       <div style="background:#0d0d0d;padding:24px 20px;text-align:center">
@@ -530,6 +540,7 @@ async function resetFirmPassword() {
 // Cache of all loaded firms — used by filterFirms() without re-fetching
 let _allFirmsData = [];
 let _allUsageData = [];
+let _cronMeta = {}; // { cronPausedGlobal, cronLastDay, cronLastState, cronFinishedAt }
 // Active filter: 'all' | 'alex' | 'scout'
 let _firmsFilter = 'all';
 
@@ -564,6 +575,15 @@ async function loadFirms() {
     }
 
     const firms = data.firms || [];
+
+    // Store cron metadata and render status bar
+    _cronMeta = {
+      cronPausedGlobal: !!data.cronPausedGlobal,
+      cronLastDay: data.cronLastDay || null,
+      cronLastState: data.cronLastState || null,
+      cronFinishedAt: data.cronFinishedAt || null
+    };
+    renderCronStatusBar();
 
     if (firms.length === 0) {
       container.innerHTML = '<p class="loading-text">No firm accounts created yet.</p>';
@@ -631,7 +651,6 @@ async function loadFirms() {
 function renderFirmsTable(filter) {
   const container = document.getElementById('firmsContainer');
 
-  // Apply filter
   const filtered = _allFirmsData.filter(function(firm) {
     if (filter === 'all') return true;
     return getProduct(firm) === filter;
@@ -642,69 +661,98 @@ function renderFirmsTable(filter) {
     return;
   }
 
-  // Build the table — Product column added between Firm Name and Created
   let html = '<table class="firms-table"><thead><tr>';
-  html += '<th>Firm Code</th><th>Firm Name</th><th>Product</th>';
-  html += '<th>Created</th><th>Tier</th><th>Plan</th><th>Deals Used</th><th>Action</th>';
+  html += '<th>Firm</th><th>Product</th><th>Plan</th><th>Morning</th><th>Test</th>';
+  html += '<th>Emails</th><th>Last Seen</th><th>Last Run</th><th>Usage</th><th>Action</th>';
   html += '</tr></thead><tbody>';
 
   filtered.forEach(function(firm) {
-    // Find original index to match usage data
     const origIdx = _allFirmsData.indexOf(firm);
     const usage = _allUsageData[origIdx] || {};
+    const fc = escapeHtml(firm.firmCode);
+    const product = getProduct(firm);
+
+    // Usage cell
     var usageCellHtml;
     if (usage._product === 'scout') {
-      // Scout: show analyses + check-ins. Free limits 1 analyse / 0 checkins. Paid limits 3/8 per month.
       var isPaid = (firm.plan === 'paid');
       var aUsed = isPaid ? (usage.paidAnalyses || 0) : (usage.freeAnalyses || 0);
       var cUsed = isPaid ? (usage.paidCheckins || 0) : (usage.freeCheckins || 0);
       var aLimit = isPaid ? 3 : 1;
       var cLimit = isPaid ? 8 : 0;
-      var aColor = aUsed >= aLimit ? '#e08080' : '#ccc';
-      var cColor = cUsed >= cLimit ? '#e08080' : '#ccc';
-      usageCellHtml = '<span style="color:' + aColor + '">A: ' + aUsed + '/' + aLimit + '</span>' +
-        ' <span style="opacity:0.4">·</span> ' +
-        '<span style="color:' + cColor + '">C: ' + cUsed + '/' + cLimit + '</span>';
+      usageCellHtml = '<span style="color:' + (aUsed >= aLimit ? '#e08080' : '#ccc') + '">A:' + aUsed + '/' + aLimit + '</span>' +
+        ' <span style="color:' + (cUsed >= cLimit ? '#e08080' : '#ccc') + '">C:' + cUsed + '/' + cLimit + '</span>';
     } else {
       var count = usage.count || 0;
       var limit = usage.limit || 50;
-      var usageColor = count >= limit ? '#e08080' : count >= limit * 0.8 ? '#C9A84C' : '#ccc';
-      usageCellHtml = '<span style="color:' + usageColor + ';font-weight:600">' + count + ' / ' + limit + '</span>';
+      usageCellHtml = '<span style="color:' + (count >= limit ? '#e08080' : '#ccc') + '">' + count + '/' + limit + '</span>';
     }
 
-    const createdDate = firm.createdAt
-      ? new Date(firm.createdAt).toLocaleDateString('en-GB', {
-          day: 'numeric', month: 'short', year: 'numeric'
-        })
-      : '—';
+    // Product badge
+    var prodBadge = product === 'scout'
+      ? '<span style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#C9A84C;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);padding:2px 6px">Scout</span>'
+      : '<span style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#888;background:rgba(250,250,248,0.04);border:1px solid #2a2a2a;padding:2px 6px">Alex</span>';
 
-    const product = getProduct(firm);
+    // Plan badge
+    var planBadge = firm.plan === 'paid'
+      ? '<span style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#7BC47B;background:rgba(123,196,123,0.12);border:1px solid rgba(123,196,123,0.3);padding:2px 6px">Paid</span>'
+      : '<span style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#888;border:1px solid #2a2a2a;padding:2px 6px">Free</span>';
 
-    // Product badge — gold for Scout, grey for Alex
-    const productBadge = product === 'scout'
-      ? '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#C9A84C;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);padding:2px 8px">Scout</span>'
-      : '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#888;background:rgba(250,250,248,0.04);border:1px solid #2a2a2a;padding:2px 8px">Alex</span>';
+    // Morning job toggle — On (green) or Paused (red)
+    var cronOn = !firm.cronPaused;
+    var cronBtnColor = cronOn ? '#7BC47B' : '#e08080';
+    var cronBtnLabel = cronOn ? 'On' : 'Paused';
+    var cronToggle = '<button class="btn" style="font-size:9px;padding:3px 8px;background:' + cronBtnColor + ';color:#0a0a0a;min-width:52px" ' +
+      'onclick="toggleFirmCron(\'' + fc + '\',' + cronOn + ')">' + cronBtnLabel + '</button>';
+
+    // Test checkbox
+    var testChecked = firm.isTest ? ' checked' : '';
+    var testCb = '<input type="checkbox"' + testChecked + ' onchange="toggleFirmTest(\'' + fc + '\',this.checked)" style="cursor:pointer;width:14px;height:14px">';
+
+    // Emails
+    var emailParts = [];
+    if (firm.emailActions) emailParts.push('Act');
+    if (firm.emailNews) emailParts.push('News');
+    var emailLabel = emailParts.length ? emailParts.join('+') : '<span style="color:#555">Off</span>';
+
+    // Last seen — relative
+    var lastSeenLabel = '—';
+    if (firm.lastSeen) {
+      var lsDays = Math.floor((Date.now() - new Date(firm.lastSeen).getTime()) / 86400000);
+      lastSeenLabel = lsDays === 0 ? 'Today' : lsDays === 1 ? 'Yesterday' : lsDays + 'd ago';
+    }
+
+    // Last run — status + cost summary
+    var lastRunHtml = '—';
+    if (firm.lastRun) {
+      var lr = firm.lastRun;
+      var lrStatus = String(lr.status || '').slice(0, 20);
+      var lrParts = [lrStatus];
+      if (lr.cost) {
+        lrParts.push(lr.cost.input_tokens ? (Math.round(lr.cost.input_tokens / 1000) + 'k in') : '');
+        lrParts.push(lr.cost.output_tokens ? (Math.round(lr.cost.output_tokens / 1000) + 'k out') : '');
+        if (lr.cost.web_search_requests) lrParts.push(lr.cost.web_search_requests + ' srch');
+      }
+      var statusColor = lrStatus.indexOf('error') !== -1 ? '#e08080' : lrStatus.indexOf('skip') !== -1 || lrStatus === 'paused' || lrStatus === 'test' ? '#888' : '#7ecf9a';
+      lastRunHtml = '<span style="color:' + statusColor + ';font-size:10px">' + escapeHtml(lrParts.filter(Boolean).join(' · ')) + '</span>';
+      if (lr.ms) lastRunHtml += '<br><span style="color:#444;font-size:9px">' + (lr.ms / 1000).toFixed(1) + 's</span>';
+    }
 
     html += '<tr>';
-    html += '<td><span class="firm-code-badge">' + escapeHtml(firm.firmCode) + '</span></td>';
-    html += '<td>' + escapeHtml(firm.firmName || '—') + '</td>';
-    html += '<td>' + productBadge + '</td>';
-    html += '<td>' + createdDate + '</td>';
-    html += '<td><span class="tier-badge">' + escapeHtml(firm.tier || 'beta') + '</span></td>';
-
-    var planVal = firm.plan === 'paid' ? 'paid' : 'free';
-    var planBadge = planVal === 'paid'
-      ? '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7BC47B;background:rgba(123,196,123,0.12);border:1px solid rgba(123,196,123,0.3);padding:2px 8px">Paid</span>'
-      : '<span style="display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#888;background:rgba(250,250,248,0.04);border:1px solid #2a2a2a;padding:2px 8px">Free</span>';
+    html += '<td><span class="firm-code-badge">' + fc + '</span><br><span style="font-size:10px;color:#555">' + escapeHtml(firm.firmName || '') + '</span></td>';
+    html += '<td>' + prodBadge + '</td>';
     html += '<td>' + planBadge + '</td>';
+    html += '<td style="text-align:center">' + cronToggle + '</td>';
+    html += '<td style="text-align:center">' + testCb + '</td>';
+    html += '<td style="font-size:11px">' + emailLabel + '</td>';
+    html += '<td style="font-size:11px;color:#888">' + lastSeenLabel + '</td>';
+    html += '<td>' + lastRunHtml + '</td>';
+    html += '<td style="font-size:11px">' + usageCellHtml + '</td>';
 
-    html += '<td style="font-weight:600">' + usageCellHtml + '</td>';
-
-    var planBtn = planVal === 'paid'
-      ? '<button class="btn" style="font-size:10px;padding:5px 10px;margin-right:6px;background:#2a2a2a;color:#ccc" onclick="setPlan(\'' + escapeHtml(firm.firmCode) + '\',\'free\')">Downgrade</button>'
-      : '<button class="btn" style="font-size:10px;padding:5px 10px;margin-right:6px;background:#7BC47B;color:#0a0a0a" onclick="setPlan(\'' + escapeHtml(firm.firmCode) + '\',\'paid\')">Upgrade to Paid</button>';
-    html += '<td>' + planBtn + '<button class="btn btn-danger" style="font-size:10px;padding:5px 10px" ' +
-      'onclick="resetUsage(\'' + escapeHtml(firm.firmCode) + '\',\'' + product + '\')">Reset Usage</button></td>';
+    var planBtn = firm.plan === 'paid'
+      ? '<button class="btn" style="font-size:9px;padding:4px 8px;background:#2a2a2a;color:#ccc" onclick="setPlan(\'' + fc + '\',\'free\')">↓Free</button>'
+      : '<button class="btn" style="font-size:9px;padding:4px 8px;background:#7BC47B;color:#0a0a0a" onclick="setPlan(\'' + fc + '\',\'paid\')">↑Paid</button>';
+    html += '<td>' + planBtn + '</td>';
     html += '</tr>';
   });
 
@@ -1035,6 +1083,90 @@ async function createScoutAccount() {
 // ─────────────────────────────────────────────────────────────
 // UTILITY — escape HTML to prevent XSS in table cells
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// CRON STATUS BAR
+// Renders the morning job status and global pause button.
+// ─────────────────────────────────────────────────────────────
+function renderCronStatusBar() {
+  var label = document.getElementById('cronStateLabel');
+  var timeEl = document.getElementById('cronLastTime');
+  var btn = document.getElementById('cronPauseBtn');
+
+  if (_cronMeta.cronPausedGlobal) {
+    label.textContent = 'Paused';
+    label.style.color = '#e08080';
+    btn.textContent = 'Resume';
+    btn.style.borderColor = '#7BC47B'; btn.style.color = '#7BC47B';
+  } else {
+    label.textContent = 'Running';
+    label.style.color = '#7BC47B';
+    btn.textContent = 'Pause';
+    btn.style.borderColor = '#e08080'; btn.style.color = '#e08080';
+  }
+
+  if (_cronMeta.cronFinishedAt) {
+    try {
+      var d = new Date(_cronMeta.cronFinishedAt);
+      timeEl.textContent = 'Last: ' + d.toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    } catch(e) { timeEl.textContent = ''; }
+  } else if (_cronMeta.cronLastState === 'running') {
+    timeEl.textContent = 'Currently running…';
+  } else {
+    timeEl.textContent = '';
+  }
+}
+
+async function toggleCronPause() {
+  var btn = document.getElementById('cronPauseBtn');
+  var newPaused = !_cronMeta.cronPausedGlobal;
+  btn.disabled = true;
+  try {
+    var r = await fetch(WORKER + '/admin/cron-pause', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword: adminPassword, paused: newPaused })
+    });
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Failed');
+    _cronMeta.cronPausedGlobal = newPaused;
+    renderCronStatusBar();
+  } catch(e) { alert('Error: ' + e.message); }
+  btn.disabled = false;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// TOGGLE FIRM FLAGS
+// Immediately saves cronPaused or isTest for one firm.
+// ─────────────────────────────────────────────────────────────
+async function toggleFirmCron(firmCode, currentlyOn) {
+  try {
+    var r = await fetch(WORKER + '/admin/set-firm-flags', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword: adminPassword, firmCode: firmCode, cronPaused: currentlyOn })
+    });
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Failed');
+    // Update cached data and re-render
+    var firm = _allFirmsData.find(function(f) { return f.firmCode === firmCode; });
+    if (firm) firm.cronPaused = currentlyOn; // currentlyOn=true means we're pausing
+    renderFirmsTable(_firmsFilter);
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+async function toggleFirmTest(firmCode, checked) {
+  try {
+    var r = await fetch(WORKER + '/admin/set-firm-flags', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword: adminPassword, firmCode: firmCode, isTest: checked })
+    });
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Failed');
+    var firm = _allFirmsData.find(function(f) { return f.firmCode === firmCode; });
+    if (firm) firm.isTest = checked;
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
