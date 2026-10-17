@@ -1035,6 +1035,10 @@ async function runMorningForFirm(env, firmCode, day) {
   if (!saved || !saved.context) return 'no_context';
   const user = await env.G7_KV.get('auth:users:' + firmCode, 'json') || {};
 
+  /* Per-firm flags: cronPaused and isTest skip all generation */
+  if (user.cronPaused) return 'paused';
+  if (user.isTest) return 'test';
+
   /* Skip firms with nothing to deliver: both emails off AND not recently
      active on the dashboard. "Recently" = lastSeen within last 3 days. */
   const ep = emailPrefs(user);
@@ -2159,37 +2163,92 @@ export default {
 
     // =========================================================================
     // ROUTE 8 — GET /admin/list-firms
-    // Returns a list of all firm accounts in KV.
+    // Returns a list of all firm accounts in KV, enriched with cron/email/lastSeen data.
     // Protected by ?adminPassword=xxx query parameter.
     // =========================================================================
     if (request.method === 'GET' && path === '/admin/list-firms') {
 
       const adminPassword = url.searchParams.get('adminPassword');
 
-      // Validate admin password
       if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
         return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
       }
 
-      // List all keys with the 'auth:users:' prefix to find all firm accounts
       const list = await env.G7_KV.list({ prefix: 'auth:users:' });
 
-      // Fetch each firm's data to return a useful summary
+      /* Load cron:last once — used to attach per-firm last-run info */
+      const cronLast = await env.G7_KV.get('cron:last', 'json');
+      const cronFirmMap = {};
+      if (cronLast && Array.isArray(cronLast.firms)) {
+        cronLast.firms.forEach(function(f) { cronFirmMap[f.firm] = f; });
+      }
+
+      /* Global pause state */
+      const cronPausedGlobal = (await env.G7_KV.get('cron:paused')) === '1';
+
       const firms = await Promise.all(
         list.keys.map(async (key) => {
           const user = await env.G7_KV.get(key.name, 'json');
-          // Extract firmCode from the key name by stripping 'auth:users:' prefix
           const firmCode = key.name.replace('auth:users:', '');
+          const ep = emailPrefs(user);
+          const lastSeen = await env.G7_KV.get('scout:lastSeen:' + firmCode);
+          const cronEntry = cronFirmMap[firmCode] || null;
           return {
             firmCode,
             firmName: user ? user.firmName : 'Unknown',
             createdAt: user ? user.createdAt : null,
-            tier: user ? user.tier : null
+            tier: user ? user.tier : null,
+            plan: user ? user.plan : null,
+            product: user ? user.product : null,
+            cronPaused: !!(user && user.cronPaused),
+            isTest: !!(user && user.isTest),
+            emailActions: ep.actions,
+            emailNews: ep.news,
+            lastSeen: lastSeen || null,
+            lastRun: cronEntry
           };
         })
       );
 
-      return jsonResponse({ firms });
+      return jsonResponse({ firms, cronPausedGlobal, cronLastDay: cronLast ? cronLast.day : null,
+        cronLastState: cronLast ? cronLast.state : null,
+        cronFinishedAt: cronLast ? cronLast.finishedAt : null });
+    }
+
+    // ── POST /admin/set-firm-flags ──────────────────────────────────────────
+    // Updates cronPaused and/or isTest on a firm's user record.
+    // Body: { adminPassword, firmCode, cronPaused?: bool, isTest?: bool }
+    if (request.method === 'POST' && path === '/admin/set-firm-flags') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+      if (!body.adminPassword || body.adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden' }, 403);
+      }
+      const firmCode = String(body.firmCode || '').toUpperCase().trim();
+      if (!firmCode) return jsonResponse({ error: 'firmCode required' }, 400);
+      const user = await env.G7_KV.get('auth:users:' + firmCode, 'json');
+      if (!user) return jsonResponse({ error: 'Firm not found' }, 404);
+      if (typeof body.cronPaused === 'boolean') user.cronPaused = body.cronPaused;
+      if (typeof body.isTest === 'boolean') user.isTest = body.isTest;
+      await kvPut(env, 'auth:users:' + firmCode, JSON.stringify(user));
+      return jsonResponse({ success: true, firmCode, cronPaused: !!user.cronPaused, isTest: !!user.isTest });
+    }
+
+    // ── POST /admin/cron-pause ───────────────────────────────────────────────
+    // Global kill switch for the 6am morning job.
+    // Body: { adminPassword, paused: true|false }
+    if (request.method === 'POST' && path === '/admin/cron-pause') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON body' }, 400); }
+      if (!body.adminPassword || body.adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden' }, 403);
+      }
+      if (body.paused) {
+        await kvPut(env, 'cron:paused', '1');
+      } else {
+        await env.G7_KV.delete('cron:paused');
+      }
+      return jsonResponse({ success: true, paused: !!body.paused });
     }
 
     // ── ROUTE 9 — POST /admin/reset-password ──────────────────────────────────
@@ -3471,23 +3530,24 @@ export default {
     const ist = new Date(Date.now() + 5.5 * 3600 * 1000);
     const day = ist.toISOString().slice(0, 10);
     const report = { day: day, startedAt: new Date().toISOString(), firms: [] };
+
+    /* Global kill switch — KV key cron:paused = "1" */
+    if ((await env.G7_KV.get('cron:paused')) === '1') {
+      report.state = 'paused';
+      report.finishedAt = new Date().toISOString();
+      console.log(JSON.stringify({ cron: report }));
+      await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+      return;
+    }
+
     report.state = 'running';
     await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
-
-    /* env.SKIP_CRON_FIRMS — comma-separated firm codes to skip entirely */
-    const skipSet = new Set(
-      (env.SKIP_CRON_FIRMS || '').split(',').map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean)
-    );
 
     let cursor;
     do {
       const page = await env.G7_KV.list({ prefix: 'market:ctx:', cursor: cursor });
       for (const k of page.keys) {
         const firmCode = k.name.slice('market:ctx:'.length);
-        if (skipSet.has(firmCode)) {
-          report.firms.push({ firm: firmCode, status: 'skipped_env', ms: 0 });
-          continue;
-        }
         report.current = firmCode;
         await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
         const t0 = Date.now();
