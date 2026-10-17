@@ -1147,14 +1147,14 @@ async function findBusinesses(env, query, cap) {
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-5-5',
+      model: 'claude-haiku-5-5',
       max_tokens: 6000,
-      thinking: { type: 'between_tools' },
+      thinking: { type: 'disabled' },
       system: system,
       tools: [
-        { type: 'web_search_20250305', name: 'web_search', max_uses: 5,
+        { type: 'web_search_20250305', name: 'web_search', max_uses: 2,
           user_location: { type: 'approximate', country: 'IN', timezone: 'Asia/Kolkata' } },
-        { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 4, max_content_tokens: 6000 }
+        { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 2, max_content_tokens: 3000 }
       ],
       messages: [{ role: 'user', content: 'Find: ' + query }]
     })
@@ -1225,11 +1225,18 @@ async function findBusinesses(env, query, cap) {
 
   /* One log line per search — visible in Cloudflare Workers Logs. Tells us
      where leads are lost: not found, phone not proposed, or phone not
-     verifiable. */
+     verifiable. Also logs token usage and tool call counts for cost tracking. */
   try {
     const proposed = Array.isArray(parsed.businesses) ? parsed.businesses : [];
+    var _u = data.usage || {};
+    var _wsr = (_u.server_tool_use && _u.server_tool_use.web_search_requests) || 0;
+    var _wfr = (data.content || []).filter(function(b){ return b.type === 'web_fetch_tool_result'; }).length;
     console.log(JSON.stringify({
       finder: query,
+      input_tokens: _u.input_tokens || 0,
+      output_tokens: _u.output_tokens || 0,
+      web_searches: _wsr,
+      web_fetches: _wfr,
       proposed: proposed.length,
       proposedWithPhone: proposed.filter(function(b){ return b && b.phone; }).length,
       kept: out.length,
@@ -3188,48 +3195,48 @@ export default {
       // 3. Read plan from user record
       const userRecord = await env.G7_KV.get('auth:users:' + session.firmCode, 'json');
       const plan = userRecord && userRecord.plan ? userRecord.plan : 'free';
-      const monthKey = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+      const todayKey = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
 
-      // Determine limit and result cap based on plan
-      const isPaid   = plan === 'paid';
-      const cap      = isPaid ? 50 : 2;
-      const hardLimit = isPaid ? 6 : 5;
+      // Determine daily limit and result cap based on plan
+      const isPaid    = plan === 'paid';
+      const cap       = isPaid ? 50 : 2;
+      const hardLimit = isPaid ? 5 : 2;
 
-      // Counter key follows the exact same pattern as /scout/analyse
-      const placesCounterKey = isPaid
-        ? 'scout:limit:' + session.firmCode + ':places:' + monthKey
-        : 'scout:limit:' + session.firmCode + ':places';
+      // Daily counter key
+      const placesCounterKey = 'scout:limit:' + session.firmCode + ':places:' + todayKey;
 
-      // 4. Rate limit check (before cache — so limit applies even on cache hits
-      //    only on live calls; cache hits skip this block below)
+      // 4. Read current count
       const cntRaw = await env.G7_KV.get(placesCounterKey);
       const placesCount = cntRaw ? parseInt(cntRaw, 10) : 0;
 
       // 5. Cache lookup — normalise query to lowercase for stable cache key
       const normalised = q.toLowerCase();
-      // SHA-256 hash of the normalised query, hex-encoded, for the cache key
       const encoder = new TextEncoder();
       const hashBuf = await crypto.subtle.digest('SHA-256', encoder.encode(normalised));
       const hashHex = Array.from(new Uint8Array(hashBuf))
         .map(b => b.toString(16).padStart(2, '0')).join('');
       const cacheKey = 'places:cache:' + hashHex;
 
-      const cached = await env.G7_KV.get(cacheKey, 'json');
-      if (cached) {
-        // Cache hit — return stored results, no counter increment, no Google call
-        return jsonResponse({
-          cacheHit: true,
-          results:  cached.slice(0, cap),
-          quota:    { used: placesCount, limit: hardLimit }
-        });
+      const forceRefresh = url.searchParams.get('refresh') === '1';
+      if (!forceRefresh) {
+        const cached = await env.G7_KV.get(cacheKey, 'json');
+        if (cached) {
+          // Cache hit — return stored results + cachedAt date, no counter increment
+          return jsonResponse({
+            cacheHit: true,
+            cachedAt: cached._cachedAt || null,
+            results:  (cached.results || cached).slice ? (cached.results || []).slice(0, cap) : [],
+            quota:    { used: placesCount, limit: hardLimit, period: 'day' }
+          });
+        }
       }
 
-      // Cache miss — enforce rate limit before calling Google
+      // Cache miss — enforce daily rate limit
       if (placesCount >= hardLimit) {
         return jsonResponse({ error: 'limit_reached', limit: 'places' }, 403);
       }
 
-      // 6. Call Claude web search to find businesses (replaces Google Places)
+      // 6. Call Claude web search to find businesses
       let places;
       try {
         places = await findBusinesses(env, q, cap);
@@ -3237,17 +3244,17 @@ export default {
         return jsonResponse({ error: 'Business search failed' }, 502);
       }
 
-      // 8. Store in cache — 30-day TTL (2592000 seconds)
-      // Fire-and-forget; does not block the response
-      kvPut(env,cacheKey, JSON.stringify(places), { expirationTtl: 2592000 });
+      // 7. Store in cache — 14-day TTL with timestamp
+      var _cacheObj = { _cachedAt: new Date().toISOString().slice(0, 10), results: places };
+      kvPut(env, cacheKey, JSON.stringify(_cacheObj), { expirationTtl: 14 * 86400 });
 
-      // 9. Increment counter only on a successful non-cached call
-      await kvPut(env,placesCounterKey, String(placesCount + 1));
+      // 8. Increment daily counter (24h TTL so it auto-resets)
+      await kvPut(env, placesCounterKey, String(placesCount + 1), { expirationTtl: 86400 });
 
       return jsonResponse({
         cacheHit: false,
         results:  places.slice(0, cap),
-        quota:    { used: placesCount + 1, limit: hardLimit }
+        quota:    { used: placesCount + 1, limit: hardLimit, period: 'day' }
       });
     }
 

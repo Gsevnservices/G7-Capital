@@ -1972,13 +1972,14 @@ function renderTab1JSON(tab1, data) {
     if (icp.searchQuery) {
       var _cfIdx = idx;
       var _cfQ   = String(icp.searchQuery);
+      var _cfShort = _leadsIcpShortName(icp.name);
       html += '<div class="cf-block" id="cf-block-' + _cfIdx + '">';
       html += '<div class="cf-query">Searching: ' + escHtml(_cfQ) + '</div>';
       html += '<button class="cf-btn" id="cf-btn-' + _cfIdx + '" ';
       html += 'data-cf-query="' + escAttr(_cfQ) + '" ';
       html += 'data-cf-icp="'   + escAttr(icp.name || '') + '" ';
       html += 'data-cf-idx="'   + _cfIdx + '">';
-      html += 'Find these businesses near you \u2192</button>';
+      html += 'Find ' + escHtml(_cfShort) + ' \u2192</button>';
       html += '<div id="cf-results-' + _cfIdx + '"></div>';
       html += '</div>';
     }
@@ -3715,6 +3716,16 @@ function renderLeadsTab(data) {
   container.addEventListener('click', function(e) {
     var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
 
+    /* ── CF REFRESH BUTTON (.cf-refresh-btn — bypass cache) ── */
+    var cfRefreshBtn = e.target.closest('.cf-refresh-btn');
+    if (cfRefreshBtn) {
+      var rQ   = cfRefreshBtn.getAttribute('data-cf-query') || '';
+      var rIcp = cfRefreshBtn.getAttribute('data-cf-icp')   || '';
+      var rIdx = cfRefreshBtn.getAttribute('data-cf-idx')   || '';
+      if (rQ) searchPlaces(rQ, rIcp, rIdx, true);
+      return;
+    }
+
     /* ── CF SEARCH BUTTON (.cf-btn inside leadsSearchBlock) ── */
     var cfSearchBtn = e.target.closest('.cf-btn');
     if (cfSearchBtn && !cfSearchBtn.disabled) {
@@ -3853,6 +3864,15 @@ function attachCFListeners() {
   container.addEventListener('click', function(e) {
     var btn = e.target;
 
+    /* Refresh button (.cf-refresh-btn) — bypass cache */
+    if (btn.classList.contains('cf-refresh-btn')) {
+      var rQuery   = btn.getAttribute('data-cf-query') || '';
+      var rIcpName = btn.getAttribute('data-cf-icp')   || '';
+      var rIcpIdx  = parseInt(btn.getAttribute('data-cf-idx'), 10);
+      if (rQuery) searchPlaces(rQuery, rIcpName, rIcpIdx, true);
+      return;
+    }
+
     /* Search button (.cf-btn) */
     if (btn.classList.contains('cf-btn') && !btn.disabled) {
       var query   = btn.getAttribute('data-cf-query') || '';
@@ -3873,32 +3893,34 @@ function attachCFListeners() {
   });
 }
 
-async function searchPlaces(query, icpName, icpIdx) {
+async function searchPlaces(query, icpName, icpIdx, forceRefresh) {
   var btn       = document.getElementById('cf-btn-'     + icpIdx);
   var resultsEl = document.getElementById('cf-results-' + icpIdx);
   if (!btn || !resultsEl) return;
 
+  var shortName = _leadsIcpShortName(icpName);
   btn.textContent = 'Searching\u2026';
   btn.disabled    = true;
   resultsEl.innerHTML = '';
 
   try {
     var token = localStorage.getItem('g7_session_token') || '';
-    var res = await fetch(
-      SCOUT_WORKER + '/places/search?q=' + encodeURIComponent(query),
+    var fetchUrl = SCOUT_WORKER + '/places/search?q=' + encodeURIComponent(query);
+    if (forceRefresh) fetchUrl += '&refresh=1';
+    var res = await fetch(fetchUrl,
       { method: 'GET', headers: { 'Authorization': 'Bearer ' + token } }
     );
 
-    /* 403 — quota exhausted */
+    /* 403 — daily quota exhausted */
     if (res.status === 403) {
       var errData = null;
       try { errData = await res.json(); } catch(e) {}
       if (errData && errData.error === 'limit_reached') {
-        document.getElementById('cfUpgradeModal').style.display = 'flex';
+        resultsEl.innerHTML = '<div class="cf-msg">You\u2019ve used today\u2019s searches \u2014 saved results still work.</div>';
       } else {
-        resultsEl.innerHTML = '<div class="cf-msg">Search unavailable — please try again later.</div>';
+        resultsEl.innerHTML = '<div class="cf-msg">Search unavailable \u2014 please try again later.</div>';
       }
-      btn.textContent = 'Find these businesses near you \u2192';
+      btn.textContent = 'Search ' + shortName + ' again \u2192';
       btn.disabled = false;
       return;
     }
@@ -3906,7 +3928,7 @@ async function searchPlaces(query, icpName, icpIdx) {
     /* Any other non-OK response */
     if (!res.ok) {
       resultsEl.innerHTML = '<div class="cf-msg">Something went wrong. Please try again.</div>';
-      btn.textContent = 'Find these businesses near you \u2192';
+      btn.textContent = 'Find ' + shortName + ' \u2192';
       btn.disabled = false;
       return;
     }
@@ -3916,8 +3938,8 @@ async function searchPlaces(query, icpName, icpIdx) {
 
     /* Empty results */
     if (places.length === 0) {
-      resultsEl.innerHTML = '<div class="cf-msg">No businesses found for this search. Try the plan\'s other groups.</div>';
-      btn.textContent = 'Find these businesses near you \u2192';
+      resultsEl.innerHTML = '<div class="cf-msg">No businesses found for this search. Try the plan\u2019s other groups.</div>';
+      btn.textContent = 'Search ' + shortName + ' again \u2192';
       btn.disabled = false;
       return;
     }
@@ -3943,8 +3965,18 @@ async function searchPlaces(query, icpName, icpIdx) {
       });
     }
 
+    /* Cache notice — show date and Refresh button on cache hits */
+    var html = '';
+    if (data.cacheHit && data.cachedAt) {
+      html += '<div class="cf-msg" style="display:flex;align-items:center;gap:8px">' +
+        '<span>Saved results from ' + escHtml(data.cachedAt) + '</span>' +
+        '<button class="cf-refresh-btn" data-cf-query="' + escAttr(query) + '" ' +
+        'data-cf-icp="' + escAttr(icpName) + '" data-cf-idx="' + escAttr(String(icpIdx)) + '" ' +
+        'style="background:none;border:1px solid var(--border);color:var(--gold);font-size:10px;font-family:inherit;cursor:pointer;padding:3px 10px;letter-spacing:.08em">Refresh</button></div>';
+    }
+
     /* Render result cards */
-    var html = '<div class="cf-results">';
+    html += '<div class="cf-results">';
     places.forEach(function(p, j) {
       var placeKey = icpIdx + '_' + j;
       var exists   = alreadyInPipeline(p);
@@ -3962,7 +3994,6 @@ async function searchPlaces(query, icpName, icpIdx) {
       if (exists) {
         html += '<button class="cf-add-btn" disabled>Already in your list</button>';
       } else {
-        /* Data attributes carry parameters — no inline onclick with JSON.stringify */
         html += '<button class="cf-add-btn" id="cf-add-' + escAttr(placeKey) + '" ';
         html += 'data-cf-idx="'      + icpIdx + '" ';
         html += 'data-cf-place="'    + j + '" ';
@@ -3973,20 +4004,20 @@ async function searchPlaces(query, icpName, icpIdx) {
     });
     html += '</div>';
 
-    /* Quota line — derived from data.quota.{used,limit} sent by the Worker */
+    /* Quota line — daily */
     if (data.quota && data.quota.limit !== undefined && data.quota.used !== undefined) {
       var rem = data.quota.limit - data.quota.used;
       if (rem < 0) rem = 0;
-      html += '<div class="cf-quota">' + (rem === 1 ? '1 search left this month' : escHtml(String(rem)) + ' searches left this month') + '</div>';
+      html += '<div class="cf-quota">' + (rem === 1 ? '1 search left today' : escHtml(String(rem)) + ' searches left today') + '</div>';
     }
 
     resultsEl.innerHTML = html;
-    btn.textContent = 'Search again \u2192';
+    btn.textContent = 'Search ' + shortName + ' again \u2192';
     btn.disabled    = false;
 
   } catch (e) {
     resultsEl.innerHTML = '<div class="cf-msg">Something went wrong. Please try again.</div>';
-    btn.textContent = 'Find these businesses near you \u2192';
+    btn.textContent = 'Find ' + shortName + ' \u2192';
     btn.disabled    = false;
   }
 }
