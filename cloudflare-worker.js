@@ -78,6 +78,23 @@ function jsonResponse(body, status = 200) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// HELPER: PER-CALL COST ACCUMULATOR
+// Reset before each firm in the cron loop; each API call records its usage.
+// ─────────────────────────────────────────────────────────────────────────────
+var _cronCost = { calls: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
+function resetCronCost() { _cronCost = { calls: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 }; }
+function recordCronCost(data) {
+  if (!data) return;
+  _cronCost.calls++;
+  var u = data.usage || {};
+  _cronCost.input_tokens += (u.input_tokens || 0);
+  _cronCost.output_tokens += (u.output_tokens || 0);
+  if (u.server_tool_use) {
+    _cronCost.web_search_requests += (u.server_tool_use.web_search_requests || 0);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // HELPER: HASH PASSWORD
 // SHA-256 hashes a plain-text password and returns a hex string.
 // Used during firm creation and login verification.
@@ -372,7 +389,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
       'policy and prices for this trade. Return 2 to 3 items.';
   }
 
-  const tool = { type: 'web_search_20250305', name: 'web_search', max_uses: 4 };
+  const tool = { type: 'web_search_20250305', name: 'web_search', max_uses: macroOnly ? 1 : 2 };
   if (city) {
     tool.user_location = { type: 'approximate', city: city, country: 'IN', timezone: 'Asia/Kolkata' };
   }
@@ -385,9 +402,9 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-5-5',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 6000,
-      thinking: { type: 'between_tools' },
+      thinking: { type: 'disabled' },
       system: system,
       tools: [tool],
       messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
@@ -400,6 +417,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     throw new Error('Anthropic ' + r.status + ': ' + errText.slice(0, 500));
   }
   const data = await r.json();
+  recordCronCost(data);
 
   /* Collect every URL web search actually returned. */
   const seen = new Set();
@@ -1014,6 +1032,17 @@ async function runMorningForFirm(env, firmCode, day) {
   const saved = await env.G7_KV.get('market:ctx:' + firmCode, 'json');
   if (!saved || !saved.context) return 'no_context';
   const user = await env.G7_KV.get('auth:users:' + firmCode, 'json') || {};
+
+  /* Skip firms with nothing to deliver: both emails off AND not recently
+     active on the dashboard. "Recently" = lastSeen within last 3 days. */
+  const ep = emailPrefs(user);
+  if (!ep.actions && !ep.news) {
+    var lastSeenRaw = await env.G7_KV.get('scout:lastSeen:' + firmCode);
+    var seenDaysAgo = lastSeenRaw ? Math.floor((Date.now() - new Date(lastSeenRaw).getTime()) / 86400000) : 999;
+    if (seenDaysAgo > 3) return 'skipped_no_email';
+  }
+
+  resetCronCost();
   var news = null, move = null, a = 'error', n = 'error';
   var effectiveNewsPrefs;
   try { effectiveNewsPrefs = await resolveNewsPrefs(env, firmCode, user.newsPrefs); } catch (e) { effectiveNewsPrefs = user.newsPrefs || []; }
@@ -1022,7 +1051,7 @@ async function runMorningForFirm(env, firmCode, day) {
   try { move = await generateScoutMove(env, firmCode, day, saved.context, news, st); } catch (e) { console.log(JSON.stringify({ moveError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   try { a = await sendActionsEmail(env, firmCode, day, move); } catch (e) { console.log(JSON.stringify({ actionsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   if (news) { try { n = await sendNewsEmail(env, firmCode, day, news); } catch (e) { console.log(JSON.stringify({ newsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); } } else { n = 'no_news'; }
-  return 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none');
+  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, _cronCost) };
 }
 
 /* ═══════════════════════════════════════════
@@ -1232,14 +1261,14 @@ async function generateSharedNews(env, cat, day, city) {
   const blocked = new Set(Array.isArray(blockedRaw) ? blockedRaw : []);
 
   async function ask(domains) {
-    const tool = { type: 'web_search_20250305', name: 'web_search', max_uses: 3 };
+    const tool = { type: 'web_search_20250305', name: 'web_search', max_uses: 2 };
     if (domains.length) tool.allowed_domains = domains;
     return fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
                  'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
-        model: 'claude-sonnet-5-5', max_tokens: 6000, thinking: { type: 'between_tools' },
+        model: 'claude-haiku-4-5-20251001', max_tokens: 6000, thinking: { type: 'disabled' },
         system: system, tools: [tool],
         messages: [{ role: 'user', content: 'Today\'s ' + def.label + ' news.' }]
       })
@@ -1265,6 +1294,7 @@ async function generateSharedNews(env, cat, day, city) {
   }
   if (!r.ok) throw new Error('shared ' + cat + ' ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const data = await r.json();
+  recordCronCost(data);
 
   /* Collect URLs web search returned. */
   const seen = new Set();
@@ -1348,6 +1378,7 @@ async function personaliseNews(env, firmCode, day, context, sections) {
   if (r.ok) {
     try {
       const d = await r.json();
+      recordCronCost(d);
       const t = (d.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
       const a = t.indexOf('{'), z = t.lastIndexOf('}');
       if (a !== -1 && z > a) out = JSON.parse(t.slice(a, z + 1));
@@ -1581,6 +1612,7 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
   });
   if (!r.ok) throw new Error('move ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const d = await r.json();
+  recordCronCost(d);
   const t = (d.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
   let mv = null;
   try {
@@ -2255,8 +2287,9 @@ export default {
       const ist = new Date(Date.now() + 5.5 * 3600 * 1000);
       const day = ist.toISOString().slice(0, 10);
       try {
-        const status = await runMorningForFirm(env, firmCode, day);
-        return jsonResponse({ firmCode: firmCode, day: day, status: status });
+        const result = await runMorningForFirm(env, firmCode, day);
+        if (typeof result === 'string') return jsonResponse({ firmCode: firmCode, day: day, status: result });
+        return jsonResponse({ firmCode: firmCode, day: day, status: result.status, cost: result.cost });
       } catch (e) {
         return jsonResponse({ error: 'run_failed', detail: String(e.message || '').slice(0, 300) }, 500);
       }
@@ -3166,6 +3199,13 @@ export default {
       if (!session) return jsonResponse({ error: 'unauthorized' }, 401);
       const ist = new Date(Date.now() + 5.5 * 3600 * 1000);
       const today = ist.toISOString().slice(0, 10);
+
+      /* Track lastSeen — max one KV write per firm per day */
+      var _lsKey = 'scout:lastSeen:' + session.firmCode;
+      var _lsRaw = await env.G7_KV.get(_lsKey);
+      if (!_lsRaw || _lsRaw.slice(0, 10) !== today) {
+        kvPut(env, _lsKey, today + 'T' + ist.toISOString().slice(11, 19) + '+05:30');
+      }
       const saved = await env.G7_KV.get('market:ctx:' + session.firmCode, 'json');
       if (!saved || !saved.context) {
         /* No context saved yet — still try fallback from previous days. */
@@ -3431,17 +3471,31 @@ export default {
     const report = { day: day, startedAt: new Date().toISOString(), firms: [] };
     report.state = 'running';
     await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+
+    /* env.SKIP_CRON_FIRMS — comma-separated firm codes to skip entirely */
+    const skipSet = new Set(
+      (env.SKIP_CRON_FIRMS || '').split(',').map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean)
+    );
+
     let cursor;
     do {
       const page = await env.G7_KV.list({ prefix: 'market:ctx:', cursor: cursor });
       for (const k of page.keys) {
         const firmCode = k.name.slice('market:ctx:'.length);
+        if (skipSet.has(firmCode)) {
+          report.firms.push({ firm: firmCode, status: 'skipped_env', ms: 0 });
+          continue;
+        }
         report.current = firmCode;
         await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
         const t0 = Date.now();
         try {
-          const status = await runMorningForFirm(env, firmCode, day);
-          report.firms.push({ firm: firmCode, status: status, ms: Date.now() - t0 });
+          const result = await runMorningForFirm(env, firmCode, day);
+          if (typeof result === 'string') {
+            report.firms.push({ firm: firmCode, status: result, ms: Date.now() - t0 });
+          } else {
+            report.firms.push({ firm: firmCode, status: result.status, cost: result.cost, ms: Date.now() - t0 });
+          }
           await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
         } catch (e) {
           report.firms.push({ firm: firmCode, status: 'error',
