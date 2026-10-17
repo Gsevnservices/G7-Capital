@@ -972,7 +972,7 @@ async function loadScoutStats() {
           '<td>' + escapeHtml(f.businessName || '—') + (f.city ? '<br><span style="color:#444;font-size:10px">' + escapeHtml(f.city) + '</span>' : '') + '</td>' +
           '<td style="color:' + stageColor + '">' + escapeHtml(f.stage || '—') + '</td>' +
           '<td style="color:#666">' + escapeHtml(f.stopReason || '—') + '</td>' +
-          '<td style="color:#666">' + (f.chars || '—') + '</td>' +
+          '<td style="color:#666">' + (f.output_tokens ? f.output_tokens + ' tok' : f.chars ? f.chars + ' ch' : '—') + '</td>' +
           '<td style="color:#666;font-size:10px">' + escapeHtml((f.failedSections || []).join(', ') || '—') + '</td>' +
           '</tr>';
         if (f.parseError) {

@@ -1254,6 +1254,7 @@ var _cfPlaces        = {};     // Customer Finder: place data keyed by '{icpIdx}
 var _leadsData       = null;   // last parsed data object passed to renderLeadsTab — used for list re-renders after CF add
 var _checklistSyncTimer = null; // debounce handle for toggleDayComplete → saveScoutStateToServer
 var _checklistSyncFired = false; // leading-edge flag (matches pipelineSave pattern)
+var _parseFailReported  = false; // set by parseAndRender when it sends a 'parse' failure report
 
 /* ═══════════════════════════════════════════
    PAGE INIT
@@ -1310,24 +1311,31 @@ window.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  /* Report render failures — scan for "could not be rendered" buttons */
-  (function() {
-    var failed = [];
-    ['tab1Content','tab2Content','tab3Content','tab4Content','tab5Content','wacContent'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el && el.innerHTML.indexOf('could not be rendered') !== -1) failed.push(id);
-    });
-    if (failed.length > 0) {
-      reportAnalysisFailure({
-        stage: 'render', stopReason: '', chars: scoutRaw ? scoutRaw.length : 0,
-        parseError: '', failedSections: failed,
-        businessName: (businessData && businessData.businessName) || '',
-        businessType: (businessData && (businessData.businessType || businessData.businessTypeInput)) || '',
-        city: (businessData && businessData.location) || '',
-        rawHead: scoutRaw ? scoutRaw.slice(0, 2000) : ''
+  /* Report render failures — skip if parse already reported (same broken result) */
+  if (!_parseFailReported) {
+    (function() {
+      var failed = [];
+      ['tab1Content','tab2Content','tab3Content','tab4Content','tab5Content','wacContent'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.innerHTML.indexOf('could not be rendered') !== -1) failed.push(id);
       });
-    }
-  })();
+      if (failed.length > 0) {
+        var _failKey = (scoutRaw ? scoutRaw.length : 0) + ':' + (scoutRaw ? scoutRaw.slice(0, 50) : '');
+        var _prevKey = localStorage.getItem(scoutKey('scout_failure_reported')) || '';
+        if (_failKey !== _prevKey) {
+          localStorage.setItem(scoutKey('scout_failure_reported'), _failKey);
+          reportAnalysisFailure({
+            stage: 'render', stopReason: '', chars: scoutRaw ? scoutRaw.length : 0,
+            parseError: '', failedSections: failed,
+            businessName: (businessData && businessData.businessName) || '',
+            businessType: (businessData && (businessData.businessType || businessData.businessTypeInput)) || '',
+            city: (businessData && businessData.location) || '',
+            rawHead: scoutRaw ? scoutRaw.slice(0, 2000) : ''
+          });
+        }
+      }
+    })();
+  }
 
   /* Show Scout Insight card if one exists from the most recent check-in.
      insightWeek is the week number when the insight was generated.
@@ -1587,17 +1595,25 @@ function parseAndRender(rawOutput, biz) {
       console.error('Scout parse failed — raw output saved to scout_last_raw (' + (rawOutput ? rawOutput.length : 0) + ' chars). Copy with:\n  copy(localStorage.getItem("' + scoutKey('scout_last_raw') + '"))');
       if (jsonParseError) console.error('Last JSON parse error:', jsonParseError.message);
     } catch(_eSave) {}
-    /* Report parse failure to admin */
-    reportAnalysisFailure({
-      stage: 'parse', stopReason: '', chars: rawOutput ? rawOutput.length : 0,
-      parseError: jsonParseError ? jsonParseError.message : 'data is null after all levels',
-      failedSections: [],
-      businessName: (biz && biz.businessName) || '', businessType: (biz && (biz.businessType || biz.businessTypeInput)) || '',
-      city: (biz && biz.location) || '', rawHead: rawOutput ? rawOutput.slice(0, 2000) : ''
-    });
+    /* Report parse failure to admin — dedup by firm + length + first 50 chars */
+    _parseFailReported = true;
+    var _failKey = (rawOutput ? rawOutput.length : 0) + ':' + (rawOutput ? rawOutput.slice(0, 50) : '');
+    var _prevKey = localStorage.getItem(scoutKey('scout_failure_reported')) || '';
+    if (_failKey !== _prevKey) {
+      localStorage.setItem(scoutKey('scout_failure_reported'), _failKey);
+      reportAnalysisFailure({
+        stage: 'parse', stopReason: '', chars: rawOutput ? rawOutput.length : 0,
+        parseError: jsonParseError ? jsonParseError.message : 'data is null after all levels',
+        failedSections: [],
+        businessName: (biz && biz.businessName) || '', businessType: (biz && (biz.businessType || biz.businessTypeInput)) || '',
+        city: (biz && biz.location) || '', rawHead: rawOutput ? rawOutput.slice(0, 2000) : ''
+      });
+    }
   }
 
   if (data) {
+    /* Clear failure dedup key — this result parsed successfully */
+    try { localStorage.removeItem(scoutKey('scout_failure_reported')); } catch(_e) {}
     /* JSON path — direct field access, no regex */
     var h = data.headline || {};
     document.getElementById('metricRevenue').textContent = h.revenueVelocity || '—';
