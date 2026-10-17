@@ -190,7 +190,7 @@ async function recordAnalysisFailure(env, record) {
     var list = await env.G7_KV.get('scout:analysis-failures', 'json') || [];
     list.unshift(record);
     if (list.length > 20) list = list.slice(0, 20);
-    await env.G7_KV.put('scout:analysis-failures', JSON.stringify(list),
+    await kvPut(env, 'scout:analysis-failures', JSON.stringify(list),
       { expirationTtl: 30 * 86400 });
 
     /* Rate-limit email: one per firm per calendar day */
@@ -199,7 +199,7 @@ async function recordAnalysisFailure(env, record) {
     var already = await env.G7_KV.get(dedupKey);
     if (already || !env.ADMIN_EMAIL) return;
 
-    await env.G7_KV.put(dedupKey, '1', { expirationTtl: 86400 });
+    await kvPut(env, dedupKey, '1', { expirationTtl: 86400 });
 
     var stageLabel = record.stage === 'incomplete' ? 'Stream incomplete (truncated or dropped)' :
                      record.stage === 'parse'      ? 'JSON parse failed on result page' :
@@ -212,7 +212,8 @@ async function recordAnalysisFailure(env, record) {
       'City: ' + (record.city || '—'),
       'Stage: ' + stageLabel,
       'Stop reason: ' + (record.stopReason || '—'),
-      'Characters received: ' + (record.chars || '—'),
+      record.output_tokens ? 'Output tokens: ' + record.output_tokens : null,
+      record.chars ? 'Characters received: ' + record.chars : null,
       record.parseError ? 'Parse error: ' + record.parseError : null,
       record.failedSections && record.failedSections.length ? 'Failed sections: ' + record.failedSections.join(', ') : null,
       'Time (IST): ' + record.time,
@@ -2635,7 +2636,7 @@ export default {
               businessName: '', businessType: '', city: '',
               stage: 'incomplete',
               stopReason: _logData.stop_reason || 'none',
-              chars: _logData.output_tokens || 0,
+              output_tokens: _logData.output_tokens || 0,
               time: _istStr,
               rawHead: ''
             }));
