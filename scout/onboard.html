@@ -1278,6 +1278,12 @@ async function handleSubmit() {
       if (!streamComplete) {
         console.warn('[onboard] Retry also incomplete — stopReason=' +
           (retryStream.stopReason || 'null') + ', chars=' + scoutOutput.length);
+        reportAnalysisFailure({
+          stage: 'incomplete', stopReason: retryStream.stopReason || '',
+          chars: scoutOutput.length, parseError: '', failedSections: [],
+          businessName: data.businessName || '', businessType: data.businessType || data.businessTypeInput || '',
+          city: data.location || '', rawHead: scoutOutput.slice(0, 2000)
+        });
         overlay.classList.remove('active');
         document.getElementById('submitBtn').disabled = false;
         alert('Scout couldn\u2019t finish your analysis \u2014 tap Submit again to try once more.');

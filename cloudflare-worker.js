@@ -181,6 +181,55 @@ async function sendEmail(env, to, subject, text, html, headers) {
   } catch (e) { return false; }
 }
 
+/* ── ANALYSIS FAILURE RECORDER ──
+   Saves a failure record to KV list (max 20, 30-day TTL), sends one
+   alert email per firm per day. Never throws — fire-and-forget only. */
+async function recordAnalysisFailure(env, record) {
+  try {
+    /* Append to KV list — prepend newest, keep last 20 */
+    var list = await env.G7_KV.get('scout:analysis-failures', 'json') || [];
+    list.unshift(record);
+    if (list.length > 20) list = list.slice(0, 20);
+    await env.G7_KV.put('scout:analysis-failures', JSON.stringify(list),
+      { expirationTtl: 30 * 86400 });
+
+    /* Rate-limit email: one per firm per calendar day */
+    var today = new Date().toISOString().slice(0, 10);
+    var dedupKey = 'scout:fail-alert:' + record.firm + ':' + today;
+    var already = await env.G7_KV.get(dedupKey);
+    if (already || !env.ADMIN_EMAIL) return;
+
+    await env.G7_KV.put(dedupKey, '1', { expirationTtl: 86400 });
+
+    var stageLabel = record.stage === 'incomplete' ? 'Stream incomplete (truncated or dropped)' :
+                     record.stage === 'parse'      ? 'JSON parse failed on result page' :
+                     record.stage === 'render'     ? 'Section render errors on result page' :
+                     record.stage || 'unknown';
+    var body = [
+      'Firm: ' + record.firm,
+      'Business: ' + (record.businessName || '—'),
+      'Type: ' + (record.businessType || '—'),
+      'City: ' + (record.city || '—'),
+      'Stage: ' + stageLabel,
+      'Stop reason: ' + (record.stopReason || '—'),
+      'Characters received: ' + (record.chars || '—'),
+      record.parseError ? 'Parse error: ' + record.parseError : null,
+      record.failedSections && record.failedSections.length ? 'Failed sections: ' + record.failedSections.join(', ') : null,
+      'Time (IST): ' + record.time,
+      '',
+      'What to do: Ask the owner to tap "Re-run my analysis" on the result page, or reset their usage counter in the admin panel and have them re-submit.'
+    ].filter(Boolean).join('\n');
+
+    await sendEmail(env, env.ADMIN_EMAIL,
+      'Scout analysis failed — ' + record.firm,
+      body,
+      '<pre style="font-family:monospace;font-size:13px">' + body.replace(/</g, '&lt;') + '</pre>'
+    );
+  } catch (e) {
+    console.error('recordAnalysisFailure error:', e && e.message);
+  }
+}
+
 /* ── KV PUT HELPER ──
    Wraps every KV write. On 429 / limit errors, sends one admin alert
    per UTC day via Resend (in-memory flag — no KV dependency).
@@ -2576,6 +2625,21 @@ export default {
             stop_reason: _logData.stop_reason,
             output_tokens: _logData.output_tokens
           }));
+
+          /* Detect incomplete streams — alert admin */
+          if (_logData.stop_reason !== 'end_turn') {
+            var _istNow = new Date(Date.now() + 5.5 * 3600000);
+            var _istStr = _istNow.toISOString().replace('T', ' ').slice(0, 19) + ' IST';
+            ctx.waitUntil(recordAnalysisFailure(env, {
+              firm: session.firmCode,
+              businessName: '', businessType: '', city: '',
+              stage: 'incomplete',
+              stopReason: _logData.stop_reason || 'none',
+              chars: _logData.output_tokens || 0,
+              time: _istStr,
+              rawHead: ''
+            }));
+          }
         }
       });
       anthropicResponse.body.pipeTo(writable);
@@ -2587,6 +2651,39 @@ export default {
           'Cache-Control': 'no-cache'
         }
       });
+    }
+
+    // =========================================================================
+    // ROUTE — POST /scout/analysis-failed
+    // Client-side failure report. Session-protected. Fire-and-forget on client.
+    // Records failure to KV list + sends admin alert email (max 1/firm/day).
+    // =========================================================================
+    if (request.method === 'POST' && path === '/scout/analysis-failed') {
+      const session = await validateSession(request, env);
+      if (!session) return jsonResponse({ error: 'Unauthorized' }, 401);
+
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid JSON' }, 400); }
+
+      var _istNow = new Date(Date.now() + 5.5 * 3600000);
+      var _istStr = _istNow.toISOString().replace('T', ' ').slice(0, 19) + ' IST';
+
+      var record = {
+        firm:           session.firmCode,
+        businessName:   String(body.businessName || '').slice(0, 100),
+        businessType:   String(body.businessType || '').slice(0, 50),
+        city:           String(body.city || '').slice(0, 50),
+        stage:          String(body.stage || 'unknown').slice(0, 20),
+        stopReason:     String(body.stopReason || '').slice(0, 30),
+        chars:          parseInt(body.chars, 10) || 0,
+        parseError:     String(body.parseError || '').slice(0, 200),
+        failedSections: Array.isArray(body.failedSections) ? body.failedSections.slice(0, 10) : [],
+        rawHead:        String(body.rawHead || '').slice(0, 2000),
+        time:           _istStr
+      };
+
+      ctx.waitUntil(recordAnalysisFailure(env, record));
+      return jsonResponse({ ok: true });
     }
 
     // =========================================================================
@@ -3031,6 +3128,17 @@ export default {
         paidCheckins: paidCheckinsRaw ? parseInt(paidCheckinsRaw, 10) : 0,
         month: monthKey
       });
+    }
+
+    // ── ROUTE — GET /admin/analysis-failures ──────────────────────────────────
+    // Returns the last 20 analysis failure records from KV.
+    if (request.method === 'GET' && path === '/admin/analysis-failures') {
+      const adminPassword = url.searchParams.get('adminPassword');
+      if (!adminPassword || adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Forbidden — invalid admin password' }, 403);
+      }
+      var list = await env.G7_KV.get('scout:analysis-failures', 'json') || [];
+      return jsonResponse({ failures: list });
     }
 
     // =========================================================================

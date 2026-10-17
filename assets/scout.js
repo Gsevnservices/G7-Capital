@@ -1821,6 +1821,24 @@ function displayName(raw) {
 })();
 
 // ─────────────────────────────────────────────────────────────
+// REPORT ANALYSIS FAILURE
+// Fire-and-forget POST to /scout/analysis-failed.
+// Never blocks, never throws, never affects the user's flow.
+// ─────────────────────────────────────────────────────────────
+function reportAnalysisFailure(info) {
+  try {
+    var token = localStorage.getItem('g7_session_token') || '';
+    if (!token) return;
+    fetch(SCOUT_WORKER + '/scout/analysis-failed', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(info)
+    }).catch(function() {});
+  } catch (e) { /* silent */ }
+}
+
+
+// ─────────────────────────────────────────────────────────────
 // BUILD SCOUT USER MESSAGE
 // Assembles the structured user prompt from onboarding form data.
 // Used by onboard.html (initial analysis) and result.html (re-run).
