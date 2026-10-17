@@ -198,6 +198,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
 
     <div class="msg error" id="scoutStatsError"></div>
 
+    <!-- PART E: Failed Analyses -->
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid #222">
+      <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#C9A84C;margin-bottom:14px">Failed Analyses (last 20)</div>
+      <div id="failedAnalysesList" style="font-size:12px;color:#555">Click Refresh Stats to load.</div>
+    </div>
+
     <!-- PART D: Create Scout Account -->
     <div style="margin-top:32px;padding-top:28px;border-top:1px solid #222">
       <div style="font-size:13px;font-weight:600;color:#C9A84C;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Create Scout Account</div>
@@ -863,13 +869,17 @@ async function loadScoutStats() {
     var statsUrl = WORKER + '/admin/scout-stats?adminPassword=' + encodeURIComponent(adminPassword);
     var firmsUrl = WORKER + '/admin/list-firms?adminPassword='  + encodeURIComponent(adminPassword);
 
+    var failuresUrl = WORKER + '/admin/analysis-failures?adminPassword=' + encodeURIComponent(adminPassword);
+
     var results = await Promise.all([
       fetch(statsUrl).then(function(r) { return r.json(); }),
-      fetch(firmsUrl).then(function(r) { return r.json(); }).catch(function() { return { firms: [] }; })
+      fetch(firmsUrl).then(function(r) { return r.json(); }).catch(function() { return { firms: [] }; }),
+      fetch(failuresUrl).then(function(r) { return r.json(); }).catch(function() { return { failures: [] }; })
     ]);
 
     var stats = results[0];
     var firmsData = results[1];
+    var failuresData = results[2];
 
     if (stats.error) throw new Error(stats.error);
 
@@ -942,6 +952,38 @@ async function loadScoutStats() {
       tableHtml += '</tbody></table>';
       tableHtml += '<p style="margin-top:10px;font-size:11px;color:#333">' + log.length + ' recent entries shown</p>';
       document.getElementById('scoutLog').innerHTML = tableHtml;
+    }
+
+    // ── Failed Analyses panel ─────────────────────────────────
+    var failures = (failuresData && failuresData.failures) || [];
+    var failEl = document.getElementById('failedAnalysesList');
+    if (failures.length === 0) {
+      failEl.innerHTML = '<span style="color:#444">No failures recorded.</span>';
+    } else {
+      var fHtml = '<table class="firms-table"><thead><tr>' +
+        '<th>Time</th><th>Firm</th><th>Business</th><th>Stage</th>' +
+        '<th>Stop</th><th>Chars</th><th>Failed Sections</th>' +
+        '</tr></thead><tbody>';
+      failures.forEach(function(f) {
+        var stageColor = f.stage === 'incomplete' ? '#e05555' : f.stage === 'parse' ? '#e0a030' : '#888';
+        fHtml += '<tr>' +
+          '<td style="color:#666;white-space:nowrap">' + escapeHtml(f.time || '—') + '</td>' +
+          '<td><span class="firm-code-badge">' + escapeHtml(f.firm || '—') + '</span></td>' +
+          '<td>' + escapeHtml(f.businessName || '—') + (f.city ? '<br><span style="color:#444;font-size:10px">' + escapeHtml(f.city) + '</span>' : '') + '</td>' +
+          '<td style="color:' + stageColor + '">' + escapeHtml(f.stage || '—') + '</td>' +
+          '<td style="color:#666">' + escapeHtml(f.stopReason || '—') + '</td>' +
+          '<td style="color:#666">' + (f.chars || '—') + '</td>' +
+          '<td style="color:#666;font-size:10px">' + escapeHtml((f.failedSections || []).join(', ') || '—') + '</td>' +
+          '</tr>';
+        if (f.parseError) {
+          fHtml += '<tr><td colspan="7" style="color:#e0a030;font-size:10px;padding:2px 8px">Parse: ' + escapeHtml(f.parseError) + '</td></tr>';
+        }
+        if (f.rawHead) {
+          fHtml += '<tr><td colspan="7"><details style="font-size:10px;color:#444"><summary style="cursor:pointer;color:#555">Raw output (first 200 chars)</summary><pre style="white-space:pre-wrap;max-height:100px;overflow:auto;margin-top:4px;color:#555">' + escapeHtml(f.rawHead.slice(0, 200)) + '</pre></details></td></tr>';
+        }
+      });
+      fHtml += '</tbody></table>';
+      failEl.innerHTML = fHtml;
     }
 
   } catch(err) {

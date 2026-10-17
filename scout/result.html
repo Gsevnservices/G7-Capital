@@ -1310,6 +1310,25 @@ window.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
+  /* Report render failures — scan for "could not be rendered" buttons */
+  (function() {
+    var failed = [];
+    ['tab1Content','tab2Content','tab3Content','tab4Content','tab5Content','wacContent'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.innerHTML.indexOf('could not be rendered') !== -1) failed.push(id);
+    });
+    if (failed.length > 0) {
+      reportAnalysisFailure({
+        stage: 'render', stopReason: '', chars: scoutRaw ? scoutRaw.length : 0,
+        parseError: '', failedSections: failed,
+        businessName: (businessData && businessData.businessName) || '',
+        businessType: (businessData && (businessData.businessType || businessData.businessTypeInput)) || '',
+        city: (businessData && businessData.location) || '',
+        rawHead: scoutRaw ? scoutRaw.slice(0, 2000) : ''
+      });
+    }
+  })();
+
   /* Show Scout Insight card if one exists from the most recent check-in.
      insightWeek is the week number when the insight was generated.
      We show it whenever it exists — it was written for the just-completed check-in. */
@@ -1568,6 +1587,14 @@ function parseAndRender(rawOutput, biz) {
       console.error('Scout parse failed — raw output saved to scout_last_raw (' + (rawOutput ? rawOutput.length : 0) + ' chars). Copy with:\n  copy(localStorage.getItem("' + scoutKey('scout_last_raw') + '"))');
       if (jsonParseError) console.error('Last JSON parse error:', jsonParseError.message);
     } catch(_eSave) {}
+    /* Report parse failure to admin */
+    reportAnalysisFailure({
+      stage: 'parse', stopReason: '', chars: rawOutput ? rawOutput.length : 0,
+      parseError: jsonParseError ? jsonParseError.message : 'data is null after all levels',
+      failedSections: [],
+      businessName: (biz && biz.businessName) || '', businessType: (biz && (biz.businessType || biz.businessTypeInput)) || '',
+      city: (biz && biz.location) || '', rawHead: rawOutput ? rawOutput.slice(0, 2000) : ''
+    });
   }
 
   if (data) {
@@ -4394,6 +4421,12 @@ async function rerunAnalysis() {
       if (!streamComplete) {
         console.warn('[rerun] Retry also incomplete — stopReason=' +
           (retryStream.stopReason || 'null') + ', chars=' + scoutOutput.length);
+        reportAnalysisFailure({
+          stage: 'incomplete', stopReason: retryStream.stopReason || '',
+          chars: scoutOutput.length, parseError: '', failedSections: [],
+          businessName: businessData.businessName || '', businessType: businessData.businessType || businessData.businessTypeInput || '',
+          city: businessData.location || '', rawHead: scoutOutput.slice(0, 2000)
+        });
         overlay.classList.remove('active');
         alert('Scout couldn\u2019t finish your analysis \u2014 tap Re-run again to try once more.');
         return;
