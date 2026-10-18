@@ -1895,7 +1895,7 @@ function buildScoutUserMessage(d) {
     '  Target (12 months): ' + d.targetCustomers,
     '',
     'BEST EXISTING CUSTOMERS:', d.bestCustomers,
-    d.customerType ? 'CUSTOMER TYPE: ' + (d.customerType === 'businesses' ? 'B2B — sells to other businesses' : 'B2C — sells to individual consumers') : '',
+    d.customerType ? 'CUSTOMER TYPE: ' + (d.customerType === 'businesses' ? 'B2B — sells to other businesses' : d.customerType === 'both' ? 'Both B2B and B2C — sells to businesses and individual consumers' : 'B2C — sells to individual consumers') : '',
     d.b2bIndustries    ? 'B2B TARGET INDUSTRIES: ' + d.b2bIndustries    : '',
     d.b2bDecisionMaker ? 'B2B DECISION MAKER: '   + d.b2bDecisionMaker : '',
     d.b2bSalesCycle    ? 'B2B SALES CYCLE: '      + d.b2bSalesCycle    : '',

@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/scout-master-v1.js?v=19"></script>
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=32"></script>
+<script src="../assets/scout.js?v=33"></script>
 <script src="../assets/pipeline.js?v=20"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
@@ -244,12 +244,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <p class="section-desc">Tell Scout the fundamentals. Be specific — vague answers produce generic plans.</p>
     <div class="section-divider"></div>
     <div class="field-group">
-      <label class="field-label" for="customerType">Who Are Your Customers</label>
-      <select class="field-select" id="customerType" required>
-        <option value="" disabled selected>Select who you sell to</option>
-        <option value="consumers">Individual people who come to me</option>
-        <option value="businesses">Other companies and businesses</option>
-      </select>
+      <label class="field-label">Who Are Your Customers</label>
+      <input type="hidden" id="customerType" value="">
+      <div class="radio-grid" id="customerTypeCards">
+        <div class="radio-item" data-ct="consumers" onclick="pickCustomerType('consumers')">
+          <input type="radio" name="customerTypeCard" value="consumers" id="ctConsumers">
+          <label for="ctConsumers">People — individuals and families come to me</label>
+        </div>
+        <div class="radio-item" data-ct="businesses" onclick="pickCustomerType('businesses')">
+          <input type="radio" name="customerTypeCard" value="businesses" id="ctBusinesses">
+          <label for="ctBusinesses">Businesses — I sell to shops, offices, companies</label>
+        </div>
+        <div class="radio-item" data-ct="both" onclick="pickCustomerType('both')">
+          <input type="radio" name="customerTypeCard" value="both" id="ctBoth">
+          <label for="ctBoth">Both — individuals and businesses</label>
+        </div>
+      </div>
     </div>
     <div class="field-group">
       <label class="field-label" for="businessTypeInput">What Kind of Business</label>
@@ -557,6 +567,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <div class="field-group">
       <label class="field-label" for="specificFocus">Specific Focus for Scout <span class="optional">optional</span></label>
       <textarea class="field-textarea" id="specificFocus" rows="3" placeholder="e.g. Focus on corporate clients. Or: We have tried WhatsApp before and it didn't work — help us understand why."></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="reviewLink">Google Review Link <span class="optional">optional</span></label>
+      <input class="field-input" type="url" id="reviewLink" placeholder="https://g.page/… — paste your Google review link">
+      <div style="font-size:11px;color:var(--grey2);margin-top:4px;line-height:1.5">Find it: Google Business Profile → Ask for reviews → Copy link. You can add this later in Settings.</div>
     </div>
     <div class="form-nav">
       <button class="btn-back" onclick="goBack(7)">← Back</button>
@@ -937,12 +952,25 @@ function applyRevenueModelVisibility() {
   if (!showBp && bp) { bp.classList.remove('error'); bp.value = ''; }
 }
 
+/* Set customerType when a card is tapped */
+function pickCustomerType(val) {
+  document.getElementById('customerType').value = val;
+  /* Check the matching radio */
+  var radios = document.querySelectorAll('input[name="customerTypeCard"]');
+  radios.forEach(function(r) { r.checked = (r.value === val); });
+  /* Clear validation error border */
+  var cards = document.getElementById('customerTypeCards');
+  if (cards) cards.style.border = '';
+  applyCustomerTypeVisibility();
+  saveDraft();
+}
+
 /* Show/hide B2B fields and reword landmark labels based on customerType value */
 function applyCustomerTypeVisibility() {
   var sel = document.getElementById('customerType');
   var grp = document.getElementById('b2bFieldsGroup');
   if (!sel || !grp) return;
-  var isB2B = sel.value === 'businesses';
+  var isB2B = sel.value === 'businesses' || sel.value === 'both';
   grp.style.display = isB2B ? 'block' : 'none';
   /* Clear error state on hidden B2B fields so they do not block validation */
   if (!isB2B) {
@@ -1056,7 +1084,14 @@ function validateSection(n) {
       if (!_btHid.value) { _btInp.classList.add('error'); valid = false; }
       else _btInp.classList.remove('error');
     }
-    ['customerType','businessName','businessPhone','whatYouSell','location','monthlyRevenue','revenueModel',
+    /* customerType — validate hidden input; mark error on the card container */
+    var _ctHid = document.getElementById('customerType');
+    var _ctCards = document.getElementById('customerTypeCards');
+    if (_ctHid && _ctCards) {
+      if (!_ctHid.value) { _ctCards.style.border = '1px solid #C45A5A'; valid = false; }
+      else _ctCards.style.border = '';
+    }
+    ['businessName','businessPhone','whatYouSell','location','monthlyRevenue','revenueModel',
      'avgTransaction','currentCustomers','targetCustomers'].forEach(check);
     /* purchaseFrequency is required only when its group is visible */
     var _pfGrp = document.getElementById('purchaseFrequencyGroup');
@@ -1295,6 +1330,12 @@ async function handleSubmit() {
        handles scout_pending_result, scout_history (max 12), scout_week_number */
     saveScoutResult(scoutOutput, 1);
 
+    /* Save review link if provided */
+    var _rvLink = (document.getElementById('reviewLink').value || '').trim();
+    if (_rvLink && _rvLink.match(/^https:\/\//i)) {
+      localStorage.setItem(scoutKey('scout_review_link'), _rvLink);
+    }
+
     /* Analysis succeeded — delete draft so server sync does not preserve it */
     localStorage.removeItem(scoutKey('scout_onboard_draft'));
 
@@ -1413,6 +1454,7 @@ function saveDraft() {
       whatsappListSize: document.getElementById('whatsappListSize').value,
       howFoundYou:      document.getElementById('howFoundYou').value,
       specificFocus:    document.getElementById('specificFocus').value,
+      reviewLink:       document.getElementById('reviewLink').value,
       emailActions:     !!document.getElementById('emailActions').checked,
       emailNews:        !!document.getElementById('emailNews').checked,
       newsPrefs:        (function(){ var p=[]; ['npIndia','npCity','npMarkets','npGlobal'].forEach(function(id){ var cb=document.getElementById(id); if(cb&&cb.checked) p.push(cb.value); }); return p; })(),
@@ -1447,17 +1489,23 @@ function restoreDraft(draft) {
     'bestCustomers','b2bIndustries','b2bDecisionMaker','b2bSalesCycle','b2bCompanySize',
     'comp1name','comp1better','comp1worse','comp2name',
     'comp2better','comp2worse','largeChains','whatWorked','whatFailed',
-    'bestMonths','worstMonths','seasonalEvents','triedSoFar','specificFocus'
+    'bestMonths','worstMonths','seasonalEvents','triedSoFar','specificFocus','reviewLink'
   ];
   textFields.forEach(function(id) {
     var el = document.getElementById(id);
     if (el && draft[id] !== undefined) el.value = draft[id];
   });
   /* Select fields */
-  ['areaType','whatsappListSize','howFoundYou','revenueModel','billingPeriod','customerType'].forEach(function(id) {
+  ['areaType','whatsappListSize','howFoundYou','revenueModel','billingPeriod'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el && draft[id]) el.value = draft[id];
   });
+  /* customerType: hidden input + radio cards */
+  if (draft.customerType) {
+    document.getElementById('customerType').value = draft.customerType;
+    var _ctRadio = document.querySelector('input[name="customerTypeCard"][value="' + draft.customerType + '"]');
+    if (_ctRadio) _ctRadio.checked = true;
+  }
   /* Restore businessType hidden value (visible text already restored via textFields above) */
   var _btHid = document.getElementById('businessType');
   if (_btHid && draft.businessType) _btHid.value = draft.businessType;
