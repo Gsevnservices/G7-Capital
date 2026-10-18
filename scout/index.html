@@ -613,10 +613,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
 .cc-mk-src{display:inline-block;margin:7px 0 0 14px;font-size:10px;color:var(--grey2);text-decoration:none;border-bottom:1px solid var(--border2)}
 .cc-mk-src:hover{color:var(--grey1)}
 
-.cc-mk-mail{margin-top:16px;padding-top:14px;border-top:1px solid var(--border2);font-size:11px;color:var(--grey1);line-height:1.5}
-.cc-mk-mail button{background:transparent;border:0;padding:0;font-family:inherit;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);cursor:pointer;border-bottom:1px solid rgba(224,146,47,.4);padding-bottom:2px;margin-left:8px}
-.cc-mk-mail input{width:100%;margin:8px 0;background:transparent;border:1px solid var(--border2);color:var(--white);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;box-sizing:border-box}
-#ccNewsCats input[type="checkbox"]{width:auto;margin:0;padding:0;border:0;flex-shrink:0}
 
 @media(max-width:1200px){
   .cc-wrap{flex-direction:column}
@@ -656,6 +652,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <a href="history.html" class="nav-link">History</a>
     <a href="checkin.html" class="nav-link">Check-In</a>
     <a href="pipeline.html" class="nav-link">Customers</a>
+    <a href="settings.html" class="nav-link">Settings</a>
     <span class="nav-firm-indicator" id="navFirmName"></span>
     <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
   </div>
@@ -772,7 +769,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
             <span class="cc-note" id="ccMarketNote"></span>
           </div>
           <div id="ccMarket"><div class="cc-task-why">Scout is reading today's news for your area&hellip;</div></div>
-          <div class="cc-mk-mail" id="ccMarketMail"></div>
         </div>
         <div class="cc-panel grow">
           <div class="cc-label">What Scout sees</div>
@@ -832,7 +828,6 @@ window.addEventListener('DOMContentLoaded', async function() {
   ccRender();
   scoutMarketLoad(); /* preload for voice/briefing — not rendered into #ccMarket */
   scoutNewsLoad().then(scoutNewsRender);
-  scoutSettingsRender();
 
   var firmName = localStorage.getItem('g7_session_name') || '';
 
@@ -1461,192 +1456,6 @@ function scoutNewsRender(news) {
   });
   html += '<div style="margin-top:10px"><a href="news.html" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none">Read all news \u2192</a></div>';
   el.innerHTML = html;
-}
-
-async function scoutSettingsRender() {
-  var el = document.getElementById('ccMarketMail');
-  if (!el) return;
-  var auth = { 'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '') };
-  var st = { actions: false, news: false, on: false, hasEmail: false };
-  try {
-    var r = await fetch(SCOUT_WORKER + '/scout/brief-email', { headers: auth });
-    if (r.ok) st = await r.json();
-  } catch (e) { el.innerHTML = ''; return; }
-
-  async function saveToggle(body) {
-    el.innerHTML = '<span style="color:var(--grey2)">Saving\u2026</span>';
-    try {
-      var r2 = await fetch(SCOUT_WORKER + '/scout/brief-email', {
-        method: 'POST',
-        headers: Object.assign({ 'Content-Type': 'application/json' }, auth),
-        body: JSON.stringify(body)
-      });
-      var j = {};
-      try { j = await r2.json(); } catch (e) {}
-      if (!r2.ok) {
-        el.innerHTML = '<span style="color:#e08080">' + escHtml(j.error || 'Could not save that just now.') + '</span>';
-        setTimeout(scoutSettingsRender, 2500);
-        return;
-      }
-    } catch (e) {}
-    scoutSettingsRender();
-  }
-
-  if (!st.hasEmail) {
-    el.innerHTML = 'Get this in your inbox at 6 every morning.' +
-      '<input id="ccMailAddr" type="email" placeholder="you@example.com" aria-label="Email address">' +
-      '<button id="ccMailSet" style="margin-left:0">Email me daily</button>';
-    document.getElementById('ccMailSet').onclick = function(){
-      var v = (document.getElementById('ccMailAddr').value || '').trim();
-      if (!v) return;
-      saveToggle({ actions: true, news: true, email: v });
-    };
-    return;
-  }
-
-  var html = '';
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-    '<span>Daily actions email</span>' +
-    '<button id="ccActionsToggle" style="color:' + (st.actions ? 'var(--amber)' : 'var(--grey2)') + '">' + (st.actions ? 'On' : 'Off') + '</button></div>';
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-    '<span>News email</span>' +
-    '<button id="ccNewsToggle" style="color:' + (st.news ? 'var(--amber)' : 'var(--grey2)') + '">' + (st.news ? 'On' : 'Off') + '</button></div>';
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-    '<span>Message language</span>' +
-    '<span id="ccLangPicker" style="display:flex;gap:6px"></span></div>';
-  /* Google review link setting */
-  var _rl = '';
-  try { _rl = localStorage.getItem(scoutKey('scout_review_link')) || ''; } catch(e) {}
-  html += '<div style="margin-bottom:8px">' +
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
-    '<span>Google review link</span></div>' +
-    '<div style="display:flex;gap:6px;align-items:center">' +
-    '<input id="ccReviewLink" type="url" placeholder="https://g.page/\u2026" value="' + escHtml(_rl) + '" ' +
-    'style="flex:1;background:var(--black3);border:1px solid var(--border2);color:var(--white);padding:6px 10px;font-family:inherit;font-size:12px">' +
-    '<button id="ccReviewSave" style="color:var(--amber)">Save</button></div>' +
-    '<div id="ccReviewErr" style="font-size:11px;color:#C45A5A;display:none;margin-top:4px"></div></div>';
-  /* Review asks toggle */
-  var _rskip = false;
-  try { _rskip = localStorage.getItem(scoutKey('scout_review_skip')) === 'true'; } catch(e) {}
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-    '<span>Ask customers for reviews</span>' +
-    '<button id="ccReviewToggle" style="color:' + (_rskip ? 'var(--grey2)' : 'var(--amber)') + '">' + (_rskip ? 'Off' : 'On') + '</button></div>';
-  html += '<div><button id="ccNewsCatsBtn" style="color:var(--amber)">Choose my news</button></div>';
-  html += '<div id="ccNewsCats" style="display:none;margin-top:10px"></div>';
-  el.innerHTML = html;
-
-  document.getElementById('ccActionsToggle').onclick = function(){ saveToggle({ actions: !st.actions }); };
-  document.getElementById('ccNewsToggle').onclick = function(){ saveToggle({ news: !st.news }); };
-
-  /* Review link save */
-  document.getElementById('ccReviewSave').onclick = function() {
-    var inp = document.getElementById('ccReviewLink');
-    var err = document.getElementById('ccReviewErr');
-    var val = (inp.value || '').trim();
-    if (val && !val.match(/^https:\/\//i)) {
-      err.textContent = "That doesn\u2019t look like a link";
-      err.style.display = '';
-      inp.focus();
-      return;
-    }
-    try {
-      localStorage.setItem(scoutKey('scout_review_link'), val);
-      if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
-    } catch(e) {}
-    err.style.display = 'none';
-    inp.style.borderColor = 'var(--amber)';
-    setTimeout(function(){ inp.style.borderColor = ''; }, 1500);
-  };
-
-  /* Review asks toggle */
-  document.getElementById('ccReviewToggle').onclick = function() {
-    var cur = localStorage.getItem(scoutKey('scout_review_skip')) === 'true';
-    var next = !cur;
-    try {
-      if (next) localStorage.setItem(scoutKey('scout_review_skip'), 'true');
-      else localStorage.removeItem(scoutKey('scout_review_skip'));
-      if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
-    } catch(e) {}
-    scoutSettingsRender();
-  };
-
-  /* Language picker — load current, render three buttons. */
-  (async function() {
-    var lp = document.getElementById('ccLangPicker');
-    if (!lp) return;
-    var cur = 'Hinglish';
-    try {
-      var lr = await fetch(SCOUT_WORKER + '/scout/message-lang', { headers: auth });
-      if (lr.ok) { var lj = await lr.json(); cur = lj.language || cur; }
-    } catch (e) {}
-    var langs = ['English','Hinglish','Hindi'];
-    lp.innerHTML = langs.map(function(l) {
-      var active = l === cur;
-      return '<button data-lang="' + l + '" style="font-family:inherit;font-size:9px;letter-spacing:.12em;' +
-        'text-transform:uppercase;background:transparent;border:0;padding:0;cursor:pointer;' +
-        'color:' + (active ? 'var(--amber)' : 'var(--grey2)') + '">' + l + '</button>';
-    }).join('');
-    lp.querySelectorAll('button').forEach(function(b) {
-      b.onclick = async function() {
-        var picked = b.getAttribute('data-lang');
-        try {
-          await fetch(SCOUT_WORKER + '/scout/message-lang', {
-            method: 'POST',
-            headers: Object.assign({ 'Content-Type': 'application/json' }, auth),
-            body: JSON.stringify({ language: picked })
-          });
-        } catch (e) {}
-        _scoutMsgLang = picked;
-        _scoutCtx = null; /* force rebuild with new language */
-        scoutSettingsRender();
-      };
-    });
-  })();
-
-  document.getElementById('ccNewsCatsBtn').onclick = async function() {
-    var catsEl = document.getElementById('ccNewsCats');
-    if (catsEl.style.display !== 'none') { catsEl.style.display = 'none'; return; }
-    catsEl.innerHTML = '<span style="color:var(--grey2)">Loading\u2026</span>';
-    catsEl.style.display = '';
-    try {
-      var pr = await fetch(SCOUT_WORKER + '/scout/news-prefs', { headers: auth });
-      if (!pr.ok) throw new Error();
-      var pj = await pr.json();
-      var current = pj.prefs || [];
-      var options = pj.options || [];
-      var ch = '';
-      options.forEach(function(o) {
-        var ck = current.indexOf(o.key) !== -1 ? ' checked' : '';
-        ch += '<label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:12px;color:var(--grey1)">' +
-          '<input type="checkbox" value="' + escHtml(o.key) + '"' + ck + ' style="accent-color:var(--gold)">' +
-          escHtml(o.label) + '</label>';
-      });
-      ch += '<button id="ccNewsCatsSave" style="margin-top:8px;color:var(--amber)">Save</button>';
-      ch += '<span id="ccNewsCatsSaved" style="display:none;margin-left:8px;font-size:11px;color:var(--grey1)">Saved \u2014 from tomorrow\u2019s news</span>';
-      catsEl.innerHTML = ch;
-      document.getElementById('ccNewsCatsSave').onclick = async function() {
-        var picks = [];
-        catsEl.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb){ picks.push(cb.value); });
-        try {
-          var sr = await fetch(SCOUT_WORKER + '/scout/news-prefs', {
-            method: 'POST',
-            headers: Object.assign({ 'Content-Type': 'application/json' }, auth),
-            body: JSON.stringify({ prefs: picks })
-          });
-          if (!sr.ok) throw new Error();
-          document.getElementById('ccNewsCatsSave').style.display = 'none';
-          document.getElementById('ccNewsCatsSaved').style.display = '';
-          setTimeout(function(){ catsEl.style.display = 'none'; scoutSettingsRender(); }, 2500);
-        } catch (e) {
-          catsEl.innerHTML = '<span style="color:#e08080">Could not save. Try again.</span>';
-          setTimeout(function(){ catsEl.style.display = 'none'; }, 2500);
-        }
-      };
-    } catch (e) {
-      catsEl.innerHTML = '<span style="color:#e08080">Could not load categories.</span>';
-      setTimeout(function(){ catsEl.style.display = 'none'; }, 2500);
-    }
-  };
 }
 
 function ccRender() {

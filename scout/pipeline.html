@@ -125,6 +125,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
     <a href="history.html" class="nav-link">History</a>
     <a href="checkin.html" class="nav-link">Check-In</a>
     <a href="pipeline.html" class="nav-link active">Customers</a>
+    <a href="settings.html" class="nav-link">Settings</a>
     <span class="nav-firm-indicator" id="navFirmName"></span>
     <button class="nav-logout" onclick="handleLogout()">Sign Out</button>
   </div>
@@ -219,7 +220,7 @@ function renderChase() {
       if (!reviewLink) {
         html += '<div style="font-size:13px;color:var(--grey1);line-height:1.7;margin-bottom:12px">Add your Google review link in Settings so customers can review you in one tap.</div>';
         html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">';
-        html += '<button class="copy-btn primary" onclick="window.location.href=\'index.html\'">Open Settings</button>';
+        html += '<button class="copy-btn primary" onclick="window.location.href=\'settings.html#reviews\'">Open Settings</button>';
         html += '<a href="#" onclick="skipReviewAsks();return false" style="font-size:11px;color:var(--grey2);text-decoration:underline">Skip \u2014 no Google profile</a>';
         html += '</div>';
       } else {
