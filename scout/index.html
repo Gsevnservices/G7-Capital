@@ -9,7 +9,7 @@
 <script src="../assets/scout-master-v1.js?v=20"></script>
 <script src="../assets/auth.js?v=18"></script>
 <script src="../assets/scout.js?v=33"></script>
-<script src="../assets/pipeline.js?v=20"></script>
+<script src="../assets/pipeline.js?v=21"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -756,6 +756,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
       </div>
 
       <div class="cc-rail cc-rail-r">
+        <!-- Scout's move — first card in right rail -->
+        <div class="cc-panel" id="ccMovePanel" style="border-left:3px solid var(--amber)">
+          <div class="cc-label">Scout's move</div>
+          <div id="ccMove"><div style="font-size:12px;color:var(--grey2);line-height:1.5">Scout is preparing today's move&hellip;</div></div>
+        </div>
         <div class="cc-panel hot">
           <div class="cc-label-row">
             <div class="cc-label" id="ccTodayLabel">Today</div>
@@ -1612,16 +1617,16 @@ function ccRender() {
         linksEl.innerHTML = rows.map(function(sr){
           var n = clicks[sr.key] || 0;
           var url = 'https://g7-proxy.gsevnservices.workers.dev/i/' + codes[sr.key];
-          return '<div class="cc-link-row" style="align-items:flex-start">' +
+          var slug = '/i/' + codes[sr.key];
+          return '<div class="cc-link-row" style="align-items:center">' +
             '<div style="min-width:0;flex:1">' +
-            '<div style="font-size:12px;color:var(--white)">' + escHtml(sr.name) + '</div>' +
-            '<div style="font-size:10px;color:var(--grey1);margin-top:2px">' + escHtml(sr.where) + '</div>' +
-            '<div style="font-size:10px;color:var(--grey2);margin-top:4px;word-break:break-all;line-height:1.4">' + escHtml(url) + '</div>' +
+            '<div style="font-size:12px;color:var(--white)">' + escHtml(sr.name) +
+            ' <span style="font-size:10px;color:var(--grey2);margin-left:4px">' + escHtml(slug) + '</span></div>' +
             '</div>' +
             '<div style="flex-shrink:0;display:flex;align-items:center;gap:10px">' +
             '<span class="taps' + (n > 0 ? ' hot' : '') + '" title="taps so far">' + n + '</span>' +
             '<button class="cc-copy" data-copy="' + escHtml(url) + '">Copy</button>' +
-            '<a class="cc-copy" href="https://wa.me/?text=' + encodeURIComponent(url) + '" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a>' +
+            '<a class="cc-copy" href="https://wa.me/?text=' + encodeURIComponent(url) + '" target="_blank" rel="noopener" style="text-decoration:none">Share</a>' +
             '</div></div>';
         }).join('');
       } catch (e) {
@@ -1653,7 +1658,7 @@ function ccRender() {
     var _chaseShow = _dueList.slice(0, 3);
     _chaseShow.forEach(function(item) {
       if (item.person) {
-        ccTasks.push({ title: 'Chase ' + speakableName(item.person.name || ''), why: item.reason || 'No reply yet', link: 'pipeline.html' });
+        ccTasks.push({ title: 'Chase ' + pipelineDisplayName(item.person).first, why: item.reason || 'No reply yet', link: 'pipeline.html' });
       }
     });
     if (_dueList.length > 3) {
@@ -1663,7 +1668,7 @@ function ccRender() {
     ccTasks.push({ title: '+ Add customer', why: '', link: 'pipeline.html#add' });
     /* New leads */
     if (_allFound.length === 1) {
-      ccTasks.push({ title: 'Message ' + speakableName(_allFound[0].name || ''), why: 'Found but never messaged', link: 'pipeline.html' });
+      ccTasks.push({ title: 'Message ' + pipelineDisplayName(_allFound[0]).first, why: 'Found but never messaged', link: 'pipeline.html' });
     } else if (_allFound.length > 1) {
       ccTasks.push({ title: 'Message ' + _allFound.length + ' new leads', why: 'Found but never messaged', link: 'pipeline.html' });
     }
@@ -1713,6 +1718,45 @@ function ccRender() {
     }
   }
 
+  /* ── Scout's move (right rail — first card) ── */
+  var moveEl = document.getElementById('ccMove');
+  var movePanel = document.getElementById('ccMovePanel');
+  if (moveEl) {
+    (async function(){
+      try {
+        var mr = await fetch(SCOUT_WORKER + '/scout/move', {
+          headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '') }
+        });
+        if (!mr.ok) throw new Error('move');
+        var mv = await mr.json();
+        if (!mv || !mv.headline) {
+          moveEl.innerHTML = '<div style="font-size:12px;color:var(--grey2);line-height:1.5">No move for today yet. Check back soon.</div>';
+          return;
+        }
+        var mh = '<div style="font-size:14px;color:var(--white);font-weight:600;line-height:1.4;margin-bottom:4px">' + escHtml(mv.headline) + '</div>';
+        if (mv.reason) mh += '<div style="font-size:11px;color:var(--grey1);line-height:1.5;margin-bottom:8px">' + escHtml(mv.reason) + '</div>';
+        if (mv.action) mh += '<div style="font-size:12px;color:var(--white);line-height:1.5;margin-bottom:8px">' + escHtml(mv.action) + '</div>';
+        if (mv.message) {
+          var waUrl = mv.group ? 'https://wa.me/?text=' + encodeURIComponent(mv.message) : '';
+          mh += '<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;margin-bottom:8px">' +
+            '<div style="font-size:12px;color:var(--grey1);line-height:1.5;white-space:pre-wrap">' + escHtml(mv.message) + '</div>' +
+            '<div style="display:flex;gap:8px;margin-top:8px">' +
+            '<button class="cc-copy" data-copy="' + escHtml(mv.message) + '">Copy</button>' +
+            (waUrl ? '<a class="cc-copy" href="' + waUrl + '" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a>' : '') +
+            '</div></div>';
+        }
+        if (mv.sourceTitle && mv.sourceUrl) {
+          mh += '<div style="font-size:10px;color:var(--grey2);line-height:1.4">Based on: <a href="' + escHtml(mv.sourceUrl) + '" target="_blank" rel="noopener" style="color:var(--amber);text-decoration:none">' + escHtml(mv.sourceTitle) + '</a></div>';
+        } else if (mv.basedOn) {
+          mh += '<div style="font-size:10px;color:var(--grey2);line-height:1.4">Based on: ' + escHtml(mv.basedOn) + '</div>';
+        }
+        moveEl.innerHTML = mh;
+      } catch (e) {
+        moveEl.innerHTML = '<div style="font-size:12px;color:var(--grey2);line-height:1.5">Scout is preparing today\'s move&hellip;</div>';
+      }
+    })();
+  }
+
   /* ── Activity feed (right rail) ── */
   var feedEl = document.getElementById('ccFeed');
   if (feedEl) {
@@ -1735,7 +1779,7 @@ function ccRender() {
         var agoStr = ago === 0 ? 'Today' : ago === 1 ? 'Yesterday' : ago + 'd ago';
         feedItems.push('<div class="cc-feed">' +
           '<div class="cc-feed-dot" style="background:' + col + '"></div>' +
-          '<div><div class="cc-feed-text">' + verb + ' — ' + escHtml(speakableName(p.name || 'Unknown')) + '</div>' +
+          '<div><div class="cc-feed-text">' + verb + ' — ' + escHtml(pipelineDisplayName(p).first) + '</div>' +
           '<div class="cc-feed-when">' + agoStr + '</div></div></div>');
       });
     } catch(e) {}

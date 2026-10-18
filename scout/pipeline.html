@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/auth.js?v=18"></script>
 <script src="../assets/scout.js?v=33"></script>
-<script src="../assets/pipeline.js?v=20"></script>
+<script src="../assets/pipeline.js?v=21"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
 /* ─── RESET & VARIABLES ─── */
@@ -148,6 +148,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:cen
         <input class="add-input" id="addName" type="text" placeholder="Name (e.g. Rakesh)" autocomplete="off">
         <input class="add-input" id="addPhone" type="tel" placeholder="Phone — optional" autocomplete="off">
         <input class="add-input" id="addNote" type="text" placeholder="Short note — optional" autocomplete="off">
+      </div>
+      <div class="add-form-row" style="padding-top:0">
+        <label style="display:flex;align-items:center;gap:8px;color:#8A8880;font-size:13px;cursor:pointer">
+          <input type="checkbox" id="addBiz" style="accent-color:#C9A84C;width:18px;height:18px"> This is a business
+        </label>
       </div>
       <div class="add-form-btns">
         <button class="copy-btn primary" onclick="submitAddPerson()">Add</button>
@@ -350,7 +355,8 @@ function submitAddPerson() {
   if (!name) { document.getElementById('addName').focus(); return; }
 
   var week = parseInt(localStorage.getItem(scoutKey('scout_week_number')) || '1', 10);
-  pipelineAddPerson(name, { phone: phone, note: note, week: week });
+  var isBiz = document.getElementById('addBiz') && document.getElementById('addBiz').checked;
+  pipelineAddPerson(name, { phone: phone, note: note, week: week, kind: isBiz ? 'business' : '' });
 
   document.getElementById('addName').value = '';
   document.getElementById('addPhone').value = '';
