@@ -389,113 +389,275 @@ function isHomePage(u) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MARKET BRIEF GENERATOR — used by both the HTTP route and the scheduled job.
+// WATCHLIST + TWO-STEP BUSINESS NEWS
 // ─────────────────────────────────────────────────────────────────────────────
-async function generateMarketBrief(env, firmCode, day, context, city, macroOnly) {
-  /* History — what Scout already told this owner in the last two weeks. */
-  const histKey = 'market:history:' + firmCode;
-  const history = (await env.G7_KV.get(histKey, 'json')) || [];
-  const told = history.map(function(h){ return '- ' + h.headline + ' (' + h.sourceUrl + ')'; }).join('\n');
 
-  var system =
-    'You are Scout, the business-development employee for one Indian small business. ' +
-    'Today is ' + day + ' (India). Find the news from the last 7 days that matters to ' +
-    'THIS business, at two levels:\n' +
-    'MICRO — its city and trade: local developments, competitors, demand in its area.\n' +
-    'MACRO — the economy and policy that move its trade: interest rates, input and ' +
-    'material prices, tax and rule changes, sector demand, government schemes.\n' +
-    'There is always macro news affecting any Indian trade in a given week. Return ' +
-    'between 2 and 4 items, at least one MACRO. Never return zero.\n\n' +
-    'SEARCH FOR, in this order:\n' +
-    '1. Local developments near the business: new offices, IT parks, residential projects, ' +
-    'colleges, hospitals, malls, metro or road work — anything that brings or removes customers.\n' +
-    '2. Competitors: openings, closures, price changes, offers, in this city and area.\n' +
-    '3. Local events and festivals in the next 6 weeks that this trade can use.\n' +
-    '4. Rule, licence or tax changes that specifically affect this trade.\n' +
-    '5. Price moves in this trade\'s main inputs.\n\n' +
-    'NOT NEWS: something that already existed. A competitor simply having ' +
-    'a shop, or a festival that happens every year, is not a change. A festival ' +
-    'counts only if it is within the next 3 weeks and you give its exact date.\n\n' +
-    'RULES:\n' +
-    '- Every item must come from a page you actually found with web search. Never invent ' +
-    'a development, a competitor, a date or a number.\n' +
-    '- whatToDo must be one concrete action this week, tied to one of the business\'s ' +
-    'customer groups by name where possible.\n' +
-    '- Never write labels like "Customer 1", "Customer 2" or "ICP 1". Use the ' +
-    'customer group names given in the business context.\n' +
-    '- sourceUrl must be the page that actually states the fact in whatHappened, ' +
-    'not a general listing or directory page.\n' +
-    '- Plain English. No jargon. Indian context.\n\n' +
-    'After searching, reply with ONLY this JSON and nothing else:\n' +
-    '{"items":[{"headline":"under 10 words","whatHappened":"one sentence, under 30 words",' +
-    '"whyItMatters":"one sentence, under 30 words, specific to this business",' +
-    '"whatToDo":"one sentence, under 30 words, one action this week",' +
-    '"urgency":"today | this_week | watch",' +
-    '"scope":"micro | macro",' +
-    '"sourceTitle":"page title","sourceUrl":"exact URL from your search results"}]}';
-
-  if (macroOnly) {
-    system += '\nTHIS RUN: local news was empty. Search MACRO only — national economy, ' +
-      'policy and prices for this trade. Return 2 to 3 items.';
+/* Fast non-crypto hash for change detection on context strings. */
+function shortHash(str) {
+  var h = 5381;
+  for (var i = 0; i < str.length; i++) {
+    h = ((h << 5) + h + str.charCodeAt(i)) & 0xffffffff;
   }
+  return (h >>> 0).toString(36);
+}
 
-  const tool = { type: 'web_search_20250305', name: 'web_search', max_uses: macroOnly ? 1 : 2 };
-  if (city) {
-    tool.user_location = { type: 'approximate', city: city, country: 'IN', timezone: 'Asia/Kolkata' };
-  }
-
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+/* Build a per-firm watchlist from the business context.
+   Small Haiku call — extracts materials, triggers, localities, etc. */
+async function buildWatchlist(env, firmCode, context) {
+  var hash = shortHash(context);
+  var r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01'
-    },
+    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
+               'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
-      model: 'claude-haiku-5-5',
-      max_tokens: 6000,
-      thinking: { type: 'disabled' },
-      system: system,
-      tools: [tool],
-      messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
-        (told ? '\n\nALREADY TOLD THE OWNER IN THE LAST TWO WEEKS — do not repeat these, ' +
-                'or anything on the same topic, unless something genuinely new has happened:\n' + told : '') }]
+      model: 'claude-haiku-5-5', max_tokens: 1000, thinking: { type: 'disabled' },
+      system: 'Extract a watchlist from this business description. Return ONLY JSON:\n' +
+        '{"materials":[],"triggers":[],"localities":[],"regulations":[],"competitors":[],"groups":[]}\n' +
+        'Each array: 2–6 short items.\n' +
+        'materials = inputs the business buys (raw materials, goods, supplies).\n' +
+        'triggers = events/situations that make customers need this business.\n' +
+        'localities = specific areas, landmarks, neighbourhoods mentioned.\n' +
+        'regulations = licences, rules, taxes that apply to this trade.\n' +
+        'competitors = any competitor names mentioned.\n' +
+        'groups = the named customer segments/types.\n' +
+        'If a category has nothing, return an empty array.',
+      messages: [{ role: 'user', content: context }]
     })
   });
-  if (!r.ok) {
-    const errText = await r.text();
-    throw new Error('Anthropic ' + r.status + ': ' + errText.slice(0, 500));
-  }
-  const data = await r.json();
+  if (!r.ok) throw new Error('watchlist ' + r.status);
+  var data = await r.json();
   recordCronCost(data);
+  var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
+    .map(function(b){ return b.text; }).join('');
+  var wl = { materials: [], triggers: [], localities: [], regulations: [], competitors: [], groups: [] };
+  try {
+    var a = text.indexOf('{'), z = text.lastIndexOf('}');
+    if (a !== -1 && z > a) wl = JSON.parse(text.slice(a, z + 1));
+  } catch (e) {}
+  var keys = ['materials','triggers','localities','regulations','competitors','groups'];
+  keys.forEach(function(k) { if (!Array.isArray(wl[k])) wl[k] = []; wl[k] = wl[k].slice(0, 6); });
+  wl.hash = hash;
+  await kvPut(env, 'market:watch:' + firmCode, JSON.stringify(wl));
+  return wl;
+}
 
-  /* Collect every URL web search actually returned. */
-  const seen = new Set();
+/* Read or lazily build the watchlist. Rebuilds only when context hash changes. */
+async function getWatchlist(env, firmCode, context) {
+  var hash = shortHash(context);
+  var cached = await env.G7_KV.get('market:watch:' + firmCode, 'json');
+  if (cached && cached.hash === hash) return cached;
+  return buildWatchlist(env, firmCode, context);
+}
+
+/* Extract real metadata from an API response: URL→title from search results,
+   URL→[citedText] from citations. Never trust the model's JSON for this. */
+function collectSearchMeta(data) {
+  var titles = {};
+  var cited = {};
+  var seen = new Set();
   (data.content || []).forEach(function(b) {
     if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) {
-      b.content.forEach(function(res) { if (res && res.url) seen.add(res.url); });
+      b.content.forEach(function(res) {
+        if (res && res.url) {
+          seen.add(res.url);
+          if (res.title) titles[res.url] = res.title;
+        }
+      });
+    }
+    if (b.type === 'text' && Array.isArray(b.citations)) {
+      b.citations.forEach(function(c) {
+        if (c && c.url && c.cited_text) {
+          if (!cited[c.url]) cited[c.url] = [];
+          cited[c.url].push(c.cited_text);
+        }
+      });
     }
   });
+  return { seen: seen, titles: titles, cited: cited };
+}
 
-  /* The final answer can be split across several text blocks when the
-     model cites sources. Join them, then take the outermost JSON object. */
-  const text = (data.content || [])
-    .filter(function(b){ return b.type === 'text'; })
+/* Stopwords for headline matching — common English words with no meaning. */
+var _stopWords = new Set([
+  'the','a','an','in','on','at','of','for','to','is','are','was','were','and','or',
+  'but','by','with','from','that','this','its','has','had','it','as','be','not','no',
+  'will','can','may','up','out','new','says','said','over','after','into','about',
+  'than','been','would','could','should','also','just','more','most','very','all',
+  'any','each','how','if','set','per','get','top','cut','now','yet','two','see'
+]);
+
+/* Source-match gate: ≥2 meaningful headline words must appear in the API's
+   source title or cited text for the item's URL.
+   Returns { pass:bool, reason:string }. */
+function sourceMatchCheck(headline, url, meta) {
+  var title = meta.titles[url] || '';
+  var citedArr = meta.cited[url] || [];
+  if (!title && !citedArr.length) return { pass: false, reason: 'no API title or citation for URL' };
+  var corpus = (title + ' ' + citedArr.join(' ')).toLowerCase();
+  var words = String(headline || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').trim().split(/\s+/)
+    .filter(function(w) { return w.length > 1 && !_stopWords.has(w); });
+  var matches = words.filter(function(w) { return corpus.indexOf(w) !== -1; });
+  if (matches.length >= 2) return { pass: true };
+  return { pass: false, reason: 'only ' + matches.length + ' headline word(s) matched: [' + matches.join(', ') + '] of [' + words.join(', ') + ']' };
+}
+
+/* Relevance gate: true if whyItMatters implies no direct effect. */
+var _noEffectRe = /no direct effect|no immediate impact|does not affect|not directly|unlikely to affect|no specific impact|does not directly|no clear effect/i;
+function failsRelevanceGate(whyItMatters) {
+  return _noEffectRe.test(whyItMatters || '');
+}
+
+/* ── Step a: search for business news candidates (Haiku + web_search) ── */
+async function searchBusinessNews(env, day, context, city, watchlist, told, macroOnly) {
+  var hints = [];
+  if (!macroOnly) {
+    if (watchlist.materials && watchlist.materials.length) {
+      hints.push('MATERIAL/INPUT PRICES: search for price moves in: ' +
+        watchlist.materials.map(function(m){ return '"' + m + ' price India"'; }).join(', '));
+    }
+    if (watchlist.localities && watchlist.localities.length) {
+      hints.push('LOCAL DEVELOPMENTS: search for new construction, offices, projects near: ' +
+        watchlist.localities.join(', '));
+    }
+    if (watchlist.competitors && watchlist.competitors.length) {
+      hints.push('COMPETITORS: search for news about: ' +
+        watchlist.competitors.map(function(c){ return '"' + c + '"'; }).join(', '));
+    }
+    if (watchlist.regulations && watchlist.regulations.length) {
+      hints.push('REGULATIONS: search for changes to: ' +
+        watchlist.regulations.join(', '));
+    }
+    if (watchlist.triggers && watchlist.triggers.length) {
+      hints.push('DEMAND TRIGGERS: search for: ' +
+        watchlist.triggers.map(function(t){ return '"' + t + '"'; }).join(', '));
+    }
+  }
+
+  var system =
+    'You are a news researcher for one Indian small business. Today is ' + day + ' (India).\n' +
+    'Search for news from the last 7 days relevant to this business at two levels:\n' +
+    'MICRO — its city and trade: local developments, competitors, demand in its area.\n' +
+    'MACRO — economy and policy: interest rates, input prices, tax changes, sector demand, schemes.\n\n' +
+    (hints.length ? 'SEARCH QUERIES TO RUN (adapt to the business, search in this order):\n' +
+      hints.join('\n') + '\n\n' : '') +
+    (macroOnly ? 'THIS RUN: local news was empty. Search MACRO only — national economy, ' +
+      'policy and prices for this trade. Return 2 to 4 candidates.\n\n' : '') +
+    'NOT NEWS: something that already existed. A competitor simply having a shop, or ' +
+    'a yearly festival, is not a change.\n\n' +
+    'RULES:\n' +
+    '- Every item must come from a page you actually found with web search.\n' +
+    '- Never invent a development, competitor, date or number.\n' +
+    '- sourceUrl must be the article page, not a home page or listing.\n\n' +
+    'Return 4 to 6 candidate items. Reply with ONLY this JSON:\n' +
+    '{"candidates":[{"headline":"under 10 words","whatHappened":"one sentence, under 30 words",' +
+    '"sourceUrl":"exact URL","scope":"micro | macro"}]}';
+
+  var tool = { type: 'web_search_20250305', name: 'web_search', max_uses: macroOnly ? 1 : 3 };
+  if (city) tool.user_location = { type: 'approximate', city: city, country: 'IN', timezone: 'Asia/Kolkata' };
+
+  var r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
+               'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-5-5', max_tokens: 6000, thinking: { type: 'disabled' },
+      system: system, tools: [tool],
+      messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
+        (told ? '\n\nALREADY TOLD — do not repeat:\n' + told : '') }]
+    })
+  });
+  if (!r.ok) throw new Error('search step ' + r.status + ': ' + (await r.text()).slice(0, 300));
+  var data = await r.json();
+  recordCronCost(data);
+  var meta = collectSearchMeta(data);
+
+  var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
     .map(function(b){ return b.text; }).join('');
-  let parsed = { items: [] };
+  var parsed = { candidates: [] };
   try {
-    const a = text.indexOf('{'), z = text.lastIndexOf('}');
+    var a = text.indexOf('{'), z = text.lastIndexOf('}');
     if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
   } catch (e) {}
 
-  /* Hard gate: drop items whose sourceUrl was already told in history. */
-  const toldUrls = new Set(history.map(function(h){ return h.sourceUrl; }));
+  /* Build told-URL set from the formatted history string. */
+  var toldUrls = new Set();
+  if (told) told.split('\n').forEach(function(line) {
+    var m = line.match(/\((https?:\/\/[^)]+)\)/);
+    if (m) toldUrls.add(m[1]);
+  });
 
-  /* Integrity gate: an item survives only if its source URL is one web
-     search really returned, was not already told, and is not a home page. */
-  const items = (Array.isArray(parsed.items) ? parsed.items : [])
+  /* Pre-vet: URL must have been returned by web_search, not a home page,
+     not already told. Only vetted candidates go to Step b. */
+  var vetted = (Array.isArray(parsed.candidates) ? parsed.candidates : [])
+    .filter(function(c) {
+      return c && c.headline && c.sourceUrl &&
+             meta.seen.has(c.sourceUrl) && !isHomePage(c.sourceUrl) && !toldUrls.has(c.sourceUrl);
+    })
+    .map(function(c) {
+      return {
+        headline: String(c.headline).slice(0, 120),
+        whatHappened: clip(c.whatHappened, 400),
+        sourceUrl: c.sourceUrl,
+        scope: c.scope === 'micro' ? 'micro' : 'macro'
+      };
+    });
+
+  var rawCount = Array.isArray(parsed.candidates) ? parsed.candidates.length : 0;
+  return { candidates: vetted, meta: meta, usage: data.usage || {}, rawCount: rawCount };
+}
+
+/* ── Step b: pick and write final items (Sonnet, no tools) ── */
+async function pickAndWriteNews(env, context, candidates, watchlist) {
+  if (!candidates.length) return { items: [], usage: {} };
+  var groupList = (watchlist.groups || []).join(', ') || 'the customer groups described';
+
+  var system =
+    'You are Scout, the business news editor for one Indian small business.\n' +
+    'From the CANDIDATES below, pick 3 to 4 items that matter most to this business.\n' +
+    'For each item you keep:\n' +
+    '- whyItMatters: ONE sentence, under 25 words. Name the concrete effect on the business. ' +
+    'If there is no direct effect, do not include the item.\n' +
+    '- whatToDo: ONE sentence, under 25 words. One action this week, tied to one of these ' +
+    'customer groups by name: ' + groupList + '.\n' +
+    '- urgency: today | this_week | watch\n' +
+    '- scope: micro | macro\n' +
+    '- Copy headline, whatHappened, sourceUrl EXACTLY from the candidate. Never change a URL.\n\n' +
+    'RULES:\n' +
+    '- Never invent facts beyond what the candidates state.\n' +
+    '- Never write labels like "Customer 1" — use actual group names.\n' +
+    '- Do not include any item where you cannot name a concrete effect.\n\n' +
+    'Reply with ONLY this JSON:\n' +
+    '{"items":[{"headline":"","whatHappened":"","whyItMatters":"","whatToDo":"",' +
+    '"urgency":"","scope":"","sourceUrl":""}]}';
+
+  var r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
+               'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-5-5', max_tokens: 3000,
+      thinking: { type: 'between_tools' },
+      system: system,
+      messages: [{ role: 'user', content: 'BUSINESS:\n' + String(context).slice(0, 2500) +
+        '\n\nCANDIDATES:\n' + JSON.stringify(candidates) }]
+    })
+  });
+  if (!r.ok) throw new Error('pick step ' + r.status + ': ' + (await r.text()).slice(0, 300));
+  var data = await r.json();
+  recordCronCost(data);
+
+  var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
+    .map(function(b){ return b.text; }).join('');
+  var parsed = { items: [] };
+  try {
+    var a = text.indexOf('{'), z = text.lastIndexOf('}');
+    if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
+  } catch (e) {}
+
+  /* URL must be exactly one of the candidates — drop fabricated URLs. */
+  var candidateUrls = new Set(candidates.map(function(c){ return c.sourceUrl; }));
+  var items = (Array.isArray(parsed.items) ? parsed.items : [])
     .filter(function(it) {
-      return it && it.headline && it.whatToDo && it.sourceUrl && seen.has(it.sourceUrl) && !toldUrls.has(it.sourceUrl) && !isHomePage(it.sourceUrl);
+      return it && it.headline && it.sourceUrl && candidateUrls.has(it.sourceUrl);
     })
     .slice(0, 4)
     .map(function(it) {
@@ -506,22 +668,86 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
         whatToDo: clip(it.whatToDo, 400),
         urgency: ['today','this_week','watch'].indexOf(it.urgency) !== -1 ? it.urgency : 'watch',
         scope: it.scope === 'micro' ? 'micro' : 'macro',
-        sourceTitle: String(it.sourceTitle || '').slice(0, 160),
         sourceUrl: it.sourceUrl
       };
     });
 
-  /* Retry macro-only ONLY when the model returned nothing parseable —
-     not when items existed but were removed by source/history/home-page gates. */
-  var rawItemCount = Array.isArray(parsed.items) ? parsed.items.length : 0;
-  if (items.length === 0 && rawItemCount === 0 && !macroOnly) {
+  return { items: items, usage: data.usage || {} };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MARKET BRIEF GENERATOR — two-step: search (Haiku) → pick-and-write (Sonnet).
+// ─────────────────────────────────────────────────────────────────────────────
+async function generateMarketBrief(env, firmCode, day, context, city, macroOnly) {
+  /* History — what Scout already told this owner in the last two weeks. */
+  const histKey = 'market:history:' + firmCode;
+  const history = (await env.G7_KV.get(histKey, 'json')) || [];
+  const told = history.map(function(h){ return '- ' + h.headline + ' (' + h.sourceUrl + ')'; }).join('\n');
+
+  /* Watchlist — drives search queries. Rebuilt only when context changes. */
+  var watchlist = { materials: [], triggers: [], localities: [], regulations: [], competitors: [], groups: [] };
+  try { watchlist = await getWatchlist(env, firmCode, context); } catch (e) {
+    console.log(JSON.stringify({ watchlistError: firmCode, error: String(e && e.message || e).slice(0, 300) }));
+  }
+
+  /* Step a: search for candidates (Haiku + web_search). */
+  var search = await searchBusinessNews(env, day, context, city, watchlist, told, macroOnly);
+  var drops = [];
+
+  /* Retry macro-only when model returned nothing parseable. */
+  if (search.candidates.length === 0 && search.rawCount === 0 && !macroOnly) {
     return generateMarketBrief(env, firmCode, day, context, city, true);
   }
+
+  /* Step b: pick and write (Sonnet, no tools). */
+  var pick = await pickAndWriteNews(env, context, search.candidates, watchlist);
+  var afterPick = pick.items.length;
+
+  /* Relevance gate: drop items with whyItMatters implying no effect. */
+  var afterRelevance = pick.items.filter(function(it) {
+    if (failsRelevanceGate(it.whyItMatters)) {
+      drops.push({ headline: it.headline, reason: 'relevance: ' + it.whyItMatters });
+      return false;
+    }
+    return true;
+  });
+
+  /* Source-match gate: ≥2 meaningful headline words in API title/cited text. */
+  var items = afterRelevance.filter(function(it) {
+    var check = sourceMatchCheck(it.headline, it.sourceUrl, search.meta);
+    if (!check.pass) {
+      drops.push({ headline: it.headline, reason: 'source-match: ' + check.reason });
+      return false;
+    }
+    return true;
+  });
+
+  /* Populate sourceTitle from API metadata — never from model claims. */
+  items.forEach(function(it) {
+    it.sourceTitle = String(search.meta.titles[it.sourceUrl] || '').slice(0, 160);
+  });
+
+  /* Log per firm. */
+  try {
+    console.log(JSON.stringify({
+      newsLog: firmCode, day: day, macroOnly: !!macroOnly,
+      watchlistHit: !!(watchlist && watchlist.hash),
+      searches: (search.usage.server_tool_use && search.usage.server_tool_use.web_search_requests) || 0,
+      step1Tokens: { input: search.usage.input_tokens || 0, output: search.usage.output_tokens || 0 },
+      step2Tokens: { input: pick.usage.input_tokens || 0, output: pick.usage.output_tokens || 0 },
+      candidatesRaw: search.rawCount,
+      candidatesVetted: search.candidates.length,
+      afterPick: afterPick,
+      afterRelevance: afterRelevance.length,
+      afterSourceMatch: items.length,
+      drops: drops
+    }));
+  } catch (e) {}
 
   const result = {
     items: items,
     date: day,
-    dropped: (Array.isArray(parsed.items) ? parsed.items.length : 0) - items.length
+    dropped: afterPick - items.length
   };
   const cacheKey = 'market:' + firmCode + ':' + day;
   await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
@@ -1387,13 +1613,8 @@ async function generateSharedNews(env, cat, day, city) {
   const data = await r.json();
   recordCronCost(data);
 
-  /* Collect URLs web search returned. */
-  const seen = new Set();
-  (data.content || []).forEach(function(b) {
-    if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) {
-      b.content.forEach(function(res) { if (res && res.url) seen.add(res.url); });
-    }
-  });
+  /* Collect real API metadata: URLs, titles, cited text. */
+  const sharedMeta = collectSearchMeta(data);
 
   /* Join text blocks, parse outermost JSON. */
   const text = (data.content || []).filter(function(b){ return b.type === 'text'; })
@@ -1404,20 +1625,37 @@ async function generateSharedNews(env, cat, day, city) {
     if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
   } catch (e) {}
 
-  /* Integrity gate — same rules as generateMarketBrief. */
-  const kept = (Array.isArray(parsed.items) ? parsed.items : [])
+  /* Integrity gate: URL was returned by web_search, not a home page. */
+  var sharedDrops = [];
+  const afterIntegrity = (Array.isArray(parsed.items) ? parsed.items : [])
     .filter(function(it) {
-      return it && it.headline && it.sourceUrl && seen.has(it.sourceUrl) && !isHomePage(it.sourceUrl);
+      return it && it.headline && it.sourceUrl && sharedMeta.seen.has(it.sourceUrl) && !isHomePage(it.sourceUrl);
+    })
+    .slice(0, 6);
+
+  /* Source-match gate: ≥2 meaningful headline words in API title/cited text. */
+  const kept = afterIntegrity
+    .filter(function(it) {
+      var check = sourceMatchCheck(it.headline, it.sourceUrl, sharedMeta);
+      if (!check.pass) {
+        sharedDrops.push({ headline: it.headline, reason: 'source-match: ' + check.reason });
+        return false;
+      }
+      return true;
     })
     .slice(0, 4)
     .map(function(it) {
       return {
         headline: String(it.headline).slice(0, 120),
         whatHappened: clip(it.whatHappened, 400),
-        sourceTitle: String(it.sourceTitle || '').slice(0, 160),
+        sourceTitle: String(sharedMeta.titles[it.sourceUrl] || '').slice(0, 160),
         sourceUrl: it.sourceUrl
       };
     });
+
+  if (sharedDrops.length) {
+    try { console.log(JSON.stringify({ sharedNewsLog: cat, day: day, drops: sharedDrops })); } catch(e){}
+  }
 
   const result = { category: cat, label: def.label, items: kept, date: day };
   await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
@@ -2813,6 +3051,9 @@ export default {
         await kvPut(env,'market:ctx:' + session.firmCode,
           JSON.stringify({ context: context, city: city }),
           { expirationTtl: 7 * 86400 });
+        /* Build/refresh watchlist in background — only calls Haiku when
+           the context hash has changed (or watchlist is missing). */
+        ctx.waitUntil(getWatchlist(env, session.firmCode, context).catch(function(){}));
       }
 
       /* IST date — the brief belongs to the owner's day, not UTC's. */
