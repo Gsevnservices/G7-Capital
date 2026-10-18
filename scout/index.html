@@ -1737,12 +1737,12 @@ function ccRender() {
         if (mv.reason) mh += '<div style="font-size:11px;color:var(--grey1);line-height:1.5;margin-bottom:8px">' + escHtml(mv.reason) + '</div>';
         if (mv.action) mh += '<div style="font-size:12px;color:var(--white);line-height:1.5;margin-bottom:8px">' + escHtml(mv.action) + '</div>';
         if (mv.message) {
-          var waUrl = mv.group ? 'https://wa.me/?text=' + encodeURIComponent(mv.message) : '';
+          var waUrl = 'https://wa.me/?text=' + encodeURIComponent(mv.message);
           mh += '<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;margin-bottom:8px">' +
             '<div style="font-size:12px;color:var(--grey1);line-height:1.5;white-space:pre-wrap">' + escHtml(mv.message) + '</div>' +
             '<div style="display:flex;gap:8px;margin-top:8px">' +
             '<button class="cc-copy" data-copy="' + escHtml(mv.message) + '">Copy</button>' +
-            (waUrl ? '<a class="cc-copy" href="' + waUrl + '" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a>' : '') +
+            '<a class="cc-copy" href="' + waUrl + '" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a>' +
             '</div></div>';
         }
         if (mv.sourceTitle && mv.sourceUrl) {
