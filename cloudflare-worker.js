@@ -3304,6 +3304,62 @@ export default {
     }
 
     // ─────────────────────────────────────────────────────────────
+    // GET /scout/recovery-email — returns current recovery email.
+    // ─────────────────────────────────────────────────────────────
+    if (request.method === 'GET' && path === '/scout/recovery-email') {
+      const session = await validateSession(request, env);
+      if (!session) return jsonResponse({ error: 'unauthorized' }, 401);
+      const user = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
+      return jsonResponse({ email: user.recoveryEmail || '' });
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // POST /scout/recovery-email — { email, currentPassword? }
+    // currentPassword is required when changing an existing email.
+    // Not required when setting the first one.
+    // Never touches email on/off toggles.
+    // ─────────────────────────────────────────────────────────────
+    if (request.method === 'POST' && path === '/scout/recovery-email') {
+      const session = await validateSession(request, env);
+      if (!session) return jsonResponse({ error: 'unauthorized' }, 401);
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid request.' }, 400); }
+      const key = 'auth:users:' + session.firmCode;
+      const user = await env.G7_KV.get(key, 'json');
+      if (!user) return jsonResponse({ error: 'Account not found.' }, 404);
+
+      const newEmail = String(body.email || '').trim().toLowerCase();
+      if (!newEmail) return jsonResponse({ error: 'Enter an email address.' }, 400);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) return jsonResponse({ error: 'That email address does not look right.' }, 400);
+
+      const oldEmail = user.recoveryEmail || '';
+
+      /* Require password when changing an existing email */
+      if (oldEmail) {
+        const pw = String(body.currentPassword || '');
+        if (!pw) return jsonResponse({ error: 'Enter your current password to change the email.' }, 400);
+        const check = await verifyPassword(pw, user.password);
+        if (!check.ok) return jsonResponse({ error: 'Password is incorrect.' }, 403);
+      }
+
+      user.recoveryEmail = newEmail;
+      await kvPut(env, key, JSON.stringify(user));
+
+      /* Send notice to the OLD address (fire-and-forget, never blocks) */
+      if (oldEmail && oldEmail !== newEmail) {
+        const masked = newEmail.replace(/^(..)[^@]*/, '$1***');
+        const subj = 'Your G7 recovery email was changed';
+        const txt = 'Your G7 recovery email was changed to ' + masked + '.\n\n' +
+          'If this wasn\u2019t you, contact gsevnservices@gmail.com immediately.';
+        const htm = '<p>Your G7 recovery email was changed to <strong>' + masked + '</strong>.</p>' +
+          '<p>If this wasn\u2019t you, contact <a href="mailto:gsevnservices@gmail.com">gsevnservices@gmail.com</a> immediately.</p>';
+        sendEmail(env, oldEmail, subj, txt, htm);
+      }
+
+      return jsonResponse({ email: newEmail });
+    }
+
+    // ─────────────────────────────────────────────────────────────
     // GET /scout/news-prefs — current news category selections.
     // ─────────────────────────────────────────────────────────────
     if (request.method === 'GET' && path === '/scout/news-prefs') {
