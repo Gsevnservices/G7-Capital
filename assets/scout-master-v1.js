@@ -4622,6 +4622,26 @@ and decision-maker trust — not proximity.
 in Bengaluru" beats "we are 5 minutes from
 your office."
 
+BOTH BRANCH (CUSTOMER TYPE: Both B2B and B2C):
+When CUSTOMER TYPE is Both, the business sells
+to individual consumers AND to other businesses.
+Scout must create at least one B2C customer
+group AND at least one B2B customer group.
+
+For B2C groups: apply the B2C landmark proximity
+rules above. Use landmarks to build trust,
+define catchment, and craft outreach messages
+that reference familiar locations.
+
+For B2B groups: apply the B2B outcome-first
+rules above. Use business areas, tech parks,
+and industry targeting. Outreach messages must
+open with a business outcome, not proximity.
+
+Never blend the two approaches in one customer
+group. Each ICP is either B2C (landmark rules)
+or B2B (outcome-first rules) — not a mix.
+
 RULE 2 — COMPETITOR INTEGRATION
 
 Every business names 2-3 competitors in onboarding.
@@ -4952,6 +4972,12 @@ artificially constrain B2B outreach to a
 geographic radius. Instead constrain by
 INDUSTRY (from B2B TARGET INDUSTRIES field)
 and COMPANY SIZE (from B2B COMPANY SIZE field).
+
+Both: Apply radius to B2C customer groups and
+industry/size targeting to B2B customer groups.
+Each group gets the catchment logic that matches
+its type — never apply a geographic radius to
+a B2B group or industry targeting to a B2C group.
 
 Rule 7c — Identify specific locations
 B2C: Rather than saying "nearby areas"
