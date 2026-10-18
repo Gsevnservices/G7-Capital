@@ -758,7 +758,10 @@ function renderFirmsTable(filter) {
     var planBtn = firm.plan === 'paid'
       ? '<button class="btn" style="font-size:9px;padding:4px 8px;background:#2a2a2a;color:#ccc" onclick="setPlan(\'' + fc + '\',\'free\')">↓Free</button>'
       : '<button class="btn" style="font-size:9px;padding:4px 8px;background:#7BC47B;color:#0a0a0a" onclick="setPlan(\'' + fc + '\',\'paid\')">↑Paid</button>';
-    html += '<td>' + planBtn + ' <button class="btn btn-danger" style="font-size:9px;padding:4px 8px" onclick="resetUsage(\'' + fc + '\',\'' + product + '\')">Reset</button></td>';
+    var regenNewsBtn = product === 'scout'
+      ? ' <button class="btn" style="font-size:9px;padding:4px 8px;background:#2a2a2a;color:#C9A84C" onclick="regenNews(\'' + fc + '\')">Regen News</button>'
+      : '';
+    html += '<td>' + planBtn + ' <button class="btn btn-danger" style="font-size:9px;padding:4px 8px" onclick="resetUsage(\'' + fc + '\',\'' + product + '\')">Reset</button>' + regenNewsBtn + '</td>';
     html += '</tr>';
   });
 
@@ -818,6 +821,43 @@ async function resetUsage(firmCode, product) {
       throw new Error(data.error || 'Reset failed (' + response.status + ')');
     }
     loadFirms();
+  } catch(err) {
+    alert('Error: ' + err.message);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// REGENERATE NEWS
+// Deletes today's business brief + personalisation cache and regenerates.
+// Shows the newsLog summary (searches, tokens, counts, drops) in an alert.
+// ─────────────────────────────────────────────────────────────
+async function regenNews(firmCode) {
+  if (!confirm('Regenerate news for ' + firmCode + '? This costs ~2 API calls.')) return;
+  try {
+    const response = await fetch(WORKER + '/admin/regen-news', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword, firmCode })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Regen failed (' + response.status + ')');
+    var log = data.log || {};
+    var items = (data.news && data.news.business && data.news.business.items) || [];
+    var msg = 'News regenerated for ' + firmCode + '\n\n' +
+      'Items: ' + items.length + '\n' +
+      'Searches: ' + (log.searches || 0) + '\n' +
+      'Step 1 tokens: ' + ((log.step1Tokens && log.step1Tokens.input) || 0) + ' in / ' + ((log.step1Tokens && log.step1Tokens.output) || 0) + ' out\n' +
+      'Step 2 tokens: ' + ((log.step2Tokens && log.step2Tokens.input) || 0) + ' in / ' + ((log.step2Tokens && log.step2Tokens.output) || 0) + ' out\n' +
+      'Candidates: ' + (log.candidatesRaw || 0) + ' raw → ' + (log.candidatesVetted || 0) + ' vetted\n' +
+      'After pick: ' + (log.afterPick || 0) + ' → relevance: ' + (log.afterRelevance || 0) + ' → source-match: ' + (log.afterSourceMatch || 0);
+    if (log.drops && log.drops.length) {
+      msg += '\n\nDrops:';
+      log.drops.forEach(function(d) { msg += '\n  • ' + (d.headline || '?') + ' — ' + (d.reason || ''); });
+    }
+    msg += '\n\nHeadlines:';
+    items.forEach(function(it) { msg += '\n  • ' + (it.headline || ''); });
+    alert(msg);
   } catch(err) {
     alert('Error: ' + err.message);
   }

@@ -392,7 +392,7 @@ function isHomePage(u) {
 // WATCHLIST + TWO-STEP BUSINESS NEWS
 // ─────────────────────────────────────────────────────────────────────────────
 
-/* Fast non-crypto hash for change detection on context strings. */
+/* Fast non-crypto hash for change detection. */
 function shortHash(str) {
   var h = 5381;
   for (var i = 0; i < str.length; i++) {
@@ -401,10 +401,41 @@ function shortHash(str) {
   return (h >>> 0).toString(36);
 }
 
+/* Extract the stable lines from the context that drive watchlist content.
+   The context string (built by scoutContext in index.html) contains:
+     BUSINESS: name | type | location   ← stable
+     SELLS: what they sell              ← stable
+     TYPICAL SALE: avg transaction      ← semi-stable, not relevant
+     REVENUE MODEL: ...                 ← semi-stable
+     CURRENT CUSTOMERS: count           ← changes at check-in
+     12-MONTH TARGET: ...               ← changes at check-in
+     BEST EXISTING CUSTOMERS: ...       ← stable
+     BEST MONTHS / WORST MONTHS         ← stable
+     LOCAL EVENTS: ...                  ← stable
+     WHAT HAS WORKED / FAILED           ← stable
+     COMPETITORS: ...                   ← stable
+     CUSTOMER GROUPS: ...               ← stable (from analysis)
+     SCOUT ASSESSMENT: ...              ← changes every analysis
+     PREFERRED LANGUAGE: ...            ← irrelevant to watchlist
+   We hash only the lines that would change what the watchlist should contain. */
+var _watchlistKeys = ['BUSINESS:','SELLS:','BEST EXISTING CUSTOMERS:','BEST MONTHS:',
+  'WORST MONTHS:','LOCAL EVENTS:','WHAT HAS WORKED:','WHAT HAS FAILED:',
+  'COMPETITORS:','CUSTOMER GROUPS:'];
+function watchlistHash(context) {
+  var lines = String(context || '').split('\n');
+  var stable = lines.filter(function(l) {
+    for (var i = 0; i < _watchlistKeys.length; i++) {
+      if (l.indexOf(_watchlistKeys[i]) === 0) return true;
+    }
+    return false;
+  });
+  return shortHash(stable.join('\n'));
+}
+
 /* Build a per-firm watchlist from the business context.
    Small Haiku call — extracts materials, triggers, localities, etc. */
 async function buildWatchlist(env, firmCode, context) {
-  var hash = shortHash(context);
+  var hash = watchlistHash(context);
   var r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
@@ -441,9 +472,9 @@ async function buildWatchlist(env, firmCode, context) {
   return wl;
 }
 
-/* Read or lazily build the watchlist. Rebuilds only when context hash changes. */
+/* Read or lazily build the watchlist. Rebuilds only when the stable-input hash changes. */
 async function getWatchlist(env, firmCode, context) {
-  var hash = shortHash(context);
+  var hash = watchlistHash(context);
   var cached = await env.G7_KV.get('market:watch:' + firmCode, 'json');
   if (cached && cached.hash === hash) return cached;
   return buildWatchlist(env, firmCode, context);
@@ -728,27 +759,28 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
   });
 
   /* Log per firm. */
-  try {
-    console.log(JSON.stringify({
-      newsLog: firmCode, day: day, macroOnly: !!macroOnly,
-      watchlistHit: !!(watchlist && watchlist.hash),
-      searches: (search.usage.server_tool_use && search.usage.server_tool_use.web_search_requests) || 0,
-      step1Tokens: { input: search.usage.input_tokens || 0, output: search.usage.output_tokens || 0 },
-      step2Tokens: { input: pick.usage.input_tokens || 0, output: pick.usage.output_tokens || 0 },
-      candidatesRaw: search.rawCount,
-      candidatesVetted: search.candidates.length,
-      afterPick: afterPick,
-      afterRelevance: afterRelevance.length,
-      afterSourceMatch: items.length,
-      drops: drops
-    }));
-  } catch (e) {}
+  var _newsLog = {
+    newsLog: firmCode, day: day, macroOnly: !!macroOnly,
+    watchlistHit: !!(watchlist && watchlist.hash),
+    searches: (search.usage.server_tool_use && search.usage.server_tool_use.web_search_requests) || 0,
+    step1Tokens: { input: search.usage.input_tokens || 0, output: search.usage.output_tokens || 0 },
+    step2Tokens: { input: pick.usage.input_tokens || 0, output: pick.usage.output_tokens || 0 },
+    candidatesRaw: search.rawCount,
+    candidatesVetted: search.candidates.length,
+    afterPick: afterPick,
+    afterRelevance: afterRelevance.length,
+    afterSourceMatch: items.length,
+    drops: drops
+  };
+  try { console.log(JSON.stringify(_newsLog)); } catch (e) {}
 
   const result = {
     items: items,
     date: day,
     dropped: afterPick - items.length
   };
+  /* _log is ephemeral — not persisted to KV, only read by admin routes. */
+  result._log = _newsLog;
   const cacheKey = 'market:' + firmCode + ':' + day;
   await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
 
@@ -2702,6 +2734,48 @@ export default {
         return jsonResponse({ move: move });
       } catch (e) {
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 300) }, 500);
+      }
+    }
+
+    // POST /admin/regen-news — { adminPassword, firmCode, shared?: bool }
+    // Deletes today's business + personalisation cache and regenerates.
+    // If shared:true, also deletes shared category caches for the day.
+    // Returns the news result plus the newsLog summary.
+    if (request.method === 'POST' && path === '/admin/regen-news') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid request.' }, 400); }
+      if (!body.adminPassword || body.adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Invalid admin password' }, 403);
+      }
+      const firmCode = String(body.firmCode || '').toUpperCase().trim();
+      if (!firmCode) return jsonResponse({ error: 'firmCode required' }, 400);
+      const ist = new Date(Date.now() + 5.5 * 3600 * 1000);
+      const day = ist.toISOString().slice(0, 10);
+      const saved = await env.G7_KV.get('market:ctx:' + firmCode, 'json');
+      if (!saved || !saved.context) return jsonResponse({ error: 'no_context' }, 404);
+      try {
+        /* Delete business brief cache + personalisation tags. */
+        await env.G7_KV.delete('market:' + firmCode + ':' + day);
+        await env.G7_KV.delete('news:sig:' + firmCode + ':' + day);
+
+        /* Optionally nuke shared category caches too. */
+        if (body.shared) {
+          var citySlug = (saved.city || '').toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+          for (var catKey of Object.keys(NEWS_CATS)) {
+            var sharedCacheKey = 'news:' + catKey + (catKey === 'city' ? ':' + citySlug : '') + ':' + day;
+            await env.G7_KV.delete(sharedCacheKey);
+          }
+        }
+
+        const user = await env.G7_KV.get('auth:users:' + firmCode, 'json') || {};
+        const effectivePrefs = await resolveNewsPrefs(env, firmCode, user.newsPrefs);
+        resetCronCost();
+        const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectivePrefs);
+        /* Extract the _log from the business brief (set by generateMarketBrief). */
+        var bizLog = (news && news.business && news.business._log) || null;
+        return jsonResponse({ news: news, log: bizLog, cost: Object.assign({}, _cronCost) });
+      } catch (e) {
+        return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 500) }, 500);
       }
     }
 
