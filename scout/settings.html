@@ -375,20 +375,40 @@ async function renderAccount() {
   html += '<div style="margin-bottom:14px">' +
     '<div class="s-row-label" style="margin-bottom:8px">Recovery email</div>';
   if (hasEmail) {
-    html += '<div style="font-size:13px;color:var(--white);margin-bottom:10px">' + escHtml(email) + '</div>';
+    html += '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px">' +
+      '<span style="font-size:13px;color:var(--white)">' + escHtml(email) + '</span>' +
+      '<a href="#" id="accountChangeLink" style="font-size:11px;color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.4)">Change</a></div>';
+    html += '<div id="accountChangeForm" style="display:none">';
+    html += '<div class="s-row-label" style="margin-bottom:6px;font-size:11px">New email</div>';
+    html += '<input class="s-input" type="email" id="accountEmail" placeholder="you@example.com" style="margin-bottom:8px">';
+    html += '<div class="s-row-label" style="margin-bottom:6px;font-size:11px">Current password</div>';
+    html += '<input class="s-input" type="password" id="accountPassword" placeholder="" style="margin-bottom:8px">';
+    html += '<button class="s-btn" id="accountEmailSave">Update</button>';
+    html += '<div class="s-err" id="accountEmailErr"></div>';
+    html += '<div class="s-saved" id="accountEmailSaved">Saved</div>';
+    html += '</div>';
+  } else {
+    html += '<input class="s-input" type="email" id="accountEmail" placeholder="you@example.com" style="margin-bottom:8px">';
+    html += '<button class="s-btn" id="accountEmailSave">Save</button>';
+    html += '<div class="s-err" id="accountEmailErr"></div>';
+    html += '<div class="s-saved" id="accountEmailSaved">Saved</div>';
   }
-  html += '<input class="s-input" type="email" id="accountEmail" placeholder="you@example.com" style="margin-bottom:8px">';
-  if (hasEmail) {
-    html += '<input class="s-input" type="password" id="accountPassword" placeholder="Current password" style="margin-bottom:8px">';
-  }
-  html += '<button class="s-btn" id="accountEmailSave">' + (hasEmail ? 'Update' : 'Save') + '</button>' +
-    '<div class="s-err" id="accountEmailErr"></div>' +
-    '<div class="s-saved" id="accountEmailSaved">Saved</div>' +
-    '</div>';
+  html += '</div>';
   html += '<div>' +
     '<a href="../change-password.html" class="s-link">Change password</a>' +
     '</div>';
   el.innerHTML = html;
+
+  /* Reveal change form on tap */
+  var changeLink = document.getElementById('accountChangeLink');
+  if (changeLink) {
+    changeLink.onclick = function(e) {
+      e.preventDefault();
+      document.getElementById('accountChangeForm').style.display = '';
+      changeLink.style.display = 'none';
+      document.getElementById('accountEmail').focus();
+    };
+  }
 
   document.getElementById('accountEmailSave').onclick = async function() {
     var val = (document.getElementById('accountEmail').value || '').trim();
