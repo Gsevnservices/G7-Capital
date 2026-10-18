@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
 <script src="../assets/auth.js?v=18"></script>
-<script src="../assets/scout.js?v=32"></script>
+<script src="../assets/scout.js?v=33"></script>
 <script src="../assets/pipeline.js?v=20"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><text y='.9em' font-size='70' font-family='serif' fill='%23C9A84C'>G</text></svg>">
 <style>
@@ -217,14 +217,11 @@ function renderChase() {
     /* Review-ask card */
     if (item.isReview) {
       if (!reviewLink) {
-        html += '<div style="font-size:13px;color:var(--grey1);line-height:1.7;margin-bottom:12px">Add your Google review link so customers can review you in one tap.</div>';
-        html += '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">';
-        html += '<input class="add-input" id="reviewInline_' + idx + '" type="url" placeholder="Paste link here" style="flex:1;min-width:180px">';
-        html += '<button class="copy-btn primary" onclick="saveReviewInline(' + idx + ')">Save</button>';
+        html += '<div style="font-size:13px;color:var(--grey1);line-height:1.7;margin-bottom:12px">Add your Google review link in Settings so customers can review you in one tap.</div>';
+        html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">';
+        html += '<button class="copy-btn primary" onclick="window.location.href=\'index.html\'">Open Settings</button>';
+        html += '<a href="#" onclick="skipReviewAsks();return false" style="font-size:11px;color:var(--grey2);text-decoration:underline">Skip \u2014 no Google profile</a>';
         html += '</div>';
-        html += '<div id="reviewErr_' + idx + '" style="font-size:11px;color:#C45A5A;display:none;margin-bottom:8px"></div>';
-        html += '<div style="font-size:11px;color:var(--grey2);line-height:1.6">Find it: Google Business Profile \u2192 Ask for reviews \u2192 Copy link.</div>';
-        html += '<div style="margin-top:10px"><a href="#" onclick="skipReviewAsks();return false" style="font-size:11px;color:var(--grey2);text-decoration:underline">Skip \u2014 no Google profile</a></div>';
       } else {
         html += '<div class="chase-msg">' + escHtml(item.msg) + '</div>';
         html += '<div class="chase-btns">';
@@ -298,23 +295,6 @@ function renderEveryone() {
   el.innerHTML = html;
 }
 
-/* Save review link from the inline input inside a chase card */
-function saveReviewInline(idx) {
-  var inp = document.getElementById('reviewInline_' + idx);
-  var err = document.getElementById('reviewErr_' + idx);
-  if (!inp) return;
-  var val = String(inp.value || '').trim();
-  if (!val.match(/^https:\/\//i)) {
-    if (err) { err.textContent = "That doesn\u2019t look like a link"; err.style.display = ''; }
-    inp.focus();
-    return;
-  }
-  try {
-    localStorage.setItem(scoutKey('scout_review_link'), val);
-    if (typeof saveScoutStateToServer === 'function') saveScoutStateToServer();
-  } catch(e) {}
-  render();
-}
 
 /* ═══════════════════════════════════════════
    CHASE ACTIONS
