@@ -3338,7 +3338,7 @@ export default {
       if (oldEmail) {
         const pw = String(body.currentPassword || '');
         if (!pw) return jsonResponse({ error: 'Enter your current password to change the email.' }, 400);
-        const check = await verifyPassword(pw, user.password);
+        const check = await verifyPassword(pw, user.passwordHash);
         if (!check.ok) return jsonResponse({ error: 'Password is incorrect.' }, 403);
       }
 
@@ -3353,7 +3353,7 @@ export default {
           'If this wasn\u2019t you, contact gsevnservices@gmail.com immediately.';
         const htm = '<p>Your G7 recovery email was changed to <strong>' + masked + '</strong>.</p>' +
           '<p>If this wasn\u2019t you, contact <a href="mailto:gsevnservices@gmail.com">gsevnservices@gmail.com</a> immediately.</p>';
-        sendEmail(env, oldEmail, subj, txt, htm);
+        ctx.waitUntil(sendEmail(env, oldEmail, subj, txt, htm));
       }
 
       return jsonResponse({ email: newEmail });
