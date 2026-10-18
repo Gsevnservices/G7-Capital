@@ -174,6 +174,7 @@ function pipelineAddPerson(name, opts) {
     address: opts.address || '',        /* from Customer Finder — '' when hand-added */
     website: opts.website || '',        /* from Customer Finder — '' when hand-added */
     source: opts.source || 'manual',   /* 'places' when added from Customer Finder */
+    kind: opts.kind || '',             /* 'business' | 'person' | '' (inferred at read time) */
     history: [{ week: opts.week || 0, event: initialStatus, at: now }]
   };
   store.people.push(person);
@@ -241,6 +242,47 @@ function pipelineWeekStats(week) {
     if (a.week === week) bucket(a.icp || 'Unknown').contacted += a.count;
   });
   return stats;
+}
+
+/* ---------- Business vs person detection ---------- */
+/* Business-word regex: whole-word, case-insensitive.
+   "Co" only matches "& Co" or "Co." to avoid false positives on Cooper, Coaching etc. */
+var _bizWordRe = /\b(enterprises|traders|architects|associates|interiors|pvt|ltd|llp|group|solutions|services|studio|builders)\b|& co\b|co\./i;
+
+/* Infer kind for a lead that has no explicit kind set. */
+function pipelineInferKind(person) {
+  if (person.kind === 'business' || person.kind === 'person') return person.kind;
+  /* Customer Finder leads are always businesses */
+  if (person.source === 'places') return 'business';
+  var name = String(person.name || '');
+  var words = name.trim().split(/\s+/);
+  if (words.length >= 3) return 'business';
+  if (_bizWordRe.test(name)) return 'business';
+  return 'person';
+}
+
+/* Display-name helper: returns { first, full, kind } for use in messages and cards.
+   Person: first = first word, full = full name.
+   Business: first = full name (never split), full = full name. */
+function pipelineDisplayName(person) {
+  var kind = pipelineInferKind(person);
+  var full = String(person.name || '').trim() || 'there';
+  if (kind === 'business') return { first: full, full: full, kind: 'business' };
+  var firstWord = full.split(' ')[0] || full;
+  return { first: firstWord, full: full, kind: 'person' };
+}
+
+/* Greeting helper: language-aware greeting for messages.
+   Person: "Namaste {first} ji" / "Hi {first}"
+   Business: "Namaste {full} team" / "Hi {full} team" */
+function pipelineGreeting(person, lang) {
+  var dn = pipelineDisplayName(person);
+  if (dn.kind === 'business') {
+    if (lang === 'English') return 'Hi ' + dn.full + ' team';
+    return 'Namaste ' + dn.full + ' team';
+  }
+  if (lang === 'English') return 'Hi ' + dn.first;
+  return 'Namaste ' + dn.first + ' ji';
 }
 
 /* ---------- Follow-up message templates ---------- */
@@ -378,11 +420,11 @@ function pipelineDue() {
       if (!reviewSkip && !p.reviewAskedAt && p.wonAt) {
         var dw = pipelineDaysSince(p.wonAt);
         if (dw <= 7) {
-          var first = (p.name || '').split(' ')[0] || 'there';
-          var msg = templateMsg('review', lang, { name: first, business: bizName, link: reviewLink });
+          var dn = pipelineDisplayName(p);
+          var msg = templateMsg('review', lang, { name: dn.first, business: bizName, link: reviewLink });
           out.push({
             person: p, urgency: dw === 0 ? 2 : 1, isReview: true,
-            reason: 'Ask ' + first + ' for a Google review',
+            reason: 'Ask ' + dn.first + ' for a Google review',
             msg: msg
           });
         }
@@ -392,42 +434,43 @@ function pipelineDue() {
     if (p.status === 'not_interested') return;
 
     var d = pipelineDaysSince(p.lastStatusAt || p.lastContactedAt);
-    var first = (p.name || '').split(' ')[0] || 'there';
+    var dn = pipelineDisplayName(p);
+    var greet = pipelineGreeting(p, lang);
     var item = null;
 
     if (p.status === 'contacted' && d >= 14) {
       item = { reason: 'No response in ' + d + ' days', urgency: 3,
-               msg: 'Hi ' + first + ' \u2014 last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
+               msg: greet + ' \u2014 last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
     } else if (p.status === 'contacted' && d >= 7) {
       item = { reason: 'No reply for ' + d + ' days \u2014 final follow-up', urgency: 2,
-               msg: 'Hi ' + first + ' \u2014 ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
+               msg: greet + ' \u2014 ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'contacted' && d >= 3) {
       item = { reason: 'No reply for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' \u2014 pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
+               msg: greet + ' \u2014 pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'replied' && d >= 5) {
       item = { reason: 'Replied ' + d + ' days ago but has not booked', urgency: 3,
-               msg: 'Hi ' + first + ' \u2014 aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
+               msg: greet + ' \u2014 aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
     } else if (p.status === 'trial_booked' && bucket === 'trade') {
       /* Trade bucket: quote follow-ups at 3, 7, 15 days */
       if (d >= 15) {
         item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
-                 msg: templateMsg('quote_15', lang, { name: first, business: bizName, link: '' }) };
+                 msg: templateMsg('quote_15', lang, { name: dn.first, business: bizName, link: '' }) };
       } else if (d >= 7) {
         item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
-                 msg: templateMsg('quote_7', lang, { name: first, business: bizName, link: '' }) };
+                 msg: templateMsg('quote_7', lang, { name: dn.first, business: bizName, link: '' }) };
       } else if (d >= 3) {
         item = { reason: 'Quote sent ' + d + ' days ago', urgency: 1,
-                 msg: templateMsg('quote_3', lang, { name: first, business: bizName, link: '' }) };
+                 msg: templateMsg('quote_3', lang, { name: dn.first, business: bizName, link: '' }) };
       }
     } else if (p.status === 'trial_booked' && d >= 1) {
       item = { reason: stageLabel('trial_booked') + ' was ' + d + ' day(s) ago \u2014 did they show?', urgency: 3,
-               msg: 'Hi ' + first + ' \u2014 kaisa raha? Koi baat ho toh bata dena.' };
+               msg: greet + ' \u2014 kaisa raha? Koi baat ho toh bata dena.' };
     } else if (p.status === 'gone_quiet' && d >= 14) {
       item = { reason: 'Quiet for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' \u2014 kaafi time ho gaya. Jab ready ho, bata dena.' };
+               msg: greet + ' \u2014 kaafi time ho gaya. Jab ready ho, bata dena.' };
     } else if (p.status === 'found' && d >= 1) {
       item = { reason: 'Found ' + d + ' day(s) ago \u2014 never messaged', urgency: 2,
-               msg: 'Hi ' + (p.name || 'there') + ' \u2014 ' + (bizName ? 'main ' + bizName + ' se hoon. ' : '') + 'Aapke liye ek baat thi, 2 min baat kar sakte hain?' };
+               msg: greet + ' \u2014 ' + (bizName ? 'main ' + bizName + ' se hoon. ' : '') + 'Aapke liye ek baat thi, 2 min baat kar sakte hain?' };
     }
 
     if (item) {

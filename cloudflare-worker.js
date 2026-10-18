@@ -620,6 +620,33 @@ function wStageLabel(stage, bucket) {
   return stage;
 }
 
+/* Business-word regex — mirrors pipeline.js _bizWordRe */
+var _wBizWordRe = /\b(enterprises|traders|architects|associates|interiors|pvt|ltd|llp|group|solutions|services|studio|builders)\b|& co\b|co\./i;
+
+function wInferKind(p) {
+  if (p.kind === 'business' || p.kind === 'person') return p.kind;
+  if (p.source === 'places') return 'business';
+  var name = String(p.name || '');
+  var words = name.trim().split(/\s+/);
+  if (words.length >= 3) return 'business';
+  if (_wBizWordRe.test(name)) return 'business';
+  return 'person';
+}
+
+function wDisplayName(p) {
+  var kind = wInferKind(p);
+  var full = String(p.name || '').trim() || 'there';
+  if (kind === 'business') return { first: full, full: full, kind: 'business' };
+  var firstWord = full.split(' ')[0] || full;
+  return { first: firstWord, full: full, kind: 'person' };
+}
+
+function wGreeting(p) {
+  var dn = wDisplayName(p);
+  if (dn.kind === 'business') return 'Namaste ' + dn.full + ' team';
+  return 'Namaste ' + dn.first + ' ji';
+}
+
 function pipelineDueFromStore(store, now, bizName, bucket, reviewSkip) {
   if (!store || !Array.isArray(store.people)) return [];
   var bk = bucket || 'retail';
@@ -631,10 +658,10 @@ function pipelineDueFromStore(store, now, bizName, bucket, reviewSkip) {
       if (!reviewSkip && !p.reviewAskedAt && p.wonAt) {
         var dw = daysSince(p.wonAt, now);
         if (dw <= 7) {
-          var first = (p.name || '').split(' ')[0] || 'there';
+          var dn = wDisplayName(p);
           out.push({
             person: p, urgency: dw === 0 ? 2 : 1, isReview: true,
-            reason: 'Ask ' + first + ' for a Google review',
+            reason: 'Ask ' + dn.first + ' for a Google review',
             msg: ''
           });
         }
@@ -643,42 +670,43 @@ function pipelineDueFromStore(store, now, bizName, bucket, reviewSkip) {
     }
     if (p.status === 'not_interested') return;
     var d = daysSince(p.lastStatusAt || p.lastContactedAt, now);
-    var first = (p.name || '').split(' ')[0] || 'there';
+    var dn = wDisplayName(p);
+    var greet = wGreeting(p);
     var item = null;
 
     if (p.status === 'contacted' && d >= 14) {
       item = { reason: 'No response in ' + d + ' days', urgency: 3,
-               msg: 'Hi ' + first + ' \u2014 last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
+               msg: greet + ' \u2014 last try from my side. Agar kabhi zaroorat ho toh bata dena. Hum yahaan hain.' };
     } else if (p.status === 'contacted' && d >= 7) {
       item = { reason: 'No reply for ' + d + ' days \u2014 final follow-up', urgency: 2,
-               msg: 'Hi ' + first + ' \u2014 ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
+               msg: greet + ' \u2014 ek baar aur pooch raha hoon. Aapke liye koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'contacted' && d >= 3) {
       item = { reason: 'No reply for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' \u2014 pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
+               msg: greet + ' \u2014 pichle message ka follow-up. Koi din suit karta hai baat karne ke liye?' };
     } else if (p.status === 'replied' && d >= 5) {
       item = { reason: 'Replied ' + d + ' days ago but has not booked', urgency: 3,
-               msg: 'Hi ' + first + ' \u2014 aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
+               msg: greet + ' \u2014 aapne interest dikhaya tha. Is week ek slot rakh doon? Bas din bata dijiye.' };
     } else if (p.status === 'trial_booked' && bk === 'trade') {
       /* Trade: quote follow-ups at 3, 7, 15 days */
       if (d >= 15) {
         item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
-                 msg: 'Namaste ' + first + ' ji, quote bheje kuch din ho gaye. Abhi bhi interest ho toh bataiye, koi jaldi nahi.' };
+                 msg: greet + ', quote bheje kuch din ho gaye. Abhi bhi interest ho toh bataiye, koi jaldi nahi.' };
       } else if (d >= 7) {
         item = { reason: 'Quote sent ' + d + ' days ago', urgency: 2,
-                 msg: 'Namaste ' + first + ' ji, pichle hafte ka quote \u2014 kuch badalna ho toh bataiye.' };
+                 msg: greet + ', pichle hafte ka quote \u2014 kuch badalna ho toh bataiye.' };
       } else if (d >= 3) {
         item = { reason: 'Quote sent ' + d + ' days ago', urgency: 1,
-                 msg: 'Namaste ' + first + ' ji, quote dekh liya? Koi sawaal ho toh bataiye, hum samjha denge.' };
+                 msg: greet + ', quote dekh liya? Koi sawaal ho toh bataiye, hum samjha denge.' };
       }
     } else if (p.status === 'trial_booked' && d >= 1) {
       item = { reason: wStageLabel('trial_booked', bk) + ' was ' + d + ' day(s) ago \u2014 did they show?', urgency: 3,
-               msg: 'Hi ' + first + ' \u2014 kaisa raha? Koi baat ho toh bata dena.' };
+               msg: greet + ' \u2014 kaisa raha? Koi baat ho toh bata dena.' };
     } else if (p.status === 'gone_quiet' && d >= 14) {
       item = { reason: 'Quiet for ' + d + ' days', urgency: 1,
-               msg: 'Hi ' + first + ' \u2014 kaafi time ho gaya. Jab ready ho, bata dena.' };
+               msg: greet + ' \u2014 kaafi time ho gaya. Jab ready ho, bata dena.' };
     } else if (p.status === 'found' && d >= 1) {
       item = { reason: 'Found ' + d + ' day(s) ago \u2014 never messaged', urgency: 2,
-               msg: 'Hi ' + (p.name || 'there') + ' \u2014 ' + (bizName ? 'main ' + bizName + ' se hoon. ' : '') + 'Aapke liye ek baat thi, 2 min baat kar sakte hain?' };
+               msg: greet + ' \u2014 ' + (bizName ? 'main ' + bizName + ' se hoon. ' : '') + 'Aapke liye ek baat thi, 2 min baat kar sakte hain?' };
     }
 
     if (item) {
