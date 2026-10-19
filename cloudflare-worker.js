@@ -779,8 +779,6 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     date: day,
     dropped: afterPick - items.length
   };
-  /* _log is ephemeral — not persisted to KV, only read by admin routes. */
-  result._log = _newsLog;
   result.generatedAt = new Date().toISOString();
   const cacheKey = 'market:' + firmCode + ':' + day;
   await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
@@ -796,6 +794,9 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
   })).slice(-15);
   await kvPut(env,histKey, JSON.stringify(nextHist));
 
+  /* _log is ephemeral — never persisted to KV or sent to clients.
+     Attached after KV writes so callers (admin regen) can read it. */
+  result._log = _newsLog;
   return result;
 }
 
@@ -1855,11 +1856,15 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
   for (let i = sections.length - 1; i >= 0; i--) {
     if (!sections[i].items.length) sections.splice(i, 1);
   }
+  /* Capture _log before stripping — only used by admin regen-news route. */
+  var bizLog = (business && business._log) || null;
+  if (business) delete business._log;
   var out = { business: business, sections: sections, errors: errors, generatedAt: (business && business.generatedAt) || new Date().toISOString() };
   if (stale) {
     out.stale = true;
     out.staleDate = (business && business.date) || '';
   }
+  out._log = bizLog;
   return out;
 }
 
@@ -2772,8 +2777,8 @@ export default {
         const effectivePrefs = await resolveNewsPrefs(env, firmCode, user.newsPrefs);
         resetCronCost();
         const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectivePrefs);
-        /* Extract the _log from the business brief (set by generateMarketBrief). */
-        var bizLog = (news && news.business && news.business._log) || null;
+        var bizLog = (news && news._log) || null;
+        delete news._log;
         return jsonResponse({ news: news, log: bizLog, cost: Object.assign({}, _cronCost) });
       } catch (e) {
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 500) }, 500);
@@ -3804,6 +3809,7 @@ export default {
       const user = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
       const effectivePrefs = await resolveNewsPrefs(env, session.firmCode, user.newsPrefs);
       const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', effectivePrefs);
+      delete news._log;
       return jsonResponse(news);
     }
 
