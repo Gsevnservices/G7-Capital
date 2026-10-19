@@ -388,6 +388,60 @@ function isHomePage(u) {
   } catch (e) { return true; }
 }
 
+/* Listing/quote/portal gate: drop URLs from classified portals, quote/ticker
+   pages, and similar non-article pages. Allow only when path is clearly an
+   article (/news/, /article/, or a dated slug like /2025/ or /2026-04-...). */
+var _portalDomains = /\b(magicbricks|99acres|housing|nobroker|commonfloor|makaan|squareyards|justdial|indiamart|sulekha)\b/i;
+var _quotePathRe = /\/(quote|quotes|stocks|markets\/data)(\/|$)/i;
+var _articlePathRe = /\/(news|article|story|stories)\//i;
+var _datedSlugRe = /\/20\d{2}[\/-]/;
+function isListingOrQuote(u) {
+  try {
+    var url = new URL(u);
+    if (_portalDomains.test(url.hostname)) {
+      /* Allow if the path is clearly an article. */
+      if (_articlePathRe.test(url.pathname) || _datedSlugRe.test(url.pathname)) return false;
+      return true;
+    }
+    if (_quotePathRe.test(url.pathname)) return true;
+    return false;
+  } catch (e) { return false; }
+}
+
+/* Recency gate: returns true if the date string is within the last N days. */
+function isRecent(dateStr, maxDays) {
+  if (!dateStr) return false;
+  var d = new Date(dateStr);
+  if (isNaN(d.getTime())) return false;
+  var now = Date.now() + 5.5 * 3600 * 1000; /* IST */
+  var age = now - d.getTime();
+  return age >= 0 && age <= maxDays * 86400 * 1000;
+}
+
+/* Same-topic dedupe: if two items share ≥3 meaningful headline words,
+   keep the one with longer whatHappened (proxy for clarity/detail). */
+function dedupeItems(items) {
+  var dominated = new Set();
+  for (var i = 0; i < items.length; i++) {
+    if (dominated.has(i)) continue;
+    var wordsI = String(items[i].headline || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').trim().split(/\s+/)
+      .filter(function(w) { return w.length > 1 && !_stopWords.has(w); });
+    for (var j = i + 1; j < items.length; j++) {
+      if (dominated.has(j)) continue;
+      var wordsJ = String(items[j].headline || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').trim().split(/\s+/)
+        .filter(function(w) { return w.length > 1 && !_stopWords.has(w); });
+      var setJ = new Set(wordsJ);
+      var shared = wordsI.filter(function(w) { return setJ.has(w); }).length;
+      if (shared >= 3) {
+        var lenI = (items[i].whatHappened || '').length;
+        var lenJ = (items[j].whatHappened || '').length;
+        dominated.add(lenI >= lenJ ? j : i);
+      }
+    }
+  }
+  return items.filter(function(_, idx) { return !dominated.has(idx); });
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // WATCHLIST + TWO-STEP BUSINESS NEWS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -537,103 +591,170 @@ function failsRelevanceGate(whyItMatters) {
   return _noEffectRe.test(whyItMatters || '');
 }
 
-/* ── Step a: search for business news candidates (Haiku + web_search) ── */
-async function searchBusinessNews(env, day, context, city, watchlist, told, macroOnly) {
-  var hints = [];
-  if (!macroOnly) {
-    if (watchlist.materials && watchlist.materials.length) {
-      hints.push('MATERIAL/INPUT PRICES: search for price moves in: ' +
-        watchlist.materials.map(function(m){ return '"' + m + ' price India"'; }).join(', '));
-    }
-    if (watchlist.localities && watchlist.localities.length) {
-      hints.push('LOCAL DEVELOPMENTS: search for new construction, offices, projects near: ' +
-        watchlist.localities.join(', '));
-    }
-    if (watchlist.competitors && watchlist.competitors.length) {
-      hints.push('COMPETITORS: search for news about: ' +
-        watchlist.competitors.map(function(c){ return '"' + c + '"'; }).join(', '));
-    }
-    if (watchlist.regulations && watchlist.regulations.length) {
-      hints.push('REGULATIONS: search for changes to: ' +
-        watchlist.regulations.join(', '));
-    }
-    if (watchlist.triggers && watchlist.triggers.length) {
-      hints.push('DEMAND TRIGGERS: search for: ' +
-        watchlist.triggers.map(function(t){ return '"' + t + '"'; }).join(', '));
-    }
-  }
+/* ── Step a: search for business news candidates (Haiku + web_search) ──
+   Three focused category searches: (a) material/input prices,
+   (b) demand/locality + triggers, (c) macro/regulation. Each max_uses 1.
+   At least 1 candidate per category when found; up to 8 total. */
 
+function _buildSearchCategory(catLabel, focus, day, context, city) {
   var system =
     'You are a news researcher for one Indian small business. Today is ' + day + ' (India).\n' +
-    'Search for news from the last 7 days relevant to this business at two levels:\n' +
-    'MICRO — its city and trade: local developments, competitors, demand in its area.\n' +
-    'MACRO — economy and policy: interest rates, input prices, tax changes, sector demand, schemes.\n\n' +
-    (hints.length ? 'SEARCH QUERIES TO RUN (adapt to the business, search in this order):\n' +
-      hints.join('\n') + '\n\n' : '') +
-    (macroOnly ? 'THIS RUN: local news was empty. Search MACRO only — national economy, ' +
-      'policy and prices for this trade. Return 2 to 4 candidates.\n\n' : '') +
+    'FOCUS: ' + focus + '\n\n' +
     'NOT NEWS: something that already existed. A competitor simply having a shop, or ' +
     'a yearly festival, is not a change.\n\n' +
     'RULES:\n' +
     '- Every item must come from a page you actually found with web search.\n' +
     '- Never invent a development, competitor, date or number.\n' +
-    '- sourceUrl must be the article page, not a home page or listing.\n\n' +
-    'Return 4 to 6 candidate items. Reply with ONLY this JSON:\n' +
+    '- sourceUrl must be the article page, not a home page or listing.\n' +
+    '- publishedDate: the article\'s publication date as YYYY-MM-DD. Omit if not visible.\n\n' +
+    'Return 2 to 4 candidate items. Reply with ONLY this JSON:\n' +
     '{"candidates":[{"headline":"under 10 words","whatHappened":"one sentence, under 30 words",' +
-    '"sourceUrl":"exact URL","scope":"micro | macro"}]}';
-
-  var tool = { type: 'web_search_20250305', name: 'web_search', max_uses: macroOnly ? 1 : 3 };
+    '"sourceUrl":"exact URL","publishedDate":"YYYY-MM-DD or omit","scope":"micro | macro"}]}';
+  var tool = { type: 'web_search_20250305', name: 'web_search', max_uses: 1 };
   if (city) tool.user_location = { type: 'approximate', city: city, country: 'IN', timezone: 'Asia/Kolkata' };
+  return { label: catLabel, system: system, tool: tool };
+}
 
-  var r = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
-               'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-haiku-5-5', max_tokens: 6000, thinking: { type: 'disabled' },
-      system: system, tools: [tool],
-      messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
-        (told ? '\n\nALREADY TOLD — do not repeat:\n' + told : '') }]
-    })
-  });
-  if (!r.ok) throw new Error('search step ' + r.status + ': ' + (await r.text()).slice(0, 300));
-  var data = await r.json();
-  recordCronCost(data);
-  var meta = collectSearchMeta(data);
+async function searchBusinessNews(env, day, context, city, watchlist, told, macroOnly) {
+  /* Build up to 3 search categories from the watchlist. */
+  var cats = [];
+  if (!macroOnly) {
+    /* (a) Material/input prices */
+    if (watchlist.materials && watchlist.materials.length) {
+      cats.push(_buildSearchCategory('materials',
+        'Search for recent price moves in: ' +
+        watchlist.materials.map(function(m){ return '"' + m + ' price India"'; }).join(', ') +
+        '. Focus on commodity and input price changes this trade depends on.',
+        day, context, city));
+    }
+    /* (b) Demand/locality + triggers + competitors */
+    var demandParts = [];
+    if (watchlist.localities && watchlist.localities.length)
+      demandParts.push('local developments, new projects near: ' + watchlist.localities.join(', '));
+    if (watchlist.triggers && watchlist.triggers.length)
+      demandParts.push('demand triggers: ' + watchlist.triggers.map(function(t){ return '"' + t + '"'; }).join(', '));
+    if (watchlist.competitors && watchlist.competitors.length)
+      demandParts.push('competitor news: ' + watchlist.competitors.map(function(c){ return '"' + c + '"'; }).join(', '));
+    if (demandParts.length) {
+      cats.push(_buildSearchCategory('demand',
+        'Search for demand and local news: ' + demandParts.join('. ') + '.',
+        day, context, city));
+    }
+  }
+  /* (c) Macro/regulation — always run */
+  var macroParts = ['interest rates, GST changes, government schemes for this trade'];
+  if (watchlist.regulations && watchlist.regulations.length)
+    macroParts.push('regulation changes: ' + watchlist.regulations.join(', '));
+  cats.push(_buildSearchCategory('macro',
+    'Search for macro-economic and regulatory news: ' + macroParts.join('. ') +
+    '. Focus on national policy and economy affecting this business.',
+    day, context, city));
 
-  var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
-    .map(function(b){ return b.text; }).join('');
-  var parsed = { candidates: [] };
-  try {
-    var a = text.indexOf('{'), z = text.lastIndexOf('}');
-    if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
-  } catch (e) {}
-
-  /* Build told-URL set from the formatted history string. */
+  /* Run all category searches in parallel. */
   var toldUrls = new Set();
   if (told) told.split('\n').forEach(function(line) {
     var m = line.match(/\((https?:\/\/[^)]+)\)/);
     if (m) toldUrls.add(m[1]);
   });
 
-  /* Pre-vet: URL must have been returned by web_search, not a home page,
-     not already told. Only vetted candidates go to Step b. */
-  var vetted = (Array.isArray(parsed.candidates) ? parsed.candidates : [])
-    .filter(function(c) {
-      return c && c.headline && c.sourceUrl &&
-             meta.seen.has(c.sourceUrl) && !isHomePage(c.sourceUrl) && !toldUrls.has(c.sourceUrl);
-    })
-    .map(function(c) {
+  var allVetted = [];
+  var allMeta = { seen: new Set(), titles: {}, cited: {} };
+  var totalUsage = { input_tokens: 0, output_tokens: 0, server_tool_use: { web_search_requests: 0 } };
+  var totalRaw = 0;
+  var catLog = [];
+  var drops = [];
+
+  var results = await Promise.all(cats.map(function(cat) {
+    return (async function() {
+      try {
+        var r = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
+                     'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({
+            model: 'claude-haiku-5-5', max_tokens: 6000, thinking: { type: 'disabled' },
+            system: cat.system, tools: [cat.tool],
+            messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
+              (told ? '\n\nALREADY TOLD — do not repeat:\n' + told : '') }]
+          })
+        });
+        if (!r.ok) return { label: cat.label, error: r.status };
+        var data = await r.json();
+        recordCronCost(data);
+        return { label: cat.label, data: data };
+      } catch (e) {
+        return { label: cat.label, error: String(e && e.message || e).slice(0, 200) };
+      }
+    })();
+  }));
+
+  results.forEach(function(res) {
+    if (res.error) {
+      catLog.push({ cat: res.label, raw: 0, vetted: 0, error: res.error });
+      return;
+    }
+    var data = res.data;
+    var meta = collectSearchMeta(data);
+    /* Merge meta into allMeta. */
+    meta.seen.forEach(function(u) { allMeta.seen.add(u); });
+    Object.keys(meta.titles).forEach(function(u) { allMeta.titles[u] = meta.titles[u]; });
+    Object.keys(meta.cited).forEach(function(u) {
+      allMeta.cited[u] = (allMeta.cited[u] || []).concat(meta.cited[u]);
+    });
+    /* Merge usage. */
+    var u = data.usage || {};
+    totalUsage.input_tokens += u.input_tokens || 0;
+    totalUsage.output_tokens += u.output_tokens || 0;
+    if (u.server_tool_use) totalUsage.server_tool_use.web_search_requests += u.server_tool_use.web_search_requests || 0;
+
+    var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
+      .map(function(b){ return b.text; }).join('');
+    var parsed = { candidates: [] };
+    try {
+      var a = text.indexOf('{'), z = text.lastIndexOf('}');
+      if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
+    } catch (e) {}
+
+    var raw = Array.isArray(parsed.candidates) ? parsed.candidates : [];
+    totalRaw += raw.length;
+    var vetted = raw.filter(function(c) {
+      if (!c || !c.headline || !c.sourceUrl) return false;
+      if (!meta.seen.has(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'URL not in search results', cat: res.label }); return false; }
+      if (isHomePage(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'home/section page', cat: res.label }); return false; }
+      if (isListingOrQuote(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'listing/quote portal', cat: res.label }); return false; }
+      if (toldUrls.has(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'already told', cat: res.label }); return false; }
+      if (c.publishedDate && !isRecent(c.publishedDate, 10)) { drops.push({ headline: c.headline, reason: 'older than 10 days: ' + c.publishedDate, cat: res.label }); return false; }
+      return true;
+    }).map(function(c) {
       return {
         headline: String(c.headline).slice(0, 120),
         whatHappened: clip(c.whatHappened, 400),
         sourceUrl: c.sourceUrl,
-        scope: c.scope === 'micro' ? 'micro' : 'macro'
+        scope: c.scope === 'micro' ? 'micro' : 'macro',
+        _cat: res.label
       };
     });
+    catLog.push({ cat: res.label, raw: raw.length, vetted: vetted.length });
+    allVetted = allVetted.concat(vetted);
+  });
 
-  var rawCount = Array.isArray(parsed.candidates) ? parsed.candidates.length : 0;
-  return { candidates: vetted, meta: meta, usage: data.usage || {}, rawCount: rawCount };
+  /* Cap at 8, ensuring at least 1 per category when available. */
+  if (allVetted.length > 8) {
+    var byCat = {};
+    allVetted.forEach(function(c) {
+      if (!byCat[c._cat]) byCat[c._cat] = [];
+      byCat[c._cat].push(c);
+    });
+    var kept = [];
+    Object.keys(byCat).forEach(function(cat) { kept.push(byCat[cat][0]); });
+    allVetted.forEach(function(c) {
+      if (kept.length >= 8) return;
+      if (kept.indexOf(c) === -1) kept.push(c);
+    });
+    allVetted = kept;
+  }
+
+  return { candidates: allVetted, meta: allMeta, usage: totalUsage, rawCount: totalRaw, catLog: catLog, drops: drops };
 }
 
 /* ── Step b: pick and write final items (Sonnet, no tools) ── */
@@ -721,9 +842,9 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     console.log(JSON.stringify({ watchlistError: firmCode, error: String(e && e.message || e).slice(0, 300) }));
   }
 
-  /* Step a: search for candidates (Haiku + web_search). */
+  /* Step a: search for candidates (Haiku + web_search, 3 parallel categories). */
   var search = await searchBusinessNews(env, day, context, city, watchlist, told, macroOnly);
-  var drops = [];
+  var drops = (search.drops || []).slice();
 
   /* Retry macro-only when model returned nothing parseable. */
   if (search.candidates.length === 0 && search.rawCount === 0 && !macroOnly) {
@@ -744,7 +865,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
   });
 
   /* Source-match gate: ≥2 meaningful headline words in API title/cited text. */
-  var items = afterRelevance.filter(function(it) {
+  var afterSourceMatch = afterRelevance.filter(function(it) {
     var check = sourceMatchCheck(it.headline, it.sourceUrl, search.meta);
     if (!check.pass) {
       drops.push({ headline: it.headline, reason: 'source-match: ' + check.reason });
@@ -752,6 +873,13 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     }
     return true;
   });
+
+  /* Same-topic dedupe: keep the clearer item when ≥3 headline words overlap. */
+  var items = dedupeItems(afterSourceMatch);
+  if (items.length < afterSourceMatch.length) {
+    var deduped = afterSourceMatch.filter(function(it) { return items.indexOf(it) === -1; });
+    deduped.forEach(function(it) { drops.push({ headline: it.headline, reason: 'dedupe: duplicate topic' }); });
+  }
 
   /* Populate sourceTitle from API metadata — never from model claims. */
   items.forEach(function(it) {
@@ -767,9 +895,11 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     step2Tokens: { input: pick.usage.input_tokens || 0, output: pick.usage.output_tokens || 0 },
     candidatesRaw: search.rawCount,
     candidatesVetted: search.candidates.length,
+    catLog: search.catLog || [],
     afterPick: afterPick,
     afterRelevance: afterRelevance.length,
-    afterSourceMatch: items.length,
+    afterSourceMatch: afterSourceMatch.length,
+    afterDedupe: items.length,
     drops: drops
   };
   try { console.log(JSON.stringify(_newsLog)); } catch (e) {}
@@ -1659,16 +1789,21 @@ async function generateSharedNews(env, cat, day, city) {
     if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
   } catch (e) {}
 
-  /* Integrity gate: URL was returned by web_search, not a home page. */
+  /* Integrity gate: URL was returned by web_search, not a home page,
+     not a listing/quote portal. */
   var sharedDrops = [];
   const afterIntegrity = (Array.isArray(parsed.items) ? parsed.items : [])
     .filter(function(it) {
-      return it && it.headline && it.sourceUrl && sharedMeta.seen.has(it.sourceUrl) && !isHomePage(it.sourceUrl);
+      if (!it || !it.headline || !it.sourceUrl) return false;
+      if (!sharedMeta.seen.has(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, reason: 'URL not in search results' }); return false; }
+      if (isHomePage(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, reason: 'home/section page' }); return false; }
+      if (isListingOrQuote(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, reason: 'listing/quote portal' }); return false; }
+      return true;
     })
     .slice(0, 6);
 
   /* Source-match gate: ≥2 meaningful headline words in API title/cited text. */
-  const kept = afterIntegrity
+  const afterSourceMatch = afterIntegrity
     .filter(function(it) {
       var check = sourceMatchCheck(it.headline, it.sourceUrl, sharedMeta);
       if (!check.pass) {
@@ -1687,8 +1822,15 @@ async function generateSharedNews(env, cat, day, city) {
       };
     });
 
+  /* Same-topic dedupe within the section. */
+  const kept = dedupeItems(afterSourceMatch);
+  if (kept.length < afterSourceMatch.length) {
+    afterSourceMatch.filter(function(it) { return kept.indexOf(it) === -1; })
+      .forEach(function(it) { sharedDrops.push({ headline: it.headline, reason: 'dedupe: duplicate topic' }); });
+  }
+
   if (sharedDrops.length) {
-    try { console.log(JSON.stringify({ sharedNewsLog: cat, day: day, drops: sharedDrops })); } catch(e){}
+    try { console.log(JSON.stringify({ sharedNewsLog: cat, day: day, candidates: (parsed.items || []).length, kept: kept.length, drops: sharedDrops })); } catch(e){}
   }
 
   const result = { category: cat, label: def.label, items: kept, date: day };
@@ -1721,8 +1863,8 @@ async function personaliseNews(env, firmCode, day, context, sections) {
     headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
                'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001', max_tokens: 2000,
-      system: 'For each news item, judge what it means for the business described. ' +
+      model: 'claude-haiku-5-5', max_tokens: 2000, thinking: { type: 'disabled' },
+      system: 'For each news item, judge what it means for the business described.\n' +
         'Return for each id an object:\n' +
         '  why: ONE sentence under 25 words on the concrete effect on this business, ' +
         'or exactly "No direct effect on your business."\n' +
@@ -1730,8 +1872,12 @@ async function personaliseNews(env, firmCode, day, context, sections) {
         'competitor, regulation, timing, none\n' +
         '  group: the name of the business\'s customer group most affected, copied ' +
         'exactly from the business description, or ""\n' +
-        '  horizon: now (this week), weeks, or months\n' +
-        'Never invent facts beyond the item. Never give investment or loan advice. ' +
+        '  horizon: now (this week), weeks, or months\n\n' +
+        'STRICT RULES:\n' +
+        '- Say "No direct effect on your business." whenever the link would be a stretch. ' +
+        'Never invent an effect from unrelated news (politics, celebrity, sport).\n' +
+        '- Give an effect ONLY when the news changes this business\'s costs, demand, customers, rules or competitors.\n' +
+        '- Never invent facts beyond the item. Never give investment or loan advice.\n' +
         'Reply with ONLY JSON: {"<id>":{"why":"","impact":"","group":"","horizon":""}, ...}',
       messages: [{ role: 'user', content: 'BUSINESS:\n' + String(context).slice(0, 2500) +
         '\n\nITEMS:\n' + JSON.stringify(flat) }]
