@@ -377,13 +377,16 @@ function isHomePage(u) {
     var url = new URL(u);
     var p = url.pathname.replace(/\/+$/, '');
     if (p === '' || /^\/(index|home|default)(\.[a-z]+)?$/i.test(p)) return true;
-    if (/allrelease|archive|latest-news|\/tag\/|\/topic\/|\/category\//i.test(u)) return true;
+    if (/allrelease|archive|latest-news|\/tag\/|\/topic\/|\/category\//i.test(p)) return true;
     var segs = p.split('/').filter(Boolean);
     var last = segs[segs.length - 1] || '';
+    /* Any query parameter that looks like an article id means this is content,
+       not a section page. Broad match: ?id=, ?p=, ?story=, ?prid=, etc. */
+    var hasId = /[?&](p|prid|id|nid|sid|storyid|newsid|articleid|story|postid)=/i.test(url.search);
+    if (hasId) return false;
     /* One short word with no digits ("/economy", "/markets") is a section
-       page — unless the query carries an article id, as PIB's do. */
-    var hasId = /[?&](prid|id|newsid|articleid)=/i.test(url.search);
-    if (segs.length === 1 && last.length < 20 && !/\d/.test(last) && !hasId) return true;
+       page — but only when there's no query string at all. */
+    if (segs.length === 1 && last.length < 20 && !/\d/.test(last) && !url.search) return true;
     return false;
   } catch (e) { return true; }
 }
@@ -421,14 +424,29 @@ function isListingOrQuote(u) {
   } catch (e) { return false; }
 }
 
-/* Recency gate: returns true if the date string is within the last N days. */
-function isRecent(dateStr, maxDays) {
-  if (!dateStr) return false;
-  var d = new Date(dateStr);
-  if (isNaN(d.getTime())) return false;
-  var now = Date.now() + 5.5 * 3600 * 1000; /* IST */
-  var age = now - d.getTime();
-  return age >= 0 && age <= maxDays * 86400 * 1000;
+/* Recency gate from page_age string (e.g. "3 days ago", "2 weeks ago",
+   "5 hours ago", "2025-10-12"). Returns { recent: bool, dated: bool }. */
+function checkPageAge(pageAge, maxDays) {
+  if (!pageAge) return { recent: true, dated: false }; /* undated — keep */
+  var s = String(pageAge).toLowerCase().trim();
+  /* Try ISO date first. */
+  var d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    var age = (Date.now() + 5.5 * 3600 * 1000) - d.getTime();
+    return { recent: age >= 0 && age <= maxDays * 86400 * 1000, dated: true };
+  }
+  /* Parse relative: "X unit(s) ago" */
+  var m = s.match(/(\d+)\s*(second|minute|hour|day|week|month|year)/);
+  if (!m) return { recent: true, dated: false }; /* unparseable — keep */
+  var n = parseInt(m[1], 10);
+  var unit = m[2];
+  var days = 0;
+  if (unit === 'second' || unit === 'minute' || unit === 'hour') days = n < 24 ? 0 : 1;
+  else if (unit === 'day') days = n;
+  else if (unit === 'week') days = n * 7;
+  else if (unit === 'month') days = n * 30;
+  else if (unit === 'year') days = n * 365;
+  return { recent: days <= maxDays, dated: true };
 }
 
 /* Same-topic dedupe: if two items share ≥3 meaningful headline words,
@@ -548,17 +566,19 @@ async function getWatchlist(env, firmCode, context) {
 }
 
 /* Extract real metadata from an API response: URL→title from search results,
-   URL→[citedText] from citations. Never trust the model's JSON for this. */
+   URL→page_age, URL→[citedText] from citations. Never trust the model's JSON. */
 function collectSearchMeta(data) {
   var titles = {};
   var cited = {};
   var seen = new Set();
+  var pageAge = {};
   (data.content || []).forEach(function(b) {
     if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) {
       b.content.forEach(function(res) {
         if (res && res.url) {
           seen.add(res.url);
           if (res.title) titles[res.url] = res.title;
+          if (res.page_age) pageAge[res.url] = res.page_age;
         }
       });
     }
@@ -571,7 +591,7 @@ function collectSearchMeta(data) {
       });
     }
   });
-  return { seen: seen, titles: titles, cited: cited };
+  return { seen: seen, titles: titles, cited: cited, pageAge: pageAge };
 }
 
 /* Stopwords for headline matching — common English words with no meaning. */
@@ -605,42 +625,19 @@ function failsRelevanceGate(whyItMatters) {
 }
 
 /* ── Step a: search for business news candidates (Haiku + web_search) ──
-   Three focused category searches: (a) material/input prices,
-   (b) demand/locality + triggers, (c) macro/regulation. Each max_uses 1.
-   At least 1 candidate per category when found; up to 8 total. */
-
-function _buildSearchCategory(catLabel, focus, day, context, city) {
-  var system =
-    'You are a news researcher for one Indian small business. Today is ' + day + ' (India).\n' +
-    'FOCUS: ' + focus + '\n\n' +
-    'NOT NEWS: something that already existed. A competitor simply having a shop, or ' +
-    'a yearly festival, is not a change.\n\n' +
-    'RULES:\n' +
-    '- Every item must come from a page you actually found with web search.\n' +
-    '- Never invent a development, competitor, date or number.\n' +
-    '- sourceUrl must be the article page, not a home page or listing.\n' +
-    '- publishedDate: the article\'s publication date as YYYY-MM-DD. Omit if not visible.\n\n' +
-    'Return 2 to 4 candidate items. Reply with ONLY this JSON:\n' +
-    '{"candidates":[{"headline":"under 10 words","whatHappened":"one sentence, under 30 words",' +
-    '"sourceUrl":"exact URL","publishedDate":"YYYY-MM-DD or omit","scope":"micro | macro"}]}';
-  var tool = { type: 'web_search_20250305', name: 'web_search', max_uses: 1 };
-  if (city) tool.user_location = { type: 'approximate', city: city, country: 'IN', timezone: 'Asia/Kolkata' };
-  return { label: catLabel, system: system, tool: tool };
-}
+   ONE call with max_uses 3. Prompt lists three searches in order:
+   (a) material/input prices, (b) demand/locality, (c) macro/regulation.
+   Model returns up to 10 candidates; we vet using API data for headline
+   and recency (page_age), not the model's claims. */
 
 async function searchBusinessNews(env, day, context, city, watchlist, told, macroOnly) {
-  /* Build up to 3 search categories from the watchlist. */
-  var cats = [];
+  /* Build the three search instructions from the watchlist. */
+  var searches = [];
   if (!macroOnly) {
-    /* (a) Material/input prices */
     if (watchlist.materials && watchlist.materials.length) {
-      cats.push(_buildSearchCategory('materials',
-        'Search for recent price moves in: ' +
-        watchlist.materials.map(function(m){ return '"' + m + ' price India"'; }).join(', ') +
-        '. Focus on commodity and input price changes this trade depends on.',
-        day, context, city));
+      searches.push('SEARCH 1 — MATERIAL/INPUT PRICES: ' +
+        watchlist.materials.map(function(m){ return '"' + m + ' price India"'; }).join(', '));
     }
-    /* (b) Demand/locality + triggers + competitors */
     var demandParts = [];
     if (watchlist.localities && watchlist.localities.length)
       demandParts.push('local developments, new projects near: ' + watchlist.localities.join(', '));
@@ -649,130 +646,105 @@ async function searchBusinessNews(env, day, context, city, watchlist, told, macr
     if (watchlist.competitors && watchlist.competitors.length)
       demandParts.push('competitor news: ' + watchlist.competitors.map(function(c){ return '"' + c + '"'; }).join(', '));
     if (demandParts.length) {
-      cats.push(_buildSearchCategory('demand',
-        'Search for demand and local news: ' + demandParts.join('. ') + '.',
-        day, context, city));
+      searches.push('SEARCH 2 — DEMAND/LOCALITY: ' + demandParts.join('. '));
     }
   }
-  /* (c) Macro/regulation — always run */
   var macroParts = ['interest rates, GST changes, government schemes for this trade'];
   if (watchlist.regulations && watchlist.regulations.length)
     macroParts.push('regulation changes: ' + watchlist.regulations.join(', '));
-  cats.push(_buildSearchCategory('macro',
-    'Search for macro-economic and regulatory news: ' + macroParts.join('. ') +
-    '. Focus on national policy and economy affecting this business.',
-    day, context, city));
+  searches.push('SEARCH 3 — MACRO/REGULATION: ' + macroParts.join('. '));
 
-  /* Run all category searches in parallel. */
+  var system =
+    'You are a news researcher for one Indian small business. Today is ' + day + ' (India).\n' +
+    'Run these searches IN ORDER:\n' + searches.join('\n') + '\n\n' +
+    (macroOnly ? 'THIS RUN: local news was empty. Search MACRO only — national economy, ' +
+      'policy and prices for this trade.\n\n' : '') +
+    'NOT NEWS: something that already existed. A competitor simply having a shop, or ' +
+    'a yearly festival, is not a change.\n\n' +
+    'RULES:\n' +
+    '- Return EVERY result relevant to this business — up to 10 candidates, at least 2 per search when available.\n' +
+    '- Every item must come from a page you actually found with web search.\n' +
+    '- Never invent a development, competitor, date or number.\n' +
+    '- sourceUrl must be the article page, not a home page or listing.\n\n' +
+    'Reply with ONLY this JSON:\n' +
+    '{"candidates":[{"sourceUrl":"exact URL","whatHappened":"one sentence, under 30 words",' +
+    '"search":1|2|3}]}';
+
+  var tool = { type: 'web_search_20250305', name: 'web_search', max_uses: macroOnly ? 1 : 3 };
+  if (city) tool.user_location = { type: 'approximate', city: city, country: 'IN', timezone: 'Asia/Kolkata' };
+
+  var r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
+               'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-5-5', max_tokens: 6000, thinking: { type: 'disabled' },
+      system: system, tools: [tool],
+      messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
+        (told ? '\n\nALREADY TOLD — do not repeat:\n' + told : '') }]
+    })
+  });
+  if (!r.ok) throw new Error('search step ' + r.status + ': ' + (await r.text()).slice(0, 300));
+  var data = await r.json();
+  recordCronCost(data);
+  var meta = collectSearchMeta(data);
+
+  var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
+    .map(function(b){ return b.text; }).join('');
+  var parsed = { candidates: [] };
+  try {
+    var a = text.indexOf('{'), z = text.lastIndexOf('}');
+    if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
+  } catch (e) {}
+
+  /* Build told-URL set from the formatted history string. */
   var toldUrls = new Set();
   if (told) told.split('\n').forEach(function(line) {
     var m = line.match(/\((https?:\/\/[^)]+)\)/);
     if (m) toldUrls.add(m[1]);
   });
 
-  var allVetted = [];
-  var allMeta = { seen: new Set(), titles: {}, cited: {} };
-  var totalUsage = { input_tokens: 0, output_tokens: 0, server_tool_use: { web_search_requests: 0 } };
-  var totalRaw = 0;
-  var catLog = [];
+  /* Per-search counters for logging. */
+  var searchLabels = { 1: 'materials', 2: 'demand', 3: 'macro' };
+  var catRaw = { materials: 0, demand: 0, macro: 0 };
+  var catVetted = { materials: 0, demand: 0, macro: 0 };
   var drops = [];
 
-  var results = await Promise.all(cats.map(function(cat) {
-    return (async function() {
-      try {
-        var r = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY,
-                     'anthropic-version': '2023-06-01' },
-          body: JSON.stringify({
-            model: 'claude-haiku-5-5', max_tokens: 6000, thinking: { type: 'disabled' },
-            system: cat.system, tools: [cat.tool],
-            messages: [{ role: 'user', content: 'THE BUSINESS:\n' + context +
-              (told ? '\n\nALREADY TOLD — do not repeat:\n' + told : '') }]
-          })
-        });
-        if (!r.ok) return { label: cat.label, error: r.status };
-        var data = await r.json();
-        recordCronCost(data);
-        return { label: cat.label, data: data };
-      } catch (e) {
-        return { label: cat.label, error: String(e && e.message || e).slice(0, 200) };
-      }
-    })();
-  }));
-
-  results.forEach(function(res) {
-    if (res.error) {
-      catLog.push({ cat: res.label, raw: 0, vetted: 0, error: res.error });
-      return;
-    }
-    var data = res.data;
-    var meta = collectSearchMeta(data);
-    /* Merge meta into allMeta. */
-    meta.seen.forEach(function(u) { allMeta.seen.add(u); });
-    Object.keys(meta.titles).forEach(function(u) { allMeta.titles[u] = meta.titles[u]; });
-    Object.keys(meta.cited).forEach(function(u) {
-      allMeta.cited[u] = (allMeta.cited[u] || []).concat(meta.cited[u]);
-    });
-    /* Merge usage. */
-    var u = data.usage || {};
-    totalUsage.input_tokens += u.input_tokens || 0;
-    totalUsage.output_tokens += u.output_tokens || 0;
-    if (u.server_tool_use) totalUsage.server_tool_use.web_search_requests += u.server_tool_use.web_search_requests || 0;
-
-    var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
-      .map(function(b){ return b.text; }).join('');
-    var parsed = { candidates: [] };
-    try {
-      var a = text.indexOf('{'), z = text.lastIndexOf('}');
-      if (a !== -1 && z > a) parsed = JSON.parse(text.slice(a, z + 1));
-    } catch (e) {}
-
-    var raw = Array.isArray(parsed.candidates) ? parsed.candidates : [];
-    totalRaw += raw.length;
-    var vetted = raw.filter(function(c) {
-      if (!c || !c.headline || !c.sourceUrl) return false;
-      if (!meta.seen.has(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'URL not in search results', cat: res.label }); return false; }
-      if (isHomePage(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'home/section page', cat: res.label }); return false; }
-      if (isListingOrQuote(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'listing/quote portal', cat: res.label }); return false; }
-      if (toldUrls.has(c.sourceUrl)) { drops.push({ headline: c.headline, reason: 'already told', cat: res.label }); return false; }
-      if (c.publishedDate && !isRecent(c.publishedDate, 10)) { drops.push({ headline: c.headline, reason: 'older than 10 days: ' + c.publishedDate, cat: res.label }); return false; }
-      return true;
-    }).map(function(c) {
-      var dated = !!(c.publishedDate && isRecent(c.publishedDate, 10));
-      return {
-        headline: String(c.headline).slice(0, 120),
-        whatHappened: clip(c.whatHappened, 400),
-        sourceUrl: c.sourceUrl,
-        scope: c.scope === 'micro' ? 'micro' : 'macro',
-        dated: dated,
-        _cat: res.label
-      };
-    });
-    catLog.push({ cat: res.label, raw: raw.length, vetted: vetted.length });
-    allVetted = allVetted.concat(vetted);
+  var raw = Array.isArray(parsed.candidates) ? parsed.candidates : [];
+  var vetted = raw.filter(function(c) {
+    if (!c || !c.sourceUrl) return false;
+    var catName = searchLabels[c.search] || 'macro';
+    catRaw[catName] = (catRaw[catName] || 0) + 1;
+    if (!meta.seen.has(c.sourceUrl)) { drops.push({ headline: meta.titles[c.sourceUrl] || c.sourceUrl, url: c.sourceUrl, reason: 'URL not in search results', cat: catName }); return false; }
+    if (isHomePage(c.sourceUrl)) { drops.push({ headline: meta.titles[c.sourceUrl] || '?', url: c.sourceUrl, reason: 'home/section page', cat: catName }); return false; }
+    if (isListingOrQuote(c.sourceUrl)) { drops.push({ headline: meta.titles[c.sourceUrl] || '?', url: c.sourceUrl, reason: 'listing/quote portal', cat: catName }); return false; }
+    if (toldUrls.has(c.sourceUrl)) { drops.push({ headline: meta.titles[c.sourceUrl] || '?', url: c.sourceUrl, reason: 'already told', cat: catName }); return false; }
+    /* Recency from API page_age — not the model's publishedDate. */
+    var age = checkPageAge(meta.pageAge[c.sourceUrl], 10);
+    if (age.dated && !age.recent) { drops.push({ headline: meta.titles[c.sourceUrl] || '?', url: c.sourceUrl, reason: 'older than 10 days (page_age: ' + meta.pageAge[c.sourceUrl] + ')', cat: catName }); return false; }
+    catVetted[catName] = (catVetted[catName] || 0) + 1;
+    return true;
+  }).map(function(c) {
+    var catName = searchLabels[c.search] || 'macro';
+    var age = checkPageAge(meta.pageAge[c.sourceUrl], 10);
+    /* Headline from API title, not model — trimmed and capped. */
+    var apiTitle = String(meta.titles[c.sourceUrl] || '').trim();
+    return {
+      headline: apiTitle.slice(0, 120) || String(c.whatHappened || '').slice(0, 120),
+      whatHappened: clip(c.whatHappened, 400),
+      sourceUrl: c.sourceUrl,
+      scope: catName === 'macro' ? 'macro' : 'micro',
+      dated: age.dated,
+      _cat: catName
+    };
   });
 
   /* Sort dated candidates first so Step b prefers them. */
-  allVetted.sort(function(a, b) { return (b.dated ? 1 : 0) - (a.dated ? 1 : 0); });
+  vetted.sort(function(a, b) { return (b.dated ? 1 : 0) - (a.dated ? 1 : 0); });
 
-  /* Cap at 8, ensuring at least 1 per category when available. */
-  if (allVetted.length > 8) {
-    var byCat = {};
-    allVetted.forEach(function(c) {
-      if (!byCat[c._cat]) byCat[c._cat] = [];
-      byCat[c._cat].push(c);
-    });
-    var kept = [];
-    Object.keys(byCat).forEach(function(cat) { kept.push(byCat[cat][0]); });
-    allVetted.forEach(function(c) {
-      if (kept.length >= 8) return;
-      if (kept.indexOf(c) === -1) kept.push(c);
-    });
-    allVetted = kept;
-  }
+  var catLog = Object.keys(catRaw).map(function(k) { return { cat: k, raw: catRaw[k], vetted: catVetted[k] || 0 }; });
 
-  return { candidates: allVetted, meta: allMeta, usage: totalUsage, rawCount: totalRaw, catLog: catLog, drops: drops };
+  return { candidates: vetted, meta: meta, usage: data.usage || {}, rawCount: raw.length, catLog: catLog, drops: drops };
 }
 
 /* ── Step b: pick and write final items (Sonnet, no tools) ── */
