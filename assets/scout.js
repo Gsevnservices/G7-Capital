@@ -1658,42 +1658,67 @@ function scoutNewsFlatItems(news) {
 }
 
 /* Load today's news from /scout/news (with localStorage cache).
+   Cache is reused for at most 30 minutes; replaced whenever the
+   server's generatedAt is newer (e.g. after admin regen-news).
    Returns a promise resolving to the raw response object or null. */
 var _scoutNewsPromise = null;
+var _SCOUT_NEWS_TTL = 30 * 60 * 1000; /* 30 minutes */
 function scoutNewsLoad() {
   if (_scoutNewsPromise) return _scoutNewsPromise;
   var ist = new Date(Date.now() + 5.5 * 3600 * 1000);
   var day = ist.toISOString().slice(0, 10);
   var localKey = scoutKey('scout_news2_' + day);
+  var cached = null;
+  var cacheStale = true;
   try {
-    var hit = JSON.parse(localStorage.getItem(localKey) || 'null');
-    if (hit && (Array.isArray(hit.sections) || (hit.business && hit.business.items))) {
-      _scoutNewsPromise = Promise.resolve(hit);
-      return _scoutNewsPromise;
+    cached = JSON.parse(localStorage.getItem(localKey) || 'null');
+    if (cached && (Array.isArray(cached.sections) || (cached.business && cached.business.items))) {
+      var cachedAt = cached._cachedAt ? new Date(cached._cachedAt).getTime() : 0;
+      if (cachedAt && (Date.now() - cachedAt) < _SCOUT_NEWS_TTL) {
+        cacheStale = false;
+      }
+    } else {
+      cached = null;
     }
-  } catch (e) {}
+  } catch (e) { cached = null; }
+  /* If cache is fresh (< 30 min), use it immediately. */
+  if (cached && !cacheStale) {
+    _scoutNewsPromise = Promise.resolve(cached);
+    return _scoutNewsPromise;
+  }
+  /* Otherwise fetch from server. Fall back to stale cache on network error. */
   _scoutNewsPromise = (async function() {
     try {
       var r = await fetch(SCOUT_WORKER + '/scout/news', {
         headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('g7_session_token') || '') }
       });
-      if (!r.ok) return null;
+      if (!r.ok) return cached || null;
       var j = await r.json();
       if (j && (Array.isArray(j.sections) || (j.business && j.business.items))) {
-        try {
-          /* Don't cache stale fallback — let the next load retry for fresh news. */
-          if (!j.stale) localStorage.setItem(localKey, JSON.stringify(j));
-          /* Clean up old scout_news_ and scout_news2_ keys for other days. */
-          for (var i = localStorage.length - 1; i >= 0; i--) {
-            var k = localStorage.key(i);
-            if (!k) continue;
-            if (k.indexOf('scout_news_') !== -1 && k.indexOf(day) === -1) localStorage.removeItem(k);
-            else if (k.indexOf('scout_news2_') !== -1 && k.indexOf(day) === -1) localStorage.removeItem(k);
-          }
-        } catch (e) {}
+        /* Use server response if it is newer, or if we had no cache. */
+        var serverGen = j.generatedAt || '';
+        var cachedGen = (cached && cached.generatedAt) || '';
+        if (!cached || !cachedGen || !serverGen || serverGen > cachedGen) {
+          try {
+            if (!j.stale) {
+              j._cachedAt = new Date().toISOString();
+              localStorage.setItem(localKey, JSON.stringify(j));
+            }
+            /* Clean up old scout_news_ and scout_news2_ keys for other days. */
+            for (var i = localStorage.length - 1; i >= 0; i--) {
+              var k = localStorage.key(i);
+              if (!k) continue;
+              if (k.indexOf('scout_news_') !== -1 && k.indexOf(day) === -1) localStorage.removeItem(k);
+              else if (k.indexOf('scout_news2_') !== -1 && k.indexOf(day) === -1) localStorage.removeItem(k);
+            }
+          } catch (e) {}
+          return j;
+        }
+        /* Server data is not newer — keep using cache. */
+        return cached;
       }
-      return j;
-    } catch (e) { return null; }
+      return cached || j;
+    } catch (e) { return cached || null; }
   })();
   return _scoutNewsPromise;
 }

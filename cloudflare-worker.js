@@ -781,6 +781,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
   };
   /* _log is ephemeral — not persisted to KV, only read by admin routes. */
   result._log = _newsLog;
+  result.generatedAt = new Date().toISOString();
   const cacheKey = 'market:' + firmCode + ':' + day;
   await kvPut(env,cacheKey, JSON.stringify(result), { expirationTtl: 172800 });
 
@@ -1854,7 +1855,7 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
   for (let i = sections.length - 1; i >= 0; i--) {
     if (!sections[i].items.length) sections.splice(i, 1);
   }
-  var out = { business: business, sections: sections, errors: errors };
+  var out = { business: business, sections: sections, errors: errors, generatedAt: (business && business.generatedAt) || new Date().toISOString() };
   if (stale) {
     out.stale = true;
     out.staleDate = (business && business.date) || '';
