@@ -762,7 +762,8 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
     'customer groups by name: ' + groupList + '.\n' +
     '- urgency: today | this_week | watch\n' +
     '- scope: micro | macro\n' +
-    '- Copy headline, whatHappened, sourceUrl EXACTLY from the candidate. Never change a URL.\n\n' +
+    '- headline: rewrite in under 10 words, plain English, using facts from the candidate\'s title and whatHappened. No clickbait.\n' +
+    '- Copy sourceUrl EXACTLY from the candidate. Never change a URL.\n\n' +
     'RULES:\n' +
     '- Prefer candidates marked dated:true (confirmed recent). Include an undated candidate only when it is clearly more important.\n' +
     '- Never invent facts beyond what the candidates state.\n' +
