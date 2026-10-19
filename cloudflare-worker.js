@@ -391,14 +391,27 @@ function isHomePage(u) {
 /* Listing/quote/portal gate: drop URLs from classified portals, quote/ticker
    pages, and similar non-article pages. Allow only when path is clearly an
    article (/news/, /article/, or a dated slug like /2025/ or /2026-04-...). */
-var _portalDomains = /\b(magicbricks|99acres|housing|nobroker|commonfloor|makaan|squareyards|justdial|indiamart|sulekha)\b/i;
+var _portalDomainSet = new Set([
+  'magicbricks.com','99acres.com','housing.com','nobroker.in','commonfloor.com',
+  'makaan.com','squareyards.com','justdial.com','indiamart.com','sulekha.com'
+]);
 var _quotePathRe = /\/(quote|quotes|stocks|markets\/data)(\/|$)/i;
 var _articlePathRe = /\/(news|article|story|stories)\//i;
 var _datedSlugRe = /\/20\d{2}[\/-]/;
+function _registrableDomain(hostname) {
+  /* Strip subdomains: "www.housing.com" → "housing.com", "m.justdial.com" → "justdial.com".
+     Handles two-part TLDs like .co.in by checking if the set contains the result. */
+  var parts = hostname.toLowerCase().split('.');
+  for (var i = 0; i < parts.length - 1; i++) {
+    var candidate = parts.slice(i).join('.');
+    if (_portalDomainSet.has(candidate)) return candidate;
+  }
+  return parts.slice(-2).join('.');
+}
 function isListingOrQuote(u) {
   try {
     var url = new URL(u);
-    if (_portalDomains.test(url.hostname)) {
+    if (_portalDomainSet.has(_registrableDomain(url.hostname))) {
       /* Allow if the path is clearly an article. */
       if (_articlePathRe.test(url.pathname) || _datedSlugRe.test(url.pathname)) return false;
       return true;
@@ -726,17 +739,22 @@ async function searchBusinessNews(env, day, context, city, watchlist, told, macr
       if (c.publishedDate && !isRecent(c.publishedDate, 10)) { drops.push({ headline: c.headline, reason: 'older than 10 days: ' + c.publishedDate, cat: res.label }); return false; }
       return true;
     }).map(function(c) {
+      var dated = !!(c.publishedDate && isRecent(c.publishedDate, 10));
       return {
         headline: String(c.headline).slice(0, 120),
         whatHappened: clip(c.whatHappened, 400),
         sourceUrl: c.sourceUrl,
         scope: c.scope === 'micro' ? 'micro' : 'macro',
+        dated: dated,
         _cat: res.label
       };
     });
     catLog.push({ cat: res.label, raw: raw.length, vetted: vetted.length });
     allVetted = allVetted.concat(vetted);
   });
+
+  /* Sort dated candidates first so Step b prefers them. */
+  allVetted.sort(function(a, b) { return (b.dated ? 1 : 0) - (a.dated ? 1 : 0); });
 
   /* Cap at 8, ensuring at least 1 per category when available. */
   if (allVetted.length > 8) {
@@ -774,6 +792,7 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
     '- scope: micro | macro\n' +
     '- Copy headline, whatHappened, sourceUrl EXACTLY from the candidate. Never change a URL.\n\n' +
     'RULES:\n' +
+    '- Prefer candidates marked dated:true (confirmed recent). Include an undated candidate only when it is clearly more important.\n' +
     '- Never invent facts beyond what the candidates state.\n' +
     '- Never write labels like "Customer 1" — use actual group names.\n' +
     '- Do not include any item where you cannot name a concrete effect.\n\n' +
