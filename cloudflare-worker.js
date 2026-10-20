@@ -81,50 +81,84 @@ function jsonResponse(body, status = 200) {
 // HELPER: PER-CALL COST ACCUMULATOR
 // Reset before each firm in the cron loop; each API call records its usage.
 // ─────────────────────────────────────────────────────────────────────────────
-var _cronCost = { calls: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
-function resetCronCost() { _cronCost = { calls: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 }; }
-function recordCronCost(data) {
-  if (!data) return;
-  _cronCost.calls++;
-  var u = data.usage || {};
-  _cronCost.input_tokens += (u.input_tokens || 0);
-  _cronCost.output_tokens += (u.output_tokens || 0);
-  if (u.server_tool_use) {
-    _cronCost.web_search_requests += (u.server_tool_use.web_search_requests || 0);
-  }
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
-// COST TABLE & ESTIMATION
-// Per-million-token prices (USD) as of Oct 2025. Keeps the budget guard simple.
-// web_search is per-request (one search = one request, regardless of results).
+// COST TABLE & PER-REQUEST ACCUMULATOR
+// Prices per million tokens (USD).
+// ⚠️  CHECK THESE against https://docs.anthropic.com/en/docs/about-claude/pricing
+//     whenever Anthropic updates their pricing page.
+// web_search is per-search-request ($0.01 each).
 // ─────────────────────────────────────────────────────────────────────────────
 const COST_TABLE = {
-  'claude-haiku-5-5':  { input: 0.80, output: 4.00, search: 10 / 1000 },
-  'claude-sonnet-5-5': { input: 3.00, output: 15.00, search: 10 / 1000 }
+  'claude-sonnet-5-5':          { input: 2.00, output: 10.00, search: 0.01 },
+  'claude-haiku-5-5':           { input: 0.10, output:  0.50, search: 0.01 },
+  'claude-haiku-4-5-20251001':  { input: 1.00, output:  5.00, search: 0.01 }
 };
-/* Estimate dollar cost from a _cronCost-shaped object.
-   model is the dominant model used in the run (good enough for an estimate). */
-function estimateCost(usage, model) {
-  var t = COST_TABLE[model] || COST_TABLE['claude-sonnet-5-5'];
-  var inp = ((usage.input_tokens || 0) / 1e6) * t.input;
-  var out = ((usage.output_tokens || 0) / 1e6) * t.output;
-  var srch = (usage.web_search_requests || 0) * t.search;
-  return { input: inp, output: out, search: srch, total: inp + out + srch };
+
+/* Per-request cost accumulator — reset at the start of any request that does
+   generation, flushed to KV once via ctx.waitUntil at the end. */
+var _reqCost = { calls: 0, usd: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
+function resetReqCost() {
+  _reqCost = { calls: 0, usd: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
 }
-/* Write the firm's run cost to KV. Called once after the full firm run. */
-async function flushCost(env, day, firmCode, usage) {
-  var est = estimateCost(usage, 'claude-sonnet-5-5');
+
+/* Record one Anthropic call. Called after EVERY API response (including streams). */
+function recordCost(model, data) {
+  if (!data) return;
+  _reqCost.calls++;
+  var u = data.usage || {};
+  var inp = u.input_tokens || 0;
+  var out = u.output_tokens || 0;
+  var srch = (u.server_tool_use && u.server_tool_use.web_search_requests) || 0;
+  _reqCost.input_tokens += inp;
+  _reqCost.output_tokens += out;
+  _reqCost.web_search_requests += srch;
+  var t = COST_TABLE[model] || COST_TABLE['claude-sonnet-5-5'];
+  _reqCost.usd += (inp / 1e6) * t.input + (out / 1e6) * t.output + srch * t.search;
+}
+
+/* Backward-compat shim — old callers pass (data). Maps to recordCost with model. */
+function recordCronCost(data) { recordCost('claude-sonnet-5-5', data); }
+
+/* Flush accumulated cost to KV. firmCode = the firm that triggered the
+   request, or "SHARED" for shared-news generation. Returns total USD added. */
+async function flushCost(env, day, firmCode) {
+  if (_reqCost.usd <= 0) return 0;
+  var amt = _reqCost.usd;
   var firmKey = 'cost:' + day + ':' + firmCode;
   var totalKey = 'cost:' + day + ':total';
-  /* Read existing totals, add this run's cost, write both keys. */
   var prev = parseFloat(await env.G7_KV.get(firmKey) || '0');
   var prevTotal = parseFloat(await env.G7_KV.get(totalKey) || '0');
   await Promise.all([
-    kvPut(env, firmKey, String(prev + est.total), { expirationTtl: 259200 }),
-    kvPut(env, totalKey, String(prevTotal + est.total), { expirationTtl: 259200 })
+    kvPut(env, firmKey, String(prev + amt), { expirationTtl: 259200 }),
+    kvPut(env, totalKey, String(prevTotal + amt), { expirationTtl: 259200 })
   ]);
-  return est;
+  return amt;
+}
+
+/* Budget check. Returns { ok:true } or { ok:false, reason, firmSpent, daySpent }. */
+async function budgetCheck(env, day, firmCode, opts) {
+  var firmCap = parseFloat(env.COST_CAP_FIRM || '0.10');
+  var dayCap = parseFloat(env.COST_CAP_DAY || '2.00');
+  var firmSpent = parseFloat(await env.G7_KV.get('cost:' + day + ':' + firmCode) || '0');
+  var daySpent = parseFloat(await env.G7_KV.get('cost:' + day + ':total') || '0');
+  if (!(opts && opts.exemptFirm) && firmSpent >= firmCap) {
+    return { ok: false, reason: 'firm', firmSpent: firmSpent, daySpent: daySpent, cap: firmCap };
+  }
+  if (daySpent >= dayCap) {
+    return { ok: false, reason: 'total', firmSpent: firmSpent, daySpent: daySpent, cap: dayCap };
+  }
+  return { ok: true, firmSpent: firmSpent, daySpent: daySpent };
+}
+
+/* Send budget-reached email — ONE per day per cap type (firm or total). */
+async function sendBudgetEmail(env, day, capType, spent, cap) {
+  var alertKey = 'cost:alert:' + day + ':' + capType;
+  if (await env.G7_KV.get(alertKey)) return;
+  await kvPut(env, alertKey, '1', { expirationTtl: 172800 });
+  var subj = 'Scout daily budget reached (' + capType + ': $' + spent.toFixed(4) + ' of $' + cap.toFixed(2) + ')';
+  var text = subj + '.\n\nGeneration paused until midnight IST.\n' +
+    'Day: ' + day + '\nCap type: ' + capType + '\nSpent: $' + spent.toFixed(4) + '\nCap: $' + cap.toFixed(2);
+  try { await sendEmail(env, 'contact@gsevnservices.in', subj, text, '<p>' + text.replace(/\n/g, '<br>') + '</p>'); } catch (e) {}
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -640,7 +674,7 @@ async function buildWatchlist(env, firmCode, context) {
   });
   if (!r.ok) throw new Error('watchlist ' + r.status);
   var data = await r.json();
-  recordCronCost(data);
+  recordCost('claude-haiku-5-5', data);
   var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
     .map(function(b){ return b.text; }).join('');
   var wl = { materials: [], triggers: [], localities: [], regulations: [], competitors: [], groups: [] };
@@ -784,7 +818,7 @@ async function searchBusinessNews(env, day, context, city, watchlist, told, macr
   });
   if (!r.ok) throw new Error('search step ' + r.status + ': ' + (await r.text()).slice(0, 300));
   var data = await r.json();
-  recordCronCost(data);
+  recordCost('claude-haiku-5-5', data);
   var meta = collectSearchMeta(data);
 
   var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
@@ -889,7 +923,7 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
   });
   if (!r.ok) throw new Error('pick step ' + r.status + ': ' + (await r.text()).slice(0, 300));
   var data = await r.json();
-  recordCronCost(data);
+  recordCost('claude-sonnet-5-5', data);
 
   var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
     .map(function(b){ return b.text; }).join('');
@@ -1630,29 +1664,15 @@ async function runMorningForFirm(env, firmCode, day) {
     if (seenDaysAgo > 3) return 'skipped_no_email';
   }
 
-  /* B5: Budget guard — skip generation if firm or day cap exceeded. */
-  var firmCap = parseFloat(env.COST_CAP_FIRM || '0.10');
-  var dayCap = parseFloat(env.COST_CAP_DAY || '2.00');
-  var firmSpent = parseFloat(await env.G7_KV.get('cost:' + day + ':' + firmCode) || '0');
-  var daySpent = parseFloat(await env.G7_KV.get('cost:' + day + ':total') || '0');
-  if (firmSpent >= firmCap || daySpent >= dayCap) {
-    console.log(JSON.stringify({ budgetSkip: firmCode, firmSpent: firmSpent, daySpent: daySpent }));
-    /* Serve cached/last-good instead of generating fresh. */
-    var _cachedNews = await env.G7_KV.get('market:' + firmCode + ':' + day, 'json');
-    if (!_cachedNews) {
-      var _lastGood = await lastMarketBrief(env, firmCode, day);
-      if (_lastGood) _cachedNews = _lastGood;
-    }
-    /* One admin email per day when budget is hit. */
-    var _budgetAlertKey = 'cost:alert:' + day;
-    if (!(await env.G7_KV.get(_budgetAlertKey))) {
-      try { await sendCreditAlert(env, day); } catch (e) {}
-      await kvPut(env, _budgetAlertKey, '1', { expirationTtl: 172800 });
-    }
-    return { status: 'budget_exceeded', cost: { firmSpent: firmSpent, daySpent: daySpent } };
+  /* Budget guard — skip generation if firm or day cap exceeded. */
+  var _bc = await budgetCheck(env, day, firmCode);
+  if (!_bc.ok) {
+    console.log(JSON.stringify({ budgetSkip: firmCode, reason: _bc.reason, firmSpent: _bc.firmSpent, daySpent: _bc.daySpent }));
+    await sendBudgetEmail(env, day, _bc.reason, _bc.reason === 'firm' ? _bc.firmSpent : _bc.daySpent, _bc.cap);
+    return { status: 'budget_exceeded', cost: { firmSpent: _bc.firmSpent, daySpent: _bc.daySpent } };
   }
 
-  resetCronCost();
+  resetReqCost();
   var news = null, move = null, a = 'error', n = 'error';
   var effectiveNewsPrefs;
   try { effectiveNewsPrefs = await resolveNewsPrefs(env, firmCode, user.newsPrefs); } catch (e) { effectiveNewsPrefs = user.newsPrefs || []; }
@@ -1662,10 +1682,10 @@ async function runMorningForFirm(env, firmCode, day) {
   try { a = await sendActionsEmail(env, firmCode, day, move); } catch (e) { console.log(JSON.stringify({ actionsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   if (news) { try { n = await sendNewsEmail(env, firmCode, day, news); } catch (e) { console.log(JSON.stringify({ newsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); } } else { n = 'no_news'; }
 
-  /* B4: Flush cost to KV after the full firm run. */
-  var costEst = null;
-  try { costEst = await flushCost(env, day, firmCode, _cronCost); } catch (e) {}
-  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, _cronCost), costEst: costEst };
+  /* Flush cost to KV after the full firm run. */
+  var costUsd = 0;
+  try { costUsd = await flushCost(env, day, firmCode); } catch (e) {}
+  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, _reqCost), costUsd: costUsd };
 }
 
 /* ═══════════════════════════════════════════
@@ -1722,6 +1742,7 @@ async function findBusinesses(env, query, cap) {
     throw new Error('finder ' + r.status + ': ' + t.slice(0, 400));
   }
   const data = await r.json();
+  recordCost('claude-haiku-5-5', data);
 
   /* Everything Scout actually read: fetched page text and cited passages. */
   let corpus = '';
@@ -1917,7 +1938,7 @@ async function generateSharedNews(env, cat, day, city) {
   }
   if (!r.ok) throw new Error('shared ' + cat + ' ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const data = await r.json();
-  recordCronCost(data);
+  recordCost('claude-haiku-5-5', data);
 
   /* Collect real API metadata: URLs, titles, cited text. */
   const sharedMeta = collectSearchMeta(data);
@@ -2031,7 +2052,7 @@ async function personaliseNews(env, firmCode, day, context, sections) {
   if (r.ok) {
     try {
       const d = await r.json();
-      recordCronCost(d);
+      recordCost('claude-haiku-5-5', d);
       const t = (d.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
       const a = t.indexOf('{'), z = t.lastIndexOf('}');
       if (a !== -1 && z > a) out = JSON.parse(t.slice(a, z + 1));
@@ -2282,7 +2303,7 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
   });
   if (!r.ok) throw new Error('move ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const d = await r.json();
-  recordCronCost(d);
+  recordCost('claude-sonnet-5-5', d);
   const t = (d.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
   let mv = null;
   try {
@@ -3035,13 +3056,21 @@ export default {
       const day = ist.toISOString().slice(0, 10);
       const saved = await env.G7_KV.get('market:ctx:' + firmCode, 'json');
       if (!saved || !saved.context) return jsonResponse({ error: 'no_context' }, 404);
+      /* Budget guard for admin regen-move */
+      var _bcRM = await budgetCheck(env, day, firmCode);
+      if (!_bcRM.ok) {
+        return jsonResponse({ error: 'Budget exceeded ($' + (_bcRM.reason === 'firm' ? _bcRM.firmSpent : _bcRM.daySpent).toFixed(4) + ' of $' + _bcRM.cap.toFixed(2) + ' ' + _bcRM.reason + ' cap)' }, 429);
+      }
+      resetReqCost();
       try {
         const user = await env.G7_KV.get('auth:users:' + firmCode, 'json') || {};
         const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', user.newsPrefs);
         const st = await loadScoutState(env, firmCode);
         const move = await generateScoutMove(env, firmCode, day, saved.context, news, st, true);
+        ctx.waitUntil(flushCost(env, day, firmCode));
         return jsonResponse({ move: move });
       } catch (e) {
+        ctx.waitUntil(flushCost(env, day, firmCode));
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 300) }, 500);
       }
     }
@@ -3078,12 +3107,19 @@ export default {
 
         const user = await env.G7_KV.get('auth:users:' + firmCode, 'json') || {};
         const effectivePrefs = await resolveNewsPrefs(env, firmCode, user.newsPrefs);
-        resetCronCost();
+        /* Budget guard for admin regen */
+        var _bcR = await budgetCheck(env, day, firmCode);
+        if (!_bcR.ok) {
+          return jsonResponse({ error: 'Budget exceeded ($' + (_bcR.reason === 'firm' ? _bcR.firmSpent : _bcR.daySpent).toFixed(4) + ' of $' + _bcR.cap.toFixed(2) + ' ' + _bcR.reason + ' cap)' }, 429);
+        }
+        resetReqCost();
         const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectivePrefs);
         var bizLog = (news && news._log) || null;
         delete news._log;
-        return jsonResponse({ news: news, log: bizLog, cost: Object.assign({}, _cronCost) });
+        ctx.waitUntil(flushCost(env, day, firmCode));
+        return jsonResponse({ news: news, log: bizLog, cost: Object.assign({}, _reqCost) });
       } catch (e) {
+        ctx.waitUntil(flushCost(env, day, firmCode));
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 500) }, 500);
       }
     }
@@ -3231,6 +3267,14 @@ export default {
       }
       // ---- end limit gate ----
 
+      /* Budget guard — analysis exempt from firm cap, but day cap still applies. */
+      var _istAn = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+      var _bcAn = await budgetCheck(env, _istAn, session.firmCode, { exemptFirm: true });
+      if (!_bcAn.ok) {
+        return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
+      }
+      resetReqCost();
+
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -3308,6 +3352,10 @@ export default {
             stop_reason: _logData.stop_reason,
             output_tokens: _logData.output_tokens
           }));
+
+          /* Record cost from the stream's final usage. */
+          recordCost('claude-sonnet-5-5', { usage: { input_tokens: _logData.input_tokens || 0, output_tokens: _logData.output_tokens || 0 } });
+          ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode));
 
           /* Detect incomplete streams — alert admin */
           if (_logData.stop_reason !== 'end_turn') {
@@ -3405,6 +3453,14 @@ export default {
         return jsonResponse({ error: 'Invalid JSON body' }, 400);
       }
 
+      /* Budget guard */
+      var _istBrief = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+      var _bcB = await budgetCheck(env, _istBrief, session.firmCode);
+      if (!_bcB.ok) {
+        return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
+      }
+      resetReqCost();
+
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -3427,6 +3483,8 @@ export default {
       }
 
       const result = await anthropicResponse.json();
+      recordCost('claude-sonnet-5-5', result);
+      ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode));
       const text = (result.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
 
       return jsonResponse({ text: text });
@@ -3475,6 +3533,14 @@ export default {
 
       if (!context) return jsonResponse({ items: [], date: day });
 
+      /* Budget guard */
+      var _bcM = await budgetCheck(env, day, session.firmCode);
+      if (!_bcM.ok) {
+        var _lbM = await lastMarketBrief(env, session.firmCode, day);
+        if (_lbM) return jsonResponse(Object.assign({}, _lbM, { stale: true, staleDate: _lbM.date || '', budgetPaused: true }));
+        return jsonResponse({ items: [], date: day, budgetPaused: true });
+      }
+
       /* Concurrency lock — prevents duplicate generation if two tabs load
          at the same time. Auto-expires after 120 s as a safety net. */
       const lockKey = 'market:lock:' + session.firmCode + ':' + day;
@@ -3497,12 +3563,15 @@ export default {
       }
       await kvPut(env,attemptKey, String(attempts + 1), { expirationTtl: 172800 });
 
+      resetReqCost();
       try {
         const result = await generateMarketBrief(env, session.firmCode, day, context, city);
         await env.G7_KV.delete(lockKey);
+        ctx.waitUntil(flushCost(env, day, session.firmCode));
         return jsonResponse(result);
       } catch (e) {
         await env.G7_KV.delete(lockKey);
+        ctx.waitUntil(flushCost(env, day, session.firmCode));
         console.log(JSON.stringify({ newsFallback: session.firmCode, reason: String(e.message || '').slice(0, 300) }));
         if (isBillingError(e)) await sendCreditAlert(env, day);
         /* Fall back to last known good, or yesterday/day-before cache. */
@@ -3552,6 +3621,14 @@ export default {
       }
       // ---- end limit gate ----
 
+      /* Budget guard */
+      var _istCI = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+      var _bcCI = await budgetCheck(env, _istCI, session.firmCode);
+      if (!_bcCI.ok) {
+        return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
+      }
+      resetReqCost();
+
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -3578,7 +3655,34 @@ export default {
       // Increment the appropriate counter (monthly for paid, lifetime for free) only on success
       await kvPut(env,checkinCounterKey, String(checkinCount + 1));
 
-      return new Response(anthropicResponse.body, {
+      /* Wrap stream to capture usage for cost tracking. */
+      var _ciDec = new TextDecoder('utf-8');
+      var _ciBuf = '';
+      var _ciUsage = { input: 0, output: 0 };
+      var _ciFlushCost = function() {
+        recordCost('claude-sonnet-5-5', { usage: { input_tokens: _ciUsage.input, output_tokens: _ciUsage.output } });
+        ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode));
+      };
+      const _ciStream = new TransformStream({
+        transform(chunk, controller) {
+          controller.enqueue(chunk);
+          try {
+            _ciBuf += _ciDec.decode(chunk, { stream: true });
+            var parts = _ciBuf.split('\n'); _ciBuf = parts.pop() || '';
+            for (var li = 0; li < parts.length; li++) {
+              var ln = parts[li].trim();
+              if (!ln.startsWith('data: ') || ln === 'data: [DONE]') continue;
+              var ev = JSON.parse(ln.slice(6));
+              if (ev.type === 'message_start' && ev.message && ev.message.usage) _ciUsage.input = ev.message.usage.input_tokens || 0;
+              if (ev.type === 'message_delta' && ev.usage) _ciUsage.output = ev.usage.output_tokens || 0;
+            }
+          } catch (_) {}
+        },
+        flush() { try { _ciFlushCost(); } catch (_) {} }
+      });
+      anthropicResponse.body.pipeTo(_ciStream.writable);
+
+      return new Response(_ciStream.readable, {
         headers: {
           'Content-Type': 'text/event-stream',
           'Access-Control-Allow-Origin': '*',
@@ -3916,17 +4020,27 @@ export default {
         return jsonResponse({ error: 'limit_reached', limit: 'places' }, 403);
       }
 
+      // Budget guard
+      var _istPlaces = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+      var _bcP = await budgetCheck(env, _istPlaces, session.firmCode);
+      if (!_bcP.ok) {
+        return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
+      }
+
       // 6. Call Claude web search to find businesses
+      resetReqCost();
       let places;
       try {
         places = await findBusinesses(env, q, cap);
       } catch (e) {
+        ctx.waitUntil(flushCost(env, _istPlaces, session.firmCode));
         return jsonResponse({ error: 'Business search failed' }, 502);
       }
 
       // 7. Store in cache — 14-day TTL with timestamp
       var _cacheObj = { _cachedAt: new Date().toISOString().slice(0, 10), results: places };
       kvPut(env, cacheKey, JSON.stringify(_cacheObj), { expirationTtl: 14 * 86400 });
+      ctx.waitUntil(flushCost(env, _istPlaces, session.firmCode));
 
       // 8. Increment daily counter (24h TTL so it auto-resets)
       await kvPut(env, placesCounterKey, String(placesCount + 1), { expirationTtl: 86400 });
@@ -4137,8 +4251,18 @@ export default {
       }
       const user = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
       const effectivePrefs = await resolveNewsPrefs(env, session.firmCode, user.newsPrefs);
+      /* Budget guard — serve cache/last-good when over cap. */
+      var _bc1 = await budgetCheck(env, today, session.firmCode);
+      if (!_bc1.ok) {
+        var _cachedBiz = await env.G7_KV.get('market:' + session.firmCode + ':' + today, 'json')
+                      || await lastMarketBrief(env, session.firmCode, today);
+        if (_cachedBiz) return jsonResponse({ business: _cachedBiz, sections: [], budgetPaused: true });
+        return jsonResponse({ business: { items: [] }, sections: [], budgetPaused: true });
+      }
+      resetReqCost();
       const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', effectivePrefs);
       delete news._log;
+      ctx.waitUntil(flushCost(env, today, session.firmCode));
       return jsonResponse(news);
     }
 
@@ -4154,13 +4278,19 @@ export default {
       if (cached) return jsonResponse({ move: cached });
       const saved = await env.G7_KV.get('market:ctx:' + session.firmCode, 'json');
       if (!saved || !saved.context) return jsonResponse({ move: null });
+      /* Budget guard */
+      var _bc2 = await budgetCheck(env, today, session.firmCode);
+      if (!_bc2.ok) return jsonResponse({ move: null, budgetPaused: true });
+      resetReqCost();
       try {
         const user = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
         const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', user.newsPrefs);
         const st = await loadScoutState(env, session.firmCode);
         const move = await generateScoutMove(env, session.firmCode, today, saved.context, news, st);
+        ctx.waitUntil(flushCost(env, today, session.firmCode));
         return jsonResponse({ move: move });
       } catch (e) {
+        ctx.waitUntil(flushCost(env, today, session.firmCode));
         return jsonResponse({ move: null });
       }
     }
@@ -4423,13 +4553,27 @@ export default {
       }
       cursor0 = pg.list_complete ? undefined : pg.cursor;
     } while (cursor0);
-    /* Generate each needed shared category once (they cache in KV). */
-    var _anyCityUsed = Object.values(_firmCities).filter(Boolean)[0] || '';
+    /* Generate each needed shared category once (they cache in KV).
+       City news: once per DISTINCT active city. Others: once total. */
+    resetReqCost();
+    var _distinctCities = new Set();
+    Object.values(_firmCities).forEach(function(c) { if (c) _distinctCities.add(c); });
     for (var _cat of _neededCats) {
-      try { await generateSharedNews(env, _cat, day, _cat === 'city' ? _anyCityUsed : ''); } catch (e) {
-        console.log(JSON.stringify({ sharedPregenError: _cat, error: String(e && e.message || e).slice(0, 300) }));
+      if (_cat === 'city') {
+        for (var _city of _distinctCities) {
+          try { await generateSharedNews(env, _cat, day, _city); } catch (e) {
+            console.log(JSON.stringify({ sharedPregenError: _cat, city: _city, error: String(e && e.message || e).slice(0, 300) }));
+          }
+        }
+      } else {
+        try { await generateSharedNews(env, _cat, day, ''); } catch (e) {
+          console.log(JSON.stringify({ sharedPregenError: _cat, error: String(e && e.message || e).slice(0, 300) }));
+        }
       }
     }
+    /* Flush shared-news cost under firm "SHARED". */
+    try { await flushCost(env, day, 'SHARED'); } catch (e) {}
+    resetReqCost();
 
     let cursor;
     do {
