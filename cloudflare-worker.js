@@ -389,19 +389,44 @@ function cleanNewsItem(it) {
   return it;
 }
 
-/* Clip to the first sentence, max ~200 chars. */
+/* Clip to the first sentence, max ~200 chars.
+   A sentence ends at . ! or ? followed by a space+uppercase/quote or end of string.
+   Never split inside numbers (22,888.95) or abbreviations (U.S., Rs., Mr., etc.). */
+var _abbrRe = /^(?:U\.S|Rs|Mr|Mrs|Ms|Dr|No|vs|e\.g|i\.e|Jr|Sr|St|Ltd|Inc|govt|approx|dept|est|Feb|Jan|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)$/i;
 function clipOneSentence(s) {
   s = String(s || '').trim();
-  var m = s.match(/^[^.!?]*[.!?]/);
-  var sent = m ? m[0].trim() : s;
-  if (sent.length > 200) sent = clip(sent, 200);
-  return sent;
+  /* Walk the string looking for . ! ? that genuinely end a sentence. */
+  for (var i = 0; i < s.length; i++) {
+    var ch = s[i];
+    if (ch !== '.' && ch !== '!' && ch !== '?') continue;
+    /* End of string — this terminates the sentence. */
+    if (i === s.length - 1) return s.length <= 200 ? s : clip(s, 200);
+    var after = s[i + 1] || '';
+    /* Must be followed by space then uppercase or quote to be a sentence end. */
+    if (after !== ' ') continue;
+    var afterSpace = s[i + 2] || '';
+    if (!/[A-Z"'\u201C\u2018]/.test(afterSpace)) continue;
+    /* Check if the period is inside a number: digit before and digit after the dot. */
+    if (ch === '.' && i > 0 && /\d/.test(s[i - 1]) && /\d/.test(afterSpace)) continue;
+    /* Check if the period follows a common abbreviation. */
+    if (ch === '.') {
+      var wordStart = i - 1;
+      while (wordStart > 0 && /[A-Za-z.]/.test(s[wordStart - 1])) wordStart--;
+      var word = s.slice(wordStart, i);
+      if (_abbrRe.test(word)) continue;
+    }
+    /* Found a real sentence boundary. */
+    var sent = s.slice(0, i + 1).trim();
+    return sent.length <= 200 ? sent : clip(sent, 200);
+  }
+  /* No sentence boundary found — return whole string, capped. */
+  return s.length <= 200 ? s : clip(s, 200);
 }
 
 /* Evergreen/guide gate: drop titles that are guides, explainers, rate tables,
    checklists etc. — unless page_age is within 3 days (the guide was just published
    and may contain new info). Returns { pass:bool, reason?:string }. */
-var _evergreenRe = /\bguide\b|\bhow to\b|\bexplained\b|\bwhat is\b|\beverything you need\b|\bchecklist\b|\btips\b|\brates list\b|\bvs\b/i;
+var _evergreenRe = /\bguide\b|\bhow to\b|\bexplained\b|\bwhat is\b|\beverything you need\b|\bchecklist\b|\brates list\b/i;
 function evergreenCheck(title, pageAge) {
   if (!_evergreenRe.test(title || '')) return { pass: true };
   /* Allow very recently published guides — they may contain new info. */
