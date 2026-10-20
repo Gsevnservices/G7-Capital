@@ -95,6 +95,39 @@ function recordCronCost(data) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// COST TABLE & ESTIMATION
+// Per-million-token prices (USD) as of Oct 2025. Keeps the budget guard simple.
+// web_search is per-request (one search = one request, regardless of results).
+// ─────────────────────────────────────────────────────────────────────────────
+const COST_TABLE = {
+  'claude-haiku-5-5':  { input: 0.80, output: 4.00, search: 10 / 1000 },
+  'claude-sonnet-5-5': { input: 3.00, output: 15.00, search: 10 / 1000 }
+};
+/* Estimate dollar cost from a _cronCost-shaped object.
+   model is the dominant model used in the run (good enough for an estimate). */
+function estimateCost(usage, model) {
+  var t = COST_TABLE[model] || COST_TABLE['claude-sonnet-5-5'];
+  var inp = ((usage.input_tokens || 0) / 1e6) * t.input;
+  var out = ((usage.output_tokens || 0) / 1e6) * t.output;
+  var srch = (usage.web_search_requests || 0) * t.search;
+  return { input: inp, output: out, search: srch, total: inp + out + srch };
+}
+/* Write the firm's run cost to KV. Called once after the full firm run. */
+async function flushCost(env, day, firmCode, usage) {
+  var est = estimateCost(usage, 'claude-sonnet-5-5');
+  var firmKey = 'cost:' + day + ':' + firmCode;
+  var totalKey = 'cost:' + day + ':total';
+  /* Read existing totals, add this run's cost, write both keys. */
+  var prev = parseFloat(await env.G7_KV.get(firmKey) || '0');
+  var prevTotal = parseFloat(await env.G7_KV.get(totalKey) || '0');
+  await Promise.all([
+    kvPut(env, firmKey, String(prev + est.total), { expirationTtl: 259200 }),
+    kvPut(env, totalKey, String(prevTotal + est.total), { expirationTtl: 259200 })
+  ]);
+  return est;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // HELPER: HASH PASSWORD
 // SHA-256 hashes a plain-text password and returns a hex string.
 // Used during firm creation and login verification.
@@ -891,7 +924,7 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
 // ─────────────────────────────────────────────────────────────────────────────
 // MARKET BRIEF GENERATOR — two-step: search (Haiku) → pick-and-write (Sonnet).
 // ─────────────────────────────────────────────────────────────────────────────
-async function generateMarketBrief(env, firmCode, day, context, city, macroOnly) {
+async function generateMarketBrief(env, firmCode, day, context, city, macroOnly, _retried) {
   /* History — what Scout already told this owner in the last two weeks. */
   const histKey = 'market:history:' + firmCode;
   const history = (await env.G7_KV.get(histKey, 'json')) || [];
@@ -903,20 +936,20 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     console.log(JSON.stringify({ watchlistError: firmCode, error: String(e && e.message || e).slice(0, 300) }));
   }
 
-  /* Step a: search for candidates (Haiku + web_search, 3 parallel categories). */
+  /* Step a: search for candidates (Haiku + web_search, up to 3 searches). */
   var search = await searchBusinessNews(env, day, context, city, watchlist, told, macroOnly);
   var drops = (search.drops || []).slice();
 
-  /* Retry macro-only when model returned nothing parseable. */
-  if (search.candidates.length === 0 && search.rawCount === 0 && !macroOnly) {
-    return generateMarketBrief(env, firmCode, day, context, city, true);
+  /* Retry macro-only when model returned nothing parseable (first call only). */
+  if (search.candidates.length === 0 && search.rawCount === 0 && !macroOnly && !_retried) {
+    return generateMarketBrief(env, firmCode, day, context, city, true, true);
   }
 
   /* Step b: pick and write (Sonnet, no tools). */
   var pick = await pickAndWriteNews(env, context, search.candidates, watchlist);
   var afterPick = pick.items.length;
 
-  /* Relevance gate: drop items with whyItMatters implying no effect. */
+  /* ── Quality gates ── */
   var afterRelevance = pick.items.filter(function(it) {
     if (failsRelevanceGate(it.whyItMatters)) {
       drops.push({ headline: it.headline, reason: 'relevance: ' + it.whyItMatters });
@@ -924,8 +957,6 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     }
     return true;
   });
-
-  /* Source-match gate: ≥2 meaningful headline words in API title/cited text. */
   var afterSourceMatch = afterRelevance.filter(function(it) {
     var check = sourceMatchCheck(it.headline, it.sourceUrl, search.meta);
     if (!check.pass) {
@@ -934,12 +965,34 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
     }
     return true;
   });
-
-  /* Same-topic dedupe: keep the clearer item when ≥3 headline words overlap. */
   var items = dedupeItems(afterSourceMatch);
   if (items.length < afterSourceMatch.length) {
     var deduped = afterSourceMatch.filter(function(it) { return items.indexOf(it) === -1; });
     deduped.forEach(function(it) { drops.push({ headline: it.headline, reason: 'dedupe: duplicate topic' }); });
+  }
+
+  /* ── A1: Retry once with macro search if < 2 items survived gates ── */
+  if (items.length < 2 && !_retried && !macroOnly) {
+    var retry = await searchBusinessNews(env, day, context, city, watchlist, told, true);
+    drops = drops.concat(retry.drops || []);
+    /* Merge new candidates with existing survivors, re-run Step b. */
+    var combined = items.concat(retry.candidates);
+    if (combined.length > items.length) {
+      var pick2 = await pickAndWriteNews(env, context, combined, watchlist);
+      /* Re-apply gates on the new pick. */
+      var merged2 = pick2.items.filter(function(it) {
+        if (failsRelevanceGate(it.whyItMatters)) { drops.push({ headline: it.headline, reason: 'retry-relevance' }); return false; }
+        var cm = sourceMatchCheck(it.headline, it.sourceUrl, search.meta);
+        /* Also check retry meta for new URLs. */
+        if (!cm.pass) cm = sourceMatchCheck(it.headline, it.sourceUrl, retry.meta);
+        if (!cm.pass) { drops.push({ headline: it.headline, reason: 'retry-source-match' }); return false; }
+        return true;
+      });
+      items = dedupeItems(merged2);
+      afterPick = pick2.items.length;
+      /* Merge search metadata. */
+      Object.keys(retry.meta.titles).forEach(function(k) { if (!search.meta.titles[k]) search.meta.titles[k] = retry.meta.titles[k]; });
+    }
   }
 
   /* Populate sourceTitle from API metadata — never from model claims. */
@@ -949,7 +1002,7 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly)
 
   /* Log per firm. */
   var _newsLog = {
-    newsLog: firmCode, day: day, macroOnly: !!macroOnly,
+    newsLog: firmCode, day: day, macroOnly: !!macroOnly, retried: !!_retried,
     watchlistHit: !!(watchlist && watchlist.hash),
     searches: (search.usage.server_tool_use && search.usage.server_tool_use.web_search_requests) || 0,
     step1Tokens: { input: search.usage.input_tokens || 0, output: search.usage.output_tokens || 0 },
@@ -1577,6 +1630,28 @@ async function runMorningForFirm(env, firmCode, day) {
     if (seenDaysAgo > 3) return 'skipped_no_email';
   }
 
+  /* B5: Budget guard — skip generation if firm or day cap exceeded. */
+  var firmCap = parseFloat(env.COST_CAP_FIRM || '0.10');
+  var dayCap = parseFloat(env.COST_CAP_DAY || '2.00');
+  var firmSpent = parseFloat(await env.G7_KV.get('cost:' + day + ':' + firmCode) || '0');
+  var daySpent = parseFloat(await env.G7_KV.get('cost:' + day + ':total') || '0');
+  if (firmSpent >= firmCap || daySpent >= dayCap) {
+    console.log(JSON.stringify({ budgetSkip: firmCode, firmSpent: firmSpent, daySpent: daySpent }));
+    /* Serve cached/last-good instead of generating fresh. */
+    var _cachedNews = await env.G7_KV.get('market:' + firmCode + ':' + day, 'json');
+    if (!_cachedNews) {
+      var _lastGood = await lastMarketBrief(env, firmCode, day);
+      if (_lastGood) _cachedNews = _lastGood;
+    }
+    /* One admin email per day when budget is hit. */
+    var _budgetAlertKey = 'cost:alert:' + day;
+    if (!(await env.G7_KV.get(_budgetAlertKey))) {
+      try { await sendCreditAlert(env, day); } catch (e) {}
+      await kvPut(env, _budgetAlertKey, '1', { expirationTtl: 172800 });
+    }
+    return { status: 'budget_exceeded', cost: { firmSpent: firmSpent, daySpent: daySpent } };
+  }
+
   resetCronCost();
   var news = null, move = null, a = 'error', n = 'error';
   var effectiveNewsPrefs;
@@ -1586,7 +1661,11 @@ async function runMorningForFirm(env, firmCode, day) {
   try { move = await generateScoutMove(env, firmCode, day, saved.context, news, st); } catch (e) { console.log(JSON.stringify({ moveError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   try { a = await sendActionsEmail(env, firmCode, day, move); } catch (e) { console.log(JSON.stringify({ actionsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   if (news) { try { n = await sendNewsEmail(env, firmCode, day, news); } catch (e) { console.log(JSON.stringify({ newsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); } } else { n = 'no_news'; }
-  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, _cronCost) };
+
+  /* B4: Flush cost to KV after the full firm run. */
+  var costEst = null;
+  try { costEst = await flushCost(env, day, firmCode, _cronCost); } catch (e) {}
+  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, _cronCost), costEst: costEst };
 }
 
 /* ═══════════════════════════════════════════
@@ -2056,29 +2135,33 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
       return Object.assign({}, it, { why: '' });
     });
   });
-  /* Relevance first. In policy and city news, an item with no effect on
-     this business is noise — drop it. In markets and global news he chose
-     to follow the market itself, so keep them, relevant items first. */
-  const CAP = { india_markets: 2, india_policy: 3, global: 3, city: 3 };
+
+  /* A2: Merge all shared sections into ONE "Also worth knowing" section.
+     Only items with a real effect (impact != none). Max 3, ranked by impact
+     strength: demand/cost/regulation beat timing/competitor beat the rest. */
   const NO_EFFECT = 'No direct effect on your business.';
+  const _impactRank = { demand_up:5, demand_down:5, cost_up:4, cost_down:4, regulation:4,
+                        competitor:3, timing:3, lead_source:2, none:0 };
+  var alsoPool = [];
   sections.forEach(function(s) {
-    let items = s.items.slice();
-    if (s.category === 'india_policy' || s.category === 'city') {
-      items = items.filter(function(it){ return it.why && it.why.trim() !== NO_EFFECT; });
-    }
-    items.sort(function(a, b){
-      return ((b.why && b.why.trim() !== NO_EFFECT) ? 1 : 0) - ((a.why && a.why.trim() !== NO_EFFECT) ? 1 : 0);
+    (s.items || []).forEach(function(it) {
+      if (it.impact && it.impact !== 'none' && it.why && it.why.trim() !== NO_EFFECT) {
+        alsoPool.push(it);
+      }
     });
-    s.items = items.slice(0, CAP[s.category] || 3);
   });
-  /* A category emptied by the relevance filter is not shown. */
-  for (let i = sections.length - 1; i >= 0; i--) {
-    if (!sections[i].items.length) sections.splice(i, 1);
+  alsoPool.sort(function(a, b) {
+    return (_impactRank[b.impact] || 0) - (_impactRank[a.impact] || 0);
+  });
+  var alsoSection = [];
+  if (alsoPool.length > 0) {
+    alsoSection = [{ category: 'also', label: 'Also worth knowing', items: alsoPool.slice(0, 3) }];
   }
+
   /* Capture _log before stripping — only used by admin regen-news route. */
   var bizLog = (business && business._log) || null;
   if (business) delete business._log;
-  var out = { business: business, sections: sections, errors: errors, generatedAt: (business && business.generatedAt) || new Date().toISOString() };
+  var out = { business: business, sections: alsoSection, errors: errors, generatedAt: (business && business.generatedAt) || new Date().toISOString() };
   if (stale) {
     out.stale = true;
     out.staleDate = (business && business.date) || '';
@@ -2156,9 +2239,10 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
     'Today is ' + weekday + ', ' + day + '. Decide the ONE most useful move the owner ' +
     'should make today to win customers or protect margins.\n\n' +
     'HOW TO DECIDE:\n' +
-    '- Prefer a move driven by a news signal with horizon "now" and a clear effect on ' +
-    'a named customer group. A strong signal can change WHICH group to target this ' +
-    'week, WHAT to say, or HOW to price and quote.\n' +
+    '- Prefer signal 0 (the top business news item) when it has a clear group effect — ' +
+    'it is the most relevant to this firm. Otherwise pick another signal with horizon ' +
+    '"now" and a clear effect on a named customer group. A strong signal can change ' +
+    'WHICH group to target this week, WHAT to say, or HOW to price and quote.\n' +
     '- If no signal is strong, base the move on the pipeline (who is due) or the plan step.\n' +
     '- The move adjusts the plan; it never contradicts it without saying why.\n' +
     '- Do not repeat any recent move unless something new justifies it.\n\n' +
@@ -3002,6 +3086,32 @@ export default {
       } catch (e) {
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 500) }, 500);
       }
+    }
+
+    // POST /admin/cost-today — { adminPassword } → today's spend per firm and total
+    if (request.method === 'POST' && path === '/admin/cost-today') {
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: 'Invalid request.' }, 400); }
+      if (!body.adminPassword || body.adminPassword !== env.ADMIN_PASSWORD) {
+        return jsonResponse({ error: 'Invalid admin password' }, 403);
+      }
+      const ist = new Date(Date.now() + 5.5 * 3600 * 1000);
+      const day = ist.toISOString().slice(0, 10);
+      var totalRaw = await env.G7_KV.get('cost:' + day + ':total');
+      var firms = {};
+      /* List all cost keys for today by iterating known firms. */
+      let _cc;
+      do {
+        const _pg = await env.G7_KV.list({ prefix: 'cost:' + day + ':', cursor: _cc });
+        for (const _k of _pg.keys) {
+          var _parts = _k.name.split(':');
+          if (_parts.length === 3 && _parts[2] !== 'total' && _parts[2] !== 'alert') {
+            firms[_parts[2]] = parseFloat(await env.G7_KV.get(_k.name) || '0');
+          }
+        }
+        _cc = _pg.list_complete ? undefined : _pg.cursor;
+      } while (_cc);
+      return jsonResponse({ day: day, total: parseFloat(totalRaw || '0'), firms: firms });
     }
 
     // POST /admin/cron-status — { adminPassword } → the last 06:00 report
@@ -4285,6 +4395,41 @@ export default {
 
     report.state = 'running';
     await kvPut(env,'cron:last', JSON.stringify(report), { expirationTtl: 7 * 86400 });
+
+    /* B6: Pre-generate shared categories only when at least one active firm
+       needs them. Collect needed categories across all firms first. */
+    var _neededCats = new Set();
+    var _firmCities = {};
+    let cursor0;
+    do {
+      const pg = await env.G7_KV.list({ prefix: 'market:ctx:', cursor: cursor0 });
+      for (const k of pg.keys) {
+        var fc0 = k.name.slice('market:ctx:'.length);
+        var u0 = await env.G7_KV.get('auth:users:' + fc0, 'json') || {};
+        if (u0.cronPaused || u0.isTest) continue;
+        var ep0 = emailPrefs(u0);
+        var active0 = ep0.actions || ep0.news;
+        if (!active0) {
+          var ls0 = await env.G7_KV.get('scout:lastSeen:' + fc0);
+          var ago0 = ls0 ? Math.floor((Date.now() - new Date(ls0).getTime()) / 86400000) : 999;
+          if (ago0 > 3) continue;
+        }
+        var prefs0;
+        try { prefs0 = await resolveNewsPrefs(env, fc0, u0.newsPrefs); } catch (e) { prefs0 = u0.newsPrefs || []; }
+        var ctx0 = await env.G7_KV.get('market:ctx:' + fc0, 'json');
+        var city0 = (ctx0 && ctx0.city) || '';
+        _firmCities[fc0] = city0;
+        (Array.isArray(prefs0) ? prefs0 : []).forEach(function(c) { if (NEWS_CATS[c]) _neededCats.add(c); });
+      }
+      cursor0 = pg.list_complete ? undefined : pg.cursor;
+    } while (cursor0);
+    /* Generate each needed shared category once (they cache in KV). */
+    var _anyCityUsed = Object.values(_firmCities).filter(Boolean)[0] || '';
+    for (var _cat of _neededCats) {
+      try { await generateSharedNews(env, _cat, day, _cat === 'city' ? _anyCityUsed : ''); } catch (e) {
+        console.log(JSON.stringify({ sharedPregenError: _cat, error: String(e && e.message || e).slice(0, 300) }));
+      }
+    }
 
     let cursor;
     do {

@@ -156,6 +156,15 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e
       <button class="btn btn-outline" id="cronPauseBtn" style="font-size:10px;padding:6px 14px" onclick="toggleCronPause()">—</button>
     </div>
 
+    <!-- PART 0b: Today's Spend -->
+    <div id="costBar" style="background:#0d0d0d;border:1px solid #222;padding:16px 20px;margin-bottom:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#555">Today's Spend (est.)</div>
+        <span id="costTotal" style="font-size:16px;font-weight:600;color:#C9A84C">—</span>
+      </div>
+      <div id="costFirms" style="font-size:11px;color:#666"></div>
+    </div>
+
     <!-- PART A: Platform Overview — 4 metric tiles -->
     <div id="scoutMetrics" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#222;border:1px solid #222;margin-bottom:24px">
       <div style="background:#0d0d0d;padding:24px 20px;text-align:center">
@@ -383,8 +392,9 @@ function authenticate() {
   document.getElementById('sectionReset').classList.add('visible');
   document.getElementById('sectionFirms').classList.add('visible');
 
-  // Auto-load Scout stats and firm list on authenticate
+  // Auto-load Scout stats, cost, and firm list on authenticate
   loadScoutStats();
+  loadCostToday();
   loadFirms();
 }
 
@@ -899,6 +909,27 @@ async function setPlan(firmCode, plan) {
 // Calls GET /admin/scout-stats and also fetches Alex firm count
 // from /admin/list-firms so all 4 tiles render together.
 // ─────────────────────────────────────────────────────────────
+async function loadCostToday() {
+  try {
+    var r = await fetch(WORKER + '/admin/cost-today', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminPassword: adminPassword })
+    });
+    var d = await r.json();
+    document.getElementById('costTotal').textContent = '$' + (d.total || 0).toFixed(4);
+    var firmsEl = document.getElementById('costFirms');
+    var lines = [];
+    if (d.firms) {
+      Object.keys(d.firms).sort().forEach(function(fc) {
+        lines.push(fc + ': $' + d.firms[fc].toFixed(4));
+      });
+    }
+    firmsEl.textContent = lines.length ? lines.join('  ·  ') : 'No spend yet today.';
+  } catch (e) {
+    document.getElementById('costTotal').textContent = '?';
+  }
+}
+
 async function loadScoutStats() {
   var errorEl = document.getElementById('scoutStatsError');
   var refreshBtn = document.getElementById('scoutRefreshBtn');
