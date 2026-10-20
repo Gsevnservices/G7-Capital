@@ -370,6 +370,46 @@ function clip(s, n) {
   return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:\s—-]+$/, '') + '\u2026';
 }
 
+/* Strip citation markup that leaks from web_search into model text:
+   <cite ...>, </cite>, (cite index=...>, index="N-N" fragments. */
+var _citeRe = /<\/?cite[^>]*>|\(cite\s+index=[^>]*>|index="\d+(?:-\d+)?"/gi;
+function stripCite(s) {
+  if (!s) return s;
+  return String(s).replace(_citeRe, '').replace(/\s{2,}/g, ' ').trim();
+}
+
+/* Clean all text fields in a news item object. */
+function cleanNewsItem(it) {
+  if (!it) return it;
+  if (it.headline) it.headline = stripCite(it.headline);
+  if (it.whatHappened) it.whatHappened = stripCite(it.whatHappened);
+  if (it.whyItMatters) it.whyItMatters = stripCite(it.whyItMatters);
+  if (it.whatToDo) it.whatToDo = stripCite(it.whatToDo);
+  if (it.why) it.why = stripCite(it.why);
+  return it;
+}
+
+/* Clip to the first sentence, max ~200 chars. */
+function clipOneSentence(s) {
+  s = String(s || '').trim();
+  var m = s.match(/^[^.!?]*[.!?]/);
+  var sent = m ? m[0].trim() : s;
+  if (sent.length > 200) sent = clip(sent, 200);
+  return sent;
+}
+
+/* Evergreen/guide gate: drop titles that are guides, explainers, rate tables,
+   checklists etc. — unless page_age is within 3 days (the guide was just published
+   and may contain new info). Returns { pass:bool, reason?:string }. */
+var _evergreenRe = /\bguide\b|\bhow to\b|\bexplained\b|\bwhat is\b|\beverything you need\b|\bchecklist\b|\btips\b|\brates list\b|\bvs\b/i;
+function evergreenCheck(title, pageAge) {
+  if (!_evergreenRe.test(title || '')) return { pass: true };
+  /* Allow very recently published guides — they may contain new info. */
+  var age = checkPageAge(pageAge, 3);
+  if (age.dated && age.recent) return { pass: true };
+  return { pass: false, reason: 'evergreen/guide title: ' + String(title).slice(0, 100) };
+}
+
 /* A home page, section page or listing page cannot be the source of a
    specific fact — only an article can. */
 function isHomePage(u) {
@@ -722,16 +762,19 @@ async function searchBusinessNews(env, day, context, city, watchlist, told, macr
     /* Recency from API page_age — not the model's publishedDate. */
     var age = checkPageAge(meta.pageAge[c.sourceUrl], 10);
     if (age.dated && !age.recent) { drops.push({ headline: meta.titles[c.sourceUrl] || '?', url: c.sourceUrl, reason: 'older than 10 days (page_age: ' + meta.pageAge[c.sourceUrl] + ')', cat: catName }); return false; }
+    /* Evergreen/guide gate: drop guides, explainers, rate tables unless very recent. */
+    var evg = evergreenCheck(meta.titles[c.sourceUrl], meta.pageAge[c.sourceUrl]);
+    if (!evg.pass) { drops.push({ headline: meta.titles[c.sourceUrl] || '?', url: c.sourceUrl, reason: evg.reason, cat: catName }); return false; }
     catVetted[catName] = (catVetted[catName] || 0) + 1;
     return true;
   }).map(function(c) {
     var catName = searchLabels[c.search] || 'macro';
     var age = checkPageAge(meta.pageAge[c.sourceUrl], 10);
     /* Headline from API title, not model — trimmed and capped. */
-    var apiTitle = String(meta.titles[c.sourceUrl] || '').trim();
+    var apiTitle = stripCite(String(meta.titles[c.sourceUrl] || '').trim());
     return {
-      headline: apiTitle.slice(0, 120) || String(c.whatHappened || '').slice(0, 120),
-      whatHappened: clip(c.whatHappened, 400),
+      headline: apiTitle.slice(0, 120) || stripCite(String(c.whatHappened || '')).slice(0, 120),
+      whatHappened: clipOneSentence(stripCite(c.whatHappened)),
       sourceUrl: c.sourceUrl,
       scope: catName === 'macro' ? 'macro' : 'micro',
       dated: age.dated,
@@ -765,6 +808,7 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
     '- headline: rewrite in under 10 words, plain English, using facts from the candidate\'s title and whatHappened. No clickbait.\n' +
     '- Copy sourceUrl EXACTLY from the candidate. Never change a URL.\n\n' +
     'RULES:\n' +
+    '- Only events that changed recently: announced, launched, raised, cut, approved, opened, closed. No guides, explainers, "how to", rate tables.\n' +
     '- Prefer candidates marked dated:true (confirmed recent). Include an undated candidate only when it is clearly more important.\n' +
     '- Never invent facts beyond what the candidates state.\n' +
     '- Never write labels like "Customer 1" — use actual group names.\n' +
@@ -805,15 +849,15 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
     })
     .slice(0, 4)
     .map(function(it) {
-      return {
+      return cleanNewsItem({
         headline: String(it.headline).slice(0, 120),
-        whatHappened: clip(it.whatHappened, 400),
+        whatHappened: clipOneSentence(it.whatHappened),
         whyItMatters: clip(it.whyItMatters, 400),
         whatToDo: clip(it.whatToDo, 400),
         urgency: ['today','this_week','watch'].indexOf(it.urgency) !== -1 ? it.urgency : 'watch',
         scope: it.scope === 'micro' ? 'micro' : 'macro',
         sourceUrl: it.sourceUrl
-      };
+      });
     });
 
   return { items: items, usage: data.usage || {} };
@@ -1718,13 +1762,15 @@ async function generateSharedNews(env, cat, day, city) {
     'You are a careful news editor for Indian small-business owners. Today is ' + day + ' (India).\n' +
     def.ask + (cat === 'city' ? '\nCITY: ' + city : '') + '\n\n' +
     'RULES:\n' +
+    '- Only events that changed recently: announced, launched, raised, cut, approved, opened, closed.\n' +
+    '- No guides, explainers, "how to", "what is", rate tables, checklists.\n' +
     '- Only from pages you actually found. Never invent a fact, figure or date.\n' +
     '- Copy every number exactly as the source states it.\n' +
     '- Nothing older than 48 hours.\n' +
     '- Return 2 to 4 items, most important first.\n' +
     '- sourceUrl must be the article that states the fact, never a home page.\n\n' +
     'Reply with ONLY this JSON:\n' +
-    '{"items":[{"headline":"under 12 words","whatHappened":"one or two sentences, under 45 words",' +
+    '{"items":[{"headline":"under 12 words","whatHappened":"one sentence, under 30 words",' +
     '"sourceTitle":"","sourceUrl":""}]}';
 
   /* Publishers that block AI crawlers make the whole request fail. Remember
@@ -1782,14 +1828,16 @@ async function generateSharedNews(env, cat, day, city) {
   } catch (e) {}
 
   /* Integrity gate: URL was returned by web_search, not a home page,
-     not a listing/quote portal. */
+     not a listing/quote portal, not an evergreen guide. */
   var sharedDrops = [];
   const afterIntegrity = (Array.isArray(parsed.items) ? parsed.items : [])
     .filter(function(it) {
       if (!it || !it.headline || !it.sourceUrl) return false;
       if (!sharedMeta.seen.has(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, reason: 'URL not in search results' }); return false; }
-      if (isHomePage(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, reason: 'home/section page' }); return false; }
-      if (isListingOrQuote(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, reason: 'listing/quote portal' }); return false; }
+      if (isHomePage(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, url: it.sourceUrl, reason: 'home/section page' }); return false; }
+      if (isListingOrQuote(it.sourceUrl)) { sharedDrops.push({ headline: it.headline, url: it.sourceUrl, reason: 'listing/quote portal' }); return false; }
+      var evg = evergreenCheck(sharedMeta.titles[it.sourceUrl] || it.headline, sharedMeta.pageAge[it.sourceUrl]);
+      if (!evg.pass) { sharedDrops.push({ headline: it.headline, url: it.sourceUrl, reason: evg.reason }); return false; }
       return true;
     })
     .slice(0, 6);
@@ -1806,12 +1854,12 @@ async function generateSharedNews(env, cat, day, city) {
     })
     .slice(0, 4)
     .map(function(it) {
-      return {
+      return cleanNewsItem({
         headline: String(it.headline).slice(0, 120),
-        whatHappened: clip(it.whatHappened, 400),
-        sourceTitle: String(sharedMeta.titles[it.sourceUrl] || '').slice(0, 160),
+        whatHappened: clipOneSentence(it.whatHappened),
+        sourceTitle: stripCite(String(sharedMeta.titles[it.sourceUrl] || '')).slice(0, 160),
         sourceUrl: it.sourceUrl
-      };
+      });
     });
 
   /* Same-topic dedupe within the section. */
@@ -1885,6 +1933,10 @@ async function personaliseNews(env, firmCode, day, context, sections) {
       if (a !== -1 && z > a) out = JSON.parse(t.slice(a, z + 1));
     } catch (e) {}
   }
+  /* Strip citation markup from every why field. */
+  Object.keys(out).forEach(function(k) {
+    if (out[k] && out[k].why) out[k].why = stripCite(out[k].why);
+  });
   await kvPut(env,key, JSON.stringify(out), { expirationTtl: 172800 });
   return out;
 }
@@ -1959,6 +2011,10 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
       }
     }
   }
+  /* Clean citation markup from cached items (covers existing caches). */
+  if (business && business.items) business.items.forEach(cleanNewsItem);
+  sections.forEach(function(s) { if (s.items) s.items.forEach(cleanNewsItem); });
+
   const all = [{ category: 'business', items: (business && business.items) || [] }].concat(sections);
   const sig = await personaliseNews(env, firmCode, day, context, all);
   /* Apply tags back — index 0 is business, 1+ are sections. */
