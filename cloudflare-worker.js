@@ -94,36 +94,33 @@ const COST_TABLE = {
   'claude-haiku-4-5-20251001':  { input: 1.00, output:  5.00, search: 0.01 }
 };
 
-/* Per-request cost accumulator — reset at the start of any request that does
-   generation, flushed to KV once via ctx.waitUntil at the end. */
-var _reqCost = { calls: 0, usd: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
-function resetReqCost() {
-  _reqCost = { calls: 0, usd: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
+/* Factory for a per-request cost accumulator. Create one at the start of
+   each request or cron firm-run; pass it explicitly through every function
+   that calls Anthropic; flush it once at the end. */
+function newCostAccum() {
+  return { calls: 0, usd: 0, web_search_requests: 0, input_tokens: 0, output_tokens: 0 };
 }
 
-/* Record one Anthropic call. Called after EVERY API response (including streams). */
-function recordCost(model, data) {
-  if (!data) return;
-  _reqCost.calls++;
+/* Record one Anthropic call's usage into the given accumulator. */
+function recordCost(cost, model, data) {
+  if (!data || !cost) return;
+  cost.calls++;
   var u = data.usage || {};
   var inp = u.input_tokens || 0;
   var out = u.output_tokens || 0;
   var srch = (u.server_tool_use && u.server_tool_use.web_search_requests) || 0;
-  _reqCost.input_tokens += inp;
-  _reqCost.output_tokens += out;
-  _reqCost.web_search_requests += srch;
+  cost.input_tokens += inp;
+  cost.output_tokens += out;
+  cost.web_search_requests += srch;
   var t = COST_TABLE[model] || COST_TABLE['claude-sonnet-5-5'];
-  _reqCost.usd += (inp / 1e6) * t.input + (out / 1e6) * t.output + srch * t.search;
+  cost.usd += (inp / 1e6) * t.input + (out / 1e6) * t.output + srch * t.search;
 }
-
-/* Backward-compat shim — old callers pass (data). Maps to recordCost with model. */
-function recordCronCost(data) { recordCost('claude-sonnet-5-5', data); }
 
 /* Flush accumulated cost to KV. firmCode = the firm that triggered the
    request, or "SHARED" for shared-news generation. Returns total USD added. */
-async function flushCost(env, day, firmCode) {
-  if (_reqCost.usd <= 0) return 0;
-  var amt = _reqCost.usd;
+async function flushCost(env, day, firmCode, cost) {
+  if (!cost || cost.usd <= 0) return 0;
+  var amt = cost.usd;
   var firmKey = 'cost:' + day + ':' + firmCode;
   var totalKey = 'cost:' + day + ':total';
   var prev = parseFloat(await env.G7_KV.get(firmKey) || '0');
@@ -158,7 +155,7 @@ async function sendBudgetEmail(env, day, capType, spent, cap) {
   var subj = 'Scout daily budget reached (' + capType + ': $' + spent.toFixed(4) + ' of $' + cap.toFixed(2) + ')';
   var text = subj + '.\n\nGeneration paused until midnight IST.\n' +
     'Day: ' + day + '\nCap type: ' + capType + '\nSpent: $' + spent.toFixed(4) + '\nCap: $' + cap.toFixed(2);
-  try { await sendEmail(env, 'contact@gsevnservices.in', subj, text, '<p>' + text.replace(/\n/g, '<br>') + '</p>'); } catch (e) {}
+  try { await sendEmail(env, (env.ADMIN_EMAIL || 'contact@gsevnservices.in'), subj, text, '<p>' + text.replace(/\n/g, '<br>') + '</p>'); } catch (e) {}
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -651,7 +648,7 @@ function watchlistHash(context) {
 
 /* Build a per-firm watchlist from the business context.
    Small Haiku call — extracts materials, triggers, localities, etc. */
-async function buildWatchlist(env, firmCode, context) {
+async function buildWatchlist(env, firmCode, context, cost) {
   var hash = watchlistHash(context);
   var r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -674,7 +671,7 @@ async function buildWatchlist(env, firmCode, context) {
   });
   if (!r.ok) throw new Error('watchlist ' + r.status);
   var data = await r.json();
-  recordCost('claude-haiku-5-5', data);
+  recordCost(cost, 'claude-haiku-5-5', data);
   var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
     .map(function(b){ return b.text; }).join('');
   var wl = { materials: [], triggers: [], localities: [], regulations: [], competitors: [], groups: [] };
@@ -690,11 +687,11 @@ async function buildWatchlist(env, firmCode, context) {
 }
 
 /* Read or lazily build the watchlist. Rebuilds only when the stable-input hash changes. */
-async function getWatchlist(env, firmCode, context) {
+async function getWatchlist(env, firmCode, context, cost) {
   var hash = watchlistHash(context);
   var cached = await env.G7_KV.get('market:watch:' + firmCode, 'json');
   if (cached && cached.hash === hash) return cached;
-  return buildWatchlist(env, firmCode, context);
+  return buildWatchlist(env, firmCode, context, cost);
 }
 
 /* Extract real metadata from an API response: URL→title from search results,
@@ -762,7 +759,7 @@ function failsRelevanceGate(whyItMatters) {
    Model returns up to 10 candidates; we vet using API data for headline
    and recency (page_age), not the model's claims. */
 
-async function searchBusinessNews(env, day, context, city, watchlist, told, macroOnly) {
+async function searchBusinessNews(env, day, context, city, watchlist, told, macroOnly, cost) {
   /* Build the three search instructions from the watchlist. */
   var searches = [];
   if (!macroOnly) {
@@ -818,7 +815,7 @@ async function searchBusinessNews(env, day, context, city, watchlist, told, macr
   });
   if (!r.ok) throw new Error('search step ' + r.status + ': ' + (await r.text()).slice(0, 300));
   var data = await r.json();
-  recordCost('claude-haiku-5-5', data);
+  recordCost(cost, 'claude-haiku-5-5', data);
   var meta = collectSearchMeta(data);
 
   var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
@@ -883,7 +880,7 @@ async function searchBusinessNews(env, day, context, city, watchlist, told, macr
 }
 
 /* ── Step b: pick and write final items (Sonnet, no tools) ── */
-async function pickAndWriteNews(env, context, candidates, watchlist) {
+async function pickAndWriteNews(env, context, candidates, watchlist, cost) {
   if (!candidates.length) return { items: [], usage: {} };
   var groupList = (watchlist.groups || []).join(', ') || 'the customer groups described';
 
@@ -923,7 +920,7 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
   });
   if (!r.ok) throw new Error('pick step ' + r.status + ': ' + (await r.text()).slice(0, 300));
   var data = await r.json();
-  recordCost('claude-sonnet-5-5', data);
+  recordCost(cost, 'claude-sonnet-5-5', data);
 
   var text = (data.content || []).filter(function(b){ return b.type === 'text'; })
     .map(function(b){ return b.text; }).join('');
@@ -958,7 +955,7 @@ async function pickAndWriteNews(env, context, candidates, watchlist) {
 // ─────────────────────────────────────────────────────────────────────────────
 // MARKET BRIEF GENERATOR — two-step: search (Haiku) → pick-and-write (Sonnet).
 // ─────────────────────────────────────────────────────────────────────────────
-async function generateMarketBrief(env, firmCode, day, context, city, macroOnly, _retried) {
+async function generateMarketBrief(env, firmCode, day, context, city, macroOnly, _retried, cost) {
   /* History — what Scout already told this owner in the last two weeks. */
   const histKey = 'market:history:' + firmCode;
   const history = (await env.G7_KV.get(histKey, 'json')) || [];
@@ -966,21 +963,21 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly,
 
   /* Watchlist — drives search queries. Rebuilt only when context changes. */
   var watchlist = { materials: [], triggers: [], localities: [], regulations: [], competitors: [], groups: [] };
-  try { watchlist = await getWatchlist(env, firmCode, context); } catch (e) {
+  try { watchlist = await getWatchlist(env, firmCode, context, cost); } catch (e) {
     console.log(JSON.stringify({ watchlistError: firmCode, error: String(e && e.message || e).slice(0, 300) }));
   }
 
   /* Step a: search for candidates (Haiku + web_search, up to 3 searches). */
-  var search = await searchBusinessNews(env, day, context, city, watchlist, told, macroOnly);
+  var search = await searchBusinessNews(env, day, context, city, watchlist, told, macroOnly, cost);
   var drops = (search.drops || []).slice();
 
   /* Retry macro-only when model returned nothing parseable (first call only). */
   if (search.candidates.length === 0 && search.rawCount === 0 && !macroOnly && !_retried) {
-    return generateMarketBrief(env, firmCode, day, context, city, true, true);
+    return generateMarketBrief(env, firmCode, day, context, city, true, true, cost);
   }
 
   /* Step b: pick and write (Sonnet, no tools). */
-  var pick = await pickAndWriteNews(env, context, search.candidates, watchlist);
+  var pick = await pickAndWriteNews(env, context, search.candidates, watchlist, cost);
   var afterPick = pick.items.length;
 
   /* ── Quality gates ── */
@@ -1007,12 +1004,12 @@ async function generateMarketBrief(env, firmCode, day, context, city, macroOnly,
 
   /* ── A1: Retry once with macro search if < 2 items survived gates ── */
   if (items.length < 2 && !_retried && !macroOnly) {
-    var retry = await searchBusinessNews(env, day, context, city, watchlist, told, true);
+    var retry = await searchBusinessNews(env, day, context, city, watchlist, told, true, cost);
     drops = drops.concat(retry.drops || []);
     /* Merge new candidates with existing survivors, re-run Step b. */
     var combined = items.concat(retry.candidates);
     if (combined.length > items.length) {
-      var pick2 = await pickAndWriteNews(env, context, combined, watchlist);
+      var pick2 = await pickAndWriteNews(env, context, combined, watchlist, cost);
       /* Re-apply gates on the new pick. */
       var merged2 = pick2.items.filter(function(it) {
         if (failsRelevanceGate(it.whyItMatters)) { drops.push({ headline: it.headline, reason: 'retry-relevance' }); return false; }
@@ -1672,20 +1669,20 @@ async function runMorningForFirm(env, firmCode, day) {
     return { status: 'budget_exceeded', cost: { firmSpent: _bc.firmSpent, daySpent: _bc.daySpent } };
   }
 
-  resetReqCost();
+  var cost = newCostAccum();
   var news = null, move = null, a = 'error', n = 'error';
   var effectiveNewsPrefs;
   try { effectiveNewsPrefs = await resolveNewsPrefs(env, firmCode, user.newsPrefs); } catch (e) { effectiveNewsPrefs = user.newsPrefs || []; }
-  try { news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectiveNewsPrefs); } catch (e) { console.log(JSON.stringify({ newsError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
+  try { news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectiveNewsPrefs, cost); } catch (e) { console.log(JSON.stringify({ newsError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   const st = await loadScoutState(env, firmCode);
-  try { move = await generateScoutMove(env, firmCode, day, saved.context, news, st); } catch (e) { console.log(JSON.stringify({ moveError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
+  try { move = await generateScoutMove(env, firmCode, day, saved.context, news, st, false, cost); } catch (e) { console.log(JSON.stringify({ moveError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   try { a = await sendActionsEmail(env, firmCode, day, move); } catch (e) { console.log(JSON.stringify({ actionsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); }
   if (news) { try { n = await sendNewsEmail(env, firmCode, day, news); } catch (e) { console.log(JSON.stringify({ newsEmailError: firmCode, error: String(e && e.message || e).slice(0, 300) })); } } else { n = 'no_news'; }
 
   /* Flush cost to KV after the full firm run. */
   var costUsd = 0;
-  try { costUsd = await flushCost(env, day, firmCode); } catch (e) {}
-  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, _reqCost), costUsd: costUsd };
+  try { costUsd = await flushCost(env, day, firmCode, cost); } catch (e) {}
+  return { status: 'actions:' + a + ' news:' + n + ' move:' + (move ? 'ok' : 'none'), cost: Object.assign({}, cost), costUsd: costUsd };
 }
 
 /* ═══════════════════════════════════════════
@@ -1696,7 +1693,7 @@ async function runMorningForFirm(env, firmCode, day) {
    A business with no verifiable phone is kept with phone empty, never
    with a guessed one.
 ═══════════════════════════════════════════ */
-async function findBusinesses(env, query, cap) {
+async function findBusinesses(env, query, cap, cost) {
   const want = Math.max(1, Math.min(cap || 10, 15));
   const system =
     'You find real businesses in India for a small-business owner to contact. ' +
@@ -1742,7 +1739,7 @@ async function findBusinesses(env, query, cap) {
     throw new Error('finder ' + r.status + ': ' + t.slice(0, 400));
   }
   const data = await r.json();
-  recordCost('claude-haiku-5-5', data);
+  recordCost(cost, 'claude-haiku-5-5', data);
 
   /* Everything Scout actually read: fetched page text and cited passages. */
   let corpus = '';
@@ -1874,7 +1871,7 @@ const NEWS_CATS = {
 /* Facts only, generated once per day per category and shared by every firm
    that chose it (city news once per city). No personal relevance here —
    that is added per firm by personaliseNews. */
-async function generateSharedNews(env, cat, day, city) {
+async function generateSharedNews(env, cat, day, city, cost) {
   const def = NEWS_CATS[cat];
   if (!def) return { items: [] };
   const citySlug = (city || '').toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
@@ -1938,7 +1935,7 @@ async function generateSharedNews(env, cat, day, city) {
   }
   if (!r.ok) throw new Error('shared ' + cat + ' ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const data = await r.json();
-  recordCost('claude-haiku-5-5', data);
+  recordCost(cost, 'claude-haiku-5-5', data);
 
   /* Collect real API metadata: URLs, titles, cited text. */
   const sharedMeta = collectSearchMeta(data);
@@ -2012,7 +2009,7 @@ async function generateSharedNews(env, cat, day, city) {
 
 /* Per firm, no search: tag every item with why, impact, group, horizon.
    Cheap model — the facts are already verified. */
-async function personaliseNews(env, firmCode, day, context, sections) {
+async function personaliseNews(env, firmCode, day, context, sections, cost) {
   const key = 'news:sig:' + firmCode + ':' + day;
   const cached = await env.G7_KV.get(key, 'json');
   if (cached) return cached;
@@ -2052,7 +2049,7 @@ async function personaliseNews(env, firmCode, day, context, sections) {
   if (r.ok) {
     try {
       const d = await r.json();
-      recordCost('claude-haiku-5-5', d);
+      recordCost(cost, 'claude-haiku-5-5', d);
       const t = (d.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
       const a = t.indexOf('{'), z = t.lastIndexOf('}');
       if (a !== -1 && z > a) out = JSON.parse(t.slice(a, z + 1));
@@ -2093,12 +2090,12 @@ async function resolveNewsPrefs(env, firmCode, rawPrefs) {
 
 /* Everything a firm reads today: business brief + chosen categories,
    each item carrying a `why` line. Used by the dashboard route and email. */
-async function buildDailyNews(env, firmCode, day, context, city, prefs) {
+async function buildDailyNews(env, firmCode, day, context, city, prefs, cost) {
   var stale = false;
   let business = await env.G7_KV.get('market:' + firmCode + ':' + day, 'json');
   if (!business) {
     try {
-      business = await generateMarketBrief(env, firmCode, day, context, city, false);
+      business = await generateMarketBrief(env, firmCode, day, context, city, false, false, cost);
     } catch (e) {
       var bizErr = String((e && e.message) || e).slice(0, 300);
       console.log(JSON.stringify({ newsFallback: firmCode, reason: bizErr }));
@@ -2117,7 +2114,7 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
   var citySlug = (city || '').toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
   for (const c of chosen) {
     try {
-      const s = await generateSharedNews(env, c, day, city);
+      const s = await generateSharedNews(env, c, day, city, cost);
       if (s && s.items && s.items.length) {
         sections.push(s);
       } else {
@@ -2141,7 +2138,7 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
   sections.forEach(function(s) { if (s.items) s.items.forEach(cleanNewsItem); });
 
   const all = [{ category: 'business', items: (business && business.items) || [] }].concat(sections);
-  const sig = await personaliseNews(env, firmCode, day, context, all);
+  const sig = await personaliseNews(env, firmCode, day, context, all, cost);
   /* Apply tags back — index 0 is business, 1+ are sections. */
   (all[0].items || []).forEach(function(it, ii) {
     var v = sig['0.' + ii];
@@ -2194,7 +2191,7 @@ async function buildDailyNews(env, firmCode, day, context, city, prefs) {
 /* One decision per firm per day: the single most useful thing to do today,
    built from news signals, the pipeline, the plan and past moves. No web
    search — every fact it uses was already verified upstream. */
-async function generateScoutMove(env, firmCode, day, context, news, st, force) {
+async function generateScoutMove(env, firmCode, day, context, news, st, force, cost) {
   const cacheKey = 'move:' + firmCode + ':' + day;
   if (!force) {
     const cached = await env.G7_KV.get(cacheKey, 'json');
@@ -2303,7 +2300,7 @@ async function generateScoutMove(env, firmCode, day, context, news, st, force) {
   });
   if (!r.ok) throw new Error('move ' + r.status + ': ' + (await r.text()).slice(0, 300));
   const d = await r.json();
-  recordCost('claude-sonnet-5-5', d);
+  recordCost(cost, 'claude-sonnet-5-5', d);
   const t = (d.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
   let mv = null;
   try {
@@ -3059,18 +3056,19 @@ export default {
       /* Budget guard for admin regen-move */
       var _bcRM = await budgetCheck(env, day, firmCode);
       if (!_bcRM.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, day, _bcRM.reason === 'firm' ? firmCode : 'total', _bcRM.reason === 'firm' ? _bcRM.firmSpent : _bcRM.daySpent, _bcRM.cap));
         return jsonResponse({ error: 'Budget exceeded ($' + (_bcRM.reason === 'firm' ? _bcRM.firmSpent : _bcRM.daySpent).toFixed(4) + ' of $' + _bcRM.cap.toFixed(2) + ' ' + _bcRM.reason + ' cap)' }, 429);
       }
-      resetReqCost();
+      var cost = newCostAccum();
       try {
         const user = await env.G7_KV.get('auth:users:' + firmCode, 'json') || {};
-        const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', user.newsPrefs);
+        const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', user.newsPrefs, cost);
         const st = await loadScoutState(env, firmCode);
-        const move = await generateScoutMove(env, firmCode, day, saved.context, news, st, true);
-        ctx.waitUntil(flushCost(env, day, firmCode));
+        const move = await generateScoutMove(env, firmCode, day, saved.context, news, st, true, cost);
+        ctx.waitUntil(flushCost(env, day, firmCode, cost));
         return jsonResponse({ move: move });
       } catch (e) {
-        ctx.waitUntil(flushCost(env, day, firmCode));
+        ctx.waitUntil(flushCost(env, day, firmCode, cost));
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 300) }, 500);
       }
     }
@@ -3110,16 +3108,17 @@ export default {
         /* Budget guard for admin regen */
         var _bcR = await budgetCheck(env, day, firmCode);
         if (!_bcR.ok) {
+          ctx.waitUntil(sendBudgetEmail(env, day, _bcR.reason === 'firm' ? firmCode : 'total', _bcR.reason === 'firm' ? _bcR.firmSpent : _bcR.daySpent, _bcR.cap));
           return jsonResponse({ error: 'Budget exceeded ($' + (_bcR.reason === 'firm' ? _bcR.firmSpent : _bcR.daySpent).toFixed(4) + ' of $' + _bcR.cap.toFixed(2) + ' ' + _bcR.reason + ' cap)' }, 429);
         }
-        resetReqCost();
-        const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectivePrefs);
+        var cost = newCostAccum();
+        const news = await buildDailyNews(env, firmCode, day, saved.context, saved.city || '', effectivePrefs, cost);
         var bizLog = (news && news._log) || null;
         delete news._log;
-        ctx.waitUntil(flushCost(env, day, firmCode));
-        return jsonResponse({ news: news, log: bizLog, cost: Object.assign({}, _reqCost) });
+        ctx.waitUntil(flushCost(env, day, firmCode, cost));
+        return jsonResponse({ news: news, log: bizLog, cost: Object.assign({}, cost) });
       } catch (e) {
-        ctx.waitUntil(flushCost(env, day, firmCode));
+        ctx.waitUntil(flushCost(env, day, firmCode, cost));
         return jsonResponse({ error: 'regen_failed', detail: String((e && e.message) || e).slice(0, 500) }, 500);
       }
     }
@@ -3271,9 +3270,10 @@ export default {
       var _istAn = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
       var _bcAn = await budgetCheck(env, _istAn, session.firmCode, { exemptFirm: true });
       if (!_bcAn.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, _istAn, _bcAn.reason === 'firm' ? session.firmCode : 'total', _bcAn.reason === 'firm' ? _bcAn.firmSpent : _bcAn.daySpent, _bcAn.cap));
         return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
       }
-      resetReqCost();
+      var cost = newCostAccum();
 
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -3354,8 +3354,8 @@ export default {
           }));
 
           /* Record cost from the stream's final usage. */
-          recordCost('claude-sonnet-5-5', { usage: { input_tokens: _logData.input_tokens || 0, output_tokens: _logData.output_tokens || 0 } });
-          ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode));
+          recordCost(cost, 'claude-sonnet-5-5', { usage: { input_tokens: _logData.input_tokens || 0, output_tokens: _logData.output_tokens || 0 } });
+          ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode, cost));
 
           /* Detect incomplete streams — alert admin */
           if (_logData.stop_reason !== 'end_turn') {
@@ -3457,9 +3457,10 @@ export default {
       var _istBrief = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
       var _bcB = await budgetCheck(env, _istBrief, session.firmCode);
       if (!_bcB.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, _istBrief, _bcB.reason === 'firm' ? session.firmCode : 'total', _bcB.reason === 'firm' ? _bcB.firmSpent : _bcB.daySpent, _bcB.cap));
         return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
       }
-      resetReqCost();
+      var cost = newCostAccum();
 
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -3483,8 +3484,8 @@ export default {
       }
 
       const result = await anthropicResponse.json();
-      recordCost('claude-sonnet-5-5', result);
-      ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode));
+      recordCost(cost, 'claude-sonnet-5-5', result);
+      ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode, cost));
       const text = (result.content || []).filter(function(b){ return b.type === 'text'; }).map(function(b){ return b.text; }).join('');
 
       return jsonResponse({ text: text });
@@ -3520,7 +3521,7 @@ export default {
           { expirationTtl: 7 * 86400 });
         /* Build/refresh watchlist in background — only calls Haiku when
            the context hash has changed (or watchlist is missing). */
-        ctx.waitUntil(getWatchlist(env, session.firmCode, context).catch(function(){}));
+        ctx.waitUntil(getWatchlist(env, session.firmCode, context, null).catch(function(){}));
       }
 
       /* IST date — the brief belongs to the owner's day, not UTC's. */
@@ -3536,6 +3537,7 @@ export default {
       /* Budget guard */
       var _bcM = await budgetCheck(env, day, session.firmCode);
       if (!_bcM.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, day, _bcM.reason === 'firm' ? session.firmCode : 'total', _bcM.reason === 'firm' ? _bcM.firmSpent : _bcM.daySpent, _bcM.cap));
         var _lbM = await lastMarketBrief(env, session.firmCode, day);
         if (_lbM) return jsonResponse(Object.assign({}, _lbM, { stale: true, staleDate: _lbM.date || '', budgetPaused: true }));
         return jsonResponse({ items: [], date: day, budgetPaused: true });
@@ -3563,15 +3565,15 @@ export default {
       }
       await kvPut(env,attemptKey, String(attempts + 1), { expirationTtl: 172800 });
 
-      resetReqCost();
+      var cost = newCostAccum();
       try {
-        const result = await generateMarketBrief(env, session.firmCode, day, context, city);
+        const result = await generateMarketBrief(env, session.firmCode, day, context, city, false, false, cost);
         await env.G7_KV.delete(lockKey);
-        ctx.waitUntil(flushCost(env, day, session.firmCode));
+        ctx.waitUntil(flushCost(env, day, session.firmCode, cost));
         return jsonResponse(result);
       } catch (e) {
         await env.G7_KV.delete(lockKey);
-        ctx.waitUntil(flushCost(env, day, session.firmCode));
+        ctx.waitUntil(flushCost(env, day, session.firmCode, cost));
         console.log(JSON.stringify({ newsFallback: session.firmCode, reason: String(e.message || '').slice(0, 300) }));
         if (isBillingError(e)) await sendCreditAlert(env, day);
         /* Fall back to last known good, or yesterday/day-before cache. */
@@ -3625,9 +3627,10 @@ export default {
       var _istCI = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
       var _bcCI = await budgetCheck(env, _istCI, session.firmCode);
       if (!_bcCI.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, _istCI, _bcCI.reason === 'firm' ? session.firmCode : 'total', _bcCI.reason === 'firm' ? _bcCI.firmSpent : _bcCI.daySpent, _bcCI.cap));
         return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
       }
-      resetReqCost();
+      var cost = newCostAccum();
 
       const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -3660,8 +3663,8 @@ export default {
       var _ciBuf = '';
       var _ciUsage = { input: 0, output: 0 };
       var _ciFlushCost = function() {
-        recordCost('claude-sonnet-5-5', { usage: { input_tokens: _ciUsage.input, output_tokens: _ciUsage.output } });
-        ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode));
+        recordCost(cost, 'claude-sonnet-5-5', { usage: { input_tokens: _ciUsage.input, output_tokens: _ciUsage.output } });
+        ctx.waitUntil(flushCost(env, new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10), session.firmCode, cost));
       };
       const _ciStream = new TransformStream({
         transform(chunk, controller) {
@@ -4024,23 +4027,24 @@ export default {
       var _istPlaces = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
       var _bcP = await budgetCheck(env, _istPlaces, session.firmCode);
       if (!_bcP.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, _istPlaces, _bcP.reason === 'firm' ? session.firmCode : 'total', _bcP.reason === 'firm' ? _bcP.firmSpent : _bcP.daySpent, _bcP.cap));
         return jsonResponse({ error: 'Scout has reached today\u2019s limit \u2014 back tomorrow.', budgetPaused: true }, 429);
       }
 
       // 6. Call Claude web search to find businesses
-      resetReqCost();
+      var cost = newCostAccum();
       let places;
       try {
-        places = await findBusinesses(env, q, cap);
+        places = await findBusinesses(env, q, cap, cost);
       } catch (e) {
-        ctx.waitUntil(flushCost(env, _istPlaces, session.firmCode));
+        ctx.waitUntil(flushCost(env, _istPlaces, session.firmCode, cost));
         return jsonResponse({ error: 'Business search failed' }, 502);
       }
 
       // 7. Store in cache — 14-day TTL with timestamp
       var _cacheObj = { _cachedAt: new Date().toISOString().slice(0, 10), results: places };
       kvPut(env, cacheKey, JSON.stringify(_cacheObj), { expirationTtl: 14 * 86400 });
-      ctx.waitUntil(flushCost(env, _istPlaces, session.firmCode));
+      ctx.waitUntil(flushCost(env, _istPlaces, session.firmCode, cost));
 
       // 8. Increment daily counter (24h TTL so it auto-resets)
       await kvPut(env, placesCounterKey, String(placesCount + 1), { expirationTtl: 86400 });
@@ -4254,15 +4258,16 @@ export default {
       /* Budget guard — serve cache/last-good when over cap. */
       var _bc1 = await budgetCheck(env, today, session.firmCode);
       if (!_bc1.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, today, _bc1.reason === 'firm' ? session.firmCode : 'total', _bc1.reason === 'firm' ? _bc1.firmSpent : _bc1.daySpent, _bc1.cap));
         var _cachedBiz = await env.G7_KV.get('market:' + session.firmCode + ':' + today, 'json')
                       || await lastMarketBrief(env, session.firmCode, today);
         if (_cachedBiz) return jsonResponse({ business: _cachedBiz, sections: [], budgetPaused: true });
         return jsonResponse({ business: { items: [] }, sections: [], budgetPaused: true });
       }
-      resetReqCost();
-      const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', effectivePrefs);
+      var cost = newCostAccum();
+      const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', effectivePrefs, cost);
       delete news._log;
-      ctx.waitUntil(flushCost(env, today, session.firmCode));
+      ctx.waitUntil(flushCost(env, today, session.firmCode, cost));
       return jsonResponse(news);
     }
 
@@ -4280,17 +4285,20 @@ export default {
       if (!saved || !saved.context) return jsonResponse({ move: null });
       /* Budget guard */
       var _bc2 = await budgetCheck(env, today, session.firmCode);
-      if (!_bc2.ok) return jsonResponse({ move: null, budgetPaused: true });
-      resetReqCost();
+      if (!_bc2.ok) {
+        ctx.waitUntil(sendBudgetEmail(env, today, _bc2.reason === 'firm' ? session.firmCode : 'total', _bc2.reason === 'firm' ? _bc2.firmSpent : _bc2.daySpent, _bc2.cap));
+        return jsonResponse({ move: null, budgetPaused: true });
+      }
+      var cost = newCostAccum();
       try {
         const user = await env.G7_KV.get('auth:users:' + session.firmCode, 'json') || {};
-        const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', user.newsPrefs);
+        const news = await buildDailyNews(env, session.firmCode, today, saved.context, saved.city || '', user.newsPrefs, cost);
         const st = await loadScoutState(env, session.firmCode);
-        const move = await generateScoutMove(env, session.firmCode, today, saved.context, news, st);
-        ctx.waitUntil(flushCost(env, today, session.firmCode));
+        const move = await generateScoutMove(env, session.firmCode, today, saved.context, news, st, false, cost);
+        ctx.waitUntil(flushCost(env, today, session.firmCode, cost));
         return jsonResponse({ move: move });
       } catch (e) {
-        ctx.waitUntil(flushCost(env, today, session.firmCode));
+        ctx.waitUntil(flushCost(env, today, session.firmCode, cost));
         return jsonResponse({ move: null });
       }
     }
@@ -4555,25 +4563,24 @@ export default {
     } while (cursor0);
     /* Generate each needed shared category once (they cache in KV).
        City news: once per DISTINCT active city. Others: once total. */
-    resetReqCost();
+    var cost = newCostAccum();
     var _distinctCities = new Set();
     Object.values(_firmCities).forEach(function(c) { if (c) _distinctCities.add(c); });
     for (var _cat of _neededCats) {
       if (_cat === 'city') {
         for (var _city of _distinctCities) {
-          try { await generateSharedNews(env, _cat, day, _city); } catch (e) {
+          try { await generateSharedNews(env, _cat, day, _city, cost); } catch (e) {
             console.log(JSON.stringify({ sharedPregenError: _cat, city: _city, error: String(e && e.message || e).slice(0, 300) }));
           }
         }
       } else {
-        try { await generateSharedNews(env, _cat, day, ''); } catch (e) {
+        try { await generateSharedNews(env, _cat, day, '', cost); } catch (e) {
           console.log(JSON.stringify({ sharedPregenError: _cat, error: String(e && e.message || e).slice(0, 300) }));
         }
       }
     }
     /* Flush shared-news cost under firm "SHARED". */
-    try { await flushCost(env, day, 'SHARED'); } catch (e) {}
-    resetReqCost();
+    try { await flushCost(env, day, 'SHARED', cost); } catch (e) {}
 
     let cursor;
     do {
